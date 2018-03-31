@@ -35,7 +35,7 @@ num_cores = multiprocessing.cpu_count()
 print(num_cores, 'CPU threads available')
 
 
-def search(N_searches, scoring, ML_dict=classifier_config_dict1, cv=5):
+def search(N_searches, X_train, y_train, scoring, ML_dict=classifier_config_dict1, cv=5):
 
 	model = None
 	hyperpara_values = []
@@ -104,16 +104,12 @@ def search(N_searches, scoring, ML_dict=classifier_config_dict1, cv=5):
 
 
 
-
-
-def random_search(ML_dict, scoring, N_pipelines=1000, T_search_time=None, cv=5):
-
-	start = time.time()
+def random_search(ML_dict, X_train, y_train, scoring, N_pipelines=100, T_search_time=None, cv=5):
 
 	N_best_models = 1
 
 	pool = multiprocessing.Pool(num_cores)
-	search1 = partial(search, ML_dict=ML_dict, scoring=scoring, cv=cv)
+	search1 = partial(search, ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, cv=cv)
 	models, scores = zip(*pool.map(search1, range(0, N_pipelines)))
 
 	scores = np.array(scores)
@@ -126,19 +122,35 @@ def random_search(ML_dict, scoring, N_pipelines=1000, T_search_time=None, cv=5):
 	for i in range(len(index_best_scores)):
 		print(models[index_best_scores[i]], '\n')
 	'''
-	print('best_score: ', best_score, '\n')
-	print('best_pipeline: ', best_pipeline, '\n')
-	print('Search time: ', time.time()-start,' seconds')
-
 
 	return best_pipeline, best_score
 
 
 
 
+def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, T_search_time=None, cv=5):
+	if T_search_time is not None and N_pipelines is None:
+		start = time.time()
+		random_search(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=1000, T_search_time=None, cv=cv)
+		search_time = time.time() - start
+
+		N_pipelines = int(1000 * T_search_time/search_time)
+		print(N_pipelines)
 
 
-#best_pipeline, best_score = random_search(ML_dict=classifier_config_dict1, scoring='f1_micro')
+		start = time.time()
+		best_pipeline, best_score = random_search(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, T_search_time=None, cv=cv)
+		print('search_time: ', time.time() - start)
+
+
+	print('best_score: ', best_score, '\n')
+	print('best_pipeline: ', best_pipeline, '\n')
+
+
+
+
+
+#apply_random_search(ML_dict=classifier_config_dict1, X_train=X, y_train=y, scoring='f1_micro', T_search_time=30, cv=3)
 
 
 
