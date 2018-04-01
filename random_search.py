@@ -18,6 +18,8 @@ print(num_cores, 'CPU threads available')
 
 def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
 
+	random.seed(N_searches)
+
 	model = None
 	hyperpara_values = []
 	hyperpara_names = []
@@ -98,6 +100,14 @@ def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, T_
 		start = time.time()
 		best_pipeline, best_score = multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, T_search_time=None, cv=cv)
 		print('search_time: ', time.time() - start)
+		print('Number of searched pipelines: ', N_pipelines, '\n')
+
+	elif T_search_time is None and N_pipelines is not None:
+
+		start = time.time()
+		best_pipeline, best_score = multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, T_search_time=None, cv=cv)
+		print('search_time: ', time.time() - start)
+		print('Number of searched pipelines: ', N_pipelines, '\n')
 
 
 	print('best_score: ', best_score, '\n')
