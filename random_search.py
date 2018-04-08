@@ -4,7 +4,6 @@ import time
 import random
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import multiprocessing
 
 from importlib import import_module
@@ -119,4 +118,21 @@ def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, T_
 
 
 
+class RandomSearch_Optimizer(object):
 
+	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5):
+		self.ml_dict = ML_dict
+		self.scoring = scoring
+		self.n_pipelines = N_pipelines
+		self.t_search_time = T_search_time
+		self.cv = cv
+
+
+
+	def fit(self, X_train, y_train):
+		apply_random_search(ML_dict=self.ml_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.n_pipelines, T_search_time=self.t_search_time, cv=self.cv)
+
+
+
+	def predict(self):
+		pass
