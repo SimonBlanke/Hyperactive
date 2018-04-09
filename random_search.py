@@ -108,9 +108,12 @@ def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, T_
 		print('search_time: ', time.time() - start)
 		print('Number of searched pipelines: ', N_pipelines, '\n')
 
-
 	print('best_score: ', best_score, '\n')
 	print('best_pipeline: ', best_pipeline, '\n')
+
+	return best_pipeline
+
+
 
 
 
@@ -120,19 +123,23 @@ def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, T_
 
 class RandomSearch_Optimizer(object):
 
-	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5):
+	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5, verbosity=0):
 		self.ml_dict = ML_dict
 		self.scoring = scoring
 		self.n_pipelines = N_pipelines
 		self.t_search_time = T_search_time
 		self.cv = cv
+		self.verbosity = verbosity
+
+		self.best_model = None
 
 
 
 	def fit(self, X_train, y_train):
-		apply_random_search(ML_dict=self.ml_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.n_pipelines, T_search_time=self.t_search_time, cv=self.cv)
+		self.best_model = apply_random_search(ML_dict=self.ml_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.n_pipelines, T_search_time=self.t_search_time, cv=self.cv)
+		self.best_model.fit(X_train, y_train)
 
 
 
-	def predict(self):
-		pass
+	def predict(self, X_test):
+		return self.best_model.predict(X_test)
