@@ -72,16 +72,10 @@ def calc_neighbor_solution(self, X_train, y_train, hyperpara_indices, epsilon=1)
 	Random_list = np.array(Random_list)
 	hyperpara_indices_new = np.add(hyperpara_indices, Random_list)
 
-	print('hyperpara_indices_old', hyperpara_indices, '\n')
-	print('hyperpara_indices_new: ',hyperpara_indices_new, '\n')
-
 	hyperpara_length_np = np.array(self.hyperpara_length_list)
-
 
 	hyperpara_indices_new[hyperpara_indices_new < 0] = 0
 	hyperpara_indices_new[hyperpara_indices_new+1 > hyperpara_length_np] = hyperpara_length_np[hyperpara_indices_new+1 > hyperpara_length_np]-1
-
-	print('hyperpara_indices_new: ',hyperpara_indices_new, '\n')
 
 	model_key = list(self.ML_dict.keys())[0]
 	hyperpara_dict = {}
@@ -92,7 +86,6 @@ def calc_neighbor_solution(self, X_train, y_train, hyperpara_indices, epsilon=1)
 		hyperpara_dict[hyperpara_key] = out
 
 
-	print(hyperpara_dict)
 
 
 	ML_model = get_model_from_string(model_key, hyperpara_dict)
@@ -100,6 +93,7 @@ def calc_neighbor_solution(self, X_train, y_train, hyperpara_indices, epsilon=1)
 	scores = cross_val_score(ML_model, X_train, y_train, scoring=self.scoring, cv=self.cv)
 	score = scores.mean()
 
+	return score, hyperpara_indices_new
 
 
 def calc_temperature():
@@ -140,14 +134,47 @@ class SimulatedAnnealing_Optimizer(object):
 		self.cv = cv
 		self.verbosity = verbosity
 
+		self.score = 0
+		self.score_best = 0
+		self.score_current = 0
+
+		self.hyperpara_indices = 0
+		self.hyperpara_indices_best = 0
+		self.hyperpara_indices_current = 0
+
 
 
 	def fit(self, X_train, y_train):
 		calc_general_parameters(self)
-		score, hyperpara_indices = create_init_solution(self, X_train, y_train)
-		calc_neighbor_solution(self, X_train, y_train, hyperpara_indices)
+		self.score_current, self.hyperpara_indices_current = create_init_solution(self, X_train, y_train)
 
-		print(self.hyperpara_length_list)
+		self.score_best = self.score_current
+		self.hyperpara_indices_best = self.hyperpara_indices_current
+
+		Temp = 100
+		for i in range(self.N_pipelines):
+
+			self.score, self.hyperpara_indices = calc_neighbor_solution(self, X_train, y_train, self.hyperpara_indices_current)
+			Temp = Temp*0.999
+
+			# Normalized score difference to have a factor for later use with temperature and random
+			score_diff_norm = (self.score_current - self.score)/(self.score_current + self.score)
+			rand = random.randint(0, 1)
+
+			if self.score > self.score_current:
+				self.score_current = self.score
+				self.hyperpara_indices_current = self.hyperpara_indices
+				if self.score > self.score_best:
+					self.score_best = self.score
+					self.hyperpara_indices_best = self.hyperpara_indices
+
+			elif np.exp( score_diff_norm/Temp ) > rand:
+				self.score_current = self.score
+				self.hyperpara_indices_current = self.hyperpara_indices
+
+		print(self.score_best)
+
+		#print(self.hyperpara_length_list)
 
 	def predict(self, X_test):
 		pass
@@ -160,8 +187,7 @@ class SimulatedAnnealing_Optimizer(object):
 
 
 
-Opt = SimulatedAnnealing_Optimizer(ML_dict=classifier_config_dict1, scoring='f1_micro', N_pipelines=1000, T_search_time=None, cv=3)
-Opt.fit(X, y)
+
 
 
 
