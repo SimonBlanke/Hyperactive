@@ -41,10 +41,22 @@ num_cores = multiprocessing.cpu_count()
 
 
 def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
-	print(N_searches)
+	'''
+	In this function we do the random search in the hyperparameter/ML-models space given by the 'ML_dict'-dictionary.
+	The goal is to find the model/hyperparameter combination with the best score. This means that we have to train every model on data and compare their scores.
 
-	if time.time() - g_time >= g_search_time:
-		terminate()
+	Arguments:
+		- N_searches: Number of model/hyperpara. combinations searched. (int)
+		- X_train: training data of features, similar to scikit-learn. (numpy array)
+		- y_train: training data of targets, similar to scikit-learn. (numpy array)
+		- scoring: scoring used to compare models, similar to scikit-learn. (string)
+		- ML_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
+		- cv: defines the k of k-fold cross validation. (int)
+
+	Returns:
+		- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
+		- score: A list of scores of these models. (list of floats)
+	'''	
 
 	random.seed(N_searches)
 
@@ -99,6 +111,24 @@ def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
 
 
 def multiprocessing_helper_func(ML_dict, X_train, y_train, scoring, cv, N_pipelines=100, T_search_time=None):
+	'''
+	This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
+	After that the lists are searched to find the best model and its score.
+
+	Arguments:
+		- N_pipelines: Number of model/hyperpara. combinations searched. (int)
+		- X_train: training data of features, similar to scikit-learn. (numpy array)
+		- y_train: training data of targets, similar to scikit-learn. (numpy array)
+		- scoring: scoring used to compare models, similar to scikit-learn. (string)
+		- ML_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
+		- cv: defines the k of k-fold cross validation. (int)
+		- T_search_time: Currently not used. So far i did not find out an implementation for the search time that does not look ugly.
+
+	Returns:
+		- best_pipeline: The model and hyperparameter combination with best score. (scikit-learn object)
+		- best_score: The score of this model. (float)
+	'''	
+
 	global g_time
 	global g_search_time
 	g_time = 0
@@ -126,20 +156,13 @@ def multiprocessing_helper_func(ML_dict, X_train, y_train, scoring, cv, N_pipeli
 
 
 
-def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, cv=5):
-	best_pipeline, best_score = multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, cv=cv)
-
-	return best_pipeline
-
-
-
 class RandomSearch_Optimizer(object):
 
 	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5, verbosity=0):
-		self.ml_dict = ML_dict
+		self.ML_dict = ML_dict
 		self.scoring = scoring
-		self.n_pipelines = N_pipelines
-		self.t_search_time = T_search_time
+		self.N_pipelines = N_pipelines
+		self.T_search_time = T_search_time
 		self.cv = cv
 		self.verbosity = verbosity
 
@@ -149,5 +172,5 @@ class RandomSearch_Optimizer(object):
 		return self.best_model
 
 	def fit(self, X_train, y_train):
-		self.best_model = apply_random_search(ML_dict=self.ml_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.n_pipelines, cv=self.cv)
+		self.best_model, best_score = multiprocessing_helper_func(ML_dict=self.ML_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.N_pipelines, cv=self.cv)
 		self.best_model.fit(X_train, y_train)
