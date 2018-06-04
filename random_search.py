@@ -128,22 +128,11 @@ def multiprocessing_helper_func(ML_dict, X_train, y_train, scoring, cv, N_pipeli
 		- best_pipeline: The model and hyperparameter combination with best score. (scikit-learn object)
 		- best_score: The score of this model. (float)
 	'''	
-
-	global g_time
-	global g_search_time
-	g_time = 0
-	g_search_time = 1
-
-
 	N_best_models = 1
 
-	s_time = time.time()
-	g_time = time.time()
 	pool = multiprocessing.Pool(num_cores)
 	random_search_obj = partial(random_search, ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, cv=cv)
-	models, scores = zip(*pool.map(random_search_obj, range(0, 100)))
-
-	print('Search time: ', time.time() - s_time)
+	models, scores = zip(*pool.map(random_search_obj, range(0, N_pipelines)))
 
 	scores = np.array(scores)
 	index_best_scores = scores.argsort()[-N_best_models:][::-1]
