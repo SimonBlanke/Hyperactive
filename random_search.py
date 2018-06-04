@@ -1,3 +1,28 @@
+'''
+MIT License
+
+Copyright (c) [2018] [Simon Blanke]
+Email: simonblanke528481@gmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+'''
+
 import os
 import sys
 import time
@@ -10,12 +35,16 @@ from importlib import import_module
 from functools import partial
 from sklearn.model_selection import cross_val_score
 
-
 num_cores = multiprocessing.cpu_count()
-print(num_cores, 'CPU threads available')
+#print(num_cores, 'CPU threads available')
+
 
 
 def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
+	print(N_searches)
+
+	if time.time() - g_time >= g_search_time:
+		terminate()
 
 	random.seed(N_searches)
 
@@ -70,12 +99,21 @@ def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
 
 
 def multiprocessing_helper_func(ML_dict, X_train, y_train, scoring, cv, N_pipelines=100, T_search_time=None):
+	global g_time
+	global g_search_time
+	g_time = 0
+	g_search_time = 1
+
 
 	N_best_models = 1
 
+	s_time = time.time()
+	g_time = time.time()
 	pool = multiprocessing.Pool(num_cores)
 	random_search_obj = partial(random_search, ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, cv=cv)
-	models, scores = zip(*pool.map(random_search_obj, range(0, N_pipelines)))
+	models, scores = zip(*pool.map(random_search_obj, range(0, 100)))
+
+	print('Search time: ', time.time() - s_time)
 
 	scores = np.array(scores)
 	index_best_scores = scores.argsort()[-N_best_models:][::-1]
@@ -88,36 +126,10 @@ def multiprocessing_helper_func(ML_dict, X_train, y_train, scoring, cv, N_pipeli
 
 
 
-def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, T_search_time=None, cv=5):
-	if T_search_time is not None and N_pipelines is None:
-		start = time.time()
-		multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=1000, T_search_time=None, cv=cv)
-		search_time = time.time() - start
-
-		N_pipelines = int(1000 * T_search_time/search_time)
-
-		start = time.time()
-		best_pipeline, best_score = multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, T_search_time=None, cv=cv)
-		print('search_time: ', time.time() - start)
-		print('Number of searched pipelines: ', N_pipelines, '\n')
-
-	elif T_search_time is None and N_pipelines is not None:
-
-		start = time.time()
-		best_pipeline, best_score = multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, T_search_time=None, cv=cv)
-		print('search_time: ', time.time() - start)
-		print('Number of searched pipelines: ', N_pipelines, '\n')
-
-	print('best_score: ', best_score, '\n')
-	print('best_pipeline: ', best_pipeline, '\n')
+def apply_random_search(ML_dict, X_train, y_train, scoring, N_pipelines=None, cv=5):
+	best_pipeline, best_score = multiprocessing_helper_func(ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, N_pipelines=N_pipelines, cv=cv)
 
 	return best_pipeline
-
-
-
-
-
-
 
 
 
@@ -133,13 +145,9 @@ class RandomSearch_Optimizer(object):
 
 		self.best_model = None
 
-
+	def __call__(self):
+		return self.best_model
 
 	def fit(self, X_train, y_train):
-		self.best_model = apply_random_search(ML_dict=self.ml_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.n_pipelines, T_search_time=self.t_search_time, cv=self.cv)
+		self.best_model = apply_random_search(ML_dict=self.ml_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.n_pipelines, cv=self.cv)
 		self.best_model.fit(X_train, y_train)
-
-
-
-	def predict(self, X_test):
-		return self.best_model.predict(X_test)
