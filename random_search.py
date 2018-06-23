@@ -58,7 +58,7 @@ def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
 		- score: A list of scores of these models. (list of floats)
 	'''	
 
-	random.seed(N_searches)
+	#random.seed(N_searches)
 
 	model = None
 	hyperpara_values = []
@@ -109,42 +109,6 @@ def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
 
 
 
-
-def multiprocessing_helper_func(ML_dict, X_train, y_train, scoring, cv, N_pipelines=100, T_search_time=None):
-	'''
-	This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
-	After that the lists are searched to find the best model and its score.
-
-	Arguments:
-		- N_pipelines: Number of model/hyperpara. combinations searched. (int)
-		- X_train: training data of features, similar to scikit-learn. (numpy array)
-		- y_train: training data of targets, similar to scikit-learn. (numpy array)
-		- scoring: scoring used to compare models, similar to scikit-learn. (string)
-		- ML_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
-		- cv: defines the k of k-fold cross validation. (int)
-		- T_search_time: Currently not used. So far i did not find out an implementation for the search time that does not look ugly.
-
-	Returns:
-		- best_pipeline: The model and hyperparameter combination with best score. (scikit-learn object)
-		- best_score: The score of this model. (float)
-	'''	
-	N_best_models = 1
-
-	pool = multiprocessing.Pool(num_cores)
-	random_search_obj = partial(random_search, ML_dict=ML_dict, X_train=X_train, y_train=y_train, scoring=scoring, cv=cv)
-	models, scores = zip(*pool.map(random_search_obj, range(0, N_pipelines)))
-
-	scores = np.array(scores)
-	index_best_scores = scores.argsort()[-N_best_models:][::-1]
-
-	best_score = scores[index_best_scores]
-	best_pipeline = models[index_best_scores[0]]
-
-	return best_pipeline, best_score
-
-
-
-
 class RandomSearch_Optimizer(object):
 
 	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5, verbosity=0):
@@ -159,7 +123,56 @@ class RandomSearch_Optimizer(object):
 
 	def __call__(self):
 		return self.best_model
+	
+	
+	def _find_best_model(self, X_train, y_train):
+		N_best_models = 1
+
+		models, scores = self._random_search_multiprocessing(X_train, y_train)
+
+		scores = np.array(scores)
+		index_best_scores = scores.argsort()[-N_best_models:][::-1]
+
+		best_score = scores[index_best_scores]
+		best_pipeline = models[index_best_scores[0]]
+
+		return best_pipeline, best_score
+	
+	def _random_search_multiprocessing(self, X_train, y_train):
+		'''
+		This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
+		After that the lists are searched to find the best model and its score.
+
+		Arguments:
+			- X_train: training data of features, similar to scikit-learn. (numpy array)
+			- y_train: training data of targets, similar to scikit-learn. (numpy array)
+		Returns:
+			- best_pipeline: The model and hyperparameter combination with best score. (scikit-learn object)
+			- best_score: The score of this model. (float)
+		'''	
+
+		pool = multiprocessing.Pool(num_cores)
+		random_search_obj = partial(random_search, ML_dict=self.ML_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, cv=self.cv)
+		models, scores = zip(*pool.map(random_search_obj, range(0, self.N_pipelines)))
+		pool.close()
+
+		return models, scores
+
 
 	def fit(self, X_train, y_train):
-		self.best_model, best_score = multiprocessing_helper_func(ML_dict=self.ML_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, N_pipelines=self.N_pipelines, cv=self.cv)
+		self.best_model, best_score = self._find_best_model(X_train=X_train, y_train=y_train)
 		self.best_model.fit(X_train, y_train)
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
