@@ -35,6 +35,8 @@ from importlib import import_module
 from functools import partial
 from sklearn.model_selection import cross_val_score
 
+from base import BaseOptimizer
+
 
 num_cores = multiprocessing.cpu_count()
 print(num_cores, 'CPU threads available')
@@ -141,7 +143,7 @@ def calc_general_parameters(self):
 
 
 
-class SimulatedAnnealing_Optimizer(object):
+class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
 	calc_general_parameters = calc_general_parameters
 	create_init_solution = create_init_solution
@@ -189,9 +191,6 @@ class SimulatedAnnealing_Optimizer(object):
 
 		Temp = 100
 		for i in range(self.N_pipelines):
-			print(self.score_best)
-			print(self.hyperpara_dict_best)
-			print(self.ML_model_str_best, '\n')
 
 			self.score, self.hyperpara_indices, self.hyperpara_dict, self.ML_model_str  = calc_neighbor_solution(self, X_train, y_train, self.hyperpara_indices_current)
 			Temp = Temp*0.999
@@ -219,28 +218,6 @@ class SimulatedAnnealing_Optimizer(object):
 				self.ML_model_str_current = self.ML_model_str 
 
 
-		print(self.ML_model_str_best)
-		print(self.hyperpara_dict_best)
-
 		self.best_model = get_model_from_string(self.ML_model_str_best, self.hyperpara_dict_best)
 		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

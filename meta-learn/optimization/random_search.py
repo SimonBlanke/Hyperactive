@@ -27,91 +27,16 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 
-from importlib import import_module
+
 from functools import partial
-from sklearn.model_selection import cross_val_score
+
+from .base import BaseOptimizer
+
 
 num_cores = multiprocessing.cpu_count()
-#print(num_cores, 'CPU threads available')
-
-def get_random_hyperparameter(ML_dict):
-	model = None
-	hyperpara_values = []
-	hyperpara_names = []
-
-	hyperpara_dict = {}
-	hyperpara_value = []
-
-	dict1_len = len(ML_dict)
-	rand1 = random.randint(0, dict1_len-1)
-
-	for i, key_model in zip(range(dict1_len), ML_dict.keys()):
-		if i == rand1:
-			model = key_model
-
-	if model == None:
-		print('Warning: No model selected!\n')
-
-	dict2_len = len(ML_dict[model])
-
-	for j, hyperpara_name in zip(range(dict2_len), ML_dict[model].keys()):
-
-		dict3_len = len(ML_dict[model][hyperpara_name])
-		rand2 = random.randint(0, dict3_len-1)
-
-		hyperpara_names.append(hyperpara_name)
-
-		array = ML_dict[model][hyperpara_name]
-		hyperpara_value = array[rand2]
-
-		hyperpara_values.append(hyperpara_value)
-
-		hyperpara_dict[hyperpara_name] = hyperpara_value
-
-	return model, hyperpara_dict
 
 
-def import_model(model):
-	sklearn, submod_func = model.rsplit('.', 1)
-	module = import_module(sklearn)
-	model = getattr(module, submod_func)
-
-	return model
-
-
-def random_search(N_searches, X_train, y_train, scoring, ML_dict, cv):
-	'''
-	In this function we do the random search in the hyperparameter/ML-models space given by the 'ML_dict'-dictionary.
-	The goal is to find the model/hyperparameter combination with the best score. This means that we have to train every model on data and compare their scores.
-	Arguments:
-		- N_searches: Number of model/hyperpara. combinations searched. (int)
-		- X_train: training data of features, similar to scikit-learn. (numpy array)
-		- y_train: training data of targets, similar to scikit-learn. (numpy array)
-		- scoring: scoring used to compare models, similar to scikit-learn. (string)
-		- ML_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
-		- cv: defines the k of k-fold cross validation. (int)
-	Returns:
-		- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
-		- score: A list of scores of these models. (list of floats)
-	'''	
-
-	#random.seed(N_searches)
-	model, hyperpara_dict = get_random_hyperparameter(ML_dict)
-
-	model = import_model(model)
-
-	ML_model = model(**hyperpara_dict)
-
-	train_time = 0
-	time_temp = time.time()
-	scores = cross_val_score(ML_model, X_train, y_train, scoring=scoring, cv=cv)
-	train_time = (time.time() - time_temp)/cv
-	score = scores.mean()	  
-	  
-	return ML_model, score, hyperpara_dict, train_time
-
-
-class RandomSearch_Optimizer(object):
+class RandomSearch_Optimizer(BaseOptimizer):
 
 	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5, verbosity=0):
 		self.ML_dict = ML_dict
@@ -129,21 +54,60 @@ class RandomSearch_Optimizer(object):
 
 	def __call__(self):
 		return self.best_model
-	
-	
-	def _find_best_model(self, X_train, y_train):
-		N_best_models = 1
 
-		models, scores = self._random_search_multiprocessing(X_train, y_train)
 
-		scores = np.array(scores)
-		index_best_scores = scores.argsort()[-N_best_models:][::-1]
+			# get meta_regressor from model
 
-		best_score = scores[index_best_scores]
-		best_pipeline = models[index_best_scores[0]]
+			# get dataset meta features
 
-		return best_pipeline, best_score
-	
+			# put dataset meta freatures and hyperpara_dict together
+
+			# predict score from data	
+
+	def _random_search_v2(self, N_searches, ML_dict, X_train, meta_regressor):
+		model, hyperpara_dict = self._get_random_hyperparameter(ML_dict)
+
+		get_meta_regressor = self.get_meta_regressor(model)
+
+		features_from_dataset = self._get_features_from_dataset(X_train)
+
+
+		all_features = self._get_all_features(X_train, y_train)
+
+
+
+
+		time_temp = time.time()
+		prediction = get_meta_regressor.predict(all_features)
+		train_time = time.time() - time_temp
+
+		return model, prediction, hyperpara_dict, train_time
+
+
+	def _random_search(self, N_searches, X_train, y_train, scoring, ML_dict, cv):
+		'''
+		In this function we do the random search in the hyperparameter/ML-models space given by the 'ML_dict'-dictionary.
+		The goal is to find the model/hyperparameter combination with the best score. This means that we have to train every model on data and compare their scores.
+		Arguments:
+			- N_searches: Number of model/hyperpara. combinations searched. (int)
+			- X_train: training data of features, similar to scikit-learn. (numpy array)
+			- y_train: training data of targets, similar to scikit-learn. (numpy array)
+			- scoring: scoring used to compare models, similar to scikit-learn. (string)
+			- ML_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
+			- cv: defines the k of k-fold cross validation. (int)
+		Returns:
+			- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
+			- score: A list of scores of these models. (list of floats)
+		'''
+		model, hyperpara_dict = self._get_random_hyperparameter(ML_dict)
+
+		model = self._import_model(model)
+		ML_model = model(**hyperpara_dict)
+
+		score, train_time = self._train_model(ML_model, X_train, y_train, scoring, cv)
+
+		return ML_model, score, hyperpara_dict, train_time
+
 
 	def _random_search_multiprocessing(self, X_train, y_train):
 		'''
@@ -153,12 +117,12 @@ class RandomSearch_Optimizer(object):
 			- X_train: training data of features, similar to scikit-learn. (numpy array)
 			- y_train: training data of targets, similar to scikit-learn. (numpy array)
 		Returns:
-			- best_pipeline: The model and hyperparameter combination with best score. (scikit-learn object)
+			- best_model: The model and hyperparameter combination with best score. (scikit-learn object)
 			- best_score: The score of this model. (float)
 		'''	
 
 		pool = multiprocessing.Pool(num_cores)
-		random_search_obj = partial(random_search, ML_dict=self.ML_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, cv=self.cv)
+		random_search_obj = partial(self._random_search, ML_dict=self.ML_dict, X_train=X_train, y_train=y_train, scoring=self.scoring, cv=self.cv)
 		
 		c_time = time.time()
 		models, scores, hyperpara_dict, train_time = zip(*pool.map(random_search_obj, range(0, self.N_pipelines)))
@@ -172,5 +136,7 @@ class RandomSearch_Optimizer(object):
 
 
 	def fit(self, X_train, y_train):
-		self.best_model, best_score = self._find_best_model(X_train=X_train, y_train=y_train)
+		models, scores = self._random_search_multiprocessing(X_train, y_train)
+
+		self.best_model, best_score = self._find_best_model(models, scores)
 		self.best_model.fit(X_train, y_train)
