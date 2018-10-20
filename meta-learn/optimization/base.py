@@ -27,6 +27,7 @@ import numpy as np
 import pandas as pd
 
 from importlib import import_module
+from functools import partial
 from sklearn.model_selection import cross_val_score
 
 
@@ -74,14 +75,7 @@ class BaseOptimizer(object):
 		return model
 
 
-	def _train_model(self, ML_model, X_train, y_train, scoring, cv):
-		train_time = 0
-		time_temp = time.time()
-		scores = cross_val_score(ML_model, X_train, y_train, scoring=scoring, cv=cv)
-		train_time = (time.time() - time_temp)/cv
-		score = scores.mean()
 
-		return score, train_time
 
 
 	def _find_best_model(self, models, scores):
@@ -100,3 +94,25 @@ class BaseOptimizer(object):
 		pass
 
 
+
+class machine_learning_helper(object):
+
+	def __init__(self, X_train, y_train, scoring, cv=5):
+		self.X_train = X_train
+		self.y_train = y_train
+		self.scoring = scoring
+		self.cv = cv
+
+
+	def get_partial_ml_function(self):
+		partial_function = partial(self._train_model, X_train=self.X_train, y_train=self.y_train, scoring=self.scoring, cv=self.cv)
+
+		return partial_function
+
+
+	def _train_model(self, ml_model, X_train, y_train, scoring, cv):
+		time_temp = time.time()
+		scores = cross_val_score(ml_model, X_train, y_train, scoring=scoring, cv=cv)
+		train_time = (time.time() - time_temp)/cv
+
+		return scores.mean(), train_time
