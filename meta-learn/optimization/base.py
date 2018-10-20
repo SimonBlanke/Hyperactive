@@ -25,6 +25,9 @@ import time
 import random
 import numpy as np
 import pandas as pd
+import multiprocessing
+
+num_cores = multiprocessing.cpu_count()
 
 from importlib import import_module
 from functools import partial
@@ -33,8 +36,13 @@ from sklearn.model_selection import cross_val_score
 
 class BaseOptimizer(object):
 
-	def __init__(self):
+	def __init__(self, verbosity=0):
+		self.verbosity = verbosity
+
+
+	def	get_meta_regressor(model):
 		pass
+
 
 	def _check_model_str(self, model):
 		if 'sklearn' not in model:
@@ -42,24 +50,24 @@ class BaseOptimizer(object):
 			return
 
 
-	def _get_random_hyperparameter(self, ML_dict):
+	def _get_random_value(self, search_space_dict):
 		model = None
 		hyperpara_names = []
 
 		hyperpara_dict = {}
 		hyperpara_value = []
 
-		model = random.choice(list(ML_dict.keys()))
+		model = random.choice(list(search_space_dict.keys()))
 		self._check_model_str(model)
 
-		for hyperpara_name in ML_dict[model].keys():
+		for hyperpara_name in search_space_dict[model].keys():
 
-			n_hyperpara_values = len(ML_dict[model][hyperpara_name])
+			n_hyperpara_values = len(search_space_dict[model][hyperpara_name])
 			rand_hyperpara_value = random.randint(0, n_hyperpara_values-1)
 
 			hyperpara_names.append(hyperpara_name)
 
-			hyperpara_values = ML_dict[model][hyperpara_name]
+			hyperpara_values = search_space_dict[model][hyperpara_name]
 			hyperpara_value = hyperpara_values[rand_hyperpara_value]
 
 			hyperpara_dict[hyperpara_name] = hyperpara_value
@@ -75,9 +83,6 @@ class BaseOptimizer(object):
 		return model
 
 
-
-
-
 	def _find_best_model(self, models, scores):
 		N_best_models = 1
 
@@ -90,8 +95,40 @@ class BaseOptimizer(object):
 		return best_model, best_score
 
 
-	def	get_meta_regressor(model):
-		pass
+	def _search_multiprocessing(self, search_space_dict, function, n_searches):
+		'''
+		This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
+		After that the lists are searched to find the best model and its score.
+		Arguments:
+			- X_train: training data of features, similar to scikit-learn. (numpy array)
+			- y_train: training data of targets, similar to scikit-learn. (numpy array)
+		Returns:
+			- best_model: The model and hyperparameter combination with best score. (scikit-learn object)
+			- best_score: The score of this model. (float)
+		'''	
+
+		pool = multiprocessing.Pool(num_cores)
+
+		#partial_function = partial(self._train_model, X_train=X_train, y_train=y_train, scoring=self.scoring, cv=self.cv)
+		
+		random_search_obj = partial(self._search, search_space_dict=search_space_dict, function=function)
+				
+		c_time = time.time()
+		models, scores, hyperpara_dict, train_time = zip(*pool.map(random_search_obj, range(0, n_searches)))
+		
+		self.model_list = models[:]
+		self.score_list = scores[:]
+		self.hyperpara_dict = hyperpara_dict[:]
+		self.train_time = train_time[:]
+
+		return models, scores
+
+
+	def search(self, search_space_dict, function, n_searches):
+		models, scores = self._search_multiprocessing(search_space_dict, function, n_searches)
+
+		self.best_model, best_score = self._find_best_model(models, scores)
+
 
 
 
