@@ -35,8 +35,8 @@ from .base import BaseOptimizer
 
 class RandomSearch_Optimizer(BaseOptimizer):
 
-	def __init__(self, verbosity=0):
-		super().__init__(verbosity)
+	def __init__(self, ml_search_dict, n_searches, scoring, cv=5, verbosity=0):
+		super().__init__(ml_search_dict, n_searches, scoring, cv, verbosity)
 
 		self.best_model = None
 		self.model_list = []
@@ -47,42 +47,28 @@ class RandomSearch_Optimizer(BaseOptimizer):
 		self._search = self._random_search
 
 
-	def __call__(self):
-		return self.best_model
-
-			# get meta_regressor from model
-
-			# get dataset meta features
-
-			# put dataset meta freatures and hyperpara_dict together
-
-			# predict score from data	
-
-
-	def _random_search(self, n_searches, function, search_space_dict):
+	def _random_search(self, n_searches, X_train, y_train, ml_search_dict, init_search_dict):
 		'''
-		In this function we do the random search in the hyperparameter/ML-models space given by the 'search_space_dict'-dictionary.
+		In this function we do the random search in the hyperparameter/ML-models space given by the 'ml_search_dict'-dictionary.
 		The goal is to find the model/hyperparameter combination with the best score. This means that we have to train every model on data and compare their scores.
 		Arguments:
 			- n_searches: Number of model/hyperpara. combinations searched. (int)
 			- X_train: training data of features, similar to scikit-learn. (numpy array)
 			- y_train: training data of targets, similar to scikit-learn. (numpy array)
 			- scoring: scoring used to compare models, similar to scikit-learn. (string)
-			- search_space_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
+			- ml_search_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
 			- cv: defines the k of k-fold cross validation. (int)
 		Returns:
 			- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
 			- score: A list of scores of these models. (list of floats)
 		'''
-		model, hyperpara_dict = self._get_random_value(search_space_dict)
+		model, hyperpara_dict = self._get_random_value(ml_search_dict)
 
 		model = self._import_model(model)
 		ML_model = model(**hyperpara_dict)
 
-		score, train_time = function(ML_model)
+		score, train_time = self._train_model(ML_model, X_train, y_train)
 		
-		print(score)
-
 		return ML_model, score, hyperpara_dict, train_time
 
 

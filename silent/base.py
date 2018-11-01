@@ -36,12 +36,12 @@ from sklearn.model_selection import cross_val_score
 
 class BaseOptimizer(object):
 
-	def __init__(self, verbosity=0):
+	def __init__(self, ml_search_dict, n_searches, scoring, cv=5, verbosity=0):
+		self.ml_search_dict = ml_search_dict
+		self.n_searches = n_searches
+		self.scoring = scoring
+		self.cv = cv
 		self.verbosity = verbosity
-
-
-	def	get_meta_regressor(model):
-		pass
 
 
 	def _check_model_str(self, model):
@@ -95,7 +95,15 @@ class BaseOptimizer(object):
 		return best_model, best_score
 
 
-	def _search_multiprocessing(self, search_space_dict, function, n_searches):
+	def _train_model(self, ml_model, X_train, y_train):
+		time_temp = time.time()
+		scores = cross_val_score(ml_model, X_train, y_train, scoring=self.scoring, cv=self.cv)
+		train_time = (time.time() - time_temp)/self.cv
+
+		return scores.mean(), train_time
+
+
+	def _search_multiprocessing(self, X_train, y_train, init_search_dict):
 		'''
 		This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
 		After that the lists are searched to find the best model and its score.
@@ -108,13 +116,11 @@ class BaseOptimizer(object):
 		'''	
 
 		pool = multiprocessing.Pool(num_cores)
-
-		#partial_function = partial(self._train_model, X_train=X_train, y_train=y_train, scoring=self.scoring, cv=self.cv)
-		
-		random_search_obj = partial(self._search, search_space_dict=search_space_dict, function=function)
+	
+		search = partial(self._search, X_train=X_train, y_train=y_train, ml_search_dict=self.ml_search_dict, init_search_dict=init_search_dict)
 				
 		c_time = time.time()
-		models, scores, hyperpara_dict, train_time = zip(*pool.map(random_search_obj, range(0, n_searches)))
+		models, scores, hyperpara_dict, train_time = zip(*pool.map(search, range(0, self.n_searches)))
 		
 		self.model_list = models[:]
 		self.score_list = scores[:]
@@ -124,32 +130,18 @@ class BaseOptimizer(object):
 		return models, scores
 
 
-	def search(self, search_space_dict, function, n_searches):
-		models, scores = self._search_multiprocessing(search_space_dict, function, n_searches)
+	def fit(self, X_train, y_train, init_search_dict=None):
+		models, scores = self._search_multiprocessing(X_train, y_train, init_search_dict)
 
 		self.best_model, best_score = self._find_best_model(models, scores)
+		self.best_model.fit(X_train, y_train)
+
+		print('Best score:', *best_score)
 
 
+	def predict(self, X_test):
+		return self.best_model.predict(X_test)
 
 
-class machine_learning_helper(object):
-
-	def __init__(self, X_train, y_train, scoring, cv=5):
-		self.X_train = X_train
-		self.y_train = y_train
-		self.scoring = scoring
-		self.cv = cv
-
-
-	def get_partial_ml_function(self):
-		partial_function = partial(self._train_model, X_train=self.X_train, y_train=self.y_train, scoring=self.scoring, cv=self.cv)
-
-		return partial_function
-
-
-	def _train_model(self, ml_model, X_train, y_train, scoring, cv):
-		time_temp = time.time()
-		scores = cross_val_score(ml_model, X_train, y_train, scoring=scoring, cv=cv)
-		train_time = (time.time() - time_temp)/cv
-
-		return scores.mean(), train_time
+	def score():
+		pass
