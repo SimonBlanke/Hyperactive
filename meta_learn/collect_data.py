@@ -86,6 +86,28 @@ class DataCollector(object):
     return model
 
 
+  def _get_default_hyperpara(self, model, n_rows):
+    hyperpara_dict = model.get_params()
+    hyperpara_df = pd.DataFrame(hyperpara_dict, index=[0])
+
+    hyperpara_df = pd.DataFrame(hyperpara_df, index=range(n_rows))
+    columns = hyperpara_df.columns
+    for column in columns:
+      hyperpara_df[column] = hyperpara_df[column][0]
+
+    return hyperpara_df
+
+
+  def _merge_dict(self, params_df, hyperpara_df):
+    searched_hyperpara = params_df.columns
+
+    for hyperpara in searched_hyperpara:
+      hyperpara_df = hyperpara_df.drop(hyperpara, axis=1)
+    params_df = pd.concat([params_df, hyperpara_df], axis=1, ignore_index=False)
+
+    return params_df
+
+
   def _grid_search(self, X_train, y_train, ml_config_dict):
     for model_key in ml_config_dict.keys():
       parameters = ml_config_dict[model_key]
@@ -98,16 +120,14 @@ class DataCollector(object):
 
       grid_search_dict = model_grid_search.cv_results_
 
-      #print(grid_search_dict.keys(), '\n')
-
       params_df = pd.DataFrame(grid_search_dict['params'])
+
+      default_hyperpara_df = self._get_default_hyperpara(model, len(params_df))
+      params_df = self._merge_dict(params_df, default_hyperpara_df)
+
       mean_test_score_df = pd.DataFrame(grid_search_dict['mean_test_score'], columns=['mean_test_score'])
 
-      #print(params_df, '\n')
-      #print(mean_test_score_df, '\n')
-
       features_from_model = pd.concat([params_df, mean_test_score_df], axis=1, ignore_index=False)
-      #print(features_from_model, '\n')
 
       return features_from_model
 
@@ -117,13 +137,19 @@ class DataCollector(object):
     
     features_from_model = self._grid_search(X_train, y_train, ml_config_dict)
 
-
     features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
-
     columns = features_from_dataset.columns
     for column in columns:
       features_from_dataset[column] = features_from_dataset[column][0]
 
+    all_features = self._concat_dataframes(features_from_dataset, features_from_model)
+
+    print(all_features.head())
+
+    return all_features
+
+
+  def _concat_dataframes(self, features_from_dataset, features_from_model):
     features_from_dataset = features_from_dataset.reset_index()
     features_from_model = features_from_model.reset_index()
 
@@ -133,7 +159,7 @@ class DataCollector(object):
       features_from_model = features_from_model.drop('index', axis=1)
 
     all_features = pd.concat([features_from_dataset, features_from_model], axis=1, ignore_index=False)
- 
+
     return all_features
 
 
@@ -142,8 +168,8 @@ class DataCollector(object):
     path_name = path+'meta_knowledge'
     #print(dataframe)
     #dataframe.to_hdf(path_name, key=str(key), mode='a')
-    dataframe.to_csv(key, index=False)
-    print('saving', str(key), 'meta data')
+    dataframe.to_csv('./meta_learn/data/'+key, index=False)
+    print('saving', len(dataframe), 'examples of', str(key), 'meta data')
 
 
 

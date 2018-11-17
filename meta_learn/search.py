@@ -29,19 +29,25 @@ import pandas as pd
 from functools import partial
 from scipy.optimize import minimize
 from sklearn.externals import joblib
+from importlib import import_module
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+from .collect_data import DataCollector
+from .meta_regressor import MetaRegressor
+from .label_encoder_dict import label_encoder_dict
 
 
-class Search(object):
+class Search(DataCollector, MetaRegressor):
 
-  def __init__(self, path, search_dict):
-    self.path = path
+  def __init__(self, search_dict):
+    self.path = './meta_learn/data/sklearn.neighbors.KNeighborsClassifier_meta_regressor'
     self.search_dict = search_dict
     self.meta_regressor = None
     self.all_features = None
+
+    self.model_name = None
 
 
   def search_optimum(self, X_train, y_train):
@@ -65,27 +71,12 @@ class Search(object):
     self.meta_regressor = reg
 
 
-  def _get_features_from_dataset(self, X_train):
-    def get_number_of_instances(X_train):
-      return 'N_rows', X_train.shape[0]
-
-    def get_number_of_features(X_train):
-      return 'N_columns', X_train.shape[1]
-
-    # List of functions to get the different features of the dataset
-    func_list = [get_number_of_instances, get_number_of_features]
-    
-    features_from_dataset = {}
-    for func in func_list:
-      name, value = func(X_train)
-      features_from_dataset[name] = value
-      
-    features_from_dataset = pd.DataFrame(features_from_dataset, index=[0])
-    return features_from_dataset
-
-
   def _search(self, X_train):
     for model_key in self.search_dict.keys():
+      self.model_name = model_key
+
+      model = self._import_model(model_key)
+      model = model()
 
       hyperpara_search_dict = self.search_dict[model_key]
 
@@ -93,6 +84,9 @@ class Search(object):
       meta_reg_input = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
       features_from_model = pd.DataFrame(meta_reg_input)
+
+      default_hyperpara_df = self._get_default_hyperpara(model, len(features_from_model))
+      features_from_model = self._merge_dict(features_from_model, default_hyperpara_df)
 
       features_from_dataset = self._get_features_from_dataset(X_train)
 
@@ -102,18 +96,11 @@ class Search(object):
       for column in columns:
         features_from_dataset[column] = features_from_dataset[column][0]
 
-      features_from_dataset = features_from_dataset.reset_index()
-      features_from_model = features_from_model.reset_index()
-
-      if 'index' in features_from_dataset.columns:
-        features_from_dataset = features_from_dataset.drop('index', axis=1)
-      if 'index' in features_from_model.columns:
-        features_from_model = features_from_model.drop('index', axis=1)
-
-      self.all_features = pd.concat([features_from_dataset, features_from_model], axis=1, ignore_index=False)
+      self.all_features = self._concat_dataframes(features_from_dataset, features_from_model)
 
 
   def _predict(self):
+    self.all_features = self._label_enconding(self.all_features)
     score_pred = self.meta_regressor.predict(self.all_features)
 
     best_features, best_score = self._find_best_hyperpara(self.all_features, score_pred)

@@ -32,20 +32,39 @@ from sklearn.preprocessing import LabelEncoder
 from collections import defaultdict
 from sklearn.externals import joblib
 
+from .label_encoder_dict import label_encoder_dict
+
 
 class MetaRegressor(object):
 
-  def __init__(self, path):
-    self.path = path
+  def __init__(self):
+    self.path = './meta_learn/data/sklearn.neighbors.KNeighborsClassifier'
     self.meta_regressor = None
+
+    self.model_name = self._get_model_name()
 
 
   def train_meta_regressor(self):
     X_train, y_train = self._get_meta_knowledge()
-    
-    self._train_regressor(X_train, y_train)
 
+    X_train = self._label_enconding(X_train)
+    #print(X_train)
+    self._train_regressor(X_train, y_train)
     self._store_model()
+
+
+  def _get_model_name(self):
+    model_name = self.path.split('/')[-1]
+    return model_name
+
+
+  def _label_enconding(self, X_train):
+    hyperpara_dict = label_encoder_dict[self.model_name]
+
+    for hyperpara_key in hyperpara_dict:
+      X_train = X_train.replace({str(hyperpara_key): hyperpara_dict[hyperpara_key]})
+
+    return X_train
 
 
   def _get_meta_knowledge(self):
@@ -67,7 +86,7 @@ class MetaRegressor(object):
     
 
   def _store_model(self):
-    filename = 'meta_regressor'
+    filename = './meta_learn/data/sklearn.neighbors.KNeighborsClassifier_meta_regressor'
     joblib.dump(self.meta_regressor, filename)
 
 
