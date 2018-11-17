@@ -58,8 +58,11 @@ class MetaRegressor(object):
     return model_name
 
 
+  def _get_hyperpara(self):
+    return label_encoder_dict[self.model_name]
+
   def _label_enconding(self, X_train):
-    hyperpara_dict = label_encoder_dict[self.model_name]
+    hyperpara_dict = self._get_hyperpara()
 
     for hyperpara_key in hyperpara_dict:
       X_train = X_train.replace({str(hyperpara_key): hyperpara_dict[hyperpara_key]})

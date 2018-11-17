@@ -36,18 +36,22 @@ from sklearn.ensemble import RandomForestClassifier
 
 from .collect_data import DataCollector
 from .meta_regressor import MetaRegressor
+
 from .label_encoder_dict import label_encoder_dict
 
 
 class Search(DataCollector, MetaRegressor):
 
   def __init__(self, search_dict):
-    self.path = './meta_learn/data/sklearn.neighbors.KNeighborsClassifier_meta_regressor'
+    self.path = None
     self.search_dict = search_dict
     self.meta_regressor = None
     self.all_features = None
 
     self.model_name = None
+    self.hyperpara_search_dict = None
+
+    self._get_meta_regressor_path()
 
 
   def search_optimum(self, X_train, y_train):
@@ -71,6 +75,12 @@ class Search(DataCollector, MetaRegressor):
     self.meta_regressor = reg
 
 
+  def _get_meta_regressor_path(self):
+    model_key = self.search_dict.keys()
+    path_dir = './meta_learn/data/'
+    self.path = path_dir+str(*model_key)+'_meta_regressor'
+
+
   def _search(self, X_train):
     for model_key in self.search_dict.keys():
       self.model_name = model_key
@@ -78,9 +88,9 @@ class Search(DataCollector, MetaRegressor):
       model = self._import_model(model_key)
       model = model()
 
-      hyperpara_search_dict = self.search_dict[model_key]
+      self.hyperpara_search_dict = self.search_dict[model_key]
 
-      keys, values = zip(*hyperpara_search_dict.items())
+      keys, values = zip(*self.hyperpara_search_dict.items())
       meta_reg_input = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
       features_from_model = pd.DataFrame(meta_reg_input)
@@ -109,9 +119,24 @@ class Search(DataCollector, MetaRegressor):
 
     keys = list(best_features[list1].columns)
     values = list(*best_features[list1].values)
-    hyperpara_dict = dict(zip(keys, values))
+    best_hyperpara_dict = dict(zip(keys, values))
 
-    return hyperpara_dict, best_score
+    best_hyperpara_dict = self._decode_hyperpara_dict(best_hyperpara_dict)
+    print(best_hyperpara_dict)
+
+    return best_hyperpara_dict, best_score
+
+
+  def _decode_hyperpara_dict(self, hyperpara_dict):
+    for hyperpara_key in label_encoder_dict[self.model_name]:
+      if hyperpara_key in hyperpara_dict:
+        inv_label_encoder_dict = {v: k for k, v in label_encoder_dict[self.model_name][hyperpara_key].items()}
+
+        encoded_values = hyperpara_dict[hyperpara_key]
+
+        hyperpara_dict[hyperpara_key] = inv_label_encoder_dict[encoded_values]
+
+    return hyperpara_dict
    
 
   def _find_best_hyperpara(self, features, scores):
