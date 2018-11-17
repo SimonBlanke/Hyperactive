@@ -75,6 +75,8 @@ class DataCollector(object):
       features_from_dataset[name] = value
       
     features_from_dataset = pd.DataFrame(features_from_dataset, index=[0])
+    features_from_dataset = features_from_dataset.reindex_axis(sorted(features_from_dataset.columns), axis=1)
+
     return features_from_dataset
 
 
@@ -124,6 +126,8 @@ class DataCollector(object):
 
       default_hyperpara_df = self._get_default_hyperpara(model, len(params_df))
       params_df = self._merge_dict(params_df, default_hyperpara_df)
+
+      params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
 
       mean_test_score_df = pd.DataFrame(grid_search_dict['mean_test_score'], columns=['mean_test_score'])
 

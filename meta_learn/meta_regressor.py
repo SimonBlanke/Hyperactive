@@ -61,6 +61,7 @@ class MetaRegressor(object):
   def _get_hyperpara(self):
     return label_encoder_dict[self.model_name]
 
+
   def _label_enconding(self, X_train):
     hyperpara_dict = self._get_hyperpara()
 
@@ -89,7 +90,7 @@ class MetaRegressor(object):
     
 
   def _store_model(self):
-    filename = './meta_learn/data/sklearn.neighbors.KNeighborsClassifier_meta_regressor'
+    filename = './meta_learn/data/'+str(self.model_name)
     joblib.dump(self.meta_regressor, filename)
 
 

@@ -26,6 +26,7 @@ import itertools
 import numpy as np
 import pandas as pd
 
+from pathlib import Path
 from functools import partial
 from scipy.optimize import minimize
 from sklearn.externals import joblib
@@ -59,20 +60,27 @@ class Search(DataCollector, MetaRegressor):
     self._load_model()
     print('\n Time _load_model:', time.time() - time1)
 
-    time1 = time.time()
-    self._search(X_train)
-    print('\n Time _search:', time.time() - time1)
+    if self.meta_regressor:
 
-    time1 = time.time()    
-    hyperpara_dict, best_score = self._predict()
-    print('\n Time _predict:', time.time() - time1, '\n')
+      time1 = time.time()
+      self._search(X_train)
+      print('\n Time _search:', time.time() - time1)
 
-    return hyperpara_dict, best_score
+    if self.all_features is not None:
+
+      time1 = time.time()    
+      hyperpara_dict, best_score = self._predict()
+      print('\n Time _predict:', time.time() - time1, '\n')
+
+      return hyperpara_dict, best_score
 
 
   def _load_model(self):
-    reg = joblib.load(self.path)
-    self.meta_regressor = reg
+    if Path(self.path).exists():
+      reg = joblib.load(self.path)
+      self.meta_regressor = reg
+    else:
+      print('No proper meta regressor found')
 
 
   def _get_meta_regressor_path(self):
@@ -90,6 +98,10 @@ class Search(DataCollector, MetaRegressor):
 
       self.hyperpara_search_dict = self.search_dict[model_key]
 
+      if len(self.hyperpara_search_dict.items()) == 0:
+        print('Error: hyperparameter search dict is empty\n')
+        break
+
       keys, values = zip(*self.hyperpara_search_dict.items())
       meta_reg_input = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
@@ -97,6 +109,7 @@ class Search(DataCollector, MetaRegressor):
 
       default_hyperpara_df = self._get_default_hyperpara(model, len(features_from_model))
       features_from_model = self._merge_dict(features_from_model, default_hyperpara_df)
+      features_from_model = features_from_model.reindex_axis(sorted(features_from_model.columns), axis=1)
 
       features_from_dataset = self._get_features_from_dataset(X_train)
 
@@ -107,6 +120,8 @@ class Search(DataCollector, MetaRegressor):
         features_from_dataset[column] = features_from_dataset[column][0]
 
       self.all_features = self._concat_dataframes(features_from_dataset, features_from_model)
+
+      print(self.all_features.head())
 
 
   def _predict(self):
