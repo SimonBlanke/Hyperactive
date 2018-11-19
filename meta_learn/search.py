@@ -54,33 +54,42 @@ class Search(DataCollector, MetaRegressor):
 
     self._get_meta_regressor_path()
 
+    self.model = None
+    self.X_train = None
+    self.y_train = None
+
 
   def search_optimum(self, X_train, y_train):
+    self.X_train = X_train
+    self.y_train = y_train
+
     time1 = time.time()
     self._load_model()
-    print('\n Time _load_model:', time.time() - time1)
+    print(' Time _load_model:', round(time.time() - time1, 5))
 
     if self.meta_regressor:
-
       time1 = time.time()
       self._search(X_train)
-      print('\n Time _search:', time.time() - time1)
+      print(' Time _search:', round(time.time() - time1, 5))
+    else:
+      print('Error: No meta regressor loaded\n')
 
     if self.all_features is not None:
 
       time1 = time.time()    
       hyperpara_dict, best_score = self._predict()
-      print('\n Time _predict:', time.time() - time1, '\n')
+      print(' Time _predict:', round(time.time() - time1, 5), '\n')
 
       return hyperpara_dict, best_score
-
+    else:
+      print('Error: meta regressor input is None\n')
 
   def _load_model(self):
     if Path(self.path).exists():
       reg = joblib.load(self.path)
       self.meta_regressor = reg
     else:
-      print('No proper meta regressor found')
+      print('No proper meta regressor found\n')
 
 
   def _get_meta_regressor_path(self):
@@ -94,7 +103,7 @@ class Search(DataCollector, MetaRegressor):
       self.model_name = model_key
 
       model = self._import_model(model_key)
-      model = model()
+      self.model = model()
 
       self.hyperpara_search_dict = self.search_dict[model_key]
 
@@ -107,11 +116,11 @@ class Search(DataCollector, MetaRegressor):
 
       features_from_model = pd.DataFrame(meta_reg_input)
 
-      default_hyperpara_df = self._get_default_hyperpara(model, len(features_from_model))
+      default_hyperpara_df = self._get_default_hyperpara(self.model, len(features_from_model))
       features_from_model = self._merge_dict(features_from_model, default_hyperpara_df)
       features_from_model = features_from_model.reindex_axis(sorted(features_from_model.columns), axis=1)
 
-      features_from_dataset = self._get_features_from_dataset(X_train)
+      features_from_dataset = self._get_features_from_dataset()
 
       features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
 
@@ -121,7 +130,7 @@ class Search(DataCollector, MetaRegressor):
 
       self.all_features = self._concat_dataframes(features_from_dataset, features_from_model)
 
-      print(self.all_features.head())
+      #print(self.all_features.head())
 
 
   def _predict(self):
@@ -137,7 +146,6 @@ class Search(DataCollector, MetaRegressor):
     best_hyperpara_dict = dict(zip(keys, values))
 
     best_hyperpara_dict = self._decode_hyperpara_dict(best_hyperpara_dict)
-    print(best_hyperpara_dict)
 
     return best_hyperpara_dict, best_score
 

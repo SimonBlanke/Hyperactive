@@ -43,35 +43,40 @@ class DataCollector(object):
     self.scoring = scoring
     self.cv = cv
     self.n_jobs = n_jobs
+    self.model = None
+
+    self.X_train = None
+    self.y_train = None
 
 
   def collect_meta_data(self, dataset_dict, ml_config_dict):
 
     for data_key in dataset_dict.keys():
 
-      X_train = dataset_dict[data_key][0]
-      y_train = dataset_dict[data_key][1]
+      self.X_train = dataset_dict[data_key][0]
+      self.y_train = dataset_dict[data_key][1]
       for ml_key in ml_config_dict.keys():
-        all_features = self._get_all_features(X_train, y_train, ml_config_dict)
+        all_features = self._get_all_features(ml_config_dict)
 
         self._save_toHDF(all_features, ml_key)
-      # Do data DataCollection
-      # Save to file
 
 
-  def _get_features_from_dataset(self, X_train):
-    def get_number_of_instances(X_train):
-      return 'N_rows', X_train.shape[0]
+  def _get_features_from_dataset(self):
+    def get_number_of_instances():
+      return 'N_rows', self.X_train.shape[0]
 
-    def get_number_of_features(X_train):
-      return 'N_columns', X_train.shape[1]
+    def get_number_of_features():
+      return 'N_columns', self.X_train.shape[1]
 
+    def get_default_score():
+      return 'cv_default_score', cross_val_score(self.model, self.X_train, self.y_train, cv=5).mean()
+      
     # List of functions to get the different features of the dataset
-    func_list = [get_number_of_instances, get_number_of_features]
+    func_list = [get_number_of_instances, get_number_of_features, get_default_score]
     
     features_from_dataset = {}
     for func in func_list:
-      name, value = func(X_train)
+      name, value = func()
       features_from_dataset[name] = value
       
     features_from_dataset = pd.DataFrame(features_from_dataset, index=[0])
@@ -110,21 +115,21 @@ class DataCollector(object):
     return params_df
 
 
-  def _grid_search(self, X_train, y_train, ml_config_dict):
+  def _grid_search(self, ml_config_dict):
     for model_key in ml_config_dict.keys():
       parameters = ml_config_dict[model_key]
 
       model = self._import_model(model_key)
-      model = model()
+      self.model = model()
 
-      model_grid_search = GridSearchCV(model, parameters, cv=self.cv, n_jobs=self.n_jobs)
-      model_grid_search.fit(X_train, y_train)
+      model_grid_search = GridSearchCV(self.model, parameters, cv=self.cv, n_jobs=self.n_jobs)
+      model_grid_search.fit(self.X_train, self.y_train)
 
       grid_search_dict = model_grid_search.cv_results_
 
       params_df = pd.DataFrame(grid_search_dict['params'])
 
-      default_hyperpara_df = self._get_default_hyperpara(model, len(params_df))
+      default_hyperpara_df = self._get_default_hyperpara(self.model, len(params_df))
       params_df = self._merge_dict(params_df, default_hyperpara_df)
 
       params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
@@ -136,10 +141,10 @@ class DataCollector(object):
       return features_from_model
 
 
-  def _get_all_features(self, X_train, y_train, ml_config_dict):
-    features_from_dataset = self._get_features_from_dataset(X_train)
+  def _get_all_features(self, ml_config_dict):
+    features_from_model = self._grid_search(ml_config_dict)
+    features_from_dataset = self._get_features_from_dataset()
     
-    features_from_model = self._grid_search(X_train, y_train, ml_config_dict)
 
     features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
     columns = features_from_dataset.columns
@@ -148,7 +153,7 @@ class DataCollector(object):
 
     all_features = self._concat_dataframes(features_from_dataset, features_from_model)
 
-    print(all_features.head())
+    #print(all_features.head())
 
     return all_features
 
@@ -170,10 +175,15 @@ class DataCollector(object):
   def _save_toHDF(self, dataframe, key, path=''):
     today = datetime.date.today()
     path_name = path+'meta_knowledge'
-    #print(dataframe)
-    #dataframe.to_hdf(path_name, key=str(key), mode='a')
-    dataframe.to_csv('./meta_learn/data/'+key, index=False)
-    print('saving', len(dataframe), 'examples of', str(key), 'meta data')
+    path1 = './meta_learn/data/'+'meta_knowledge'
+    
+    print(key)
+    print(path1)
+    print(len(dataframe))
+
+    dataframe.to_hdf(path1, key='a', mode='a', format='table', append=True)
+    #dataframe.to_csv(path1, index=False)
+    #print('saving', len(dataframe), 'examples of', str(key), 'meta data')
 
 
 

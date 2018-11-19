@@ -37,11 +37,12 @@ from .label_encoder_dict import label_encoder_dict
 
 class MetaRegressor(object):
 
-  def __init__(self):
-    self.path = './meta_learn/data/sklearn.neighbors.KNeighborsClassifier'
+  def __init__(self, model_name):
+    self.path = './meta_learn/data/meta_knowledge'
     self.meta_regressor = None
 
-    self.model_name = self._get_model_name()
+    self.model_name = model_name
+    #self._get_model_name()
 
 
   def train_meta_regressor(self):
@@ -72,7 +73,10 @@ class MetaRegressor(object):
 
 
   def _get_meta_knowledge(self):
-    data = pd.read_csv(self.path)
+    #data = pd.read_csv(self.path)
+    data = pd.read_hdf(self.path, key='a')
+
+    #print(data)
     
     column_names = data.columns
     score_name = [name for name in column_names if 'mean_test_score' in name]
@@ -85,12 +89,16 @@ class MetaRegressor(object):
 
   def _train_regressor(self, X_train, y_train):
     if self.meta_regressor == None:
-      self.meta_regressor = GradientBoostingRegressor(n_estimators=10)
+      self.meta_regressor = GradientBoostingRegressor(n_estimators=100)
+
+      print(X_train)
+      print(y_train)
       self.meta_regressor.fit(X_train, y_train)
     
 
   def _store_model(self):
-    filename = './meta_learn/data/'+str(self.model_name)
+    filename = './meta_learn/data/'+str(self.model_name)+'_meta_regressor'
+    #print(filename)
     joblib.dump(self.meta_regressor, filename)
 
 
