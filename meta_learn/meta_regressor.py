@@ -89,10 +89,12 @@ class MetaRegressor(object):
 
   def _train_regressor(self, X_train, y_train):
     if self.meta_regressor == None:
-      self.meta_regressor = GradientBoostingRegressor(n_estimators=100)
+      n_estimators = int(y_train.shape[0]/50)
+      n_estimators = 300
+      print('n_estimators: ', n_estimators)
+      self.meta_regressor = GradientBoostingRegressor(n_estimators=n_estimators)
 
-      print(X_train)
-      print(y_train)
+      print('Meta dataset', y_train.shape[0])
       self.meta_regressor.fit(X_train, y_train)
     
 

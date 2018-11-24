@@ -19,6 +19,17 @@ label_encoder_dict = {
     'n_jobs': {
       None: 0
     }
+  },
+  'sklearn.ensemble.RandomForestClassifier': {
+    'criterion': {
+      "gini": 0, 
+      "entropy": 1
+    },
+    'bootstrap': {
+      False: 0,
+      True: 1
+    }
+
   }
 }
 

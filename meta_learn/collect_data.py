@@ -63,10 +63,10 @@ class DataCollector(object):
 
   def _get_features_from_dataset(self):
     def get_number_of_instances():
-      return 'N_rows', self.X_train.shape[0]
+      return 'N_rows', int(self.X_train.shape[0])
 
     def get_number_of_features():
-      return 'N_columns', self.X_train.shape[1]
+      return 'N_columns', int(self.X_train.shape[1])
 
     def get_default_score():
       return 'cv_default_score', cross_val_score(self.model, self.X_train, self.y_train, cv=5).mean()
@@ -177,9 +177,9 @@ class DataCollector(object):
     path_name = path+'meta_knowledge'
     path1 = './meta_learn/data/'+'meta_knowledge'
     
-    print(key)
-    print(path1)
-    print(len(dataframe))
+    #print(key)
+    #print(path1)
+    #print(len(dataframe))
 
     dataframe.to_hdf(path1, key='a', mode='a', format='table', append=True)
     #dataframe.to_csv(path1, index=False)
