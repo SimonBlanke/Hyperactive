@@ -26,15 +26,21 @@ import numpy as np
 import pandas as pd
 
 from importlib import import_module
+from tqdm import tqdm
+
 
 from sklearn.datasets import load_iris
 from sklearn.datasets import load_wine
 
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import MinMaxScaler
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingRegressor
+
+
+from .augment_datasets import augment_dataset
 
 
 class DataCollector(object):
@@ -49,9 +55,27 @@ class DataCollector(object):
     self.y_train = None
 
 
-  def collect_meta_data(self, dataset_dict, ml_config_dict):
+  def collect_meta_data(self, dataset_dict, ml_config_dict, augment_data=False):
+    
+    if augment_data == True:
+      dataset_dict_temp = {}
+      print('Augmenting data')
+      for data_key in tqdm(dataset_dict.keys()):
+        X_train = dataset_dict[data_key][0]
+        y_train = dataset_dict[data_key][1]
 
-    for data_key in dataset_dict.keys():
+        dataset_dict_t = augment_dataset(X_train, y_train, n_drops=1)
+
+        for key in dataset_dict_t:
+          dataset_dict_temp[key] = dataset_dict_t[key]
+
+      dataset_dict = dict(dataset_dict_temp)
+
+    #print(dataset_dict.keys())
+
+    print('Collecting meta data')
+    for data_key in tqdm(dataset_dict.keys()):
+      #print('data_key: ', data_key)
 
       self.X_train = dataset_dict[data_key][0]
       self.y_train = dataset_dict[data_key][1]
@@ -134,7 +158,15 @@ class DataCollector(object):
 
       params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
 
+
       mean_test_score_df = pd.DataFrame(grid_search_dict['mean_test_score'], columns=['mean_test_score'])
+
+
+      # scale the score -> important for comparison of meta data from datasets in meta regressor training
+      scaler = MinMaxScaler()
+      mean_test_score_df = scaler.fit_transform(mean_test_score_df)
+      mean_test_score_df = pd.DataFrame(mean_test_score_df, columns=['mean_test_score'])
+
 
       features_from_model = pd.concat([params_df, mean_test_score_df], axis=1, ignore_index=False)
 
@@ -153,7 +185,8 @@ class DataCollector(object):
 
     all_features = self._concat_dataframes(features_from_dataset, features_from_model)
 
-    #print(all_features.head())
+    print(all_features)
+    print(all_features.columns)
 
     return all_features
 

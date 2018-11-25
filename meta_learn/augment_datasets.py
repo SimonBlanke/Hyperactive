@@ -24,26 +24,41 @@ import time
 import datetime
 import numpy as np
 import pandas as pd
+import multiprocessing
+
+num_cores = multiprocessing.cpu_count()
 
 
-
-def augment_dataset(X_train, y_train, dataset_name=None):
+def augment_dataset(X_train, y_train, n_drops=3, dataset_name=None):
 	dataset_dict = {}
 	dataset_dict['base'] = X_train
 
-	n_drops = len(X_train.columns)
-
 	dataset_dict_temp = dict(dataset_dict)
 	dataset_dict['base'] = [X_train, y_train]
-	for i in range(n_drops-2):
+
+	#pool = multiprocessing.Pool(num_cores)
+	#dataset_dict = zip(*pool.map(multiprocessing_helper, range(0, n_drops-2)))
+	
+	if n_drops > len(X_train.columns)-2:
+		n_drops = len(X_train.columns)-2
+		print('Number of drops to high for dataset. Setting n_drops to', n_drops)
+	for i in range(n_drops):
 		dataset_dict_temp = drop_feature(dataset_dict_temp)
 
 		for key_temp in dataset_dict_temp:
 			dataset_dict[key_temp] = [dataset_dict_temp[key_temp], y_train]
-	
+
 	return dataset_dict
 
+'''
+def multiprocessing_helper(n_drops):
+	dataset_dict_temp = drop_feature(dataset_dict_temp)
 
+	for key_temp in dataset_dict_temp:
+		dataset_dict[key_temp] = [dataset_dict_temp[key_temp], y_train]
+
+	return dataset_dict
+'''
 def drop_feature(dataset_dict):
 	dataset_dict_temp = {}
 	already_dropped = []

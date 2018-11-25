@@ -24,6 +24,7 @@ import datetime
 import pickle
 import numpy as np
 import pandas as pd
+import xgboost as xgb
 
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
@@ -90,12 +91,19 @@ class MetaRegressor(object):
   def _train_regressor(self, X_train, y_train):
     if self.meta_regressor == None:
       n_estimators = int(y_train.shape[0]/50)
-      n_estimators = 300
+      if n_estimators < 100:
+        n_estimators = 100
+      if n_estimators > 1000:
+        n_estimators = 1000
+      n_estimators = 1000
       print('n_estimators: ', n_estimators)
-      self.meta_regressor = GradientBoostingRegressor(n_estimators=n_estimators)
 
+      time1 = time.time()
+      #self.meta_regressor = GradientBoostingRegressor(n_estimators=n_estimators)
+      self.meta_regressor = xgb.XGBRegressor(n_estimators=n_estimators, nthread=-1)
       print('Meta dataset', y_train.shape[0])
       self.meta_regressor.fit(X_train, y_train)
+      print('time: ', round( (time.time() - time1), 4))
     
 
   def _store_model(self):
