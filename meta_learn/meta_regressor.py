@@ -99,7 +99,7 @@ class MetaRegressor(object):
     
 
   def _store_model(self):
-    filename = './meta_learn/data/'+str(self.model_name)+'_meta_regressor'
+    filename = './meta_learn/data/'+str(self.model_name)+'_meta_regressor.pkl'
     #print(filename)
     joblib.dump(self.meta_regressor, filename)
 

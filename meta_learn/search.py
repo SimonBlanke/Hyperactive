@@ -95,7 +95,7 @@ class Search(DataCollector, MetaRegressor):
   def _get_meta_regressor_path(self):
     model_key = self.search_dict.keys()
     path_dir = './meta_learn/data/'
-    self.path = path_dir+str(*model_key)+'_meta_regressor'
+    self.path = path_dir+str(*model_key)+'_meta_regressor.pkl'
 
 
   def _search(self, X_train):
