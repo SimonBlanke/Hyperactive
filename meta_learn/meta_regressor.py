@@ -32,6 +32,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import LabelEncoder
 from collections import defaultdict
 from sklearn.externals import joblib
+from sklearn.preprocessing import MinMaxScaler
 
 from .label_encoder_dict import label_encoder_dict
 
@@ -85,7 +86,18 @@ class MetaRegressor(object):
     X_train = data.drop(score_name, axis=1)
     y_train = data[score_name]
 
+    y_train = self._scale(y_train)
+
     return X_train, y_train
+
+
+  def _scale(self, y_train):
+    # scale the score -> important for comparison of meta data from datasets in meta regressor training
+    scaler = MinMaxScaler()
+    y_train = scaler.fit_transform(y_train)
+    y_train = pd.DataFrame(y_train, columns=['mean_test_score'])
+
+    return y_train
 
 
   def _train_regressor(self, X_train, y_train):

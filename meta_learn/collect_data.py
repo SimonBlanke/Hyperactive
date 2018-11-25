@@ -34,16 +34,21 @@ from sklearn.datasets import load_wine
 
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import MinMaxScaler
+
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingRegressor
 
-
 from .augment_datasets import augment_dataset
+from .dataset_features import get_number_of_instances
+from .dataset_features import get_number_of_features
+from .dataset_features import get_default_score
 
 
 class DataCollector(object):
+  get_number_of_instances = get_number_of_instances
+  get_number_of_features = get_number_of_features
+  get_default_score = get_default_score
 
   def __init__(self, scoring, cv=5, n_jobs=-1):
     self.scoring = scoring
@@ -86,17 +91,10 @@ class DataCollector(object):
 
 
   def _get_features_from_dataset(self):
-    def get_number_of_instances():
-      return 'N_rows', int(self.X_train.shape[0])
 
-    def get_number_of_features():
-      return 'N_columns', int(self.X_train.shape[1])
-
-    def get_default_score():
-      return 'cv_default_score', cross_val_score(self.model, self.X_train, self.y_train, cv=5).mean()
       
     # List of functions to get the different features of the dataset
-    func_list = [get_number_of_instances, get_number_of_features, get_default_score]
+    func_list = [self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
     
     features_from_dataset = {}
     for func in func_list:
@@ -158,15 +156,7 @@ class DataCollector(object):
 
       params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
 
-
       mean_test_score_df = pd.DataFrame(grid_search_dict['mean_test_score'], columns=['mean_test_score'])
-
-
-      # scale the score -> important for comparison of meta data from datasets in meta regressor training
-      scaler = MinMaxScaler()
-      mean_test_score_df = scaler.fit_transform(mean_test_score_df)
-      mean_test_score_df = pd.DataFrame(mean_test_score_df, columns=['mean_test_score'])
-
 
       features_from_model = pd.concat([params_df, mean_test_score_df], axis=1, ignore_index=False)
 
