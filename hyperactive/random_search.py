@@ -31,8 +31,8 @@ from .base import BaseOptimizer
 
 class RandomSearch_Optimizer(BaseOptimizer):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, cv=5, verbosity=0):
-		super().__init__(ml_search_dict, n_searches, scoring, cv, verbosity)
+	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=-1, cv=5, verbosity=0):
+		super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
 
 		self.ml_search_dict = ml_search_dict
 		self._search = self._start_random_search
@@ -53,11 +53,13 @@ class RandomSearch_Optimizer(BaseOptimizer):
 			- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
 			- score: A list of scores of these models. (list of floats)
 		'''
+		#n_searches = int(self.n_searches/self.n_jobs)
+
 
 		model_str, hyperpara_dict, hyperpara_indices = self._get_random_model()
 		score, train_time = self._get_score(model_str, hyperpara_dict)
 
-		return sklearn_model, score, hyperpara_dict, train_time
+		return self.sklearn_model, score, hyperpara_dict, train_time
 
 
 

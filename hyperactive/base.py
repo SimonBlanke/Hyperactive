@@ -34,10 +34,11 @@ from sklearn.model_selection import cross_val_score
 
 class BaseOptimizer(object):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, cv=5, verbosity=0):
+	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=-1, cv=5, verbosity=0):
 		self.ml_search_dict = ml_search_dict
 		self.n_searches = n_searches
 		self.scoring = scoring
+		self.n_jobs = n_jobs
 		self.cv = cv
 		self.verbosity = verbosity
 
@@ -152,25 +153,24 @@ class BaseOptimizer(object):
 		'''	
 
 		num_cores = multiprocessing.cpu_count()
-		num_cores = 1
-		pool = multiprocessing.Pool(num_cores)
+		if self.n_jobs == -1 or self.n_jobs > num_cores:
+			self.n_jobs = num_cores
+		pool = multiprocessing.Pool(self.n_jobs)
 				
-		n_searches_range = range(0, self.n_searches)
+		n_searches_range = range(0, self.n_jobs-1)
 		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, n_searches_range))
 		
-		self.model_list = models[:]
-		self.score_list = scores[:]
-		self.hyperpara_dict = hyperpara_dict[:]
-		self.train_time = train_time[:]
+		self.model_list = models
+		self.score_list = scores
+		self.hyperpara_dict = hyperpara_dict
+		self.train_time = train_time
 
 		return models, scores
 
 	def _search_test(self):
 
 		n_searches_range = range(0, self.n_searches)
-
 		models, scores, hyperpara_dict, train_time = self._search(10)
-
 
 		return models, scores
 

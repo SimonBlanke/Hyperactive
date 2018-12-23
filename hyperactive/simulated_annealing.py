@@ -40,8 +40,8 @@ from .base import BaseOptimizer
 
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, cv=5, verbosity=0):
-		super().__init__(ml_search_dict, n_searches, scoring, cv, verbosity)
+	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=-1, cv=5, verbosity=0):
+		super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
 
 		self._search = self._start_simulated_annealing
 
@@ -96,6 +96,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
 
 	def _start_simulated_annealing(self, n_searches):
+		n_searches = int(self.n_searches/self.n_jobs)
+
 		self.ML_model_str_current, self.hyperpara_dict_current, self.hyperpara_indices_current = self._get_random_model()
 
 		self.score_current, train_time = self._get_score(self.ML_model_str_current, self.hyperpara_dict_current)
