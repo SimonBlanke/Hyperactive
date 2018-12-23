@@ -27,8 +27,6 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 
-num_cores = multiprocessing.cpu_count()
-
 from importlib import import_module
 from functools import partial
 from sklearn.model_selection import cross_val_score
@@ -45,6 +43,10 @@ class BaseOptimizer(object):
 
 		self.sklearn_model = None
 
+		self.X_train = None
+		self.y_train = None
+		self.init_search_dict = None
+
 
 	def _check_model_str(self, model):
 		if 'sklearn' not in model:
@@ -57,9 +59,7 @@ class BaseOptimizer(object):
 		return model
 
 
-# score, hyperpara_indices, hyperpara_dict, ML_model_str
-
-	def _get_random_position(self, search_space_dict):
+	def _get_random_position(self):
 		'''
 		get a random N-Dim position in search space and return: 
 		model (string), 
@@ -70,15 +70,15 @@ class BaseOptimizer(object):
 		hyperpara_indices = {}
 
 		# if there are multiple models, select a random one
-		model = random.choice(list(search_space_dict.keys()))
+		model = random.choice(list(self.ml_search_dict.keys()))
 		model = self._check_model_str(model)
 
-		for hyperpara_name in search_space_dict[model].keys():
+		for hyperpara_name in self.ml_search_dict[model].keys():
 
-			n_hyperpara_values = len(search_space_dict[model][hyperpara_name])
+			n_hyperpara_values = len(self.ml_search_dict[model][hyperpara_name])
 			hyperpara_index = random.randint(0, n_hyperpara_values-1)
 
-			hyperpara_values = search_space_dict[model][hyperpara_name]
+			hyperpara_values = self.ml_search_dict[model][hyperpara_name]
 			hyperpara_value = hyperpara_values[hyperpara_index]
 
 			hyperpara_dict[hyperpara_name] = hyperpara_value
@@ -107,15 +107,36 @@ class BaseOptimizer(object):
 		return best_model, best_score
 
 
-	def _train_model(self, sklearn_model, X_train, y_train):
+	def _create_sklearn_model(self, model, hyperpara_dict):
+		return model(**hyperpara_dict)
+
+
+	def _train_model(self):
 		time_temp = time.time()
-		scores = cross_val_score(sklearn_model, X_train, y_train, scoring=self.scoring, cv=self.cv)
+		scores = cross_val_score(self.sklearn_model, self.X_train, self.y_train, scoring=self.scoring, cv=self.cv)
 		train_time = (time.time() - time_temp)/self.cv
 
 		return scores.mean(), train_time
 
 
-	def _search_multiprocessing(self, X_train, y_train, init_search_dict):
+	def _get_random_model(self):
+		'''
+		takes search space and training data to get a random sklearn model + hyperparameter combination
+		'''
+		model, hyperpara_dict, hyperpara_indices = self._get_random_position()
+		model = self._import_model(model)
+		self.sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
+		score, train_time = self._train_model()
+
+		return self.sklearn_model, hyperpara_dict, hyperpara_indices, score, train_time
+
+
+	def _get_neighbor_model(self, epsilon=1):
+
+		return None
+
+
+	def _search_multiprocessing(self):
 		'''
 		This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
 		After that the lists are searched to find the best model and its score.
@@ -127,12 +148,11 @@ class BaseOptimizer(object):
 			- best_score: The score of this model. (float)
 		'''	
 
+		num_cores = multiprocessing.cpu_count()
 		pool = multiprocessing.Pool(num_cores)
-	
-		search = partial(self._search, X_train=X_train, y_train=y_train, ml_search_dict=self.ml_search_dict, init_search_dict=init_search_dict)
 				
-		c_time = time.time()
-		models, scores, hyperpara_dict, train_time = zip(*pool.map(search, range(0, self.n_searches)))
+		n_searches_iter = range(0, self.n_searches)
+		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, n_searches_iter))
 		
 		self.model_list = models[:]
 		self.score_list = scores[:]
@@ -143,7 +163,11 @@ class BaseOptimizer(object):
 
 
 	def fit(self, X_train, y_train, init_search_dict=None):
-		models, scores = self._search_multiprocessing(X_train, y_train, init_search_dict)
+		self.X_train = X_train
+		self.y_train = y_train
+		self.init_search_dict = init_search_dict
+
+		models, scores = self._search_multiprocessing()
 
 		self.best_model, best_score = self._find_best_model(models, scores)
 		self.best_model.fit(X_train, y_train)

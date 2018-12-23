@@ -35,20 +35,8 @@ from importlib import import_module
 from functools import partial
 from sklearn.model_selection import cross_val_score
 
-from base import BaseOptimizer
+from .base import BaseOptimizer
 
-
-num_cores = multiprocessing.cpu_count()
-print(num_cores, 'CPU threads available')
-
-
-from dict1 import classifier_config_dict
-from dict1 import classifier_config_dict1
-
-from sklearn import datasets
-iris = datasets.load_iris()
-X = iris.data
-y = iris.target
 
 
 def get_model_from_string(module_string, hyperpara_dict):
@@ -114,8 +102,6 @@ def calc_neighbor_solution(self, X_train, y_train, hyperpara_indices, epsilon=1)
 		hyperpara_dict[hyperpara_key] = out
 
 
-
-
 	ML_model = get_model_from_string(model_key, hyperpara_dict)
 	ML_model_str = str(ML_model)
 
@@ -127,15 +113,15 @@ def calc_neighbor_solution(self, X_train, y_train, hyperpara_indices, epsilon=1)
 
 
 def calc_general_parameters(self):
-	self.model_key = list(self.ML_dict.keys())[0]
-	self.hyperpara_list = list(self.ML_dict[self.model_key].keys())
+	self.model_key = list(self.ml_search_dict.keys())[0]
+	self.hyperpara_list = list(self.ml_search_dict[self.model_key].keys())
 
 	self.hyperpara_range_list = []
 	self.hyperpara_length_list = []
 
 
 	for hyperpara in self.hyperpara_list:
-		hyperpara_range = np.array(self.ML_dict[self.model_key][hyperpara])
+		hyperpara_range = np.array(self.ml_search_dict[self.model_key][hyperpara])
 		hyperpara_length = len(hyperpara_range)
 		self.hyperpara_range_list.append(hyperpara_range)
 		self.hyperpara_length_list.append(hyperpara_length)
@@ -146,15 +132,17 @@ def calc_general_parameters(self):
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
 	calc_general_parameters = calc_general_parameters
-	create_init_solution = create_init_solution
-	calc_neighbor_solution = calc_neighbor_solution
+	#create_init_solution = create_init_solution
+	#calc_neighbor_solution = calc_neighbor_solution
 
+	def __init__(self, ml_search_dict, n_searches, scoring, cv=5, verbosity=0):
+		super().__init__(ml_search_dict, n_searches, scoring, cv, verbosity)
 
-	def __init__(self, ML_dict, scoring, N_pipelines=None, T_search_time=None, cv=5, verbosity=0):
-		self.ML_dict = ML_dict
+		self._search = self._start_simulated_annealing
+
+		self.ml_search_dict = ml_search_dict
 		self.scoring = scoring
-		self.N_pipelines = N_pipelines
-		self.T_search_time = T_search_time
+		self.n_searches = n_searches
 		self.cv = cv
 		self.verbosity = verbosity
 
@@ -177,9 +165,12 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 		self.ML_model_str_current = 0
 
 
-	def fit(self, X_train, y_train):
+	def _start_simulated_annealing(self, n_searches, ml_search_dict, X_train, y_train, init_search_dict):
 		calc_general_parameters(self)
-		self.score_current, self.hyperpara_indices_current, self.hyperpara_dict_current, self.ML_model_str_current = create_init_solution(self, X_train, y_train)
+
+		_, self.hyperpara_dict_current, self.hyperpara_indices_current, self.score_current, _ = self._get_random_model(ml_search_dict, X_train, y_train)
+
+		#self.score_current, self.hyperpara_indices_current, self.hyperpara_dict_current, self.ML_model_str_current = create_init_solution(self, X_train, y_train)
 
 		self.score_best = self.score_current
 		self.hyperpara_indices_best = self.hyperpara_indices_current
@@ -187,7 +178,9 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 		self.ML_model_str_best = self.ML_model_str_current
 
 		Temp = 100
-		for i in range(self.N_pipelines):
+		for i in range(n_searches):
+
+			#self.ML_model_str, self.hyperpara_dict, self.hyperpara_indices, self.score, _ = self._get_random_model(ml_search_dict, X_train, y_train)
 
 			self.score, self.hyperpara_indices, self.hyperpara_dict, self.ML_model_str  = calc_neighbor_solution(self, X_train, y_train, self.hyperpara_indices_current)
 			Temp = Temp*0.999
@@ -215,6 +208,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 				self.ML_model_str_current = self.ML_model_str 
 
 
-		self.best_model = get_model_from_string(self.ML_model_str_best, self.hyperpara_dict_best)
+		#self.best_model = self.ML_model_str
+
+		return self.ML_model_str, self.score, self.hyperpara_dict, 0
 		
 
