@@ -35,9 +35,6 @@ class RandomSearch_Optimizer(BaseOptimizer):
 		super().__init__(ml_search_dict, n_searches, scoring, cv, verbosity)
 
 		self.ml_search_dict = ml_search_dict
-		#self.X_train = X_train
-		#self.y_train = y_train
-
 		self._search = self._start_random_search
 
 
@@ -57,7 +54,8 @@ class RandomSearch_Optimizer(BaseOptimizer):
 			- score: A list of scores of these models. (list of floats)
 		'''
 
-		sklearn_model, hyperpara_dict, _, score, train_time = self._get_random_model()
+		model_str, hyperpara_dict, hyperpara_indices = self._get_random_model()
+		score, train_time = self._get_score(model_str, hyperpara_dict)
 
 		return sklearn_model, score, hyperpara_dict, train_time
 

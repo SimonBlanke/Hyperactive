@@ -47,6 +47,8 @@ class BaseOptimizer(object):
 		self.y_train = None
 		self.init_search_dict = None
 
+		self.hyperpara_search_dict = ml_search_dict[list(ml_search_dict.keys())[0]]
+
 
 	def _check_model_str(self, model):
 		if 'sklearn' not in model:
@@ -123,17 +125,18 @@ class BaseOptimizer(object):
 		'''
 		takes search space and training data to get a random sklearn model + hyperparameter combination
 		'''
-		model, hyperpara_dict, hyperpara_indices = self._get_random_position()
-		model = self._import_model(model)
+		model_str, hyperpara_dict, hyperpara_indices = self._get_random_position()
+
+		return model_str, hyperpara_dict, hyperpara_indices
+
+
+	def _get_score(self, model_str, hyperpara_dict):
+		model = self._import_model(model_str)
 		self.sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
 		score, train_time = self._train_model()
 
-		return self.sklearn_model, hyperpara_dict, hyperpara_indices, score, train_time
+		return score, train_time
 
-
-	def _get_neighbor_model(self, epsilon=1):
-
-		return None
 
 
 	def _search_multiprocessing(self):
@@ -149,10 +152,11 @@ class BaseOptimizer(object):
 		'''	
 
 		num_cores = multiprocessing.cpu_count()
+		num_cores = 1
 		pool = multiprocessing.Pool(num_cores)
 				
-		n_searches_iter = range(0, self.n_searches)
-		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, n_searches_iter))
+		n_searches_range = range(0, self.n_searches)
+		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, n_searches_range))
 		
 		self.model_list = models[:]
 		self.score_list = scores[:]
@@ -160,6 +164,26 @@ class BaseOptimizer(object):
 		self.train_time = train_time[:]
 
 		return models, scores
+
+	def _search_test(self):
+
+		n_searches_range = range(0, self.n_searches)
+
+		models, scores, hyperpara_dict, train_time = self._search(10)
+
+
+		return models, scores
+
+	def fit_test(self, X_train, y_train, init_search_dict=None):
+		self.X_train = X_train
+		self.y_train = y_train
+		self.init_search_dict = init_search_dict
+
+		models, scores = self._search_test()
+
+		models.fit(X_train, y_train)
+
+		print('Best score:', scores)
 
 
 	def fit(self, X_train, y_train, init_search_dict=None):
