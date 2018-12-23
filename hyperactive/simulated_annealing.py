@@ -176,9 +176,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 		self.ML_model_str_best = 0
 		self.ML_model_str_current = 0
 
-	def __call__(self):
-		return self.best_model
-
 
 	def fit(self, X_train, y_train):
 		calc_general_parameters(self)

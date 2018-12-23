@@ -26,11 +26,7 @@ import random
 import numpy as np
 import pandas as pd
 
-
-from functools import partial
-
 from .base import BaseOptimizer
-
 
 
 class RandomSearch_Optimizer(BaseOptimizer):
@@ -62,7 +58,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
 			- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
 			- score: A list of scores of these models. (list of floats)
 		'''
-		model, hyperpara_dict = self._get_random_value(ml_search_dict)
+		model, hyperpara_dict, _ = self._get_random_position(ml_search_dict)
+
+		print(hyperpara_dict)
 
 		model = self._import_model(model)
 		ML_model = model(**hyperpara_dict)

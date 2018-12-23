@@ -43,36 +43,48 @@ class BaseOptimizer(object):
 		self.cv = cv
 		self.verbosity = verbosity
 
+		self.sklearn_model = None
+
 
 	def _check_model_str(self, model):
 		if 'sklearn' not in model:
-			print(' ')
+			if self.sklearn_model:
+				print('')
+				return self.sklearn_model
+				
+			print('No sklearn model in ml_search_dict')
 			return
+		return model
 
 
-	def _get_random_value(self, search_space_dict):
-		model = None
-		hyperpara_names = []
+# score, hyperpara_indices, hyperpara_dict, ML_model_str
 
+	def _get_random_position(self, search_space_dict):
+		'''
+		get a random N-Dim position in search space and return: 
+		model (string), 
+		hyperparameter (dict), 
+		N indices of N-Dim position (dict)
+		'''
 		hyperpara_dict = {}
-		hyperpara_value = []
+		hyperpara_indices = {}
 
+		# if there are multiple models, select a random one
 		model = random.choice(list(search_space_dict.keys()))
-		self._check_model_str(model)
+		model = self._check_model_str(model)
 
 		for hyperpara_name in search_space_dict[model].keys():
 
 			n_hyperpara_values = len(search_space_dict[model][hyperpara_name])
-			rand_hyperpara_value = random.randint(0, n_hyperpara_values-1)
-
-			hyperpara_names.append(hyperpara_name)
+			hyperpara_index = random.randint(0, n_hyperpara_values-1)
 
 			hyperpara_values = search_space_dict[model][hyperpara_name]
-			hyperpara_value = hyperpara_values[rand_hyperpara_value]
+			hyperpara_value = hyperpara_values[hyperpara_index]
 
 			hyperpara_dict[hyperpara_name] = hyperpara_value
+			hyperpara_indices[hyperpara_name] = hyperpara_index
 
-		return model, hyperpara_dict
+		return model, hyperpara_dict, hyperpara_indices
 
 
 	def _import_model(self, model):
@@ -95,9 +107,9 @@ class BaseOptimizer(object):
 		return best_model, best_score
 
 
-	def _train_model(self, ml_model, X_train, y_train):
+	def _train_model(self, sklearn_model, X_train, y_train):
 		time_temp = time.time()
-		scores = cross_val_score(ml_model, X_train, y_train, scoring=self.scoring, cv=self.cv)
+		scores = cross_val_score(sklearn_model, X_train, y_train, scoring=self.scoring, cv=self.cv)
 		train_time = (time.time() - time_temp)/self.cv
 
 		return scores.mean(), train_time
