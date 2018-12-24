@@ -139,7 +139,6 @@ class BaseOptimizer(object):
 		return score, train_time
 
 
-
 	def _search_multiprocessing(self):
 		'''
 		This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
@@ -167,12 +166,14 @@ class BaseOptimizer(object):
 
 		return models, scores
 
+
 	def _search_test(self):
 
 		n_searches_range = range(0, self.n_searches)
 		models, scores, hyperpara_dict, train_time = self._search(10)
 
 		return models, scores
+
 
 	def fit_test(self, X_train, y_train, init_search_dict=None):
 		self.X_train = X_train
