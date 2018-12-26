@@ -31,7 +31,7 @@ from .base import BaseOptimizer
 
 class RandomSearch_Optimizer(BaseOptimizer):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=-1, cv=5, verbosity=0):
+	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=1, cv=5, verbosity=0):
 		super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
 
 		self.ml_search_dict = ml_search_dict

@@ -34,7 +34,7 @@ from sklearn.model_selection import cross_val_score
 
 class BaseOptimizer(object):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=-1, cv=5, verbosity=0):
+	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=1, cv=5, verbosity=0):
 		self.ml_search_dict = ml_search_dict
 		self.n_searches = n_searches
 		self.scoring = scoring
@@ -73,21 +73,21 @@ class BaseOptimizer(object):
 		hyperpara_indices = {}
 
 		# if there are multiple models, select a random one
-		model = random.choice(list(self.ml_search_dict.keys()))
-		model = self._check_model_str(model)
+		model_str = random.choice(list(self.ml_search_dict.keys()))
+		model_str = self._check_model_str(model_str)
 
-		for hyperpara_name in self.ml_search_dict[model].keys():
+		for hyperpara_name in self.ml_search_dict[model_str].keys():
 
-			n_hyperpara_values = len(self.ml_search_dict[model][hyperpara_name])
+			n_hyperpara_values = len(self.ml_search_dict[model_str][hyperpara_name])
 			hyperpara_index = random.randint(0, n_hyperpara_values-1)
 
-			hyperpara_values = self.ml_search_dict[model][hyperpara_name]
+			hyperpara_values = self.ml_search_dict[model_str][hyperpara_name]
 			hyperpara_value = hyperpara_values[hyperpara_index]
 
 			hyperpara_dict[hyperpara_name] = hyperpara_value
 			hyperpara_indices[hyperpara_name] = hyperpara_index
 
-		return model, hyperpara_dict, hyperpara_indices
+		return model_str, hyperpara_dict, hyperpara_indices
 
 
 	def _import_model(self, model):
@@ -170,7 +170,7 @@ class BaseOptimizer(object):
 	def _search_test(self):
 
 		n_searches_range = range(0, self.n_searches)
-		models, scores, hyperpara_dict, train_time = self._search(10)
+		models, scores, hyperpara_dict, train_time = self._search(80)
 
 		return models, scores
 
