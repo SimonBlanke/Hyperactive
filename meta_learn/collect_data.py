@@ -40,12 +40,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingRegressor
 
 from .augment_datasets import augment_dataset
+
+from .dataset_features import add_dataset_name
 from .dataset_features import get_number_of_instances
 from .dataset_features import get_number_of_features
 from .dataset_features import get_default_score
 
 
 class DataCollector(object):
+  add_dataset_name = add_dataset_name
   get_number_of_instances = get_number_of_instances
   get_number_of_features = get_number_of_features
   get_default_score = get_default_score
@@ -54,14 +57,26 @@ class DataCollector(object):
     self.scoring = scoring
     self.cv = cv
     self.n_jobs = n_jobs
+
+    self.dataset_dict = None
+    self.ml_config_dict = None
+
     self.model = None
 
     self.X_train = None
     self.y_train = None
+    self.data_name = None
+
+    self.model_name = None
+
+    self.meta_knowledge_dict = {}
 
 
   def collect_meta_data(self, dataset_dict, ml_config_dict, augment_data=False):
-    
+    self.dataset_dict = dataset_dict
+    self.ml_config_dict = ml_config_dict
+
+    '''
     if augment_data == True:
       dataset_dict_temp = {}
       print('Augmenting data')
@@ -75,26 +90,27 @@ class DataCollector(object):
           dataset_dict_temp[key] = dataset_dict_t[key]
 
       dataset_dict = dict(dataset_dict_temp)
-
-    #print(dataset_dict.keys())
+    '''
 
     print('Collecting meta data')
-    for data_key in tqdm(dataset_dict.keys()):
-      #print('data_key: ', data_key)
+    for data_name in tqdm(dataset_dict.keys()):
+      self.data_name = data_name
 
-      self.X_train = dataset_dict[data_key][0]
-      self.y_train = dataset_dict[data_key][1]
-      for ml_key in ml_config_dict.keys():
+      self.X_train = dataset_dict[data_name][0]
+      self.y_train = dataset_dict[data_name][1]
+
+      for model_name in ml_config_dict.keys():
+        self.model_name = model_name
+        
         all_features = self._get_all_features(ml_config_dict)
 
-        self._save_toHDF(all_features, ml_key)
+        self._save_toHDF(all_features, model_name)
 
 
   def _get_features_from_dataset(self):
-
       
     # List of functions to get the different features of the dataset
-    func_list = [self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
+    func_list = [self.add_dataset_name, self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
     
     features_from_dataset = {}
     for func in func_list:
@@ -138,10 +154,10 @@ class DataCollector(object):
 
 
   def _grid_search(self, ml_config_dict):
-    for model_key in ml_config_dict.keys():
-      parameters = ml_config_dict[model_key]
+    for model_name in ml_config_dict.keys():
+      parameters = ml_config_dict[model_name]
 
-      model = self._import_model(model_key)
+      model = self._import_model(model_name)
       self.model = model()
 
       model_grid_search = GridSearchCV(self.model, parameters, cv=self.cv, n_jobs=self.n_jobs)
@@ -204,8 +220,8 @@ class DataCollector(object):
     #print(path1)
     #print(len(dataframe))
 
-    dataframe.to_hdf(path1, key='a', mode='a', format='table', append=True)
-    #dataframe.to_csv(path1, index=False)
+    #dataframe.to_hdf(path1, key='a', mode='a', format='table', append=True)
+    dataframe.to_csv(path1, index=False)
     #print('saving', len(dataframe), 'examples of', str(key), 'meta data')
 
 
