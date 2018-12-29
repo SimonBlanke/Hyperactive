@@ -41,17 +41,10 @@ from sklearn.ensemble import GradientBoostingRegressor
 
 from .augment_datasets import augment_dataset
 
-from .dataset_features import add_dataset_name
-from .dataset_features import get_number_of_instances
-from .dataset_features import get_number_of_features
-from .dataset_features import get_default_score
+
 
 
 class DataCollector(object):
-  add_dataset_name = add_dataset_name
-  get_number_of_instances = get_number_of_instances
-  get_number_of_features = get_number_of_features
-  get_default_score = get_default_score
 
   def __init__(self, scoring, cv=5, n_jobs=-1):
     self.scoring = scoring
@@ -93,108 +86,28 @@ class DataCollector(object):
     '''
 
     print('Collecting meta data')
-    for data_name in tqdm(dataset_dict.keys()):
-      self.data_name = data_name
 
-      self.X_train = dataset_dict[data_name][0]
-      self.y_train = dataset_dict[data_name][1]
+    for model_name in ml_config_dict.keys():
+      dataCollector_model = DataCollector_model(ml_config_dict)
+      dataCollector_dataset = DataCollector_dataset(ml_config_dict)
 
-      for model_name in ml_config_dict.keys():
-        self.model_name = model_name
+      for data_name, data_train in tqdm(dataset_dict.items()):
+
+        features_from_model = dataCollector_model.collect(data_name, data_train)
+        features_from_dataset = dataCollector_dataset.collect(data_name, data_train)
+
+        print('features_from_model\n', features_from_model, '\n')
+        print('features_from_dataset\n', features_from_dataset, '\n')
+
+        features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
+        columns = features_from_dataset.columns
+        for column in columns:
+          features_from_dataset[column] = features_from_dataset[column][0]
         
-        all_features = self._get_all_features(ml_config_dict)
+
+        all_features = self._concat_dataframes(features_from_dataset, features_from_model)
 
         self._save_toHDF(all_features, model_name)
-
-
-  def _get_features_from_dataset(self):
-      
-    # List of functions to get the different features of the dataset
-    func_list = [self.add_dataset_name, self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
-    
-    features_from_dataset = {}
-    for func in func_list:
-      name, value = func()
-      features_from_dataset[name] = value
-      
-    features_from_dataset = pd.DataFrame(features_from_dataset, index=[0])
-    features_from_dataset = features_from_dataset.reindex_axis(sorted(features_from_dataset.columns), axis=1)
-
-    return features_from_dataset
-
-
-  def _import_model(self, model):
-    sklearn, submod_func = model.rsplit('.', 1)
-    module = import_module(sklearn)
-    model = getattr(module, submod_func)
-
-    return model
-
-
-  def _get_default_hyperpara(self, model, n_rows):
-    hyperpara_dict = model.get_params()
-    hyperpara_df = pd.DataFrame(hyperpara_dict, index=[0])
-
-    hyperpara_df = pd.DataFrame(hyperpara_df, index=range(n_rows))
-    columns = hyperpara_df.columns
-    for column in columns:
-      hyperpara_df[column] = hyperpara_df[column][0]
-
-    return hyperpara_df
-
-
-  def _merge_dict(self, params_df, hyperpara_df):
-    searched_hyperpara = params_df.columns
-
-    for hyperpara in searched_hyperpara:
-      hyperpara_df = hyperpara_df.drop(hyperpara, axis=1)
-    params_df = pd.concat([params_df, hyperpara_df], axis=1, ignore_index=False)
-
-    return params_df
-
-
-  def _grid_search(self, ml_config_dict):
-    for model_name in ml_config_dict.keys():
-      parameters = ml_config_dict[model_name]
-
-      model = self._import_model(model_name)
-      self.model = model()
-
-      model_grid_search = GridSearchCV(self.model, parameters, cv=self.cv, n_jobs=self.n_jobs)
-      model_grid_search.fit(self.X_train, self.y_train)
-
-      grid_search_dict = model_grid_search.cv_results_
-
-      params_df = pd.DataFrame(grid_search_dict['params'])
-
-      default_hyperpara_df = self._get_default_hyperpara(self.model, len(params_df))
-      params_df = self._merge_dict(params_df, default_hyperpara_df)
-
-      params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
-
-      mean_test_score_df = pd.DataFrame(grid_search_dict['mean_test_score'], columns=['mean_test_score'])
-
-      features_from_model = pd.concat([params_df, mean_test_score_df], axis=1, ignore_index=False)
-
-      return features_from_model
-
-
-  def _get_all_features(self, ml_config_dict):
-    features_from_model = self._grid_search(ml_config_dict)
-    features_from_dataset = self._get_features_from_dataset()
-    
-
-    features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
-    columns = features_from_dataset.columns
-    for column in columns:
-      features_from_dataset[column] = features_from_dataset[column][0]
-
-    all_features = self._concat_dataframes(features_from_dataset, features_from_model)
-
-    print(all_features)
-    print(all_features.columns)
-
-    return all_features
 
 
   def _concat_dataframes(self, features_from_dataset, features_from_model):
@@ -226,11 +139,130 @@ class DataCollector(object):
 
 
 
+from .dataset_features import add_dataset_name
+from .dataset_features import get_number_of_instances
+from .dataset_features import get_number_of_features
+from .dataset_features import get_default_score
+
+class DataCollector_dataset(object):
+
+  add_dataset_name = add_dataset_name
+  get_number_of_instances = get_number_of_instances
+  get_number_of_features = get_number_of_features
+  get_default_score = get_default_score
+
+  def __init__(self, ml_config_dict, cv=5):
+    self.ml_config_dict = ml_config_dict
+
+    self.model_name = list(ml_config_dict.keys())[0]
+
+
+  def _get_features_from_dataset(self):
+      
+    # List of functions to get the different features of the dataset
+    func_list = [self.add_dataset_name, self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
+    
+    features_from_dataset = {}
+    for func in func_list:
+      name, value = func()
+      features_from_dataset[name] = value
+      
+    features_from_dataset = pd.DataFrame(features_from_dataset, index=[0])
+    features_from_dataset = features_from_dataset.reindex_axis(sorted(features_from_dataset.columns), axis=1)
+
+    return features_from_dataset
+
+
+  def _import_model(self, model):
+    sklearn, submod_func = model.rsplit('.', 1)
+    module = import_module(sklearn)
+    model = getattr(module, submod_func)
+
+    return model
+
+
+  def collect(self, data_name, data_train):
+    self.data_name = data_name
+    self.X_train = data_train[0]
+    self.y_train = data_train[1]
+
+    model = self._import_model(self.model_name)
+    self.model = model()
+
+    features_from_dataset = self._get_features_from_dataset()
+
+    return features_from_dataset
 
 
 
 
+class DataCollector_model(object):
+
+  def __init__(self, ml_config_dict, cv=5, n_jobs=-1):
+    self.ml_config_dict = ml_config_dict
+    self.cv = cv
+    self.n_jobs = n_jobs
 
 
+  def _grid_search(self, X_train, y_train):
+    for model_name in self.ml_config_dict.keys():
+      parameters = self.ml_config_dict[model_name]
+
+      model = self._import_model(model_name)
+      self.model = model()
+
+      model_grid_search = GridSearchCV(self.model, parameters, cv=self.cv, n_jobs=self.n_jobs)
+      model_grid_search.fit(X_train, y_train)
+
+      grid_search_dict = model_grid_search.cv_results_
+
+      params_df = pd.DataFrame(grid_search_dict['params'])
+
+      default_hyperpara_df = self._get_default_hyperpara(self.model, len(params_df))
+      params_df = self._merge_dict(params_df, default_hyperpara_df)
+
+      params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
+
+      mean_test_score_df = pd.DataFrame(grid_search_dict['mean_test_score'], columns=['mean_test_score'])
+
+      features_from_model = pd.concat([params_df, mean_test_score_df], axis=1, ignore_index=False)
+
+      return features_from_model
 
 
+  def _get_default_hyperpara(self, model, n_rows):
+    hyperpara_dict = model.get_params()
+    hyperpara_df = pd.DataFrame(hyperpara_dict, index=[0])
+
+    hyperpara_df = pd.DataFrame(hyperpara_df, index=range(n_rows))
+    columns = hyperpara_df.columns
+    for column in columns:
+      hyperpara_df[column] = hyperpara_df[column][0]
+
+    return hyperpara_df
+
+
+  def _merge_dict(self, params_df, hyperpara_df):
+    searched_hyperpara = params_df.columns
+
+    for hyperpara in searched_hyperpara:
+      hyperpara_df = hyperpara_df.drop(hyperpara, axis=1)
+    params_df = pd.concat([params_df, hyperpara_df], axis=1, ignore_index=False)
+
+    return params_df
+
+
+  def _import_model(self, model):
+    sklearn, submod_func = model.rsplit('.', 1)
+    module = import_module(sklearn)
+    model = getattr(module, submod_func)
+
+    return model
+
+
+  def collect(self, data_name, data_train):
+    self.data_name = data_name
+    X_train = data_train[0]
+    y_train = data_train[1]
+
+    return self._grid_search(X_train, y_train)
