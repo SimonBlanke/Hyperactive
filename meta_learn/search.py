@@ -26,6 +26,7 @@ import itertools
 import numpy as np
 import pandas as pd
 
+from tqdm import tqdm
 from pathlib import Path
 from functools import partial
 from scipy.optimize import minimize
@@ -36,18 +37,21 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 from .collect_data import DataCollector
+from .collect_data import DataCollector_model
+from .collect_data import DataCollector_dataset
+
 from .meta_regressor import MetaRegressor
 
 from .label_encoder_dict import label_encoder_dict
 
 
-class Search(DataCollector, MetaRegressor):
+class Search(DataCollector, DataCollector_model, MetaRegressor):
 
   def __init__(self, search_dict):
     self.path = None
     self.search_dict = search_dict
     self.meta_regressor = None
-    self.all_features = None
+    self.meta_knowledge = None
 
     self.model_name = None
     self.hyperpara_search_dict = None
@@ -58,31 +62,31 @@ class Search(DataCollector, MetaRegressor):
     self.X_train = None
     self.y_train = None
 
+    self.data_name = None
+    self.data_test = None
 
-  def search_optimum(self, X_train, y_train):
-    self.X_train = X_train
-    self.y_train = y_train
+    self.hyperpara_dict = None
 
-    time1 = time.time()
-    self._load_model()
-    print(' Time _load_model:', round(time.time() - time1, 5))
 
-    if self.meta_regressor:
-      time1 = time.time()
-      self._search(X_train)
-      print(' Time _search:', round(time.time() - time1, 5))
-    else:
-      print('Error: No meta regressor loaded\n')
+  def search_optimum(self, data_dict):
+    for data_name, data_test in tqdm(data_dict.items()):
+      self.data_name = data_name
+      self.data_test = data_test
 
-    if self.all_features is not None:
+      self.X_train = data_test[0]
+      self.y_train = data_test[1]
 
-      time1 = time.time()    
+      self._load_model()
+
+      if not self.meta_regressor:
+        print('Error: No meta regressor loaded\n')
+        return 0
+
+      self._search(self.X_train)
       hyperpara_dict, best_score = self._predict()
-      print(' Time _predict:', round(time.time() - time1, 5), '\n')
 
       return hyperpara_dict, best_score
-    else:
-      print('Error: meta regressor input is None\n')
+
 
   def _load_model(self):
     if Path(self.path).exists():
@@ -94,13 +98,15 @@ class Search(DataCollector, MetaRegressor):
 
   def _get_meta_regressor_path(self):
     model_key = self.search_dict.keys()
-    path_dir = './meta_learn/data/'
+    path_dir = './data/'
     self.path = path_dir+str(*model_key)+'_meta_regressor.pkl'
 
 
   def _search(self, X_train):
     for model_key in self.search_dict.keys():
       self.model_name = model_key
+
+      self.hyperpara_dict = self._get_hyperpara(model_key)
 
       model = self._import_model(model_key)
       self.model = model()
@@ -111,16 +117,10 @@ class Search(DataCollector, MetaRegressor):
         print('Error: hyperparameter search dict is empty\n')
         break
 
-      keys, values = zip(*self.hyperpara_search_dict.items())
-      meta_reg_input = [dict(zip(keys, v)) for v in itertools.product(*values)]
+      features_from_model = self._features_from_model()
 
-      features_from_model = pd.DataFrame(meta_reg_input)
-
-      default_hyperpara_df = self._get_default_hyperpara(self.model, len(features_from_model))
-      features_from_model = self._merge_dict(features_from_model, default_hyperpara_df)
-      features_from_model = features_from_model.reindex_axis(sorted(features_from_model.columns), axis=1)
-
-      features_from_dataset = self._get_features_from_dataset()
+      dataCollector_dataset = DataCollector_dataset(self.search_dict)
+      features_from_dataset = dataCollector_dataset.collect(self.data_name, self.data_test)
 
       features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
 
@@ -128,16 +128,28 @@ class Search(DataCollector, MetaRegressor):
       for column in columns:
         features_from_dataset[column] = features_from_dataset[column][0]
 
-      self.all_features = self._concat_dataframes(features_from_dataset, features_from_model)
+      self.meta_knowledge = self._concat_dataframes(features_from_dataset, features_from_model)
 
-      #print(self.all_features.head())
 
+  def _features_from_model(self):
+    keys, values = zip(*self.hyperpara_search_dict.items())
+    meta_reg_input = [dict(zip(keys, v)) for v in itertools.product(*values)]
+
+    features_from_model = pd.DataFrame(meta_reg_input)
+
+    default_hyperpara_df = self._get_default_hyperpara(self.model, len(features_from_model))
+    features_from_model = self._merge_dict(features_from_model, default_hyperpara_df)
+    features_from_model = features_from_model.reindex_axis(sorted(features_from_model.columns), axis=1)
+
+    return features_from_model
 
   def _predict(self):
-    self.all_features = self._label_enconding(self.all_features)
-    score_pred = self.meta_regressor.predict(self.all_features)
+    self.meta_knowledge = self._label_enconding(self.meta_knowledge)
+    print(self.meta_knowledge)
+    print(self.meta_knowledge.info())
+    score_pred = self.meta_regressor.predict(self.meta_knowledge)
 
-    best_features, best_score = self._find_best_hyperpara(self.all_features, score_pred)
+    best_features, best_score = self._find_best_hyperpara(self.meta_knowledge, score_pred)
 
     list1 = list(self.search_dict[str(*self.search_dict.keys())].keys())
 
@@ -166,7 +178,6 @@ class Search(DataCollector, MetaRegressor):
     N_best_features = 1
 
     scores = np.array(scores)
-   
     index_best_scores = list(scores.argsort()[-N_best_features:][::-1])
 
     best_score = scores[index_best_scores][0]
@@ -174,3 +185,14 @@ class Search(DataCollector, MetaRegressor):
 
     return best_features, best_score
 
+
+  def _get_hyperpara(self, model_name):
+    return label_encoder_dict[model_name]
+
+
+  def _label_enconding(self, X_train):
+    for hyperpara_key in self.hyperpara_dict:
+      to_replace = {hyperpara_key: self.hyperpara_dict[hyperpara_key] }
+      X_train = X_train.replace(to_replace)
+
+    return X_train

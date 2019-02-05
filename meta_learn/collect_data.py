@@ -19,7 +19,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-
+import os
 import time
 import datetime
 import numpy as np
@@ -87,27 +87,30 @@ class DataCollector(object):
 
     print('Collecting meta data')
 
+    meta_knowledge_from_model = {}
     for model_name in ml_config_dict.keys():
       dataCollector_model = DataCollector_model(ml_config_dict)
       dataCollector_dataset = DataCollector_dataset(ml_config_dict)
 
+      meta_knowledge_from_dataset = {}
       for data_name, data_train in tqdm(dataset_dict.items()):
 
         features_from_model = dataCollector_model.collect(data_name, data_train)
         features_from_dataset = dataCollector_dataset.collect(data_name, data_train)
 
-        print('features_from_model\n', features_from_model, '\n')
-        print('features_from_dataset\n', features_from_dataset, '\n')
-
         features_from_dataset = pd.DataFrame(features_from_dataset, index=range(len(features_from_model)))
         columns = features_from_dataset.columns
         for column in columns:
           features_from_dataset[column] = features_from_dataset[column][0]
-        
 
-        all_features = self._concat_dataframes(features_from_dataset, features_from_model)
+        meta_knowledge = self._concat_dataframes(features_from_dataset, features_from_model)
 
-        self._save_toHDF(all_features, model_name)
+        self._save_toCSV(meta_knowledge, model_name)
+        meta_knowledge_from_dataset[data_name] = meta_knowledge
+
+      meta_knowledge_from_model[model_name] = meta_knowledge_from_dataset
+
+    return meta_knowledge_from_model
 
 
   def _concat_dataframes(self, features_from_dataset, features_from_model):
@@ -120,6 +123,7 @@ class DataCollector(object):
       features_from_model = features_from_model.drop('index', axis=1)
 
     all_features = pd.concat([features_from_dataset, features_from_model], axis=1, ignore_index=False)
+    all_features = all_features.convert_objects()
 
     return all_features
 
@@ -129,15 +133,18 @@ class DataCollector(object):
     path_name = path+'meta_knowledge'
     path1 = './meta_learn/data/'+'meta_knowledge'
     
-    #print(key)
-    #print(path1)
-    #print(len(dataframe))
+    dataframe.to_hdf(path1, key='a', mode='a', format='table', append=True)
 
-    #dataframe.to_hdf(path1, key='a', mode='a', format='table', append=True)
-    dataframe.to_csv(path1, index=False)
+
+  def _save_toCSV(self, dataframe, key, path=''):
+    directory = './data/'
+    #today = datetime.date.today()
+    if not os.path.exists(directory):
+      os.makedirs(directory)
+
+    path = directory+'meta_knowledge'
+    dataframe.to_csv(path, index=False)
     #print('saving', len(dataframe), 'examples of', str(key), 'meta data')
-
-
 
 from .dataset_features import add_dataset_name
 from .dataset_features import get_number_of_instances
@@ -160,7 +167,7 @@ class DataCollector_dataset(object):
   def _get_features_from_dataset(self):
       
     # List of functions to get the different features of the dataset
-    func_list = [self.add_dataset_name, self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
+    func_list = [self.get_number_of_instances, self.get_number_of_features, self.get_default_score]
     
     features_from_dataset = {}
     for func in func_list:
@@ -194,7 +201,7 @@ class DataCollector_dataset(object):
     return features_from_dataset
 
 
-
+from .label_encoder_dict import label_encoder_dict
 
 class DataCollector_model(object):
 
@@ -203,9 +210,13 @@ class DataCollector_model(object):
     self.cv = cv
     self.n_jobs = n_jobs
 
+    self.model_name = None
+    self.hyperpara_dict = None
+
 
   def _grid_search(self, X_train, y_train):
     for model_name in self.ml_config_dict.keys():
+      self.hyperpara_dict = self._get_hyperpara(model_name)
       parameters = self.ml_config_dict[model_name]
 
       model = self._import_model(model_name)
@@ -227,7 +238,22 @@ class DataCollector_model(object):
 
       features_from_model = pd.concat([params_df, mean_test_score_df], axis=1, ignore_index=False)
 
+      print(features_from_model)
+
+      features_from_model = self._label_enconding(features_from_model)
+
       return features_from_model
+
+  def _get_hyperpara(self, model_name):
+    return label_encoder_dict[model_name]
+
+
+  def _label_enconding(self, X_train):
+    for hyperpara_key in self.hyperpara_dict:
+      to_replace = {hyperpara_key: self.hyperpara_dict[hyperpara_key] }
+      X_train = X_train.replace(to_replace)
+
+    return X_train
 
 
   def _get_default_hyperpara(self, model, n_rows):

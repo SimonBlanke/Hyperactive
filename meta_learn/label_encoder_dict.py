@@ -1,8 +1,8 @@
 label_encoder_dict = {
   'sklearn.neighbors.KNeighborsClassifier': {
     'weights': {
-      "uniform": 0,
-      "distance": 1
+      'uniform': 0,
+      'distance': 1
     },
     'algorithm': {
       'auto': 0, 
@@ -22,8 +22,8 @@ label_encoder_dict = {
   },
   'sklearn.ensemble.RandomForestClassifier': {
     'criterion': {
-      "gini": 0, 
-      "entropy": 1
+      'gini': 0, 
+      'entropy': 1
     },
     'bootstrap': {
       False: 0,
@@ -32,5 +32,4 @@ label_encoder_dict = {
 
   }
 }
-
 

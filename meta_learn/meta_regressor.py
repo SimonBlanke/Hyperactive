@@ -40,7 +40,7 @@ from .label_encoder_dict import label_encoder_dict
 class MetaRegressor(object):
 
   def __init__(self, model_name):
-    self.path = './meta_learn/data/meta_knowledge'
+    self.path = './data/meta_knowledge'
     self.meta_regressor = None
 
     self.model_name = model_name
@@ -50,7 +50,7 @@ class MetaRegressor(object):
   def train_meta_regressor(self):
     X_train, y_train = self._get_meta_knowledge()
 
-    X_train = self._label_enconding(X_train)
+    #X_train = self._label_enconding(X_train)
     #print(X_train)
     self._train_regressor(X_train, y_train)
     self._store_model()
@@ -61,24 +61,9 @@ class MetaRegressor(object):
     return model_name
 
 
-  def _get_hyperpara(self):
-    return label_encoder_dict[self.model_name]
-
-
-  def _label_enconding(self, X_train):
-    hyperpara_dict = self._get_hyperpara()
-
-    for hyperpara_key in hyperpara_dict:
-      X_train = X_train.replace({str(hyperpara_key): hyperpara_dict[hyperpara_key]})
-
-    return X_train
-
-
   def _get_meta_knowledge(self):
     #data = pd.read_csv(self.path)
-    data = pd.read_hdf(self.path, key='a')
-
-    #print(data)
+    data = pd.read_csv(self.path)
     
     column_names = data.columns
     score_name = [name for name in column_names if 'mean_test_score' in name]
@@ -102,24 +87,19 @@ class MetaRegressor(object):
 
   def _train_regressor(self, X_train, y_train):
     if self.meta_regressor == None:
-      n_estimators = int(y_train.shape[0]/50)
-      if n_estimators < 100:
-        n_estimators = 100
-      if n_estimators > 1000:
-        n_estimators = 1000
-      n_estimators = 1000
+      n_estimators = int(y_train.shape[0]/50+50)
+
       print('n_estimators: ', n_estimators)
 
       time1 = time.time()
       #self.meta_regressor = GradientBoostingRegressor(n_estimators=n_estimators)
       self.meta_regressor = xgb.XGBRegressor(n_estimators=n_estimators, nthread=-1)
-      print('Meta dataset', y_train.shape[0])
       self.meta_regressor.fit(X_train, y_train)
       print('time: ', round( (time.time() - time1), 4))
     
 
   def _store_model(self):
-    filename = './meta_learn/data/'+str(self.model_name)+'_meta_regressor.pkl'
+    filename = './data/'+str(self.model_name)+'_meta_regressor.pkl'
     #print(filename)
     joblib.dump(self.meta_regressor, filename)
 
