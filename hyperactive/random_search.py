@@ -38,28 +38,36 @@ class RandomSearch_Optimizer(BaseOptimizer):
 		self._search = self._start_random_search
 
 
+
+
 	def _start_random_search(self, n_searches):
 		'''
 		In this function we do the random search in the hyperparameter/ML-models space given by the 'ml_search_dict'-dictionary.
 		The goal is to find the model/hyperparameter combination with the best score. This means that we have to train every model on data and compare their scores.
 		Arguments:
 			- n_searches: Number of model/hyperpara. combinations searched. (int)
-			- X_train: training data of features, similar to scikit-learn. (numpy array)
-			- y_train: training data of targets, similar to scikit-learn. (numpy array)
-			- scoring: scoring used to compare models, similar to scikit-learn. (string)
-			- ml_search_dict: dictionary that contains models and hyperparameter + their ranges and steps for the search. Similar to Tpot package. (dictionary)
-			- cv: defines the k of k-fold cross validation. (int)
 		Returns:
 			- ML_model: A list of model and hyperparameter combinations with best score. (list of scikit-learn objects)
 			- score: A list of scores of these models. (list of floats)
 		'''
-		#n_searches = int(self.n_searches/self.n_jobs)
+		n_steps = int(self.n_searches/self.n_jobs)
 
+		best_model = None
+		best_score = 0
+		best_hyperpara_dict = None
+		best_train_time = None
 
-		model_str, hyperpara_dict, hyperpara_indices = self._get_random_model()
-		score, train_time = self._get_score(model_str, hyperpara_dict)
+		for i in range(n_steps):
+			model_str, hyperpara_dict, hyperpara_indices = self._get_random_model()
+			score, train_time, sklearn_model = self._get_score(model_str, hyperpara_dict)
 
-		return self.sklearn_model, score, hyperpara_dict, train_time
+			if score > best_score:
+				best_model = sklearn_model
+				best_score = score
+				best_hyperpara_dict = hyperpara_dict
+				best_train_time = train_time
+
+		return best_model, best_score, best_hyperpara_dict, best_train_time
 
 
 

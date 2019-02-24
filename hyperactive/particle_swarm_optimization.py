@@ -27,7 +27,6 @@ import numpy as np
 import pandas as pd
 
 
-
 from .base import BaseOptimizer
 
 
@@ -47,7 +46,6 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 		self.n_jobs = n_jobs
 		self.cv = cv
 		self.verbosity = verbosity
-
 
 		self.score = {}
 		self.hyperpara_indices = {}
@@ -73,7 +71,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 	def _initialize_positions(self):
 		for i in range(self.n_particles):
 			self.model_str[i], self.hyperpara_dict[i], self.hyperpara_indices[i] = self._get_random_position()
-			self.score[i], train_time = self._get_score(self.model_str[i], self.hyperpara_dict[i])
+			self.score[i], train_time, sklearn_model = self._get_score(self.model_str[i], self.hyperpara_dict[i])
 
 			self.score_best[i] = self.score[i]
 			self.hyperpara_indices_best[i] = self.hyperpara_indices[i]
@@ -107,10 +105,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 		'''
 		for i in range(n_steps):
 			
-
 			for particle in range(self.n_particles):
 				print(particle)
-
 		'''
 
 		print('\n\n\n')

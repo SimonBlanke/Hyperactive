@@ -42,8 +42,6 @@ class BaseOptimizer(object):
 		self.cv = cv
 		self.verbosity = verbosity
 
-		self.sklearn_model = None
-
 		self.X_train = None
 		self.y_train = None
 		self.init_search_dict = None
@@ -52,13 +50,8 @@ class BaseOptimizer(object):
 
 
 	def _check_model_str(self, model):
-		if 'sklearn' not in model:
-			if self.sklearn_model:
-				print('')
-				return self.sklearn_model
-				
-			print('No sklearn model in ml_search_dict')
-			return
+		if 'sklearn' not in model:		
+			raise ValueError('No sklearn model in ml_search_dict found')
 		return model
 
 
@@ -114,9 +107,9 @@ class BaseOptimizer(object):
 		return model(**hyperpara_dict)
 
 
-	def _train_model(self):
+	def _train_model(self, sklearn_model):
 		time_temp = time.time()
-		scores = cross_val_score(self.sklearn_model, self.X_train, self.y_train, scoring=self.scoring, cv=self.cv)
+		scores = cross_val_score(sklearn_model, self.X_train, self.y_train, scoring=self.scoring, cv=self.cv)
 		train_time = (time.time() - time_temp)/self.cv
 
 		return scores.mean(), train_time
@@ -133,10 +126,10 @@ class BaseOptimizer(object):
 
 	def _get_score(self, model_str, hyperpara_dict):
 		model = self._import_model(model_str)
-		self.sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
-		score, train_time = self._train_model()
+		sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
+		score, train_time = self._train_model(sklearn_model)
 
-		return score, train_time
+		return score, train_time, sklearn_model
 
 
 	def _search_multiprocessing(self):
@@ -156,7 +149,7 @@ class BaseOptimizer(object):
 			self.n_jobs = num_cores
 		pool = multiprocessing.Pool(self.n_jobs)
 				
-		n_searches_range = range(0, self.n_jobs-1)
+		n_searches_range = range(0, self.n_jobs)
 		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, n_searches_range))
 		
 		self.model_list = models

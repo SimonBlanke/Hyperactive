@@ -105,7 +105,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
 		self.ML_model_str_current, self.hyperpara_dict_current, self.hyperpara_indices_current = self._get_random_model()
 
-		self.score_current, train_time = self._get_score(self.ML_model_str_current, self.hyperpara_dict_current)
+		self.score_current, train_time, sklearn_model = self._get_score(self.ML_model_str_current, self.hyperpara_dict_current)
 
 		self.score_best = self.score_current
 		self.hyperpara_indices_best = self.hyperpara_indices_current
@@ -116,8 +116,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 			self.temp = self.temp*self.annealing_factor
 			rand = random.randint(0, 1)
 
-			self.hyperpara_dict, self.hyperpara_indices = self._get_neighbor_model(self.hyperpara_indices_current, epsilon=1)
-			self.score, train_time = self._get_score(self.ML_model_str_current, self.hyperpara_dict)
+			self.hyperpara_dict, self.hyperpara_indices = self._get_neighbor_model(self.hyperpara_indices_current)
+			self.score, train_time, sklearn_model = self._get_score(self.ML_model_str_current, self.hyperpara_dict)
 			self.ML_model_str = self.ML_model_str_current
 			
 			# Normalized score difference to have a factor for later use with temperature and random
