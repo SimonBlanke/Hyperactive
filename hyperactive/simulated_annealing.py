@@ -52,10 +52,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 		self.epsilon = epsilon
 		self.annealing_factor = annealing_factor
 
-		self.n_jobs = n_jobs
-		self.cv = cv
-		self.verbosity = verbosity
-
 		self.temp = 100
 
 		self.best_model = None
@@ -68,17 +64,9 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 		self.hyperpara_indices_best = 0
 		self.hyperpara_indices_current = 0
 
-		self.hyperpara_dict = 0
-		self.hyperpara_dict_best = 0
-		self.hyperpara_dict_current = 0
-
-		self.ML_model_str = 0
-		self.ML_model_str_best = 0
-		self.ML_model_str_current = 0
 
 	def _get_neighbor_model(self, hyperpara_indices):
 		hyperpara_indices_new = {}
-		hyperpara_dict = {}
 
 		for hyperpara_name in hyperpara_indices:
 			n_values = len(self.hyperpara_search_dict[hyperpara_name])
@@ -94,56 +82,47 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 			if index_new > n_values-1:
 				index_new = n_values-1
 
-			hyperpara_dict[hyperpara_name] = self.hyperpara_search_dict[hyperpara_name][index_new]
 			hyperpara_indices_new[hyperpara_name] = index_new
 
-		return hyperpara_dict, hyperpara_indices_new
+		return hyperpara_indices_new
 
 
 	def _start_simulated_annealing(self, n_searches):
 		n_steps = int(self.n_searches/self.n_jobs)
 
-		self.ML_model_str_current, self.hyperpara_dict_current, self.hyperpara_indices_current = self._get_random_model()
-
-		self.score_current, train_time, sklearn_model = self._get_score(self.ML_model_str_current, self.hyperpara_dict_current)
+		self.hyperpara_indices_current = self._get_random_position()
+		self.hyperpara_dict_current = self._get_hyperpara_dict_from_positions(self.hyperpara_indices_current)
+		self.score_current, train_time, sklearn_model = self._get_score(self.hyperpara_dict_current)
 
 		self.score_best = self.score_current
 		self.hyperpara_indices_best = self.hyperpara_indices_current
-		self.hyperpara_dict_best = self.hyperpara_dict_current
-		self.ML_model_str_best = self.ML_model_str_current
 
 		for i in range(n_steps):
 			self.temp = self.temp*self.annealing_factor
 			rand = random.randint(0, 1)
 
-			self.hyperpara_dict, self.hyperpara_indices = self._get_neighbor_model(self.hyperpara_indices_current)
-			self.score, train_time, sklearn_model = self._get_score(self.ML_model_str_current, self.hyperpara_dict)
-			self.ML_model_str = self.ML_model_str_current
-			
+			self.hyperpara_indices = self._get_neighbor_model(self.hyperpara_indices_current)
+			self.hyperpara_dict = self._get_hyperpara_dict_from_positions(self.hyperpara_indices)
+			self.score, train_time, sklearn_model = self._get_score(self.hyperpara_dict)
+
 			# Normalized score difference to have a factor for later use with temperature and random
 			score_diff_norm = (self.score_current - self.score)/(self.score_current + self.score)
 			
 			if self.score > self.score_current:
 				self.score_current = self.score
 				self.hyperpara_indices_current = self.hyperpara_indices
-				self.hyperpara_dict_current = self.hyperpara_dict
-				self.ML_model_str_current = self.ML_model_str 
 
 				if self.score > self.score_best:
 					self.score_best = self.score
 					self.hyperpara_indices_best = self.hyperpara_indices
-					self.hyperpara_dict_best = self.hyperpara_dict
-					self.ML_model_str_best  = self.ML_model_str 
 
 			elif np.exp( score_diff_norm/self.temp ) > rand:
 				self.score_current = self.score
 				self.hyperpara_indices_current = self.hyperpara_indices
-				self.hyperpara_dict_current = self.hyperpara_dict
-				self.ML_model_str_current = self.ML_model_str 
 
-		model = self._import_model(self.ML_model_str_best)
-		sklearn_model = self._create_sklearn_model(model, self.hyperpara_dict_best)
+		hyperpara_dict_best = self._get_hyperpara_dict_from_positions(self.hyperpara_indices_best)
+		score_best, train_time, sklearn_model = self._get_score(hyperpara_dict_best)
 
-		return sklearn_model, self.score_best, self.hyperpara_dict_best, train_time
+		return sklearn_model, score_best, hyperpara_dict_best, train_time
 		
 

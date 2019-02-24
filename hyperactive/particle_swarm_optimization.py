@@ -47,38 +47,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 		self.cv = cv
 		self.verbosity = verbosity
 
-		self.score = {}
-		self.hyperpara_indices = {}
-		self.hyperpara_dict = {}
-		self.model_str = {}
-
-		self.score_best = {}
-		self.hyperpara_indices_best = {}
-		self.hyperpara_dict_best = {}
-		self.model_str_best = {}
-
-		self.score_current = {}		
-		self.hyperpara_indices_current = {}
-		self.hyperpara_dict_current = {}		
-		self.model_str_current = {}
-
-		self.score_best_global = 0	
-		self.hyperpara_indices_best_global = 0
-		self.hyperpara_dict_best_global = 0		
-		self.model_str_best_global = 0
-
-
-	def _initialize_positions(self):
-		for i in range(self.n_particles):
-			self.model_str[i], self.hyperpara_dict[i], self.hyperpara_indices[i] = self._get_random_position()
-			self.score[i], train_time, sklearn_model = self._get_score(self.model_str[i], self.hyperpara_dict[i])
-
-			self.score_best[i] = self.score[i]
-			self.hyperpara_indices_best[i] = self.hyperpara_indices[i]
-			self.hyperpara_dict_best[i] = self.hyperpara_dict[i]
-			self.model_str_best[i] = self.model_str[i]
-
-		self._find_best_particle()
+		self.gbest_position = None
+		self.gbest_score = None
 
 
 	def _find_best_particle(self):
@@ -114,9 +84,19 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
 
 
+class Particle():
+	def __init__(self):
 
+		self.model_str[i], self.hyperpara_dict[i], self.hyperpara_indices[i] = self._get_random_position()
+		self.score[i], train_time, sklearn_model = self._get_score(self.model_str[i], self.hyperpara_dict[i])
 
+		self.position = None
+		self.velocity = np.array([0, 0])
+		self.best_position = self.position
+		self.best_score = 0
 
+	def move(self):
+		self.position = self.position + self.velocity
 
 
 

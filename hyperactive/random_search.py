@@ -33,11 +33,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
 	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=1, cv=5, verbosity=0):
 		super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
-
-		self.ml_search_dict = ml_search_dict
 		self._search = self._start_random_search
-
-
 
 
 	def _start_random_search(self, n_searches):
@@ -58,8 +54,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
 		best_train_time = None
 
 		for i in range(n_steps):
-			model_str, hyperpara_dict, hyperpara_indices = self._get_random_model()
-			score, train_time, sklearn_model = self._get_score(model_str, hyperpara_dict)
+			hyperpara_indices = self._get_random_position()
+			hyperpara_dict = self._get_hyperpara_dict_from_positions(hyperpara_indices)
+			score, train_time, sklearn_model = self._get_score(hyperpara_dict)
 
 			if score > best_score:
 				best_model = sklearn_model

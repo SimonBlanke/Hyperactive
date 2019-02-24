@@ -46,13 +46,28 @@ class BaseOptimizer(object):
 		self.y_train = None
 		self.init_search_dict = None
 
+		self.model_key = list(self.ml_search_dict.keys())[0]
+		#model_str = random.choice(list(self.ml_search_dict.keys()))
 		self.hyperpara_search_dict = ml_search_dict[list(ml_search_dict.keys())[0]]
+		
+
+		self._set_n_jobs()
+		self.n_searches_range = range(0, self.n_jobs)
+
+		self._check_sklearn_model_key()
 
 
-	def _check_model_str(self, model):
-		if 'sklearn' not in model:		
+	def _set_n_jobs(self):
+		num_cores = multiprocessing.cpu_count()
+		if self.n_jobs == -1 or self.n_jobs > num_cores:
+			self.n_jobs = num_cores
+		if self.n_jobs > self.n_searches:
+			self.n_searches = self.n_jobs
+
+
+	def _check_sklearn_model_key(self):
+		if 'sklearn' not in self.model_key:		
 			raise ValueError('No sklearn model in ml_search_dict found')
-		return model
 
 
 	def _get_random_position(self):
@@ -62,25 +77,29 @@ class BaseOptimizer(object):
 		hyperparameter (dict), 
 		N indices of N-Dim position (dict)
 		'''
+		search_positions = {}
+		
+		for hyperpara_name in self.hyperpara_search_dict.keys():
+
+			n_hyperpara_values = len(self.hyperpara_search_dict[hyperpara_name])
+			search_position = random.randint(0, n_hyperpara_values-1)
+
+			hyperpara_values = self.hyperpara_search_dict[hyperpara_name]
+			hyperpara_value = hyperpara_values[search_position]
+
+			search_positions[hyperpara_name] = search_position
+
+		return search_positions
+
+
+	def _get_hyperpara_dict_from_positions(self, search_positions):
 		hyperpara_dict = {}
-		hyperpara_indices = {}
 
-		# if there are multiple models, select a random one
-		model_str = random.choice(list(self.ml_search_dict.keys()))
-		model_str = self._check_model_str(model_str)
+		for hyperpara_name in search_positions.keys():
+			search_position = search_positions[hyperpara_name]
+			hyperpara_dict[hyperpara_name] = list(self.hyperpara_search_dict[hyperpara_name])[search_position]
 
-		for hyperpara_name in self.ml_search_dict[model_str].keys():
-
-			n_hyperpara_values = len(self.ml_search_dict[model_str][hyperpara_name])
-			hyperpara_index = random.randint(0, n_hyperpara_values-1)
-
-			hyperpara_values = self.ml_search_dict[model_str][hyperpara_name]
-			hyperpara_value = hyperpara_values[hyperpara_index]
-
-			hyperpara_dict[hyperpara_name] = hyperpara_value
-			hyperpara_indices[hyperpara_name] = hyperpara_index
-
-		return model_str, hyperpara_dict, hyperpara_indices
+		return hyperpara_dict
 
 
 	def _import_model(self, model):
@@ -115,17 +134,8 @@ class BaseOptimizer(object):
 		return scores.mean(), train_time
 
 
-	def _get_random_model(self):
-		'''
-		takes search space and training data to get a random sklearn model + hyperparameter combination
-		'''
-		model_str, hyperpara_dict, hyperpara_indices = self._get_random_position()
-
-		return model_str, hyperpara_dict, hyperpara_indices
-
-
-	def _get_score(self, model_str, hyperpara_dict):
-		model = self._import_model(model_str)
+	def _get_score(self, hyperpara_dict):
+		model = self._import_model(self.model_key)
 		sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
 		score, train_time = self._train_model(sklearn_model)
 
@@ -143,14 +153,9 @@ class BaseOptimizer(object):
 			- best_model: The model and hyperparameter combination with best score. (scikit-learn object)
 			- best_score: The score of this model. (float)
 		'''	
-
-		num_cores = multiprocessing.cpu_count()
-		if self.n_jobs == -1 or self.n_jobs > num_cores:
-			self.n_jobs = num_cores
-		pool = multiprocessing.Pool(self.n_jobs)
-				
-		n_searches_range = range(0, self.n_jobs)
-		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, n_searches_range))
+		
+		pool = multiprocessing.Pool(self.n_jobs)		
+		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, self.n_searches_range))
 		
 		self.model_list = models
 		self.score_list = scores
@@ -158,26 +163,6 @@ class BaseOptimizer(object):
 		self.train_time = train_time
 
 		return models, scores
-
-
-	def _search_test(self):
-
-		n_searches_range = range(0, self.n_searches)
-		models, scores, hyperpara_dict, train_time = self._search(80)
-
-		return models, scores
-
-
-	def fit_test(self, X_train, y_train, init_search_dict=None):
-		self.X_train = X_train
-		self.y_train = y_train
-		self.init_search_dict = init_search_dict
-
-		models, scores = self._search_test()
-
-		models.fit(X_train, y_train)
-
-		print('Best score:', scores)
 
 
 	def fit(self, X_train, y_train, init_search_dict=None):
