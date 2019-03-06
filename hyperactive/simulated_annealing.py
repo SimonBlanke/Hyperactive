@@ -42,7 +42,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
 	def __init__(self, ml_search_dict, n_searches, scoring, epsilon=1, annealing_factor=0.9, n_jobs=1, cv=5, verbosity=0):
 		super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
-
 		self._search = self._start_simulated_annealing
 
 		self.ml_search_dict = ml_search_dict
@@ -91,8 +90,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 		n_steps = int(self.n_searches/self.n_jobs)
 
 		self.hyperpara_indices_current = self._get_random_position()
-		self.hyperpara_dict_current = self._get_hyperpara_dict_from_positions(self.hyperpara_indices_current)
-		self.score_current, train_time, sklearn_model = self._get_score(self.hyperpara_dict_current)
+		self.hyperpara_dict_current = self._pos2values_dict(self.hyperpara_indices_current)
+		self.score_current, train_time, sklearn_model = self._train_model(self.hyperpara_dict_current)
 
 		self.score_best = self.score_current
 		self.hyperpara_indices_best = self.hyperpara_indices_current
@@ -102,8 +101,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 			rand = random.randint(0, 1)
 
 			self.hyperpara_indices = self._get_neighbor_model(self.hyperpara_indices_current)
-			self.hyperpara_dict = self._get_hyperpara_dict_from_positions(self.hyperpara_indices)
-			self.score, train_time, sklearn_model = self._get_score(self.hyperpara_dict)
+			self.hyperpara_dict = self._pos2values_dict(self.hyperpara_indices)
+			self.score, train_time, sklearn_model = self._train_model(self.hyperpara_dict)
 
 			# Normalized score difference to have a factor for later use with temperature and random
 			score_diff_norm = (self.score_current - self.score)/(self.score_current + self.score)
@@ -120,8 +119,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 				self.score_current = self.score
 				self.hyperpara_indices_current = self.hyperpara_indices
 
-		hyperpara_dict_best = self._get_hyperpara_dict_from_positions(self.hyperpara_indices_best)
-		score_best, train_time, sklearn_model = self._get_score(hyperpara_dict_best)
+		hyperpara_dict_best = self._pos2values_dict(self.hyperpara_indices_best)
+		score_best, train_time, sklearn_model = self._train_model(hyperpara_dict_best)
 
 		return sklearn_model, score_best, hyperpara_dict_best, train_time
 		

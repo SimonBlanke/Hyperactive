@@ -50,11 +50,14 @@ class BaseOptimizer(object):
 		#model_str = random.choice(list(self.ml_search_dict.keys()))
 		self.hyperpara_search_dict = ml_search_dict[list(ml_search_dict.keys())[0]]
 		
-
 		self._set_n_jobs()
 		self.n_searches_range = range(0, self.n_jobs)
 
 		self._check_sklearn_model_key()
+
+
+	def _get_dim_SearchSpace(self):
+		return len(self.hyperpara_search_dict)
 
 
 	def _set_n_jobs(self):
@@ -73,11 +76,9 @@ class BaseOptimizer(object):
 	def _get_random_position(self):
 		'''
 		get a random N-Dim position in search space and return: 
-		model (string), 
-		hyperparameter (dict), 
 		N indices of N-Dim position (dict)
 		'''
-		search_positions = {}
+		pos_dict = {}
 		
 		for hyperpara_name in self.hyperpara_search_dict.keys():
 
@@ -87,22 +88,51 @@ class BaseOptimizer(object):
 			hyperpara_values = self.hyperpara_search_dict[hyperpara_name]
 			hyperpara_value = hyperpara_values[search_position]
 
-			search_positions[hyperpara_name] = search_position
+			pos_dict[hyperpara_name] = search_position
 
-		return search_positions
-
-
-	def _get_hyperpara_dict_from_positions(self, search_positions):
-		hyperpara_dict = {}
-
-		for hyperpara_name in search_positions.keys():
-			search_position = search_positions[hyperpara_name]
-			hyperpara_dict[hyperpara_name] = list(self.hyperpara_search_dict[hyperpara_name])[search_position]
-
-		return hyperpara_dict
+		return pos_dict
 
 
-	def _import_model(self, model):
+	def _limit_pos(self, pos):
+		max_pos_list = []
+		for values in list(self.hyperpara_search_dict.values()):
+			max_pos_list.append(len(values))
+
+		return np.minimum(pos, max_pos_list)
+
+
+	def _pos_dict2values_dict(self, pos_dict):
+		values_dict = {}
+
+		for hyperpara_name in pos_dict.keys():
+			pos = pos_dict[hyperpara_name]
+			values_dict[hyperpara_name] = list(self.hyperpara_search_dict[hyperpara_name])[pos]
+
+		return values_dict
+
+
+	def _pos_dict2np_array(self, pos_dict):
+		return np.array(list(pos_dict.values()))
+
+
+	def _pos_np2values_dict(self, np_array):
+		if len(self.hyperpara_search_dict.keys()) == np_array.size:
+			values_dict = {}
+			for i, key in enumerate(self.hyperpara_search_dict.keys()):
+				pos = int(np_array[i])
+
+				if pos > len(list(self.hyperpara_search_dict[key])):
+					print('------------------------------------------------------------------ out of range')
+				print(key, pos)
+				values_dict[key] = list(self.hyperpara_search_dict[key])[pos]
+
+			return values_dict
+		else:
+			raise ValueError('hyperpara_search_dict and np_array have different size')
+
+
+
+	def _get_model(self, model):
 		sklearn, submod_func = model.rsplit('.', 1)
 		module = import_module(sklearn)
 		model = getattr(module, submod_func)
@@ -126,34 +156,18 @@ class BaseOptimizer(object):
 		return model(**hyperpara_dict)
 
 
-	def _train_model(self, sklearn_model):
+	def _train_model(self, hyperpara_dict):
+		model = self._get_model(self.model_key)
+		sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
+
 		time_temp = time.time()
 		scores = cross_val_score(sklearn_model, self.X_train, self.y_train, scoring=self.scoring, cv=self.cv)
 		train_time = (time.time() - time_temp)/self.cv
 
-		return scores.mean(), train_time
-
-
-	def _get_score(self, hyperpara_dict):
-		model = self._import_model(self.model_key)
-		sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
-		score, train_time = self._train_model(sklearn_model)
-
-		return score, train_time, sklearn_model
+		return scores.mean(), train_time, sklearn_model
 
 
 	def _search_multiprocessing(self):
-		'''
-		This function runs the 'random_search'-function in parallel to return a list of the models and their scores.
-		After that the lists are searched to find the best model and its score.
-		Arguments:
-			- X_train: training data of features, similar to scikit-learn. (numpy array)
-			- y_train: training data of targets, similar to scikit-learn. (numpy array)
-		Returns:
-			- best_model: The model and hyperparameter combination with best score. (scikit-learn object)
-			- best_score: The score of this model. (float)
-		'''	
-		
 		pool = multiprocessing.Pool(self.n_jobs)		
 		models, scores, hyperpara_dict, train_time = zip(*pool.map(self._search, self.n_searches_range))
 		

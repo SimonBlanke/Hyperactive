@@ -55,8 +55,8 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
 		for i in range(n_steps):
 			hyperpara_indices = self._get_random_position()
-			hyperpara_dict = self._get_hyperpara_dict_from_positions(hyperpara_indices)
-			score, train_time, sklearn_model = self._get_score(hyperpara_dict)
+			hyperpara_dict = self._pos2values_dict(hyperpara_indices)
+			score, train_time, sklearn_model = self._train_model(hyperpara_dict)
 
 			if score > best_score:
 				best_model = sklearn_model
@@ -65,9 +65,5 @@ class RandomSearch_Optimizer(BaseOptimizer):
 				best_train_time = train_time
 
 		return best_model, best_score, best_hyperpara_dict, best_train_time
-
-
-
-
 
 
