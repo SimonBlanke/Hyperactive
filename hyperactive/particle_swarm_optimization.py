@@ -22,7 +22,7 @@ SOFTWARE.
 import os
 import sys
 import time
-import random
+import random as rnd
 import numpy as np
 import pandas as pd
 
@@ -32,9 +32,8 @@ from .base import BaseOptimizer
 
 class ParticleSwarm_Optimizer(BaseOptimizer):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, n_particles=3, n_jobs=1, cv=5, verbosity=0):
+	def __init__(self, ml_search_dict, n_searches, scoring, n_particles=1, n_jobs=1, cv=5, verbosity=0):
 		super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
-
 		self._search = self._start_particle_swarm_optimization
 
 		self.ml_search_dict = ml_search_dict
@@ -43,68 +42,80 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 		
 		self.n_particles = n_particles
 
-		self.n_jobs = n_jobs
-		self.cv = cv
-		self.verbosity = verbosity
-
-		self.gbest_position = None
-		self.gbest_score = None
-
+		self.best_model = None
+		self.best_score = 0
+		self.best_pos = None
+		self.best_hyperpara_dict = None
+		self.best_train_time = None
 
 	def _find_best_particle(self):
-		best_score = 0
-		best_particle = None
+		for p in self.p_list:
+			if p.best_score > self.best_score:
+				self.best_score = p.best_score
+				self.best_pos = p.best_pos
 
-		for particle in self.score_best:
-			score = self.score_best[particle]
-			if score > best_score:
-				best_score = score
-				best_particle = particle
 
-		self.score_best_global = best_score
-		self.hyperpara_dict_best_global = self.hyperpara_dict_best[particle]
-		self.hyperpara_indices_best_global = self.hyperpara_indices_best[particle]
+	def _init_particles(self):
+		self.p_list = [Particle() for _ in range(self.n_particles)]
+		for p in self.p_list:
+			p.pos = self._pos_dict2np_array(self._get_random_position())
+			p.best_pos = self._pos_dict2np_array(self._get_random_position())
+			p.velo = np.zeros(self._get_dim_SearchSpace())
+
+
+	def _move_particles(self):
+		W = 0.5
+		c1 = 0.8
+		c2 = 0.9
+		for p in self.p_list:
+			A = W * p.velo
+			B = c1 * rnd.random() * np.subtract(p.best_pos, p.pos)
+			C = c2 * rnd.random() * np.subtract(self.best_pos, p.pos)
+			new_velocity = A + B + C
+			p.velo = new_velocity
+			p.move()
+
+
+	def _eval_particles(self):
+		for p in self.p_list:
+			print('\n---------------p.pos;', p.pos)
+
+			pos = self._limit_pos(p.pos)
+
+			hyperpara_dict = self._pos_np2values_dict(pos)
+			p.best_score, p.train_time, p.sklearn_model = self._train_model(hyperpara_dict)
 
 
 	def _start_particle_swarm_optimization(self, n_searches):
 		n_steps = int(self.n_searches/self.n_jobs)
-		print('n_steps ', n_steps)
 
-		self._initialize_positions()
-
-		'''
+		self._init_particles()
 		for i in range(n_steps):
-			
-			for particle in range(self.n_particles):
-				print(particle)
-		'''
+			print('\nstep:', i, '\n')
+			self._eval_particles()
+			self._find_best_particle()
+			self._move_particles()
 
-		print('\n\n\n')
-		return 0, 0, 0, 0
+		hyperpara_dict_best = self._pos_np2values_dict(self.best_pos)
+		score_best, train_time, sklearn_model = self._train_model(hyperpara_dict_best)
+
+		return sklearn_model, score_best, hyperpara_dict_best, train_time
 
 
 
 class Particle():
 	def __init__(self):
+		self.pos = None
+		self.velo = None
+		self.best_pos = None
 
-		self.model_str[i], self.hyperpara_dict[i], self.hyperpara_indices[i] = self._get_random_position()
-		self.score[i], train_time, sklearn_model = self._get_score(self.model_str[i], self.hyperpara_dict[i])
+		self.best_score = None
+		self.train_time = None
+		self.sklearn_model = None
 
-		self.position = None
-		self.velocity = np.array([0, 0])
-		self.best_position = self.position
-		self.best_score = 0
 
 	def move(self):
-		self.position = self.position + self.velocity
-
-
-
-
-
-
-
-
+		self.pos = (self.pos + self.velo).astype(int)
 
 
 
