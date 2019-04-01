@@ -1,1 +1,5 @@
-__pycache__/
+*.pyc
+*.xml
+*.iml
+**/__pycache__/
+hyperactive_dev.py
