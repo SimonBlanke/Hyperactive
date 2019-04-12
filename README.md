@@ -5,10 +5,32 @@ A Python package for meta-heuristic hyperparameter optimization of scikit-learn 
   - Particle swarm optimization
 
 ### Installation
+```python
+pip install hyperactive
+```
 
-### Usage
+### Example
+```python
+from sklearn.datasets import load_iris
+from hyperactive import SimulatedAnnealing_Optimizer
+
+iris_data = load_iris()
+iris_X_train = iris_data.data
+iris_y_train = iris_data.target
+
+search_dict = {
+    'sklearn.ensemble.RandomForestClassifier': {
+        'n_estimators': [200],
+        'criterion': ["gini", "entropy"],
+        'min_samples_split': range(2, 21),
+        'min_samples_leaf':  range(2, 21),
+      }
+}
+
+Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_searches=1000, scoring='accuracy', n_jobs=1)
+Optimizer.fit(iris_X_train, iris_y_train)
+```
 
 ### Implementation
 
 ### Performance comparison
-

@@ -34,7 +34,7 @@ from sklearn.model_selection import cross_val_score
 
 class BaseOptimizer(object):
 
-	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=1, cv=5, verbosity=0):
+	def __init__(self, ml_search_dict, n_searches, scoring, n_jobs=1, cv=5, verbosity=1):
 		self.ml_search_dict = ml_search_dict
 		self.n_searches = n_searches
 		self.scoring = scoring
