@@ -4,11 +4,27 @@ A Python package for meta-heuristic hyperparameter optimization of scikit-learn 
   - Simulated annealing
   - Particle swarm optimization
 
-### Installation
+The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel.
 
-### Usage
 
-### Implementation
+## Example
+```python
+from sklearn.datasets import load_iris
+from hyperactive import SimulatedAnnealing_Optimizer
 
-### Performance comparison
+iris_data = load_iris()
+X_train = iris_data.data
+y_train = iris_data.target
 
+search_dict = {
+    'sklearn.ensemble.RandomForestClassifier': {
+        'n_estimators': [100],
+        'criterion': ["gini", "entropy"],
+        'min_samples_split': range(2, 21),
+        'min_samples_leaf':  range(2, 21),
+      }
+}
+
+Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_iter=1000, scoring='accuracy', n_jobs=2)
+Optimizer.fit(X_train, y_train)
+```
