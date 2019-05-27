@@ -31,21 +31,6 @@ search_dict = {
       }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_iter=1000, n_jobs=2)
+Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_iter=1000, scoring='accuracy', n_jobs=2)
 Optimizer.fit(X_train, y_train)
 ```
-
-
-
-
-[//]: # (
-## Performance comparison
-
-plots:
-  - show parallelisation efficiency
-  - compare random search with sklearn impl. of random search
-  - show average score of each method after 10, 100, 1000, 10000 iterations for several datasets
-
-
-idea: determine degree of overfitting, by looking at environment of solution
-)
