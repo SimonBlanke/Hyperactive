@@ -4,33 +4,48 @@ A Python package for meta-heuristic hyperparameter optimization of scikit-learn 
   - Simulated annealing
   - Particle swarm optimization
 
-### Installation
-```python
+The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel. In the current implementation the actual number of searches in each process is n_iter divided by n_jobs and rounded down to the next integer.
+
+
+## Installation
+```console
 pip install hyperactive
 ```
 
-### Example
+
+## Example
 ```python
 from sklearn.datasets import load_iris
 from hyperactive import SimulatedAnnealing_Optimizer
 
 iris_data = load_iris()
-iris_X_train = iris_data.data
-iris_y_train = iris_data.target
+X_train = iris_data.data
+y_train = iris_data.target
 
 search_dict = {
     'sklearn.ensemble.RandomForestClassifier': {
-        'n_estimators': [200],
+        'n_estimators': [100],
         'criterion': ["gini", "entropy"],
         'min_samples_split': range(2, 21),
         'min_samples_leaf':  range(2, 21),
       }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_searches=1000, scoring='accuracy', n_jobs=1)
-Optimizer.fit(iris_X_train, iris_y_train)
+Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_iter=1000, n_jobs=2)
+Optimizer.fit(X_train, y_train)
 ```
 
-### Implementation
 
-### Performance comparison
+
+
+[//]: # (
+## Performance comparison
+
+plots:
+  - show parallelisation efficiency
+  - compare random search with sklearn impl. of random search
+  - show average score of each method after 10, 100, 1000, 10000 iterations for several datasets
+
+
+idea: determine degree of overfitting, by looking at environment of solution
+)
