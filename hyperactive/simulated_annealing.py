@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) [2018] [Simon Blanke]
-Email: simonblanke528481@gmail.com
+Email: simon.blanke@yahoo.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,17 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os
-import sys
-import time
 import random
 import numpy as np
-import pandas as pd
-import multiprocessing
-
-from importlib import import_module
-from functools import partial
-from sklearn.model_selection import cross_val_score
+import tqdm
 
 from .base import BaseOptimizer
 
@@ -48,9 +40,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         annealing_factor=0.9,
         n_jobs=1,
         cv=5,
-        verbosity=0,
     ):
-        super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
+        super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv)
         self._search = self._start_simulated_annealing
 
         self.ml_search_dict = ml_search_dict
@@ -96,8 +87,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
     def _start_simulated_annealing(self, n_searches):
         n_steps = int(self.n_searches / self.n_jobs)
 
-        print(n_searches)
-
         self.hyperpara_indices_current = self._get_random_position()
         self.hyperpara_dict_current = self._pos_dict2values_dict(
             self.hyperpara_indices_current
@@ -109,7 +98,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.score_best = self.score_current
         self.hyperpara_indices_best = self.hyperpara_indices_current
 
-        for i in range(n_steps):
+        for i in tqdm.tqdm(range(n_steps), position=n_searches, leave=False):
             self.temp = self.temp * self.annealing_factor
             rand = random.randint(0, 1)
 

@@ -1,15 +1,19 @@
 """
 MIT License
-Copyright (c) [2018] [Simon Franz Albert Blanke]
-Email: simonblanke528481@gmail.com
+
+Copyright (c) [2018] [Simon Blanke]
+Email: simon.blanke@yahoo.com
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,21 +33,13 @@ from sklearn.model_selection import cross_val_score
 
 
 class BaseOptimizer(object):
-    def __init__(
-        self,
-        ml_search_dict,
-        n_searches,
-        scoring="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-    ):
+    def __init__(self, ml_search_dict, n_searches, scoring="accuracy", n_jobs=1, cv=5):
         self.ml_search_dict = ml_search_dict
         self.n_searches = n_searches
         self.scoring = scoring
         self.n_jobs = n_jobs
         self.cv = cv
-        self.verbosity = verbosity
+        self.verbosity = 1
 
         self.X_train = None
         self.y_train = None
@@ -54,7 +50,7 @@ class BaseOptimizer(object):
         self.hyperpara_search_dict = ml_search_dict[list(ml_search_dict.keys())[0]]
 
         self._set_n_jobs()
-        self.n_searches_range = range(0, self.n_jobs)
+        self._n_searches_range = range(0, self.n_jobs)
 
         self._check_sklearn_model_key()
         self._limit_pos()
@@ -84,9 +80,6 @@ class BaseOptimizer(object):
 
             n_hyperpara_values = len(self.hyperpara_search_dict[hyperpara_name])
             search_position = random.randint(0, n_hyperpara_values - 1)
-
-            # hyperpara_values = self.hyperpara_search_dict[hyperpara_name]
-            # hyperpara_value = hyperpara_values[search_position]
 
             pos_dict[hyperpara_name] = search_position
 
@@ -160,7 +153,7 @@ class BaseOptimizer(object):
     def _search_multiprocessing(self):
         pool = multiprocessing.Pool(self.n_jobs)
         models, scores, hyperpara_dict, train_time = zip(
-            *pool.map(self._search, self.n_searches_range)
+            *pool.map(self._search, self._n_searches_range)
         )
 
         self.model_list = models
@@ -181,6 +174,7 @@ class BaseOptimizer(object):
         self.best_model.fit(X_train, y_train)
 
         print("Best score:", *best_score)
+        print("Best model:", self.best_model)
 
     def predict(self, X_test):
         return self.best_model.predict(X_test)

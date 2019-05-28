@@ -1,15 +1,19 @@
 """
 MIT License
-Copyright (c) [2018] [Simon Franz Albert Blanke]
-Email: simonblanke528481@gmail.com
+
+Copyright (c) [2018] [Simon Blanke]
+Email: simon.blanke@yahoo.com
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,24 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import random as rnd
+import random
 import numpy as np
+import tqdm
 
 from .base import BaseOptimizer
 
 
 class ParticleSwarm_Optimizer(BaseOptimizer):
     def __init__(
-        self,
-        ml_search_dict,
-        n_searches,
-        scoring,
-        n_particles=1,
-        n_jobs=1,
-        cv=5,
-        verbosity=0,
+        self, ml_search_dict, n_searches, scoring, n_particles=1, n_jobs=1, cv=5
     ):
-        super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv, verbosity)
+        super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv)
         self._search = self._start_particle_swarm_optimization
 
         self.ml_search_dict = ml_search_dict
@@ -73,8 +71,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         c2 = 0.9
         for p in p_list:
             A = W * p.velo
-            B = c1 * rnd.random() * np.subtract(p.best_pos, p.pos)
-            C = c2 * rnd.random() * np.subtract(self.best_pos, p.pos)
+            B = c1 * random.random() * np.subtract(p.best_pos, p.pos)
+            C = c2 * random.random() * np.subtract(self.best_pos, p.pos)
             new_velocity = A + B + C
 
             p.velo = new_velocity
@@ -91,7 +89,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         n_steps = max(1, int(self.n_searches / self.n_jobs))
 
         p_list = self._init_particles()
-        for i in range(n_steps):
+        for i in tqdm.tqdm(range(n_steps), position=n_searches, leave=False):
             self._eval_particles(p_list)
             self._find_best_particle(p_list)
             self._move_particles(p_list)
