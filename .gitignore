@@ -1,5 +1,9 @@
 *.pyc
 *.xml
 *.iml
+*.pypirc
 **/__pycache__/
+**/build/
+**/dist/
+**/hyperactive.egg-info/
 hyperactive_dev.py
