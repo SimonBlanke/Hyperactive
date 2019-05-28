@@ -4,7 +4,7 @@ A Python package for meta-heuristic hyperparameter optimization of scikit-learn 
   - Simulated annealing
   - Particle swarm optimization
 
-The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel. In the current implementation the actual number of searches in each process is n_iter divided by n_jobs and rounded down to the next integer.
+The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel. In the current implementation the actual number of searches in each process is n_searches divided by n_jobs and rounded down to the next integer.
 
 
 ## Installation
@@ -31,6 +31,6 @@ search_dict = {
       }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_iter=1000, scoring='accuracy', n_jobs=2)
+Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_searches=1000, scoring='accuracy', n_jobs=2)
 Optimizer.fit(X_train, y_train)
 ```
