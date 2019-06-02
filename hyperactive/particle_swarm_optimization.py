@@ -11,16 +11,28 @@ from .base import BaseOptimizer
 
 class ParticleSwarm_Optimizer(BaseOptimizer):
     def __init__(
-        self, ml_search_dict, n_searches, scoring, n_particles=1, n_jobs=1, cv=5
+        self,
+        search_dict,
+        n_iter,
+        scoring,
+        n_part=1,
+        w=0.5,
+        c_k=0.8,
+        c_s=0.9,
+        n_jobs=1,
+        cv=5,
     ):
-        super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv)
+        super().__init__(search_dict, n_iter, scoring, n_jobs, cv)
         self._search = self._start_particle_swarm_optimization
 
-        self.ml_search_dict = ml_search_dict
-        self.n_searches = n_searches
+        self.search_dict = search_dict
+        self.n_iter = n_iter
         self.scoring = scoring
 
-        self.n_particles = n_particles
+        self.n_part = n_part
+        self.w = w
+        self.c_k = c_k
+        self.c_s = c_s
 
         self.best_model = None
         self.best_score = 0
@@ -35,7 +47,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 self.best_pos = p.best_pos
 
     def _init_particles(self):
-        p_list = [Particle() for _ in range(self.n_particles)]
+        p_list = [Particle() for _ in range(self.n_part)]
         for p in p_list:
             p.max_pos_list = self.max_pos_list
             p.pos = self._pos_dict2np_array(self._get_random_position())
@@ -45,13 +57,11 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         return p_list
 
     def _move_particles(self, p_list):
-        W = 0.5
-        c1 = 0.8
-        c2 = 0.9
+
         for p in p_list:
-            A = W * p.velo
-            B = c1 * random.random() * np.subtract(p.best_pos, p.pos)
-            C = c2 * random.random() * np.subtract(self.best_pos, p.pos)
+            A = self.w * p.velo
+            B = self.c_k * random.random() * np.subtract(p.best_pos, p.pos)
+            C = self.c_s * random.random() * np.subtract(self.best_pos, p.pos)
             new_velocity = A + B + C
 
             p.velo = new_velocity
@@ -64,11 +74,11 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 hyperpara_dict
             )
 
-    def _start_particle_swarm_optimization(self, n_searches):
-        n_steps = max(1, int(self.n_searches / self.n_jobs))
+    def _start_particle_swarm_optimization(self, n_iter):
+        n_steps = max(1, int(self.n_iter / self.n_jobs))
 
         p_list = self._init_particles()
-        for i in tqdm.tqdm(range(n_steps), position=n_searches, leave=False):
+        for i in tqdm.tqdm(range(n_steps), position=n_iter, leave=False):
             self._eval_particles(p_list)
             self._find_best_particle(p_list)
             self._move_particles(p_list)

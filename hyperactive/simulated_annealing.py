@@ -10,25 +10,16 @@ from .base import BaseOptimizer
 
 
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
-    def __init__(
-        self,
-        ml_search_dict,
-        n_searches,
-        scoring,
-        epsilon=1,
-        annealing_factor=0.9,
-        n_jobs=1,
-        cv=5,
-    ):
-        super().__init__(ml_search_dict, n_searches, scoring, n_jobs, cv)
+    def __init__(self, search_dict, n_iter, scoring, eps=1, t_rate=0.9, n_jobs=1, cv=5):
+        super().__init__(search_dict, n_iter, scoring, n_jobs, cv)
         self._search = self._start_simulated_annealing
 
-        self.ml_search_dict = ml_search_dict
+        self.search_dict = search_dict
         self.scoring = scoring
-        self.n_searches = n_searches
+        self.n_iter = n_iter
 
-        self.epsilon = epsilon
-        self.annealing_factor = annealing_factor
+        self.eps = eps
+        self.t_rate = t_rate
 
         self.temp = 100
 
@@ -47,10 +38,10 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         for hyperpara_name in hyperpara_indices:
             n_values = len(self.hyperpara_search_dict[hyperpara_name])
-            rand_epsilon = random.randint(-self.epsilon, self.epsilon + 1)
+            rand_eps = random.randint(-self.eps, self.eps + 1)
 
             index = hyperpara_indices[hyperpara_name]
-            index_new = index + rand_epsilon
+            index_new = index + rand_eps
             hyperpara_indices_new[hyperpara_name] = index_new
 
             # don't go out of range
@@ -63,8 +54,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         return hyperpara_indices_new
 
-    def _start_simulated_annealing(self, n_searches):
-        n_steps = int(self.n_searches / self.n_jobs)
+    def _start_simulated_annealing(self, n_iter):
+        n_steps = int(self.n_iter / self.n_jobs)
 
         self.hyperpara_indices_current = self._get_random_position()
         self.hyperpara_dict_current = self._pos_dict2values_dict(
@@ -77,8 +68,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.score_best = self.score_current
         self.hyperpara_indices_best = self.hyperpara_indices_current
 
-        for i in tqdm.tqdm(range(n_steps), position=n_searches, leave=False):
-            self.temp = self.temp * self.annealing_factor
+        for i in tqdm.tqdm(range(n_steps), position=n_iter, leave=False):
+            self.temp = self.temp * self.t_rate
             rand = random.randint(0, 1)
 
             self.hyperpara_indices = self._get_neighbor_model(

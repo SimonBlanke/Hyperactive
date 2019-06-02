@@ -12,24 +12,25 @@ from sklearn.model_selection import cross_val_score
 
 
 class BaseOptimizer(object):
-    def __init__(self, ml_search_dict, n_searches, scoring="accuracy", n_jobs=1, cv=5):
-        self.ml_search_dict = ml_search_dict
-        self.n_searches = n_searches
+    def __init__(self, search_dict, n_iter, scoring="accuracy", n_jobs=1, cv=5):
+        self.search_dict = search_dict
+        self.n_iter = n_iter
         self.scoring = scoring
         self.n_jobs = n_jobs
         self.cv = cv
         self.verbosity = 1
+        self.random_state = None
 
         self.X_train = None
         self.y_train = None
         self.init_search_dict = None
 
-        self.model_key = list(self.ml_search_dict.keys())[0]
-        # model_str = random.choice(list(self.ml_search_dict.keys()))
-        self.hyperpara_search_dict = ml_search_dict[list(ml_search_dict.keys())[0]]
+        self.model_key = list(self.search_dict.keys())[0]
+        # model_str = random.choice(list(self.search_dict.keys()))
+        self.hyperpara_search_dict = search_dict[list(search_dict.keys())[0]]
 
         self._set_n_jobs()
-        self._n_searches_range = range(0, self.n_jobs)
+        self._n_iter_range = range(0, self.n_jobs)
 
         self._check_sklearn_model_key()
         self._limit_pos()
@@ -41,12 +42,12 @@ class BaseOptimizer(object):
         num_cores = multiprocessing.cpu_count()
         if self.n_jobs == -1 or self.n_jobs > num_cores:
             self.n_jobs = num_cores
-        if self.n_jobs > self.n_searches:
-            self.n_searches = self.n_jobs
+        if self.n_jobs > self.n_iter:
+            self.n_iter = self.n_jobs
 
     def _check_sklearn_model_key(self):
         if "sklearn" not in self.model_key:
-            raise ValueError("No sklearn model in ml_search_dict found")
+            raise ValueError("No sklearn model in search_dict found")
 
     def _get_random_position(self):
         """
@@ -132,7 +133,7 @@ class BaseOptimizer(object):
     def _search_multiprocessing(self):
         pool = multiprocessing.Pool(self.n_jobs)
         models, scores, hyperpara_dict, train_time = zip(
-            *pool.map(self._search, self._n_searches_range)
+            *pool.map(self._search, self._n_iter_range)
         )
 
         self.model_list = models
