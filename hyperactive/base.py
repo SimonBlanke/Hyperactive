@@ -3,12 +3,14 @@
 # License: MIT License
 
 import time
+import pickle
 import random
 import numpy as np
 import multiprocessing
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
+from sklearn.metrics import accuracy_score
 
 
 class BaseOptimizer(object):
@@ -159,5 +161,10 @@ class BaseOptimizer(object):
     def predict(self, X_test):
         return self.best_model.predict(X_test)
 
-    def score():
-        pass
+    def score(self, X_test, y_test):
+        y_pred = self.predict(X_test)
+        return accuracy_score(y_test, y_pred)
+
+    def export(self, filename, path=""):
+        if self.best_model:
+            pickle.dump(self.best_model, open(filename, "wb"))
