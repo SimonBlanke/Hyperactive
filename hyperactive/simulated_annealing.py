@@ -10,8 +10,29 @@ from .base import BaseOptimizer
 
 
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
-    def __init__(self, search_dict, n_iter, scoring, eps=1, t_rate=0.9, n_jobs=1, cv=5):
-        super().__init__(search_dict, n_iter, scoring, n_jobs, cv)
+    def __init__(
+        self,
+        search_dict,
+        n_iter,
+        scoring="accuracy",
+        tabu_memory=None,
+        n_jobs=1,
+        cv=5,
+        verbosity=1,
+        random_state=None,
+        eps=1,
+        t_rate=0.9,
+    ):
+        super().__init__(
+            search_dict,
+            n_iter,
+            scoring,
+            tabu_memory,
+            n_jobs,
+            cv,
+            verbosity,
+            random_state,
+        )
         self._search = self._start_simulated_annealing
 
         self.search_dict = search_dict
@@ -54,7 +75,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         return hyperpara_indices_new
 
-    def _start_simulated_annealing(self, n_iter):
+    def _start_simulated_annealing(self, n_process):
+        self._set_random_seed(n_process)
         n_steps = int(self.n_iter / self.n_jobs)
 
         self.hyperpara_indices_current = self._get_random_position()
@@ -68,7 +90,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.score_best = self.score_current
         self.hyperpara_indices_best = self.hyperpara_indices_current
 
-        for i in tqdm.tqdm(range(n_steps), position=n_iter, leave=False):
+        for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
             self.temp = self.temp * self.t_rate
             rand = random.randint(0, 1)
 

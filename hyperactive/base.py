@@ -7,6 +7,7 @@ import pickle
 import random
 import numpy as np
 import multiprocessing
+import scipy
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
@@ -23,8 +24,9 @@ class BaseOptimizer(object):
         n_jobs=1,
         cv=5,
         verbosity=1,
-        random_state=False,
+        random_state=None,
     ):
+
         self.search_dict = search_dict
         self.n_iter = n_iter
         self.scoring = scoring
@@ -43,10 +45,17 @@ class BaseOptimizer(object):
         self.hyperpara_search_dict = search_dict[list(search_dict.keys())[0]]
 
         self._set_n_jobs()
-        self._n_iter_range = range(0, self.n_jobs)
+        # self._set_random_seed()
+        self._n_process_range = range(0, self.n_jobs)
 
         self._check_sklearn_model_key()
         self._limit_pos()
+
+    def _set_random_seed(self, thread=0):
+        if self.random_state:
+            random.seed(self.random_state + thread)
+            np.random.seed(self.random_state + thread)
+            scipy.random.seed(self.random_state + thread)
 
     def _get_dim_SearchSpace(self):
         return len(self.hyperpara_search_dict)
@@ -146,7 +155,7 @@ class BaseOptimizer(object):
     def _search_multiprocessing(self):
         pool = multiprocessing.Pool(self.n_jobs)
         models, scores, hyperpara_dict, train_time = zip(
-            *pool.map(self._search, self._n_iter_range)
+            *pool.map(self._search, self._n_process_range)
         )
 
         self.model_list = models

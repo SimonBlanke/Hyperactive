@@ -14,15 +14,27 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self,
         search_dict,
         n_iter,
-        scoring,
+        scoring="accuracy",
+        tabu_memory=None,
+        n_jobs=1,
+        cv=5,
+        verbosity=1,
+        random_state=None,
         n_part=1,
         w=0.5,
         c_k=0.8,
         c_s=0.9,
-        n_jobs=1,
-        cv=5,
     ):
-        super().__init__(search_dict, n_iter, scoring, n_jobs, cv)
+        super().__init__(
+            search_dict,
+            n_iter,
+            scoring,
+            tabu_memory,
+            n_jobs,
+            cv,
+            verbosity,
+            random_state,
+        )
         self._search = self._start_particle_swarm_optimization
 
         self.search_dict = search_dict
@@ -73,11 +85,12 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 p.best_score = p.score
                 p.best_pos = p.pos
 
-    def _start_particle_swarm_optimization(self, n_iter):
+    def _start_particle_swarm_optimization(self, n_process):
+        self._set_random_seed(n_process)
         n_steps = max(1, int(self.n_iter / self.n_jobs))
 
         p_list = self._init_particles()
-        for i in tqdm.tqdm(range(n_steps), position=n_iter, leave=False):
+        for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
             self._eval_particles(p_list)
             self._find_best_particle(p_list)
             self._move_particles(p_list)
