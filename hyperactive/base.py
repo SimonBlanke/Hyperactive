@@ -14,14 +14,25 @@ from sklearn.metrics import accuracy_score
 
 
 class BaseOptimizer(object):
-    def __init__(self, search_dict, n_iter, scoring="accuracy", n_jobs=1, cv=5):
+    def __init__(
+        self,
+        search_dict,
+        n_iter,
+        scoring="accuracy",
+        tabu_memory=None,
+        n_jobs=1,
+        cv=5,
+        verbosity=1,
+        random_state=False,
+    ):
         self.search_dict = search_dict
         self.n_iter = n_iter
         self.scoring = scoring
+        self.tabu_memory = tabu_memory
         self.n_jobs = n_jobs
         self.cv = cv
-        self.verbosity = 1
-        self.random_state = None
+        self.verbosity = verbosity
+        self.random_state = random_state
 
         self.X_train = None
         self.y_train = None
