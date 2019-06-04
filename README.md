@@ -39,27 +39,14 @@ Optimizer.fit(X_train, y_train)
 ## Hyperactive API
 
 ```python
-RandomSearch_Optimizer(search_dict, n_iter, scoring, n_jobs=1, cv=5)
+Usable classes:
+    - RandomSearch_Optimizer(search_dict, n_iter, scoring='accuracy', n_jobs=1, cv=5)
+    - SimulatedAnnealing_Optimizer(search_dict, n_iter, scoring='accuracy', eps=1, t_rate=0.9, n_jobs=1, cv=5)
+    - ParticleSwarm_Optimizer(search_dict, n_iter, scoring='accuracy', n_part=1, w=0.5, c_k=0.8, c_s=0.9, n_jobs=1, cv=5)
 
 Methods:
     - fit(X_train, y_train)
     - predict(X_test)
-```
-
-
-```python
-SimulatedAnnealing_Optimizer(search_dict, n_iter, scoring, eps=1, t_rate=0.9, n_jobs=1, cv=5)
-
-Methods:
-    - fit(X_train, y_train)
-    - predict(X_test)
-```
-
-
-```python
-ParticleSwarm_Optimizer(search_dict, n_iter, scoring, n_part=1, w=0.5, c_k=0.8, c_s=0.9, n_jobs=1, cv=5)
-
-Methods:
-    - fit(X_train, y_train)
-    - predict(X_test)
+    - score(X_test, y_test)
+    - export(filename, path="")
 ```
