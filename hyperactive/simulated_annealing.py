@@ -22,7 +22,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         random_state=None,
         start_points=None,
         eps=1,
-        t_rate=0.9,
+        t_rate=0.95,
     ):
         super().__init__(
             search_space,
@@ -40,17 +40,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.eps = eps
         self.t_rate = t_rate
 
-        self.temp = 100000
-
-        self.best_model = None
-
-        self.score = 0
-        self.score_best = 0
-        self.score_current = 0
-
-        self.hyperpara_indices = 0
-        self.hyperpara_indices_best = 0
-        self.hyperpara_indices_current = 0
+        self.temp = 0.1
 
     def _get_neighbor_model(self, hyperpara_indices):
         hyperpara_indices_new = {}
@@ -74,50 +64,50 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         return hyperpara_indices_new
 
     def _start_simulated_annealing(self, n_process):
+        score = 0
+        score_best = 0
+        score_current = 0
+
+        hyperpara_indices = 0
+        hyperpara_indices_best = 0
+        hyperpara_indices_current = 0
+
         self._set_random_seed(n_process)
         n_steps = int(self.n_iter / self.n_jobs)
 
-        self.hyperpara_indices_current = self._init_eval(n_process)
-        self.hyperpara_dict_current = self._pos_dict2values_dict(
-            self.hyperpara_indices_current
-        )
-        self.score_current, train_time, sklearn_model = self._train_model(
-            self.hyperpara_dict_current
+        hyperpara_indices_current = self._init_eval(n_process)
+        hyperpara_dict_current = self._pos_dict2values_dict(hyperpara_indices_current)
+        score_current, train_time, sklearn_model = self._train_model(
+            hyperpara_dict_current
         )
 
-        self.score_best = self.score_current
-        self.hyperpara_indices_best = self.hyperpara_indices_current
+        score_best = score_current
+        hyperpara_indices_best = hyperpara_indices_current
 
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
             self.temp = self.temp * self.t_rate
             rand = random.randint(0, 1)
 
-            self.hyperpara_indices = self._get_neighbor_model(
-                self.hyperpara_indices_current
-            )
-            self.hyperpara_dict = self._pos_dict2values_dict(self.hyperpara_indices)
-            self.score, train_time, sklearn_model = self._train_model(
-                self.hyperpara_dict
-            )
+            hyperpara_indices = self._get_neighbor_model(hyperpara_indices_current)
+            hyperpara_dict = self._pos_dict2values_dict(hyperpara_indices)
+            score, train_time, sklearn_model = self._train_model(hyperpara_dict)
 
             # Normalized score difference to have a factor for later use with temperature and random
-            score_diff_norm = (self.score_current - self.score) / (
-                self.score_current + self.score
-            )
+            score_diff_norm = (score_current - score) / (score_current + score)
 
-            if self.score > self.score_current:
-                self.score_current = self.score
-                self.hyperpara_indices_current = self.hyperpara_indices
+            if score > score_current:
+                score_current = score
+                hyperpara_indices_current = hyperpara_indices
 
-                if self.score > self.score_best:
-                    self.score_best = self.score
-                    self.hyperpara_indices_best = self.hyperpara_indices
+                if score > score_best:
+                    score_best = score
+                    hyperpara_indices_best = hyperpara_indices
 
             elif np.exp(score_diff_norm / self.temp) > rand:
-                self.score_current = self.score
-                self.hyperpara_indices_current = self.hyperpara_indices
+                score_current = score
+                hyperpara_indices_current = hyperpara_indices
 
-        hyperpara_dict_best = self._pos_dict2values_dict(self.hyperpara_indices_best)
+        hyperpara_dict_best = self._pos_dict2values_dict(hyperpara_indices_best)
         score_best, train_time, sklearn_model = self._train_model(hyperpara_dict_best)
 
         return sklearn_model, score_best, hyperpara_dict_best, train_time
