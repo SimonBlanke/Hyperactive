@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score
 class BaseOptimizer(object):
     def __init__(
         self,
-        search_dict,
+        search_space,
         n_iter,
         scoring="accuracy",
         tabu_memory=None,
@@ -25,9 +25,10 @@ class BaseOptimizer(object):
         cv=5,
         verbosity=1,
         random_state=None,
+        start_points=None,
     ):
 
-        self.search_dict = search_dict
+        self.search_space = search_space
         self.n_iter = n_iter
         self.scoring = scoring
         self.tabu_memory = tabu_memory
@@ -35,14 +36,15 @@ class BaseOptimizer(object):
         self.cv = cv
         self.verbosity = verbosity
         self.random_state = random_state
+        self.start_points = start_points
 
         self.X_train = None
         self.y_train = None
         self.init_search_dict = None
 
-        self.model_key = list(self.search_dict.keys())[0]
+        self.model_key = list(self.search_space.keys())[0]
         # model_str = random.choice(list(self.search_dict.keys()))
-        self.hyperpara_search_dict = search_dict[list(search_dict.keys())[0]]
+        self.hyperpara_search_dict = search_space[list(search_space.keys())[0]]
 
         self._set_n_jobs()
         # self._set_random_seed()
@@ -71,6 +73,30 @@ class BaseOptimizer(object):
         if "sklearn" not in self.model_key:
             raise ValueError("No sklearn model in search_dict found")
 
+    def _init_eval(self, n_process):
+        hyperpara_indices = None
+        if self.start_points:
+            for key in self.start_points.keys():
+                if key == n_process:
+                    hyperpara_indices = self._set_start_position(n_process)
+
+        if not hyperpara_indices:
+            hyperpara_indices = self._get_random_position()
+
+        return hyperpara_indices
+
+    def _set_start_position(self, n_process):
+        pos_dict = {}
+
+        for hyperpara_name in self.hyperpara_search_dict.keys():
+            search_position = self.hyperpara_search_dict[hyperpara_name].index(
+                self.start_points[n_process][hyperpara_name]
+            )
+
+            pos_dict[hyperpara_name] = search_position
+
+        return pos_dict
+
     def _get_random_position(self):
         """
         get a random N-Dim position in search space and return:
@@ -79,7 +105,6 @@ class BaseOptimizer(object):
         pos_dict = {}
 
         for hyperpara_name in self.hyperpara_search_dict.keys():
-
             n_hyperpara_values = len(self.hyperpara_search_dict[hyperpara_name])
             search_position = random.randint(0, n_hyperpara_values - 1)
 

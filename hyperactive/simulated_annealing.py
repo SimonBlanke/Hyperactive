@@ -12,7 +12,7 @@ from .base import BaseOptimizer
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
     def __init__(
         self,
-        search_dict,
+        search_space,
         n_iter,
         scoring="accuracy",
         tabu_memory=None,
@@ -20,11 +20,12 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         cv=5,
         verbosity=1,
         random_state=None,
+        start_points=None,
         eps=1,
         t_rate=0.9,
     ):
         super().__init__(
-            search_dict,
+            search_space,
             n_iter,
             scoring,
             tabu_memory,
@@ -32,17 +33,14 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             cv,
             verbosity,
             random_state,
+            start_points,
         )
         self._search = self._start_simulated_annealing
-
-        self.search_dict = search_dict
-        self.scoring = scoring
-        self.n_iter = n_iter
 
         self.eps = eps
         self.t_rate = t_rate
 
-        self.temp = 100
+        self.temp = 100000
 
         self.best_model = None
 
@@ -79,7 +77,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self._set_random_seed(n_process)
         n_steps = int(self.n_iter / self.n_jobs)
 
-        self.hyperpara_indices_current = self._get_random_position()
+        self.hyperpara_indices_current = self._init_eval(n_process)
         self.hyperpara_dict_current = self._pos_dict2values_dict(
             self.hyperpara_indices_current
         )

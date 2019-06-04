@@ -12,7 +12,7 @@ from .base import BaseOptimizer
 class ParticleSwarm_Optimizer(BaseOptimizer):
     def __init__(
         self,
-        search_dict,
+        search_space,
         n_iter,
         scoring="accuracy",
         tabu_memory=None,
@@ -20,13 +20,14 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         cv=5,
         verbosity=1,
         random_state=None,
+        start_points=None,
         n_part=1,
         w=0.5,
         c_k=0.8,
         c_s=0.9,
     ):
         super().__init__(
-            search_dict,
+            search_space,
             n_iter,
             scoring,
             tabu_memory,
@@ -34,12 +35,9 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             cv,
             verbosity,
             random_state,
+            start_points,
         )
         self._search = self._start_particle_swarm_optimization
-
-        self.search_dict = search_dict
-        self.n_iter = n_iter
-        self.scoring = scoring
 
         self.n_part = n_part
         self.w = w
@@ -88,6 +86,11 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
     def _start_particle_swarm_optimization(self, n_process):
         self._set_random_seed(n_process)
         n_steps = max(1, int(self.n_iter / self.n_jobs))
+
+        hyperpara_indices = self._init_eval(n_process)
+        hyperpara_dict = self._pos_dict2values_dict(hyperpara_indices)
+        self.best_pos = self._pos_dict2np_array(hyperpara_indices)
+        self.best_score, train_time, sklearn_model = self._train_model(hyperpara_dict)
 
         p_list = self._init_particles()
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
