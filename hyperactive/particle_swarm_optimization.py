@@ -34,11 +34,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self.c_k = c_k
         self.c_s = c_s
 
-        self.best_model = None
         self.best_score = 0
         self.best_pos = None
-        self.best_hyperpara_dict = None
-        self.best_train_time = None
 
     def _find_best_particle(self, p_list):
         for p in p_list:
@@ -70,9 +67,11 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
     def _eval_particles(self, p_list):
         for p in p_list:
             hyperpara_dict = self._pos_np2values_dict(p.pos)
-            p.best_score, p.train_time, p.sklearn_model = self._train_model(
-                hyperpara_dict
-            )
+            p.score, _, p.sklearn_model = self._train_model(hyperpara_dict)
+
+            if p.score > p.best_score:
+                p.best_score = p.score
+                p.best_pos = p.pos
 
     def _start_particle_swarm_optimization(self, n_iter):
         n_steps = max(1, int(self.n_iter / self.n_jobs))
@@ -93,10 +92,11 @@ class Particle:
     def __init__(self):
         self.pos = None
         self.velo = None
-        self.best_pos = None
+        self.score = None
 
-        self.best_score = None
-        self.train_time = None
+        self.best_pos = None
+        self.best_score = 0
+
         self.sklearn_model = None
 
         self.max_pos_list = None
