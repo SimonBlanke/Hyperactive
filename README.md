@@ -42,15 +42,74 @@ Optimizer.fit(X_train, y_train)
 
 ## Hyperactive API
 
+### Classes:
 ```python
-Usable classes:
-    - RandomSearch_Optimizer(search_dict, n_iter, scoring='accuracy', n_jobs=1, cv=5)
-    - SimulatedAnnealing_Optimizer(search_dict, n_iter, scoring='accuracy', eps=1, t_rate=0.9, n_jobs=1, cv=5)
-    - ParticleSwarm_Optimizer(search_dict, n_iter, scoring='accuracy', n_part=1, w=0.5, c_k=0.8, c_s=0.9, n_jobs=1, cv=5)
-
-Methods:
-    - fit(X_train, y_train)
-    - predict(X_test)
-    - score(X_test, y_test)
-    - export(filename, path="")
+RandomSearch_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
+SimulatedAnnealing_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.95)
+ParticleSwarm_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=2, w=0.5, c_k=0.5, c_s=0.9)
 ```
+
+### General positional argument:
+
+| Argument | Type | Description |
+| ------ | ------ | ------ |
+| search_space  | dict | bla |
+| n_iter | int | bla |
+
+### General keyword arguments:
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| scoring  | str | "accuracy" | bla |
+| n_jobs | int | bla | bla |
+| cv | int | bla | bla |
+| verbosity | int | bla | bla |
+| random_state | int | bla | bla |
+| start_points | dict | bla | bla |
+
+### Specific keyword arguments (simulated annealing):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | bla |
+| t_rate | float | 0.95 | bla |
+
+### Specific keyword arguments (particle swarm optimization):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| n_part  | int | 1 | bla |
+| w | float | 0.5 | bla |
+| c_k | float | 0.8 | bla |
+| c_s | float | 0.9 | bla |
+
+### General methods:
+```
+fit(self, X_train, y_train)
+```
+| Argument | Type | Description |
+| ------ | ------ | ------ |
+| X_train  | array-like | training input features |
+| y_train | array-like | training target |
+
+```
+predict(self, X_test)
+```
+| Argument | Type | Description |
+| ------ | ------ | ------ |
+| X_test  | array-like | testing input features |
+
+```
+score(self, X_test, y_test)
+```
+| Argument | Type | Description |
+| ------ | ------ | ------ |
+| X_test  | array-like | testing input features |
+| y_test | array-like | true values |
+
+```
+export(self, filename)
+```
+| Argument | Type | Description |
+| ------ | ------ | ------ |
+| filename  | str | file name and path for model export |
