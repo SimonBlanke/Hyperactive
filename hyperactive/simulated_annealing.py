@@ -24,7 +24,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         random_state=None,
         start_points=None,
         eps=1,
-        t_rate=0.95,
+        t_rate=0.99,
     ):
         super().__init__(
             search_space,

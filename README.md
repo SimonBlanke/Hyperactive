@@ -8,7 +8,7 @@ A Python package for meta-heuristic hyperparameter optimization of scikit-learn 
   - Simulated annealing
   - Particle swarm optimization
 
-The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel. In the current implementation the actual number of searches in each process is n_iter divided by n_jobs and rounded down to the next integer.
+The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel.
 
 
 ## Installation
@@ -45,8 +45,8 @@ Optimizer.fit(X_train, y_train)
 ### Classes:
 ```python
 RandomSearch_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
-SimulatedAnnealing_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.95)
-ParticleSwarm_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=2, w=0.5, c_k=0.5, c_s=0.9)
+SimulatedAnnealing_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.99)
+ParticleSwarm_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
 ```
 
 ### General positional argument:
@@ -72,7 +72,7 @@ ParticleSwarm_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
-| t_rate | float | 0.95 | cooling rate  |
+| t_rate | float | 0.99 | cooling rate  |
 
 ### Specific keyword arguments (particle swarm optimization):
 

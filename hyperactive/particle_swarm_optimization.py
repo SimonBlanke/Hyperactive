@@ -23,7 +23,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         start_points=None,
-        n_part=2,
+        n_part=1,
         w=0.5,
         c_k=0.5,
         c_s=0.9,
