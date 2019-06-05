@@ -37,7 +37,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
     def _start_random_search(self, n_process):
         self._set_random_seed(n_process)
-        n_steps = int(self.n_iter / self.n_jobs)
+        n_steps = self._set_n_steps(n_process)
 
         best_model = None
         best_score = 0
@@ -55,8 +55,8 @@ class RandomSearch_Optimizer(BaseOptimizer):
             best_train_time = train_time
 
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
-            hyperpara_indices = self._get_random_position()
 
+            hyperpara_indices = self._get_random_position()
             hyperpara_dict = self._pos_dict2values_dict(hyperpara_indices)
             score, train_time, sklearn_model = self._train_model(hyperpara_dict)
 

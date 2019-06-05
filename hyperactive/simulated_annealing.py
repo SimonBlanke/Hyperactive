@@ -75,7 +75,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         hyperpara_indices_current = 0
 
         self._set_random_seed(n_process)
-        n_steps = int(self.n_iter / self.n_jobs)
+        n_steps = self._set_n_steps(n_process)
 
         hyperpara_indices_current = self._init_eval(n_process)
         hyperpara_dict_current = self._pos_dict2values_dict(hyperpara_indices_current)

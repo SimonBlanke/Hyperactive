@@ -87,7 +87,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
     def _start_particle_swarm_optimization(self, n_process):
         self._set_random_seed(n_process)
-        n_steps = max(1, int(self.n_iter / self.n_jobs))
+        n_steps = self._set_n_steps(n_process)
 
         hyperpara_indices = self._init_eval(n_process)
         hyperpara_dict = self._pos_dict2values_dict(hyperpara_indices)

@@ -55,6 +55,15 @@ class BaseOptimizer(object):
         self._check_sklearn_model_key()
         self._limit_pos()
 
+    def _set_n_steps(self, n_process):
+        n_steps = int(self.n_iter / self.n_jobs)
+        remain = self.n_iter % self.n_jobs
+
+        if n_process < remain:
+            n_steps += 1
+
+        return n_steps
+
     def _set_random_seed(self, thread=0):
         if self.random_state:
             random.seed(self.random_state + thread)
