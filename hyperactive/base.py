@@ -2,12 +2,14 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+
 import time
 import pickle
 import random
-import numpy as np
 import multiprocessing
+
 import scipy
+import numpy as np
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
@@ -200,8 +202,9 @@ class BaseOptimizer(object):
         self.best_model, best_score = self._find_best_model(models, scores)
         self.best_model.fit(X_train, y_train)
 
-        print("Best score:", *best_score)
-        print("Best model:", self.best_model)
+        if self.verbosity:
+            print("Best score:", *best_score)
+            print("Best model:", self.best_model)
 
     def predict(self, X_test):
         return self.best_model.predict(X_test)
@@ -210,6 +213,6 @@ class BaseOptimizer(object):
         y_pred = self.predict(X_test)
         return accuracy_score(y_test, y_pred)
 
-    def export(self, filename, path=""):
+    def export(self, filename):
         if self.best_model:
             pickle.dump(self.best_model, open(filename, "wb"))

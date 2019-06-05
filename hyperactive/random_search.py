@@ -2,8 +2,10 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from .base import BaseOptimizer
+
 import tqdm
+
+from .base import BaseOptimizer
 
 
 class RandomSearch_Optimizer(BaseOptimizer):

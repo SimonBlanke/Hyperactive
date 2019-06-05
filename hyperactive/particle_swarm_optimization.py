@@ -2,7 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+
 import random
+
 import numpy as np
 import tqdm
 
@@ -21,9 +23,9 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         start_points=None,
-        n_part=1,
+        n_part=2,
         w=0.5,
-        c_k=0.8,
+        c_k=0.5,
         c_s=0.9,
     ):
         super().__init__(
