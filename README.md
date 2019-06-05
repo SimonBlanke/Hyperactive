@@ -53,35 +53,35 @@ ParticleSwarm_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5
 
 | Argument | Type | Description |
 | ------ | ------ | ------ |
-| search_space  | dict | bla |
-| n_iter | int | bla |
+| search_space  | dict | hyperparameter search space to explore by the optimizer |
+| n_iter | int | number of iterations to perform |
 
 ### General keyword arguments:
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
-| scoring  | str | "accuracy" | bla |
-| n_jobs | int | bla | bla |
-| cv | int | bla | bla |
-| verbosity | int | bla | bla |
-| random_state | int | bla | bla |
-| start_points | dict | bla | bla |
+| scoring  | str | "accuracy" | scoring for model evaluation |
+| n_jobs | int | 1 | number of jobs to run in parallel (-1 for maximum) |
+| cv | int | 5 | cross-validation |
+| verbosity | int | 1 | Shows model and scoring information |
+| random_state | int | None | The seed for random number generator |
+| start_points | dict | None | Hyperparameter configuration to start from |
 
 ### Specific keyword arguments (simulated annealing):
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
-| eps  | int | 1 | bla |
-| t_rate | float | 0.95 | bla |
+| eps  | int | 1 | epsilon |
+| t_rate | float | 0.95 | cooling rate  |
 
 ### Specific keyword arguments (particle swarm optimization):
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
-| n_part  | int | 1 | bla |
-| w | float | 0.5 | bla |
-| c_k | float | 0.8 | bla |
-| c_s | float | 0.9 | bla |
+| n_part  | int | 1 | number of particles |
+| w | float | 0.5 | intertia factor |
+| c_k | float | 0.8 | cognitive factor |
+| c_s | float | 0.9 | social factor |
 
 ### General methods:
 ```
