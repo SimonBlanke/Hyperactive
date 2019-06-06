@@ -1,5 +1,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/hyperactive.svg)](https://pypi.python.org/pypi/hyperactive)
 [![PyPI license](https://img.shields.io/pypi/l/hyperactive.svg)](https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE)
+[![PyPI downloads](https://img.shields.io/pypi/dm/hyperactive.svg)](https://pypi.python.org/pypi/hyperactive)
+
 
 
 # Hyperactive
