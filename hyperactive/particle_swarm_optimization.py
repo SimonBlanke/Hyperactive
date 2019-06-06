@@ -9,6 +9,7 @@ import numpy as np
 import tqdm
 
 from .base import BaseOptimizer
+from .base import SearchSpace
 
 
 class ParticleSwarm_Optimizer(BaseOptimizer):
@@ -39,7 +40,6 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             random_state,
             start_points,
         )
-        self._search = self._start_particle_swarm_optimization
 
         self.n_part = n_part
         self.w = w
@@ -48,6 +48,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
         self.best_score = 0
         self.best_pos = None
+
+        self.search_space = SearchSpace(start_points, search_space)
 
     def _find_best_particle(self, p_list):
         for p in p_list:
@@ -59,8 +61,12 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         p_list = [Particle() for _ in range(self.n_part)]
         for p in p_list:
             p.max_pos_list = self.max_pos_list
-            p.pos = self._pos_dict2np_array(self._get_random_position())
-            p.best_pos = self._pos_dict2np_array(self._get_random_position())
+            p.pos = self.search_space._pos_dict2np_array(
+                self.search_space._get_random_position()
+            )
+            p.best_pos = self.search_space._pos_dict2np_array(
+                self.search_space._get_random_position()
+            )
             p.velo = np.zeros(self._get_dim_SearchSpace())
 
         return p_list
@@ -78,20 +84,20 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
     def _eval_particles(self, p_list):
         for p in p_list:
-            hyperpara_dict = self._pos_np2values_dict(p.pos)
+            hyperpara_dict = self.search_space._pos_np2values_dict(p.pos)
             p.score, _, p.sklearn_model = self._train_model(hyperpara_dict)
 
             if p.score > p.best_score:
                 p.best_score = p.score
                 p.best_pos = p.pos
 
-    def _start_particle_swarm_optimization(self, n_process):
+    def _search(self, n_process):
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
-        hyperpara_indices = self._init_eval(n_process)
-        hyperpara_dict = self._pos_dict2values_dict(hyperpara_indices)
-        self.best_pos = self._pos_dict2np_array(hyperpara_indices)
+        hyperpara_indices = self.search_space._init_eval(n_process)
+        hyperpara_dict = self.search_space._pos_dict2values_dict(hyperpara_indices)
+        self.best_pos = self.search_space._pos_dict2np_array(hyperpara_indices)
         self.best_score, train_time, sklearn_model = self._train_model(hyperpara_dict)
 
         p_list = self._init_particles()
@@ -100,7 +106,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             self._find_best_particle(p_list)
             self._move_particles(p_list)
 
-        hyperpara_dict_best = self._pos_np2values_dict(self.best_pos)
+        hyperpara_dict_best = self.search_space._pos_np2values_dict(self.best_pos)
         score_best, train_time, sklearn_model = self._train_model(hyperpara_dict_best)
 
         return sklearn_model, score_best, hyperpara_dict_best, train_time
