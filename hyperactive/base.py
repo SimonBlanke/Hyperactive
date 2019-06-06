@@ -14,6 +14,7 @@ import numpy as np
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
+from functools import partial
 
 
 class BaseOptimizer(object):
@@ -46,14 +47,11 @@ class BaseOptimizer(object):
 
         self._set_n_jobs()
 
-        self.model_key = list(self.search_space.keys())[0]
         # model_str = random.choice(list(self.search_dict.keys()))
         self.hyperpara_search_dict = search_space[list(search_space.keys())[0]]
 
         # self._set_random_seed()
         self._n_process_range = range(0, self.n_jobs)
-
-        self._check_sklearn_model_key()
         self._limit_pos()
 
     def _set_n_jobs(self):
@@ -81,23 +79,12 @@ class BaseOptimizer(object):
     def _get_dim_SearchSpace(self):
         return len(self.hyperpara_search_dict)
 
-    def _check_sklearn_model_key(self):
-        if "sklearn" not in self.model_key:
-            raise ValueError("No sklearn model in search_dict found")
-
     def _limit_pos(self):
         max_pos_list = []
         for values in list(self.hyperpara_search_dict.values()):
             max_pos_list.append(len(values) - 1)
 
         self.max_pos_list = np.array(max_pos_list)
-
-    def _get_model(self, model):
-        sklearn, submod_func = model.rsplit(".", 1)
-        module = import_module(sklearn)
-        model = getattr(module, submod_func)
-
-        return model
 
     def _find_best_model(self, models, scores):
         N_best_models = 1
@@ -110,28 +97,16 @@ class BaseOptimizer(object):
 
         return best_model, best_score
 
-    def _create_sklearn_model(self, model, hyperpara_dict):
-        return model(**hyperpara_dict)
-
-    def _train_model(self, hyperpara_dict):
-        model = self._get_model(self.model_key)
-        sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
-
-        time_temp = time.time()
-        scores = cross_val_score(
-            sklearn_model, self.X_train, self.y_train, scoring=self.scoring, cv=self.cv
-        )
-        train_time = (time.time() - time_temp) / self.cv
-
-        return scores.mean(), train_time, sklearn_model
-
     def _search(self):
         pass
 
-    def _search_multiprocessing(self):
+    def _search_multiprocessing(self, X_train, y_train):
         pool = multiprocessing.Pool(self.n_jobs)
+
+        _search = partial(self._search, X_train=X_train, y_train=y_train)
+
         models, scores, hyperpara_dict, train_time = zip(
-            *pool.map(self._search, self._n_process_range)
+            *pool.map(_search, self._n_process_range)
         )
 
         self.model_list = models
@@ -146,7 +121,7 @@ class BaseOptimizer(object):
         self.y_train = y_train
         self.init_search_dict = init_search_dict
 
-        models, scores = self._search_multiprocessing()
+        models, scores = self._search_multiprocessing(X_train, y_train)
 
         self.best_model, best_score = self._find_best_model(models, scores)
         self.best_model.fit(X_train, y_train)
@@ -165,6 +140,43 @@ class BaseOptimizer(object):
     def export(self, filename):
         if self.best_model:
             pickle.dump(self.best_model, open(filename, "wb"))
+
+
+class MachineLearner:
+    def __init__(self, search_space, scoring, cv):
+        self.search_space = search_space
+        self.scoring = scoring
+        self.cv = cv
+
+        self.model_key = list(self.search_space.keys())[0]
+
+        self._check_sklearn_model_key()
+
+    def _check_sklearn_model_key(self):
+        if "sklearn" not in self.model_key:
+            raise ValueError("No sklearn model in search_dict found")
+
+    def _get_model(self, model):
+        sklearn, submod_func = model.rsplit(".", 1)
+        module = import_module(sklearn)
+        model = getattr(module, submod_func)
+
+        return model
+
+    def _create_sklearn_model(self, model, hyperpara_dict):
+        return model(**hyperpara_dict)
+
+    def _train_model(self, hyperpara_dict, X_train, y_train):
+        model = self._get_model(self.model_key)
+        sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
+
+        time_temp = time.time()
+        scores = cross_val_score(
+            sklearn_model, X_train, y_train, scoring=self.scoring, cv=self.cv
+        )
+        train_time = (time.time() - time_temp) / self.cv
+
+        return scores.mean(), train_time, sklearn_model
 
 
 class SearchSpace:

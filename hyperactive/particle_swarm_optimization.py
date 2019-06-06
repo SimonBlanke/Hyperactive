@@ -10,6 +10,7 @@ import tqdm
 
 from .base import BaseOptimizer
 from .base import SearchSpace
+from .base import MachineLearner
 
 
 class ParticleSwarm_Optimizer(BaseOptimizer):
@@ -50,6 +51,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self.best_pos = None
 
         self.search_space = SearchSpace(start_points, search_space)
+        self.machine_learner = MachineLearner(search_space, scoring, cv)
 
     def _find_best_particle(self, p_list):
         for p in p_list:
@@ -82,32 +84,38 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             p.velo = new_velocity
             p.move()
 
-    def _eval_particles(self, p_list):
+    def _eval_particles(self, p_list, X_train, y_train):
         for p in p_list:
             hyperpara_dict = self.search_space._pos_np2values_dict(p.pos)
-            p.score, _, p.sklearn_model = self._train_model(hyperpara_dict)
+            p.score, _, p.sklearn_model = self.machine_learner._train_model(
+                hyperpara_dict, X_train, y_train
+            )
 
             if p.score > p.best_score:
                 p.best_score = p.score
                 p.best_pos = p.pos
 
-    def _search(self, n_process):
+    def _search(self, n_process, X_train, y_train):
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
         hyperpara_indices = self.search_space._init_eval(n_process)
         hyperpara_dict = self.search_space._pos_dict2values_dict(hyperpara_indices)
         self.best_pos = self.search_space._pos_dict2np_array(hyperpara_indices)
-        self.best_score, train_time, sklearn_model = self._train_model(hyperpara_dict)
+        self.best_score, train_time, sklearn_model = self.machine_learner._train_model(
+            hyperpara_dict, X_train, y_train
+        )
 
         p_list = self._init_particles()
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
-            self._eval_particles(p_list)
+            self._eval_particles(p_list, X_train, y_train)
             self._find_best_particle(p_list)
             self._move_particles(p_list)
 
         hyperpara_dict_best = self.search_space._pos_np2values_dict(self.best_pos)
-        score_best, train_time, sklearn_model = self._train_model(hyperpara_dict_best)
+        score_best, train_time, sklearn_model = self.machine_learner._train_model(
+            hyperpara_dict_best, X_train, y_train
+        )
 
         return sklearn_model, score_best, hyperpara_dict_best, train_time
 

@@ -10,6 +10,7 @@ import tqdm
 
 from .base import BaseOptimizer
 from .base import SearchSpace
+from .base import MachineLearner
 
 
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
@@ -45,6 +46,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.temp = 0.1
 
         self.search_space = SearchSpace(start_points, search_space)
+        self.machine_learner = MachineLearner(search_space, scoring, cv)
 
     def _get_neighbor_model(self, hyperpara_indices):
         hyperpara_indices_new = {}
@@ -67,7 +69,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         return hyperpara_indices_new
 
-    def _search(self, n_process):
+    def _search(self, n_process, X_train, y_train):
         score = 0
         score_best = 0
         score_current = 0
@@ -83,8 +85,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         hyperpara_dict_current = self.search_space._pos_dict2values_dict(
             hyperpara_indices_current
         )
-        score_current, train_time, sklearn_model = self._train_model(
-            hyperpara_dict_current
+        score_current, train_time, sklearn_model = self.machine_learner._train_model(
+            hyperpara_dict_current, X_train, y_train
         )
 
         score_best = score_current
@@ -96,7 +98,9 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
             hyperpara_indices = self._get_neighbor_model(hyperpara_indices_current)
             hyperpara_dict = self.search_space._pos_dict2values_dict(hyperpara_indices)
-            score, train_time, sklearn_model = self._train_model(hyperpara_dict)
+            score, train_time, sklearn_model = self.machine_learner._train_model(
+                hyperpara_dict, X_train, y_train
+            )
 
             # Normalized score difference to have a factor for later use with temperature and random
             score_diff_norm = (score_current - score) / (score_current + score)
@@ -116,6 +120,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         hyperpara_dict_best = self.search_space._pos_dict2values_dict(
             hyperpara_indices_best
         )
-        score_best, train_time, sklearn_model = self._train_model(hyperpara_dict_best)
+        score_best, train_time, sklearn_model = self.machine_learner._train_model(
+            hyperpara_dict_best, X_train, y_train
+        )
 
         return sklearn_model, score_best, hyperpara_dict_best, train_time
