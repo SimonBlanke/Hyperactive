@@ -47,10 +47,10 @@ class RandomSearch_Optimizer(BaseOptimizer):
         best_hyperpara_dict = None
         best_train_time = None
 
-        hyperpara_indices = self.search_space._init_eval(n_process)
+        hyperpara_indices = self.search_space.init_eval(n_process)
 
-        hyperpara_dict = self.search_space._pos_dict2values_dict(hyperpara_indices)
-        score, train_time, sklearn_model = self.machine_learner._train_model(
+        hyperpara_dict = self.search_space.pos_dict2values_dict(hyperpara_indices)
+        score, train_time, sklearn_model = self.machine_learner.train_model(
             hyperpara_dict, X_train, y_train
         )
 
@@ -62,9 +62,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
 
-            hyperpara_indices = self.search_space._get_random_position()
-            hyperpara_dict = self.search_space._pos_dict2values_dict(hyperpara_indices)
-            score, train_time, sklearn_model = self.machine_learner._train_model(
+            hyperpara_indices = self.search_space.get_random_position()
+            hyperpara_dict = self.search_space.pos_dict2values_dict(hyperpara_indices)
+            score, train_time, sklearn_model = self.machine_learner.train_model(
                 hyperpara_dict, X_train, y_train
             )
 

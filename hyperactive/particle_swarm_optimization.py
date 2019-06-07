@@ -63,11 +63,11 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         p_list = [Particle() for _ in range(self.n_part)]
         for p in p_list:
             p.max_pos_list = self.max_pos_list
-            p.pos = self.search_space._pos_dict2np_array(
-                self.search_space._get_random_position()
+            p.pos = self.search_space.pos_dict2np_array(
+                self.search_space.get_random_position()
             )
-            p.best_pos = self.search_space._pos_dict2np_array(
-                self.search_space._get_random_position()
+            p.best_pos = self.search_space.pos_dict2np_array(
+                self.search_space.get_random_position()
             )
             p.velo = np.zeros(self._get_dim_SearchSpace())
 
@@ -86,8 +86,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
     def _eval_particles(self, p_list, X_train, y_train):
         for p in p_list:
-            hyperpara_dict = self.search_space._pos_np2values_dict(p.pos)
-            p.score, _, p.sklearn_model = self.machine_learner._train_model(
+            hyperpara_dict = self.search_space.pos_np2values_dict(p.pos)
+            p.score, _, p.sklearn_model = self.machine_learner.train_model(
                 hyperpara_dict, X_train, y_train
             )
 
@@ -99,10 +99,10 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
-        hyperpara_indices = self.search_space._init_eval(n_process)
-        hyperpara_dict = self.search_space._pos_dict2values_dict(hyperpara_indices)
-        self.best_pos = self.search_space._pos_dict2np_array(hyperpara_indices)
-        self.best_score, train_time, sklearn_model = self.machine_learner._train_model(
+        hyperpara_indices = self.search_space.init_eval(n_process)
+        hyperpara_dict = self.search_space.pos_dict2values_dict(hyperpara_indices)
+        self.best_pos = self.search_space.pos_dict2np_array(hyperpara_indices)
+        self.best_score, train_time, sklearn_model = self.machine_learner.train_model(
             hyperpara_dict, X_train, y_train
         )
 
@@ -112,8 +112,8 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             self._find_best_particle(p_list)
             self._move_particles(p_list)
 
-        hyperpara_dict_best = self.search_space._pos_np2values_dict(self.best_pos)
-        score_best, train_time, sklearn_model = self.machine_learner._train_model(
+        hyperpara_dict_best = self.search_space.pos_np2values_dict(self.best_pos)
+        score_best, train_time, sklearn_model = self.machine_learner.train_model(
             hyperpara_dict_best, X_train, y_train
         )
 

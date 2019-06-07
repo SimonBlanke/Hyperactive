@@ -10,6 +10,7 @@ import multiprocessing
 
 import scipy
 import numpy as np
+import xgboost as xgb
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
@@ -116,11 +117,7 @@ class BaseOptimizer(object):
 
         return models, scores
 
-    def fit(self, X_train, y_train, init_search_dict=None):
-        self.X_train = X_train
-        self.y_train = y_train
-        self.init_search_dict = init_search_dict
-
+    def fit(self, X_train, y_train):
         models, scores = self._search_multiprocessing(X_train, y_train)
 
         self.best_model, best_score = self._find_best_model(models, scores)
@@ -150,10 +147,10 @@ class MachineLearner:
 
         self.model_key = list(self.search_space.keys())[0]
 
-        self._check_sklearn_model_key()
+        self._check_model_key()
 
-    def _check_sklearn_model_key(self):
-        if "sklearn" not in self.model_key:
+    def _check_model_key(self):
+        if "sklearn" and "xgboost" not in self.model_key:
             raise ValueError("No sklearn model in search_dict found")
 
     def _get_model(self, model):
@@ -166,15 +163,15 @@ class MachineLearner:
     def _create_sklearn_model(self, model, hyperpara_dict):
         return model(**hyperpara_dict)
 
-    def _train_model(self, hyperpara_dict, X_train, y_train):
+    def train_model(self, hyperpara_dict, X_train, y_train):
         model = self._get_model(self.model_key)
         sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
 
-        time_temp = time.time()
+        time_temp = time.perf_counter()
         scores = cross_val_score(
             sklearn_model, X_train, y_train, scoring=self.scoring, cv=self.cv
         )
-        train_time = (time.time() - time_temp) / self.cv
+        train_time = (time.perf_counter() - time_temp) / self.cv
 
         return scores.mean(), train_time, sklearn_model
 
@@ -184,19 +181,19 @@ class SearchSpace:
         self.start_points = start_points
         self.hyperpara_search_dict = search_space[list(search_space.keys())[0]]
 
-    def _init_eval(self, n_process):
+    def init_eval(self, n_process):
         hyperpara_indices = None
         if self.start_points:
             for key in self.start_points.keys():
                 if key == n_process:
-                    hyperpara_indices = self._set_start_position(n_process)
+                    hyperpara_indices = self.set_start_position(n_process)
 
         if not hyperpara_indices:
-            hyperpara_indices = self._get_random_position()
+            hyperpara_indices = self.get_random_position()
 
         return hyperpara_indices
 
-    def _set_start_position(self, n_process):
+    def set_start_position(self, n_process):
         pos_dict = {}
 
         for hyperpara_name in self.hyperpara_search_dict.keys():
@@ -208,7 +205,7 @@ class SearchSpace:
 
         return pos_dict
 
-    def _get_random_position(self):
+    def get_random_position(self):
         """
         get a random N-Dim position in search space and return:
         N indices of N-Dim position (dict)
@@ -223,7 +220,7 @@ class SearchSpace:
 
         return pos_dict
 
-    def _pos_dict2values_dict(self, pos_dict):
+    def pos_dict2values_dict(self, pos_dict):
         values_dict = {}
 
         for hyperpara_name in pos_dict.keys():
@@ -234,10 +231,10 @@ class SearchSpace:
 
         return values_dict
 
-    def _pos_dict2np_array(self, pos_dict):
+    def pos_dict2np_array(self, pos_dict):
         return np.array(list(pos_dict.values()))
 
-    def _pos_np2values_dict(self, np_array):
+    def pos_np2values_dict(self, np_array):
         if len(self.hyperpara_search_dict.keys()) == np_array.size:
             values_dict = {}
             for i, key in enumerate(self.hyperpara_search_dict.keys()):
