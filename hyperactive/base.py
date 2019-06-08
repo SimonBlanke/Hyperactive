@@ -4,8 +4,8 @@
 
 
 import pickle
-import random
 import multiprocessing
+import random
 
 import scipy
 import numpy as np
@@ -41,16 +41,46 @@ class BaseOptimizer(object):
 
         self.X_train = None
         self.y_train = None
-        self.init_search_dict = None
+        self.model_type = None
+
+        self.model_key = list(self.search_config.keys())[0]
 
         self._set_n_jobs()
+        self._get_model_type()
 
-        # model_str = random.choice(list(self.search_dict.keys()))
-        self.search_space = search_config[list(search_config.keys())[0]]
-
-        # self._set_random_seed()
         self._n_process_range = range(0, self.n_jobs)
-        self._limit_pos()
+
+    def _set_random_seed(self, thread=0):
+        if self.random_state:
+            random.seed(self.random_state + thread)
+            np.random.seed(self.random_state + thread)
+            scipy.random.seed(self.random_state + thread)
+
+    def _is_all_same(self, list):
+        if len(set(list)) == 1:
+            return True
+        else:
+            return False
+
+    def _get_model_type(self):
+        model_type_list = []
+
+        for model_type_key in self.search_config.keys():
+            if "sklearn" in model_type_key:
+                model_type_list.append("sklearn")
+            elif "xgboost" in model_type_key:
+                model_type_list.append("sklearn")
+            elif "keras" in model_type_key:
+                model_type_list.append("keras")
+            elif "torch" in model_type_key:
+                model_type_list.append("torch")
+            else:
+                raise Exception("No valid model string in search_config")
+
+        if self._is_all_same(model_type_list):
+            self.model_type = model_type_list[0]
+        else:
+            raise Exception("Model strings in search_config keys are inconsistent")
 
     def _set_n_jobs(self):
         num_cores = multiprocessing.cpu_count()
@@ -58,12 +88,6 @@ class BaseOptimizer(object):
             self.n_jobs = num_cores
         if self.n_jobs > self.n_iter:
             self.n_iter = self.n_jobs
-
-    def _set_random_seed(self, thread=0):
-        if self.random_state:
-            random.seed(self.random_state + thread)
-            np.random.seed(self.random_state + thread)
-            scipy.random.seed(self.random_state + thread)
 
     def _set_n_steps(self, n_process):
         n_steps = int(self.n_iter / self.n_jobs)
@@ -73,16 +97,6 @@ class BaseOptimizer(object):
             n_steps += 1
 
         return n_steps
-
-    def _get_dim_SearchSpace(self):
-        return len(self.search_space)
-
-    def _limit_pos(self):
-        max_pos_list = []
-        for values in list(self.search_space.values()):
-            max_pos_list.append(len(values) - 1)
-
-        self.max_pos_list = np.array(max_pos_list)
 
     def _find_best_model(self, models, scores):
         N_best_models = 1

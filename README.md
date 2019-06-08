@@ -28,7 +28,7 @@ iris_data = load_iris()
 X_train = iris_data.data
 y_train = iris_data.target
 
-search_dict = {
+search_config = {
     'sklearn.ensemble.RandomForestClassifier': {
         'n_estimators': [100],
         'criterion': ["gini", "entropy"],
@@ -37,7 +37,7 @@ search_dict = {
       }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_dict, n_iter=1000, scoring='accuracy', n_jobs=2)
+Optimizer = SimulatedAnnealing_Optimizer(search_config, n_iter=1000, scoring='accuracy', n_jobs=2)
 Optimizer.fit(X_train, y_train)
 ```
 
@@ -46,16 +46,16 @@ Optimizer.fit(X_train, y_train)
 
 ### Classes:
 ```python
-RandomSearch_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
-SimulatedAnnealing_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.99)
-ParticleSwarm_Optimizer(search_space, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
+RandomSearch_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
+SimulatedAnnealing_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.99)
+ParticleSwarm_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
 ```
 
 ### General positional argument:
 
 | Argument | Type | Description |
 | ------ | ------ | ------ |
-| search_space  | dict | hyperparameter search space to explore by the optimizer |
+| search_config  | dict | hyperparameter search space to explore by the optimizer |
 | n_iter | int | number of iterations to perform |
 
 ### General keyword arguments:

@@ -15,11 +15,6 @@ class Model:
         self.scoring = scoring
         self.cv = cv
 
-    def _check_model_key(self):
-        print("self.model_key", self.model_key)
-        if "sklearn" and "xgboost" not in self.model_key:
-            raise ValueError("No sklearn model in search_dict found")
-
     def _get_model(self, model):
         sklearn_str, model_str = model.rsplit(".", 1)
         module = import_module(sklearn_str)
@@ -49,44 +44,44 @@ class DeepLearner(Model):
 
         return layer_dict
 
-    def _trafo_hyperpara_dict(self, hyperpara_dict):
-        self.hyperpara_dict = {}
+    def _trafo_hyperpara_dict(self, keras_para_dict):
+        self.layer_para_dict = {}
 
         nr_str_temp = "1"
-        self.hyperpara_dict_temp = {}
-        for layer_key in hyperpara_dict.keys():
+        self.layer_para_dict_temp = {}
+        for layer_key in keras_para_dict.keys():
             layer_nr_str, para_str = layer_key.rsplit(".", 1)
             layer_str, nr_str = layer_nr_str.rsplit(".", 1)
 
             if nr_str_temp != nr_str:
-                self.hyperpara_dict[self.layer_nr_str_temp] = self.hyperpara_dict_temp
-                self.hyperpara_dict_temp = {}
+                self.layer_para_dict[self.layer_nr_str_temp] = self.layer_para_dict_temp
+                self.layer_para_dict_temp = {}
 
-            self.hyperpara_dict_temp[para_str] = hyperpara_dict[layer_key]
+            self.layer_para_dict_temp[para_str] = keras_para_dict[layer_key]
 
             self.layer_nr_str_temp = layer_nr_str
             nr_str_temp = nr_str
 
-        self.hyperpara_dict[self.layer_nr_str_temp] = self.hyperpara_dict_temp
+        self.layer_para_dict[self.layer_nr_str_temp] = self.layer_para_dict_temp
 
-    def _create_keras_model(self, hyperpara_dict):
-        self._trafo_hyperpara_dict(hyperpara_dict)
+    def _create_keras_model(self, keras_para_dict):
+        self._trafo_hyperpara_dict(keras_para_dict)
 
         model = Sequential()
         for layer_key in self.layer_dict.keys():
             layer = self.layer_dict[layer_key]
 
-            model.add(layer(**self.hyperpara_dict[layer_key]))
+            model.add(layer(**self.layer_para_dict[layer_key]))
 
         return model
 
-    def train_model(self, hyperpara_dict, X_train, y_train):
-        model = self._create_keras_model(hyperpara_dict)
+    def train_model(self, keras_para_dict, X_train, y_train):
+        model = self._create_keras_model(keras_para_dict)
 
         model.compile(
             loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"]
         )
-        model.fit(X_train, y_train, epochs=1, batch_size=100, verbose=2)
+        model.fit(X_train, y_train, epochs=1, batch_size=100, verbose=1)
 
         if self.cv == 1:
             score = model.evaluate(X_train, y_train)[1]
@@ -105,11 +100,11 @@ class MachineLearner(Model):
         self.model_key = list(self.search_config.keys())[0]
         self.model = self._get_model(self.model_key)
 
-    def _create_sklearn_model(self, hyperpara_dict):
-        return self.model(**hyperpara_dict)
+    def _create_sklearn_model(self, sklearn_para_dict):
+        return self.model(**sklearn_para_dict)
 
-    def train_model(self, hyperpara_dict, X_train, y_train):
-        sklearn_model = self._create_sklearn_model(hyperpara_dict)
+    def train_model(self, sklearn_para_dict, X_train, y_train):
+        sklearn_model = self._create_sklearn_model(sklearn_para_dict)
 
         time_temp = time.perf_counter()
         scores = cross_val_score(

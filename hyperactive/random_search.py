@@ -36,8 +36,14 @@ class RandomSearch_Optimizer(BaseOptimizer):
             start_points,
         )
 
-        self.search_config = SearchSpace(start_points, search_config)
-        self.deep_learner = DeepLearner(search_config, scoring, cv)
+        self.random_search_space = SearchSpace(start_points, search_config)
+
+        if self.model_type == "sklearn":
+            self.random_search_space.create_mlSearchSpace(search_config)
+            self.model = MachineLearner(search_config, scoring, cv)
+        elif self.model_type == "keras":
+            self.random_search_space.create_kerasSearchSpace(search_config)
+            self.model = DeepLearner(search_config, scoring, cv)
 
     def _search(self, n_process, X_train, y_train):
         self._set_random_seed(n_process)
@@ -48,11 +54,13 @@ class RandomSearch_Optimizer(BaseOptimizer):
         best_hyperpara_dict = None
         best_train_time = None
 
-        hyperpara_indices = self.search_config.init_eval(n_process)
+        hyperpara_indices = self.random_search_space.init_eval(n_process)
 
-        hyperpara_dict = self.search_config.pos_dict2values_dict(hyperpara_indices)
+        hyperpara_dict = self.random_search_space.pos_dict2values_dict(
+            hyperpara_indices
+        )
 
-        score, train_time, sklearn_model = self.deep_learner.train_model(
+        score, train_time, sklearn_model = self.model.train_model(
             hyperpara_dict, X_train, y_train
         )
 
@@ -64,9 +72,11 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
 
-            hyperpara_indices = self.search_config.get_random_position()
-            hyperpara_dict = self.search_config.pos_dict2values_dict(hyperpara_indices)
-            score, train_time, sklearn_model = self.deep_learner.train_model(
+            hyperpara_indices = self.random_search_space.get_random_position()
+            hyperpara_dict = self.random_search_space.pos_dict2values_dict(
+                hyperpara_indices
+            )
+            score, train_time, sklearn_model = self.model.train_model(
                 hyperpara_dict, X_train, y_train
             )
 

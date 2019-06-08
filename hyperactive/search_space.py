@@ -13,10 +13,7 @@ class SearchSpace:
         self.start_points = start_points
         self.search_config = search_config
 
-        # self._create_mlSearchSpace(search_config)
-        self._create_kerasSearchSpace(search_config)
-
-    def _create_kerasSearchSpace(self, search_config):
+    def create_kerasSearchSpace(self, search_config):
         search_space = {}
 
         for layer_str in search_config.keys():
@@ -28,7 +25,7 @@ class SearchSpace:
 
         self.search_space = search_space
 
-    def _create_mlSearchSpace(self, search_config):
+    def create_mlSearchSpace(self, search_config):
         self.search_space = search_config[list(search_config.keys())[0]]
 
     def init_eval(self, n_process):
