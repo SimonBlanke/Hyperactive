@@ -9,14 +9,14 @@ import numpy as np
 import tqdm
 
 from .base import BaseOptimizer
-from .base import SearchSpace
-from .base import MachineLearner
+from .search_space import SearchSpace
+from .model import MachineLearner
 
 
 class SimulatedAnnealing_Optimizer(BaseOptimizer):
     def __init__(
         self,
-        search_space,
+        search_config,
         n_iter,
         scoring="accuracy",
         tabu_memory=None,
@@ -29,7 +29,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         t_rate=0.99,
     ):
         super().__init__(
-            search_space,
+            search_config,
             n_iter,
             scoring,
             tabu_memory,
@@ -45,14 +45,14 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         self.temp = 0.1
 
-        self.search_space = SearchSpace(start_points, search_space)
-        self.machine_learner = MachineLearner(search_space, scoring, cv)
+        self.search_config = SearchSpace(start_points, search_config)
+        self.machine_learner = MachineLearner(search_config, scoring, cv)
 
     def _get_neighbor_model(self, hyperpara_indices):
         hyperpara_indices_new = {}
 
         for hyperpara_name in hyperpara_indices:
-            n_values = len(self.hyperpara_search_dict[hyperpara_name])
+            n_values = len(self.search_space[hyperpara_name])
             rand_eps = random.randint(-self.eps, self.eps + 1)
 
             index = hyperpara_indices[hyperpara_name]
@@ -81,8 +81,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
-        hyperpara_indices_current = self.search_space.init_eval(n_process)
-        hyperpara_dict_current = self.search_space.pos_dict2values_dict(
+        hyperpara_indices_current = self.search_config.init_eval(n_process)
+        hyperpara_dict_current = self.search_config.pos_dict2values_dict(
             hyperpara_indices_current
         )
         score_current, train_time, sklearn_model = self.machine_learner.train_model(
@@ -97,7 +97,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             rand = random.randint(0, 1)
 
             hyperpara_indices = self._get_neighbor_model(hyperpara_indices_current)
-            hyperpara_dict = self.search_space.pos_dict2values_dict(hyperpara_indices)
+            hyperpara_dict = self.search_config.pos_dict2values_dict(hyperpara_indices)
             score, train_time, sklearn_model = self.machine_learner.train_model(
                 hyperpara_dict, X_train, y_train
             )
@@ -117,7 +117,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
                 score_current = score
                 hyperpara_indices_current = hyperpara_indices
 
-        hyperpara_dict_best = self.search_space.pos_dict2values_dict(
+        hyperpara_dict_best = self.search_config.pos_dict2values_dict(
             hyperpara_indices_best
         )
         score_best, train_time, sklearn_model = self.machine_learner.train_model(

@@ -3,17 +3,14 @@
 # License: MIT License
 
 
-import time
 import pickle
 import random
 import multiprocessing
 
 import scipy
 import numpy as np
-import xgboost as xgb
 
-from importlib import import_module
-from sklearn.model_selection import cross_val_score
+
 from sklearn.metrics import accuracy_score
 from functools import partial
 
@@ -21,7 +18,7 @@ from functools import partial
 class BaseOptimizer(object):
     def __init__(
         self,
-        search_space,
+        search_config,
         n_iter,
         scoring="accuracy",
         tabu_memory=None,
@@ -32,7 +29,7 @@ class BaseOptimizer(object):
         start_points=None,
     ):
 
-        self.search_space = search_space
+        self.search_config = search_config
         self.n_iter = n_iter
         self.scoring = scoring
         self.tabu_memory = tabu_memory
@@ -49,7 +46,7 @@ class BaseOptimizer(object):
         self._set_n_jobs()
 
         # model_str = random.choice(list(self.search_dict.keys()))
-        self.hyperpara_search_dict = search_space[list(search_space.keys())[0]]
+        self.search_space = search_config[list(search_config.keys())[0]]
 
         # self._set_random_seed()
         self._n_process_range = range(0, self.n_jobs)
@@ -78,11 +75,11 @@ class BaseOptimizer(object):
         return n_steps
 
     def _get_dim_SearchSpace(self):
-        return len(self.hyperpara_search_dict)
+        return len(self.search_space)
 
     def _limit_pos(self):
         max_pos_list = []
-        for values in list(self.hyperpara_search_dict.values()):
+        for values in list(self.search_space.values()):
             max_pos_list.append(len(values) - 1)
 
         self.max_pos_list = np.array(max_pos_list)
@@ -101,6 +98,13 @@ class BaseOptimizer(object):
     def _search(self):
         pass
 
+    def _search_normalprocessing(self, X_train, y_train):
+        best_model, best_score, best_hyperpara_dict, best_train_time = self._search(
+            0, X_train, y_train
+        )
+
+        return best_model, best_score
+
     def _search_multiprocessing(self, X_train, y_train):
         pool = multiprocessing.Pool(self.n_jobs)
 
@@ -118,14 +122,23 @@ class BaseOptimizer(object):
         return models, scores
 
     def fit(self, X_train, y_train):
-        models, scores = self._search_multiprocessing(X_train, y_train)
+        if self.n_jobs == 1:
+            self.best_model, best_score = self._search_normalprocessing(
+                X_train, y_train
+            )
+            if self.verbosity:
+                print("Best score:", best_score)
+                print("Best model:", self.best_model)
 
-        self.best_model, best_score = self._find_best_model(models, scores)
+        else:
+            models, scores = self._search_multiprocessing(X_train, y_train)
+            self.best_model, best_score = self._find_best_model(models, scores)
+
+            if self.verbosity:
+                print("Best score:", *best_score)
+                print("Best model:", self.best_model)
+
         self.best_model.fit(X_train, y_train)
-
-        if self.verbosity:
-            print("Best score:", *best_score)
-            print("Best model:", self.best_model)
 
     def predict(self, X_test):
         return self.best_model.predict(X_test)
@@ -137,110 +150,3 @@ class BaseOptimizer(object):
     def export(self, filename):
         if self.best_model:
             pickle.dump(self.best_model, open(filename, "wb"))
-
-
-class MachineLearner:
-    def __init__(self, search_space, scoring, cv):
-        self.search_space = search_space
-        self.scoring = scoring
-        self.cv = cv
-
-        self.model_key = list(self.search_space.keys())[0]
-
-        self._check_model_key()
-
-    def _check_model_key(self):
-        if "sklearn" and "xgboost" not in self.model_key:
-            raise ValueError("No sklearn model in search_dict found")
-
-    def _get_model(self, model):
-        sklearn, submod_func = model.rsplit(".", 1)
-        module = import_module(sklearn)
-        model = getattr(module, submod_func)
-
-        return model
-
-    def _create_sklearn_model(self, model, hyperpara_dict):
-        return model(**hyperpara_dict)
-
-    def train_model(self, hyperpara_dict, X_train, y_train):
-        model = self._get_model(self.model_key)
-        sklearn_model = self._create_sklearn_model(model, hyperpara_dict)
-
-        time_temp = time.perf_counter()
-        scores = cross_val_score(
-            sklearn_model, X_train, y_train, scoring=self.scoring, cv=self.cv
-        )
-        train_time = (time.perf_counter() - time_temp) / self.cv
-
-        return scores.mean(), train_time, sklearn_model
-
-
-class SearchSpace:
-    def __init__(self, start_points, search_space):
-        self.start_points = start_points
-        self.hyperpara_search_dict = search_space[list(search_space.keys())[0]]
-
-    def init_eval(self, n_process):
-        hyperpara_indices = None
-        if self.start_points:
-            for key in self.start_points.keys():
-                if key == n_process:
-                    hyperpara_indices = self.set_start_position(n_process)
-
-        if not hyperpara_indices:
-            hyperpara_indices = self.get_random_position()
-
-        return hyperpara_indices
-
-    def set_start_position(self, n_process):
-        pos_dict = {}
-
-        for hyperpara_name in self.hyperpara_search_dict.keys():
-            search_position = self.hyperpara_search_dict[hyperpara_name].index(
-                self.start_points[n_process][hyperpara_name]
-            )
-
-            pos_dict[hyperpara_name] = search_position
-
-        return pos_dict
-
-    def get_random_position(self):
-        """
-        get a random N-Dim position in search space and return:
-        N indices of N-Dim position (dict)
-        """
-        pos_dict = {}
-
-        for hyperpara_name in self.hyperpara_search_dict.keys():
-            n_hyperpara_values = len(self.hyperpara_search_dict[hyperpara_name])
-            search_position = random.randint(0, n_hyperpara_values - 1)
-
-            pos_dict[hyperpara_name] = search_position
-
-        return pos_dict
-
-    def pos_dict2values_dict(self, pos_dict):
-        values_dict = {}
-
-        for hyperpara_name in pos_dict.keys():
-            pos = pos_dict[hyperpara_name]
-            values_dict[hyperpara_name] = list(
-                self.hyperpara_search_dict[hyperpara_name]
-            )[pos]
-
-        return values_dict
-
-    def pos_dict2np_array(self, pos_dict):
-        return np.array(list(pos_dict.values()))
-
-    def pos_np2values_dict(self, np_array):
-        if len(self.hyperpara_search_dict.keys()) == np_array.size:
-            values_dict = {}
-            for i, key in enumerate(self.hyperpara_search_dict.keys()):
-                pos = int(np_array[i])
-                values_dict[key] = list(self.hyperpara_search_dict[key])[pos]
-
-            return values_dict
-        else:
-            raise ValueError("hyperpara_search_dict and np_array have different size")
