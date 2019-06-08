@@ -5,11 +5,11 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="hyperactive",
-    version="0.1.2",
+    version="0.1.3",
     author="Simon Blanke",
     author_email="simon.blanke@yahoo.com",
     license="MIT",
-    description="Meta heuristic optimization techniques for scikit-learn models",
+    description="Meta heuristic optimization techniques for scikit-learn, XGBoost and Keras models",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/SimonBlanke/hyperactive",
