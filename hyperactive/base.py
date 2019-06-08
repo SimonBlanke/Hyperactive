@@ -48,6 +48,9 @@ class BaseOptimizer(object):
         self._set_n_jobs()
         self._get_model_type()
 
+        if self.model_type == "keras":
+            self.n_jobs = 1
+
         self._n_process_range = range(0, self.n_jobs)
 
     def _set_random_seed(self, thread=0):
