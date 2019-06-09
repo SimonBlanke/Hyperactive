@@ -17,7 +17,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         search_config,
         n_iter,
         scoring="accuracy",
-        tabu_memory=None,
+        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
@@ -28,7 +28,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
             search_config,
             n_iter,
             scoring,
-            tabu_memory,
+            memory,
             n_jobs,
             cv,
             verbosity,
@@ -36,16 +36,25 @@ class RandomSearch_Optimizer(BaseOptimizer):
             start_points,
         )
 
+        self.search_config = search_config
+        self.scoring = scoring
+        self.cv = cv
+        self.n_jobs = n_jobs
+
         self.random_search_space = SearchSpace(start_points, search_config)
 
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            self.random_search_space.create_mlSearchSpace(search_config)
-            self.model = MachineLearner(search_config, scoring, cv)
-        elif self.model_type == "keras":
-            self.random_search_space.create_kerasSearchSpace(search_config)
-            self.model = DeepLearner(search_config, scoring, cv)
-
     def _search(self, n_process, X_train, y_train):
+        model_str = self._get_sklearn_model(n_process)
+
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            self.random_search_space.create_mlSearchSpace(self.search_config)
+            self.model = MachineLearner(
+                self.search_config, self.scoring, self.cv, model_str
+            )
+        elif self.model_type == "keras":
+            self.random_search_space.create_kerasSearchSpace(self.search_config)
+            self.model = DeepLearner(self.search_config, self.scoring, self.cv)
+
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 

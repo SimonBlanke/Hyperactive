@@ -3,6 +3,7 @@
 # License: MIT License
 
 import time
+import random
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
@@ -137,15 +138,14 @@ class DeepLearner(Model):
 
 
 class MachineLearner(Model):
-    def __init__(self, search_config, scoring, cv):
+    def __init__(self, search_config, scoring, cv, model_str):
         super().__init__(search_config, scoring, cv)
 
         self.search_config = search_config
         self.scoring = scoring
         self.cv = cv
 
-        self.model_key = list(self.search_config.keys())[0]
-        self.model = self._get_model(self.model_key)
+        self.model = self._get_model(model_str)
 
     def _create_sklearn_model(self, sklearn_para_dict):
         return self.model(**sklearn_para_dict)

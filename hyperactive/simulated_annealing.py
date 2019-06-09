@@ -20,7 +20,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         search_config,
         n_iter,
         scoring="accuracy",
-        tabu_memory=None,
+        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
@@ -33,7 +33,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             search_config,
             n_iter,
             scoring,
-            tabu_memory,
+            memory,
             n_jobs,
             cv,
             verbosity,
@@ -47,13 +47,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.temp = 0.1
 
         self.annealing_search_space = SearchSpace(start_points, search_config)
-
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            self.annealing_search_space.create_mlSearchSpace(search_config)
-            self.model = MachineLearner(search_config, scoring, cv)
-        elif self.model_type == "keras":
-            self.annealing_search_space.create_kerasSearchSpace(search_config)
-            self.model = DeepLearner(search_config, scoring, cv)
 
     def _get_neighbor_model(self, hyperpara_indices):
         hyperpara_indices_new = {}
@@ -77,6 +70,20 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         return hyperpara_indices_new
 
     def _search(self, n_process, X_train, y_train):
+        model_str = self._get_sklearn_model(n_process)
+
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            self.annealing_search_space.create_mlSearchSpace(self.search_config)
+            self.model = MachineLearner(
+                self.search_config, self.scoring, self.cv, model_str
+            )
+        elif self.model_type == "keras":
+            self.annealing_search_space.create_kerasSearchSpace(self.search_config)
+            self.model = DeepLearner(self.search_config, self.scoring, self.cv)
+
+        self._set_random_seed(n_process)
+        n_steps = self._set_n_steps(n_process)
+
         score = 0
         score_best = 0
         score_current = 0
@@ -84,9 +91,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         hyperpara_indices = 0
         hyperpara_indices_best = 0
         hyperpara_indices_current = 0
-
-        self._set_random_seed(n_process)
-        n_steps = self._set_n_steps(n_process)
 
         hyperpara_indices_current = self.annealing_search_space.init_eval(n_process)
         hyperpara_dict_current = self.annealing_search_space.pos_dict2values_dict(

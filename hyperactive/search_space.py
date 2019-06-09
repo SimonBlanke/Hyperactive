@@ -53,7 +53,7 @@ class SearchSpace:
                     *self.start_points[start_point_key][hyperpara_name]
                 )
             except ValueError:
-                print("start_point is not in the search space")
+                print("\nStart_point is not in the search space\n")
 
             pos_dict[hyperpara_name] = search_position
 

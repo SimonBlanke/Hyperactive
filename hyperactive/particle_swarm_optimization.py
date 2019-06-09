@@ -20,7 +20,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         search_config,
         n_iter,
         scoring="accuracy",
-        tabu_memory=None,
+        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
@@ -35,7 +35,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             search_config,
             n_iter,
             scoring,
-            tabu_memory,
+            memory,
             n_jobs,
             cv,
             verbosity,
@@ -52,15 +52,6 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self.best_pos = None
 
         self.particle_search_space = SearchSpace(start_points, search_config)
-
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            self.particle_search_space.create_mlSearchSpace(search_config)
-            self.model = MachineLearner(search_config, scoring, cv)
-        elif self.model_type == "keras":
-            self.particle_search_space.create_kerasSearchSpace(search_config)
-            self.model = DeepLearner(search_config, scoring, cv)
-
-        self._limit_pos(self.particle_search_space.search_space)
 
     def _find_best_particle(self, p_list):
         for p in p_list:
@@ -115,6 +106,19 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 p.best_pos = p.pos
 
     def _search(self, n_process, X_train, y_train):
+        model_str = self._get_sklearn_model(n_process)
+
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            self.particle_search_space.create_mlSearchSpace(self.search_config)
+            self.model = MachineLearner(
+                self.search_config, self.scoring, self.cv, model_str
+            )
+        elif self.model_type == "keras":
+            self.particle_search_space.create_kerasSearchSpace(self.search_config)
+            self.model = DeepLearner(self.search_config, self.scoring, self.cv)
+
+        self._limit_pos(self.particle_search_space.search_space)
+
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 

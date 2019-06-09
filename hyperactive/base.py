@@ -21,7 +21,7 @@ class BaseOptimizer(object):
         search_config,
         n_iter,
         scoring="accuracy",
-        tabu_memory=None,
+        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
@@ -32,7 +32,7 @@ class BaseOptimizer(object):
         self.search_config = search_config
         self.n_iter = n_iter
         self.scoring = scoring
-        self.tabu_memory = tabu_memory
+        self.memory = memory
         self.n_jobs = n_jobs
         self.cv = cv
         self.verbosity = verbosity
@@ -42,6 +42,9 @@ class BaseOptimizer(object):
         self.X_train = None
         self.y_train = None
         self.model_type = None
+
+        self.model_list = list(self.search_config.keys())
+        self.n_models = len(self.model_list)
 
         self.model_key = list(self.search_config.keys())[0]
 
@@ -85,6 +88,22 @@ class BaseOptimizer(object):
         else:
             raise Exception("Model strings in search_config keys are inconsistent")
 
+    def _get_sklearn_model(self, n_process):
+        if self.n_models > self.n_jobs:
+            diff = self.n_models - self.n_jobs
+            print(
+                "\nNot enough jobs to process models. The last",
+                diff,
+                "models will not be processed",
+            )
+            model_key = self.model_list[n_process]
+        elif n_process < self.n_models:
+            model_key = self.model_list[n_process]
+        else:
+            model_key = random.choice(self.model_list)
+
+        return model_key
+
     def _set_n_jobs(self):
         num_cores = multiprocessing.cpu_count()
         if self.n_jobs == -1 or self.n_jobs > num_cores:
@@ -120,6 +139,9 @@ class BaseOptimizer(object):
             0, X_train, y_train
         )
 
+        print("\nself.model_key", self.model_key)
+        print("best_hyperpara_dict", best_hyperpara_dict, "\n")
+
         return best_model, best_score
 
     def _search_multiprocessing(self, X_train, y_train):
@@ -127,16 +149,16 @@ class BaseOptimizer(object):
 
         _search = partial(self._search, X_train=X_train, y_train=y_train)
 
-        models, scores, hyperpara_dict, train_time = zip(
+        best_models, scores, hyperpara_dict, train_time = zip(
             *pool.map(_search, self._n_process_range)
         )
 
-        self.model_list = models
+        self.best_model_list = best_models
         self.score_list = scores
         self.hyperpara_dict = hyperpara_dict
         self.train_time = train_time
 
-        return models, scores
+        return best_models, scores
 
     def fit(self, X_train, y_train):
         if self.n_jobs == 1:
