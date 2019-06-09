@@ -32,7 +32,9 @@ class SearchSpace:
         hyperpara_indices = None
         if self.start_points:
             for key in self.start_points.keys():
-                if key == n_process:
+                model_str, start_process = key.rsplit(".", 1)
+
+                if int(start_process) == n_process:
                     hyperpara_indices = self.set_start_position(n_process)
 
         if not hyperpara_indices:
@@ -44,9 +46,14 @@ class SearchSpace:
         pos_dict = {}
 
         for hyperpara_name in self.search_space.keys():
-            search_position = self.search_space[hyperpara_name].index(
-                self.start_points[n_process][hyperpara_name]
-            )
+            start_point_key = list(self.start_points.keys())[n_process]
+
+            try:
+                search_position = self.search_space[hyperpara_name].index(
+                    *self.start_points[start_point_key][hyperpara_name]
+                )
+            except ValueError:
+                print("start_point is not in the search space")
 
             pos_dict[hyperpara_name] = search_position
 

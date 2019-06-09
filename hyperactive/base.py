@@ -72,7 +72,7 @@ class BaseOptimizer(object):
             if "sklearn" in model_type_key:
                 model_type_list.append("sklearn")
             elif "xgboost" in model_type_key:
-                model_type_list.append("sklearn")
+                model_type_list.append("xgboost")
             elif "keras" in model_type_key:
                 model_type_list.append("keras")
             elif "torch" in model_type_key:
@@ -147,6 +147,7 @@ class BaseOptimizer(object):
                 print("Best score:", best_score)
                 print("Best model:", self.best_model)
 
+                # self.best_model.summery()
         else:
             models, scores = self._search_multiprocessing(X_train, y_train)
             self.best_model, best_score = self._find_best_model(models, scores)

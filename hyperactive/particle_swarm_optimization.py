@@ -53,7 +53,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
         self.particle_search_space = SearchSpace(start_points, search_config)
 
-        if self.model_type == "sklearn":
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
             self.particle_search_space.create_mlSearchSpace(search_config)
             self.model = MachineLearner(search_config, scoring, cv)
         elif self.model_type == "keras":

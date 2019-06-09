@@ -16,8 +16,8 @@ class Model:
         self.cv = cv
 
     def _get_model(self, model):
-        sklearn_str, model_str = model.rsplit(".", 1)
-        module = import_module(sklearn_str)
+        module_str, model_str = model.rsplit(".", 1)
+        module = import_module(module_str)
         model = getattr(module, model_str)
 
         return model
@@ -131,7 +131,6 @@ class DeepLearner(Model):
         model.compile(**compile_para_dict)
         model.fit(**fit_para_dict)
 
-        # if self.cv == 1:
         score = model.evaluate(X_train, y_train)[1]
 
         return score, time, model
