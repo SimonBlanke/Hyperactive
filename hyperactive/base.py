@@ -161,8 +161,11 @@ class BaseOptimizer(object):
         return self.best_model.predict(X_test)
 
     def score(self, X_test, y_test):
-        y_pred = self.predict(X_test)
-        return accuracy_score(y_test, y_pred)
+        if self.model_type == "sklearn":
+            y_pred = self.predict(X_test)
+            return accuracy_score(y_pred, y_test)
+        elif self.model_type == "keras":
+            return self.best_model.evaluate(X_test, y_test)[1]
 
     def export(self, filename):
         if self.best_model:
