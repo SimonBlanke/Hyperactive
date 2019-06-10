@@ -70,9 +70,9 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         return hyperpara_indices_new
 
     def _search(self, n_process, X_train, y_train):
-        model_str = self._get_sklearn_model(n_process)
 
         if self.model_type == "sklearn" or self.model_type == "xgboost":
+            model_str = self._get_sklearn_model(n_process)
             self.annealing_search_space.create_mlSearchSpace(self.search_config)
             self.model = MachineLearner(
                 self.search_config, self.scoring, self.cv, model_str

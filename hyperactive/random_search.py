@@ -44,9 +44,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
         self.random_search_space = SearchSpace(start_points, search_config)
 
     def _search(self, n_process, X_train, y_train):
-        model_str = self._get_sklearn_model(n_process)
 
         if self.model_type == "sklearn" or self.model_type == "xgboost":
+            model_str = self._get_sklearn_model(n_process)
             self.random_search_space.create_mlSearchSpace(self.search_config)
             self.model = MachineLearner(
                 self.search_config, self.scoring, self.cv, model_str
@@ -98,6 +98,6 @@ class RandomSearch_Optimizer(BaseOptimizer):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
             start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
         elif self.model_type == "keras":
-            pass
+            start_point = None
 
         return best_model, best_score, start_point

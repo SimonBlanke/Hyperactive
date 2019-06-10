@@ -106,9 +106,9 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 p.best_pos = p.pos
 
     def _search(self, n_process, X_train, y_train):
-        model_str = self._get_sklearn_model(n_process)
 
         if self.model_type == "sklearn" or self.model_type == "xgboost":
+            model_str = self._get_sklearn_model(n_process)
             self.particle_search_space.create_mlSearchSpace(self.search_config)
             self.model = MachineLearner(
                 self.search_config, self.scoring, self.cv, model_str
