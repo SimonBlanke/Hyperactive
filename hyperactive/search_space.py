@@ -60,6 +60,7 @@ class SearchSpace:
         return pos_dict
 
     def _set_start_position_sklearn(self, n_process):
+        print("n_process", n_process)
         pos_dict = {}
 
         for hyperpara_name in self.search_space.keys():

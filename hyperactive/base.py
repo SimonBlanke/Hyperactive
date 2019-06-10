@@ -185,7 +185,7 @@ class BaseOptimizer(object):
             )
             if self.verbosity:
                 print("\nScore:", best_score)
-                print("Start_point =", start_point, "\n")
+                print("start_point =", start_point, "\n")
 
                 # self.best_model.summery()
         else:
@@ -198,7 +198,7 @@ class BaseOptimizer(object):
             if self.verbosity:
                 for score, start_point in zip(scores, start_points):
                     print("\nScore:", best_score)
-                    print("Start_point =", start_point, "\n")
+                    print("start_point =", start_point, "\n")
 
         self.best_model.fit(X_train, y_train)
 

@@ -169,7 +169,12 @@ class MachineLearner(Model):
     def create_start_point(self, sklearn_para_dict, n_process):
         start_point = {}
         model_str = self.model_str + "." + str(n_process)
-        start_point[model_str] = sklearn_para_dict
+
+        temp_dict = {}
+        for para_key in sklearn_para_dict:
+            temp_dict[para_key] = [sklearn_para_dict[para_key]]
+
+        start_point[model_str] = temp_dict
 
         return start_point
 
