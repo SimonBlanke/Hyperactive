@@ -42,7 +42,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         self.search_space_inst = SearchSpace(start_points, search_config)
 
     def _search(self, n_process, X_train, y_train):
-        self._init_search(n_process, X_train, y_train)
+        hyperpara_indices = self._init_search(n_process, X_train, y_train)
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
@@ -51,9 +51,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
         best_hyperpara_dict = None
         best_train_time = None
 
-        hyperpara_indices = self.search_space_inst.init_eval(n_process)
-
         hyperpara_dict = self.search_space_inst.pos_dict2values_dict(hyperpara_indices)
+
+        print("\n", n_process, "hyperpara_dict", hyperpara_dict, "\n")
 
         score, train_time, sklearn_model = self.model.train_model(
             hyperpara_dict, X_train, y_train

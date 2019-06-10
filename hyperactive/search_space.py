@@ -25,31 +25,45 @@ class SearchSpace:
 
         self.search_space = search_space
 
-    def create_mlSearchSpace(self, search_config):
-        self.search_space = search_config[list(search_config.keys())[0]]
+    def create_mlSearchSpace(self, search_config, n_process):
+        self.search_space = search_config[list(search_config.keys())[n_process]]
 
-    def init_eval(self, n_process):
+    def init_eval(self, n_process, model_type):
         hyperpara_indices = None
         if self.start_points:
             for key in self.start_points.keys():
                 model_str, start_process = key.rsplit(".", 1)
 
                 if int(start_process) == n_process:
-                    hyperpara_indices = self.set_start_position(n_process)
+                    if model_type == "sklearn" or model_type == "xgboost":
+                        hyperpara_indices = self._set_start_position_sklearn(n_process)
+                    elif model_type == "keras":
+                        hyperpara_indices = self._set_start_position_keras(n_process)
 
         if not hyperpara_indices:
             hyperpara_indices = self.get_random_position()
 
         return hyperpara_indices
 
-    def set_start_position(self, n_process):
+    def _set_start_position_keras(self, n_process):
+        pos_dict = {}
+
+        for layer_key in self.search_space.keys():
+            layer_str, para_str = layer_key.rsplit(".", 1)
+
+            search_position = self.search_space[layer_key].index(
+                *self.start_points[layer_str][para_str]
+            )
+
+            pos_dict[layer_key] = search_position
+
+        return pos_dict
+
+    def _set_start_position_sklearn(self, n_process):
         pos_dict = {}
 
         for hyperpara_name in self.search_space.keys():
             start_point_key = list(self.start_points.keys())[n_process]
-
-            print("\nstart_point_key", start_point_key)
-            print("hyperpara_name", hyperpara_name, "\n")
 
             search_position = self.search_space[hyperpara_name].index(
                 *self.start_points[start_point_key][hyperpara_name]

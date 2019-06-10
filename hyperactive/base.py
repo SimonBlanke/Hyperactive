@@ -103,6 +103,8 @@ class BaseOptimizer(object):
         else:
             model_key = random.choice(self.model_list)
 
+        print("\n model_key", model_key, "\n")
+
         return model_key
 
     def _set_n_jobs(self):
@@ -135,30 +137,38 @@ class BaseOptimizer(object):
     def _init_search(self, n_process, X_train, y_train):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
             model_str = self._get_sklearn_model(n_process)
-            self.search_space_inst.create_mlSearchSpace(self.search_config)
+            self.search_space_inst.create_mlSearchSpace(self.search_config, n_process)
             self.model = MachineLearner(
                 self.search_config, self.scoring, self.cv, model_str
             )
+            hyperpara_indices = self.search_space_inst.init_eval(n_process, "sklearn")
         elif self.model_type == "keras":
             self.search_space_inst.create_kerasSearchSpace(self.search_config)
             self.model = DeepLearner(self.search_config, self.scoring, self.cv)
+
+            hyperpara_indices = self.search_space_inst.init_eval(n_process, "keras")
+
+        return hyperpara_indices
 
     def _finish_search(self, best_hyperpara_dict, n_process):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
             start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
         elif self.model_type == "keras":
-            start_point = self.model.trafo_hyperpara_dict(best_hyperpara_dict)
+            start_point = self.model.trafo_hyperpara_dict_lists(best_hyperpara_dict)
 
         return start_point
 
     def _search_normalprocessing(self, X_train, y_train):
+        print(" \n_search_normalprocessing")
         best_model, best_score, start_point = self._search(0, X_train, y_train)
 
         return best_model, best_score, start_point
 
     def _search_multiprocessing(self, X_train, y_train):
+        print("\n_search_multiprocessing")
         pool = multiprocessing.Pool(self.n_jobs)
 
+        print("self.n_jobs", self.n_jobs)
         _search = partial(self._search, X_train=X_train, y_train=y_train)
 
         best_models, scores, start_points = zip(
@@ -180,19 +190,20 @@ class BaseOptimizer(object):
             )
             if self.verbosity:
                 print("Score:", best_score)
-                print("Start point:", start_point)
+                print("Start_point =", start_point)
 
                 # self.best_model.summery()
         else:
             models, scores, start_points = self._search_multiprocessing(
                 X_train, y_train
             )
+
             self.best_model, best_score = self._find_best_model(models, scores)
 
             if self.verbosity:
                 for score, start_point in zip(scores, start_points):
                     print("Score:", best_score)
-                    print("Start point:", start_point)
+                    print("Start_point =", start_point)
 
         self.best_model.fit(X_train, y_train)
 
