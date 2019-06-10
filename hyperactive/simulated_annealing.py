@@ -68,10 +68,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         return hyperpara_indices_new
 
     def _search(self, n_process, X_train, y_train):
-        self._init_search(n_process, X_train, y_train)
-        self._set_random_seed(n_process)
-        n_steps = self._set_n_steps(n_process)
-
         score = 0
         score_best = 0
         score_current = 0
@@ -80,7 +76,10 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         hyperpara_indices_best = 0
         hyperpara_indices_current = 0
 
-        hyperpara_indices_current = self.search_space_inst.init_eval(n_process)
+        hyperpara_indices_current = self._init_search(n_process, X_train, y_train)
+        self._set_random_seed(n_process)
+        n_steps = self._set_n_steps(n_process)
+
         hyperpara_dict_current = self.search_space_inst.pos_dict2values_dict(
             hyperpara_indices_current
         )

@@ -104,14 +104,13 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 p.best_pos = p.pos
 
     def _search(self, n_process, X_train, y_train):
-        self._init_search(n_process, X_train, y_train)
+        hyperpara_indices = self._init_search(n_process, X_train, y_train)
 
         self._limit_pos(self.search_space_inst.search_space)
 
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
-        hyperpara_indices = self.search_space_inst.init_eval(n_process)
         hyperpara_dict = self.search_space_inst.pos_dict2values_dict(hyperpara_indices)
         self.best_pos = self.search_space_inst.pos_dict2np_array(hyperpara_indices)
         self.best_score, train_time, sklearn_model = self.model.train_model(

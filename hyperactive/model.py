@@ -72,7 +72,23 @@ class DeepLearner(Model):
 
         return layerStr_2_kerasLayer_dict
 
-    def trafo_hyperpara_dict(self, keras_para_dict):
+    def trafo_hyperpara_dict_lists(self, keras_para_dict):
+        layers_para_dict = {}
+
+        for layer_str_1 in list(self.search_config.keys()):
+
+            layer_para_dict = {}
+            for layer_key in keras_para_dict.keys():
+                layer_str_2, para = layer_key.rsplit(".", 1)
+
+                if layer_str_1 == layer_str_2:
+                    layer_para_dict[para] = [keras_para_dict[layer_key]]
+
+            layers_para_dict[layer_str_1] = layer_para_dict
+
+        return layers_para_dict
+
+    def _trafo_hyperpara_dict(self, keras_para_dict):
         layers_para_dict = {}
 
         for layer_str_1 in list(self.search_config.keys()):
@@ -89,7 +105,7 @@ class DeepLearner(Model):
         return layers_para_dict
 
     def _create_keras_model(self, keras_para_dict):
-        layers_para_dict = self.trafo_hyperpara_dict(keras_para_dict)
+        layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
 
         model = Sequential()
         for layer_key in self.layerStr_2_kerasLayer_dict.keys():
