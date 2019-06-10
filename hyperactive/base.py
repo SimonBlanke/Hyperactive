@@ -143,6 +143,14 @@ class BaseOptimizer(object):
             self.search_space_inst.create_kerasSearchSpace(self.search_config)
             self.model = DeepLearner(self.search_config, self.scoring, self.cv)
 
+    def _finish_search(self, best_hyperpara_dict, n_process):
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
+        elif self.model_type == "keras":
+            start_point = self.model.trafo_hyperpara_dict(best_hyperpara_dict)
+
+        return start_point
+
     def _search_normalprocessing(self, X_train, y_train):
         best_model, best_score, start_point = self._search(0, X_train, y_train)
 
