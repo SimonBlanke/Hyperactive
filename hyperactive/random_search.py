@@ -53,8 +53,6 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
         hyperpara_dict = self.search_space_inst.pos_dict2values_dict(hyperpara_indices)
 
-        print("\n", n_process, "hyperpara_dict", hyperpara_dict, "\n")
-
         score, train_time, sklearn_model = self.model.train_model(
             hyperpara_dict, X_train, y_train
         )

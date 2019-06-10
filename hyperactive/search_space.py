@@ -25,8 +25,8 @@ class SearchSpace:
 
         self.search_space = search_space
 
-    def create_mlSearchSpace(self, search_config, n_process):
-        self.search_space = search_config[list(search_config.keys())[n_process]]
+    def create_mlSearchSpace(self, search_config, model_str):
+        self.search_space = search_config[model_str]
 
     def init_eval(self, n_process, model_type):
         hyperpara_indices = None
