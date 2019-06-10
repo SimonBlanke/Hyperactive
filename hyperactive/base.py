@@ -189,7 +189,6 @@ class BaseOptimizer(object):
 
                 # self.best_model.summery()
         else:
-            print("self.n_jobs", self.n_jobs)
             models, scores, start_points = self._search_multiprocessing(
                 X_train, y_train
             )

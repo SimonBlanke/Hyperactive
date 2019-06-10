@@ -34,11 +34,6 @@ class RandomSearch_Optimizer(BaseOptimizer):
             start_points,
         )
 
-        self.search_config = search_config
-        self.scoring = scoring
-        self.cv = cv
-        self.n_jobs = n_jobs
-
         self.search_space_inst = SearchSpace(start_points, search_config)
 
     def _search(self, n_process, X_train, y_train):
