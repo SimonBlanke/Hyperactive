@@ -20,7 +20,19 @@ search_config = {
     }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_config, 100, n_jobs=4)
+start_point = {
+    "sklearn.ensemble.RandomForestClassifier.0": {
+        "n_estimators": 70,
+        "max_depth": 6,
+        "criterion": "entropy",
+        "min_samples_split": 8,
+        "min_samples_leaf": 7,
+    }
+}
+
+Optimizer = SimulatedAnnealing_Optimizer(
+    search_config, 100, n_jobs=4, start_points=start_point
+)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
