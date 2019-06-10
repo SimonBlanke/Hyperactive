@@ -140,6 +140,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
             start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
         elif self.model_type == "keras":
-            pass
+            start_point = self.model.trafo_hyperpara_dict(best_hyperpara_dict)
 
         return sklearn_model, score_best, start_point

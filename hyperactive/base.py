@@ -162,7 +162,6 @@ class BaseOptimizer(object):
 
                 # self.best_model.summery()
         else:
-            print("\n\n\n _search_multiprocessing \n")
             models, scores, start_points = self._search_multiprocessing(
                 X_train, y_train
             )
@@ -173,9 +172,7 @@ class BaseOptimizer(object):
                     print("Score:", best_score)
                     print("Start point:", start_point)
 
-        print("\n\n\nself.model_type", self.model_type)
-
-        # self.best_model.fit(X_train, y_train)
+        self.best_model.fit(X_train, y_train)
 
     def set_start_model(self):
         return 0
