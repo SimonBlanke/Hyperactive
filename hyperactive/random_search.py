@@ -95,4 +95,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
                 best_hyperpara_dict = hyperpara_dict
                 best_train_time = train_time
 
-        return best_model, best_score, best_hyperpara_dict, best_train_time
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
+        elif self.model_type == "keras":
+            pass
+
+        return best_model, best_score, start_point

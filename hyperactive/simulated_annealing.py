@@ -130,11 +130,16 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
                 score_current = score
                 hyperpara_indices_current = hyperpara_indices
 
-        hyperpara_dict_best = self.annealing_search_space.pos_dict2values_dict(
+        best_hyperpara_dict = self.annealing_search_space.pos_dict2values_dict(
             hyperpara_indices_best
         )
         score_best, train_time, sklearn_model = self.model.train_model(
-            hyperpara_dict_best, X_train, y_train
+            best_hyperpara_dict, X_train, y_train
         )
 
-        return sklearn_model, score_best, hyperpara_dict_best, train_time
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
+        elif self.model_type == "keras":
+            pass
+
+        return sklearn_model, score_best, start_point

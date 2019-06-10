@@ -3,7 +3,6 @@
 # License: MIT License
 
 import time
-import random
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
@@ -144,11 +143,19 @@ class MachineLearner(Model):
         self.search_config = search_config
         self.scoring = scoring
         self.cv = cv
+        self.model_str = model_str
 
         self.model = self._get_model(model_str)
 
     def _create_sklearn_model(self, sklearn_para_dict):
         return self.model(**sklearn_para_dict)
+
+    def create_start_point(self, sklearn_para_dict, n_process):
+        start_point = {}
+        model_str = self.model_str + "." + str(n_process)
+        start_point[model_str] = sklearn_para_dict
+
+        return start_point
 
     def train_model(self, sklearn_para_dict, X_train, y_train):
         sklearn_model = self._create_sklearn_model(sklearn_para_dict)

@@ -131,54 +131,53 @@ class BaseOptimizer(object):
 
         return best_model, best_score
 
-    def _search(self):
-        pass
-
     def _search_normalprocessing(self, X_train, y_train):
-        best_model, best_score, best_hyperpara_dict, best_train_time = self._search(
-            0, X_train, y_train
-        )
+        best_model, best_score, start_point = self._search(0, X_train, y_train)
 
-        print("\nself.model_key", self.model_key)
-        print("best_hyperpara_dict", best_hyperpara_dict, "\n")
-
-        return best_model, best_score
+        return best_model, best_score, start_point
 
     def _search_multiprocessing(self, X_train, y_train):
         pool = multiprocessing.Pool(self.n_jobs)
 
         _search = partial(self._search, X_train=X_train, y_train=y_train)
 
-        best_models, scores, hyperpara_dict, train_time = zip(
+        best_models, scores, start_points = zip(
             *pool.map(_search, self._n_process_range)
         )
 
         self.best_model_list = best_models
         self.score_list = scores
-        self.hyperpara_dict = hyperpara_dict
-        self.train_time = train_time
 
-        return best_models, scores
+        return best_models, scores, start_points
 
     def fit(self, X_train, y_train):
         if self.n_jobs == 1:
-            self.best_model, best_score = self._search_normalprocessing(
+            self.best_model, best_score, start_point = self._search_normalprocessing(
                 X_train, y_train
             )
             if self.verbosity:
                 print("Best score:", best_score)
-                print("Best model:", self.best_model)
+                print("Best model:", start_point)
 
                 # self.best_model.summery()
         else:
-            models, scores = self._search_multiprocessing(X_train, y_train)
+            models, scores, start_points = self._search_multiprocessing(
+                X_train, y_train
+            )
             self.best_model, best_score = self._find_best_model(models, scores)
 
             if self.verbosity:
-                print("Best score:", *best_score)
-                print("Best model:", self.best_model)
+                for score, start_point in zip(scores, start_points):
+                    print("Best score:", score)
+                    print("Best model:", start_point)
 
         self.best_model.fit(X_train, y_train)
+
+    def set_start_model(self):
+        return 0
+
+    def get_start_model(self):
+        return 0
 
     def predict(self, X_test):
         return self.best_model.predict(X_test)
