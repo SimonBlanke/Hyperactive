@@ -22,11 +22,11 @@ search_config = {
 
 start_point = {
     "sklearn.ensemble.RandomForestClassifier.0": {
-        "n_estimators": 70,
-        "max_depth": 6,
-        "criterion": "entropy",
-        "min_samples_split": 8,
-        "min_samples_leaf": 7,
+        "n_estimators": [30],
+        "max_depth": [6],
+        "criterion": ["entropy"],
+        "min_samples_split": [12],
+        "min_samples_leaf": [16],
     }
 }
 
