@@ -14,6 +14,9 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from functools import partial
 
+from .model import MachineLearner
+from .model import DeepLearner
+
 
 class BaseOptimizer(object):
     def __init__(
@@ -128,6 +131,17 @@ class BaseOptimizer(object):
         best_model = models[index_best_scores[0]]
 
         return best_model, best_score
+
+    def _init_search(self, n_process, X_train, y_train):
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+            model_str = self._get_sklearn_model(n_process)
+            self.search_space_inst.create_mlSearchSpace(self.search_config)
+            self.model = MachineLearner(
+                self.search_config, self.scoring, self.cv, model_str
+            )
+        elif self.model_type == "keras":
+            self.search_space_inst.create_kerasSearchSpace(self.search_config)
+            self.model = DeepLearner(self.search_config, self.scoring, self.cv)
 
     def _search_normalprocessing(self, X_train, y_train):
         best_model, best_score, start_point = self._search(0, X_train, y_train)

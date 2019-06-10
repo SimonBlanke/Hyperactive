@@ -48,12 +48,12 @@ class SearchSpace:
         for hyperpara_name in self.search_space.keys():
             start_point_key = list(self.start_points.keys())[n_process]
 
-            try:
-                search_position = self.search_space[hyperpara_name].index(
-                    *self.start_points[start_point_key][hyperpara_name]
-                )
-            except ValueError:
-                print("\nStart_point is not in the search space\n")
+            print("\nstart_point_key", start_point_key)
+            print("hyperpara_name", hyperpara_name, "\n")
+
+            search_position = self.search_space[hyperpara_name].index(
+                *self.start_points[start_point_key][hyperpara_name]
+            )
 
             pos_dict[hyperpara_name] = search_position
 

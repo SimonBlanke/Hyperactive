@@ -7,8 +7,6 @@ import tqdm
 
 from .base import BaseOptimizer
 from .search_space import SearchSpace
-from .model import MachineLearner
-from .model import DeepLearner
 
 
 class RandomSearch_Optimizer(BaseOptimizer):
@@ -41,20 +39,10 @@ class RandomSearch_Optimizer(BaseOptimizer):
         self.cv = cv
         self.n_jobs = n_jobs
 
-        self.random_search_space = SearchSpace(start_points, search_config)
+        self.search_space_inst = SearchSpace(start_points, search_config)
 
     def _search(self, n_process, X_train, y_train):
-
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            model_str = self._get_sklearn_model(n_process)
-            self.random_search_space.create_mlSearchSpace(self.search_config)
-            self.model = MachineLearner(
-                self.search_config, self.scoring, self.cv, model_str
-            )
-        elif self.model_type == "keras":
-            self.random_search_space.create_kerasSearchSpace(self.search_config)
-            self.model = DeepLearner(self.search_config, self.scoring, self.cv)
-
+        self._init_search(n_process, X_train, y_train)
         self._set_random_seed(n_process)
         n_steps = self._set_n_steps(n_process)
 
@@ -63,11 +51,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
         best_hyperpara_dict = None
         best_train_time = None
 
-        hyperpara_indices = self.random_search_space.init_eval(n_process)
+        hyperpara_indices = self.search_space_inst.init_eval(n_process)
 
-        hyperpara_dict = self.random_search_space.pos_dict2values_dict(
-            hyperpara_indices
-        )
+        hyperpara_dict = self.search_space_inst.pos_dict2values_dict(hyperpara_indices)
 
         score, train_time, sklearn_model = self.model.train_model(
             hyperpara_dict, X_train, y_train
@@ -81,8 +67,8 @@ class RandomSearch_Optimizer(BaseOptimizer):
 
         for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
 
-            hyperpara_indices = self.random_search_space.get_random_position()
-            hyperpara_dict = self.random_search_space.pos_dict2values_dict(
+            hyperpara_indices = self.search_space_inst.get_random_position()
+            hyperpara_dict = self.search_space_inst.pos_dict2values_dict(
                 hyperpara_indices
             )
             score, train_time, sklearn_model = self.model.train_model(
