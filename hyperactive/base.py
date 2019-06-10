@@ -43,16 +43,14 @@ class BaseOptimizer(object):
         self.y_train = None
         self.model_type = None
 
+        self._get_model_type()
+
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
         self.model_key = list(self.search_config.keys())[0]
 
         self._set_n_jobs()
-        self._get_model_type()
-
-        if self.model_type == "keras":
-            self.n_jobs = 1
 
         self._n_process_range = range(0, self.n_jobs)
 
@@ -151,16 +149,20 @@ class BaseOptimizer(object):
         return best_models, scores, start_points
 
     def fit(self, X_train, y_train):
+        if self.model_type == "keras":
+            self.n_jobs = 1
+
         if self.n_jobs == 1:
             self.best_model, best_score, start_point = self._search_normalprocessing(
                 X_train, y_train
             )
             if self.verbosity:
-                print("Best score:", best_score)
-                print("Best model:", start_point)
+                print("Score:", best_score)
+                print("Start point:", start_point)
 
                 # self.best_model.summery()
         else:
+            print("\n\n\n _search_multiprocessing \n")
             models, scores, start_points = self._search_multiprocessing(
                 X_train, y_train
             )
@@ -168,10 +170,12 @@ class BaseOptimizer(object):
 
             if self.verbosity:
                 for score, start_point in zip(scores, start_points):
-                    print("Best score:", score)
-                    print("Best model:", start_point)
+                    print("Score:", best_score)
+                    print("Start point:", start_point)
 
-        self.best_model.fit(X_train, y_train)
+        print("\n\n\nself.model_type", self.model_type)
+
+        # self.best_model.fit(X_train, y_train)
 
     def set_start_model(self):
         return 0
