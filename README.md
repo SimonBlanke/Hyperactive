@@ -21,27 +21,7 @@ pip install hyperactive
 
 ## Examples
 
-A very basic example:
-```python
-from sklearn.datasets import load_iris
-
-from hyperactive import RandomSearch_Optimizer
-
-iris_data = load_iris()
-X = iris_data.data
-y = iris_data.target
-
-search_config = {
-    "sklearn.ensemble.RandomForestClassifier": {"n_estimators": range(10, 100, 10)}
-}
-
-Optimizer = RandomSearch_Optimizer(search_config, 10)
-Optimizer.fit(X, y)
-```
-
-
-
-Example with larger search space and testing:
+Basic sklearn example:
 ```python
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
@@ -77,48 +57,6 @@ prediction = Optimizer.predict(X_test)
 score = Optimizer.score(X_test, y_test)
 ```
 
-Example with a feedforward neural network in keras:
-```python
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-
-from hyperactive import ParticleSwarm_Optimizer
-
-breast_cancer_data = load_breast_cancer()
-X = breast_cancer_data.data
-y = breast_cancer_data.target
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-
-# this defines the structure of the model and the search space in each layer
-search_config = {
-    "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [5], "batch_size": [100]},
-    "keras.layers.Dense.1": {
-        "units": range(5, 15),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
-    },
-    "keras.layers.Dense.2": {
-        "units": range(5, 15),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
-    },
-    "keras.layers.Dense.3": {"units": [1], "activation": ["sigmoid"]},
-}
-Optimizer = ParticleSwarm_Optimizer(search_config, 3, cv=1)
-
-# search best hyperparameter for given data
-Optimizer.fit(X_train, y_train)
-
-# predict from test data
-prediction = Optimizer.predict(X_test)
-
-# calculate accuracy score
-score = Optimizer.score(X_test, y_test)
-```
-
-
 Example with a convolutional neural network in keras:
 ```python
 import numpy as np
@@ -149,23 +87,15 @@ search_config = {
     },
     "keras.layers.MaxPooling2D.2": {"pool_size": [(2, 2)]},
     "keras.layers.Conv2D.3": {
-        "filters": [32, 64, 128],
+        "filters": [16, 32, 64],
         "kernel_size": [3],
         "activation": ["relu"],
-        "input_shape": [(28, 28, 1)],
     },
     "keras.layers.MaxPooling2D.4": {"pool_size": [(2, 2)]},
-    "keras.layers.Conv2D.5": {
-        "filters": [32, 64, 128],
-        "kernel_size": [3],
-        "activation": ["relu"],
-        "input_shape": [(28, 28, 1)],
-    },
-    "keras.layers.MaxPooling2D.6": {"pool_size": [(2, 2)]},
-    "keras.layers.Flatten.7": {},
-    "keras.layers.Dense.8": {"units": range(30, 200, 10), "activation": ["softmax"]},
-    "keras.layers.Dropout.9": {"rate": np.arange(0.4, 0.8, 0.1)},
-    "keras.layers.Dense.10": {"units": [10], "activation": ["softmax"]},
+    "keras.layers.Flatten.5": {},
+    "keras.layers.Dense.6": {"units": range(30, 200, 10), "activation": ["softmax"]},
+    "keras.layers.Dropout.7": {"rate": np.arange(0.4, 0.8, 0.1)},
+    "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
 Optimizer = RandomSearch_Optimizer(search_config, 20)
