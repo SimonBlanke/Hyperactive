@@ -12,6 +12,11 @@ A Python package for meta-heuristic hyperparameter optimization of scikit-learn 
 
 The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel.
 
+# Table of Contents
+* [Installation](https://github.com/SimonBlanke/hyperactive#installation)
+* [Examples](https://github.com/SimonBlanke/hyperactive#examples)
+* [Hyperactive API](https://github.com/SimonBlanke/hyperactive#hyperactive-api)
+
 
 ## Installation
 ```console
