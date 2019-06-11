@@ -23,7 +23,7 @@ search_config = {
     }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_config, 100, n_jobs=4)
+Optimizer = SimulatedAnnealing_Optimizer(search_config, n_iter=100, n_jobs=4)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)

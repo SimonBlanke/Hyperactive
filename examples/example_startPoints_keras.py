@@ -7,7 +7,12 @@ from hyperactive import RandomSearch_Optimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-X_train = X_train.reshape(60000, 28, 28, 1)
+size = 6000
+
+X_train = X_train[0:size]
+y_train = y_train[0:size]
+
+X_train = X_train.reshape(size, 28, 28, 1)
 X_test = X_test.reshape(10000, 28, 28, 1)
 
 y_train = to_categorical(y_train)
@@ -45,7 +50,7 @@ search_config = {
     "keras.layers.Dense.10": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = RandomSearch_Optimizer(search_config, 10)
+Optimizer = RandomSearch_Optimizer(search_config, n_iter=10)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
