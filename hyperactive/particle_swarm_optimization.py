@@ -118,7 +118,9 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         )
 
         p_list = self._init_particles()
-        for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
+        for i in tqdm.tqdm(
+            range(n_steps), desc=str(self.model_str), position=n_process, leave=False
+        ):
             self._eval_particles(p_list, X_train, y_train)
             self._find_best_particle(p_list)
             self._move_particles(p_list)

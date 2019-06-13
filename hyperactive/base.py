@@ -80,12 +80,12 @@ class BaseOptimizer(object):
             elif "torch" in model_type_key:
                 model_type_list.append("torch")
             else:
-                raise Exception("No valid model string in search_config")
+                raise Exception("\n No valid model string in search_config")
 
         if self._is_all_same(model_type_list):
             self.model_type = model_type_list[0]
         else:
-            raise Exception("Model strings in search_config keys are inconsistent")
+            raise Exception("\n Model strings in search_config keys are inconsistent")
 
     def _get_sklearn_model(self, n_process):
         if self.n_models > self.n_jobs:
@@ -134,13 +134,18 @@ class BaseOptimizer(object):
 
     def _init_search(self, n_process, X_train, y_train):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
-            model_str = self._get_sklearn_model(n_process)
-            self.search_space_inst.create_mlSearchSpace(self.search_config, model_str)
+            model_module_str = self._get_sklearn_model(n_process)
+            _, self.model_str = model_module_str.rsplit(".", 1)
+
+            self.search_space_inst.create_mlSearchSpace(
+                self.search_config, model_module_str
+            )
             self.model = MachineLearner(
-                self.search_config, self.scoring, self.cv, model_str
+                self.search_config, self.scoring, self.cv, model_module_str
             )
             hyperpara_indices = self.search_space_inst.init_eval(n_process, "sklearn")
         elif self.model_type == "keras":
+            self.model_str = "keras model"
             self.search_space_inst.create_kerasSearchSpace(self.search_config)
             self.model = DeepLearner(self.search_config, self.scoring, self.cv)
 

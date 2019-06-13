@@ -58,7 +58,9 @@ class RandomSearch_Optimizer(BaseOptimizer):
             best_hyperpara_dict = hyperpara_dict
             best_train_time = train_time
 
-        for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
+        for i in tqdm.tqdm(
+            range(n_steps), desc=str(self.model_str), position=n_process, leave=False
+        ):
 
             hyperpara_indices = self.search_space_inst.get_random_position()
             hyperpara_dict = self.search_space_inst.pos_dict2values_dict(

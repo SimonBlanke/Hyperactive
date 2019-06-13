@@ -90,7 +90,9 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         score_best = score_current
         hyperpara_indices_best = hyperpara_indices_current
 
-        for i in tqdm.tqdm(range(n_steps), position=n_process, leave=False):
+        for i in tqdm.tqdm(
+            range(n_steps), desc=str(self.model_str), position=n_process, leave=False
+        ):
             self.temp = self.temp * self.t_rate
             rand = random.randint(0, 1)
 
