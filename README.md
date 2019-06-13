@@ -50,7 +50,7 @@ search_config = {
     }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_config, 100, n_jobs=4)
+Optimizer = SimulatedAnnealing_Optimizer(search_config, n_iter=100, n_jobs=4)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -103,7 +103,7 @@ search_config = {
     "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = RandomSearch_Optimizer(search_config, 20)
+Optimizer = RandomSearch_Optimizer(search_config, n_iter=20)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -122,9 +122,9 @@ score = Optimizer.score(X_test, y_test)
 
 ### Classes:
 ```python
-RandomSearch_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
-SimulatedAnnealing_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.99)
-ParticleSwarm_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
+RandomSearch_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
+SimulatedAnnealing_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.99)
+ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
 ```
 
 ### General positional argument:
@@ -138,10 +138,10 @@ ParticleSwarm_Optimizer(search_config, n_iter, scoring="accuracy", n_jobs=1, cv=
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
-| scoring  | str | "accuracy" | scoring for model evaluation |
+| metric  | str | "accuracy" | metric for model evaluation |
 | n_jobs | int | 1 | number of jobs to run in parallel (-1 for maximum) |
 | cv | int | 5 | cross-validation |
-| verbosity | int | 1 | Shows model and scoring information |
+| verbosity | int | 1 | Shows model and metric information |
 | random_state | int | None | The seed for random number generator |
 | start_points | dict | None | Hyperparameter configuration to start from |
 

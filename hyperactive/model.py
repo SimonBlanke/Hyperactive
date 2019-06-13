@@ -10,9 +10,9 @@ from keras.models import Sequential
 
 
 class Model:
-    def __init__(self, search_config, scoring, cv):
+    def __init__(self, search_config, metric, cv):
         self.search_config = search_config
-        self.scoring = scoring
+        self.metric = metric
         self.cv = cv
 
     def _get_model(self, model):
@@ -24,11 +24,11 @@ class Model:
 
 
 class DeepLearner(Model):
-    def __init__(self, search_config, scoring, cv):
-        super().__init__(search_config, scoring, cv)
+    def __init__(self, search_config, metric, cv):
+        super().__init__(search_config, metric, cv)
 
         self.search_config = search_config
-        self.scoring = scoring
+        self.metric = metric
         self.cv = cv
 
         self.layerStr_2_kerasLayer_dict = self._layer_dict(search_config)
@@ -140,7 +140,11 @@ class DeepLearner(Model):
         del layers_para_dict["keras.compile.0"]
         del layers_para_dict["keras.fit.0"]
 
-        compile_para_dict["metrics"] = ["accuracy"]
+        # if no metric was passed
+        if self.metric == "accuracy":
+            self.metric = [self.metric]
+
+        compile_para_dict["metrics"] = self.metric
         fit_para_dict["x"] = X_train
         fit_para_dict["y"] = y_train
 
@@ -153,15 +157,52 @@ class DeepLearner(Model):
 
 
 class MachineLearner(Model):
-    def __init__(self, search_config, scoring, cv, model_str):
-        super().__init__(search_config, scoring, cv)
+    def __init__(self, search_config, metric, cv, model_str):
+        super().__init__(search_config, metric, cv)
 
         self.search_config = search_config
-        self.scoring = scoring
+        self.metric = metric
         self.cv = cv
         self.model_str = model_str
 
         self.model = self._get_model(model_str)
+
+        self.scores = [
+            "accuracy",
+            "balanced_accuracy",
+            "average_precision",
+            "f1",
+            "f1_micro",
+            "f1_macro",
+            "f1_weighted",
+            "f1_samples",
+            "precision",
+            "recall",
+            "jaccard",
+            "roc_auc",
+            "explained_variance",
+            "r2",
+        ]
+
+        self.losses = [
+            "brier_score_loss",
+            "neg_log_loss",
+            "max_error",
+            "neg_mean_absolute_error",
+            "neg_mean_squared_error",
+            "neg_mean_squared_log_error",
+            "neg_median_absolute_error",
+        ]
+
+    def _get_metric_type_sklearn(self):
+        if self.metric in self.scores:
+            metric_type = "score"
+        elif self.metric in self.losses:
+            metric_type = "loss"
+        else:
+            raise ValueError("\n Metric not compatible with sklearn scoring functions")
+
+        return metric_type
 
     def _create_sklearn_model(self, sklearn_para_dict):
         return self.model(**sklearn_para_dict)
@@ -183,7 +224,7 @@ class MachineLearner(Model):
 
         time_temp = time.perf_counter()
         scores = cross_val_score(
-            sklearn_model, X_train, y_train, scoring=self.scoring, cv=self.cv
+            sklearn_model, X_train, y_train, scoring=self.metric, cv=self.cv
         )
         train_time = (time.perf_counter() - time_temp) / self.cv
 

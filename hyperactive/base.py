@@ -23,7 +23,7 @@ class BaseOptimizer(object):
         self,
         search_config,
         n_iter,
-        scoring="accuracy",
+        metric="accuracy",
         memory=None,
         n_jobs=1,
         cv=5,
@@ -34,7 +34,7 @@ class BaseOptimizer(object):
 
         self.search_config = search_config
         self.n_iter = n_iter
-        self.scoring = scoring
+        self.metric = metric
         self.memory = memory
         self.n_jobs = n_jobs
         self.cv = cv
@@ -54,6 +54,9 @@ class BaseOptimizer(object):
         self._set_n_jobs()
 
         self._n_process_range = range(0, self.n_jobs)
+
+    def _get_metric_type_keras(self):
+        pass
 
     def _set_random_seed(self, thread=0):
         if self.random_state:
@@ -134,20 +137,24 @@ class BaseOptimizer(object):
 
     def _init_search(self, n_process, X_train, y_train):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
+
             model_module_str = self._get_sklearn_model(n_process)
             _, self.model_str = model_module_str.rsplit(".", 1)
 
             self.search_space_inst.create_mlSearchSpace(
                 self.search_config, model_module_str
             )
+
             self.model = MachineLearner(
-                self.search_config, self.scoring, self.cv, model_module_str
+                self.search_config, self.metric, self.cv, model_module_str
             )
+            self.metric_type = self.model._get_metric_type_sklearn()
+
             hyperpara_indices = self.search_space_inst.init_eval(n_process, "sklearn")
         elif self.model_type == "keras":
             self.model_str = "keras model"
             self.search_space_inst.create_kerasSearchSpace(self.search_config)
-            self.model = DeepLearner(self.search_config, self.scoring, self.cv)
+            self.model = DeepLearner(self.search_config, self.metric, self.cv)
 
             hyperpara_indices = self.search_space_inst.init_eval(n_process, "keras")
 
@@ -202,7 +209,7 @@ class BaseOptimizer(object):
 
             if self.verbosity:
                 for score, start_point in zip(scores, start_points):
-                    print("\nScore:", best_score)
+                    print("\n", self.metric, best_score)
                     print("start_point =", start_point, "\n")
 
         self.best_model.fit(X_train, y_train)
