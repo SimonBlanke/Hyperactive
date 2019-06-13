@@ -36,6 +36,42 @@ class DeepLearner(Model):
 
         self._get_search_config_onlyLayers()
 
+        self.scores = [
+            "accuracy",
+            "binary_accuracy",
+            "categorical_accuracy",
+            "sparse_categorical_accuracy",
+            "top_k_categorical_accuracy",
+            "sparse_top_k_categorical_accuracy",
+        ]
+
+        self.losses = [
+            "mean_squared_error",
+            "mean_absolute_error",
+            "mean_absolute_percentage_error",
+            "mean_squared_logarithmic_error",
+            "squared_hinge",
+            "hinge",
+            "categorical_hinge",
+            "logcosh",
+            "categorical_crossentropy",
+            "sparse_categorical_crossentropy",
+            "binary_crossentropy",
+            "kullback_leibler_divergence",
+            "poisson",
+            "cosine_proximity",
+        ]
+
+    def _get_metric_type_keras(self):
+        if self.metric in self.scores:
+            metric_type = "score"
+        elif self.metric in self.losses:
+            metric_type = "loss"
+        else:
+            raise ValueError("\n Metric not compatible with keras scoring functions")
+
+        return metric_type
+
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
         if list(self.search_config.keys())[0] == "keras.compile.0":
@@ -141,7 +177,7 @@ class DeepLearner(Model):
         del layers_para_dict["keras.fit.0"]
 
         # if no metric was passed
-        if self.metric == "accuracy":
+        if isinstance(self.metric, str):
             self.metric = [self.metric]
 
         compile_para_dict["metrics"] = self.metric

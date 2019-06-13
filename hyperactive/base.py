@@ -55,9 +55,6 @@ class BaseOptimizer(object):
 
         self._n_process_range = range(0, self.n_jobs)
 
-    def _get_metric_type_keras(self):
-        pass
-
     def _set_random_seed(self, thread=0):
         if self.random_state:
             random.seed(self.random_state + thread)
@@ -156,6 +153,8 @@ class BaseOptimizer(object):
             self.search_space_inst.create_kerasSearchSpace(self.search_config)
             self.model = DeepLearner(self.search_config, self.metric, self.cv)
 
+            self.metric_type = self.model._get_metric_type_keras()
+
             hyperpara_indices = self.search_space_inst.init_eval(n_process, "keras")
 
         return hyperpara_indices
@@ -213,12 +212,6 @@ class BaseOptimizer(object):
                     print("start_point =", start_point, "\n")
 
         self.best_model.fit(X_train, y_train)
-
-    def set_start_model(self):
-        return 0
-
-    def get_start_model(self):
-        return 0
 
     def predict(self, X_test):
         return self.best_model.predict(X_test)
