@@ -31,6 +31,10 @@ class DeepLearner(Model):
         self.metric = metric
         self.cv = cv
 
+        # if no metric was passed
+        if isinstance(self.metric, str):
+            self.metric = [self.metric]
+
         self.layerStr_2_kerasLayer_dict = self._layer_dict(search_config)
         # self.n_layer = len(self.layerStr_2_kerasLayer_dict.keys())
 
@@ -63,12 +67,14 @@ class DeepLearner(Model):
         ]
 
     def _get_metric_type_keras(self):
-        if self.metric in self.scores:
+        if self.metric[0] in self.scores:
             metric_type = "score"
-        elif self.metric in self.losses:
+        elif self.metric[0] in self.losses:
             metric_type = "loss"
         else:
-            raise ValueError("\n Metric not compatible with keras scoring functions")
+            raise ValueError(
+                "\n", self.metric, "not in list of compatible scoring functions"
+            )
 
         return metric_type
 
@@ -175,10 +181,6 @@ class DeepLearner(Model):
 
         del layers_para_dict["keras.compile.0"]
         del layers_para_dict["keras.fit.0"]
-
-        # if no metric was passed
-        if isinstance(self.metric, str):
-            self.metric = [self.metric]
 
         compile_para_dict["metrics"] = self.metric
         fit_para_dict["x"] = X_train
