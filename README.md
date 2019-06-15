@@ -7,7 +7,6 @@ Collect and use meta-data of machine learning datasets to reduce search time for
 pip install meta-learn
 ```
 
-
 ## Examples
 If you want to search for the best model:
 ```python
@@ -45,18 +44,4 @@ dataset_dict = {}
 
 metalearn = MetaLearn(search_dict, metric='accuracy')
 metalearn.extract(dataset_dict)
-```
-
-## Meta-Learn API
-```python
-MetaLearn()
-
-Parameters:
-  -
-
-Attributes:
-  -
-
-Methods:
-  -
 ```
