@@ -1,4 +1,4 @@
-'''
+"""
 MIT License
 Copyright (c) [2018] [Simon Franz Albert Blanke]
 Email: simonblanke528481@gmail.com
@@ -17,18 +17,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-'''
+"""
 
 from sklearn.model_selection import cross_val_score
 
+
 def add_dataset_name(self):
-	return 'Dataset_name', self.data_name
+    return "Dataset_name", self.data_name
+
 
 def get_number_of_instances(self):
-	return 'N_rows', int(self.X_train.shape[0])
+    return "N_rows", int(self.X_train.shape[0])
+
 
 def get_number_of_features(self):
-	return 'N_columns', int(self.X_train.shape[1])
+    return "N_columns", int(self.X_train.shape[1])
+
 
 def get_default_score(self):
-	return 'cv_default_score', cross_val_score(self.model, self.X_train, self.y_train, cv=5).mean()
+    return (
+        "cv_default_score",
+        cross_val_score(self.model, self.X_train, self.y_train, cv=5).mean(),
+    )
