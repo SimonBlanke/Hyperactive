@@ -22,7 +22,9 @@ search_config = {
     },
     "keras.layers.Dense.3": {"units": [1], "activation": ["sigmoid"]},
 }
-Optimizer = ParticleSwarm_Optimizer(search_config, n_iter=10)
+Optimizer = ParticleSwarm_Optimizer(
+    search_config, n_iter=10, metric=["mean_absolute_error"]
+)
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
 # predict from test data

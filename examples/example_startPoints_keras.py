@@ -3,7 +3,7 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
 
-from hyperactive import RandomSearch_Optimizer
+from hyperactive import SimulatedAnnealing_Optimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -46,11 +46,45 @@ search_config = {
     "keras.layers.MaxPooling2D.6": {"pool_size": [(2, 2)]},
     "keras.layers.Flatten.7": {},
     "keras.layers.Dense.8": {"units": range(30, 200, 10), "activation": ["softmax"]},
-    "keras.layers.Dropout.9": {"rate": np.arange(0.4, 0.8, 0.1)},
+    "keras.layers.Dropout.9": {"rate": list(np.arange(0.4, 0.8, 0.1))},
     "keras.layers.Dense.10": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = RandomSearch_Optimizer(search_config, n_iter=10)
+
+start_point = {
+    "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
+    "keras.fit.0": {"epochs": [10], "batch_size": [500], "verbose": [2]},
+    "keras.layers.Conv2D.1": {
+        "filters": [64],
+        "kernel_size": [3],
+        "activation": ["relu"],
+        "input_shape": [(28, 28, 1)],
+    },
+    "keras.layers.MaxPooling2D.2": {"pool_size": [(2, 2)]},
+    "keras.layers.Conv2D.3": {
+        "filters": [32],
+        "kernel_size": [3],
+        "activation": ["relu"],
+        "input_shape": [(28, 28, 1)],
+    },
+    "keras.layers.MaxPooling2D.4": {"pool_size": [(2, 2)]},
+    "keras.layers.Conv2D.5": {
+        "filters": [32],
+        "kernel_size": [3],
+        "activation": ["relu"],
+        "input_shape": [(28, 28, 1)],
+    },
+    "keras.layers.MaxPooling2D.6": {"pool_size": [(2, 2)]},
+    "keras.layers.Flatten.7": {},
+    "keras.layers.Dense.8": {"units": [50], "activation": ["softmax"]},
+    "keras.layers.Dropout.9": {"rate": [0.4]},
+    "keras.layers.Dense.10": {"units": [10], "activation": ["softmax"]},
+}
+
+
+Optimizer = SimulatedAnnealing_Optimizer(
+    search_config, n_iter=10, start_points=start_point
+)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
