@@ -1,18 +1,31 @@
+
+
+
+
+# Hyperactive
+### A hyperparameter optimization toolbox for convenient and fast prototyping.
+
+---
+
+
+
 [![PyPI version](https://img.shields.io/pypi/v/hyperactive.svg)](https://pypi.python.org/pypi/hyperactive)
 [![PyPI license](https://img.shields.io/pypi/l/hyperactive.svg)](https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/hyperactive)](https://pepy.tech/project/hyperactive)
 
 
+## Overview:
+- Optimize hyperparameter of machine- and deep-learning models from sklearn, xgboost and keras
+- Choose from a variety of different optimization techniques to improve your model including:
+    - Random search
+    - Simulated annealing
+    - Particle swarm optimization
+- Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
+- Use multiprocessing for machine learning or your gpu for deep learning models
 
-# Hyperactive
-A Python package for meta-heuristic hyperparameter optimization of scikit-learn models for supervised learning. Hyperactive automates the search for hyperparameters by utilizing metaheuristics to efficiently explore the search space and provide a sufficiently good solution. Its API is similar to scikit-learn and allows for parallel computation. Hyperactive offers a small collection of the following meta-heuristic optimization techniques:
-  - Random search
-  - Simulated annealing
-  - Particle swarm optimization
 
-The multiprocessing will start n_jobs separate searches. These can operate independent of one another, which makes the workload perfectly parallel.
 
-# Table of Contents
+## Table of Contents
 * [Installation](https://github.com/SimonBlanke/hyperactive#installation)
 * [Examples](https://github.com/SimonBlanke/hyperactive#examples)
 * [Hyperactive API](https://github.com/SimonBlanke/hyperactive#hyperactive-api)
@@ -99,7 +112,7 @@ search_config = {
     "keras.layers.MaxPooling2D.4": {"pool_size": [(2, 2)]},
     "keras.layers.Flatten.5": {},
     "keras.layers.Dense.6": {"units": range(30, 200, 10), "activation": ["softmax"]},
-    "keras.layers.Dropout.7": {"rate": np.arange(0.4, 0.8, 0.1)},
+    "keras.layers.Dropout.7": {"rate": list(np.arange(0.4, 0.8, 0.1))},
     "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
