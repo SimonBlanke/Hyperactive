@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
 import time
 import pandas as pd
 
@@ -16,11 +17,17 @@ from sklearn.preprocessing import MinMaxScaler
 
 class MetaRegressor(object):
     def __init__(self, model_name):
-        self.path = "./data/meta_knowledge"
         self.meta_regressor = None
 
         self.model_name = model_name
         # self._get_model_name()
+
+        current_path = os.path.realpath(__file__)
+        self.path_name, file_name = current_path.rsplit("/", 1)
+
+        self.path = self.path_name + "/meta_data/meta_knowledge"
+
+        print("\n self.path", self.path, "\n")
 
     def train_meta_regressor(self):
         X_train, y_train = self._get_meta_knowledge()
@@ -69,6 +76,11 @@ class MetaRegressor(object):
             print("time: ", round((time.time() - time1), 4))
 
     def _store_model(self):
-        filename = "./data/" + str(self.model_name) + "_meta_regressor.pkl"
+        filename = (
+            self.path_name
+            + "/meta_regressor/"
+            + str(self.model_name)
+            + "_meta_regressor.pkl"
+        )
         # print(filename)
         joblib.dump(self.meta_regressor, filename)

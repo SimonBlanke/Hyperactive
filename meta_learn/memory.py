@@ -19,14 +19,14 @@ from .dataset_features import get_default_score
 from .label_encoder_dict import label_encoder_dict
 
 
-class DataCollector(object):
+class Memory:
     def __init__(self, metric, cv=5, n_jobs=-1):
         self.metric = metric
         self.cv = cv
         self.n_jobs = n_jobs
 
         self.dataset_dict = None
-        self.ml_config_dict = None
+        self.search_config = None
 
         self.model = None
 
@@ -38,9 +38,12 @@ class DataCollector(object):
 
         self.meta_knowledge_dict = {}
 
-    def collect_meta_data(self, dataset_dict, ml_config_dict, augment_data=False):
+        current_path = os.path.realpath(__file__)
+        self.path_name, file_name = current_path.rsplit("/", 1)
+
+    def collect_meta_data(self, dataset_dict, search_config, augment_data=False):
         self.dataset_dict = dataset_dict
-        self.ml_config_dict = ml_config_dict
+        self.search_config = search_config
 
         """
     if augment_data == True:
@@ -61,9 +64,9 @@ class DataCollector(object):
         print("Collecting meta data")
 
         meta_knowledge_from_model = {}
-        for model_name in ml_config_dict.keys():
-            dataCollector_model = DataCollector_model(ml_config_dict)
-            dataCollector_dataset = DataCollector_dataset(ml_config_dict)
+        for model_name in search_config.keys():
+            dataCollector_model = ModelMetaDataCollector(search_config)
+            dataCollector_dataset = DatasetMetaDataCollector(search_config)
 
             meta_knowledge_from_dataset = {}
             for data_name, data_train in tqdm(dataset_dict.items()):
@@ -114,27 +117,27 @@ class DataCollector(object):
         dataframe.to_hdf(path1, key="a", mode="a", format="table", append=True)
 
     def _save_toCSV(self, dataframe, key, path=""):
-        directory = "./data/"
+        directory = self.path_name + "/meta_data/"
         # today = datetime.date.today()
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        path = directory + "meta_knowledge"
+        path = directory + "meta_data"
         dataframe.to_csv(path, index=False)
         # print('saving', len(dataframe), 'examples of', str(key), 'meta data')
 
 
-class DataCollector_dataset(object):
+class DatasetMetaDataCollector:
 
     add_dataset_name = add_dataset_name
     get_number_of_instances = get_number_of_instances
     get_number_of_features = get_number_of_features
     get_default_score = get_default_score
 
-    def __init__(self, ml_config_dict, cv=5):
-        self.ml_config_dict = ml_config_dict
+    def __init__(self, search_config, cv=5):
+        self.search_config = search_config
 
-        self.model_name = list(ml_config_dict.keys())[0]
+        self.model_name = list(search_config.keys())[0]
 
     def _get_features_from_dataset(self):
 
@@ -177,9 +180,9 @@ class DataCollector_dataset(object):
         return features_from_dataset
 
 
-class DataCollector_model(object):
-    def __init__(self, ml_config_dict, cv=5, n_jobs=-1):
-        self.ml_config_dict = ml_config_dict
+class ModelMetaDataCollector:
+    def __init__(self, search_config, cv=5, n_jobs=-1):
+        self.search_config = search_config
         self.cv = cv
         self.n_jobs = n_jobs
 
@@ -187,9 +190,9 @@ class DataCollector_model(object):
         self.hyperpara_dict = None
 
     def _grid_search(self, X_train, y_train):
-        for model_name in self.ml_config_dict.keys():
+        for model_name in self.search_config.keys():
             self.hyperpara_dict = self._get_hyperpara(model_name)
-            parameters = self.ml_config_dict[model_name]
+            parameters = self.search_config[model_name]
 
             model = self._import_model(model_name)
             self.model = model()
@@ -199,9 +202,9 @@ class DataCollector_model(object):
             )
             model_grid_search.fit(X_train, y_train)
 
-            grid_search_dict = model_grid_search.cv_results_
+            grid_search_config = model_grid_search.cv_results_
 
-            params_df = pd.DataFrame(grid_search_dict["params"])
+            params_df = pd.DataFrame(grid_search_config["params"])
 
             default_hyperpara_df = self._get_default_hyperpara(
                 self.model, len(params_df)
@@ -211,14 +214,14 @@ class DataCollector_model(object):
             params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
 
             mean_test_score_df = pd.DataFrame(
-                grid_search_dict["mean_test_score"], columns=["mean_test_score"]
+                grid_search_config["mean_test_score"], columns=["mean_test_score"]
             )
 
             features_from_model = pd.concat(
                 [params_df, mean_test_score_df], axis=1, ignore_index=False
             )
 
-            print(features_from_model)
+            # print(features_from_model)
 
             features_from_model = self._label_enconding(features_from_model)
 
