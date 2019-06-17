@@ -15,8 +15,8 @@
 
 
 ## Overview:
-- Optimize hyperparameter of machine- and deep-learning models from sklearn, xgboost and keras
-- Choose from a variety of different optimization techniques to improve your model including:
+- Optimize hyperparameters of machine- and deep-learning models from sklearn, xgboost and keras
+- Choose from a variety of different optimization techniques to improve your model, including:
     - Random search
     - Simulated annealing
     - Particle swarm optimization
