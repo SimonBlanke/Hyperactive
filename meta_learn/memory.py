@@ -20,81 +20,62 @@ from .label_encoder_dict import label_encoder_dict
 
 
 class Memory:
-    def __init__(self, metric, cv=5, n_jobs=-1):
+    def __init__(
+        self, search_config, metric="accuracy", cv=5, n_jobs=-1, meta_data_path=None
+    ):
         self.metric = metric
         self.cv = cv
         self.n_jobs = n_jobs
 
-        self.dataset_dict = None
-        self.search_config = None
-
-        self.model = None
-
-        self.X_train = None
-        self.y_train = None
-        self.data_name = None
-
-        self.model_name = None
+        self.search_config = search_config
 
         self.meta_knowledge_dict = {}
 
-        current_path = os.path.realpath(__file__)
-        self.path_name, file_name = current_path.rsplit("/", 1)
+        self.path_name = meta_data_path
 
-    def collect_meta_data(self, dataset_dict, search_config, augment_data=False):
-        self.dataset_dict = dataset_dict
-        self.search_config = search_config
+        self.dataCollector_model = ModelMetaDataCollector(self.search_config)
+        self.dataCollector_dataset = DatasetMetaDataCollector()
 
-        """
-    if augment_data == True:
-      dataset_dict_temp = {}
-      print('Augmenting data')
-      for data_key in tqdm(dataset_dict.keys()):
-        X_train = dataset_dict[data_key][0]
-        y_train = dataset_dict[data_key][1]
-
-        dataset_dict_t = augment_dataset(X_train, y_train, n_drops=1)
-
-        for key in dataset_dict_t:
-          dataset_dict_temp[key] = dataset_dict_t[key]
-
-      dataset_dict = dict(dataset_dict_temp)
-    """
-
-        print("Collecting meta data")
+    def extract(self, dataset_config, augment_data=False):
 
         meta_knowledge_from_model = {}
-        for model_name in search_config.keys():
-            dataCollector_model = ModelMetaDataCollector(search_config)
-            dataCollector_dataset = DatasetMetaDataCollector(search_config)
+        for model_name in self.search_config.keys():
 
             meta_knowledge_from_dataset = {}
-            for data_name, data_train in tqdm(dataset_dict.items()):
+            for data_name, data_train in dataset_config.items():
+                meta_data = self._get_meta_data(model_name, data_name, data_train)
 
-                features_from_model = dataCollector_model.collect(data_name, data_train)
-                features_from_dataset = dataCollector_dataset.collect(
-                    data_name, data_train
-                )
-
-                features_from_dataset = pd.DataFrame(
-                    features_from_dataset, index=range(len(features_from_model))
-                )
-                columns = features_from_dataset.columns
-                for column in columns:
-                    features_from_dataset[column] = features_from_dataset[column][0]
-
-                meta_knowledge = self._concat_dataframes(
-                    features_from_dataset, features_from_model
-                )
-
-                self._save_toCSV(meta_knowledge, model_name)
-                meta_knowledge_from_dataset[data_name] = meta_knowledge
+                self._save_toCSV(meta_data, model_name)
+                meta_knowledge_from_dataset[data_name] = meta_data
 
             meta_knowledge_from_model[model_name] = meta_knowledge_from_dataset
 
+        print("\nblablabla")
         return meta_knowledge_from_model
 
-    def _concat_dataframes(self, features_from_dataset, features_from_model):
+    def _get_meta_data(self, model_name, data_name, data_train):
+        X_train = data_train[0]
+        y_train = data_train[1]
+
+        features_from_model = self.dataCollector_model.collect(
+            model_name, X_train, y_train
+        )
+        features_from_dataset = self.dataCollector_dataset.collect(
+            model_name, data_name, data_train
+        )
+
+        meta_data = self._merge_data(features_from_dataset, features_from_model)
+
+        return meta_data
+
+    def _merge_data(self, features_from_dataset, features_from_model):
+        features_from_dataset = pd.DataFrame(
+            features_from_dataset, index=range(len(features_from_model))
+        )
+        columns = features_from_dataset.columns
+        for column in columns:
+            features_from_dataset[column] = features_from_dataset[column][0]
+
         features_from_dataset = features_from_dataset.reset_index()
         features_from_model = features_from_model.reset_index()
 
@@ -116,13 +97,12 @@ class Memory:
 
         dataframe.to_hdf(path1, key="a", mode="a", format="table", append=True)
 
-    def _save_toCSV(self, dataframe, key, path=""):
-        directory = self.path_name + "/meta_data/"
+    def _save_toCSV(self, dataframe, model_name, path=""):
         # today = datetime.date.today()
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        if not os.path.exists(self.path_name):
+            os.makedirs(self.path_name)
 
-        path = directory + "meta_data"
+        path = self.path_name + model_name + ":meta_data"
         dataframe.to_csv(path, index=False)
         # print('saving', len(dataframe), 'examples of', str(key), 'meta data')
 
@@ -134,12 +114,18 @@ class DatasetMetaDataCollector:
     get_number_of_features = get_number_of_features
     get_default_score = get_default_score
 
-    def __init__(self, search_config, cv=5):
-        self.search_config = search_config
+    def __init__(self, cv=5):
+        pass
+        # self.model_name = list(search_config.keys())[0]
 
-        self.model_name = list(search_config.keys())[0]
+    def collect(self, model_name, data_name, data_train):
+        self.data_name = data_name
+        self.X_train = data_train[0]
+        self.y_train = data_train[1]
 
-    def _get_features_from_dataset(self):
+        # for later use in functions in func_list
+        model = self._import_model(model_name)
+        self.model = model()
 
         # List of functions to get the different features of the dataset
         func_list = [
@@ -154,7 +140,7 @@ class DatasetMetaDataCollector:
             features_from_dataset[name] = value
 
         features_from_dataset = pd.DataFrame(features_from_dataset, index=[0])
-        features_from_dataset = features_from_dataset.reindex_axis(
+        features_from_dataset = features_from_dataset.reindex(
             sorted(features_from_dataset.columns), axis=1
         )
 
@@ -167,18 +153,6 @@ class DatasetMetaDataCollector:
 
         return model
 
-    def collect(self, data_name, data_train):
-        self.data_name = data_name
-        self.X_train = data_train[0]
-        self.y_train = data_train[1]
-
-        model = self._import_model(self.model_name)
-        self.model = model()
-
-        features_from_dataset = self._get_features_from_dataset()
-
-        return features_from_dataset
-
 
 class ModelMetaDataCollector:
     def __init__(self, search_config, cv=5, n_jobs=-1):
@@ -189,43 +163,41 @@ class ModelMetaDataCollector:
         self.model_name = None
         self.hyperpara_dict = None
 
-    def _grid_search(self, X_train, y_train):
-        for model_name in self.search_config.keys():
-            self.hyperpara_dict = self._get_hyperpara(model_name)
-            parameters = self.search_config[model_name]
+    def collect(self, model_name, X_train, y_train):
+        self.hyperpara_dict = self._get_hyperpara(model_name)
+        parameters = self.search_config[model_name]
 
-            model = self._import_model(model_name)
-            self.model = model()
+        model = self._import_model(model_name)
+        self.model = model()
 
-            model_grid_search = GridSearchCV(
-                self.model, parameters, cv=self.cv, n_jobs=self.n_jobs
-            )
-            model_grid_search.fit(X_train, y_train)
+        model_grid_search = GridSearchCV(
+            self.model, parameters, cv=self.cv, n_jobs=self.n_jobs, verbose=1
+        )
+        model_grid_search.fit(X_train, y_train)
 
-            grid_search_config = model_grid_search.cv_results_
+        grid_search_config = model_grid_search.cv_results_
 
-            params_df = pd.DataFrame(grid_search_config["params"])
+        params_df = pd.DataFrame(grid_search_config["params"])
 
-            default_hyperpara_df = self._get_default_hyperpara(
-                self.model, len(params_df)
-            )
-            params_df = self._merge_dict(params_df, default_hyperpara_df)
+        default_hyperpara_df = self._get_default_hyperpara(self.model, len(params_df))
+        params_df = self._merge_dict(params_df, default_hyperpara_df)
 
-            params_df = params_df.reindex_axis(sorted(params_df.columns), axis=1)
+        params_df = params_df.reindex(sorted(params_df.columns), axis=1)
 
-            mean_test_score_df = pd.DataFrame(
-                grid_search_config["mean_test_score"], columns=["mean_test_score"]
-            )
+        mean_test_score_df = pd.DataFrame(
+            grid_search_config["mean_test_score"], columns=["mean_test_score"]
+        )
 
-            features_from_model = pd.concat(
-                [params_df, mean_test_score_df], axis=1, ignore_index=False
-            )
+        features_from_model = pd.concat(
+            [params_df, mean_test_score_df], axis=1, ignore_index=False
+        )
 
-            # print(features_from_model)
+        features_from_model = self._label_enconding(features_from_model)
 
-            features_from_model = self._label_enconding(features_from_model)
+        # to convert False to 0 and True to 1
+        features_from_model = features_from_model * 1
 
-            return features_from_model
+        return features_from_model
 
     def _get_hyperpara(self, model_name):
         return label_encoder_dict[model_name]
@@ -234,7 +206,7 @@ class ModelMetaDataCollector:
         for hyperpara_key in self.hyperpara_dict:
             to_replace = {hyperpara_key: self.hyperpara_dict[hyperpara_key]}
             X_train = X_train.replace(to_replace)
-        X_train = X_train.convert_objects()
+        X_train = X_train.infer_objects()
 
         return X_train
 
@@ -264,10 +236,3 @@ class ModelMetaDataCollector:
         model = getattr(module, submod_func)
 
         return model
-
-    def collect(self, data_name, data_train):
-        self.data_name = data_name
-        X_train = data_train[0]
-        y_train = data_train[1]
-
-        return self._grid_search(X_train, y_train)

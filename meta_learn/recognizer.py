@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
 import itertools
 import pandas as pd
 
@@ -15,7 +14,7 @@ from .memory import Memory
 from .label_encoder_dict import label_encoder_dict
 
 
-class Recognizer(Memory):
+class Recognizer:
     def __init__(self, search_config):
         self.path = None
         self.search_config = search_config
@@ -26,28 +25,23 @@ class Recognizer(Memory):
         self.search_space = None
 
         self.model = None
-        self.X_train = None
-        self.y_train = None
 
         self.data_name = None
         self.data_test = None
 
         self.hyperpara_dict = None
 
-        self.dataCollector_model = DataCollector_model(search_config)
+        self.memory = Memory(search_config)
 
-        current_path = os.path.realpath(__file__)
-        self.path_name, file_name = current_path.rsplit("/", 1)
+        self.model_list = list(self.search_config.keys())
 
-        self.path = self.path_name + "/meta_regressor/"
+        self.model_name = self.model_list[0]
+        self.search_space = self.search_config[self.model_name]
 
     def search_optimum(self, data_dict):
         for data_name, data_test in tqdm(data_dict.items()):
             self.data_name = data_name
             self.data_test = data_test
-
-            self.X_train = data_test[0]
-            self.y_train = data_test[1]
 
             self._load_model()
 
@@ -60,6 +54,25 @@ class Recognizer(Memory):
 
             return hyperpara_dict, best_score
 
+    def get_test_metadata(self, data_config):
+
+        for data_name, data_train in data_config.items():
+
+            features_from_dataset = self.memory.dataCollector_dataset.collect(
+                self.model_name, data_name, data_train
+            )
+        self.hyperpara_dict = self._get_hyperpara(self.model_name)
+
+        model = self._import_model(self.model_name)
+        self.model = model()
+
+        features_from_model = self._features_from_model()
+
+        X_test = self.memory._merge_data(features_from_dataset, features_from_model)
+
+        print("\nblablabla")
+        return X_test
+
     def _search(self, X_train):
         for model_key in self.search_config.keys():
             self.model_name = model_key
@@ -68,12 +81,6 @@ class Recognizer(Memory):
 
             model = self._import_model(model_key)
             self.model = model()
-
-            self.search_space = self.search_config[model_key]
-
-            if len(self.search_space.items()) == 0:
-                print("Error: hyperparameter search dict is empty\n")
-                break
 
             features_from_model = self._features_from_model()
 
@@ -110,10 +117,10 @@ class Recognizer(Memory):
 
         features_from_model = pd.DataFrame(meta_reg_input)
 
-        default_hyperpara_df = self.dataCollector_model._get_default_hyperpara(
+        default_hyperpara_df = self.memory.dataCollector_model._get_default_hyperpara(
             self.model, len(features_from_model)
         )
-        features_from_model = self.dataCollector_model._merge_dict(
+        features_from_model = self.memory.dataCollector_model._merge_dict(
             features_from_model, default_hyperpara_df
         )
         features_from_model = features_from_model.reindex_axis(
