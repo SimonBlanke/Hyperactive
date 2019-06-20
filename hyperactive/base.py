@@ -29,7 +29,7 @@ class BaseOptimizer(object):
         cv=5,
         verbosity=1,
         random_state=None,
-        start_points=None,
+        warm_start=False,
     ):
 
         self.search_config = search_config
@@ -40,7 +40,7 @@ class BaseOptimizer(object):
         self.cv = cv
         self.verbosity = verbosity
         self.random_state = random_state
-        self.start_points = start_points
+        self.warm_start = warm_start
 
         self.X_train = None
         self.y_train = None
@@ -177,14 +177,12 @@ class BaseOptimizer(object):
 
         _search = partial(self._search, X_train=X_train, y_train=y_train)
 
-        best_models, scores, start_points = zip(
-            *pool.map(_search, self._n_process_range)
-        )
+        best_models, scores, warm_start = zip(*pool.map(_search, self._n_process_range))
 
         self.best_model_list = best_models
         self.score_list = scores
 
-        return best_models, scores, start_points
+        return best_models, scores, warm_start
 
     def fit(self, X_train, y_train):
         if self.model_type == "keras":
@@ -200,14 +198,12 @@ class BaseOptimizer(object):
 
                 # self.best_model.summery()
         else:
-            models, scores, start_points = self._search_multiprocessing(
-                X_train, y_train
-            )
+            models, scores, warm_start = self._search_multiprocessing(X_train, y_train)
 
             self.best_model, best_score = self._find_best_model(models, scores)
 
             if self.verbosity:
-                for score, start_point in zip(scores, start_points):
+                for score, start_point in zip(scores, warm_start):
                     print("\n", self.metric, best_score)
                     print("start_point =", start_point, "\n")
 

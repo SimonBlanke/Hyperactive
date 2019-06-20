@@ -9,7 +9,7 @@ setuptools.setup(
     author="Simon Blanke",
     author_email="simon.blanke@yahoo.com",
     license="MIT",
-    description="Meta heuristic optimization techniques for scikit-learn, XGBoost and Keras models",
+    description="A hyperparameter optimization toolbox for convenient and fast prototyping",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["machine learning", "deep learning", "optimization", "data-science"],

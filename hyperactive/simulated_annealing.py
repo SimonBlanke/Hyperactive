@@ -23,7 +23,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         cv=5,
         verbosity=1,
         random_state=None,
-        start_points=None,
+        warm_start=False,
         eps=1,
         t_rate=0.99,
     ):
@@ -36,7 +36,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             cv,
             verbosity,
             random_state,
-            start_points,
+            warm_start,
         )
 
         self.eps = eps
@@ -44,7 +44,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         self.temp = 0.1
 
-        self.search_space_inst = SearchSpace(start_points, search_config)
+        self.search_space_inst = SearchSpace(warm_start, search_config)
 
     def _get_neighbor_model(self, hyperpara_indices):
         hyperpara_indices_new = {}

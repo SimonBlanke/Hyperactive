@@ -23,7 +23,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         cv=5,
         verbosity=1,
         random_state=None,
-        start_points=None,
+        warm_start=False,
         n_part=1,
         w=0.5,
         c_k=0.5,
@@ -38,7 +38,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             cv,
             verbosity,
             random_state,
-            start_points,
+            warm_start,
         )
 
         self.n_part = n_part
@@ -49,7 +49,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self.best_score = 0
         self.best_pos = None
 
-        self.search_space_inst = SearchSpace(start_points, search_config)
+        self.search_space_inst = SearchSpace(warm_start, search_config)
 
     def _find_best_particle_score(self, p_list):
         for p in p_list:

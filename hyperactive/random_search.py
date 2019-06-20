@@ -20,7 +20,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         cv=5,
         verbosity=1,
         random_state=None,
-        start_points=None,
+        warm_start=False,
     ):
         super().__init__(
             search_config,
@@ -31,10 +31,10 @@ class RandomSearch_Optimizer(BaseOptimizer):
             cv,
             verbosity,
             random_state,
-            start_points,
+            warm_start,
         )
 
-        self.search_space_inst = SearchSpace(start_points, search_config)
+        self.search_space_inst = SearchSpace(warm_start, search_config)
 
     def _search(self, n_process, X_train, y_train):
         hyperpara_indices = self._init_search(n_process, X_train, y_train)

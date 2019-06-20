@@ -8,21 +8,19 @@
 ---
 
 
-
 [![PyPI version](https://img.shields.io/pypi/v/hyperactive.svg)](https://pypi.python.org/pypi/hyperactive)
 [![PyPI license](https://img.shields.io/pypi/l/hyperactive.svg)](https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/hyperactive)](https://pepy.tech/project/hyperactive)
 
 
 ## Overview:
-- Optimize hyperparameter of machine- and deep-learning models from sklearn, xgboost and keras
-- Choose from a variety of different optimization techniques to improve your model including:
+- Optimize hyperparameters of machine- and deep-learning models from sklearn, xgboost and keras
+- Choose from a variety of different optimization techniques to improve your model, including:
     - Random search
     - Simulated annealing
     - Particle swarm optimization
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
 - Use multiprocessing for machine learning or your gpu for deep learning models
-
 
 
 ## Table of Contents
@@ -135,9 +133,9 @@ score = Optimizer.score(X_test, y_test)
 
 ### Classes:
 ```python
-RandomSearch_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None)
-SimulatedAnnealing_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, eps=1, t_rate=0.99)
-ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, start_points=None, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
+RandomSearch_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False)
+SimulatedAnnealing_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, eps=1, t_rate=0.99)
+ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
 ```
 
 ### General positional argument:
@@ -156,7 +154,7 @@ ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5
 | cv | int | 5 | cross-validation |
 | verbosity | int | 1 | Shows model and metric information |
 | random_state | int | None | The seed for random number generator |
-| start_points | dict | None | Hyperparameter configuration to start from |
+| warm_start | dict | None | Hyperparameter configuration to start from |
 
 ### Specific keyword arguments (simulated annealing):
 

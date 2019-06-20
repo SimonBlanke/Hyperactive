@@ -9,8 +9,8 @@ import numpy as np
 
 
 class SearchSpace:
-    def __init__(self, start_points, search_config):
-        self.start_points = start_points
+    def __init__(self, warm_start, search_config):
+        self.warm_start = warm_start
         self.search_config = search_config
 
     def create_kerasSearchSpace(self, search_config):
@@ -30,8 +30,8 @@ class SearchSpace:
 
     def init_eval(self, n_process, model_type):
         hyperpara_indices = None
-        if self.start_points:
-            for key in self.start_points.keys():
+        if self.warm_start:
+            for key in self.warm_start.keys():
                 model_str, start_process = key.rsplit(".", 1)
 
                 if int(start_process) == n_process:
@@ -52,7 +52,7 @@ class SearchSpace:
             layer_str, para_str = layer_key.rsplit(".", 1)
 
             search_position = self.search_space[layer_key].index(
-                *self.start_points[layer_str][para_str]
+                *self.warm_start[layer_str][para_str]
             )
 
             pos_dict[layer_key] = search_position
@@ -64,10 +64,10 @@ class SearchSpace:
         pos_dict = {}
 
         for hyperpara_name in self.search_space.keys():
-            start_point_key = list(self.start_points.keys())[n_process]
+            start_point_key = list(self.warm_start.keys())[n_process]
 
             search_position = self.search_space[hyperpara_name].index(
-                *self.start_points[start_point_key][hyperpara_name]
+                *self.warm_start[start_point_key][hyperpara_name]
             )
 
             pos_dict[hyperpara_name] = search_position
