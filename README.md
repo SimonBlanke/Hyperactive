@@ -20,7 +20,8 @@
     - Simulated annealing
     - Particle swarm optimization
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
-- Use multiprocessing for machine learning or your gpu for deep learning models
+- Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time
+- Utilize multiprocessing for machine learning or your gpu for deep learning models
 
 
 ## Table of Contents

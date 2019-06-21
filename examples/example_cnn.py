@@ -34,7 +34,6 @@ search_config = {
         "filters": [32, 64, 128],
         "kernel_size": [3],
         "activation": ["relu"],
-        "input_shape": [(28, 28, 1)],
     },
     "keras.layers.MaxPooling2D.4": {"pool_size": [(2, 2)]},
     "keras.layers.Flatten.5": {},

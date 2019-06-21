@@ -148,8 +148,8 @@ class DeepLearner(Model):
 
     def _create_keras_model(self, keras_para_dict):
         layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
-
         model = Sequential()
+
         for layer_key in self.layerStr_2_kerasLayer_dict.keys():
             layer = self.layerStr_2_kerasLayer_dict[layer_key]
 

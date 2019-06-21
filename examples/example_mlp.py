@@ -3,9 +3,12 @@ from sklearn.model_selection import train_test_split
 from hyperactive import ParticleSwarm_Optimizer
 
 breast_cancer_data = load_breast_cancer()
+
 X = breast_cancer_data.data
 y = breast_cancer_data.target
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+
 # this defines the structure of the model and the search space in each layer
 search_config = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
@@ -22,6 +25,7 @@ search_config = {
     },
     "keras.layers.Dense.3": {"units": [1], "activation": ["sigmoid"]},
 }
+
 Optimizer = ParticleSwarm_Optimizer(
     search_config, n_iter=10, metric=["mean_absolute_error"]
 )
