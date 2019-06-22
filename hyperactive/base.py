@@ -222,3 +222,18 @@ class BaseOptimizer(object):
     def export(self, filename):
         if self.best_model:
             pickle.dump(self.best_model, open(filename, "wb"))
+
+
+class BaseCandidate:
+    def __init__(self, model):
+        self.model = model
+        self.hyperpara_dict = None
+        self.score = 0
+
+    def set_position(self, hyperpara_dict):
+        self.hyperpara_dict = hyperpara_dict
+
+    def eval(self, X_train, y_train):
+        self.score, _, self.sklearn_model = self.model.train_model(
+            self.hyperpara_dict, X_train, y_train
+        )

@@ -9,6 +9,7 @@ import numpy as np
 import tqdm
 
 from .base import BaseOptimizer
+from .base import BaseCandidate
 from .search_space import SearchSpace
 
 
@@ -64,7 +65,9 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
                 self.best_pos = p.best_pos
 
     def _init_particles(self):
-        p_list = [Particle() for _ in range(self.n_part)]
+        p_list = [
+            Particle(self.model, self.w, self.c_k, self.c_s) for _ in range(self.n_part)
+        ]
         for p in p_list:
             p.max_pos_list = self.max_pos_list
             p.pos = self.search_space_inst.pos_dict2np_array(
@@ -120,19 +123,23 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
     def _search(self, n_process, X_train, y_train):
         hyperpara_indices = self._init_search(n_process, X_train, y_train)
-
-        self._limit_pos(self.search_space_inst.search_space)
-
         self._set_random_seed(n_process)
         self.n_steps = self._set_n_steps(n_process)
+        self._limit_pos(self.search_space_inst.search_space)
+
+        particle_list = self._init_particles()
 
         hyperpara_dict = self.search_space_inst.pos_dict2values_dict(hyperpara_indices)
         self.best_pos = self.search_space_inst.pos_dict2np_array(hyperpara_indices)
-        self.best_score, train_time, sklearn_model = self.model.train_model(
-            hyperpara_dict, X_train, y_train
-        )
 
-        p_list = self._init_particles()
+        for particle in particle_list:
+            particle.set_position(hyperpara_dict)
+            particle.eval(X_train, y_train)
+
+        for particle in particle_list:
+            if particle.score > self.best_score:
+                self.best_score = particle.score
+                self.best_pos = particle.best_pos
 
         for i in tqdm.tqdm(
             range(self.n_steps),
@@ -141,14 +148,18 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
             leave=False,
         ):
 
-            if self.metric_type == "score":
-                self._eval_particles_score(p_list, X_train, y_train)
-                self._find_best_particle_score(p_list)
-            elif self.metric_type == "loss":
-                self._eval_particles_loss(p_list, X_train, y_train)
-                self._find_best_particle_loss(p_list)
+            for particle in particle_list:
+                hyperpara_dict = self.search_space_inst.pos_np2values_dict(particle.pos)
+                particle.set_position(hyperpara_dict)
+                particle.eval(X_train, y_train)
 
-            self._move_particles(p_list)
+            for particle in particle_list:
+                if particle.score > self.best_score:
+                    self.best_score = particle.score
+                    self.best_pos = particle.best_pos
+
+            for particle in particle_list:
+                particle.move(self.best_pos)
 
         best_hyperpara_dict = self.search_space_inst.pos_np2values_dict(self.best_pos)
         score_best, train_time, sklearn_model = self.model.train_model(
@@ -160,8 +171,13 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         return sklearn_model, score_best, start_point
 
 
-class Particle:
-    def __init__(self):
+class Particle(BaseCandidate):
+    def __init__(self, model, w, c_k, c_s):
+        super().__init__(model)
+        self.w = w
+        self.c_k = c_k
+        self.c_s = c_s
+
         self.pos = None
         self.velo = None
         self.score = None
@@ -173,7 +189,14 @@ class Particle:
 
         self.max_pos_list = None
 
-    def move(self):
+    def move(self, best_pos):
+        A = self.w * self.velo
+        B = self.c_k * random.random() * np.subtract(self.best_pos, self.pos)
+        C = self.c_s * random.random() * np.subtract(best_pos, self.pos)
+        new_velocity = A + B + C
+
+        self.velo = new_velocity
+
         self.pos = (self.pos + self.velo).astype(int)
 
         zeros = np.zeros(len(self.pos))
