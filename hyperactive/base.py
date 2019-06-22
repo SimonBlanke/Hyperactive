@@ -204,7 +204,7 @@ class BaseOptimizer(object):
 
             if self.verbosity:
                 for score, start_point in zip(scores, warm_start):
-                    print("\n", self.metric, best_score)
+                    print("\n", self.metric, round(score, 5))
                     print("start_point =", start_point, "\n")
 
         self.best_model.fit(X_train, y_train)
