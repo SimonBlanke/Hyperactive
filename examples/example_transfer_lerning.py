@@ -12,7 +12,7 @@ y_test = to_categorical(y_test)
 # this defines the structure of the model and the search space in each layer
 search_config = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [1], "batch_size": [100]},
+    "keras.fit.0": {"epochs": [1], "batch_size": [300], "verbose": [0]},
     # just add the pretrained model as a layer like this:
     "keras.applications.MobileNet.1": {
         "weights": ["imagenet"],
@@ -25,16 +25,13 @@ search_config = {
         "activation": ["relu"],
         "kernel_initializer": ["uniform"],
     },
-    "keras.layers.Dense.4": {
-        "units": range(5, 15),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
-    },
-    "keras.layers.Dense.5": {"units": [10], "activation": ["sigmoid"]},
+    "keras.layers.Dense.4": {"units": [10], "activation": ["sigmoid"]},
 }
 
 
-Optimizer = SimulatedAnnealing_Optimizer(search_config, n_iter=1, warm_start=False)
+Optimizer = SimulatedAnnealing_Optimizer(
+    search_config, n_iter=3, warm_start=False, verbosity=0
+)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)

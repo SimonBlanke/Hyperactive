@@ -31,7 +31,7 @@ start_point = {
 }
 
 Optimizer = SimulatedAnnealing_Optimizer(
-    search_config, n_iter=100, n_jobs=4, warm_start=start_point
+    search_config, n_iter=100, n_jobs=4, warm_start=start_point, verbosity=0
 )
 
 # search best hyperparameter for given data

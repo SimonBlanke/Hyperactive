@@ -10,5 +10,5 @@ search_config = {
     "sklearn.ensemble.RandomForestClassifier": {"n_estimators": range(10, 100, 10)}
 }
 
-Optimizer = RandomSearch_Optimizer(search_config, n_iter=10)
+Optimizer = RandomSearch_Optimizer(search_config, n_iter=10, verbosity=0)
 Optimizer.fit(X, y)

@@ -22,7 +22,7 @@ y_test = to_categorical(y_test)
 # this defines the structure of the model and the search space in each layer
 search_config = {
     "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [10], "batch_size": [500], "verbose": [2]},
+    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
     "keras.layers.Conv2D.1": {
         "filters": [32, 64, 128],
         "kernel_size": range(3, 4),
@@ -52,7 +52,7 @@ search_config = {
 
 start_point = {
     "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [10], "batch_size": [500], "verbose": [2]},
+    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
     "keras.layers.Conv2D.1": {
         "filters": [64],
         "kernel_size": [3],
@@ -82,7 +82,7 @@ start_point = {
 
 
 Optimizer = SimulatedAnnealing_Optimizer(
-    search_config, n_iter=10, warm_start=start_point
+    search_config, n_iter=3, warm_start=start_point, verbosity=0
 )
 
 # search best hyperparameter for given data
