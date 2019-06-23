@@ -4,14 +4,17 @@
 
 
 import random
-
 import numpy as np
+
+from importlib import import_module
 
 
 class SearchSpace:
     def __init__(self, warm_start, search_config):
         self.warm_start = warm_start
         self.search_config = search_config
+
+        self._set_warm_start()
 
     def create_kerasSearchSpace(self, search_config):
         search_space = {}
@@ -29,6 +32,8 @@ class SearchSpace:
         self.search_space = search_config[model_str]
 
     def init_eval(self, n_process, model_type):
+        print("\n self.warm_start ", self.warm_start, "\n")
+
         hyperpara_indices = None
         if self.warm_start:
             for key in self.warm_start.keys():
@@ -45,6 +50,28 @@ class SearchSpace:
 
         return hyperpara_indices
 
+    def _add_list_to_dict_values(self, dict_, model_str):
+        dict__ = {}
+
+        for key in self.search_config[model_str].keys():
+            dict__[key] = [dict_[key]]
+
+        return dict__
+
+    def _set_warm_start(self):
+        if self.warm_start is False:
+            warm_start = {}
+            for i, model_str in enumerate(self.search_config.keys()):
+                model = self._get_model(model_str)
+                warm_start_dict = self._add_list_to_dict_values(
+                    model().get_params(), model_str
+                )
+
+                dict_key = model_str + "." + str(i)
+                warm_start[dict_key] = warm_start_dict
+
+            self.warm_start = warm_start
+
     def _set_start_position_keras(self, n_process):
         pos_dict = {}
 
@@ -59,16 +86,26 @@ class SearchSpace:
 
         return pos_dict
 
+    def _get_model(self, model):
+        module_str, model_str = model.rsplit(".", 1)
+        module = import_module(module_str)
+        model = getattr(module, model_str)
+
+        return model
+
     def _set_start_position_sklearn(self, n_process):
-        print("n_process", n_process)
         pos_dict = {}
 
         for hyperpara_name in self.search_space.keys():
             start_point_key = list(self.warm_start.keys())[n_process]
 
-            search_position = self.search_space[hyperpara_name].index(
-                *self.warm_start[start_point_key][hyperpara_name]
-            )
+            try:
+                search_position = self.search_space[hyperpara_name].index(
+                    *self.warm_start[start_point_key][hyperpara_name]
+                )
+            except ValueError:
+                print("")
+                return self.get_random_position()
 
             pos_dict[hyperpara_name] = search_position
 
