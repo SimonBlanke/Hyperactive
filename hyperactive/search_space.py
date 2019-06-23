@@ -14,8 +14,6 @@ class SearchSpace:
         self.warm_start = warm_start
         self.search_config = search_config
 
-        self._set_warm_start()
-
     def create_kerasSearchSpace(self, search_config):
         search_space = {}
 
@@ -31,20 +29,25 @@ class SearchSpace:
     def create_mlSearchSpace(self, search_config, model_str):
         self.search_space = search_config[model_str]
 
-    def init_eval(self, n_process, model_type):
-        hyperpara_indices = None
-        if self.warm_start:
-            for key in self.warm_start.keys():
-                model_str, start_process = key.rsplit(".", 1)
+    def warm_start_ml(self, n_process):
+        for key in self.warm_start.keys():
+            model_str, start_process = key.rsplit(".", 1)
 
-                if int(start_process) == n_process:
-                    if model_type == "sklearn" or model_type == "xgboost":
-                        hyperpara_indices = self._set_start_position_sklearn(n_process)
-                    elif model_type == "keras":
-                        hyperpara_indices = self._set_start_position_keras(n_process)
+            if int(start_process) == n_process:
+                hyperpara_indices = self._set_start_position_sklearn(n_process)
+            else:
+                hyperpara_indices = self.get_random_position()
 
-        if not hyperpara_indices:
-            hyperpara_indices = self.get_random_position()
+        return hyperpara_indices
+
+    def warm_start_dl(self, n_process):
+        for key in self.warm_start.keys():
+            model_str, start_process = key.rsplit(".", 1)
+
+            if int(start_process) == n_process:
+                hyperpara_indices = self._set_start_position_keras(n_process)
+            else:
+                hyperpara_indices = self.get_random_position()
 
         return hyperpara_indices
 
@@ -56,7 +59,7 @@ class SearchSpace:
 
         return dict__
 
-    def _set_warm_start(self):
+    def set_warm_start(self):
         if self.warm_start is False:
             warm_start = {}
             for i, model_str in enumerate(self.search_config.keys()):

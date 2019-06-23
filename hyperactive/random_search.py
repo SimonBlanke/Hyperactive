@@ -35,7 +35,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
             warm_start,
         )
 
-        self.search_space_inst = SearchSpace(warm_start, search_config)
+        self.space = SearchSpace(warm_start, search_config)
 
     def _search(self, n_process, X_train, y_train):
         hyperpara_indices = self._init_search(n_process, X_train, y_train)
@@ -43,7 +43,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         self.n_steps = self._set_n_steps(n_process)
         self.candidate = BaseCandidate(self.model)
 
-        hyperpara_dict = self.search_space_inst.pos_dict2values_dict(hyperpara_indices)
+        hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
 
         self.candidate.set_position(hyperpara_dict)
         self.candidate.eval(X_train, y_train)
@@ -65,10 +65,8 @@ class RandomSearch_Optimizer(BaseOptimizer):
             leave=False,
         ):
 
-            hyperpara_indices = self.search_space_inst.get_random_position()
-            hyperpara_dict = self.search_space_inst.pos_dict2values_dict(
-                hyperpara_indices
-            )
+            hyperpara_indices = self.space.get_random_position()
+            hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
 
             self.candidate.set_position(hyperpara_dict)
             self.candidate.eval(X_train, y_train)
@@ -90,10 +88,8 @@ class RandomSearch_Optimizer(BaseOptimizer):
             leave=False,
         ):
 
-            hyperpara_indices = self.search_space_inst.get_random_position()
-            hyperpara_dict = self.search_space_inst.pos_dict2values_dict(
-                hyperpara_indices
-            )
+            hyperpara_indices = self.space.get_random_position()
+            hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
 
             self.candidate.set_position(hyperpara_dict)
             self.candidate.eval(X_train, y_train)
