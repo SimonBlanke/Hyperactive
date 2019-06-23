@@ -32,8 +32,6 @@ class SearchSpace:
         self.search_space = search_config[model_str]
 
     def init_eval(self, n_process, model_type):
-        print("\n self.warm_start ", self.warm_start, "\n")
-
         hyperpara_indices = None
         if self.warm_start:
             for key in self.warm_start.keys():
@@ -104,7 +102,7 @@ class SearchSpace:
                     *self.warm_start[start_point_key][hyperpara_name]
                 )
             except ValueError:
-                print("")
+                print("Warm start not in search space, using random position")
                 return self.get_random_position()
 
             pos_dict[hyperpara_name] = search_position

@@ -121,14 +121,16 @@ class BaseOptimizer(object):
 
         return n_steps
 
-    def _find_best_model(self, models, scores):
-        N_best_models = 1
-
+    def _find_best_model(self, models, scores, n_best_models=1):
         scores = np.array(scores)
-        index_best_scores = scores.argsort()[-N_best_models:][::-1]
+        index_best_scores = list(scores.argsort()[-n_best_models:][::-1])
 
         best_score = scores[index_best_scores]
-        best_model = models[index_best_scores[0]]
+        best_model = models[index_best_scores]
+
+        if n_best_models == 1:
+            best_score = best_score[0]
+            best_model = best_model[0]
 
         return best_model, best_score
 
@@ -189,21 +191,32 @@ class BaseOptimizer(object):
             self.n_jobs = 1
 
         if self.n_jobs == 1:
-            self.best_model, best_score, start_point = self._search_normalprocessing(
+            self.best_model, self.best_score, start_point = self._search_normalprocessing(
                 X_train, y_train
             )
             if self.verbosity:
-                print("\nScore:", best_score)
+                print("\n", self.metric, round(self.best_score, 5))
                 print("start_point =", start_point, "\n")
 
                 # self.best_model.summery()
         else:
             models, scores, warm_start = self._search_multiprocessing(X_train, y_train)
 
-            self.best_model, best_score = self._find_best_model(models, scores)
+            warm_start = list(warm_start)
+            warm_start = np.array(warm_start)
 
+            models = list(models)
+            models = np.array(models)
+
+            warm_starts, best_scores = self._find_best_model(
+                warm_start, scores, n_best_models=self.n_jobs
+            )
+
+            self.best_model, self.best_score = self._find_best_model(models, scores)
+
+            print("\nList of start points (best first):")
             if self.verbosity:
-                for score, start_point in zip(scores, warm_start):
+                for score, start_point in zip(best_scores, warm_starts):
                     print("\n", self.metric, round(score, 5))
                     print("start_point =", start_point, "\n")
 
