@@ -52,14 +52,14 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
 
         self.space = SearchSpace(warm_start, search_config)
 
-    def _init_particles(self):
+    def _init_particles(self, hyperpara_indices_list):
         p_list = [
             Particle(self.model, self.w, self.c_k, self.c_s) for _ in range(self.n_part)
         ]
-        for p in p_list:
+        for p, hyperpara_indices in zip(p_list, hyperpara_indices_list):
             p.max_pos_list = self.max_pos_list
-            p.pos = self.space.pos_dict2np_array(self.space.get_random_position())
-            p.best_pos = self.space.pos_dict2np_array(self.space.get_random_position())
+            p.pos = self.space.pos_dict2np_array(hyperpara_indices)
+            p.best_pos = p.pos
             p.velo = np.zeros(self._get_dim_SearchSpace())
 
         return p_list
@@ -75,17 +75,21 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self.max_pos_list = np.array(max_pos_list)
 
     def _search(self, n_process, X_train, y_train):
-        hyperpara_indices = self._init_search(n_process, X_train, y_train)
+        hyperpara_indices_list = self._init_population_search(
+            n_process, X_train, y_train, self.n_part
+        )
+
+        print("hyperpara_indices_list", hyperpara_indices_list)
+
         self._set_random_seed(n_process)
         self.n_steps = self._set_n_steps(n_process)
         self._limit_pos(self.space.search_space)
 
-        self.particle_list = self._init_particles()
-
-        hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
-        self.best_pos = self.space.pos_dict2np_array(hyperpara_indices)
+        self.particle_list = self._init_particles(hyperpara_indices_list)
 
         for particle in self.particle_list:
+            hyperpara_dict = self.space.pos_np2values_dict(particle.pos)
+            print("hyperpara_dict", hyperpara_dict)
             particle.set_position(hyperpara_dict)
             particle.eval(X_train, y_train)
 
