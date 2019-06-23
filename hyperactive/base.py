@@ -195,8 +195,8 @@ class BaseOptimizer(object):
                 X_train, y_train
             )
             if self.verbosity:
-                print("\n", self.metric, round(self.best_score, 5))
-                print("start_point =", start_point, "\n")
+                print("\n", self.metric, self.best_score)
+                print("start_point =", start_point)
 
                 # self.best_model.summery()
         else:
@@ -217,8 +217,8 @@ class BaseOptimizer(object):
             print("\nList of start points (best first):")
             if self.verbosity:
                 for score, start_point in zip(best_scores, warm_starts):
-                    print("\n", self.metric, round(score, 5))
-                    print("start_point =", start_point, "\n")
+                    print("\n", self.metric, score)
+                    print("start_point =", start_point)
 
         self.best_model.fit(X_train, y_train)
 
