@@ -1,16 +1,27 @@
+<h1 align="center">
+Hyperactive
+</h1>
 
-
-
-
-# Hyperactive
-### A hyperparameter optimization toolbox for convenient and fast prototyping.
+<h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping.</h3>
 
 ---
 
+<p align="center">
 
-[![PyPI version](https://img.shields.io/pypi/v/hyperactive.svg)](https://pypi.python.org/pypi/hyperactive)
-[![PyPI license](https://img.shields.io/pypi/l/hyperactive.svg)](https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE)
-[![Downloads](https://pepy.tech/badge/hyperactive)](https://pepy.tech/project/hyperactive)
+  <a href="https://pypi.python.org/pypi/hyperactive">
+    <img src="https://img.shields.io/pypi/v/hyperactive.svg">
+  </a>
+  
+  <a href="https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE">
+    <img src="https://img.shields.io/pypi/l/hyperactive.svg">
+  </a>
+  
+  <a href="https://pepy.tech/project/hyperactive">
+    <img src="https://pepy.tech/badge/hyperactive">
+  </a>
+  
+</p>
+
 
 
 ## Overview:
@@ -24,10 +35,11 @@
 - Utilize multiprocessing for machine learning or your gpu for deep learning models
 
 
-## Table of Contents
-* [Installation](https://github.com/SimonBlanke/hyperactive#installation)
-* [Examples](https://github.com/SimonBlanke/hyperactive#examples)
-* [Hyperactive API](https://github.com/SimonBlanke/hyperactive#hyperactive-api)
+<p align="center">
+  <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> | 
+  <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> | 
+  <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
+</p>
 
 
 ## Installation
