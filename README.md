@@ -35,12 +35,15 @@ Hyperactive
 - Utilize multiprocessing for machine learning or your gpu for deep learning models
 
 
+---
+
 <p align="center">
   <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> | 
   <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> | 
   <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
 </p>
 
+---
 
 ## Installation
 ```console
