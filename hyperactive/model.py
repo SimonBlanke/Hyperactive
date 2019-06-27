@@ -232,22 +232,22 @@ class MachineLearner(Model):
             "neg_median_absolute_error",
         ]
 
+        self._get_metric_type_sklearn()
+
     def _get_metric_type_sklearn(self):
         if self.metric in self.scores:
-            metric_type = "score"
+            self.metric_type = "score"
         elif self.metric in self.losses:
-            metric_type = "loss"
+            self.metric_type = "loss"
         else:
             raise ValueError("\n Metric not compatible with sklearn scoring functions")
-
-        return metric_type
 
     def _create_sklearn_model(self, sklearn_para_dict):
         return self.model(**sklearn_para_dict)
 
-    def create_start_point(self, sklearn_para_dict, n_process):
+    def create_start_point(self, sklearn_para_dict, nth_process):
         start_point = {}
-        model_str = self.model_str + "." + str(n_process)
+        model_str = self.model_str + "." + str(nth_process)
 
         temp_dict = {}
         for para_key in sklearn_para_dict:
@@ -266,4 +266,7 @@ class MachineLearner(Model):
         )
         train_time = (time.perf_counter() - time_temp) / self.cv
 
-        return scores.mean(), train_time, sklearn_model
+        if self.metric_type == "score":
+            return scores.mean(), train_time, sklearn_model
+        elif self.metric_type == "loss":
+            return -scores.mean(), train_time, sklearn_model

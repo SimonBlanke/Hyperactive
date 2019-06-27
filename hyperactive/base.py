@@ -14,8 +14,9 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from functools import partial
 
-from .model import MachineLearner
 from .model import DeepLearner
+from .positioner import MlCandidate
+from .positioner import DlCandidate
 
 
 class BaseOptimizer(object):
@@ -87,19 +88,19 @@ class BaseOptimizer(object):
         else:
             raise Exception("\n Model strings in search_config keys are inconsistent")
 
-    def _get_sklearn_model(self, n_process):
+    def _get_sklearn_model(self, nth_process):
         if self.n_models > self.n_jobs:
             diff = self.n_models - self.n_jobs
 
-            if n_process == 0:
+            if nth_process == 0:
                 print(
                     "\nNot enough jobs to process models. The last",
                     diff,
                     "models will not be processed",
                 )
-            model_key = self.model_list[n_process]
-        elif n_process < self.n_models:
-            model_key = self.model_list[n_process]
+            model_key = self.model_list[nth_process]
+        elif nth_process < self.n_models:
+            model_key = self.model_list[nth_process]
         else:
             model_key = random.choice(self.model_list)
 
@@ -112,11 +113,11 @@ class BaseOptimizer(object):
         if self.n_jobs > self.n_iter:
             self.n_iter = self.n_jobs
 
-    def _set_n_steps(self, n_process):
+    def _set_n_steps(self, nth_process):
         n_steps = int(self.n_iter / self.n_jobs)
         remain = self.n_iter % self.n_jobs
 
-        if n_process < remain:
+        if nth_process < remain:
             n_steps += 1
 
         return n_steps
@@ -134,45 +135,53 @@ class BaseOptimizer(object):
 
         return best_model, best_score
 
-    def _init_search(self, n_process, X, y):
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            self.space.set_warm_start()
-            self._init_ml_search(n_process, X, y)
+    def _init_search(self, nth_process, X, y):
+        self._set_random_seed(nth_process)
+        self.n_steps = self._set_n_steps(nth_process)
 
-            if self.warm_start:
-                return self.space.warm_start_ml(n_process)
-            else:
-                return self.space.get_random_position()
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+
+            search_config_key = self._get_sklearn_model(nth_process)
+            __cand_ = MlCandidate(
+                nth_process,
+                self.search_config,
+                False,
+                self.metric,
+                self.cv,
+                search_config_key,
+            )
 
         elif self.model_type == "keras":
-            self._init_dl_search(n_process, X, y)
+            self._dl_cand_ = DlCandidate(nth_process, self.search_config, False)
 
             if self.warm_start:
-                return self.space.warm_start_dl(n_process)
+                return self.space.warm_start_dl(nth_process)
             else:
                 return self.space.get_random_position()
 
-    def _init_population_search(self, n_process, X, y, n_candidates):
+        return __cand_
+
+    def _init_population_search(self, nth_process, X, y, n_candidates):
         hyperpara_indices_list = []
 
         if self.model_type == "sklearn" or self.model_type == "xgboost":
             self.space.set_warm_start()
-            self._init_ml_search(n_process, X, y)
+            self._init_ml_search(nth_process, X, y)
 
             for candidate in n_candidates:
                 if candidate == 0:
-                    hyperpara_indices = self.space.warm_start_ml(n_process)
+                    hyperpara_indices = self.space.warm_start_ml(nth_process)
                 else:
                     hyperpara_indices = self.space.get_random_position()
 
                 hyperpara_indices_list.append(hyperpara_indices)
 
         elif self.model_type == "keras":
-            self._init_dl_search(n_process, X, y)
+            self._init_dl_search(nth_process, X, y)
 
             for candidate in n_candidates:
                 if candidate == 0:
-                    hyperpara_indices = self.space.warm_start_dl(n_process)
+                    hyperpara_indices = self.space.warm_start_dl(nth_process)
                 else:
                     hyperpara_indices = self.space.get_random_position()
 
@@ -180,43 +189,34 @@ class BaseOptimizer(object):
 
         return hyperpara_indices_list
 
-    def _init_ml_search(self, n_process, X_train, y_train):
-        model_module_str = self._get_sklearn_model(n_process)
-        _, self.model_str = model_module_str.rsplit(".", 1)
-
-        self.space.create_mlSearchSpace(self.search_config, model_module_str)
-
-        self.model = MachineLearner(
-            self.search_config, self.metric, self.cv, model_module_str
-        )
-        self.metric_type = self.model._get_metric_type_sklearn()
-
-    def _init_dl_search(self, n_process, X_train, y_train):
+    def _init_dl_search(self, nth_process, X_train, y_train):
         self.model_str = "keras model"
         self.space.create_kerasSearchSpace(self.search_config)
         self.model = DeepLearner(self.search_config, self.metric, self.cv)
 
         self.metric_type = self.model._get_metric_type_keras()
 
-    def _finish_search(self, best_hyperpara_dict, n_process):
+    def _finish_search(self, best_hyperpara_dict, nth_process):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
-            start_point = self.model.create_start_point(best_hyperpara_dict, n_process)
+            start_point = self.model.create_start_point(
+                best_hyperpara_dict, nth_process
+            )
         elif self.model_type == "keras":
             start_point = self.model.trafo_hyperpara_dict_lists(best_hyperpara_dict)
 
         return start_point
 
     def _search_normalprocessing(self, X_train, y_train):
-        best_model, best_score, start_point = self._search(0, X_train, y_train)
+        best_model, best_score, start_point = self.search(0, X_train, y_train)
 
         return best_model, best_score, start_point
 
     def _search_multiprocessing(self, X_train, y_train):
         pool = multiprocessing.Pool(self.n_jobs)
 
-        _search = partial(self._search, X_train=X_train, y_train=y_train)
+        search = partial(self.search, X=X_train, y=y_train)
 
-        best_models, scores, warm_start = zip(*pool.map(_search, self._n_process_range))
+        best_models, scores, warm_start = zip(*pool.map(search, self._n_process_range))
 
         self.best_model_list = best_models
         self.score_list = scores
@@ -245,19 +245,19 @@ class BaseOptimizer(object):
             models = list(models)
             models = np.array(models)
 
-            warm_starts, best_scores = self._find_best_model(
+            warm_starts, score_best = self._find_best_model(
                 warm_start, scores, n_best_models=self.n_jobs
             )
 
-            self.best_model, self.best_score = self._find_best_model(models, scores)
+            self.pos_best, self.score_best = self._find_best_model(models, scores)
 
             print("\nList of start points (best first):")
             if self.verbosity:
-                for score, start_point in zip(best_scores, warm_starts):
+                for score, warm_start in zip(score_best, warm_starts):
                     print("\n", self.metric, score)
-                    print("start_point =", start_point)
+                    print("warm_start =", warm_start)
 
-        self.best_model.fit(X_train, y_train)
+        # self.best_model.fit(X_train, y_train)
 
     def predict(self, X_test):
         return self.best_model.predict(X_test)

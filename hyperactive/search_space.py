@@ -14,38 +14,38 @@ class SearchSpace:
         self.warm_start = warm_start
         self.search_config = search_config
 
-    def create_kerasSearchSpace(self, search_config):
+    def create_kerasSearchSpace(self):
         search_space = {}
 
-        for layer_str in search_config.keys():
+        for layer_str in self.search_config.keys():
 
-            for param_str in search_config[layer_str].keys():
+            for param_str in self.search_config[layer_str].keys():
                 new_param_str = layer_str + "." + param_str
 
-                search_space[new_param_str] = search_config[layer_str][param_str]
+                search_space[new_param_str] = self.search_config[layer_str][param_str]
 
-        self.search_space = search_space
+        self.para_space = search_space
 
-    def create_mlSearchSpace(self, search_config, model_str):
-        self.search_space = search_config[model_str]
+    def create_mlSearchSpace(self, model_str):
+        self.para_space = self.search_config[model_str]
 
-    def warm_start_ml(self, n_process):
+    def warm_start_ml(self, nth_process):
         for key in self.warm_start.keys():
             model_str, start_process = key.rsplit(".", 1)
 
-            if int(start_process) == n_process:
-                hyperpara_indices = self._set_start_position_sklearn(n_process)
+            if int(start_process) == nth_process:
+                hyperpara_indices = self._set_start_position_sklearn(nth_process)
             else:
                 hyperpara_indices = self.get_random_position()
 
         return hyperpara_indices
 
-    def warm_start_dl(self, n_process):
+    def warm_start_dl(self, nth_process):
         for key in self.warm_start.keys():
             model_str, start_process = key.rsplit(".", 1)
 
-            if int(start_process) == n_process:
-                hyperpara_indices = self._set_start_position_keras(n_process)
+            if int(start_process) == nth_process:
+                hyperpara_indices = self._set_start_position_keras(nth_process)
             else:
                 hyperpara_indices = self.get_random_position()
 
@@ -59,7 +59,7 @@ class SearchSpace:
 
         return dict__
 
-    def set_warm_start(self):
+    def set_default_warm_start(self):
         if self.warm_start is False:
             warm_start = {}
             for i, model_str in enumerate(self.search_config.keys()):
@@ -73,19 +73,19 @@ class SearchSpace:
 
             self.warm_start = warm_start
 
-    def _set_start_position_keras(self, n_process):
-        pos_dict = {}
+    def _set_start_position_keras(self, nth_process):
+        pos = {}
 
-        for layer_key in self.search_space.keys():
+        for layer_key in self.para_space.keys():
             layer_str, para_str = layer_key.rsplit(".", 1)
 
-            search_position = self.search_space[layer_key].index(
+            search_position = self.para_space[layer_key].index(
                 *self.warm_start[layer_str][para_str]
             )
 
-            pos_dict[layer_key] = search_position
+            pos[layer_key] = search_position
 
-        return pos_dict
+        return pos
 
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)
@@ -94,58 +94,58 @@ class SearchSpace:
 
         return model
 
-    def _set_start_position_sklearn(self, n_process):
-        pos_dict = {}
+    def _set_start_position_sklearn(self, nth_process):
+        pos = {}
 
-        for hyperpara_name in self.search_space.keys():
-            start_point_key = list(self.warm_start.keys())[n_process]
+        for hyperpara_name in self.para_space.keys():
+            start_point_key = list(self.warm_start.keys())[nth_process]
 
             try:
-                search_position = self.search_space[hyperpara_name].index(
+                search_position = self.para_space[hyperpara_name].index(
                     *self.warm_start[start_point_key][hyperpara_name]
                 )
             except ValueError:
                 print("Warm start not in search space, using random position")
                 return self.get_random_position()
 
-            pos_dict[hyperpara_name] = search_position
+            pos[hyperpara_name] = search_position
 
-        return pos_dict
+        return pos
 
     def get_random_position(self):
         """
         get a random N-Dim position in search space and return:
         N indices of N-Dim position (dict)
         """
-        pos_dict = {}
+        pos = {}
 
-        for hyperpara_name in self.search_space.keys():
-            n_hyperpara_values = len(self.search_space[hyperpara_name])
+        for hyperpara_name in self.para_space.keys():
+            n_hyperpara_values = len(self.para_space[hyperpara_name])
             search_position = random.randint(0, n_hyperpara_values - 1)
 
-            pos_dict[hyperpara_name] = search_position
+            pos[hyperpara_name] = search_position
 
-        return pos_dict
+        return pos
 
-    def pos_dict2values_dict(self, pos_dict):
-        values_dict = {}
+    def pos2para(self, pos_space):
+        para = {}
 
-        for hyperpara_name in pos_dict.keys():
-            pos = pos_dict[hyperpara_name]
-            values_dict[hyperpara_name] = list(self.search_space[hyperpara_name])[pos]
+        for hyperpara_name in pos_space.keys():
+            pos = pos_space[hyperpara_name]
+            para[hyperpara_name] = list(self.para_space[hyperpara_name])[pos]
 
-        return values_dict
+        return para
 
-    def pos_dict2np_array(self, pos_dict):
-        return np.array(list(pos_dict.values()))
+    def pos_dict2np_array(self, pos_space):
+        return np.array(list(pos_space.values()))
 
     def pos_np2values_dict(self, np_array):
-        if len(self.search_space.keys()) == np_array.size:
+        if len(self.para_space.keys()) == np_array.size:
             values_dict = {}
-            for i, key in enumerate(self.search_space.keys()):
+            for i, key in enumerate(self.para_space.keys()):
                 pos = int(np_array[i])
-                values_dict[key] = list(self.search_space[key])[pos]
+                values_dict[key] = list(self.para_space[key])[pos]
 
             return values_dict
         else:
-            raise ValueError("search_space and np_array have different size")
+            raise ValueError("para_space and np_array have different size")

@@ -4,10 +4,9 @@
 
 
 import tqdm
+import random
 
 from .base import BaseOptimizer
-from .base import BaseCandidate
-from .search_space import SearchSpace
 
 
 class RandomSearch_Optimizer(BaseOptimizer):
@@ -35,70 +34,39 @@ class RandomSearch_Optimizer(BaseOptimizer):
             warm_start,
         )
 
-        self.space = SearchSpace(warm_start, search_config)
+    def _move(self, space):
+        pos = {}
 
-    def _search(self, n_process, X_train, y_train):
-        hyperpara_indices = self._init_search(n_process, X_train, y_train)
-        self._set_random_seed(n_process)
-        self.n_steps = self._set_n_steps(n_process)
-        self.candidate = BaseCandidate(self.model)
+        for hyperpara_name in space.para_space.keys():
+            n_hyperpara_values = len(space.para_space[hyperpara_name])
+            search_position = random.randint(0, n_hyperpara_values - 1)
 
-        hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
+            pos[hyperpara_name] = search_position
 
-        self.candidate.set_position(hyperpara_dict)
-        self.candidate.eval(X_train, y_train)
+        return pos
 
-        self.best_score = self.candidate.score
-        self.best_hyperpara_dict = self.candidate.hyperpara_dict
-        self.best_model = self.candidate.sklearn_model
+    def search(self, nth_process, X, y):
+        _cand_ = self._init_search(nth_process, X, y)
 
-        if self.metric_type == "score":
-            return self._search_best_score(n_process, X_train, y_train)
-        elif self.metric_type == "loss":
-            return self._search_best_loss(n_process, X_train, y_train)
+        _cand_.eval(X, y)
 
-    def _search_best_score(self, n_process, X_train, y_train):
+        _cand_.score_best = _cand_.score
+        _cand_.pos_best = _cand_.pos
+
         for i in tqdm.tqdm(
             range(self.n_steps),
-            desc=str(self.model_str),
-            position=n_process,
+            # desc=str(self.model_str),
+            position=_cand_.nth_process,
             leave=False,
         ):
 
-            hyperpara_indices = self.space.get_random_position()
-            hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
+            _cand_.move(self._move)
+            _cand_.eval(X, y)
 
-            self.candidate.set_position(hyperpara_dict)
-            self.candidate.eval(X_train, y_train)
+            if _cand_.score > _cand_.score_best:
+                _cand_.score_best = _cand_.score
+                _cand_.pos_best = _cand_.pos
 
-            if self.candidate.score > self.best_score:
-                self.best_score = self.candidate.score
-                self.best_hyperpara_dict = self.candidate.hyperpara_dict
-                self.best_model = self.candidate.sklearn_model
+        start_point = _cand_._get_warm_start()
 
-        start_point = self._finish_search(self.best_hyperpara_dict, n_process)
-
-        return self.best_model, self.best_score, start_point
-
-    def _search_best_loss(self, n_process, X_train, y_train):
-        for i in tqdm.tqdm(
-            range(self.n_steps),
-            desc=str(self.model_str),
-            position=n_process,
-            leave=False,
-        ):
-
-            hyperpara_indices = self.space.get_random_position()
-            hyperpara_dict = self.space.pos_dict2values_dict(hyperpara_indices)
-
-            self.candidate.set_position(hyperpara_dict)
-            self.candidate.eval(X_train, y_train)
-
-            if self.candidate.score < self.best_score:
-                self.best_score = self.candidate.score
-                self.best_hyperpara_dict = self.candidate.hyperpara_dict
-                self.best_model = self.candidate.sklearn_model
-
-        start_point = self._finish_search(self.best_hyperpara_dict, n_process)
-
-        return self.best_model, self.best_score, start_point
+        return _cand_.pos_best, _cand_.score_best, start_point
