@@ -42,16 +42,16 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.t_rate = t_rate
         self.temp = 0.1
 
-    def _move(self, space, pos=None):
-        hyperpara_indices_new = {}
+    def _move(self, cand):
+        pos = {}
 
-        for pos_key in pos:
-            n_values = len(space.para_space[pos_key])
+        for pos_key in cand.pos:
+            n_values = len(cand._space_.para_space[pos_key])
             rand_eps = random.randint(-self.eps, self.eps + 1)
 
-            index = pos[pos_key]
+            index = cand.pos[pos_key]
             index_new = index + rand_eps
-            hyperpara_indices_new[pos_key] = index_new
+            pos[pos_key] = index_new
 
             # don't go out of range
             if index_new < 0:
@@ -59,9 +59,9 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             if index_new > n_values - 1:
                 index_new = n_values - 1
 
-            hyperpara_indices_new[pos_key] = index_new
+            pos[pos_key] = index_new
 
-        return hyperpara_indices_new
+        cand.pos = pos
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
@@ -82,7 +82,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             self.temp = self.temp * self.t_rate
             rand = random.randint(0, 1)
 
-            _cand_.move(self._move)
+            self._move(_cand_)
             _cand_.eval(X, y)
 
             # Normalized score difference to have a factor for later use with temperature and random

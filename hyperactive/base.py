@@ -15,8 +15,11 @@ from sklearn.metrics import accuracy_score
 from functools import partial
 
 from .model import DeepLearner
-from .positioner import MlCandidate
-from .positioner import DlCandidate
+from .candidate import MlCandidate
+from .candidate import DlCandidate
+
+from .candidate import MlCandidates
+from .candidate import DlCandidates
 
 
 class BaseOptimizer(object):
@@ -142,7 +145,7 @@ class BaseOptimizer(object):
         if self.model_type == "sklearn" or self.model_type == "xgboost":
 
             search_config_key = self._get_sklearn_model(nth_process)
-            __cand_ = MlCandidate(
+            _cand_ = MlCandidate(
                 nth_process,
                 self.search_config,
                 False,
@@ -152,59 +155,36 @@ class BaseOptimizer(object):
             )
 
         elif self.model_type == "keras":
-            self._dl_cand_ = DlCandidate(nth_process, self.search_config, False)
-
-            if self.warm_start:
-                return self.space.warm_start_dl(nth_process)
-            else:
-                return self.space.get_random_position()
-
-        return __cand_
-
-    def _init_population_search(self, nth_process, X, y, n_candidates):
-        hyperpara_indices_list = []
-
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            self.space.set_warm_start()
-            self._init_ml_search(nth_process, X, y)
-
-            for candidate in n_candidates:
-                if candidate == 0:
-                    hyperpara_indices = self.space.warm_start_ml(nth_process)
-                else:
-                    hyperpara_indices = self.space.get_random_position()
-
-                hyperpara_indices_list.append(hyperpara_indices)
-
-        elif self.model_type == "keras":
-            self._init_dl_search(nth_process, X, y)
-
-            for candidate in n_candidates:
-                if candidate == 0:
-                    hyperpara_indices = self.space.warm_start_dl(nth_process)
-                else:
-                    hyperpara_indices = self.space.get_random_position()
-
-                hyperpara_indices_list.append(hyperpara_indices)
-
-        return hyperpara_indices_list
-
-    def _init_dl_search(self, nth_process, X_train, y_train):
-        self.model_str = "keras model"
-        self.space.create_kerasSearchSpace(self.search_config)
-        self.model = DeepLearner(self.search_config, self.metric, self.cv)
-
-        self.metric_type = self.model._get_metric_type_keras()
-
-    def _finish_search(self, best_hyperpara_dict, nth_process):
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
-            start_point = self.model.create_start_point(
-                best_hyperpara_dict, nth_process
+            _cand_ = DlCandidate(
+                nth_process, self.search_config, False, self.metric, self.cv
             )
-        elif self.model_type == "keras":
-            start_point = self.model.trafo_hyperpara_dict_lists(best_hyperpara_dict)
 
-        return start_point
+        return _cand_
+
+    def _init_population_search(self, nth_process, X, y, n_cand):
+        self._set_random_seed(nth_process)
+        self.n_steps = self._set_n_steps(nth_process)
+
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
+
+            search_config_key = self._get_sklearn_model(nth_process)
+            _cand_ = MlCandidates(
+                nth_process,
+                self.search_config,
+                False,
+                self.metric,
+                self.cv,
+                n_cand,
+                search_config_key,
+            )
+
+        elif self.model_type == "keras":
+
+            _cand_ = DlCandidates(
+                nth_process, self.search_config, False, self.metric, self.cv, n_cand
+            )
+
+        return _cand_
 
     def _search_normalprocessing(self, X_train, y_train):
         best_model, best_score, start_point = self.search(0, X_train, y_train)

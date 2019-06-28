@@ -34,16 +34,16 @@ class RandomSearch_Optimizer(BaseOptimizer):
             warm_start,
         )
 
-    def _move(self, space):
+    def _move(self, cand):
         pos = {}
 
-        for hyperpara_name in space.para_space.keys():
-            n_hyperpara_values = len(space.para_space[hyperpara_name])
+        for hyperpara_name in cand._space_.para_space.keys():
+            n_hyperpara_values = len(cand._space_.para_space[hyperpara_name])
             search_position = random.randint(0, n_hyperpara_values - 1)
 
             pos[hyperpara_name] = search_position
 
-        return pos
+        cand.pos = pos
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
@@ -60,7 +60,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
             leave=False,
         ):
 
-            _cand_.move(self._move)
+            self._move(_cand_)
             _cand_.eval(X, y)
 
             if _cand_.score > _cand_.score_best:

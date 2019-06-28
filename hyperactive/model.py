@@ -191,7 +191,10 @@ class DeepLearner(Model):
 
         score = model.evaluate(X_train, y_train)[1]
 
-        return score, time, model
+        if self.metric_type == "score":
+            return score, _, model
+        elif self.metric_type == "loss":
+            return -score, _, model
 
 
 class MachineLearner(Model):

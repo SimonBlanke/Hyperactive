@@ -10,7 +10,6 @@ import tqdm
 
 from .base import BaseOptimizer
 from .base import BaseCandidate
-from .search_space import SearchSpace
 
 
 class ParticleSwarm_Optimizer(BaseOptimizer):
@@ -25,7 +24,7 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        n_part=1,
+        n_part=2,
         w=0.5,
         c_k=0.5,
         c_s=0.9,
@@ -50,118 +49,81 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         self.best_score = 0
         self.best_pos = None
 
-        self.space = SearchSpace(warm_start, search_config)
+    def _init_particles(self, cand):
+        print("cand.pos", cand.pos)
 
-    def _init_particles(self, hyperpara_indices_list):
-        p_list = [
-            Particle(self.model, self.w, self.c_k, self.c_s) for _ in range(self.n_part)
-        ]
-        for p, hyperpara_indices in zip(p_list, hyperpara_indices_list):
-            p.max_pos_list = self.max_pos_list
-            p.pos = self.space.pos_dict2np_array(hyperpara_indices)
-            p.best_pos = p.pos
-            p.velo = np.zeros(self._get_dim_SearchSpace())
+        pos_np = cand._space_.pos_dict2np_array(cand.pos)
 
-        return p_list
+        cand.best_pos = cand.pos
+        cand.velo = np.zeros(pos_np.shape)
 
-    def _get_dim_SearchSpace(self):
-        return len(self.space.search_space)
+        print("pos_np", pos_np, type(pos_np))
+        print("cand.best_pos", cand.best_pos, type(cand.best_pos))
+        print("cand.velo", cand.velo, type(cand.velo))
 
-    def _limit_pos(self, search_space):
+    def _get_dim_SearchSpace(self, cand):
+        return len(cand._space_.para_space)
+
+    def _limit_pos(self, cand):
         max_pos_list = []
-        for values in list(search_space.values()):
+        for values in list(cand._space_.para_space.values()):
             max_pos_list.append(len(values) - 1)
 
         self.max_pos_list = np.array(max_pos_list)
 
-    def _search(self, n_process, X_train, y_train):
-        hyperpara_indices_list = self._init_population_search(
-            n_process, X_train, y_train, self.n_part
-        )
+    def _move(self, cand):
+        np_pos = []
+        for pos in cand.pos:
+            pos_ = cand._space_.pos_dict2np_array(pos)
 
-        print("hyperpara_indices_list", hyperpara_indices_list)
+            np_pos.append(pos_)
 
-        self._set_random_seed(n_process)
-        self.n_steps = self._set_n_steps(n_process)
-        self._limit_pos(self.space.search_space)
+        np_pos = np.array(np_pos)
 
-        self.particle_list = self._init_particles(hyperpara_indices_list)
+        print("np_pos", np_pos)
 
-        for particle in self.particle_list:
-            hyperpara_dict = self.space.pos_np2values_dict(particle.pos)
-            print("hyperpara_dict", hyperpara_dict)
-            particle.set_position(hyperpara_dict)
-            particle.eval(X_train, y_train)
+        A = self.w * cand.velo
+        B = self.c_k * random.random() * np.subtract(self.best_pos, self.pos)
+        C = self.c_s * random.random() * np.subtract(self.g_best_pos, self.pos)
+        new_velocity = A + B + C
 
-        for particle in self.particle_list:
-            if particle.score > self.best_score:
-                self.best_score = particle.score
-                self.best_pos = particle.best_pos
+        self.velo = new_velocity
 
-        if self.metric_type == "score":
-            return self._search_best_score(n_process, X_train, y_train)
-        elif self.metric_type == "loss":
-            return self._search_best_loss(n_process, X_train, y_train)
+        self.pos = (self.pos + self.velo).astype(int)
 
-    def _search_best_score(self, n_process, X_train, y_train):
+        zeros = np.zeros(len(self.pos))
+        self.pos = np.maximum(self.pos, zeros)
+        self.pos = np.minimum(self.pos, self.max_pos_list)
+
+    def search(self, nth_process, X, y):
+        _cand_ = self._init_population_search(nth_process, X, y, self.n_part)
+
+        self._init_particles(_cand_)
+        self._limit_pos(_cand_)
+
+        print("\n")
+        print("_cand_.pos", _cand_.pos)
+        print("_cand_.velo", _cand_.velo)
+        print("\n")
+
+        _cand_.eval(X, y)
+
         for i in tqdm.tqdm(
             range(self.n_steps),
-            desc=str(self.model_str),
-            position=n_process,
+            # desc=str(self.model_str),
+            position=nth_process,
             leave=False,
         ):
 
-            for particle in self.particle_list:
-                hyperpara_dict = self.space.pos_np2values_dict(particle.pos)
-                particle.set_position(hyperpara_dict)
-                particle.eval(X_train, y_train)
+            self._move(_cand_)
 
-            for particle in self.particle_list:
-                if particle.score > self.best_score:
-                    self.best_score = particle.score
-                    self.best_pos = particle.best_pos
+            if _cand_.score > _cand_.score_best:
+                self.score_best = _cand_.score
+                self.pos_best = _cand_.best_pos
 
-            for particle in self.particle_list:
-                particle.move(self.best_pos)
+        start_point = _cand_._get_warm_start()
 
-        best_hyperpara_dict = self.space.pos_np2values_dict(self.best_pos)
-        score_best, train_time, sklearn_model = self.model.train_model(
-            best_hyperpara_dict, X_train, y_train
-        )
-
-        start_point = self._finish_search(best_hyperpara_dict, n_process)
-
-        return sklearn_model, score_best, start_point
-
-    def _search_best_loss(self, n_process, X_train, y_train):
-        for i in tqdm.tqdm(
-            range(self.n_steps),
-            desc=str(self.model_str),
-            position=n_process,
-            leave=False,
-        ):
-
-            for particle in self.particle_list:
-                hyperpara_dict = self.space.pos_np2values_dict(particle.pos)
-                particle.set_position(hyperpara_dict)
-                particle.eval(X_train, y_train)
-
-            for particle in self.particle_list:
-                if particle.score < self.best_score:
-                    self.best_score = particle.score
-                    self.best_pos = particle.best_pos
-
-            for particle in self.particle_list:
-                particle.move(self.best_pos)
-
-        best_hyperpara_dict = self.space.pos_np2values_dict(self.best_pos)
-        score_best, train_time, sklearn_model = self.model.train_model(
-            best_hyperpara_dict, X_train, y_train
-        )
-
-        start_point = self._finish_search(best_hyperpara_dict, n_process)
-
-        return sklearn_model, score_best, start_point
+        return _cand_.pos_best, _cand_.score_best, start_point
 
 
 class Particle(BaseCandidate):
@@ -181,17 +143,3 @@ class Particle(BaseCandidate):
         self.sklearn_model = None
 
         self.max_pos_list = None
-
-    def move(self, best_pos):
-        A = self.w * self.velo
-        B = self.c_k * random.random() * np.subtract(self.best_pos, self.pos)
-        C = self.c_s * random.random() * np.subtract(best_pos, self.pos)
-        new_velocity = A + B + C
-
-        self.velo = new_velocity
-
-        self.pos = (self.pos + self.velo).astype(int)
-
-        zeros = np.zeros(len(self.pos))
-        self.pos = np.maximum(self.pos, zeros)
-        self.pos = np.minimum(self.pos, self.max_pos_list)

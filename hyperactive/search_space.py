@@ -136,16 +136,23 @@ class SearchSpace:
 
         return para
 
-    def pos_dict2np_array(self, pos_space):
-        return np.array(list(pos_space.values()))
+    def pos_dict2np_array(self, pos_list):
+        pos_np = []
 
-    def pos_np2values_dict(self, np_array):
-        if len(self.para_space.keys()) == np_array.size:
+        for pos in pos_list:
+            pos_np.append(np.array(list(pos.values())))
+
+        return np.array(pos_np)
+
+    def pos_np2values_dict(self, pos_np):
+        pos = []
+
+        for pos_np_ in pos_np:
             values_dict = {}
             for i, key in enumerate(self.para_space.keys()):
-                pos = int(np_array[i])
-                values_dict[key] = list(self.para_space[key])[pos]
+                pos_ = int(pos_np_[i])
+                values_dict[key] = list(self.para_space[key])[pos_]
 
-            return values_dict
-        else:
-            raise ValueError("para_space and np_array have different size")
+            pos.append(values_dict)
+
+        return pos
