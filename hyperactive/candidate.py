@@ -25,12 +25,10 @@ class Candidate:
     def move(self, move_func):
         self.pos = move_func(self._space_, self.pos)
 
-    def eval(self, X_train, y_train):
+    def eval(self, X, y):
         para = self._space_.pos2para(self.pos)
 
-        self.score, _, self.sklearn_model = self._model_.train_model(
-            para, X_train, y_train
-        )
+        self.score, _, self.sklearn_model = self._model_.train_model(para, X, y)
 
 
 class MlCandidate(Candidate):
@@ -77,6 +75,7 @@ class DlCandidate(Candidate):
         return warm_start
 
 
+"""
 class Candidates:
     def __init__(self, nth_process, search_config, warm_start, metric, cv, n_cand):
         self.search_config = search_config
@@ -137,3 +136,4 @@ class DlCandidates(Candidates):
 
         if warm_start:
             self.pos.append(self._space_.warm_start_dl(nth_process))
+"""

@@ -35,15 +35,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         )
 
     def _move(self, cand):
-        pos = {}
-
-        for hyperpara_name in cand._space_.para_space.keys():
-            n_hyperpara_values = len(cand._space_.para_space[hyperpara_name])
-            search_position = random.randint(0, n_hyperpara_values - 1)
-
-            pos[hyperpara_name] = search_position
-
-        cand.pos = pos
+        cand._space_.get_random_position()
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)

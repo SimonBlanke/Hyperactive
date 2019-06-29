@@ -43,25 +43,21 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.temp = 0.1
 
     def _move(self, cand):
-        pos = {}
+        pos = self._get_neighbour(cand.pos)
 
-        for pos_key in cand.pos:
-            n_values = len(cand._space_.para_space[pos_key])
-            rand_eps = random.randint(-self.eps, self.eps + 1)
-
-            index = cand.pos[pos_key]
-            index_new = index + rand_eps
-            pos[pos_key] = index_new
-
-            # don't go out of range
-            if index_new < 0:
-                index_new = 0
-            if index_new > n_values - 1:
-                index_new = n_values - 1
-
-            pos[pos_key] = index_new
+        # limit movement
+        n_zeros = [0] * len(cand._space_.n_values)
+        pos = np.clip(pos, n_zeros, cand._space_.n_values)
 
         cand.pos = pos
+
+    def _get_neighbour(self, pos_np):
+        pos_np_new = []
+
+        rand_eps = np.random.randint(-self.eps, self.eps + 1, size=pos_np.shape)
+        pos_np_new = pos_np + rand_eps
+
+        return pos_np_new
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)

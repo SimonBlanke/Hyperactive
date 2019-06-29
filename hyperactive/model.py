@@ -66,17 +66,17 @@ class DeepLearner(Model):
             "cosine_proximity",
         ]
 
+        self._get_metric_type_keras()
+
     def _get_metric_type_keras(self):
         if self.metric[0] in self.scores:
-            metric_type = "score"
+            self.metric_type = "score"
         elif self.metric[0] in self.losses:
-            metric_type = "loss"
+            self.metric_type = "loss"
         else:
             raise ValueError(
                 "\n", self.metric, "not in list of compatible scoring functions"
             )
-
-        return metric_type
 
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
@@ -192,9 +192,9 @@ class DeepLearner(Model):
         score = model.evaluate(X_train, y_train)[1]
 
         if self.metric_type == "score":
-            return score, _, model
+            return score, 1, model
         elif self.metric_type == "loss":
-            return -score, _, model
+            return -score, 1, model
 
 
 class MachineLearner(Model):
@@ -245,9 +245,6 @@ class MachineLearner(Model):
         else:
             raise ValueError("\n Metric not compatible with sklearn scoring functions")
 
-    def _create_sklearn_model(self, sklearn_para_dict):
-        return self.model(**sklearn_para_dict)
-
     def create_start_point(self, sklearn_para_dict, nth_process):
         start_point = {}
         model_str = self.model_str + "." + str(nth_process)
@@ -261,7 +258,7 @@ class MachineLearner(Model):
         return start_point
 
     def train_model(self, sklearn_para_dict, X_train, y_train):
-        sklearn_model = self._create_sklearn_model(sklearn_para_dict)
+        sklearn_model = self.model(**sklearn_para_dict)
 
         time_temp = time.perf_counter()
         scores = cross_val_score(

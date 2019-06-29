@@ -10,16 +10,12 @@ import random
 import scipy
 import numpy as np
 
-
-from sklearn.metrics import accuracy_score
+from importlib import import_module
+from sklearn.model_selection import cross_val_score
 from functools import partial
 
-from .model import DeepLearner
 from .candidate import MlCandidate
 from .candidate import DlCandidate
-
-from .candidate import MlCandidates
-from .candidate import DlCandidates
 
 
 class BaseOptimizer(object):
@@ -161,30 +157,27 @@ class BaseOptimizer(object):
 
         return _cand_
 
-    def _init_population_search(self, nth_process, X, y, n_cand):
-        self._set_random_seed(nth_process)
-        self.n_steps = self._set_n_steps(nth_process)
+    def _get_model(self, model):
+        module_str, model_str = model.rsplit(".", 1)
+        module = import_module(module_str)
+        model = getattr(module, model_str)
 
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
+        return model
 
-            search_config_key = self._get_sklearn_model(nth_process)
-            _cand_ = MlCandidates(
-                nth_process,
-                self.search_config,
-                False,
-                self.metric,
-                self.cv,
-                n_cand,
-                search_config_key,
-            )
+    def _get_finished_sklearn_model(self, warm_start):
+        model, nr = list(warm_start.keys())[0].rsplit(".", 1)
 
-        elif self.model_type == "keras":
+        model = self._get_model(model)
+        para = warm_start[list(warm_start.keys())[0]]
 
-            _cand_ = DlCandidates(
-                nth_process, self.search_config, False, self.metric, self.cv, n_cand
-            )
+        # convert listed values to unlisted values
+        sklearn_para = {}
+        for para_key in para:
+            sklearn_para[para_key] = para[para_key][0]
 
-        return _cand_
+        sklearn_model = model(**sklearn_para)
+
+        return sklearn_model
 
     def _search_normalprocessing(self, X_train, y_train):
         best_model, best_score, start_point = self.search(0, X_train, y_train)
@@ -215,7 +208,9 @@ class BaseOptimizer(object):
                 print("\n", self.metric, self.best_score)
                 print("start_point =", start_point)
 
-                # self.best_model.summery()
+                # sklearn_model = self._get_finished_sklearn_model(start_point)
+
+                # print("sklearn_model", sklearn_model)
         else:
             models, scores, warm_start = self._search_multiprocessing(X_train, y_train)
 
@@ -231,6 +226,8 @@ class BaseOptimizer(object):
 
             self.pos_best, self.score_best = self._find_best_model(models, scores)
 
+            print("self.pos_best", self.pos_best)
+
             print("\nList of start points (best first):")
             if self.verbosity:
                 for score, warm_start in zip(score_best, warm_starts):
@@ -239,19 +236,25 @@ class BaseOptimizer(object):
 
         # self.best_model.fit(X_train, y_train)
 
+    """
     def predict(self, X_test):
         return self.best_model.predict(X_test)
 
     def score(self, X_test, y_test):
         if self.model_type == "sklearn":
             y_pred = self.predict(X_test)
-            return accuracy_score(y_pred, y_test)
+
+            scores = cross_val_score(
+                sklearn_model, X_train, y_train, scoring=self.metric, cv=self.cv
+            )
+            return scores.mean()
         elif self.model_type == "keras":
             return self.best_model.evaluate(X_test, y_test)[1]
 
     def export(self, filename):
         if self.best_model:
             pickle.dump(self.best_model, open(filename, "wb"))
+    """
 
 
 class BaseCandidate:

@@ -14,6 +14,11 @@ class SearchSpace:
         self.warm_start = warm_start
         self.search_config = search_config
 
+    def pos_space_limit(self):
+        self.n_values = []
+        for pos_key in self.para_space:
+            self.n_values.append(len(self.para_space[pos_key]) - 1)
+
     def create_kerasSearchSpace(self):
         search_space = {}
 
@@ -25,9 +30,11 @@ class SearchSpace:
                 search_space[new_param_str] = self.search_config[layer_str][param_str]
 
         self.para_space = search_space
+        self.pos_space_limit()
 
     def create_mlSearchSpace(self, model_str):
         self.para_space = self.search_config[model_str]
+        self.pos_space_limit()
 
     def warm_start_ml(self, nth_process):
         for key in self.warm_start.keys():
@@ -113,20 +120,17 @@ class SearchSpace:
         return pos
 
     def get_random_position(self):
-        """
-        get a random N-Dim position in search space and return:
-        N indices of N-Dim position (dict)
-        """
-        pos = {}
+        pos = []
 
         for hyperpara_name in self.para_space.keys():
-            n_hyperpara_values = len(self.para_space[hyperpara_name])
-            search_position = random.randint(0, n_hyperpara_values - 1)
+            n_para_values = len(self.para_space[hyperpara_name])
+            pos_ = random.randint(0, n_para_values - 1)
 
-            pos[hyperpara_name] = search_position
+            pos.append(pos_)
 
-        return pos
+        return np.array(pos)
 
+    """
     def pos2para(self, pos_space):
         para = {}
 
@@ -135,24 +139,24 @@ class SearchSpace:
             para[hyperpara_name] = list(self.para_space[hyperpara_name])[pos]
 
         return para
+    """
 
-    def pos_dict2np_array(self, pos_list):
-        pos_np = []
+    def sub_dicts(self, dict1, dict2):
+        dict_diff = {}
+        return dict_diff
 
-        for pos in pos_list:
-            pos_np.append(np.array(list(pos.values())))
+    def pos_dict2np_array(self, pos_dict):
+        return np.array(list(pos_dict.values()))
 
-        return np.array(pos_np)
-
-    def pos_np2values_dict(self, pos_np):
-        pos = []
-
-        for pos_np_ in pos_np:
+    def pos2para(self, pos):
+        if len(self.para_space.keys()) == pos.size:
             values_dict = {}
             for i, key in enumerate(self.para_space.keys()):
-                pos_ = int(pos_np_[i])
+                pos_ = int(pos[i])
                 values_dict[key] = list(self.para_space[key])[pos_]
 
-            pos.append(values_dict)
-
-        return pos
+            return values_dict
+        else:
+            print("\n para_space", self.para_space)
+            print("\n pos", pos)
+            raise ValueError("para_space and pos have different size")
