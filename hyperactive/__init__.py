@@ -6,7 +6,7 @@ from .random_search import RandomSearch_Optimizer
 from .simulated_annealing import SimulatedAnnealing_Optimizer
 from .particle_swarm_optimization import ParticleSwarm_Optimizer
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __license__ = "MIT"
 
 __all__ = [
