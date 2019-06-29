@@ -55,6 +55,14 @@ class BaseOptimizer(object):
 
         self._n_process_range = range(0, self.n_jobs)
 
+    def _tqdm_dict(self, _cand_):
+        return {
+            "iterable": range(self.n_steps),
+            # "desc": str(self.model_str),
+            "position": _cand_.nth_process,
+            "leave": False,
+        }
+
     def _set_random_seed(self, thread=0):
         if self.random_state:
             random.seed(self.random_state + thread)
@@ -121,18 +129,16 @@ class BaseOptimizer(object):
 
         return n_steps
 
-    def _find_best_model(self, models, scores, n_best_models=1):
-        scores = np.array(scores)
-        index_best_scores = list(scores.argsort()[-n_best_models:][::-1])
+    def _sort_for_best(self, sort, sort_by):
+        sort = np.array(sort)
+        sort_by = np.array(sort_by)
 
-        best_score = scores[index_best_scores]
-        best_model = models[index_best_scores]
+        index_best = list(sort_by.argsort()[::-1])
 
-        if n_best_models == 1:
-            best_score = best_score[0]
-            best_model = best_model[0]
+        sort_sorted = sort[index_best]
+        sort_by_sorted = sort_by[index_best]
 
-        return best_model, best_score
+        return sort_sorted, sort_by_sorted
 
     def _init_search(self, nth_process, X, y):
         self._set_random_seed(nth_process)
@@ -164,97 +170,77 @@ class BaseOptimizer(object):
 
         return model
 
-    def _get_finished_sklearn_model(self, warm_start):
-        model, nr = list(warm_start.keys())[0].rsplit(".", 1)
-
-        model = self._get_model(model)
-        para = warm_start[list(warm_start.keys())[0]]
-
-        # convert listed values to unlisted values
-        sklearn_para = {}
-        for para_key in para:
-            sklearn_para[para_key] = para[para_key][0]
-
-        sklearn_model = model(**sklearn_para)
-
-        return sklearn_model
-
-    def _search_normalprocessing(self, X_train, y_train):
-        best_model, best_score, start_point = self.search(0, X_train, y_train)
-
-        return best_model, best_score, start_point
-
-    def _search_multiprocessing(self, X_train, y_train):
+    def _search_multiprocessing(self, X, y):
         pool = multiprocessing.Pool(self.n_jobs)
+        search = partial(self.search, X=X, y=y)
 
-        search = partial(self.search, X=X_train, y=y_train)
+        _cand_list = pool.map(search, self._n_process_range)
 
-        best_models, scores, warm_start = zip(*pool.map(search, self._n_process_range))
+        return _cand_list
 
-        self.best_model_list = best_models
-        self.score_list = scores
-
-        return best_models, scores, warm_start
-
-    def fit(self, X_train, y_train):
+    def fit(self, X, y):
         if self.model_type == "keras":
             self.n_jobs = 1
 
         if self.n_jobs == 1:
-            self.best_model, self.best_score, start_point = self._search_normalprocessing(
-                X_train, y_train
-            )
+            _cand_ = self.search(0, X, y)
+
+            start_point = _cand_._get_warm_start()
+            self.score_best = _cand_.score_best
+            self.model_best = _cand_.model_best
+
             if self.verbosity:
-                print("\n", self.metric, self.best_score)
+                print("\n", self.metric, self.score_best)
                 print("start_point =", start_point)
 
-                # sklearn_model = self._get_finished_sklearn_model(start_point)
-
-                # print("sklearn_model", sklearn_model)
         else:
-            models, scores, warm_start = self._search_multiprocessing(X_train, y_train)
+            _cand_list = self._search_multiprocessing(X, y)
 
-            warm_start = list(warm_start)
-            warm_start = np.array(warm_start)
+            start_point_list = []
+            score_best_list = []
+            model_best_list = []
+            for _cand_ in _cand_list:
+                start_point = _cand_._get_warm_start()
+                score_best = _cand_.score_best
+                model_best = _cand_.model_best
 
-            models = list(models)
-            models = np.array(models)
+                start_point_list.append(start_point)
+                score_best_list.append(score_best)
+                model_best_list.append(model_best)
 
-            warm_starts, score_best = self._find_best_model(
-                warm_start, scores, n_best_models=self.n_jobs
+            start_point_sorted, score_best_sorted = self._sort_for_best(
+                start_point_list, score_best_list
             )
 
-            self.pos_best, self.score_best = self._find_best_model(models, scores)
-
-            print("self.pos_best", self.pos_best)
+            model_best_sorted, score_best_sorted = self._sort_for_best(
+                model_best_list, score_best_list
+            )
 
             print("\nList of start points (best first):")
             if self.verbosity:
-                for score, warm_start in zip(score_best, warm_starts):
-                    print("\n", self.metric, score)
-                    print("warm_start =", warm_start)
+                for start_point, score_best in zip(
+                    start_point_sorted, score_best_sorted
+                ):
+                    print("\n", self.metric, score_best)
+                    print("start_point =", start_point)
 
-        # self.best_model.fit(X_train, y_train)
+            self.score_best = score_best_sorted[0]
+            self.model_best = model_best_sorted[0]
 
-    """
+        self.model_best.fit(X, y)
+
     def predict(self, X_test):
-        return self.best_model.predict(X_test)
+        return self.model_best.predict(X_test)
 
     def score(self, X_test, y_test):
         if self.model_type == "sklearn":
-            y_pred = self.predict(X_test)
-
-            scores = cross_val_score(
-                sklearn_model, X_train, y_train, scoring=self.metric, cv=self.cv
-            )
-            return scores.mean()
+            return self.model_best.score(X_test, y_test)
         elif self.model_type == "keras":
-            return self.best_model.evaluate(X_test, y_test)[1]
+            return self.model_best.evaluate(X_test, y_test)[1]
 
     def export(self, filename):
-        if self.best_model:
-            pickle.dump(self.best_model, open(filename, "wb"))
-    """
+        if self.model_best:
+            pickle.dump(self.model_best, open(filename, "wb"))
 
 
 class BaseCandidate:

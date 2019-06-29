@@ -45,12 +45,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         _cand_.score_best = _cand_.score
         _cand_.pos_best = _cand_.pos
 
-        for i in tqdm.tqdm(
-            range(self.n_steps),
-            # desc=str(self.model_str),
-            position=_cand_.nth_process,
-            leave=False,
-        ):
+        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
 
             self._move(_cand_)
             _cand_.eval(X, y)
@@ -59,6 +54,4 @@ class RandomSearch_Optimizer(BaseOptimizer):
                 _cand_.score_best = _cand_.score
                 _cand_.pos_best = _cand_.pos
 
-        start_point = _cand_._get_warm_start()
-
-        return _cand_.pos_best, _cand_.score_best, start_point
+        return _cand_

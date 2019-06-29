@@ -6,7 +6,6 @@ import time
 
 from importlib import import_module
 from sklearn.model_selection import cross_val_score
-from keras.models import Sequential
 
 
 class Model:
@@ -147,6 +146,8 @@ class DeepLearner(Model):
         return layers_para_dict
 
     def _create_keras_model(self, keras_para_dict):
+        from keras.models import Sequential
+
         layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
         model = Sequential()
 
@@ -192,9 +193,9 @@ class DeepLearner(Model):
         score = model.evaluate(X_train, y_train)[1]
 
         if self.metric_type == "score":
-            return score, 1, model
+            return score, 0, model
         elif self.metric_type == "loss":
-            return -score, 1, model
+            return -score, 0, model
 
 
 class MachineLearner(Model):

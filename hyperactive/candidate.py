@@ -12,7 +12,7 @@ class Candidate:
         self.search_config = search_config
 
         self.score = 0
-        self.score_best = 0
+        self._score_best = -1000
 
         self.pos = None
         self.pos_best = None
@@ -25,10 +25,19 @@ class Candidate:
     def move(self, move_func):
         self.pos = move_func(self._space_, self.pos)
 
+    @property
+    def score_best(self):
+        return self._score_best
+
+    @score_best.setter
+    def score_best(self, value):
+        self.model_best = self.model_trained
+        self._score_best = value
+
     def eval(self, X, y):
         para = self._space_.pos2para(self.pos)
 
-        self.score, _, self.sklearn_model = self._model_.train_model(para, X, y)
+        self.score, _, self.model_trained = self._model_.train_model(para, X, y)
 
 
 class MlCandidate(Candidate):
@@ -52,6 +61,21 @@ class MlCandidate(Candidate):
         warm_start = self._model_.create_start_point(para_best, self.nth_process)
 
         return warm_start
+
+    def _get_finished_model(self, warm_start):
+        model, nr = list(warm_start.keys())[0].rsplit(".", 1)
+
+        model = self._model_._get_model(model)
+        para = warm_start[list(warm_start.keys())[0]]
+
+        # convert listed values to unlisted values
+        sklearn_para = {}
+        for para_key in para:
+            sklearn_para[para_key] = para[para_key][0]
+
+        sklearn_model = model(**sklearn_para)
+
+        return sklearn_model
 
 
 class DlCandidate(Candidate):

@@ -92,20 +92,12 @@ class ParticleSwarm_Optimizer(BaseOptimizer):
         _cand_.eval(X, y)
 
         p_list = self._init_particles(_cand_)
-        for i in tqdm.tqdm(
-            range(self.n_steps),
-            # desc=str(self.model_str),
-            position=nth_process,
-            leave=False,
-        ):
-
+        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
             self._eval_particles(_cand_, p_list, X, y)
             self._find_best_particle(_cand_, p_list)
             self._move_particles(_cand_, p_list)
 
-        start_point = _cand_._get_warm_start()
-
-        return _cand_.pos_best, _cand_.score_best, start_point
+        return _cand_
 
 
 class Particle:
@@ -115,7 +107,7 @@ class Particle:
         self.score = 0
 
         self.pos_best = None
-        self.score_best = 0
+        self.score_best = -1000
 
         self.velo = None
 
