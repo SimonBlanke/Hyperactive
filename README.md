@@ -11,17 +11,17 @@ Hyperactive
   <a href="https://pypi.python.org/pypi/hyperactive">
     <img src="https://img.shields.io/pypi/v/hyperactive.svg">
   </a>
-  
+
   <a href="https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE">
     <img src="https://img.shields.io/pypi/l/hyperactive.svg">
   </a>
-  
+
   <a href="https://pepy.tech/project/hyperactive">
     <img src="https://pepy.tech/badge/hyperactive">
   </a>
   <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
   </a>
-  
+
 </p>
 
 
@@ -32,6 +32,7 @@ Hyperactive
     - Random search
     - Simulated annealing
     - Particle swarm optimization
+    - Evolution strategy
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
 - Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time
 - Utilize multiprocessing for machine learning or your gpu for deep learning models
@@ -40,8 +41,8 @@ Hyperactive
 ---
 
 <p align="center">
-  <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> | 
-  <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> | 
+  <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> |
+  <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> |
   <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
 </p>
 
@@ -154,6 +155,8 @@ score = Optimizer.score(X_test, y_test)
 RandomSearch_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False)
 SimulatedAnnealing_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, eps=1, t_rate=0.99)
 ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
+EvolutionStrategy_Optimizer(search_config, n_iter, metric="accuracy", memory=None, n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
+
 ```
 
 ### General positional argument:
@@ -189,6 +192,14 @@ ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5
 | w | float | 0.5 | intertia factor |
 | c_k | float | 0.8 | cognitive factor |
 | c_s | float | 0.9 | social factor |
+
+### Specific keyword arguments (evolution strategy optimization):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| individuals  | int | 10 | number of individuals |
+| mutation_rate | float | 0.7 | mutation rate |
+| crossover_rate | float | 0.3 | crossover rate |
 
 ### General methods:
 ```
