@@ -15,9 +15,11 @@ class SearchSpace:
         self.search_config = search_config
 
     def pos_space_limit(self):
-        self.n_values = []
+        dim = []
         for pos_key in self.para_space:
-            self.n_values.append(len(self.para_space[pos_key]) - 1)
+            dim.append(len(self.para_space[pos_key]) - 1)
+
+        self.dim = np.array(dim)
 
     def create_kerasSearchSpace(self):
         search_space = {}
@@ -129,24 +131,6 @@ class SearchSpace:
             pos.append(pos_)
 
         return np.array(pos)
-
-    """
-    def pos2para(self, pos_space):
-        para = {}
-
-        for hyperpara_name in pos_space.keys():
-            pos = pos_space[hyperpara_name]
-            para[hyperpara_name] = list(self.para_space[hyperpara_name])[pos]
-
-        return para
-    """
-
-    def sub_dicts(self, dict1, dict2):
-        dict_diff = {}
-        return dict_diff
-
-    def pos_dict2np_array(self, pos_dict):
-        return np.array(list(pos_dict.values()))
 
     def pos2para(self, pos):
         if len(self.para_space.keys()) == pos.size:

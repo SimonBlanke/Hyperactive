@@ -4,7 +4,6 @@
 
 
 import tqdm
-import random
 
 from .base import BaseOptimizer
 

@@ -11,7 +11,6 @@ import scipy
 import numpy as np
 
 from importlib import import_module
-from sklearn.model_selection import cross_val_score
 from functools import partial
 
 from .candidate import MlCandidate
@@ -103,7 +102,7 @@ class BaseOptimizer(object):
                 print(
                     "\nNot enough jobs to process models. The last",
                     diff,
-                    "models will not be processed",
+                    "model(s) will not be processed",
                 )
             model_key = self.model_list[nth_process]
         elif nth_process < self.n_models:
@@ -241,18 +240,3 @@ class BaseOptimizer(object):
     def export(self, filename):
         if self.model_best:
             pickle.dump(self.model_best, open(filename, "wb"))
-
-
-class BaseCandidate:
-    def __init__(self, model):
-        self.model = model
-        self.hyperpara_dict = None
-        self.score = 0
-
-    def set_position(self, hyperpara_dict):
-        self.hyperpara_dict = hyperpara_dict
-
-    def eval(self, X_train, y_train):
-        self.score, _, self.sklearn_model = self.model.train_model(
-            self.hyperpara_dict, X_train, y_train
-        )
