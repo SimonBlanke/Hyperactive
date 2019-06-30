@@ -52,10 +52,11 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         cand.pos = pos
 
     def _get_neighbour(self, cand):
-        sigma = (cand._space_.dim / 10) * self.eps
-        pos_new = np.random.normal(cand.pos, sigma, cand.pos.shape).astype(int)
+        sigma = (cand._space_.dim / 100) * self.eps
+        pos_new = np.random.normal(cand.pos, sigma, cand.pos.shape)
+        pos_new_int = np.rint(pos_new)
 
-        return pos_new
+        return pos_new_int
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)

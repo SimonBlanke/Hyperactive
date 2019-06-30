@@ -153,7 +153,8 @@ class Individual:
 
     def mutate(self, cand):
         sigma = cand._space_.dim / 10
-        pos_new = np.random.normal(self.pos, sigma, self.pos.shape).astype(int)
+        pos_new = np.random.normal(self.pos, sigma, self.pos.shape)
+        pos_new_int = np.rint(pos_new)
 
         n_zeros = [0] * len(cand._space_.dim)
-        self.pos = np.clip(pos_new, n_zeros, cand._space_.dim)
+        self.pos = np.clip(pos_new_int, n_zeros, cand._space_.dim)
