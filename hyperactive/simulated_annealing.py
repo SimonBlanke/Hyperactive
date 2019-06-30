@@ -46,8 +46,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         pos = self._get_neighbour(cand.pos)
 
         # limit movement
-        n_zeros = [0] * len(cand._space_.n_values)
-        pos = np.clip(pos, n_zeros, cand._space_.n_values)
+        n_zeros = [0] * len(cand._space_.dim)
+        pos = np.clip(pos, n_zeros, cand._space_.dim)
 
         cand.pos = pos
 
@@ -71,7 +71,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
             self.temp = self.temp * self.t_rate
-            rand = random.randint(0, 1)
+            rand = random.uniform(0, 1)
 
             self._move(_cand_)
             _cand_.eval(X, y)
