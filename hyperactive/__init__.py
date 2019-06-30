@@ -7,7 +7,7 @@ from .simulated_annealing import SimulatedAnnealing_Optimizer
 from .particle_swarm_optimization import ParticleSwarm_Optimizer
 from .evolution_strategy import EvolutionStrategy_Optimizer
 
-__version__ = "0.2.3"
+__version__ = "0.3.0"
 __license__ = "MIT"
 
 __all__ = [
