@@ -31,10 +31,6 @@ class Candidate:
     def eval(self, X, y):
         para = self._space_.pos2para(self.pos)
 
-        print("para", para)
-        print("self.pos", self.pos)
-        print("self.score", self.score)
-
         self.score, _, self.model_trained = self._model_.train_model(para, X, y)
 
 

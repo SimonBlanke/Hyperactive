@@ -23,8 +23,8 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        eps=2,
-        t_rate=0.99,
+        eps=1,
+        t_rate=0.98,
     ):
         super().__init__(
             search_config,
@@ -43,7 +43,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         self.temp = 0.1
 
     def _move(self, cand):
-        pos = self._get_neighbour(cand.pos)
+        pos = self._get_neighbour(cand)
 
         # limit movement
         n_zeros = [0] * len(cand._space_.dim)
@@ -51,13 +51,11 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
 
         cand.pos = pos
 
-    def _get_neighbour(self, pos_np):
-        pos_np_new = []
+    def _get_neighbour(self, cand):
+        sigma = (cand._space_.dim / 10) * self.eps
+        pos_new = np.random.normal(cand.pos, sigma, cand.pos.shape).astype(int)
 
-        rand_eps = np.random.randint(-self.eps, self.eps + 1, size=pos_np.shape)
-        pos_np_new = pos_np + rand_eps
-
-        return pos_np_new
+        return pos_new
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
@@ -81,11 +79,6 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
                 self.score_current + _cand_.score
             )
 
-            print("score_diff_norm", score_diff_norm)
-            print(
-                "np.exp(-(score_diff_norm / self.temp))",
-                np.exp(-(score_diff_norm / self.temp)),
-            )
             if _cand_.score > self.score_current:
                 self.score_current = _cand_.score
                 self.pos_curr = _cand_.pos
