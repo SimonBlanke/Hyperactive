@@ -23,7 +23,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        eps=1,
+        eps=2,
         t_rate=0.99,
     ):
         super().__init__(
@@ -81,6 +81,11 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
                 self.score_current + _cand_.score
             )
 
+            print("score_diff_norm", score_diff_norm)
+            print(
+                "np.exp(-(score_diff_norm / self.temp))",
+                np.exp(-(score_diff_norm / self.temp)),
+            )
             if _cand_.score > self.score_current:
                 self.score_current = _cand_.score
                 self.pos_curr = _cand_.pos
@@ -89,7 +94,7 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
                     _cand_.score_best = _cand_.score
                     self.pos_curr = _cand_.pos
 
-            elif np.exp(score_diff_norm / self.temp) > rand:
+            elif np.exp(-(score_diff_norm / self.temp)) > rand:
                 self.score_current = _cand_.score
                 self.hyperpara_indices_current = _cand_.pos
 
