@@ -19,12 +19,6 @@ class Candidate:
 
         self._space_ = SearchSpace(warm_start, search_config)
 
-    def set_position(self, pos):
-        self.pos = pos
-
-    def move(self, move_func):
-        self.pos = move_func(self._space_, self.pos)
-
     @property
     def score_best(self):
         return self._score_best
@@ -36,6 +30,10 @@ class Candidate:
 
     def eval(self, X, y):
         para = self._space_.pos2para(self.pos)
+
+        print("para", para)
+        print("self.pos", self.pos)
+        print("self.score", self.score)
 
         self.score, _, self.model_trained = self._model_.train_model(para, X, y)
 

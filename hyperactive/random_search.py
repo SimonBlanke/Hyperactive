@@ -34,7 +34,7 @@ class RandomSearch_Optimizer(BaseOptimizer):
         )
 
     def _move(self, cand):
-        cand._space_.get_random_position()
+        cand.pos = cand._space_.get_random_position()
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
