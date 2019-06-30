@@ -31,7 +31,14 @@ class Candidate:
     def eval(self, X, y):
         para = self._space_.pos2para(self.pos)
 
-        self.score, _, self.model_trained = self._model_.train_model(para, X, y)
+        pos = self.pos.tostring()
+        if pos in self._space_.memory:
+            self.score = self._space_.memory[pos]
+        else:
+
+            self.score, _, self.model_trained = self._model_.train_model(para, X, y)
+
+            self._space_.memory[pos] = self.score
 
 
 class MlCandidate(Candidate):

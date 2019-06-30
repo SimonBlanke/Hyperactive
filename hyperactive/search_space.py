@@ -14,6 +14,8 @@ class SearchSpace:
         self.warm_start = warm_start
         self.search_config = search_config
 
+        self.memory = {}
+
     def pos_space_limit(self):
         dim = []
         for pos_key in self.para_space:
