@@ -27,7 +27,10 @@ Hyperactive
 
 
 ## Overview:
-- Optimize hyperparameters of machine- and deep-learning models from sklearn, xgboost and keras
+- Optimize hyperparameters of machine- or deep-learning models from: 
+    - scikit-learn
+    - xgboost
+    - keras
 - Choose from a variety of different optimization techniques to improve your model, including:
     - Random search
     - Simulated annealing
