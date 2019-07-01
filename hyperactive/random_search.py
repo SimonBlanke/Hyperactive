@@ -14,23 +14,25 @@ class RandomSearch_Optimizer(BaseOptimizer):
         search_config,
         n_iter,
         metric="accuracy",
-        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
         random_state=None,
         warm_start=False,
+        memory=False,
+        hyperband_init=False,
     ):
         super().__init__(
             search_config,
             n_iter,
             metric,
-            memory,
             n_jobs,
             cv,
             verbosity,
             random_state,
             warm_start,
+            memory,
+            hyperband_init,
         )
 
     def _move(self, cand):

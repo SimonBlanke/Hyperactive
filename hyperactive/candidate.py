@@ -8,8 +8,9 @@ from .model import DeepLearner
 
 
 class Candidate:
-    def __init__(self, nth_process, search_config, warm_start, metric, cv):
+    def __init__(self, nth_process, search_config, metric, cv, warm_start, memory):
         self.search_config = search_config
+        self.memory = memory
 
         self.score = -1000
         self._score_best = -1000
@@ -17,7 +18,7 @@ class Candidate:
         self.pos = None
         self.pos_best = None
 
-        self._space_ = SearchSpace(warm_start, search_config)
+        self._space_ = SearchSpace(search_config, warm_start, memory)
 
     @property
     def score_best(self):
@@ -32,7 +33,7 @@ class Candidate:
         para = self._space_.pos2para(self.pos)
 
         pos = self.pos.tostring()
-        if pos in self._space_.memory:
+        if pos in self._space_.memory and self.memory:
             self.score = self._space_.memory[pos]
         else:
 

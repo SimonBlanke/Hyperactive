@@ -10,9 +10,9 @@ from importlib import import_module
 
 
 class SearchSpace:
-    def __init__(self, warm_start, search_config):
-        self.warm_start = warm_start
+    def __init__(self, search_config, warm_start):
         self.search_config = search_config
+        self.warm_start = warm_start
 
         self.memory = {}
 

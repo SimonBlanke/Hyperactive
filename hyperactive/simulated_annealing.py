@@ -17,12 +17,13 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
         search_config,
         n_iter,
         metric="accuracy",
-        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
         random_state=None,
         warm_start=False,
+        memory=False,
+        hyperband_init=False,
         eps=1,
         t_rate=0.98,
     ):
@@ -30,12 +31,13 @@ class SimulatedAnnealing_Optimizer(BaseOptimizer):
             search_config,
             n_iter,
             metric,
-            memory,
             n_jobs,
             cv,
             verbosity,
             random_state,
             warm_start,
+            memory,
+            hyperband_init,
         )
 
         self.eps = eps

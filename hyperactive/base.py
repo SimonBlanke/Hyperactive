@@ -23,23 +23,25 @@ class BaseOptimizer(object):
         search_config,
         n_iter,
         metric="accuracy",
-        memory=None,
         n_jobs=1,
         cv=5,
         verbosity=1,
         random_state=None,
         warm_start=False,
+        memory=False,
+        hyperband_init=False,
     ):
 
         self.search_config = search_config
         self.n_iter = n_iter
         self.metric = metric
-        self.memory = memory
         self.n_jobs = n_jobs
         self.cv = cv
         self.verbosity = verbosity
         self.random_state = random_state
         self.warm_start = warm_start
+        self.memory = memory
+        self.hyperband_init = hyperband_init
 
         self.X_train = None
         self.y_train = None
@@ -149,15 +151,21 @@ class BaseOptimizer(object):
             _cand_ = MlCandidate(
                 nth_process,
                 self.search_config,
-                False,
                 self.metric,
                 self.cv,
+                False,
+                self.memory,
                 search_config_key,
             )
 
         elif self.model_type == "keras":
             _cand_ = DlCandidate(
-                nth_process, self.search_config, False, self.metric, self.cv
+                nth_process,
+                self.search_config,
+                self.metric,
+                self.cv,
+                False,
+                self.memory,
             )
 
         return _cand_
