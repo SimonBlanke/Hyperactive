@@ -3,48 +3,121 @@
 # License: MIT License
 
 
+import numpy as np
+
 # from importlib import import_module
 
 
 class InitSearchPosition:
-    def __init__(self, para_space, warm_start, hyperband_init):
-        self.para_space = para_space
+    def __init__(self, space, model, warm_start, hyperband_init):
+        self._space_ = space
+        self._model_ = model
         self.warm_start = warm_start
         self.hyperband_init = hyperband_init
 
+    def _set_start_pos(self, nth_process, X, y):
+        if self.warm_start and self.hyperband_init:
+            if len(list(self.warm_start.keys())) > nth_process:
+                pos = self._create_warm_start(nth_process)
+            else:
+                pos = self._hyperband_init(nth_process, X, y)
+
+        elif self.warm_start:
+            if len(list(self.warm_start.keys())) > nth_process:
+                pos = self._create_warm_start(nth_process)
+            else:
+                pos = self._space_.get_random_position()
+
+        elif self.hyperband_init:
+            pos = self._hyperband_init(nth_process, X, y)
+
+        else:
+            pos = self._space_.get_random_position()
+
+        return pos
+
+    def _hyperband_init(self, nth_process, X, y):
+
+        pos_list = []
+        for i in range(self.hyperband_init):
+            pos = self._space_.get_random_position()
+            pos_list.append(pos)
+
+        """
+        print("\n test:")
+        for pos in pos_list:
+            para = self._space_.pos2para(pos)
+            score, _, _ = self._model_.train_model(para, X, y)
+
+            print("score", score)
+            print("pos  ", pos)
+
+        print("\n\n")
+        """
+
+        hb_init = self.hyperband_init
+        while hb_init > 1:
+            pos_best_list, score_best_list = self._hyperband_train(
+                X, y, hb_init, pos_list
+            )
+
+            pos_best_sorted, score_best_sorted = self._sort_for_best(
+                pos_best_list, score_best_list
+            )
+
+            hb_init = int(hb_init / 2)
+            pos_list = pos_best_sorted[:hb_init]
+
+        return pos_list[0]
+
+    def _sort_for_best(self, sort, sort_by):
+        sort = np.array(sort)
+        sort_by = np.array(sort_by)
+
+        index_best = list(sort_by.argsort()[::-1])
+
+        sort_sorted = sort[index_best]
+        sort_by_sorted = sort_by[index_best]
+
+        return sort_sorted, sort_by_sorted
+
+    def _hyperband_train(self, X, y, hb_init, pos_list):
+        X_list = np.array_split(X, hb_init)
+        y_list = np.array_split(y, hb_init)
+
+        pos_best_list = []
+        score_best_list = []
+        for X_, y_, pos in zip(X_list, y_list, pos_list):
+            para = self._space_.pos2para(pos)
+            score, _, _ = self._model_.train_model(para, X_, y_)
+
+            pos_best_list.append(pos)
+            score_best_list.append(score)
+
+        return pos_best_list, score_best_list
+
 
 class InitMLSearchPosition(InitSearchPosition):
-    def __init__(self, para_space, warm_start, hyperband_init):
-        super().__init__(para_space, warm_start, hyperband_init)
+    def __init__(self, space, model, warm_start, hyperband_init):
+        super().__init__(space, model, warm_start, hyperband_init)
 
-    def warm_start_ml(self, nth_process):
-        for key in self.warm_start.keys():
-            model_str, start_process = key.rsplit(".", 1)
+    def _create_warm_start(self, nth_process):
+        pos = []
 
-            if int(start_process) == nth_process:
-                hyperpara_indices = self._set_start_position_sklearn(nth_process)
-            else:
-                hyperpara_indices = self.get_random_position()
-
-        return hyperpara_indices
-
-    def _set_start_position_sklearn(self, nth_process):
-        pos = {}
-
-        for hyperpara_name in self.para_space.keys():
+        for hyperpara_name in self._space_.para_space.keys():
             start_point_key = list(self.warm_start.keys())[nth_process]
 
             try:
-                search_position = self.para_space[hyperpara_name].index(
+                search_position = self._space_.para_space[hyperpara_name].index(
                     *self.warm_start[start_point_key][hyperpara_name]
                 )
             except ValueError:
                 print("Warm start not in search space, using random position")
-                return self.get_random_position()
+                return self._space_.get_random_position()
 
-            pos[hyperpara_name] = search_position
+            pos.append(search_position)
 
-        return pos
+        return np.array(pos)
 
     """
     def _add_list_to_dict_values(self, dict_, model_str):
@@ -81,30 +154,19 @@ class InitMLSearchPosition(InitSearchPosition):
 
 
 class InitDLSearchPosition(InitSearchPosition):
-    def __init__(self, para_space, warm_start, hyperband_init):
-        super().__init__(para_space, warm_start, hyperband_init)
+    def __init__(self, space, model, warm_start, hyperband_init):
+        super().__init__(space, model, warm_start, hyperband_init)
 
-    def warm_start_dl(self, nth_process):
-        for key in self.warm_start.keys():
-            model_str, start_process = key.rsplit(".", 1)
+    def _create_warm_start(self, nth_process):
+        pos = []
 
-            if int(start_process) == nth_process:
-                hyperpara_indices = self._set_start_position_keras(nth_process)
-            else:
-                hyperpara_indices = self.get_random_position()
-
-        return hyperpara_indices
-
-    def _set_start_position_keras(self, nth_process):
-        pos = {}
-
-        for layer_key in self.para_space.keys():
+        for layer_key in self._space_.para_space.keys():
             layer_str, para_str = layer_key.rsplit(".", 1)
 
-            search_position = self.para_space[layer_key].index(
+            search_position = self._space_.para_space[layer_key].index(
                 *self.warm_start[layer_str][para_str]
             )
 
-            pos[layer_key] = search_position
+            pos.append(search_position)
 
-        return pos
+        return np.array(pos)

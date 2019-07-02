@@ -6,12 +6,9 @@
 import random
 import numpy as np
 
-from .init_position import InitMLSearchPosition
-from .init_position import InitDLSearchPosition
-
 
 class SearchSpace:
-    def __init__(self, search_config, warm_start=False, hyperband_init=False):
+    def __init__(self, search_config, warm_start, hyperband_init):
         self.search_config = search_config
         self.warm_start = warm_start
         self.hyperband_init = hyperband_init
@@ -29,9 +26,6 @@ class SearchSpace:
         self.para_space = self.search_config[model_str]
 
         self.pos_space_limit()
-        self._init_ = InitMLSearchPosition(
-            self.para_space, self.warm_start, self.hyperband_init
-        )
 
     def create_kerasSearchSpace(self):
         para_space = {}
@@ -46,9 +40,6 @@ class SearchSpace:
         self.para_space = para_space
 
         self.pos_space_limit()
-        self._init_ = InitDLSearchPosition(
-            self.para_space, self.warm_start, self.hyperband_init
-        )
 
     def get_random_position(self):
         pos = []

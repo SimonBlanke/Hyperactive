@@ -153,8 +153,9 @@ class BaseOptimizer(object):
                 self.search_config,
                 self.metric,
                 self.cv,
-                False,
+                self.warm_start,
                 self.memory,
+                self.hyperband_init,
                 search_config_key,
             )
 
@@ -164,9 +165,12 @@ class BaseOptimizer(object):
                 self.search_config,
                 self.metric,
                 self.cv,
-                False,
+                self.warm_start,
                 self.memory,
+                self.hyperband_init,
             )
+
+        _cand_.pos = _cand_._init_._set_start_pos(nth_process, X, y)
 
         return _cand_
 
@@ -223,8 +227,8 @@ class BaseOptimizer(object):
                 model_best_list, score_best_list
             )
 
-            print("\nList of start points (best first):")
             if self.verbosity:
+                print("\nList of start points (best first):")
                 for start_point, score_best in zip(
                     start_point_sorted, score_best_sorted
                 ):
