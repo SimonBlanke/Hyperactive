@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="hyperactive",
-    version="0.3.0",
+    version="0.3.1",
     author="Simon Blanke",
     author_email="simon.blanke@yahoo.com",
     license="MIT",
