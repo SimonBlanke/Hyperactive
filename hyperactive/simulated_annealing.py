@@ -11,7 +11,7 @@ import tqdm
 from .base import BaseOptimizer
 
 
-class SimulatedAnnealing_Optimizer(BaseOptimizer):
+class SimulatedAnnealingOptimizer(BaseOptimizer):
     def __init__(
         self,
         search_config,

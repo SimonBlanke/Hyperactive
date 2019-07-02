@@ -10,7 +10,7 @@ import random
 from .base import BaseOptimizer
 
 
-class EvolutionStrategy_Optimizer(BaseOptimizer):
+class EvolutionStrategyOptimizer(BaseOptimizer):
     def __init__(
         self,
         search_config,

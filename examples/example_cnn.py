@@ -3,7 +3,7 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
 
-from hyperactive import ParticleSwarm_Optimizer
+from hyperactive import ParticleSwarmOptimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -42,7 +42,7 @@ search_config = {
     "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = ParticleSwarm_Optimizer(
+Optimizer = ParticleSwarmOptimizer(
     search_config, n_iter=3, metric="mean_squared_error", verbosity=0
 )
 

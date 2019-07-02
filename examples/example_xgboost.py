@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
-from hyperactive import SimulatedAnnealing_Optimizer
+from hyperactive import SimulatedAnnealingOptimizer
 
 iris_data = load_iris()
 X = iris_data.data
@@ -23,7 +23,7 @@ search_config = {
     }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(
+Optimizer = SimulatedAnnealingOptimizer(
     search_config, n_iter=20, n_jobs=4, verbosity=0
 )
 

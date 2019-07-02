@@ -3,7 +3,7 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
 
-from hyperactive import SimulatedAnnealing_Optimizer
+from hyperactive import SimulatedAnnealingOptimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -81,7 +81,7 @@ start_point = {
 }
 
 
-Optimizer = SimulatedAnnealing_Optimizer(
+Optimizer = SimulatedAnnealingOptimizer(
     search_config, n_iter=3, warm_start=start_point, verbosity=0
 )
 

@@ -1,6 +1,6 @@
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
-from hyperactive import ParticleSwarm_Optimizer
+from hyperactive import ParticleSwarmOptimizer
 
 breast_cancer_data = load_breast_cancer()
 
@@ -26,7 +26,7 @@ search_config = {
     "keras.layers.Dense.3": {"units": [1], "activation": ["sigmoid"]},
 }
 
-Optimizer = ParticleSwarm_Optimizer(
+Optimizer = ParticleSwarmOptimizer(
     search_config, n_iter=3, metric=["mean_absolute_error"], verbosity=0
 )
 # search best hyperparameter for given data

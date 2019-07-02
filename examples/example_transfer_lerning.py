@@ -1,7 +1,7 @@
 from keras.datasets import cifar10
 from keras.utils import to_categorical
 
-from hyperactive import SimulatedAnnealing_Optimizer
+from hyperactive import SimulatedAnnealingOptimizer
 
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -29,7 +29,7 @@ search_config = {
 }
 
 
-Optimizer = SimulatedAnnealing_Optimizer(
+Optimizer = SimulatedAnnealingOptimizer(
     search_config, n_iter=3, warm_start=False, verbosity=0
 )
 

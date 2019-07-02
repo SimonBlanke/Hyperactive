@@ -64,7 +64,7 @@ Basic sklearn example:
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
-from hyperactive import SimulatedAnnealing_Optimizer
+from hyperactive import SimulatedAnnealingOptimizer
 
 iris_data = load_iris()
 X = iris_data.data
@@ -83,7 +83,7 @@ search_config = {
     }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(search_config, n_iter=100, n_jobs=4)
+Optimizer = SimulatedAnnealingOptimizer(search_config, n_iter=100, n_jobs=4)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -102,7 +102,7 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
 
-from hyperactive import RandomSearch_Optimizer
+from hyperactive import RandomSearchOptimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -136,7 +136,7 @@ search_config = {
     "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = RandomSearch_Optimizer(search_config, n_iter=20)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=20)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -155,10 +155,10 @@ score = Optimizer.score(X_test, y_test)
 
 ### Classes:
 ```python
-RandomSearch_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False)
-SimulatedAnnealing_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, eps=1, t_rate=0.99)
-ParticleSwarm_Optimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
-EvolutionStrategy_Optimizer(search_config, n_iter, metric="accuracy", memory=None, n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
+RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False)
+SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, eps=1, t_rate=0.99)
+ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
+EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", memory=None, n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
 
 ```
 

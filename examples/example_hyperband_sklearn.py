@@ -1,7 +1,7 @@
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 
-from hyperactive import RandomSearch_Optimizer
+from hyperactive import RandomSearchOptimizer
 
 breast_cancer_data = load_breast_cancer()
 X = breast_cancer_data.data
@@ -20,7 +20,7 @@ search_config = {
     }
 }
 
-Optimizer = RandomSearch_Optimizer(
+Optimizer = RandomSearchOptimizer(
     search_config, n_iter=100, n_jobs=1, hyperband_init=4, verbosity=0
 )
 

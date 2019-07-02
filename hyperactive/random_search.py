@@ -8,7 +8,7 @@ import tqdm
 from .base import BaseOptimizer
 
 
-class RandomSearch_Optimizer(BaseOptimizer):
+class RandomSearchOptimizer(BaseOptimizer):
     def __init__(
         self,
         search_config,

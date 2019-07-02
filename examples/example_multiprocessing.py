@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
-from hyperactive import RandomSearch_Optimizer
+from hyperactive import RandomSearchOptimizer
 
 iris_data = load_iris()
 X = iris_data.data
@@ -42,7 +42,7 @@ search_config = {
     },
 }
 
-Optimizer = RandomSearch_Optimizer(search_config, n_iter=300, n_jobs=-1, verbosity=0)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=300, n_jobs=-1, verbosity=0)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)

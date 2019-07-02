@@ -1,7 +1,7 @@
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
-from hyperactive import SimulatedAnnealing_Optimizer
+from hyperactive import SimulatedAnnealingOptimizer
 
 iris_data = load_iris()
 X = iris_data.data
@@ -30,7 +30,7 @@ start_point = {
     }
 }
 
-Optimizer = SimulatedAnnealing_Optimizer(
+Optimizer = SimulatedAnnealingOptimizer(
     search_config, n_iter=100, n_jobs=4, warm_start=start_point, verbosity=0
 )
 

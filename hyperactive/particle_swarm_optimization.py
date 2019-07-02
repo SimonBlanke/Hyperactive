@@ -11,7 +11,7 @@ import tqdm
 from .base import BaseOptimizer
 
 
-class ParticleSwarm_Optimizer(BaseOptimizer):
+class ParticleSwarmOptimizer(BaseOptimizer):
     def __init__(
         self,
         search_config,
