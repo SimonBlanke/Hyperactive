@@ -27,7 +27,7 @@ Hyperactive
 
 
 ## Overview:
-- Optimize hyperparameters of machine- or deep-learning models from: 
+- Optimize hyperparameters of machine- or deep-learning models from:
     - scikit-learn
     - xgboost
     - keras
@@ -155,10 +155,13 @@ score = Optimizer.score(X_test, y_test)
 
 ### Classes:
 ```python
-RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False)
-SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, eps=1, t_rate=0.99)
-ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, n_part=1, w=0.5, c_k=0.5, c_s=0.9)
-EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", memory=None, n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
+
+HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1)
+RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False)
+RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=100, t_rate=0.98)
+SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, t_rate=0.98)
+ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
+EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
 
 ```
 
@@ -179,13 +182,29 @@ EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", memory=None
 | verbosity | int | 1 | Shows model and metric information |
 | random_state | int | None | The seed for random number generator |
 | warm_start | dict | None | Hyperparameter configuration to start from |
+| memory  |  bool | True  |  Stores explored evaluations in a dictionary to save computing time |
+| hyperband_init  |  int | False  |  Chooses better initial position by training on multiple random positions with smaller training dataset (split into int subsets)  |
+
+
+### Specific keyword arguments (hill climbing):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | epsilon |
+
+### Specific keyword arguments (random annealing):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 100 | epsilon |
+| t_rate | float | 0.98 | cooling rate  |
 
 ### Specific keyword arguments (simulated annealing):
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
-| t_rate | float | 0.99 | cooling rate  |
+| t_rate | float | 0.98 | cooling rate  |
 
 ### Specific keyword arguments (particle swarm optimization):
 

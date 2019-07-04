@@ -22,6 +22,7 @@ class HillClimbingOptimizer(BaseOptimizer):
         warm_start=False,
         memory=True,
         hyperband_init=False,
+        eps=1,
     ):
         super().__init__(
             search_config,
@@ -36,12 +37,11 @@ class HillClimbingOptimizer(BaseOptimizer):
             hyperband_init,
         )
 
-    def _move(self, cand):
-        cand.pos = cand._space_.get_random_position()
+        self.eps = eps
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
-        _climber_ = HillClimber()
+        _climber_ = HillClimber(self.eps)
 
         _cand_.eval(X, y)
 
@@ -61,7 +61,7 @@ class HillClimbingOptimizer(BaseOptimizer):
 
 
 class HillClimber:
-    def __init__(self, eps=1):
+    def __init__(self, eps):
         self.eps = eps
 
     def climb(self, _cand_, eps_mod=1):
