@@ -10,7 +10,7 @@ from .particle_swarm_optimization import ParticleSwarmOptimizer
 from .evolution_strategy import EvolutionStrategyOptimizer
 from .bayesian_optimization import BayesianOptimizer
 
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 __license__ = "MIT"
 
 __all__ = [
