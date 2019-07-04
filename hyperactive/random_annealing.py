@@ -3,8 +3,6 @@
 # License: MIT License
 
 
-import random
-
 import numpy as np
 import tqdm
 
@@ -25,7 +23,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         warm_start=False,
         memory=True,
         hyperband_init=False,
-        eps=1,
+        eps=100,
         t_rate=0.98,
     ):
         super().__init__(
@@ -45,25 +43,9 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         self.t_rate = t_rate
         self.temp = 0.1
 
-    def _move(self, cand):
-        pos = self._get_neighbour(cand)
-
-        # limit movement
-        n_zeros = [0] * len(cand._space_.dim)
-        pos = np.clip(pos, n_zeros, cand._space_.dim)
-
-        cand.pos = pos
-
-    def _get_neighbour(self, cand):
-        sigma = (cand._space_.dim / 100) * self.eps
-        pos_new = np.random.normal(cand.pos, sigma, cand.pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        return pos_new_int
-
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
-        _annealer_ = Annealer()
+        _annealer_ = Annealer(self.eps)
 
         _cand_.eval(X, y)
 
@@ -86,7 +68,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
 
 
 class Annealer(HillClimber):
-    def __init__(self, eps=100):
+    def __init__(self, eps):
         super().__init__(eps)
 
     def find_neighbour(self, _cand_, eps_mod):

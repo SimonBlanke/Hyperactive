@@ -19,7 +19,7 @@ class RandomSearchOptimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        memory=False,
+        memory=True,
         hyperband_init=False,
     ):
         super().__init__(

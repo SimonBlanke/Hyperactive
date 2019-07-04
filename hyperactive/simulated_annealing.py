@@ -9,6 +9,7 @@ import numpy as np
 import tqdm
 
 from .base import BaseOptimizer
+from .hill_climbing_optimizer import HillClimber
 
 
 class SimulatedAnnealingOptimizer(BaseOptimizer):
@@ -22,7 +23,7 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        memory=False,
+        memory=True,
         hyperband_init=False,
         eps=1,
         t_rate=0.98,
@@ -44,24 +45,9 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         self.t_rate = t_rate
         self.temp = 0.1
 
-    def _move(self, cand):
-        pos = self._get_neighbour(cand)
-
-        # limit movement
-        n_zeros = [0] * len(cand._space_.dim)
-        pos = np.clip(pos, n_zeros, cand._space_.dim)
-
-        cand.pos = pos
-
-    def _get_neighbour(self, cand):
-        sigma = (cand._space_.dim / 100) * self.eps
-        pos_new = np.random.normal(cand.pos, sigma, cand.pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        return pos_new_int
-
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
+        _annealer_ = Annealer()
 
         _cand_.eval(X, y)
 
@@ -74,7 +60,7 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
             self.temp = self.temp * self.t_rate
             rand = random.uniform(0, 1)
 
-            self._move(_cand_)
+            _annealer_.find_neighbour(_cand_)
             _cand_.eval(X, y)
 
             # Normalized score difference to have a factor for later use with temperature and random
@@ -95,3 +81,11 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
                 self.hyperpara_indices_current = _cand_.pos
 
         return _cand_
+
+
+class Annealer(HillClimber):
+    def __init__(self, eps=1):
+        super().__init__(eps)
+
+    def find_neighbour(self, _cand_):
+        super().climb(_cand_)

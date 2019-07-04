@@ -28,7 +28,7 @@ class BaseOptimizer(object):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        memory=False,
+        memory=True,
         hyperband_init=False,
     ):
 

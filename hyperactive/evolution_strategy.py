@@ -8,6 +8,7 @@ import numpy as np
 import random
 
 from .base import BaseOptimizer
+from .hill_climbing_optimizer import HillClimber
 
 
 class EvolutionStrategyOptimizer(BaseOptimizer):
@@ -21,7 +22,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        memory=False,
+        memory=True,
         hyperband_init=False,
         individuals=10,
         mutation_rate=0.7,

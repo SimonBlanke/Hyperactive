@@ -22,7 +22,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         verbosity=1,
         random_state=None,
         warm_start=False,
-        memory=False,
+        memory=True,
         hyperband_init=False,
         n_part=4,
         w=0.5,

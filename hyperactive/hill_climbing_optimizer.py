@@ -64,8 +64,8 @@ class HillClimber:
     def __init__(self, eps=1):
         self.eps = eps
 
-    def climb(self, _cand_):
-        sigma = (_cand_._space_.dim / 100) * self.eps
+    def climb(self, _cand_, eps_mod=1):
+        sigma = (_cand_._space_.dim / 100) * self.eps * eps_mod
         pos_new = np.random.normal(_cand_.pos, sigma, _cand_.pos.shape)
         pos_new_int = np.rint(pos_new)
 
