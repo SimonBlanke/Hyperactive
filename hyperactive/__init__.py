@@ -3,7 +3,9 @@
 # License: MIT License
 
 from .hill_climbing_optimizer import HillClimbingOptimizer
+from .stochastic_hill_climbing import StochasticHillClimbingOptimizer
 from .random_search import RandomSearchOptimizer
+from .random_restart_hill_climbing import RandomRestartHillClimbingOptimizer
 from .random_annealing import RandomAnnealingOptimizer
 from .simulated_annealing import SimulatedAnnealingOptimizer
 from .particle_swarm_optimization import ParticleSwarmOptimizer
@@ -15,7 +17,9 @@ __license__ = "MIT"
 
 __all__ = [
     "HillClimbingOptimizer",
+    "StochasticHillClimbingOptimizer",
     "RandomSearchOptimizer",
+    "RandomRestartHillClimbingOptimizer",
     "RandomAnnealingOptimizer",
     "SimulatedAnnealingOptimizer",
     "ParticleSwarmOptimizer",
