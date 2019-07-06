@@ -33,6 +33,7 @@ Hyperactive
     - keras
 - Choose from a variety of different optimization techniques to improve your model, including:
     - Random search
+    - Random restart hill climbing
     - Simulated annealing
     - Particle swarm optimization
     - Evolution strategy
@@ -156,10 +157,13 @@ score = Optimizer.score(X_test, y_test)
 ### Classes:
 ```python
 
-HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1)
+HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, r=1e-6)
+StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False,)
 RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False)
+RandomRestartHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, n_restarts=10)
 RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=100, t_rate=0.98)
 SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, t_rate=0.98)
+StochasticTunnelingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, t_rate=0.98, n_neighbours=1, gamma=1)
 ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
 EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
 
@@ -192,6 +196,22 @@ EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, c
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
 
+
+### Specific keyword arguments (stochastic hill climbing):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | epsilon |
+|  r | float  |  1e-6 | acceptance factor  |
+
+### Specific keyword arguments (random restart hill climbing):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | epsilon |
+| n_restarts  | int  | 10  | number of restarts  |
+
+
 ### Specific keyword arguments (random annealing):
 
 | Argument | Type | Default | Description |
@@ -205,6 +225,15 @@ EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, c
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
 | t_rate | float | 0.98 | cooling rate  |
+
+### Specific keyword arguments (stochastic tunneling):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | epsilon |
+| t_rate | float | 0.98 | cooling rate  |
+| gamma  | float  |  1 | tunneling factor  |
+
 
 ### Specific keyword arguments (particle swarm optimization):
 
