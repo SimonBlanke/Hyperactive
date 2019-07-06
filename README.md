@@ -4,7 +4,9 @@ Hyperactive
 
 <h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping.</h3>
 
+
 ---
+
 
 <p align="center">
 
@@ -27,19 +29,12 @@ Hyperactive
 
 
 ## Overview:
-- Optimize hyperparameters of machine- or deep-learning models from:
-    - scikit-learn
-    - xgboost
-    - keras
-- Choose from a variety of different optimization techniques to improve your model, including:
-    - Random search
-    - Random restart hill climbing
-    - Simulated annealing
-    - Particle swarm optimization
-    - Evolution strategy
+- Optimize hyperparameters of machine- or deep-learning models.
+- Choose from a variety of different optimization techniques to improve your model.
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
 - Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time
 - Utilize multiprocessing for machine learning or your gpu for deep learning models
+
 
 
 <table>
@@ -74,7 +69,7 @@ Hyperactive
         <a>Population Methods:</a>
           <ul>
             <li>Particle Swarm Optimizer</li>
-            <li>Evolution Strategy</li>            
+            <li>Evolution Strategy</li>
       </td>
       <td>
       <ul>
