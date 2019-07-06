@@ -5,7 +5,7 @@
 
 import tqdm
 
-from .base import BaseOptimizer
+from ..base import BaseOptimizer
 
 
 class RandomSearchOptimizer(BaseOptimizer):
@@ -36,7 +36,7 @@ class RandomSearchOptimizer(BaseOptimizer):
         )
 
     def _move(self, cand):
-        cand.pos = cand._space_.get_random_position()
+        cand.pos = cand._space_.get_random_pos()
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)

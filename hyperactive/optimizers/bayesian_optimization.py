@@ -8,8 +8,9 @@ import numpy as np
 from scipy.stats import norm
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import ConstantKernel, Matern
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 
-from .base import BaseOptimizer
+from ..base import BaseOptimizer
 
 
 class BayesianOptimizer(BaseOptimizer):
@@ -43,14 +44,24 @@ class BayesianOptimizer(BaseOptimizer):
 
         # Gaussian process with Mat??rn kernel as surrogate model
         m52 = ConstantKernel(1.0) * Matern(length_scale=1.0, nu=2.5)
-        self.gpr = GaussianProcessRegressor(kernel=m52, alpha=0.1)
+        kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
+        self.gpr1 = GaussianProcessRegressor(kernel=kernel, alpha=0.02)
+        self.gpr = GaussianProcessRegressor(
+            kernel=Matern(nu=2.5),
+            alpha=1e-6,
+            normalize_y=True,
+            n_restarts_optimizer=25,
+            # random_state=self._random_state,
+        )
 
-    def expected_improvement(self, all_pos_comb, X_sample, Y_sample, xi=0.01):
+    def expected_improvement(self, X_sample, Y_sample, xi=0.01):
         # print("\n ei: all_pos_comb     ", all_pos_comb)
-        print("\n ei: X_sample", X_sample)
+        # print("\n ei: X_sample", X_sample)
         # print("\n ei: Y_sample", Y_sample)
 
-        mu, sigma = self.gpr.predict(all_pos_comb, return_std=True)
+        print("self.all_pos_comb shape", self.all_pos_comb.shape)
+
+        mu, sigma = self.gpr.predict(self.all_pos_comb, return_std=True)
         mu_sample = self.gpr.predict(X_sample)
 
         # print("\nsigma", sigma.shape)
@@ -73,35 +84,38 @@ class BayesianOptimizer(BaseOptimizer):
         return ei
 
     def _all_possible_pos(self, cand):
-        n_dim = cand._space_.dim.size
 
         pos_space = []
         for dim_ in cand._space_.dim:
-            pos_space.append(np.arange(dim_))
+            if dim_ > 0:
+                pos_space.append(np.arange(dim_))
+
+        self.n_dim = len(pos_space)
+        print("pos_space", pos_space)
+
+        print("\ncand._space_.dim", cand._space_.dim, "\n")
 
         # print("pos_space", pos_space)
 
-        all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, n_dim)
-
-        return all_pos_comb
+        self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
 
     def propose_location(self, cand, X_sample, Y_sample):
-        all_pos_comb = self._all_possible_pos(cand).reshape(-1, 2)
+        # all_pos_comb = self._all_possible_pos(cand).reshape(-1, self.n_dim)
 
-        # print("all_pos_comb", all_pos_comb, all_pos_comb.shape)
+        # print("all_pos_comb shape", all_pos_comb.shape)
 
-        ei = self.expected_improvement(all_pos_comb, X_sample, Y_sample)
-
+        ei = self.expected_improvement(X_sample, Y_sample)
+        # print("ei", ei.shape)
         ei = ei[:, 0]
 
-        # print("ei", ei[:10], ei.shape)
+        # print("ei", ei.shape)
         # print("all_pos_comb", all_pos_comb[:10], all_pos_comb.shape)
 
         index_best = list(ei.argsort()[::-1])
 
         # print("index_best", index_best)
 
-        all_pos_comb_sorted = all_pos_comb[index_best]
+        all_pos_comb_sorted = self.all_pos_comb[index_best]
 
         # print("all_pos_comb_sorted", all_pos_comb_sorted[:10])
 
@@ -126,6 +140,8 @@ class BayesianOptimizer(BaseOptimizer):
 
         _cand_.eval(X, y)
 
+        self._all_possible_pos(_cand_)
+
         _cand_.score_best = _cand_.score
         _cand_.pos_best = _cand_.pos
 
@@ -133,7 +149,7 @@ class BayesianOptimizer(BaseOptimizer):
         Y_sample = _cand_.score.reshape(1, -1)
 
         """
-        _cand_.pos = _cand_._space_.get_random_position()
+        _cand_.pos = _cand_._space_.get_random_pos()
         _cand_.eval(X, y)
 
         X_sample = np.vstack((X_sample, _cand_.pos))
@@ -154,5 +170,7 @@ class BayesianOptimizer(BaseOptimizer):
 
             X_sample = np.vstack((X_sample, _cand_.pos))
             Y_sample = np.vstack((Y_sample, _cand_.score))
+
+        print("X_sample", X_sample)
 
         return _cand_

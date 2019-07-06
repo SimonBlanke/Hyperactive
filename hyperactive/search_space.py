@@ -41,7 +41,7 @@ class SearchSpace:
 
         self.pos_space_limit()
 
-    def get_random_position(self):
+    def get_random_pos(self):
         pos = []
 
         for hyperpara_name in self.para_space.keys():
@@ -62,5 +62,5 @@ class SearchSpace:
             return values_dict
         else:
             print("\n para_space", self.para_space)
-            print("\n pos", pos)
+            print("\n pos shape", pos.shape)
             raise ValueError("para_space and pos have different size")

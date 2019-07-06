@@ -26,13 +26,13 @@ class InitSearchPosition:
             if len(list(self.warm_start.keys())) > nth_process:
                 pos = self._create_warm_start(nth_process)
             else:
-                pos = self._space_.get_random_position()
+                pos = self._space_.get_random_pos()
 
         elif self.hyperband_init:
             pos = self._hyperband_init(nth_process, X, y)
 
         else:
-            pos = self._space_.get_random_position()
+            pos = self._space_.get_random_pos()
 
         return pos
 
@@ -40,7 +40,7 @@ class InitSearchPosition:
 
         pos_list = []
         for i in range(self.hyperband_init):
-            pos = self._space_.get_random_position()
+            pos = self._space_.get_random_pos()
             pos_list.append(pos)
 
         """
@@ -113,7 +113,7 @@ class InitMLSearchPosition(InitSearchPosition):
                 )
             except ValueError:
                 print("Warm start not in search space, using random position")
-                return self._space_.get_random_position()
+                return self._space_.get_random_pos()
 
             pos.append(search_position)
 

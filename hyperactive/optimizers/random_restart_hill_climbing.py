@@ -6,7 +6,7 @@
 import tqdm
 import numpy as np
 
-from .base import BaseOptimizer
+from ..base import BaseOptimizer
 
 
 class RandomRestartHillClimbingOptimizer(BaseOptimizer):
@@ -65,7 +65,7 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
                 _cand_.pos_best = _cand_.pos
 
             if i % n_iter_restart == 0:
-                _cand_.pos = _cand_._space_.get_random_position()
+                _cand_.pos = _cand_._space_.get_random_pos()
 
             _cand_.pos_current = _cand_.pos
 

@@ -8,7 +8,7 @@ import random
 import numpy as np
 import tqdm
 
-from .base import BaseOptimizer
+from ..base import BaseOptimizer
 
 
 class ParticleSwarmOptimizer(BaseOptimizer):
@@ -57,7 +57,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         part_list = [Particle() for _ in range(self.n_part)]
         for i, p in enumerate(part_list):
             p.nr = i
-            p.pos = cand._space_.get_random_position()
+            p.pos = cand._space_.get_random_pos()
             p.pos_best = p.pos
             p.velo = np.zeros(len(cand._space_.para_space))
 

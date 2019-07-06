@@ -4,12 +4,12 @@
 
 
 import tqdm
-import numpy as np
 
-from .base import BaseOptimizer
+from ..base import BaseOptimizer
+from .hill_climbing_optimizer import HillClimber
 
 
-class HillClimbingOptimizer(BaseOptimizer):
+class RandomAnnealingOptimizer(BaseOptimizer):
     def __init__(
         self,
         search_config,
@@ -22,7 +22,8 @@ class HillClimbingOptimizer(BaseOptimizer):
         warm_start=False,
         memory=True,
         hyperband_init=False,
-        eps=1,
+        eps=100,
+        t_rate=0.98,
     ):
         super().__init__(
             search_config,
@@ -38,19 +39,24 @@ class HillClimbingOptimizer(BaseOptimizer):
         )
 
         self.eps = eps
+        self.t_rate = t_rate
+        self.temp = 0.1
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
-        _climber_ = HillClimber(self.eps)
+        _annealer_ = Annealer(self.eps)
 
         _cand_.eval(X, y)
 
         _cand_.score_best = _cand_.score
         _cand_.pos_best = _cand_.pos
 
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
+        self.score_current = _cand_.score
 
-            _climber_.climb(_cand_)
+        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
+            self.temp = self.temp * self.t_rate
+
+            _annealer_.find_neighbour(_cand_, self.temp)
             _cand_.eval(X, y)
 
             if _cand_.score > _cand_.score_best:
@@ -60,14 +66,9 @@ class HillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
 
-class HillClimber:
+class Annealer(HillClimber):
     def __init__(self, eps):
-        self.eps = eps
+        super().__init__(eps)
 
-    def climb(self, _cand_, eps_mod=1):
-        sigma = (_cand_._space_.dim / 100) * self.eps * eps_mod
-        pos_new = np.random.normal(_cand_.pos_best, sigma, _cand_.pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        n_zeros = [0] * len(_cand_._space_.dim)
-        _cand_.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+    def find_neighbour(self, _cand_, eps_mod):
+        super().climb(_cand_)

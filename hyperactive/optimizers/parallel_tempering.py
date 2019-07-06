@@ -8,11 +8,12 @@ import random
 import numpy as np
 import tqdm
 
-from .base import BaseOptimizer
+# from .base import BaseOptimizer
 from .hill_climbing_optimizer import HillClimber
+from .simulated_annealing import SimulatedAnnealingOptimizer
 
 
-class SimulatedAnnealingOptimizer(BaseOptimizer):
+class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(
         self,
         search_config,
@@ -28,6 +29,8 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         eps=1,
         t_rate=0.98,
         n_neighbours=1,
+        n_systems=4,
+        n_swaps=10,
     ):
         super().__init__(
             search_config,
@@ -45,31 +48,30 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         self.eps = eps
         self.t_rate = t_rate
         self.temp = 0.1
+        self.n_neighbours = n_neighbours
+        self.n_systems = n_systems
+        self.n_swaps = n_swaps
 
-    def _annealing(self, _cand_):
-        self.temp = self.temp * self.t_rate
+    def _init_annealers(self, cand):
+        ind_list = [Annealer() for _ in range(self.individuals)]
+        for ind in ind_list:
+            ind.pos = cand._space_.get_random_pos()
+            ind.pos_best = ind.pos
+
+        return ind_list
+
+    def _annealing_systems(self, _cand_, ann_list):
+        for annealer in ann_list:
+            annealer.pos_current = self._annealing(_cand_)
+
+    def _swap_pos(self):
         rand = random.uniform(0, 1)
-
-        # Normalized score difference to have a factor for later use with temperature and random
-        score_diff_norm = (self.score_current - _cand_.score) / (
-            self.score_current + _cand_.score
-        )
-
-        if _cand_.score > self.score_current:
-            self.score_current = _cand_.score
-            self.pos_curr = _cand_.pos
-
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                self.pos_curr = _cand_.pos
-
-        elif np.exp(-(score_diff_norm / self.temp)) > rand:
-            self.score_current = _cand_.score
-            self.hyperpara_indices_current = _cand_.pos
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
         _annealer_ = Annealer()
+
+        n_iter_swap = int(self.n_steps / self.n_swaps)
 
         _cand_.eval(X, y)
 
@@ -78,12 +80,16 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
 
         self.score_current = _cand_.score
 
+        ann_list = self._init_individuals(_cand_)
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
 
             _annealer_.find_neighbour(_cand_)
             _cand_.eval(X, y)
 
-            self._annealing(_cand_)
+            self._annealing_systems(_cand_, ann_list)
+
+            if i % n_iter_swap == 0:
+                self._swap_pos()
 
         return _cand_
 
@@ -91,6 +97,12 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
 class Annealer(HillClimber):
     def __init__(self, eps=1):
         super().__init__(eps)
+
+        self.pos = None
+        self.pos_best = None
+
+        self.score = -1000
+        self.score_best = -1000
 
     def find_neighbour(self, _cand_):
         super().climb(_cand_)

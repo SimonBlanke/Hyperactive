@@ -7,8 +7,9 @@ import tqdm
 import numpy as np
 import random
 
-from .base import BaseOptimizer
-from .hill_climbing_optimizer import HillClimber
+from ..base import BaseOptimizer
+
+# from .hill_climbing_optimizer import HillClimber
 
 
 class EvolutionStrategyOptimizer(BaseOptimizer):
@@ -51,7 +52,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
     def _init_individuals(self, cand):
         ind_list = [Individual() for _ in range(self.individuals)]
         for ind in ind_list:
-            ind.pos = cand._space_.get_random_position()
+            ind.pos = cand._space_.get_random_pos()
             ind.pos_best = ind.pos
 
         return ind_list

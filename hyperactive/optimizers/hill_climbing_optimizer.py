@@ -4,13 +4,12 @@
 
 
 import tqdm
-import random
 import numpy as np
 
-from .base import BaseOptimizer
+from ..base import BaseOptimizer
 
 
-class StochasticHillClimbingOptimizer(BaseOptimizer):
+class HillClimbingOptimizer(BaseOptimizer):
     def __init__(
         self,
         search_config,
@@ -24,7 +23,6 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         memory=True,
         hyperband_init=False,
         eps=1,
-        r=1e-6,
     ):
         super().__init__(
             search_config,
@@ -40,7 +38,6 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         )
 
         self.eps = eps
-        self.r = r
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
@@ -48,26 +45,17 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
 
         _cand_.eval(X, y)
 
-        _cand_.pos_current = _cand_.pos
-        _cand_.score_current = _cand_.score
+        _cand_.score_best = _cand_.score
+        _cand_.pos_best = _cand_.pos
 
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-            rand = random.uniform(0, self.r)
 
             _climber_.climb(_cand_)
             _cand_.eval(X, y)
 
-            score_diff_norm = abs(_cand_.score_current - _cand_.score) / (
-                _cand_.score_current + _cand_.score
-            )
-
             if _cand_.score > _cand_.score_best:
                 _cand_.score_best = _cand_.score
                 _cand_.pos_best = _cand_.pos
-
-            elif score_diff_norm > rand:
-                _cand_.pos_current = _cand_.pos
-                _cand_.score_current = _cand_.score
 
         return _cand_
 
@@ -78,7 +66,7 @@ class HillClimber:
 
     def climb(self, _cand_, eps_mod=1):
         sigma = (_cand_._space_.dim / 100) * self.eps * eps_mod
-        pos_new = np.random.normal(_cand_.pos_current, sigma, _cand_.pos.shape)
+        pos_new = np.random.normal(_cand_.pos_best, sigma, _cand_.pos.shape)
         pos_new_int = np.rint(pos_new)
 
         n_zeros = [0] * len(_cand_._space_.dim)
