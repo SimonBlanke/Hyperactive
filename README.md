@@ -42,6 +42,54 @@ Hyperactive
 - Utilize multiprocessing for machine learning or your gpu for deep learning models
 
 
+<table>
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b> --------------------- Optimization Techniques --------------------- </b>
+      </td>
+      <td>
+        <b> --------------------- Supported Packages --------------------- </b>
+      </td>
+    </tr>
+    <tr/>
+    <tr valign="top">
+      <td>
+        <a>Local Search:</a>
+          <ul>
+            <li>Hill Climbing</li>
+            <li>Stochastic Hill Climbing</li>
+         </ul>
+        <a>Random Methods:</a>
+          <ul>
+            <li>Random Search</li>
+            <li>Random Restart Hill Climbing</li>
+            <li>Random Annealing</li>
+         </ul>
+        <a>Markov Chain Monte Carlo:</a>
+          <ul>
+            <li>Simulated Annealing</li>
+            <li>Stochastic Tunneling</li>
+          </ul>
+        <a>Population Methods:</a>
+          <ul>
+            <li>Particle Swarm Optimizer</li>
+            <li>Evolution Strategy</li>            
+      </td>
+      <td>
+      <ul>
+          <li>Scikit-learn</li>
+          <li>XGBoost</li>
+          <li>Keras</li>
+      </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
 ---
 
 <p align="center">
