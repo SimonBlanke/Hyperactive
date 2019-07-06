@@ -9,7 +9,7 @@ import numpy as np
 import tqdm
 
 # from .base import BaseOptimizer
-from .hill_climbing_optimizer import HillClimber
+from ..local.hill_climbing_optimizer import HillClimber
 from .simulated_annealing import SimulatedAnnealingOptimizer
 
 
@@ -64,8 +64,14 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         for annealer in ann_list:
             annealer.pos_current = self._annealing(_cand_)
 
-    def _swap_pos(self):
+    def _swap_pos(self, _cand_):
         rand = random.uniform(0, 1)
+
+        score_diff_norm = (self.score_current - _cand_.score) / (
+            self.score_current + _cand_.score
+        )
+        temp = (1 / temp1) - (1 / temp2)
+        bla = np.exp(score_diff_norm * temp)
 
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
@@ -89,7 +95,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
             self._annealing_systems(_cand_, ann_list)
 
             if i % n_iter_swap == 0:
-                self._swap_pos()
+                self._swap_pos(_cand_)
 
         return _cand_
 

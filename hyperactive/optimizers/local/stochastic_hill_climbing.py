@@ -7,7 +7,7 @@ import tqdm
 import random
 import numpy as np
 
-from ..base import BaseOptimizer
+from ...base import BaseOptimizer
 
 
 class StochasticHillClimbingOptimizer(BaseOptimizer):

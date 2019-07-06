@@ -6,7 +6,7 @@
 import tqdm
 import numpy as np
 
-from ..base import BaseOptimizer
+from ...base import BaseOptimizer
 
 
 class RandomRestartHillClimbingOptimizer(BaseOptimizer):

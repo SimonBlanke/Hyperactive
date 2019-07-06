@@ -7,7 +7,7 @@ import tqdm
 import numpy as np
 import random
 
-from ..base import BaseOptimizer
+from ...base import BaseOptimizer
 
 # from .hill_climbing_optimizer import HillClimber
 

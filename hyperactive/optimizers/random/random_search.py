@@ -5,7 +5,7 @@
 
 import tqdm
 
-from ..base import BaseOptimizer
+from ...base import BaseOptimizer
 
 
 class RandomSearchOptimizer(BaseOptimizer):

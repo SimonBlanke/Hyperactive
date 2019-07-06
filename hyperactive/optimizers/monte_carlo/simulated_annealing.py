@@ -8,8 +8,8 @@ import random
 import numpy as np
 import tqdm
 
-from ..base import BaseOptimizer
-from .hill_climbing_optimizer import HillClimber
+from ...base import BaseOptimizer
+from ..local.hill_climbing_optimizer import HillClimber
 
 
 class SimulatedAnnealingOptimizer(BaseOptimizer):
@@ -51,20 +51,21 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         rand = random.uniform(0, 1)
 
         # Normalized score difference to have a factor for later use with temperature and random
-        score_diff_norm = (self.score_current - _cand_.score) / (
-            self.score_current + _cand_.score
+        score_diff_norm = (self.score_curr - _cand_.score) / (
+            self.score_curr + _cand_.score
         )
+        p_accept = np.exp(-(score_diff_norm / self.temp))
 
-        if _cand_.score > self.score_current:
-            self.score_current = _cand_.score
+        if _cand_.score > self.score_curr:
+            self.score_curr = _cand_.score
             self.pos_curr = _cand_.pos
 
             if _cand_.score > _cand_.score_best:
                 _cand_.score_best = _cand_.score
                 self.pos_curr = _cand_.pos
 
-        elif np.exp(-(score_diff_norm / self.temp)) > rand:
-            self.score_current = _cand_.score
+        elif p_accept > rand:
+            self.score_curr = _cand_.score
             self.pos_curr = _cand_.pos
 
         return self.pos_curr
@@ -78,7 +79,7 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         _cand_.score_best = _cand_.score
         _cand_.pos_best = _cand_.pos
 
-        self.score_current = _cand_.score
+        self.score_curr = _cand_.score
 
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
 

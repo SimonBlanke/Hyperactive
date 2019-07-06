@@ -1,9 +1,10 @@
-import setuptools
+from setuptools import setup
+from setuptools import find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setuptools.setup(
+setup(
     name="hyperactive",
     version="0.3.2",
     author="Simon Blanke",
@@ -14,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     keywords=["machine learning", "deep learning", "optimization", "data-science"],
     url="https://github.com/SimonBlanke/hyperactive",
-    packages=["hyperactive"],
+    packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

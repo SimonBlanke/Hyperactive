@@ -8,8 +8,8 @@ import random
 import numpy as np
 import tqdm
 
-from ..base import BaseOptimizer
-from .hill_climbing_optimizer import HillClimber
+from ...base import BaseOptimizer
+from ..local.hill_climbing_optimizer import HillClimber
 
 
 class StochasticTunnelingOptimizer(BaseOptimizer):
