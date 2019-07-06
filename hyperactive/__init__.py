@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __license__ = "MIT"
 
 from .optimizers.local import HillClimbingOptimizer
@@ -14,7 +14,8 @@ from .optimizers.random import RandomAnnealingOptimizer
 
 from .optimizers.monte_carlo import SimulatedAnnealingOptimizer
 from .optimizers.monte_carlo import StochasticTunnelingOptimizer
-from .optimizers.monte_carlo import ParallelTemperingOptimizer
+
+# from .optimizers.monte_carlo import ParallelTemperingOptimizer
 
 from .optimizers.population import ParticleSwarmOptimizer
 from .optimizers.population import EvolutionStrategyOptimizer
@@ -30,7 +31,7 @@ __all__ = [
     "RandomAnnealingOptimizer",
     "SimulatedAnnealingOptimizer",
     "StochasticTunnelingOptimizer",
-    "ParallelTemperingOptimizer",
+    # "ParallelTemperingOptimizer",
     "ParticleSwarmOptimizer",
     "EvolutionStrategyOptimizer",
     "BayesianOptimizer",
