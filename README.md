@@ -79,9 +79,13 @@ Hyperactive
               <li>Scikit-learn</li>
               <li>XGBoost</li>
           </ul>
-        <a>Machine Learning:</a>
+        <a>Deep Learning:</a>
           <ul>
               <li>Keras</li>
+          </ul>
+        <a>Distribution:</a>
+          <ul>
+              <li>Multiprocessing</li>
           </ul>
       </td>
     </tr>
