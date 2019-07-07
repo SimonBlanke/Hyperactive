@@ -103,7 +103,9 @@ pip install hyperactive
 
 ## Examples
 
-Basic sklearn example:
+<details><summary>Basic sklearn example:</summary>
+<p>
+
 ```python
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
@@ -139,7 +141,18 @@ prediction = Optimizer.predict(X_test)
 score = Optimizer.score(X_test, y_test)
 ```
 
-Example with a convolutional neural network in keras:
+</p>
+</details>
+
+
+
+
+
+
+
+<details><summary>Example with a convolutional neural network in keras:</summary>
+<p>
+
 ```python
 import numpy as np
 
@@ -191,6 +204,9 @@ prediction = Optimizer.predict(X_test)
 # calculate accuracy score
 score = Optimizer.score(X_test, y_test)
 ```
+
+</p>
+</details>
 
 
 
