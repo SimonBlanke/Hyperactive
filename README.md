@@ -41,10 +41,12 @@ Hyperactive
   <tbody>
     <tr align="center" valign="bottom">
       <td>
-        <b> --------------------- Optimization Techniques --------------------- </b>
+        <b>Optimization Techniques</b>
+        <img src="images/Blue_P750D5.png"/>
       </td>
       <td>
-        <b> --------------------- Supported Packages --------------------- </b>
+        <b>Supported Packages</b>
+        <img src="images/Blue_P750D5.png"/>
       </td>
     </tr>
     <tr/>
