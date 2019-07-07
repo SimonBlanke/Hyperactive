@@ -84,6 +84,10 @@ Hyperactive
 
 
 
+<p align="center">
+<img src="plots/optimizer_time.png" width="900"/>
+</p>
+
 
 ---
 
