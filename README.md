@@ -74,11 +74,15 @@ Hyperactive
             <li>Evolution Strategy</li>
       </td>
       <td>
-      <ul>
-          <li>Scikit-learn</li>
-          <li>XGBoost</li>
-          <li>Keras</li>
-      </ul>
+        <a>Machine Learning:</a>
+          <ul>
+              <li>Scikit-learn</li>
+              <li>XGBoost</li>
+          </ul>
+        <a>Machine Learning:</a>
+          <ul>
+              <li>Keras</li>
+          </ul>
       </td>
     </tr>
   </tbody>
