@@ -42,11 +42,11 @@ Hyperactive
     <tr align="center" valign="bottom">
       <td>
         <b>Optimization Techniques</b>
-        <img src="images/Blue_P7500D50.png"/>
+        <img src="images/blue.jpg"/>
       </td>
       <td>
         <b>Supported Packages</b>
-        <img src="images/Blue_P7500D50.png"/>
+        <img src="images/blue.jpg"/>
       </td>
     </tr>
     <tr/>
