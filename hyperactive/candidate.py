@@ -35,11 +35,11 @@ class Candidate:
         self._score_best = value
 
     def eval(self, X, y):
-        # print("self.pos", self.pos, type(self.pos))
         pos = self.pos.tostring()
 
         if pos in self._space_.memory and self.memory:
             self.score = self._space_.memory[pos]
+
         else:
             para = self._space_.pos2para(self.pos)
             self.score, _, self.model_trained = self._model_.train_model(para, X, y)
