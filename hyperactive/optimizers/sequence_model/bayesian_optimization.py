@@ -87,8 +87,7 @@ class BayesianOptimizer(BaseOptimizer):
 
         pos_space = []
         for dim_ in cand._space_.dim:
-            if dim_ > 0:
-                pos_space.append(np.arange(dim_))
+            pos_space.append(np.arange(dim_ + 1))
 
         self.n_dim = len(pos_space)
         print("pos_space", pos_space)
@@ -158,6 +157,9 @@ class BayesianOptimizer(BaseOptimizer):
 
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
             self.gpr.fit(X_sample, Y_sample)
+
+            print("\nX_sample", X_sample, X_sample.shape)
+            print("Y_sample", Y_sample)
 
             self._move(_cand_, X_sample, Y_sample)
             _cand_.eval(X, y)
