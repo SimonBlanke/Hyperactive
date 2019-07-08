@@ -54,7 +54,7 @@ class BaseOptimizer(object):
 
         self._set_n_jobs()
 
-        self._n_process_range = range(0, self.n_jobs)
+        self._n_process_range = range(0, int(self.n_jobs))
 
     def _tqdm_dict(self, _cand_):
         return {
@@ -238,7 +238,7 @@ class BaseOptimizer(object):
             self.score_best = score_best_sorted[0]
             self.model_best = model_best_sorted[0]
 
-        self.model_best.fit(X, y)
+        # self.model_best.fit(X, y)
 
     def predict(self, X_test):
         return self.model_best.predict(X_test)
