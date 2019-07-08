@@ -33,7 +33,7 @@ values_norm = values / no_opt[:, None]
 # print("values_norm", values_norm, values_norm.shape)
 
 fig, ax = plt.subplots()
-plt.figure(figsize=(15, 5))
+plt.figure(figsize=(12, 4))
 # plt.grid(True)
 # plt.ylabel(r"$\dfrac{T_{norm}}{iteration}$", rotation=0)
 plt.ylabel(r"$T_{norm}$", rotation=0)
