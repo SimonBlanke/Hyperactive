@@ -76,9 +76,10 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
 
         _cand_.eval(X, y)
 
-        _cand_.score_best = _cand_.score
         _cand_.pos_best = _cand_.pos
+        _cand_.score_best = _cand_.score
 
+        self.pos_curr = _cand_.pos
         self.score_curr = _cand_.score
 
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
