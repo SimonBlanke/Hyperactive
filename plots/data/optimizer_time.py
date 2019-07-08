@@ -45,10 +45,16 @@ iris_y = iris_data.target
 #################################################################################################
 
 
-search_config = {"sklearn.ensemble.GradientBoostingClassifier": {"n_estimators": [100]}}
+search_config = {
+    "sklearn.ensemble.GradientBoostingClassifier": {
+        "n_estimators": range(99, 102),
+        "max_depth": range(3, 4),
+    }
+}
+runs = 30
 n_iter = 300
 n_jobs = 1
-cv = 5
+cv = 3
 n_population = 10
 warm_start = False
 memory = False
@@ -112,46 +118,55 @@ opt_list = {
 
 #################################################################################################
 
+time_c = time.time()
+data_runs = []
+for run in range(runs):
+    print("\nRun nr.", run, "\n")
+    time_opt = []
 
-time_opt = []
-
-gbc = GradientBoostingClassifier()
-start = time.perf_counter()
-for i in tqdm.tqdm(range(n_iter)):
-
-    scores = cross_val_score(
-        gbc, iris_X, iris_y, scoring="accuracy", n_jobs=n_jobs, cv=cv
-    )
-time_ = time.perf_counter() - start
-
-time_opt.append(time_)
-time.sleep(1)
-# data["No Opt"]["0"] = time_
-
-for key in opt_list.keys():
-    print("\n optimizer:", key)
-    opt_obj = opt_list[key]
-
+    gbc = GradientBoostingClassifier()
     start = time.perf_counter()
-    opt_obj.fit(iris_X, iris_y)
+    for i in tqdm.tqdm(range(n_iter)):
+
+        scores = cross_val_score(
+            gbc, iris_X, iris_y, scoring="accuracy", n_jobs=n_jobs, cv=cv
+        )
     time_ = time.perf_counter() - start
 
     time_opt.append(time_)
     time.sleep(1)
+    # data["No Opt"]["0"] = time_
 
-time_opt = np.array(time_opt)
-time_opt = np.expand_dims(time_opt, axis=0)
+    for key in opt_list.keys():
+        print("\n optimizer:", key)
+        opt_obj = opt_list[key]
 
+        start = time.perf_counter()
+        opt_obj.fit(iris_X, iris_y)
+        time_ = time.perf_counter() - start
+
+        time_opt.append(time_)
+        time.sleep(1)
+
+    time_opt = np.array(time_opt)
+    time_opt = time_opt / n_iter
+    # time_opt = np.expand_dims(time_opt_norm, axis=0)
+
+    data_runs.append(time_opt)
+
+data_runs = np.array(data_runs)
 #################################################################################################
 print("\nCreate Dataframe\n")
 
-print("time_opt", time_opt)
+print("data_runs", data_runs, data_runs.shape)
 
 column_names = ["No Opt."] + list(opt_list.keys())
-data = pd.DataFrame(time_opt, columns=column_names)
+data = pd.DataFrame(data_runs, columns=column_names)
 
 calc_optimizer_time_name = "optimizer_calc_time"
 
 
 file_name = str(calc_optimizer_time_name + version)
 data.to_csv(file_name, index=False)
+
+print("data collecting time:", time.time() - time_c)
