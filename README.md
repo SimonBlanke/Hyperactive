@@ -4,10 +4,6 @@ Hyperactive
 
 <h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping.</h3>
 
-
----
-
-
 <p align="center">
 
   <a href="https://pypi.python.org/pypi/hyperactive">
@@ -27,10 +23,23 @@ Hyperactive
 </p>
 
 
+---
+
+<p align="center">
+  <a href="https://github.com/SimonBlanke/hyperactive#overview">Overview</a> |
+  <a href="https://github.com/SimonBlanke/hyperactive#performance">Performance</a> |
+  <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> |
+  <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> |
+  <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
+</p>
+
+---
+
+
 
 ## Overview:
-- Optimize hyperparameters of machine- or deep-learning models.
-- Choose from a variety of different optimization techniques to improve your model.
+- Optimize hyperparameters of machine- or deep-learning models
+- Choose from a variety of different optimization techniques to improve your model
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
 - Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time
 - Utilize multiprocessing for machine learning or your gpu for deep learning models
@@ -93,23 +102,17 @@ Hyperactive
 </table>
 
 
+## Performance
 
 <p align="center">
 <img src="plots/optimizer_time.png" width="900"/>
 </p>
 
 
----
 
-<p align="center">
-  <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
-</p>
-
----
 
 ## Installation
+
 ```console
 pip install hyperactive
 ```
