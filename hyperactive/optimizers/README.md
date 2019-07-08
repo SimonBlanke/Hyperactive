@@ -1,3 +1,6 @@
+# Optimization Techniques
+
+Hyperactive offers a wide variety of basic, meta-heuristic and sequential model-based optimization techniques for machine learning model selection and hyperparameter tuning. This readme provides an overview and brief explainations of those techniques and proposes a possible field of application.
 
 ---
 
