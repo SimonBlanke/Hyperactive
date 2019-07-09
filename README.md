@@ -4,10 +4,11 @@ Hyperactive
 
 <h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping.</h3>
 
+
 <p align="center">
 
   <a href="https://pypi.python.org/pypi/hyperactive">
-    <img src="https://img.shields.io/pypi/v/hyperactive.svg">
+    <img src="https://img.shields.io/pypi/v/hyperactive.svg?colorB=4cc61e">
   </a>
 
   <a href="https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE">
