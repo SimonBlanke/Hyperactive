@@ -77,7 +77,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 temp = (1 / ann1.temp) - (1 / ann2.temp)
                 p_accept = np.exp(score_diff_norm * temp)
 
-                print("p_accept", p_accept)
+                # print("p_accept", p_accept)
 
                 if p_accept > rand:
                     temp_temp = ann1.temp  # haha!
