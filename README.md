@@ -66,6 +66,7 @@ Hyperactive
           <ul>
             <li>Hill Climbing</li>
             <li>Stochastic Hill Climbing</li>
+            <li>Tabu Search (beta)</li>
          </ul>
         <a>Random Methods:</a>
           <ul>
@@ -77,11 +78,17 @@ Hyperactive
           <ul>
             <li>Simulated Annealing</li>
             <li>Stochastic Tunneling</li>
+            <li>Parallel Tempering</li>
           </ul>
         <a>Population Methods:</a>
           <ul>
             <li>Particle Swarm Optimizer</li>
             <li>Evolution Strategy</li>
+          </ul>
+        <a>Sequential Methods:</a>
+          <ul>
+            <li>Bayesian Optimization (beta)</li>
+          </ul>
       </td>
       <td>
         <a>Machine Learning:</a>
@@ -105,8 +112,8 @@ Hyperactive
 
 ## Performance
 
-The bar chart below shows, that the optimization process itself represents only a small fraction (<0.6%) of the computation time. 
-The 'No Opt'-bar shows the training time of a default Gradient-Boosting-Classifier normalized to 1. The other bars show the computation time relative to 'No Opt'. Each optimizer did 30 runs of 300 iterations, to get a good statistic. 
+The bar chart below shows, that the optimization process itself represents only a small fraction (<0.6%) of the computation time.
+The 'No Opt'-bar shows the training time of a default Gradient-Boosting-Classifier normalized to 1. The other bars show the computation time relative to 'No Opt'. Each optimizer did 30 runs of 300 iterations, to get a good statistic.
 
 <p align="center">
 <img src="plots/optimizer_time.png" width="900"/>
@@ -236,14 +243,21 @@ score = Optimizer.score(X_test, y_test)
 ```python
 
 HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, r=1e-6)
-StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False,)
+StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False)
+TabuOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, tabu_memory=[3, 6, 9])
+
 RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False)
 RandomRestartHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, n_restarts=10)
 RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=100, t_rate=0.98)
+
 SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, t_rate=0.98)
 StochasticTunnelingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, t_rate=0.98, n_neighbours=1, gamma=1)
+ParallelTemperingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, eps=1, t_rate=0.98, n_neighbours=1, system_temps=[0.1, 0.2, 0.01], n_swaps=10)
+
 ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
 EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
+
+BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, hyperband_init=False)
 
 ```
 
@@ -282,6 +296,14 @@ EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, c
 | eps  | int | 1 | epsilon |
 |  r | float  |  1e-6 | acceptance factor  |
 
+
+### Specific keyword arguments (tabu search):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | epsilon |
+|  tabu_memory | list  |  [3, 6, 9] | length of short/mid/long-term memory  |
+
 ### Specific keyword arguments (random restart hill climbing):
 
 | Argument | Type | Default | Description |
@@ -311,6 +333,16 @@ EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, c
 | eps  | int | 1 | epsilon |
 | t_rate | float | 0.98 | cooling rate  |
 | gamma  | float  |  1 | tunneling factor  |
+
+
+### Specific keyword arguments (parallel tempering):
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| eps  | int | 1 | epsilon |
+| t_rate | float | 0.98 | cooling rate  |
+| system_temps  | list  |  [0.1, 0.2, 0.01] | initial temperatures (number of elements defines number of systems)  |
+|  n_swaps | int  | 10  | number of swaps  |
 
 
 ### Specific keyword arguments (particle swarm optimization):
