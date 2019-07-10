@@ -4,6 +4,7 @@
 *.xml
 *.iml
 *.pkl
+*.npy
 *.pypirc
 **/__pycache__/
 **/build/
