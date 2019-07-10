@@ -3,6 +3,7 @@
 *.pyc
 *.xml
 *.iml
+*.pkl
 *.pypirc
 **/__pycache__/
 **/build/
