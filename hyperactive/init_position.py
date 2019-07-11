@@ -15,15 +15,20 @@ class InitSearchPosition:
         self.warm_start = warm_start
         self.hyperband_init = hyperband_init
 
+        if self.warm_start:
+            self.n_warm_start_keys = len(list(self.warm_start.keys()))
+        else:
+            self.n_warm_start_keys = 0
+
     def _set_start_pos(self, nth_process, X, y):
         if self.warm_start and self.hyperband_init:
-            if len(list(self.warm_start.keys())) > nth_process:
+            if self.n_warm_start_keys > nth_process:
                 pos = self._create_warm_start(nth_process)
             else:
                 pos = self._hyperband_init(nth_process, X, y)
 
         elif self.warm_start:
-            if len(list(self.warm_start.keys())) > nth_process:
+            if self.n_warm_start_keys > nth_process:
                 pos = self._create_warm_start(nth_process)
             else:
                 pos = self._space_.get_random_pos()
@@ -53,7 +58,7 @@ class InitSearchPosition:
             print("pos  ", pos)
 
         print("\n\n")
-        """
+
 
         hb_init = self.hyperband_init
         while hb_init > 1:
@@ -67,8 +72,19 @@ class InitSearchPosition:
 
             hb_init = int(hb_init / 2)
             pos_list = pos_best_sorted[:hb_init]
+        """
 
-        return pos_list[0]
+        pos_best_list, score_best_list = self._hyperband_train(
+            X, y, self.hyperband_init, pos_list
+        )
+
+        pos_best_sorted, score_best_sorted = self._sort_for_best(
+            pos_best_list, score_best_list
+        )
+
+        nth_best_pos = nth_process - self.n_warm_start_keys
+
+        return pos_best_sorted[nth_best_pos]
 
     def _sort_for_best(self, sort, sort_by):
         sort = np.array(sort)
