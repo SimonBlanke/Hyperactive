@@ -30,6 +30,7 @@ Hyperactive
   <a href="https://github.com/SimonBlanke/hyperactive#overview">Overview</a> |
   <a href="https://github.com/SimonBlanke/hyperactive#performance">Performance</a> |
   <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> |
+  <a href="https://github.com/SimonBlanke/hyperactive#advanced-features">Advanced Features</a> |
   <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> |
   <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
 </p>
@@ -39,11 +40,11 @@ Hyperactive
 
 
 ## Overview:
-- Optimize hyperparameters of machine- or deep-learning models
-- Choose from a variety of different optimization techniques to improve your model
-- Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing
-- Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time
-- Utilize multiprocessing for machine learning or your gpu for deep learning models
+- Optimize hyperparameters of machine- or deep-learning models, using a simple API.
+- Choose from a variety of different optimization techniques to improve your model.
+- Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing.
+- Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time.
+- Utilize multiprocessing for machine learning or your gpu for deep learning models.
 
 
 
@@ -122,9 +123,20 @@ The 'No Opt'-bar shows the training time of a default Gradient-Boosting-Classifi
 
 ## Installation
 
+Hyperactive is developed and tested in python 3 and is available on PyPI:
 ```console
 pip install hyperactive
 ```
+
+## Advanced Features
+
+The features listed below can be activated during the instantiation of the optimizer ([see API](https://github.com/SimonBlanke/hyperactive#hyperactive-api)) and works with every optimizer in the hyperactive package.
+
+#### Memory
+After the evaluation of a model the position (in the hyperparameter search dictionary) and the cross-validation score are written to a dictionary. If the optimizer tries to evaluate this position again it can quickly lookup if a score for this position is present and use it instead of going through the extensive training and prediction process.
+
+#### Scatter-Initialization
+This technique was inspired by the 'Hyperband Optimization' and aims to find a good initial position for the optimization. It does so by evaluating n random positions with a training subset of 1/n the size of the original dataset. The position that achieves the best score is used as the starting position for the optimization.
 
 
 ## Examples
