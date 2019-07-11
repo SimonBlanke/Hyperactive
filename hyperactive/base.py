@@ -65,7 +65,7 @@ class BaseOptimizer(object):
         }
 
     def _set_random_seed(self, thread=0):
-        if self.random_state:
+        if isinstance(self.random_state, int) and self.random_state is not False:
             random.seed(self.random_state + thread)
             np.random.seed(self.random_state + thread)
             scipy.random.seed(self.random_state + thread)
