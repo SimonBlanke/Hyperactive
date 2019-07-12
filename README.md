@@ -7,6 +7,10 @@ Hyperactive
 
 <p align="center">
 
+  <a href="https://pypi.org/project/hyperactive/">
+    <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?logo=python&logoColor=white">
+  </a>
+  
   <a href="https://pypi.python.org/pypi/hyperactive">
     <img src="https://img.shields.io/pypi/v/hyperactive.svg?colorB=4cc61e">
   </a>
@@ -15,8 +19,8 @@ Hyperactive
     <img src="https://img.shields.io/pypi/l/hyperactive.svg">
   </a>
 
-  <a href="https://pepy.tech/project/hyperactive">
-    <img src="https://pepy.tech/badge/hyperactive">
+  <a href="https://pypi.org/project/hyperactive/">
+    <img src="https://img.shields.io/pypi/dm/hyperactive.svg?label=pypi%20downloads&logo=python&logoColor=white">
   </a>
   <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
   </a>
@@ -24,7 +28,7 @@ Hyperactive
 </p>
 
 
----
+
 
 <p align="center">
   <a href="https://github.com/SimonBlanke/hyperactive#overview">Overview</a> |
