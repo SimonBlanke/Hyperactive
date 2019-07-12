@@ -8,10 +8,10 @@ import numpy as np
 
 
 class SearchSpace:
-    def __init__(self, search_config, warm_start, hyperband_init):
+    def __init__(self, search_config, warm_start, scatter_init):
         self.search_config = search_config
         self.warm_start = warm_start
-        self.hyperband_init = hyperband_init
+        self.scatter_init = scatter_init
 
         self.memory = {}
 
@@ -40,6 +40,9 @@ class SearchSpace:
         self.para_space = para_space
 
         self.pos_space_limit()
+
+    def _split_search_space(n_parts):
+        pass
 
     def get_random_pos(self):
         pos = []

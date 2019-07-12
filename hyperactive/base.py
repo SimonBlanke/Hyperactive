@@ -29,7 +29,7 @@ class BaseOptimizer(object):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
     ):
 
         self.search_config = search_config
@@ -41,7 +41,7 @@ class BaseOptimizer(object):
         self.random_state = random_state
         self.warm_start = warm_start
         self.memory = memory
-        self.hyperband_init = hyperband_init
+        self.scatter_init = scatter_init
 
         self.X_train = None
         self.y_train = None
@@ -155,7 +155,7 @@ class BaseOptimizer(object):
                 self.cv,
                 self.warm_start,
                 self.memory,
-                self.hyperband_init,
+                self.scatter_init,
                 search_config_key,
             )
 
@@ -167,7 +167,7 @@ class BaseOptimizer(object):
                 self.cv,
                 self.warm_start,
                 self.memory,
-                self.hyperband_init,
+                self.scatter_init,
             )
 
         _cand_.pos = _cand_._init_._set_start_pos(nth_process, X, y)

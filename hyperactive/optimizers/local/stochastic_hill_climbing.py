@@ -22,7 +22,7 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         eps=1,
         r=1e-6,
     ):
@@ -36,7 +36,7 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.eps = eps

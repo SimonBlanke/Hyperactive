@@ -24,7 +24,7 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         eps=1,
         t_rate=0.98,
         n_neighbours=1,
@@ -39,7 +39,7 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.eps = eps

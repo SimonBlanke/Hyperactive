@@ -21,7 +21,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         eps=100,
         t_rate=0.98,
     ):
@@ -35,7 +35,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.eps = eps

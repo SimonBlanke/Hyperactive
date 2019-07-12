@@ -20,7 +20,7 @@ class RandomSearchOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
     ):
         super().__init__(
             search_config,
@@ -32,7 +32,7 @@ class RandomSearchOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
     def _move(self, cand):

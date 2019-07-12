@@ -21,7 +21,7 @@ class TabuOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         eps=1,
         tabu_memory=[3, 6, 9],
     ):
@@ -35,7 +35,7 @@ class TabuOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.eps = eps

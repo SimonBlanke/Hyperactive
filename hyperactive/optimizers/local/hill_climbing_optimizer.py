@@ -21,7 +21,7 @@ class HillClimbingOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         eps=1,
     ):
         super().__init__(
@@ -34,7 +34,7 @@ class HillClimbingOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.eps = eps

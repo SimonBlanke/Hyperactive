@@ -9,11 +9,11 @@ import numpy as np
 
 
 class InitSearchPosition:
-    def __init__(self, space, model, warm_start, hyperband_init):
+    def __init__(self, space, model, warm_start, scatter_init):
         self._space_ = space
         self._model_ = model
         self.warm_start = warm_start
-        self.hyperband_init = hyperband_init
+        self.scatter_init = scatter_init
 
         if self.warm_start:
             self.n_warm_start_keys = len(list(self.warm_start.keys()))
@@ -21,11 +21,11 @@ class InitSearchPosition:
             self.n_warm_start_keys = 0
 
     def _set_start_pos(self, nth_process, X, y):
-        if self.warm_start and self.hyperband_init:
+        if self.warm_start and self.scatter_init:
             if self.n_warm_start_keys > nth_process:
                 pos = self._create_warm_start(nth_process)
             else:
-                pos = self._hyperband_init(nth_process, X, y)
+                pos = self._scatter_init(nth_process, X, y)
 
         elif self.warm_start:
             if self.n_warm_start_keys > nth_process:
@@ -33,18 +33,17 @@ class InitSearchPosition:
             else:
                 pos = self._space_.get_random_pos()
 
-        elif self.hyperband_init:
-            pos = self._hyperband_init(nth_process, X, y)
+        elif self.scatter_init:
+            pos = self._scatter_init(nth_process, X, y)
 
         else:
             pos = self._space_.get_random_pos()
 
         return pos
 
-    def _hyperband_init(self, nth_process, X, y):
-
+    def _scatter_init(self, nth_process, X, y):
         pos_list = []
-        for i in range(self.hyperband_init):
+        for i in range(self.scatter_init):
             pos = self._space_.get_random_pos()
             pos_list.append(pos)
 
@@ -60,7 +59,7 @@ class InitSearchPosition:
         print("\n\n")
 
 
-        hb_init = self.hyperband_init
+        hb_init = self.scatter_init
         while hb_init > 1:
             pos_best_list, score_best_list = self._hyperband_train(
                 X, y, hb_init, pos_list
@@ -74,8 +73,8 @@ class InitSearchPosition:
             pos_list = pos_best_sorted[:hb_init]
         """
 
-        pos_best_list, score_best_list = self._hyperband_train(
-            X, y, self.hyperband_init, pos_list
+        pos_best_list, score_best_list = self._scatter_train(
+            X, y, self.scatter_init, pos_list
         )
 
         pos_best_sorted, score_best_sorted = self._sort_for_best(
@@ -97,7 +96,7 @@ class InitSearchPosition:
 
         return sort_sorted, sort_by_sorted
 
-    def _hyperband_train(self, X, y, hb_init, pos_list):
+    def _scatter_train(self, X, y, hb_init, pos_list):
         X_list = np.array_split(X, hb_init)
         y_list = np.array_split(y, hb_init)
 
@@ -114,8 +113,8 @@ class InitSearchPosition:
 
 
 class InitMLSearchPosition(InitSearchPosition):
-    def __init__(self, space, model, warm_start, hyperband_init):
-        super().__init__(space, model, warm_start, hyperband_init)
+    def __init__(self, space, model, warm_start, scatter_init):
+        super().__init__(space, model, warm_start, scatter_init)
 
     def _create_warm_start(self, nth_process):
         pos = []
@@ -170,8 +169,8 @@ class InitMLSearchPosition(InitSearchPosition):
 
 
 class InitDLSearchPosition(InitSearchPosition):
-    def __init__(self, space, model, warm_start, hyperband_init):
-        super().__init__(space, model, warm_start, hyperband_init)
+    def __init__(self, space, model, warm_start, scatter_init):
+        super().__init__(space, model, warm_start, scatter_init)
 
     def _create_warm_start(self, nth_process):
         pos = []

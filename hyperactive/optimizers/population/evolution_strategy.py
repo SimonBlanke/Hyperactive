@@ -24,7 +24,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         individuals=10,
         mutation_rate=0.7,
         crossover_rate=0.3,
@@ -39,7 +39,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.individuals = individuals

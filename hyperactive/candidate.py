@@ -12,7 +12,7 @@ from .init_position import InitDLSearchPosition
 
 class Candidate:
     def __init__(
-        self, nth_process, search_config, metric, cv, warm_start, memory, hyperband_init
+        self, nth_process, search_config, metric, cv, warm_start, memory, scatter_init
     ):
         self.search_config = search_config
         self.memory = memory
@@ -23,7 +23,7 @@ class Candidate:
         self.pos = None
         self.pos_best = None
 
-        self._space_ = SearchSpace(search_config, warm_start, hyperband_init)
+        self._space_ = SearchSpace(search_config, warm_start, scatter_init)
 
     @property
     def score_best(self):
@@ -56,11 +56,11 @@ class MlCandidate(Candidate):
         cv,
         warm_start,
         memory,
-        hyperband_init,
+        scatter_init,
         model_module_str,
     ):
         super().__init__(
-            nth_process, search_config, metric, cv, warm_start, memory, hyperband_init
+            nth_process, search_config, metric, cv, warm_start, memory, scatter_init
         )
 
         self.nth_process = nth_process
@@ -69,7 +69,7 @@ class MlCandidate(Candidate):
         self._model_ = MachineLearner(search_config, metric, cv, model_module_str)
 
         self._init_ = InitMLSearchPosition(
-            self._space_, self._model_, warm_start, hyperband_init
+            self._space_, self._model_, warm_start, scatter_init
         )
 
     def _get_warm_start(self):
@@ -98,10 +98,10 @@ class MlCandidate(Candidate):
 
 class DlCandidate(Candidate):
     def __init__(
-        self, nth_process, search_config, metric, cv, warm_start, memory, hyperband_init
+        self, nth_process, search_config, metric, cv, warm_start, memory, scatter_init
     ):
         super().__init__(
-            nth_process, search_config, metric, cv, warm_start, memory, hyperband_init
+            nth_process, search_config, metric, cv, warm_start, memory, scatter_init
         )
 
         self.nth_process = nth_process
@@ -110,7 +110,7 @@ class DlCandidate(Candidate):
         self._model_ = DeepLearner(search_config, metric, cv)
 
         self._init_ = InitDLSearchPosition(
-            self._space_, self._model_, warm_start, hyperband_init
+            self._space_, self._model_, warm_start, scatter_init
         )
 
     def _get_warm_start(self):

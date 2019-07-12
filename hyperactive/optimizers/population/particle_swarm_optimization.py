@@ -23,7 +23,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
         n_part=4,
         w=0.5,
         c_k=0.5,
@@ -39,7 +39,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.n_part = n_part

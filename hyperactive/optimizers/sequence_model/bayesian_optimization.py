@@ -27,7 +27,7 @@ class BayesianOptimizer(BaseOptimizer):
         random_state=None,
         warm_start=False,
         memory=True,
-        hyperband_init=False,
+        scatter_init=False,
     ):
         super().__init__(
             search_config,
@@ -39,7 +39,7 @@ class BayesianOptimizer(BaseOptimizer):
             random_state,
             warm_start,
             memory,
-            hyperband_init,
+            scatter_init,
         )
 
         self.xi = 0.01
