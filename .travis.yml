@@ -1,0 +1,17 @@
+# Author: Simon Blanke
+# Email: simon.blanke@yahoo.com
+# License: MIT License
+
+language: python
+
+python:
+  - "3.6"
+  - "3.5"
+  - "3.4"
+
+install:
+  - pip install numpy
+  - pip install scikit-learn
+  - pip install tqdm
+  - keras
+  - meta-learn
