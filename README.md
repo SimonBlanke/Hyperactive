@@ -28,7 +28,7 @@ Hyperactive
 </p>
 
 
-
+---
 
 <p align="center">
   <a href="https://github.com/SimonBlanke/hyperactive#overview">Overview</a> |
