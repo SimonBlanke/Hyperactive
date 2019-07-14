@@ -9,6 +9,7 @@ import random
 
 import scipy
 import numpy as np
+import pandas as pd
 
 from importlib import import_module
 from functools import partial
@@ -189,7 +190,17 @@ class BaseOptimizer(object):
 
         return _cand_list
 
+    def _check_data(self, X, y):
+        if isinstance(X, pd.core.frame.DataFrame):
+            X = X.values
+        if isinstance(X, pd.core.frame.DataFrame):
+            y = y.values
+
+        return X, y
+
     def fit(self, X, y):
+        X, y = self._check_data(X, y)
+
         if self.model_type == "keras":
             self.n_jobs = 1
 
