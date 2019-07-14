@@ -73,9 +73,7 @@ class InitSearchPosition:
             pos_list = pos_best_sorted[:hb_init]
         """
 
-        pos_best_list, score_best_list = self._scatter_train(
-            X, y, self.scatter_init, pos_list
-        )
+        pos_best_list, score_best_list = self._scatter_train(X, y, pos_list)
 
         pos_best_sorted, score_best_sorted = self._sort_for_best(
             pos_best_list, score_best_list
@@ -96,20 +94,36 @@ class InitSearchPosition:
 
         return sort_sorted, sort_by_sorted
 
-    def _scatter_train(self, X, y, hb_init, pos_list):
-        X_list = np.array_split(X, hb_init)
-        y_list = np.array_split(y, hb_init)
-
+    def _scatter_train(self, X, y, pos_list):
         pos_best_list = []
         score_best_list = []
-        for X_, y_, pos in zip(X_list, y_list, pos_list):
+
+        X, y = self._get_random_sample(X, y)
+
+        for pos in pos_list:
             para = self._space_.pos2para(pos)
-            score, _, _ = self._model_.train_model(para, X_, y_)
+            score, _, _ = self._model_.train_model(para, X, y)
 
             pos_best_list.append(pos)
             score_best_list.append(score)
 
         return pos_best_list, score_best_list
+
+    def _get_random_sample(self, X, y):
+        if isinstance(X, np.ndarray) and isinstance(y, np.ndarray):
+            n_samples = int(X.shape[0] / self.scatter_init)
+
+            idx = np.random.choice(np.arange(len(X)), n_samples, replace=False)
+
+            X_sample = X[idx]
+            y_sample = y[idx]
+
+            return X_sample, y_sample
+
+        else:
+            print("\nscatter_init aborted:")
+            print("X_train or y_train not numpy array")
+            return X, y
 
 
 class InitMLSearchPosition(InitSearchPosition):
