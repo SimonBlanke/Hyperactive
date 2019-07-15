@@ -31,12 +31,12 @@ Hyperactive
 ---
 
 <p align="center">
-  <a href="https://github.com/SimonBlanke/hyperactive#overview">Overview</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#performance">Performance</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#installation">Installation</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#examples">Examples</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#advanced-features">Advanced Features</a> |
-  <a href="https://github.com/SimonBlanke/hyperactive#hyperactive-api">Hyperactive API</a>
+  <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
+  <a href="https://github.com/SimonBlanke/Hyperactive#performance">Performance</a> |
+  <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
+  <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
+  <a href="https://github.com/SimonBlanke/Hyperactive#advanced-features">Advanced Features</a> |
+  <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a>
 </p>
 
 ---
