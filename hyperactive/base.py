@@ -33,10 +33,10 @@ class BaseOptimizer(object):
         scatter_init=False,
     ):
         """
-        
+
         Parameters
         ----------
-        
+
         search_config: dict
             A dictionary providing the model and hyperparameter search space for the optimization process.
         n_iter: int
@@ -57,11 +57,11 @@ class BaseOptimizer(object):
             A memory, that saves the evaluation during the optimization to save time when optimizer returns to position.
         scatter_init: int, optional (default: False)
             Defines the number n of random positions that should be evaluated with 1/n the training data, to find a better initial position.
-       
+
         Returns
         -------
-        None       
-       
+        None
+
         """
 
         self.search_config = search_config
@@ -243,13 +243,13 @@ class BaseOptimizer(object):
 
     def fit(self, X, y):
         """Public method for starting the search with the training data (X, y)
-        
+
         Parameters
         ----------
         X : array-like or sparse matrix of shape = [n_samples, n_features]
-        
+
         y : array-like, shape = [n_samples] or [n_samples, n_outputs]
-        
+
         Returns
         -------
         None
@@ -304,15 +304,15 @@ class BaseOptimizer(object):
             self.score_best = score_best_sorted[0]
             self.model_best = model_best_sorted[0]
 
-        # self.model_best.fit(X, y)
+            self.model_best.fit(X, y)
 
     def predict(self, X_test):
         """Returns the prediction of X_test after a model was searched by `fit`
-        
+
         Parameters
         ----------
         X_test : array-like or sparse matrix of shape = [n_samples, n_features]
-        
+
         Returns
         -------
         (unnamed array) : array-like, shape = [n_samples] or [n_samples, n_outputs]
@@ -321,25 +321,25 @@ class BaseOptimizer(object):
 
     def score(self, X_test, y_test):
         """Returns the score calculated from the prediction of X_test and the true values from y_test
-        
+
         Parameters
         ----------
         X_test : array-like or sparse matrix of shape = [n_samples, n_features]
-        
+
         y_test : array-like, shape = [n_samples] or [n_samples, n_outputs]
-        
+
         Returns
         -------
         (unnamed float) : float
         """
-        if self.model_type == "sklearn":
+        if self.model_type == "sklearn" or self.model_type == "xgboost":
             return self.model_best.score(X_test, y_test)
         elif self.model_type == "keras":
             return self.model_best.evaluate(X_test, y_test)[1]
 
     def export(self, filename):
         """Exports the best model, that was found by the optimizer during `fit`
-        
+
         Parameters
         ----------
         filename : string or path
