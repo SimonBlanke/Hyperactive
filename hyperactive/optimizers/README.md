@@ -69,7 +69,6 @@ An algorithm that chooses a new position within a large hypersphere around the c
 #### Simulated Annealing
 Simulated annealing chooses its next possible position similar to hill climbing, but it accepts worse results with a probability that decreases with time:
 
-
 <p align="center">
   <a href="equation">
     <img src="https://latex.codecogs.com/gif.latex?%5CDelta%20f_%7Bnorm%7D%20%3D%20%5Cfrac%7Bf%28y%29%20-%20f%28y%29%7D%7Bf%28y%29%20&plus;%20f%28y%29%7D">
@@ -91,10 +90,32 @@ It simulates a temperature that decreases with each iteration, similar to a mate
 
 #### Stochastic Tunneling
 
+<p align="center">
+  <a href="equation">
+    <img src="https://latex.codecogs.com/gif.latex?f_%7BSTUN%7D%20%3D%201%20-%20exp%28-%5Cgamma%20%5CDelta%20f%29">
+  </a>
+</p>
+
+
+<p align="center">
+  <a href="equation">
+    <img src="https://latex.codecogs.com/gif.latex?p%20%3D%20exp%28-%5Cbeta%20f_%7BSTUN%7D%20%29">
+  </a>
+</p>
+
+
+
 ###### When to use:
 
 
 #### Parallel Tempering
+
+<p align="center">
+  <a href="equation">
+    <img src="https://latex.codecogs.com/gif.latex?p%20%3D%20%5Cmin%20%5Cleft%20%28%201%2C%20e%5E%7B%5CDelta%20f%20%5Cleft%20%28%20%5Cfrac%7B1%7D%7BT_x%7D%20-%20%5Cfrac%7B1%7D%7BT_y%7D%20%5Cright%20%29%7D%20%5Cright%20%29">
+  </a>
+</p>
+
 
 ###### When to use:
 
