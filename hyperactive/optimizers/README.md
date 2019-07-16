@@ -69,7 +69,11 @@ An algorithm that chooses a new position within a large hypersphere around the c
 #### Simulated Annealing
 Simulated annealing chooses its next possible position similar to hill climbing, but it accepts worse results with a probability that decreases with time:
 
-![equation](https://latex.codecogs.com/gif.latex?exp%5Cleft%20%28%20-%20%5Cfrac%7Bf%28y%29%20-%20f%28x%29%20%7D%7BT%7D%20%5Cright%20%29)  
+<p align="center">
+  <a href="equation">
+    <img src="https://latex.codecogs.com/gif.latex?exp%5Cleft%20%28%20-%20%5Cfrac%7Bf%28y%29%20-%20f%28x%29%20%7D%7BT%7D%20%5Cright%20%29">
+  </a>
+</p>
 
 It simulates a temperature that decreases with each iteration, similar to a material cooling down.
 
