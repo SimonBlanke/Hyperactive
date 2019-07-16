@@ -67,30 +67,30 @@ Hyperactive
     <tr/>
     <tr valign="top">
       <td>
-        <a>Local Search:</a>
+        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#local-search">Local Search:</a> </a>
           <ul>
             <li>Hill Climbing</li>
             <li>Stochastic Hill Climbing</li>
             <li>Tabu Search (beta)</li>
          </ul>
-        <a>Random Methods:</a>
+        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-methods">Random Methods:</a> </a>
           <ul>
             <li>Random Search</li>
             <li>Random Restart Hill Climbing</li>
             <li>Random Annealing</li>
          </ul>
-        <a>Markov Chain Monte Carlo:</a>
+        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#markov-chain-monte-carlo">Markov Chain Monte Carlo:</a> </a>
           <ul>
             <li>Simulated Annealing</li>
             <li>Stochastic Tunneling</li>
             <li>Parallel Tempering</li>
           </ul>
-        <a>Population Methods:</a>
+        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#population-methods">Population Methods:</a> </a>
           <ul>
             <li>Particle Swarm Optimizer</li>
             <li>Evolution Strategy</li>
           </ul>
-        <a>Sequential Methods:</a>
+        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#sequential-methods">Sequential Methods:</a> </a>
           <ul>
             <li>Bayesian Optimization (beta)</li>
           </ul>
