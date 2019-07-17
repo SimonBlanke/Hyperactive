@@ -2,7 +2,7 @@
 Hyperactive
 </h1>
 
-<h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping.</h3>
+<h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
 
 <p align="center">
@@ -43,7 +43,7 @@ Hyperactive
 
 
 
-## Overview:
+## Overview
 - Optimize hyperparameters of machine- or deep-learning models, using a simple API.
 - Choose from a variety of different optimization techniques to improve your model.
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing.
@@ -519,6 +519,7 @@ start_point = {
 <p>
   
 ```python
+start_point = {
     "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
     "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
     "keras.layers.Conv2D.1": {
