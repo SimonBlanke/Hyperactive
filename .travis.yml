@@ -10,11 +10,6 @@ python:
   - "3.4"
 
 install:
-  - pip install numpy
-  - pip install scikit-learn
-  - pip install tqdm
-  - pip install keras
-  - pip install meta-learn
-  - python setup.py install
+  - pip install .
 script:
   - pytest
