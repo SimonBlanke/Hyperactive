@@ -11,5 +11,10 @@ python:
 
 install:
   - pip install .
+
 script:
-  - pytest
+  - nosetests --with-coverage --cover-package=hyperactive
+
+after_success:
+  - coverage report -m
+  - coveralls
