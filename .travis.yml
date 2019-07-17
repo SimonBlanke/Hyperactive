@@ -13,7 +13,7 @@ install:
   - pip install numpy
   - pip install scikit-learn
   - pip install tqdm
-  - keras
-  - meta-learn
+  - pip install keras
+  - pip install meta-learn
 script:
   - pytest
