@@ -28,7 +28,7 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=["numpy", "tqdm", "scikit-learn>=0.18", "keras", "meta-learn"],
+    install_requires=["numpy", "pandas", "tqdm", "scikit-learn>=0.18", "keras", "meta-learn"],
     test_suite="nose.collector",
     tests_require=["nose"],
 )
