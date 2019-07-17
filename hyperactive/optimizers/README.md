@@ -19,7 +19,7 @@ Hyperactive offers a wide variety of basic, meta-heuristic and sequential model-
 
 ## Local Search:
 
-#### Hill Climbing
+#### [Hill Climbing](https://de.wikipedia.org/wiki/Hillclimbing)
 Hill climbing is a very basic optimization technique, that explores the search space only localy. It starts at an initial point, which is often chosen randomly and continues to move to positions with a better solution. It has no method against getting stuck in local optima.
 
 ###### Use case/properties:
@@ -27,14 +27,14 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - When you have a very good initial point to start from
 - If the search space is very simple and has few local optima or saddle points
 
-#### Stochastic Hill Climbing
+#### [Stochastic Hill Climbing](https://en.wikipedia.org/wiki/Stochastic_hill_climbing)
 Stochastic hill climbing extends the normal hill climbing by a simple method against getting stuck in local optima. It has a parameter you can set, that determines the probability to accept worse solutions as a next position.
 
 ###### Use case/properties:
 - Never as a first method of optimization
 - When you have a very good initial point to start from
 
-#### Tabu Search
+#### [Tabu Search](https://en.wikipedia.org/wiki/Tabu_search)
 Tabu search is a metaheuristic method, that explores new positions like hill climbing but memorizes previous positions and avoids those. This helps finding new trajectories through the search space.
 
 ###### Use case/properties:
@@ -42,14 +42,14 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 
 ## Random Methods:
 
-#### Random Search
+#### [Random Search](https://en.wikipedia.org/wiki/Random_search)
 The random search explores by choosing a new position at random after each iteration. Some random seach implementations choose a new position within a large hypersphere around the current position. The implementation in hyperactive is purely random across the search space in each step.
 
 ###### Use case/properties:
 - Very good as a first method of optimization or to start exploring the search space
 - For a short optimization run to get an acceptable solution
 
-#### Random Restart Hill Climbing
+#### [Random Restart Hill Climbing](https://en.wikipedia.org/wiki/Hill_climbing#Variants)
 Random restart hill climbing works by starting a hill climbing search and jumping to a random new position after a number of iterations.
 
 ###### Use case/properties:
@@ -66,7 +66,7 @@ An algorithm that chooses a new position within a large hypersphere around the c
 
 ## Markov Chain Monte Carlo:
 
-#### Simulated Annealing
+#### [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing)
 Simulated annealing chooses its next possible position similar to hill climbing, but it accepts worse results with a probability that decreases with time:
 
 <p align="center">
@@ -88,7 +88,7 @@ It simulates a temperature that decreases with each iteration, similar to a mate
 - Good as a second method of optimization
 
 
-#### Stochastic Tunneling
+#### [Stochastic Tunneling](https://en.wikipedia.org/wiki/Stochastic_tunneling)
 Stochastic Tunneling works very similar to simulated annealing, but modifies its probability to accept worse solutions by an additional term:
 
 <p align="center">
@@ -111,7 +111,7 @@ This new acceptance factor is used instead of the delta f in the original equati
 - When you have a good initial point to start from, but expect the surrounding search space to be very complex
 - Good as a second method of optimization
 
-#### Parallel Tempering
+#### [Parallel Tempering](https://en.wikipedia.org/wiki/Parallel_tempering)
 Parallel Tempering initializes multiple simulated annealing seaches with different temperatures and chooses to swap those temperatures with the following probability:
 
 <p align="center">
@@ -128,14 +128,14 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 
 ## Population Methods:
 
-#### Particle Swarm Optimizer
+#### [Particle Swarm Optimizer](https://en.wikipedia.org/wiki/Particle_swarm_optimization)
 Particle swarm optimization works by initializing a number of positions at the same time and moving all of those closer to the best one after each iteration. 
 
 ###### Use case/properties:
 - If the search space is complex and large
 - If you have enough time for many model evaluations
 
-#### Evolution Strategy
+#### [Evolution Strategy](https://en.wikipedia.org/wiki/Evolution_strategy)
 Evolution strategy mutates and combines the best individuals of a population across a number of generations without transforming them into an array of bits (like genetic algorithms) but uses the real values of the positions. 
 
 ###### Use case/properties:
@@ -144,7 +144,7 @@ Evolution strategy mutates and combines the best individuals of a population acr
 
 ## Sequential Methods:
 
-#### Bayesian Optimization
+#### [Bayesian Optimization](https://en.wikipedia.org/wiki/Bayesian_optimization)
 Bayesian optimization chooses new positions by calculating the expected improvement of every position in the search space based on a gaussian process that trains on already evaluated solutions.
 
 ###### Use case/properties:
@@ -153,6 +153,7 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 - If your search space is not to big
 
 
+</br>
 
 ##### Disclaimer:
 The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
