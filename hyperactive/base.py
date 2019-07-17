@@ -304,7 +304,7 @@ class BaseOptimizer(object):
             self.score_best = score_best_sorted[0]
             self.model_best = model_best_sorted[0]
 
-            self.model_best.fit(X, y)
+        self.model_best.fit(X, y)
 
     def predict(self, X_test):
         """Returns the prediction of X_test after a model was searched by `fit`
