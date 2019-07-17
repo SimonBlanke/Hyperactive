@@ -10,10 +10,16 @@ python:
   - "3.4"
 
 install:
+  - pip install numpy
+  - pip install scipy
+  - pip install pandas
+  - pip install scikit-learn
+  - pip install coverage
+  - pip install coveralls
   - pip install .
 
 script:
-  - nosetests --with-coverage --cover-package=hyperactive
+  - pytest
 
 after_success:
   - coverage report -m
