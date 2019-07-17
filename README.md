@@ -7,6 +7,10 @@ Hyperactive
 
 <p align="center">
 
+  <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
+    <img src="https://travis-ci.com/SimonBlanke/Hyperactive.svg?branch=master">
+  </a>
+  
   <a href="https://pypi.org/project/hyperactive/">
     <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?logo=python&logoColor=white">
   </a>
