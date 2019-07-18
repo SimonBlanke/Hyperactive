@@ -46,6 +46,7 @@ Hyperactive
 ---
 
 
+<br>
 
 ## Overview
 - Optimize hyperparameters of machine- or deep-learning models, using a simple API.
@@ -119,6 +120,8 @@ Hyperactive
 </table>
 
 
+<br>
+
 ## Performance
 
 The bar chart below shows, that the optimization process itself represents only a small fraction (<0.6%) of the computation time.
@@ -129,6 +132,7 @@ The 'No Opt'-bar shows the training time of a default Gradient-Boosting-Classifi
 </p>
 
 
+<br>
 
 ## Installation
 
@@ -138,6 +142,7 @@ pip install hyperactive
 ```
 
 
+<br>
 
 ## Examples
 
@@ -290,6 +295,7 @@ score = Optimizer.score(X_test, y_test)
 
 
 
+<br>
 
 ## Advanced Features
 
@@ -558,6 +564,7 @@ start_point = {
 </details>
 
 
+<br>
 
 ## Hyperactive API
 
