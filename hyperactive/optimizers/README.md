@@ -17,6 +17,8 @@ Hyperactive offers a wide variety of basic, meta-heuristic and sequential model-
 ---
 
 
+<br>
+
 ## Local Search:
 
 #### [Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/hill_climbing_optimizer.py)
@@ -39,6 +41,9 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 
 ###### Use case/properties:
 - When you have a good initial point to start from
+
+
+<br>
 
 ## Random Methods:
 
@@ -63,6 +68,9 @@ An algorithm that chooses a new position within a large hypersphere around the c
 - Disclaimer: I have not seen this algorithm before, but invented it myself. It seems to be a good alternative to the other random algorithms
 - Good as a first method of optimization
 - For a short optimization run to get an acceptable solution
+
+
+<br>
 
 ## Markov Chain Monte Carlo:
 
@@ -126,6 +134,8 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 - If you have enough time for many model evaluations
 
 
+<br>
+
 ## Population Methods:
 
 #### [Particle Swarm Optimizer](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/particle_swarm_optimization.py)
@@ -142,6 +152,9 @@ Evolution strategy mutates and combines the best individuals of a population acr
 - If the search space is very complex and large
 - If you have enough time for many model evaluations
 
+
+<br>
+
 ## Sequential Methods:
 
 #### [Bayesian Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/sequence_model/bayesian_optimization.py)
@@ -153,7 +166,9 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 - If your search space is not to big
 
 
-</br>
+<br>
+
+<br>
 
 ##### Disclaimer:
 The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
