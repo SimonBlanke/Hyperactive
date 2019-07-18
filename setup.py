@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="hyperactive",
-    version="0.3.4",
+    version="0.3.5",
     author="Simon Blanke",
     author_email="simon.blanke@yahoo.com",
     license="MIT",
@@ -31,5 +31,12 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=["numpy", "pandas", "tqdm", "scikit-learn>=0.18", "keras", "meta-learn"],
+    install_requires=[
+        "numpy",
+        "pandas",
+        "tqdm",
+        "scikit-learn>=0.18",
+        "keras",
+        "meta-learn",
+    ],
 )

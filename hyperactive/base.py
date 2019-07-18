@@ -38,7 +38,8 @@ class BaseOptimizer(object):
         ----------
 
         search_config: dict
-            A dictionary providing the model and hyperparameter search space for the optimization process.
+            A dictionary providing the model and hyperparameter search space for the
+            optimization process.
         n_iter: int
             The number of iterations the optimizer performs.
         metric: string, optional (default: "accuracy")
@@ -54,9 +55,11 @@ class BaseOptimizer(object):
         warm_start: dict, optional (default: False)
             Dictionary that definies a start point for the optimizer.
         memory: bool, optional (default: True)
-            A memory, that saves the evaluation during the optimization to save time when optimizer returns to position.
+            A memory, that saves the evaluation during the optimization to save time when
+            optimizer returns to position.
         scatter_init: int, optional (default: False)
-            Defines the number n of random positions that should be evaluated with 1/n the training data, to find a better initial position.
+            Defines the number n of random positions that should be evaluated with 1/n the
+            training data, to find a better initial position.
 
         Returns
         -------
