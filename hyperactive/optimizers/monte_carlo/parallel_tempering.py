@@ -9,7 +9,7 @@ import numpy as np
 
 # from .base import BaseOptimizer
 from ..local.hill_climbing_optimizer import HillClimber
-from .simulated_annealing import SimulatedAnnealingOptimizer
+from ...base import BasePositioner
 
 
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
@@ -69,7 +69,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
 
     def _find_neighbours(self, _cand_):
         for ann in self.ann_list:
-            ann.find_neighbour(_cand_)
+            ann.climb(_cand_)
 
     def _swap_pos(self, _cand_):
         for ann1 in self.ann_list:
@@ -104,11 +104,9 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 _cand_.pos_best = ann.pos_best
 
     def _iterate(self, i, _cand_, X, y):
-        self._annealer_.find_neighbour(_cand_)
+        self._annealer_.climb(_cand_)
         # _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
-
-        print("_cand_.pos_best", _cand_.pos_best)
 
         self._find_neighbours(_cand_)
         self._annealing_systems(_cand_)
@@ -129,7 +127,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         self.ann_list = self._init_annealers(_cand_)
 
 
-class Annealer(HillClimber):
+class Annealer(BasePositioner):
     def __init__(self, eps=1, temp=1):
         super().__init__(eps)
 
@@ -140,6 +138,3 @@ class Annealer(HillClimber):
         self.score_best = -1000
 
         self.temp = temp
-
-    def find_neighbour(self, _cand_):
-        super().climb(_cand_)

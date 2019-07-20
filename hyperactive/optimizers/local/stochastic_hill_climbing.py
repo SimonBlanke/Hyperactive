@@ -4,9 +4,9 @@
 
 
 import random
-import numpy as np
 
 from ...base import BaseOptimizer
+from ...base import BasePositioner
 
 
 class StochasticHillClimbingOptimizer(BaseOptimizer):
@@ -71,14 +71,6 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         _cand_.score_current = _cand_.score
 
 
-class HillClimber:
+class HillClimber(BasePositioner):
     def __init__(self, eps):
         self.eps = eps
-
-    def climb(self, _cand_, eps_mod=1):
-        sigma = (_cand_._space_.dim / 33) * self.eps / eps_mod
-        pos_new = np.random.normal(_cand_.pos_current, sigma, _cand_.pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        n_zeros = [0] * len(_cand_._space_.dim)
-        self.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)

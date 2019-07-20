@@ -8,7 +8,7 @@ import random
 import numpy as np
 
 from ...base import BaseOptimizer
-from ..local.hill_climbing_optimizer import HillClimber
+from ...base import BasePositioner
 
 
 class StochasticTunnelingOptimizer(BaseOptimizer):
@@ -77,7 +77,7 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
         return self.pos_curr
 
     def _iterate(self, i, _cand_, X, y):
-        self._annealer_.find_neighbour(_cand_)
+        self._annealer_.climb(_cand_)
         _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
 
@@ -92,9 +92,6 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
         self.score_curr = _cand_.score
 
 
-class Annealer(HillClimber):
+class Annealer(BasePositioner):
     def __init__(self, eps=1):
         super().__init__(eps)
-
-    def find_neighbour(self, _cand_):
-        super().climb(_cand_)

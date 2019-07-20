@@ -7,8 +7,7 @@ import numpy as np
 import random
 
 from ...base import BaseOptimizer
-
-# from .hill_climbing_optimizer import HillClimber
+from ...base import BasePositioner
 
 
 class EvolutionStrategyOptimizer(BaseOptimizer):
@@ -59,7 +58,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
     def _mutate_individuals(self, cand, mutate_idx):
         self.ind_list = np.array(self.ind_list)
         for ind in self.ind_list[mutate_idx]:
-            ind.mutate(cand)
+            ind.climb(cand)
 
     def _crossover(self, cand, cross_idx, replace_idx):
         self.ind_list = np.array(self.ind_list)
@@ -139,18 +138,10 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
         self._init_individuals(_cand_)
 
 
-class Individual:
+class Individual(BasePositioner):
     def __init__(self):
         self.pos = None
         self.pos_best = None
 
         self.score = -1000
         self.score_best = -1000
-
-    def mutate(self, _cand_):
-        sigma = _cand_._space_.dim / 33
-        pos_new = np.random.normal(self.pos, sigma, self.pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        n_zeros = [0] * len(_cand_._space_.dim)
-        self.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)

@@ -4,7 +4,7 @@
 
 
 from ...base import BaseOptimizer
-from ..local.hill_climbing_optimizer import HillClimber
+from ...base import BasePositioner
 
 
 class RandomAnnealingOptimizer(BaseOptimizer):
@@ -38,14 +38,14 @@ class RandomAnnealingOptimizer(BaseOptimizer):
 
         self.eps = eps
         self.t_rate = t_rate
-        self.temp = 10
+        self.temp = 1
 
         self.initializer = self._init_rnd_annealing
 
     def _iterate(self, i, _cand_, X, y):
         self.temp = self.temp * self.t_rate
 
-        self._annealer_.find_neighbour(_cand_, self.temp)
+        self._annealer_.climb(_cand_, self.temp)
         _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
 
@@ -61,9 +61,6 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         self.score_current = _cand_.score
 
 
-class Annealer(HillClimber):
+class Annealer(BasePositioner):
     def __init__(self, eps):
         super().__init__(eps)
-
-    def find_neighbour(self, _cand_, eps_mod):
-        super().climb(_cand_)

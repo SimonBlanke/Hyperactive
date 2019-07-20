@@ -23,7 +23,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         warm_start=False,
         memory=True,
         scatter_init=False,
-        n_part=4,
+        n_part=10,
         w=0.5,
         c_k=0.5,
         c_s=0.9,
@@ -48,37 +48,40 @@ class ParticleSwarmOptimizer(BaseOptimizer):
 
         self.initializer = self._init_part
 
-    def _find_best_particle(self, cand):
+    def _find_best_particle(self, _cand_):
         for p in self.part_list:
-            if p.score_best > cand.score_best:
-                cand.score_best = p.score_best
-                cand.pos_best = p.pos_best
+            if p.score_best > _cand_.score_best:
+                _cand_.score_best = p.score_best
+                _cand_.pos_best = p.pos_best
 
-    def _init_particles(self, cand):
+    def _init_particles(self, _cand_):
         self.part_list = [Particle() for _ in range(self.n_part)]
         for i, p in enumerate(self.part_list):
             p.nr = i
-            p.pos = cand._space_.get_random_pos()
+            p.pos = _cand_._space_.get_random_pos()
             p.pos_best = p.pos
-            p.velo = np.zeros(len(cand._space_.para_space))
+            p.velo = np.zeros(len(_cand_._space_.para_space))
 
         return self.part_list
 
-    def _move_particles(self, cand):
+    def _move_particles(self, _cand_):
 
         for p in self.part_list:
             A = self.w * p.velo
             B = self.c_k * random.random() * np.subtract(p.pos_best, p.pos)
-            C = self.c_s * random.random() * np.subtract(cand.pos_best, p.pos)
+            C = self.c_s * random.random() * np.subtract(_cand_.pos_best, p.pos)
             new_velocity = A + B + C
 
-            p.velo = new_velocity
-            p.move(cand)
+            print("new_velocity      ", new_velocity)
+            print("p.pos             ", p.pos)
 
-    def _eval_particles(self, cand, X, y):
+            p.velo = new_velocity
+            p.move(_cand_)
+
+    def _eval_particles(self, _cand_, X, y):
         for p in self.part_list:
-            para = cand._space_.pos2para(p.pos)
-            p.score, _, _ = cand._model_.train_model(para, X, y)
+            para = _cand_._space_.pos2para(p.pos)
+            p.score, _, _ = _cand_._model_.train_model(para, X, y)
 
             if p.score > p.score_best:
                 p.score_best = p.score

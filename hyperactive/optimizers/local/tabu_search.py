@@ -3,9 +3,8 @@
 # License: MIT License
 
 
-import numpy as np
-
 from ...base import BaseOptimizer
+from ...base import BasePositioner
 
 
 class TabuOptimizer(BaseOptimizer):
@@ -61,22 +60,16 @@ class TabuOptimizer(BaseOptimizer):
         self._climber_ = HillClimber(self.eps)
 
 
-class HillClimber:
+class HillClimber(BasePositioner):
     def __init__(self, eps):
         self.eps = eps
 
         self.tabu_memory_short = []
 
     def climb_tabu(self, _cand_, eps_mod=1):
-        sigma = (_cand_._space_.dim / 33) * self.eps * eps_mod
-
         in_tabu_mem = True
         while in_tabu_mem:
-            pos_new = np.random.normal(_cand_.pos_best, sigma, _cand_.pos.shape)
-            pos_new_int = np.rint(pos_new)
+            pos_new = self.climb(_cand_)
 
-            if not any((pos_new_int == pos).all() for pos in self.tabu_memory_short):
+            if not any((pos_new == pos).all() for pos in self.tabu_memory_short):
                 in_tabu_mem = False
-
-        n_zeros = [0] * len(_cand_._space_.dim)
-        _cand_.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
