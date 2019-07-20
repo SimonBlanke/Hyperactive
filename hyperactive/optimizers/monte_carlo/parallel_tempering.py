@@ -114,9 +114,6 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         if i % self.n_iter_swap == 0:
             self._swap_pos(_cand_)
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_tempering(self, _cand_):

@@ -89,9 +89,6 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         self._find_best_particle(_cand_)
         self._move_particles(_cand_)
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_part(self, _cand_):

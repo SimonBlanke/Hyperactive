@@ -57,9 +57,6 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
         if i % self.n_iter_restart == 0:
             _cand_.pos = _cand_._space_.get_random_pos()
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_rr_climber(self, _cand_):

@@ -105,9 +105,6 @@ class BayesianOptimizer(BaseOptimizer):
         self.X_sample = np.vstack((self.X_sample, _cand_.pos))
         self.Y_sample = np.vstack((self.Y_sample, _cand_.score))
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def init_bayesian(self, _cand_):

@@ -133,9 +133,6 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
         self._eval_individuals(_cand_, X, y)
         self._find_best_individual(_cand_)
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_evo(self, _cand_):

@@ -77,9 +77,6 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
 
         self._annealing(_cand_)
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_annealing(self, _cand_):

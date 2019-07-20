@@ -55,9 +55,6 @@ class TabuOptimizer(BaseOptimizer):
             if len(self._climber_.tabu_memory_short) > self.tabu_memory[0]:
                 del self._climber_.tabu_memory_short[0]
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_tabu(self, _cand_):

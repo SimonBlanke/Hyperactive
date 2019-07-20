@@ -54,9 +54,6 @@ class RandomAnnealingOptimizer(BaseOptimizer):
             _cand_.score_best = _cand_.score
             _cand_.pos_best = _cand_.pos
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_rnd_annealing(self, _cand_):

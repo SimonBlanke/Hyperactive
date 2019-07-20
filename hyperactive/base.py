@@ -256,6 +256,9 @@ class BaseOptimizer(object):
         for i in range(self.n_iter):
             _cand_ = self._iterate(i, _cand_, X, y)
 
+            if self._show_progress_bar():
+                self.p_bar.update(1)
+
         return _cand_
 
     def _search_multiprocessing(self, X, y):

@@ -62,9 +62,6 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
             _cand_.pos_current = _cand_.pos
             _cand_.score_current = _cand_.score
 
-        if self._show_progress_bar():
-            self.p_bar.update(1)
-
         return _cand_
 
     def _init_stoch_climber(self, _cand_):
