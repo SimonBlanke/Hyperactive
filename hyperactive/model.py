@@ -145,7 +145,7 @@ class DeepLearner(Model):
 
         return layers_para_dict
 
-    def _create_keras_model(self, keras_para_dict):
+    def _create_model(self, keras_para_dict):
         from keras.models import Sequential
 
         layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
@@ -169,7 +169,7 @@ class DeepLearner(Model):
         return fit_para_dict
 
     def train_model(self, keras_para_dict, X_train, y_train):
-        model, layers_para_dict = self._create_keras_model(keras_para_dict)
+        model, layers_para_dict = self._create_model(keras_para_dict)
 
         if list(layers_para_dict.keys())[0] == "keras.compile.0":
             compile_para_dict = self._get_compile_parameter(layers_para_dict)
@@ -258,8 +258,11 @@ class MachineLearner(Model):
 
         return start_point
 
+    def _create_model(self, sklearn_para_dict):
+        return self.model(**sklearn_para_dict)
+
     def train_model(self, sklearn_para_dict, X_train, y_train):
-        sklearn_model = self.model(**sklearn_para_dict)
+        sklearn_model = self._create_model(sklearn_para_dict)
 
         time_temp = time.perf_counter()
         scores = cross_val_score(
