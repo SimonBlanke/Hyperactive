@@ -2,13 +2,13 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from hyperactive import RandomSearchOptimizer
 
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
+def test_methods():
+    from hyperactive import RandomSearchOptimizer
 
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
 
-def test_predict():
     iris_data = load_iris()
     X = iris_data.data
     y = iris_data.target
@@ -22,3 +22,4 @@ def test_predict():
     Optimizer = RandomSearchOptimizer(search_config, n_iter=10, verbosity=0)
     Optimizer.fit(X_train, y_train)
     Optimizer.predict(X_test)
+    Optimizer.score(X_test, y_test)
