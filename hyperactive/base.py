@@ -302,7 +302,9 @@ class BaseOptimizer(object):
 
             start_point = _cand_._get_warm_start()
             self.score_best = _cand_.score_best
-            self.model_best = _cand_.model_best
+
+            para = _cand_._space_.pos2para(_cand_.pos_best)
+            self.model_best = _cand_._model_._create_model(para)
 
             if self.verbosity:
                 print("\n", self.metric, self.score_best)
@@ -317,7 +319,9 @@ class BaseOptimizer(object):
             for _cand_ in _cand_list:
                 start_point = _cand_._get_warm_start()
                 score_best = _cand_.score_best
-                model_best = _cand_.model_best
+
+                para = _cand_._space_.pos2para(_cand_.pos_best)
+                model_best = _cand_._model_._create_model(para)
 
                 start_point_list.append(start_point)
                 score_best_list.append(score_best)
@@ -394,3 +398,23 @@ class BasePositioner(object):
     def __init__(self):
         self.pos = None
         self.score = -1000
+
+    def climb(self, _cand_, eps_mod=1):
+        sigma = (_cand_._space_.dim / 33) * self.eps / eps_mod
+        pos_new = np.random.normal(_cand_.pos_best, sigma, _cand_.pos.shape)
+        pos_new_int = np.rint(pos_new)
+
+        n_zeros = [0] * len(_cand_._space_.dim)
+        pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+
+        if np.array_equal(_cand_.pos_best, self.pos):
+            pos_new = np.random.uniform(
+                _cand_.pos_best - 1, _cand_.pos_best + 1, _cand_.pos_best.shape
+            )
+            self.pos = np.rint(pos_new)
+
+            n_zeros = [0] * len(_cand_._space_.dim)
+            pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+
+        self.pos = pos
+        return pos
