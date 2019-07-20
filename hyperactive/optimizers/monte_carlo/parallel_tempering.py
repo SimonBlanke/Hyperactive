@@ -55,17 +55,17 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
 
         self.initializer = self._init_tempering
 
-    def _init_annealers(self, cand):
+    def _init_annealers(self, _cand_):
         self.ann_list = [Annealer(temp=temp) for temp in self.system_temps]
         for ind in self.ann_list:
-            ind.pos = cand._space_.get_random_pos()
+            ind.pos = _cand_._space_.get_random_pos()
             ind.pos_best = ind.pos
 
         return self.ann_list
 
     def _annealing_systems(self, _cand_):
-        for annealer in self.ann_list:
-            annealer.pos_curr = self._annealing(_cand_)
+        for ann in self.ann_list:
+            ann.pos = self._annealing(ann)
 
     def _find_neighbours(self, _cand_):
         for ann in self.ann_list:
@@ -88,25 +88,27 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                     ann1.temp = temp_temp
                     break
 
-    def _eval_annealers(self, cand, X, y):
+    def _eval_annealers(self, _cand_, X, y):
         for ann in self.ann_list:
-            para = cand._space_.pos2para(ann.pos)
-            ann.score, _, _ = cand._model_.train_model(para, X, y)
+            para = _cand_._space_.pos2para(ann.pos)
+            ann.score, _, _ = _cand_._model_.train_model(para, X, y)
 
             if ann.score > ann.score_best:
                 ann.score_best = ann.score
                 ann.pos_best = ann.pos
 
-    def _find_best_annealer(self, cand):
+    def _find_best_annealer(self, _cand_):
         for ann in self.ann_list:
-            if ann.score_best > cand.score_best:
-                cand.score_best = ann.score_best
-                cand.pos_best = ann.pos_best
+            if ann.score_best > _cand_.score_best:
+                _cand_.score_best = ann.score_best
+                _cand_.pos_best = ann.pos_best
 
     def _iterate(self, i, _cand_, X, y):
         self._annealer_.find_neighbour(_cand_)
-        _cand_.pos = self._annealer_.pos
+        # _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
+
+        print("_cand_.pos_best", _cand_.pos_best)
 
         self._find_neighbours(_cand_)
         self._annealing_systems(_cand_)
