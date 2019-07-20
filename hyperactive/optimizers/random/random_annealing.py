@@ -42,28 +42,27 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         self.t_rate = t_rate
         self.temp = 0.1
 
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
-        _annealer_ = Annealer(self.eps)
+        self.initializer = self._init_rnd_annealing
 
+    def _iterate(self, i, _cand_, X, y):
+        self.temp = self.temp * self.t_rate
+
+        self._annealer_.find_neighbour(_cand_, self.temp)
         _cand_.eval(X, y)
 
-        _cand_.score_best = _cand_.score
-        _cand_.pos_best = _cand_.pos
+        if _cand_.score > _cand_.score_best:
+            _cand_.score_best = _cand_.score
+            _cand_.pos_best = _cand_.pos
 
-        self.score_current = _cand_.score
-
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-            self.temp = self.temp * self.t_rate
-
-            _annealer_.find_neighbour(_cand_, self.temp)
-            _cand_.eval(X, y)
-
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                _cand_.pos_best = _cand_.pos
+        if self._show_progress_bar():
+            self.p_bar.update(1)
 
         return _cand_
+
+    def _init_rnd_annealing(self, _cand_):
+        self._annealer_ = Annealer(self.eps)
+
+        self.score_current = _cand_.score
 
 
 class Annealer(HillClimber):

@@ -7,6 +7,7 @@ import pickle
 import multiprocessing
 import random
 
+import tqdm
 import scipy
 import numpy as np
 import pandas as pd
@@ -90,6 +91,7 @@ class BaseOptimizer(object):
         self._set_n_jobs()
 
         self._n_process_range = range(0, int(self.n_jobs))
+        self.opt_type = None
 
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
@@ -184,7 +186,18 @@ class BaseOptimizer(object):
 
         return sort_sorted, sort_by_sorted
 
-    def _init_search(self, nth_process, X, y):
+    def _show_progress_bar(self):
+        show = False
+
+        if self.model_type == "keras" or self.model_type == "torch":
+            return show
+
+        if self.verbosity > 0:
+            show = True
+
+        return show
+
+    def _init_search(self, nth_process, X, y, init=None):
         """Initializes the search by instantiating the ml- or dl-candidate for each process"""
         self._set_random_seed(nth_process)
         # self.n_steps = self._set_n_steps(nth_process)
@@ -215,6 +228,17 @@ class BaseOptimizer(object):
             )
 
         _cand_.pos = _cand_._init_._set_start_pos(nth_process, X, y)
+        _cand_.eval(X, y)
+        _cand_.score_best = _cand_.score
+        _cand_.pos_best = _cand_.pos
+
+        # initialize optimizer specific objects
+        if self.initializer:
+            self.initializer(_cand_)
+
+        # create progress bar
+        if self._show_progress_bar():
+            self.p_bar = tqdm.tqdm(**self._tqdm_dict(_cand_))
 
         return _cand_
 
@@ -225,6 +249,14 @@ class BaseOptimizer(object):
         model = getattr(module, model_str)
 
         return model
+
+    def search(self, nth_process, X, y):
+        _cand_ = self._init_search(nth_process, X, y)
+
+        for i in range(self.n_iter):
+            _cand_ = self._iterate(i, _cand_, X, y)
+
+        return _cand_
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
@@ -353,3 +385,8 @@ class BaseOptimizer(object):
         """
         if self.model_best:
             pickle.dump(self.model_best, open(filename, "wb"))
+
+
+class BasePositioner(object):
+    def __init__(self):
+        self.pos = None

@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-import tqdm
 import random
 import numpy as np
 
@@ -42,34 +41,37 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         self.eps = eps
         self.r = r
 
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
-        _climber_ = HillClimber(self.eps)
+        self.initializer = self._init_stoch_climber
 
+    def _iterate(self, i, _cand_, X, y):
+        rand = random.uniform(0, self.r)
+
+        self._climber_.climb(_cand_)
+        _cand_.pos = self._climber_.pos
         _cand_.eval(X, y)
+
+        score_diff_norm = abs(_cand_.score_current - _cand_.score) / (
+            _cand_.score_current + _cand_.score
+        )
+
+        if _cand_.score > _cand_.score_best:
+            _cand_.score_best = _cand_.score
+            _cand_.pos_best = _cand_.pos
+
+        elif score_diff_norm > rand:
+            _cand_.pos_current = _cand_.pos
+            _cand_.score_current = _cand_.score
+
+        if self._show_progress_bar():
+            self.p_bar.update(1)
+
+        return _cand_
+
+    def _init_stoch_climber(self, _cand_):
+        self._climber_ = HillClimber(self.eps)
 
         _cand_.pos_current = _cand_.pos
         _cand_.score_current = _cand_.score
-
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-            rand = random.uniform(0, self.r)
-
-            _climber_.climb(_cand_)
-            _cand_.eval(X, y)
-
-            score_diff_norm = abs(_cand_.score_current - _cand_.score) / (
-                _cand_.score_current + _cand_.score
-            )
-
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                _cand_.pos_best = _cand_.pos
-
-            elif score_diff_norm > rand:
-                _cand_.pos_current = _cand_.pos
-                _cand_.score_current = _cand_.score
-
-        return _cand_
 
 
 class HillClimber:
@@ -82,4 +84,4 @@ class HillClimber:
         pos_new_int = np.rint(pos_new)
 
         n_zeros = [0] * len(_cand_._space_.dim)
-        _cand_.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+        self.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)

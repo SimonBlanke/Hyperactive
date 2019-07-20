@@ -6,7 +6,6 @@
 import random
 
 import numpy as np
-import tqdm
 
 from ...base import BaseOptimizer
 from ..local.hill_climbing_optimizer import HillClimber
@@ -49,6 +48,8 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
         self.gamma = gamma
         self.temp = 0.1
 
+        self.initializer = self._init_tunneling
+
     def _annealing(self, _cand_):
         self.temp = self.temp * self.t_rate
         rand = random.uniform(0, 1)
@@ -75,26 +76,22 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
 
         return self.pos_curr
 
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
-        _annealer_ = Annealer()
-
+    def _iterate(self, i, _cand_, X, y):
+        self._annealer_.find_neighbour(_cand_)
         _cand_.eval(X, y)
 
-        _cand_.pos_best = _cand_.pos
-        _cand_.score_best = _cand_.score
+        self._annealing(_cand_)
+
+        if self._show_progress_bar():
+            self.p_bar.update(1)
+
+        return _cand_
+
+    def _init_tunneling(self, _cand_):
+        self._annealer_ = Annealer()
 
         self.pos_curr = _cand_.pos
         self.score_curr = _cand_.score
-
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-
-            _annealer_.find_neighbour(_cand_)
-            _cand_.eval(X, y)
-
-            self._annealing(_cand_)
-
-        return _cand_
 
 
 class Annealer(HillClimber):

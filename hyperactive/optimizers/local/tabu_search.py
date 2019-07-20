@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-import tqdm
 import numpy as np
 
 from ...base import BaseOptimizer
@@ -41,30 +40,28 @@ class TabuOptimizer(BaseOptimizer):
         self.eps = eps
         self.tabu_memory = tabu_memory
 
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
-        _climber_ = HillClimber(self.eps)
+        self.initializer = self._init_tabu
 
+    def _iterate(self, i, _cand_, X, y):
+        self._climber_.climb_tabu(_cand_)
         _cand_.eval(X, y)
 
-        _cand_.score_best = _cand_.score
-        _cand_.pos_best = _cand_.pos
+        if _cand_.score > _cand_.score_best:
+            _cand_.score_best = _cand_.score
+            _cand_.pos_best = _cand_.pos
 
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
+            self._climber_.tabu_memory_short.append(_cand_.pos_best)
 
-            _climber_.climb_tabu(_cand_)
-            _cand_.eval(X, y)
+            if len(self._climber_.tabu_memory_short) > self.tabu_memory[0]:
+                del self._climber_.tabu_memory_short[0]
 
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                _cand_.pos_best = _cand_.pos
-
-                _climber_.tabu_memory_short.append(_cand_.pos_best)
-
-                if len(_climber_.tabu_memory_short) > self.tabu_memory[0]:
-                    del _climber_.tabu_memory_short[0]
+        if self._show_progress_bar():
+            self.p_bar.update(1)
 
         return _cand_
+
+    def _init_tabu(self, _cand_):
+        self._climber_ = HillClimber(self.eps)
 
 
 class HillClimber:

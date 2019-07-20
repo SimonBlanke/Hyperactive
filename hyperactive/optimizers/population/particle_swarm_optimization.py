@@ -47,25 +47,27 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         self.c_k = c_k
         self.c_s = c_s
 
-    def _find_best_particle(self, cand, part_list):
-        for p in part_list:
+        self.initializer = self._init_part
+
+    def _find_best_particle(self, cand):
+        for p in self.part_list:
             if p.score_best > cand.score_best:
                 cand.score_best = p.score_best
                 cand.pos_best = p.pos_best
 
     def _init_particles(self, cand):
-        part_list = [Particle() for _ in range(self.n_part)]
-        for i, p in enumerate(part_list):
+        self.part_list = [Particle() for _ in range(self.n_part)]
+        for i, p in enumerate(self.part_list):
             p.nr = i
             p.pos = cand._space_.get_random_pos()
             p.pos_best = p.pos
             p.velo = np.zeros(len(cand._space_.para_space))
 
-        return part_list
+        return self.part_list
 
-    def _move_particles(self, cand, part_list):
+    def _move_particles(self, cand):
 
-        for p in part_list:
+        for p in self.part_list:
             A = self.w * p.velo
             B = self.c_k * random.random() * np.subtract(p.pos_best, p.pos)
             C = self.c_s * random.random() * np.subtract(cand.pos_best, p.pos)
@@ -74,8 +76,8 @@ class ParticleSwarmOptimizer(BaseOptimizer):
             p.velo = new_velocity
             p.move(cand)
 
-    def _eval_particles(self, cand, part_list, X, y):
-        for p in part_list:
+    def _eval_particles(self, cand, X, y):
+        for p in self.part_list:
             para = cand._space_.pos2para(p.pos)
             p.score, _, _ = cand._model_.train_model(para, X, y)
 
@@ -83,21 +85,18 @@ class ParticleSwarmOptimizer(BaseOptimizer):
                 p.score_best = p.score
                 p.pos_best = p.pos
 
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
+    def _iterate(self, i, _cand_, X, y):
+        self._eval_particles(_cand_, X, y)
+        self._find_best_particle(_cand_)
+        self._move_particles(_cand_)
 
-        _cand_.eval(X, y)
-
-        _cand_.score_best = _cand_.score
-        _cand_.pos_best = _cand_.pos
-
-        part_list = self._init_particles(_cand_)
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-            self._eval_particles(_cand_, part_list, X, y)
-            self._find_best_particle(_cand_, part_list)
-            self._move_particles(_cand_, part_list)
+        if self._show_progress_bar():
+            self.p_bar.update(1)
 
         return _cand_
+
+    def _init_part(self, _cand_):
+        self.part_list = self._init_particles(_cand_)
 
 
 class Particle:

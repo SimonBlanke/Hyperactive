@@ -43,6 +43,7 @@ class BayesianOptimizer(BaseOptimizer):
         )
 
         self.xi = 0.01
+        self.initializer = self.init_bayesian
 
         # Gaussian process with Mat??rn kernel as surrogate model
         # m52 = ConstantKernel(1.0) * Matern(length_scale=1.0, nu=2.5)
@@ -56,9 +57,9 @@ class BayesianOptimizer(BaseOptimizer):
             # random_state=self._random_state,
         )
 
-    def expected_improvement(self, X_sample, Y_sample, xi=0.01):
+    def expected_improvement(self, xi=0.01):
         mu, sigma = self.gpr.predict(self.all_pos_comb, return_std=True)
-        mu_sample = self.gpr.predict(X_sample)
+        mu_sample = self.gpr.predict(self.X_sample)
 
         sigma = sigma.reshape(-1, 1)
         mu_sample_opt = np.max(mu_sample)
@@ -79,8 +80,8 @@ class BayesianOptimizer(BaseOptimizer):
         self.n_dim = len(pos_space)
         self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
 
-    def propose_location(self, cand, X_sample, Y_sample):
-        ei = self.expected_improvement(X_sample, Y_sample)
+    def propose_location(self, cand):
+        ei = self.expected_improvement()
         ei = ei[:, 0]
 
         index_best = list(ei.argsort()[::-1])
@@ -90,36 +91,26 @@ class BayesianOptimizer(BaseOptimizer):
 
         return pos_best
 
-    def _move(self, cand, X_sample, Y_sample):
-        pos = self.propose_location(cand, X_sample, Y_sample)
-        cand.pos = pos
-
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
+    def _iterate(self, i, _cand_, X, y):
+        self.gpr.fit(self.X_sample, self.Y_sample)
+        pos = self.propose_location(_cand_)
+        _cand_.pos = pos
 
         _cand_.eval(X, y)
 
-        self._all_possible_pos(_cand_)
+        if _cand_.score > _cand_.score_best:
+            _cand_.score_best = _cand_.score
+            _cand_.pos_best = _cand_.pos
 
-        _cand_.score_best = _cand_.score
-        _cand_.pos_best = _cand_.pos
+        self.X_sample = np.vstack((self.X_sample, _cand_.pos))
+        self.Y_sample = np.vstack((self.Y_sample, _cand_.score))
 
-        X_sample = _cand_.pos.reshape(1, -1)
-        Y_sample = _cand_.score.reshape(1, -1)
-
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-            self.gpr.fit(X_sample, Y_sample)
-
-            self._move(_cand_, X_sample, Y_sample)
-            _cand_.eval(X, y)
-
-            # print("_cand_.pos", _cand_.pos)
-
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                _cand_.pos_best = _cand_.pos
-
-            X_sample = np.vstack((X_sample, _cand_.pos))
-            Y_sample = np.vstack((Y_sample, _cand_.score))
+        if self._show_progress_bar():
+            self.p_bar.update(1)
 
         return _cand_
+
+    def init_bayesian(self, _cand_):
+        self._all_possible_pos(_cand_)
+        self.X_sample = _cand_.pos.reshape(1, -1)
+        self.Y_sample = _cand_.score.reshape(1, -1)

@@ -3,10 +3,10 @@
 # License: MIT License
 
 
-import tqdm
 import numpy as np
 
 from ...base import BaseOptimizer
+from ...base import BasePositioner
 
 
 class HillClimbingOptimizer(BaseOptimizer):
@@ -38,29 +38,27 @@ class HillClimbingOptimizer(BaseOptimizer):
         )
 
         self.eps = eps
+        self.initializer = self._init_climber
 
-    def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
-        _climber_ = HillClimber(self.eps)
-
+    def _iterate(self, i, _cand_, X, y):
+        self._climber_.climb(_cand_)
+        _cand_.pos = self._climber_.pos
         _cand_.eval(X, y)
 
-        _cand_.score_best = _cand_.score
-        _cand_.pos_best = _cand_.pos
+        if _cand_.score > _cand_.score_best:
+            _cand_.score_best = _cand_.score
+            _cand_.pos_best = _cand_.pos
 
-        for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
-
-            _climber_.climb(_cand_)
-            _cand_.eval(X, y)
-
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                _cand_.pos_best = _cand_.pos
+        if self._show_progress_bar():
+            self.p_bar.update(1)
 
         return _cand_
 
+    def _init_climber(self, _cand_):
+        self._climber_ = HillClimber(self.eps)
 
-class HillClimber:
+
+class HillClimber(BasePositioner):
     def __init__(self, eps):
         self.eps = eps
 
@@ -70,4 +68,4 @@ class HillClimber:
         pos_new_int = np.rint(pos_new)
 
         n_zeros = [0] * len(_cand_._space_.dim)
-        _cand_.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+        self.pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
