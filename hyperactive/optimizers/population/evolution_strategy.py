@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-import tqdm
 import numpy as np
 import random
 

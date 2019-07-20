@@ -6,7 +6,6 @@
 import random
 
 import numpy as np
-import tqdm
 
 from ...base import BaseOptimizer
 
