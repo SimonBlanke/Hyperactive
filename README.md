@@ -23,14 +23,13 @@ Hyperactive
     <img src="https://img.shields.io/pypi/l/hyperactive.svg">
   </a>
 
-  <a href="https://pypi.org/project/hyperactive/">
-    <img src="https://img.shields.io/pypi/dm/hyperactive.svg?label=pypi%20downloads&logo=python&logoColor=white">
+  <a href="https://pepy.tech/project/hyperactive">
+    <img src="https://pepy.tech/badge/hyperactive">
   </a>
   <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
   </a>
 
 </p>
-
 
 ---
 
