@@ -393,3 +393,4 @@ class BaseOptimizer(object):
 class BasePositioner(object):
     def __init__(self):
         self.pos = None
+        self.score = -1000

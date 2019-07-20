@@ -148,7 +148,7 @@ class Individual:
         self.score_best = -1000
 
     def mutate(self, _cand_):
-        sigma = _cand_._space_.dim / 10
+        sigma = _cand_._space_.dim / 33
         pos_new = np.random.normal(self.pos, sigma, self.pos.shape)
         pos_new_int = np.rint(pos_new)
 

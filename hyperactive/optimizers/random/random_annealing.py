@@ -3,8 +3,6 @@
 # License: MIT License
 
 
-import tqdm
-
 from ...base import BaseOptimizer
 from ..local.hill_climbing_optimizer import HillClimber
 
@@ -40,7 +38,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
 
         self.eps = eps
         self.t_rate = t_rate
-        self.temp = 0.1
+        self.temp = 10
 
         self.initializer = self._init_rnd_annealing
 
@@ -48,6 +46,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         self.temp = self.temp * self.t_rate
 
         self._annealer_.find_neighbour(_cand_, self.temp)
+        _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
 
         if _cand_.score > _cand_.score_best:

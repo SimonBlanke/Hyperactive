@@ -68,7 +68,7 @@ class HillClimber:
         self.tabu_memory_short = []
 
     def climb_tabu(self, _cand_, eps_mod=1):
-        sigma = (_cand_._space_.dim / 100) * self.eps * eps_mod
+        sigma = (_cand_._space_.dim / 33) * self.eps * eps_mod
 
         in_tabu_mem = True
         while in_tabu_mem:

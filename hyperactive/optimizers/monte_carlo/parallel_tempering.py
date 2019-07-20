@@ -104,6 +104,8 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 cand.pos_best = ann.pos_best
 
     def _iterate(self, i, _cand_, X, y):
+        self._annealer_.find_neighbour(_cand_)
+        _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
 
         self._find_neighbours(_cand_)
@@ -111,7 +113,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         self._eval_annealers(_cand_, X, y)
         self._find_best_annealer(_cand_)
 
-        if i % self.n_iter_swap == 0:
+        if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
             self._swap_pos(_cand_)
 
         return _cand_

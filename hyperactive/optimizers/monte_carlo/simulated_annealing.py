@@ -52,28 +52,31 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         rand = random.uniform(0, 1)
 
         # Normalized score difference to have a factor for later use with temperature and random
-        score_diff_norm = (self.score_curr - _cand_.score) / (
-            self.score_curr + _cand_.score
+        score_diff_norm = (self._annealer_.score - _cand_.score) / (
+            self._annealer_.score + _cand_.score
         )
         p_accept = np.exp(-(score_diff_norm / self.temp))
 
-        if _cand_.score > self.score_curr:
-            self.score_curr = _cand_.score
-            self.pos_curr = _cand_.pos
+        if _cand_.score > self._annealer_.score:
+            self._annealer_.score = _cand_.score
+            self._annealer_.pos = _cand_.pos
 
             if _cand_.score > _cand_.score_best:
                 _cand_.score_best = _cand_.score
-                self.pos_curr = _cand_.pos
+                self._annealer_.pos = _cand_.pos
 
         elif p_accept > rand:
-            self.score_curr = _cand_.score
-            self.pos_curr = _cand_.pos
+            self._annealer_.score = _cand_.score
+            self._annealer_.pos = _cand_.pos
 
-        return self.pos_curr
+        return self._annealer_.pos
 
     def _iterate(self, i, _cand_, X, y):
         self._annealer_.find_neighbour(_cand_)
+        _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
+
+        print("_cand_.pos", _cand_.pos)
 
         self._annealing(_cand_)
 
@@ -82,8 +85,8 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
     def _init_annealing(self, _cand_):
         self._annealer_ = Annealer()
 
-        self.pos_curr = _cand_.pos
-        self.score_curr = _cand_.score
+        self._annealer_.pos = _cand_.pos
+        self._annealer_.score = _cand_.score
 
 
 class Annealer(HillClimber):

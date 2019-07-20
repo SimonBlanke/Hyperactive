@@ -78,6 +78,7 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
 
     def _iterate(self, i, _cand_, X, y):
         self._annealer_.find_neighbour(_cand_)
+        _cand_.pos = self._annealer_.pos
         _cand_.eval(X, y)
 
         self._annealing(_cand_)
