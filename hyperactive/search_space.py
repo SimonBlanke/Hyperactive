@@ -45,6 +45,14 @@ class SearchSpace:
         pass
 
     def get_random_pos(self):
+        pos_new = np.random.uniform(np.zeros(self.dim.shape), self.dim, self.dim.shape)
+        pos = np.rint(pos_new)
+
+        # n_zeros = [0] * len(self.dim)
+        # pos = np.clip(pos_new_int, n_zeros, self.dim)
+        return pos
+
+    def _get_random_pos(self):
         pos = []
 
         for hyperpara_name in self.para_space.keys():
