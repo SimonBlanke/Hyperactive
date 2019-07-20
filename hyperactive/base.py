@@ -94,8 +94,8 @@ class BaseOptimizer(object):
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {
-            "iterable": range(self.n_steps),
-            # "desc": str(self.model_str),
+            "iterable": range(self.n_iter),
+            "desc": "Search " + str(_cand_.nth_process),
             "position": _cand_.nth_process,
             "leave": False,
         }
@@ -187,7 +187,7 @@ class BaseOptimizer(object):
     def _init_search(self, nth_process, X, y):
         """Initializes the search by instantiating the ml- or dl-candidate for each process"""
         self._set_random_seed(nth_process)
-        self.n_steps = self._set_n_steps(nth_process)
+        # self.n_steps = self._set_n_steps(nth_process)
 
         if self.model_type == "sklearn" or self.model_type == "xgboost":
 
