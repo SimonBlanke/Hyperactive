@@ -395,7 +395,8 @@ class BaseOptimizer(object):
 
 
 class BasePositioner(object):
-    def __init__(self):
+    def __init__(self, eps):
+        self.eps = eps
         self.pos = None
         self.score = -1000
 
@@ -407,11 +408,11 @@ class BasePositioner(object):
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
 
-        if np.array_equal(_cand_.pos_best, self.pos):
+        if np.array_equal(_cand_.pos_best, pos):
             pos_new = np.random.uniform(
                 _cand_.pos_best - 1, _cand_.pos_best + 1, _cand_.pos_best.shape
             )
-            self.pos = np.rint(pos_new)
+            pos_new_int = np.rint(pos_new)
 
             n_zeros = [0] * len(_cand_._space_.dim)
             pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)

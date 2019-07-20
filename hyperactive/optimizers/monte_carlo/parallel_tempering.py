@@ -7,8 +7,7 @@ import random
 
 import numpy as np
 
-# from .base import BaseOptimizer
-from ..local.hill_climbing_optimizer import HillClimber
+from .simulated_annealing import SimulatedAnnealingOptimizer
 from ...base import BasePositioner
 
 
@@ -104,9 +103,9 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 _cand_.pos_best = ann.pos_best
 
     def _iterate(self, i, _cand_, X, y):
-        self._annealer_.climb(_cand_)
+        # self._annealer_.climb(_cand_)
         # _cand_.pos = self._annealer_.pos
-        _cand_.eval(X, y)
+        # _cand_.eval(X, y)
 
         self._find_neighbours(_cand_)
         self._annealing_systems(_cand_)
@@ -119,7 +118,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         return _cand_
 
     def _init_tempering(self, _cand_):
-        self._annealer_ = Annealer()
+        # self._annealer_ = Annealer()
 
         self.pos_curr = _cand_.pos
         self.score_curr = _cand_.score

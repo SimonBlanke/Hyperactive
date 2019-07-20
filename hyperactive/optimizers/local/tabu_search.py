@@ -43,6 +43,7 @@ class TabuOptimizer(BaseOptimizer):
 
     def _iterate(self, i, _cand_, X, y):
         self._climber_.climb_tabu(_cand_)
+        _cand_.pos = self._climber_.pos
         _cand_.eval(X, y)
 
         if _cand_.score > _cand_.score_best:

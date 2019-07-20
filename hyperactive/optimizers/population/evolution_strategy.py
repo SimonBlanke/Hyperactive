@@ -49,18 +49,18 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
 
         self.initializer = self._init_evo
 
-    def _init_individuals(self, cand):
-        self.ind_list = [Individual() for _ in range(self.individuals)]
+    def _init_individuals(self, _cand_):
+        self.ind_list = [Individual(1) for _ in range(self.individuals)]
         for ind in self.ind_list:
-            ind.pos = cand._space_.get_random_pos()
+            ind.pos = _cand_._space_.get_random_pos()
             ind.pos_best = ind.pos
 
-    def _mutate_individuals(self, cand, mutate_idx):
+    def _mutate_individuals(self, _cand_, mutate_idx):
         self.ind_list = np.array(self.ind_list)
         for ind in self.ind_list[mutate_idx]:
-            ind.climb(cand)
+            ind.climb(_cand_)
 
-    def _crossover(self, cand, cross_idx, replace_idx):
+    def _crossover(self, _cand_, cross_idx, replace_idx):
         self.ind_list = np.array(self.ind_list)
         for i, ind in enumerate(self.ind_list[replace_idx]):
             j = i + 1
@@ -85,18 +85,18 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
 
         return np.array(pos_new)
 
-    def _new_generation(self, cand):
+    def _new_generation(self, _cand_):
 
         idx_sorted_ind = self._rank_individuals()
         mutate_idx, cross_idx, replace_idx = self._select_individuals(idx_sorted_ind)
 
-        self._mutate_individuals(cand, mutate_idx)
-        self._crossover(cand, cross_idx, replace_idx)
+        self._mutate_individuals(_cand_, mutate_idx)
+        self._crossover(_cand_, cross_idx, replace_idx)
 
-    def _eval_individuals(self, cand, X, y):
+    def _eval_individuals(self, _cand_, X, y):
         for ind in self.ind_list:
-            para = cand._space_.pos2para(ind.pos)
-            ind.score, _, _ = cand._model_.train_model(para, X, y)
+            para = _cand_._space_.pos2para(ind.pos)
+            ind.score, _, _ = _cand_._model_.train_model(para, X, y)
 
             if ind.score > ind.score_best:
                 ind.score_best = ind.score
@@ -139,7 +139,9 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
 
 
 class Individual(BasePositioner):
-    def __init__(self):
+    def __init__(self, eps):
+        super().__init__(eps)
+
         self.pos = None
         self.pos_best = None
 

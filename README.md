@@ -10,11 +10,11 @@ Hyperactive
   <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
     <img src="https://travis-ci.com/SimonBlanke/Hyperactive.svg?branch=master">
   </a>
-  
+
   <a href="https://pypi.org/project/hyperactive/">
     <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?logo=python&logoColor=white">
   </a>
-  
+
   <a href="https://pypi.python.org/pypi/hyperactive">
     <img src="https://img.shields.io/pypi/v/hyperactive.svg?colorB=4cc61e">
   </a>
@@ -75,7 +75,7 @@ Hyperactive
           <ul>
             <li>Hill Climbing</li>
             <li>Stochastic Hill Climbing</li>
-            <li>Tabu Search (beta)</li>
+            <li>Tabu Search</li>
          </ul>
         <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-methods">Random Methods:</a> </a>
           <ul>
@@ -87,7 +87,7 @@ Hyperactive
           <ul>
             <li>Simulated Annealing</li>
             <li>Stochastic Tunneling</li>
-            <li>Parallel Tempering</li>
+            <li>Parallel Tempering (beta)</li>
           </ul>
         <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#population-methods">Population Methods:</a> </a>
           <ul>
@@ -96,7 +96,7 @@ Hyperactive
           </ul>
         <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#sequential-methods">Sequential Methods:</a> </a>
           <ul>
-            <li>Bayesian Optimization (beta)</li>
+            <li>Bayesian Optimization</li>
           </ul>
       </td>
       <td>
@@ -191,7 +191,7 @@ score = Optimizer.score(X_test, y_test)
 
 <details><summary>Example with a multi-layer-perceptron in keras:</summary>
 <p>
-  
+
 ```python
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
@@ -314,7 +314,7 @@ The multiprocessing in hyperactive works by creating additional searches, that r
 
 <details><summary>Two searches with eight cpu-cores:</summary>
 <p>
-  
+
 ```python
 import numpy as np
 
@@ -353,11 +353,11 @@ Optimizer.fit(X_train, y_train)
 
 </p>
 </details>
-  
+
 
 <details><summary>One search with all cpu-cores:</summary>
 <p>
-  
+
 ```python
 import numpy as np
 
@@ -390,13 +390,13 @@ Optimizer.fit(X_train, y_train)
 
 </p>
 </details>
-  
+
 
 
 
 <details><summary>Multiple searches with all cpu-cores:</summary>
 <p>
-  
+
 ```python
 import numpy as np
 
@@ -454,7 +454,7 @@ In the current implementation transfer-learning works by using a predefined mode
 
 <details><summary>Transfer-learning example:</summary>
 <p>
-  
+
 ```python
 from keras.datasets import cifar10
 from keras.utils import to_categorical
@@ -502,7 +502,7 @@ When a search is finished the warm-start-dictionary for the best position in the
 
 <details><summary>Warm-start example for sklearn model:</summary>
 <p>
-  
+
 ```python
 start_point = {
     "sklearn.ensemble.RandomForestClassifier.0": {
@@ -526,7 +526,7 @@ start_point = {
 
 <details><summary>Warm-start example for keras model (cnn):</summary>
 <p>
-  
+
 ```python
 start_point = {
     "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},

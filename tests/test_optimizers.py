@@ -151,6 +151,9 @@ def test_StochasticTunnelingOptimizer():
     assert opt0.score_best < opt1.score_best
 
 
+"""
+
+
 def test_ParallelTemperingOptimizer():
     from hyperactive import ParallelTemperingOptimizer
 
@@ -165,6 +168,9 @@ def test_ParallelTemperingOptimizer():
     opt1.fit(X, y)
 
     assert opt0.score_best < opt1.score_best
+
+
+"""
 
 
 def test_ParticleSwarmOptimizer():
