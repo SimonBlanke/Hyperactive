@@ -104,10 +104,18 @@ class BaseOptimizer(object):
 
     def _set_random_seed(self, thread=0):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
-        if isinstance(self.random_state, int) and self.random_state is not False:
-            random.seed(self.random_state + thread)
-            np.random.seed(self.random_state + thread)
-            scipy.random.seed(self.random_state + thread)
+        if self.random_state:
+            # print("self.random_state", self.random_state)
+            rand = int(self.random_state)
+            random.seed(rand + thread)
+            np.random.seed(rand + thread)
+            scipy.random.seed(rand + thread)
+
+        else:
+            rand = 0
+            random.seed(rand + thread)
+            np.random.seed(rand + thread)
+            scipy.random.seed(rand + thread)
 
     def _is_all_same(self, list):
         """Checks if model names in search_config are consistent"""
@@ -200,6 +208,7 @@ class BaseOptimizer(object):
     def _init_search(self, nth_process, X, y, init=None):
         """Initializes the search by instantiating the ml- or dl-candidate for each process"""
         self._set_random_seed(nth_process)
+
         # self.n_steps = self._set_n_steps(nth_process)
 
         if self.model_type == "sklearn" or self.model_type == "xgboost":
