@@ -161,8 +161,8 @@ class BaseOptimizer(object):
         num_cores = multiprocessing.cpu_count()
         if self.n_jobs == -1 or self.n_jobs > num_cores:
             self.n_jobs = num_cores
-        if self.n_jobs > self.n_iter:
-            self.n_iter = self.n_jobs
+        # if self.n_jobs > self.n_iter:
+        #     self.n_iter = self.n_jobs
 
     def _set_n_steps(self, nth_process):
         """Calculates the number of steps each process has to do"""
