@@ -51,9 +51,17 @@ class TabuOptimizer(BaseOptimizer):
             _cand_.pos_best = _cand_.pos
 
             self._climber_.tabu_memory_short.append(_cand_.pos_best)
+            self._climber_.tabu_memory_mid.append(_cand_.pos_best)
+            self._climber_.tabu_memory_long.append(_cand_.pos_best)
 
-            if len(self._climber_.tabu_memory_short) > self.tabu_memory[0]:
+            if len(self._climber_.tabu_memory_mid) > self.tabu_memory[0]:
+                del self._climber_.tabu_memory_mid[0]
+
+            if len(self._climber_.tabu_memory_short) > self.tabu_memory[1]:
                 del self._climber_.tabu_memory_short[0]
+
+            if len(self._climber_.tabu_memory_long) > self.tabu_memory[2]:
+                del self._climber_.tabu_memory_long[0]
 
         return _cand_
 
@@ -66,6 +74,8 @@ class HillClimber(BasePositioner):
         self.eps = eps
 
         self.tabu_memory_short = []
+        self.tabu_memory_mid = []
+        self.tabu_memory_long = []
 
     def climb_tabu(self, _cand_, eps_mod=1):
         in_tabu_mem = True
