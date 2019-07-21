@@ -9,7 +9,7 @@ X = data.data
 y = data.target
 
 n_iter_0 = 0
-n_iter_1 = 30
+n_iter_1 = 100
 random_state = 1
 cv = 2
 
