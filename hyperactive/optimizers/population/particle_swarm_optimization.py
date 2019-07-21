@@ -72,9 +72,6 @@ class ParticleSwarmOptimizer(BaseOptimizer):
             C = self.c_s * random.random() * np.subtract(_cand_.pos_best, p.pos)
             new_velocity = A + B + C
 
-            print("new_velocity      ", new_velocity)
-            print("p.pos             ", p.pos)
-
             p.velo = new_velocity
             p.move(_cand_)
 
