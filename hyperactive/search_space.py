@@ -41,9 +41,6 @@ class SearchSpace:
 
         self.pos_space_limit()
 
-    def _split_search_space(n_parts):
-        pass
-
     def get_random_pos(self):
         pos_new = np.random.uniform(np.zeros(self.dim.shape), self.dim, self.dim.shape)
         pos = np.rint(pos_new)
@@ -52,16 +49,11 @@ class SearchSpace:
         # pos = np.clip(pos_new_int, n_zeros, self.dim)
         return pos
 
-    def _get_random_pos(self):
-        pos = []
+    def get_random_pos_scalar(self, hyperpara_name):
+        n_para_values = len(self.para_space[hyperpara_name])
+        pos = random.randint(0, n_para_values - 1)
 
-        for hyperpara_name in self.para_space.keys():
-            n_para_values = len(self.para_space[hyperpara_name])
-            pos_ = random.randint(0, n_para_values - 1)
-
-            pos.append(pos_)
-
-        return np.array(pos)
+        return pos
 
     def pos2para(self, pos):
         if len(self.para_space.keys()) == pos.size:

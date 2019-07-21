@@ -27,18 +27,22 @@ class InitSearchPosition:
             else:
                 pos = self._scatter_init(nth_process, X, y)
 
+            print("pos 1", pos)
         elif self.warm_start:
             if self.n_warm_start_keys > nth_process:
                 pos = self._create_warm_start(nth_process)
             else:
                 pos = self._space_.get_random_pos()
 
+            print("pos 2", pos)
         elif self.scatter_init:
             pos = self._scatter_init(nth_process, X, y)
 
+            print("pos 3", pos)
         else:
             pos = self._space_.get_random_pos()
 
+            print("pos 4", pos)
         return pos
 
     def _scatter_init(self, nth_process, X, y):
@@ -136,13 +140,14 @@ class InitMLSearchPosition(InitSearchPosition):
         for hyperpara_name in self._space_.para_space.keys():
             start_point_key = list(self.warm_start.keys())[nth_process]
 
-            try:
+            if hyperpara_name not in list(self.warm_start[start_point_key].keys()):
+                print(hyperpara_name, "not in warm_start selecting random scalar")
+                search_position = self._space_.get_random_pos_scalar(hyperpara_name)
+
+            else:
                 search_position = self._space_.para_space[hyperpara_name].index(
                     *self.warm_start[start_point_key][hyperpara_name]
                 )
-            except ValueError:
-                print("Warm start not in search space, using random position")
-                return self._space_.get_random_pos()
 
             pos.append(search_position)
 
@@ -171,7 +176,7 @@ class InitMLSearchPosition(InitSearchPosition):
                 warm_start[dict_key] = warm_start_dict
 
             self.warm_start = warm_start
-
+    """
 
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)
@@ -179,7 +184,6 @@ class InitMLSearchPosition(InitSearchPosition):
         model = getattr(module, model_str)
 
         return model
-    """
 
 
 class InitDLSearchPosition(InitSearchPosition):
