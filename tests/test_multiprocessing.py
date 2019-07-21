@@ -9,10 +9,10 @@ X = data.data
 y = data.target
 
 n_iter_0 = 0
-n_iter_1 = 100
-random_state = 1
-cv = 2
-n_jobs = 2
+n_iter_1 = 20
+random_state = 0
+cv = 3
+n_jobs = 8
 
 search_config = {
     "sklearn.ensemble.GradientBoostingClassifier": {
@@ -28,12 +28,7 @@ def test_HillClimbingOptimizer():
     from hyperactive import HillClimbingOptimizer
 
     opt0 = HillClimbingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -54,12 +49,7 @@ def test_StochasticHillClimbingOptimizer():
     from hyperactive import StochasticHillClimbingOptimizer
 
     opt0 = StochasticHillClimbingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -80,12 +70,7 @@ def test_TabuOptimizer():
     from hyperactive import TabuOptimizer
 
     opt0 = TabuOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -106,12 +91,7 @@ def test_RandomSearchOptimizer():
     from hyperactive import RandomSearchOptimizer
 
     opt0 = RandomSearchOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -132,12 +112,7 @@ def test_RandomRestartHillClimbingOptimizer():
     from hyperactive import RandomRestartHillClimbingOptimizer
 
     opt0 = RandomRestartHillClimbingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -158,12 +133,7 @@ def test_RandomAnnealingOptimizer():
     from hyperactive import RandomAnnealingOptimizer
 
     opt0 = RandomAnnealingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -184,12 +154,7 @@ def test_SimulatedAnnealingOptimizer():
     from hyperactive import SimulatedAnnealingOptimizer
 
     opt0 = SimulatedAnnealingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -210,12 +175,7 @@ def test_StochasticTunnelingOptimizer():
     from hyperactive import StochasticTunnelingOptimizer
 
     opt0 = StochasticTunnelingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -258,12 +218,7 @@ def test_ParticleSwarmOptimizer():
     from hyperactive import ParticleSwarmOptimizer
 
     opt0 = ParticleSwarmOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -284,12 +239,7 @@ def test_EvolutionStrategyOptimizer():
     from hyperactive import EvolutionStrategyOptimizer
 
     opt0 = EvolutionStrategyOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 
@@ -310,12 +260,7 @@ def test_BayesianOptimizer():
     from hyperactive import BayesianOptimizer
 
     opt0 = BayesianOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
     opt0.fit(X, y)
 

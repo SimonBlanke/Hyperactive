@@ -10,8 +10,8 @@ y = data.target
 
 n_iter_0 = 0
 n_iter_1 = 100
-random_state = 1
-cv = 2
+random_state = 0
+cv = 3
 
 search_config = {
     "sklearn.ensemble.GradientBoostingClassifier": {
@@ -35,6 +35,8 @@ def test_HillClimbingOptimizer():
         search_config, n_iter_1, random_state=random_state, verbosity=0, cv=cv
     )
     opt1.fit(X, y)
+
+    print(opt0.score_best)
 
     assert opt0.score_best < opt1.score_best
 
@@ -83,6 +85,8 @@ def test_RandomSearchOptimizer():
         search_config, n_iter_1, random_state=random_state, verbosity=0, cv=cv
     )
     opt1.fit(X, y)
+
+    print(opt0.score_best)
 
     assert opt0.score_best < opt1.score_best
 
@@ -219,3 +223,7 @@ def test_BayesianOptimizer():
     opt1.fit(X, y)
 
     assert opt0.score_best < opt1.score_best
+
+
+test_HillClimbingOptimizer()
+test_RandomSearchOptimizer()
