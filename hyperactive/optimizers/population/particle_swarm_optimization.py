@@ -8,6 +8,7 @@ import random
 import numpy as np
 
 from ...base import BaseOptimizer
+from ...base import BasePositioner
 
 
 class ParticleSwarmOptimizer(BaseOptimizer):
@@ -48,66 +49,59 @@ class ParticleSwarmOptimizer(BaseOptimizer):
 
         self.initializer = self._init_part
 
-    def _find_best_particle(self, _cand_):
-        for p in self.part_list:
-            if p.score_best > _cand_.score_best:
-                _cand_.score_best = p.score_best
-                _cand_.pos_best = p.pos_best
-
     def _init_particles(self, _cand_):
-        self.part_list = [Particle() for _ in range(self.n_part)]
-        for i, p in enumerate(self.part_list):
-            p.nr = i
-            p.pos = _cand_._space_.get_random_pos()
-            p.pos_best = p.pos
-            p.velo = np.zeros(len(_cand_._space_.para_space))
+        _p_list_ = [Particle() for _ in range(self.n_part)]
+        for i, _p_ in enumerate(_p_list_):
+            _p_.nr = i
+            _p_.pos_current = _cand_._space_.get_random_pos()
+            _p_.pos_best = _p_.pos_current
+            _p_.velo = np.zeros(len(_cand_._space_.para_space))
 
-        return self.part_list
+        return _p_list_
 
-    def _move_particles(self, _cand_):
+    def _move_particles(self, _cand_, _p_list_):
+        for _p_ in _p_list_:
+            r1, r2 = random.random(), random.random()
 
-        for p in self.part_list:
-            A = self.w * p.velo
-            B = self.c_k * random.random() * np.subtract(p.pos_best, p.pos)
-            C = self.c_s * random.random() * np.subtract(_cand_.pos_best, p.pos)
+            A = self.w * _p_.velo
+            B = self.c_k * r1 * np.subtract(_p_.pos_best, _p_.pos_current)
+            C = self.c_s * r2 * np.subtract(_cand_.pos_best, _p_.pos_current)
+
             new_velocity = A + B + C
 
-            p.velo = new_velocity
-            p.move(_cand_)
+            _p_.velo = new_velocity
+            _p_.pos_new = _p_.move_part(_cand_, _p_.pos_current)
 
-    def _eval_particles(self, _cand_, X, y):
-        for p in self.part_list:
-            para = _cand_._space_.pos2para(p.pos)
-            p.score, _, _ = _cand_._model_.train_model(para, X, y)
+    def _eval_particles(self, _cand_, _p_list_, X, y):
+        for _p_ in _p_list_:
+            _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-            if p.score > p.score_best:
-                p.score_best = p.score
-                p.pos_best = p.pos
+            if _p_.score_new > _cand_.score_best:
+                _cand_.score_best = _p_.score_new
+                _cand_.pos_best = _p_.pos_new
 
-    def _iterate(self, i, _cand_, X, y):
-        self._eval_particles(_cand_, X, y)
-        self._find_best_particle(_cand_)
-        self._move_particles(_cand_)
+                _p_.pos_current = _p_.pos_new
+                _p_.score_current = _p_.score_new
+
+    def _iterate(self, i, _cand_, _p_list_, X, y):
+        self._move_particles(_cand_, _p_list_)
+        self._eval_particles(_cand_, _p_list_, X, y)
 
         return _cand_
 
-    def _init_part(self, _cand_):
-        self.part_list = self._init_particles(_cand_)
+    def _init_part(self, _cand_, X, y):
+        _p_list_ = self._init_particles(_cand_)
+
+        return _p_list_
 
 
-class Particle:
+class Particle(BasePositioner):
     def __init__(self):
         self.nr = None
-        self.pos = None
-        self.pos_best = None
-
-        self.score = -1000
-        self.score_best = -1000
-
         self.velo = None
 
-    def move(self, cand):
-        self.pos = (self.pos + self.velo).astype(int)
+    def move_part(self, _cand_, pos):
+        pos_new = (pos + self.velo).astype(int)
         # limit movement
-        n_zeros = [0] * len(cand._space_.dim)
-        self.pos = np.clip(self.pos, n_zeros, cand._space_.dim)
+        n_zeros = [0] * len(_cand_._space_.dim)
+        return np.clip(pos_new, n_zeros, _cand_._space_.dim)

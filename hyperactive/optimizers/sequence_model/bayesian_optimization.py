@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-import tqdm
 import numpy as np
 from scipy.stats import norm
 from sklearn.gaussian_process import GaussianProcessRegressor
@@ -28,6 +27,7 @@ class BayesianOptimizer(BaseOptimizer):
         warm_start=False,
         memory=True,
         scatter_init=False,
+        kernel=Matern(nu=2.5),
     ):
         super().__init__(
             search_config,
@@ -43,6 +43,7 @@ class BayesianOptimizer(BaseOptimizer):
         )
 
         self.xi = 0.01
+        self.kernel = kernel
         self.initializer = self.init_bayesian
 
         # Gaussian process with Mat??rn kernel as surrogate model
@@ -50,7 +51,7 @@ class BayesianOptimizer(BaseOptimizer):
         # kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
         # self.gpr1 = GaussianProcessRegressor(kernel=kernel, alpha=0.02)
         self.gpr = GaussianProcessRegressor(
-            kernel=Matern(nu=2.5),
+            kernel=self.kernel,
             alpha=1e-6,
             normalize_y=True,
             n_restarts_optimizer=25,
@@ -81,6 +82,7 @@ class BayesianOptimizer(BaseOptimizer):
         self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
 
     def propose_location(self, cand):
+        self.gpr.fit(self.X_sample, self.Y_sample)
         ei = self.expected_improvement()
         ei = ei[:, 0]
 
@@ -91,23 +93,35 @@ class BayesianOptimizer(BaseOptimizer):
 
         return pos_best
 
-    def _iterate(self, i, _cand_, X, y):
-        self.gpr.fit(self.X_sample, self.Y_sample)
-        pos = self.propose_location(_cand_)
-        _cand_.pos = pos
+    def _iterate(self, i, _cand_, _p_, X, y):
+        _p_.pos_new = self.propose_location(_cand_)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-        _cand_.eval(X, y)
+        if _p_.score_new > _cand_.score_best:
+            _cand_.score_best = _p_.score_new
+            _cand_.pos_best = _p_.pos_new
 
-        if _cand_.score > _cand_.score_best:
-            _cand_.score_best = _cand_.score
-            _cand_.pos_best = _cand_.pos
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
 
-        self.X_sample = np.vstack((self.X_sample, _cand_.pos))
-        self.Y_sample = np.vstack((self.Y_sample, _cand_.score))
+        self.X_sample = np.vstack((self.X_sample, _cand_.pos_best))
+        self.Y_sample = np.vstack((self.Y_sample, _cand_.score_best))
 
         return _cand_
 
-    def init_bayesian(self, _cand_):
+    def init_bayesian(self, _cand_, X, y):
+        _p_ = Bayesian()
+
         self._all_possible_pos(_cand_)
-        self.X_sample = _cand_.pos.reshape(1, -1)
-        self.Y_sample = _cand_.score.reshape(1, -1)
+        self.X_sample = _cand_.pos_best.reshape(1, -1)
+        self.Y_sample = _cand_.score_best.reshape(1, -1)
+
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
+
+
+class Bayesian:
+    def __init__(self):
+        pass

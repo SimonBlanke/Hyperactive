@@ -17,33 +17,24 @@ class Candidate:
         self.search_config = search_config
         self.memory = memory
 
-        self.score = -1000
         self._score_best = -1000
-
-        self.pos = None
         self.pos_best = None
 
         self._space_ = SearchSpace(search_config, warm_start, scatter_init)
 
-    @property
-    def score_best(self):
-        return self._score_best
+    def eval_pos(self, pos, X, y):
+        pos_str = pos.tostring()
 
-    @score_best.setter
-    def score_best(self, value):
-        self._score_best = value
-
-    def eval(self, X, y):
-        pos = self.pos.tostring()
-
-        if pos in self._space_.memory and self.memory:
-            self.score = self._space_.memory[pos]
+        if pos_str in self._space_.memory and self.memory:
+            return self._space_.memory[pos_str]
 
         else:
-            para = self._space_.pos2para(self.pos)
-            self.score, _, _ = self._model_.train_model(para, X, y)
+            para = self._space_.pos2para(pos)
+            score, _, _ = self._model_.train_model(para, X, y)
 
-            self._space_.memory[pos] = self.score
+            self._space_.memory[pos_str] = score
+
+            return score
 
 
 class MlCandidate(Candidate):

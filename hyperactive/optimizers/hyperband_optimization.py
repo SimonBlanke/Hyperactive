@@ -40,14 +40,14 @@ class HyperbandOptimizer(BaseOptimizer):
     def search(self, nth_process, X, y):
         _cand_ = self._init_search(nth_process, X, y)
 
-        _cand_.eval(X, y)
+        _cand_.eval_pos(X, y)
 
         _cand_.score_best = _cand_.score
         _cand_.pos_best = _cand_.pos
 
         for i in tqdm.tqdm(**self._tqdm_dict(_cand_)):
 
-            _cand_.eval(X, y)
+            _cand_.eval_pos(X, y)
 
             if _cand_.score > _cand_.score_best:
                 _cand_.score_best = _cand_.score

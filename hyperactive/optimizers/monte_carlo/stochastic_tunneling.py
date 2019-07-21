@@ -46,52 +46,51 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
         self.t_rate = t_rate
         self.n_neighbours = n_neighbours
         self.gamma = gamma
-        self.temp = 0.1
+        self.temp = 0.01
 
         self.initializer = self._init_tunneling
 
-    def _annealing(self, _cand_):
-        self.temp = self.temp * self.t_rate
+    def _consider(self, _p_, p_accept):
         rand = random.uniform(0, 1)
 
-        # Normalized score difference to have a factor for later use with temperature and random
-        score_diff_norm = (self.score_curr - _cand_.score) / (
-            self.score_curr + _cand_.score
+        if p_accept > rand:
+            _p_.score_current = _p_.score_new
+            _p_.pos_current = _p_.pos_new
+
+    def _accept(self, _p_):
+        score_diff_norm = (_p_.score_new - _p_.score_current) / (
+            _p_.score_new + _p_.score_current
         )
-
         f_stun = 1 - np.exp(-self.gamma * score_diff_norm)
-        p_tunnel = np.exp(-f_stun / self.temp)
+        return np.exp(-f_stun / self.temp)
 
-        if _cand_.score > self.score_curr:
-            self.score_curr = _cand_.score
-            self.pos_curr = _cand_.pos
+    def _iterate(self, i, _cand_, _p_, X, y):
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-            if _cand_.score > _cand_.score_best:
-                _cand_.score_best = _cand_.score
-                self.pos_curr = _cand_.pos
+        if _p_.score_new > _cand_.score_best:
+            _cand_.score_best = _p_.score_new
+            _cand_.pos_best = _p_.pos_new
 
-        elif p_tunnel > rand:
-            self.score_curr = _cand_.score
-            self.pos_curr = _cand_.pos
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
+        else:
+            p_tunnel = self._accept(_p_)
+            self._consider(_p_, p_tunnel)
 
-        return self.pos_curr
-
-    def _iterate(self, i, _cand_, X, y):
-        self._annealer_.climb(_cand_)
-        _cand_.pos = self._annealer_.pos
-        _cand_.eval(X, y)
-
-        self._annealing(_cand_)
+        self.temp = self.temp * self.t_rate
 
         return _cand_
 
-    def _init_tunneling(self, _cand_):
-        self._annealer_ = Annealer()
+    def _init_tunneling(self, _cand_, X, y):
+        _p_ = HillClimber()
 
-        self.pos_curr = _cand_.pos
-        self.score_curr = _cand_.score
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
 
 
-class Annealer(BasePositioner):
+class HillClimber(BasePositioner):
     def __init__(self, eps=1):
         super().__init__(eps)

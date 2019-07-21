@@ -41,37 +41,47 @@ class TabuOptimizer(BaseOptimizer):
 
         self.initializer = self._init_tabu
 
-    def _iterate(self, i, _cand_, X, y):
-        self._climber_.climb_tabu(_cand_)
-        _cand_.pos = self._climber_.pos
-        _cand_.eval(X, y)
+    def _memorize(self, _cand_, _p_):
+        _p_.tabu_memory_short.append(_cand_.pos_best)
+        _p_.tabu_memory_mid.append(_cand_.pos_best)
+        _p_.tabu_memory_long.append(_cand_.pos_best)
 
-        if _cand_.score > _cand_.score_best:
-            _cand_.score_best = _cand_.score
-            _cand_.pos_best = _cand_.pos
+        if len(_p_.tabu_memory_mid) > self.tabu_memory[0]:
+            del _p_.tabu_memory_mid[0]
 
-            self._climber_.tabu_memory_short.append(_cand_.pos_best)
-            self._climber_.tabu_memory_mid.append(_cand_.pos_best)
-            self._climber_.tabu_memory_long.append(_cand_.pos_best)
+        if len(_p_.tabu_memory_short) > self.tabu_memory[1]:
+            del _p_.tabu_memory_short[0]
 
-            if len(self._climber_.tabu_memory_mid) > self.tabu_memory[0]:
-                del self._climber_.tabu_memory_mid[0]
+        if len(_p_.tabu_memory_long) > self.tabu_memory[2]:
+            del _p_.tabu_memory_long[0]
 
-            if len(self._climber_.tabu_memory_short) > self.tabu_memory[1]:
-                del self._climber_.tabu_memory_short[0]
+    def _iterate(self, i, _cand_, _p_, X, y):
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-            if len(self._climber_.tabu_memory_long) > self.tabu_memory[2]:
-                del self._climber_.tabu_memory_long[0]
+        if _p_.score_new > _cand_.score_best:
+            _cand_.score_best = _p_.score_new
+            _cand_.pos_best = _p_.pos_new
+
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
+
+            self._memorize(_cand_, _p_)
 
         return _cand_
 
-    def _init_tabu(self, _cand_):
-        self._climber_ = HillClimber(self.eps)
+    def _init_tabu(self, _cand_, X, y):
+        _p_ = HillClimber()
+
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
 
 
 class HillClimber(BasePositioner):
-    def __init__(self, eps):
-        self.eps = eps
+    def __init__(self, eps=1):
+        super().__init__(eps)
 
         self.tabu_memory_short = []
         self.tabu_memory_mid = []
@@ -80,7 +90,7 @@ class HillClimber(BasePositioner):
     def climb_tabu(self, _cand_, eps_mod=1):
         in_tabu_mem = True
         while in_tabu_mem:
-            pos_new = self.climb(_cand_)
+            pos_new = self.move_climb(_cand_)
 
             if not any((pos_new == pos).all() for pos in self.tabu_memory_short):
                 in_tabu_mem = False

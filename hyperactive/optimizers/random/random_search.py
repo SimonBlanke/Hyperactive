@@ -4,6 +4,7 @@
 
 
 from ...base import BaseOptimizer
+from ...base import BasePositioner
 
 
 class RandomSearchOptimizer(BaseOptimizer):
@@ -33,14 +34,27 @@ class RandomSearchOptimizer(BaseOptimizer):
             scatter_init,
         )
 
-        self.initializer = None
+        self.initializer = self._init_random
 
-    def _iterate(self, i, _cand_, X, y):
-        _cand_.pos = _cand_._space_.get_random_pos()
-        _cand_.eval(X, y)
+    def _iterate(self, i, _cand_, _p_, X, y):
+        _p_.pos_new = _p_.move_random(_cand_)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-        if _cand_.score > _cand_.score_best:
-            _cand_.score_best = _cand_.score
-            _cand_.pos_best = _cand_.pos
+        if _p_.score_new > _cand_.score_best:
+            _cand_.score_best = _p_.score_new
+            _cand_.pos_best = _p_.pos_new
 
         return _cand_
+
+    def _init_random(self, _cand_, X, y):
+        _p_ = Random()
+
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
+
+
+class Random(BasePositioner):
+    def __init__(self, eps=1):
+        super().__init__(eps)

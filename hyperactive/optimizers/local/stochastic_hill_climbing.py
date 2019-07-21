@@ -43,34 +43,41 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
 
         self.initializer = self._init_stoch_climber
 
-    def _iterate(self, i, _cand_, X, y):
-        rand = random.uniform(0, self.r)
+    def _consider(self, _p_, p_accept):
+        rand = random.uniform(0, 1)
 
-        self._climber_.climb(_cand_)
-        _cand_.pos = self._climber_.pos
-        _cand_.eval(X, y)
+        if p_accept > rand:
+            _p_.score_current = _p_.score_new
+            _p_.pos_current = _p_.pos_new
 
-        score_diff_norm = abs(_cand_.score_current - _cand_.score) / (
-            _cand_.score_current + _cand_.score
-        )
+    def _accept(self, _p_):
+        return (_p_.score_new - _p_.score_current) / (_p_.score_new + _p_.score_current)
 
-        if _cand_.score > _cand_.score_best:
-            _cand_.score_best = _cand_.score
-            _cand_.pos_best = _cand_.pos
+    def _iterate(self, i, _cand_, _p_, X, y):
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-        elif score_diff_norm > rand:
-            _cand_.pos_current = _cand_.pos
-            _cand_.score_current = _cand_.score
+        if _p_.score_new > _cand_.score_best:
+            _cand_.score_best = _p_.score_new
+            _cand_.pos_best = _p_.pos_new
+
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
+        else:
+            p_accept = self._accept(_p_)
+            self._consider(_p_, p_accept)
 
         return _cand_
 
-    def _init_stoch_climber(self, _cand_):
-        self._climber_ = HillClimber(self.eps)
+    def _init_stoch_climber(self, _cand_, X, y):
+        _p_ = HillClimber()
 
-        _cand_.pos_current = _cand_.pos
-        _cand_.score_current = _cand_.score
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
 
 
 class HillClimber(BasePositioner):
-    def __init__(self, eps):
+    def __init__(self, eps=1):
         self.eps = eps

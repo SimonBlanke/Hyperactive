@@ -236,20 +236,20 @@ class BaseOptimizer(object):
                 self.scatter_init,
             )
 
-        _cand_.pos = _cand_._init_._set_start_pos(nth_process, X, y)
-        _cand_.eval(X, y)
-        _cand_.score_best = _cand_.score
-        _cand_.pos_best = _cand_.pos
+        pos = _cand_._init_._set_start_pos(nth_process, X, y)
+        score = _cand_.eval_pos(pos, X, y)
+        _cand_.score_best = score
+        _cand_.pos_best = pos
 
         # initialize optimizer specific objects
         if self.initializer:
-            self.initializer(_cand_)
+            _p_ = self.initializer(_cand_, X, y)
 
         # create progress bar
         if self._show_progress_bar():
             self.p_bar = tqdm.tqdm(**self._tqdm_dict(_cand_))
 
-        return _cand_
+        return _cand_, _p_
 
     def _get_model(self, model):
         """Imports model from search_config key and returns usable model-class"""
@@ -260,10 +260,10 @@ class BaseOptimizer(object):
         return model
 
     def search(self, nth_process, X, y):
-        _cand_ = self._init_search(nth_process, X, y)
+        _cand_, _p_ = self._init_search(nth_process, X, y)
 
         for i in range(self.n_iter):
-            _cand_ = self._iterate(i, _cand_, X, y)
+            _cand_ = self._iterate(i, _cand_, _p_, X, y)
 
             if self._show_progress_bar():
                 self.p_bar.update(1)
@@ -406,25 +406,34 @@ class BaseOptimizer(object):
 class BasePositioner(object):
     def __init__(self, eps):
         self.eps = eps
-        self.pos = None
-        self.score = -1000
 
-    def climb(self, _cand_, eps_mod=1):
-        sigma = (_cand_._space_.dim / 33) * self.eps / eps_mod
-        pos_new = np.random.normal(_cand_.pos_best, sigma, _cand_.pos.shape)
+        self.pos_new = None
+        self.score_new = -1000
+
+        self.pos_current = None
+        self.score_current = -1000
+
+        self.pos_best = None
+        self.score_best = -1000
+
+    def move_climb(self, _cand_, pos, eps_mod=1):
+
+        sigma = (_cand_._space_.dim / 33) * self.eps / eps_mod + 1
+        pos_new = np.random.normal(pos, sigma, pos.shape)
         pos_new_int = np.rint(pos_new)
 
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+        """
 
-        if np.array_equal(_cand_.pos_best, pos):
-            pos_new = np.random.uniform(
-                _cand_.pos_best - 1, _cand_.pos_best + 1, _cand_.pos_best.shape
-            )
-            pos_new_int = np.rint(pos_new)
+        # if np.array_equal(_cand_.pos_best, pos):
+        pos_new = np.random.uniform(pos - 1, pos + 1, pos.shape)
+        pos_new_int = np.rint(pos_new)
 
-            n_zeros = [0] * len(_cand_._space_.dim)
-            pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
-
-        self.pos = pos
+        n_zeros = [0] * len(_cand_._space_.dim)
+        pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
+        """
         return pos
+
+    def move_random(self, _cand_):
+        return _cand_._space_.get_random_pos()

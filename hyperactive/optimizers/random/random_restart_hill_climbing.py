@@ -43,27 +43,31 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
 
         self.initializer = self._init_rr_climber
 
-    def _iterate(self, i, _cand_, X, y):
-        self._climber_.climb(_cand_)
-        _cand_.pos = self._climber_.pos
-        _cand_.eval(X, y)
+    def _iterate(self, i, _cand_, _p_, X, y):
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-        if _cand_.score > _cand_.score_best:
-            _cand_.score_best = _cand_.score
-            _cand_.pos_best = _cand_.pos
+        if _p_.score_new > _cand_.score_best:
+            _cand_.score_best = _p_.score_new
+            _cand_.pos_best = _p_.pos_new
+
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
 
         if self.n_iter_restart != 0 and i % self.n_iter_restart == 0:
-            _cand_.pos = _cand_._space_.get_random_pos()
+            _p_.pos_current = _p_.move_random(_cand_)
 
         return _cand_
 
-    def _init_rr_climber(self, _cand_):
-        self._climber_ = HillClimber(self.eps)
+    def _init_rr_climber(self, _cand_, X, y):
+        _p_ = HillClimber()
 
-        _cand_.pos_current = _cand_.pos
-        _cand_.score_current = _cand_.score
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
 
 
 class HillClimber(BasePositioner):
-    def __init__(self, eps):
+    def __init__(self, eps=1):
         self.eps = eps
