@@ -98,23 +98,13 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 p_accept = self._accept(_p_)
                 self._consider(_p_, p_accept)
 
-            self.temp = self.temp * self.t_rate
-
-    def _find_best_annealer(self, _cand_, _p_list_):
-        for _p_ in _p_list_:
-            if _p_.score_best > _cand_.score_best:
-                _cand_.score_best = _p_.score_best
-                _cand_.pos_best = _p_.pos_best
+            _p_.temp = _p_.temp * self.t_rate
 
     def _iterate(self, i, _cand_, _p_list_, X, y):
-
         self._annealing_systems(_cand_, _p_list_, X, y)
-        self._find_best_annealer(_cand_, _p_list_)
 
         if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
             self._swap_pos(_cand_, _p_list_)
-
-        print("_cand_.pos", _cand_.pos_best)
 
         return _cand_
 
