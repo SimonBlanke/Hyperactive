@@ -55,89 +55,76 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         self.initializer = self._init_tempering
 
     def _init_annealers(self, _cand_):
-        self.ann_list = [Annealer(temp=temp) for temp in self.system_temps]
-        for ind in self.ann_list:
-            ind.pos = _cand_._space_.get_random_pos()
-            ind.pos_best = ind.pos
+        _p_list_ = [HillClimber(temp=temp) for temp in self.system_temps]
+        for _p_ in _p_list_:
+            _p_.pos_current = _p_.move_random(_cand_)
+            _p_.pos_best = _p_.pos_current
 
-        return self.ann_list
+        return _p_list_
 
-    def _annealing_systems(self, _cand_):
-        for ann in self.ann_list:
-            ann.pos = self._annealing(ann)
-
-    def _find_neighbours(self, _cand_):
-        for ann in self.ann_list:
-            ann.climb(_cand_)
-
-    def _swap_pos(self, _cand_):
-        for ann1 in self.ann_list:
-            for ann2 in self.ann_list:
+    def _swap_pos(self, _cand_, _p_list_):
+        for _p1_ in _p_list_:
+            for _p2_ in _p_list_:
                 rand = random.uniform(0, 1)
 
-                score_diff_norm = (ann1.score - ann2.score) / (ann1.score + ann2.score)
-                temp = (1 / ann1.temp) - (1 / ann2.temp)
-                p_accept = np.exp(score_diff_norm * temp)
-
+                p_accept = self._accept_swap(_p1_, _p2_)
                 # print("p_accept", p_accept)
 
                 if p_accept > rand:
-                    temp_temp = ann1.temp  # haha!
-                    ann1.temp = ann2.temp
-                    ann1.temp = temp_temp
+                    temp_temp = _p1_.temp  # haha!
+                    _p1_.temp = _p2_.temp
+                    _p1_.temp = temp_temp
                     break
 
-    def _eval_annealers(self, _cand_, X, y):
-        for ann in self.ann_list:
-            para = _cand_._space_.pos2para(ann.pos)
-            ann.score, _, _ = _cand_._model_.train_model(para, X, y)
+    def _accept_swap(self, _p1_, _p2_):
+        score_diff_norm = (_p1_.score_current - _p2_.score_current) / (
+            _p1_.score_current + _p2_.score_current
+        )
+        temp = (1 / _p1_.temp) - (1 / _p2_.temp)
+        return np.exp(score_diff_norm * temp)
 
-            if ann.score > ann.score_best:
-                ann.score_best = ann.score
-                ann.pos_best = ann.pos
+    def _annealing_systems(self, _cand_, _p_list_, X, y):
+        for _p_ in _p_list_:
+            _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+            _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
-    def _find_best_annealer(self, _cand_):
-        for ann in self.ann_list:
-            if ann.score_best > _cand_.score_best:
-                _cand_.score_best = ann.score_best
-                _cand_.pos_best = ann.pos_best
+            if _p_.score_new > _cand_.score_best:
+                _cand_.score_best = _p_.score_new
+                _cand_.pos_best = _p_.pos_new
 
-    def _iterate(self, i, _cand_, X, y):
-        # self._annealer_.climb(_cand_)
-        # _cand_.pos = self._annealer_.pos
-        # _cand_.eval_pos(X, y)
+                _p_.pos_current = _p_.pos_new
+                _p_.score_current = _p_.score_new
+            else:
+                p_accept = self._accept(_p_)
+                self._consider(_p_, p_accept)
 
-        self._find_neighbours(_cand_)
-        print("_cand_.pos", _cand_.pos)
-        self._annealing_systems(_cand_)
-        print("_cand_.pos", _cand_.pos)
-        self._eval_annealers(_cand_, X, y)
-        print("_cand_.pos", _cand_.pos)
-        self._find_best_annealer(_cand_)
-        print("_cand_.pos", _cand_.pos)
+            self.temp = self.temp * self.t_rate
+
+    def _find_best_annealer(self, _cand_, _p_list_):
+        for _p_ in _p_list_:
+            if _p_.score_best > _cand_.score_best:
+                _cand_.score_best = _p_.score_best
+                _cand_.pos_best = _p_.pos_best
+
+    def _iterate(self, i, _cand_, _p_list_, X, y):
+
+        self._annealing_systems(_cand_, _p_list_, X, y)
+        self._find_best_annealer(_cand_, _p_list_)
 
         if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
-            self._swap_pos(_cand_)
+            self._swap_pos(_cand_, _p_list_)
+
+        print("_cand_.pos", _cand_.pos_best)
 
         return _cand_
 
-    def _init_tempering(self, _cand_):
-        # self._annealer_ = Annealer()
+    def _init_tempering(self, _cand_, X, y):
+        _p_list_ = self._init_annealers(_cand_)
 
-        self.pos_curr = _cand_.pos
-        self.score_curr = _cand_.score
-
-        self.ann_list = self._init_annealers(_cand_)
+        return _p_list_
 
 
-class Annealer(BasePositioner):
+class HillClimber(BasePositioner):
     def __init__(self, eps=1, temp=1):
         super().__init__(eps)
-
-        self.pos = None
-        self.pos_best = None
-
-        self.score = -1000
-        self.score_best = -1000
-
         self.temp = temp
