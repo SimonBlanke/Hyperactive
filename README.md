@@ -87,7 +87,7 @@ Hyperactive
           <ul>
             <li>Simulated Annealing</li>
             <li>Stochastic Tunneling</li>
-            <li>Parallel Tempering (beta)</li>
+            <li>Parallel Tempering</li>
           </ul>
         <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#population-methods">Population Methods:</a> </a>
           <ul>
