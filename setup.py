@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="hyperactive",
-    version="0.3.5",
+    version="0.4.0",
     author="Simon Blanke",
     author_email="simon.blanke@yahoo.com",
     license="MIT",
