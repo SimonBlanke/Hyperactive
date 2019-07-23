@@ -63,18 +63,17 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         return _p_list_
 
     def _swap_pos(self, _cand_, _p_list_):
-        for _p1_ in _p_list_:
-            for _p2_ in _p_list_:
-                rand = random.uniform(0, 1)
+        _p_list_temp = _p_list_[:]
 
-                p_accept = self._accept_swap(_p1_, _p2_)
-                # print("p_accept", p_accept)
+        for i, _p1_ in enumerate(_p_list_):
+            rand = random.uniform(0, 1)
+            _p2_ = np.random.choice(_p_list_temp)
 
-                if p_accept > rand:
-                    temp_temp = _p1_.temp  # haha!
-                    _p1_.temp = _p2_.temp
-                    _p1_.temp = temp_temp
-                    break
+            p_accept = self._accept_swap(_p1_, _p2_)
+            if p_accept > rand:
+                temp_temp = _p1_.temp  # haha!
+                _p1_.temp = _p2_.temp
+                _p2_.temp = temp_temp
 
     def _accept_swap(self, _p1_, _p2_):
         score_diff_norm = (_p1_.score_current - _p2_.score_current) / (
