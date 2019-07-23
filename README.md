@@ -5,12 +5,21 @@ Hyperactive
 <h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
 
+
 <p align="center">
-
+  
   <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-    <img src="https://travis-ci.com/SimonBlanke/Hyperactive.svg?branch=master">
+    <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=for-the-badge&logo=appveyor">
   </a>
+  
+</p>
 
+
+<br>
+
+
+<p align="center">
+  
   <a href="https://pypi.org/project/hyperactive/">
     <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?logo=python&logoColor=white">
   </a>
