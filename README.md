@@ -19,8 +19,14 @@ Hyperactive
   <a href="https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard">
     <img src="https://img.shields.io/codacy/grade/acb6989093c44fb08cc3be1dd2df1be7?style=for-the-badge&logo=codacy">
   </a>
-  
+
+  <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
+    <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=for-the-badge&logo=code-climate">
+  </a>
+
 </p>
+
+
 
 
 
