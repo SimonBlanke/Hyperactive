@@ -11,8 +11,14 @@ Hyperactive
   <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
     <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=for-the-badge&logo=appveyor">
   </a>
+ 
+  <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
+    <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=for-the-badge&logo=appveyor">
+  </a>
   
 </p>
+
+
 
 
 <br>
