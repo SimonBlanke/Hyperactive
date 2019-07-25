@@ -124,8 +124,7 @@ class BaseOptimizer:
         else:
             return False
 
-    def _get_model_type(self):
-        """extracts the model type from the search_config (important for search space construction)"""
+    def _get_model_str(self):
         model_type_list = []
 
         for model_type_key in self.search_config.keys():
@@ -139,6 +138,12 @@ class BaseOptimizer:
                 model_type_list.append("torch")
             else:
                 raise Exception("\n No valid model string in search_config")
+
+        return model_type_list
+
+    def _get_model_type(self):
+        """extracts the model type from the search_config (important for search space construction)"""
+        model_type_list = self._get_model_str()
 
         if self._is_all_same(model_type_list):
             self.model_type = model_type_list[0]
@@ -308,6 +313,53 @@ class BaseOptimizer:
 
         return X, y
 
+    def _run_one_job(self, X, y):
+        _cand_ = self.search(0, X, y)
+
+        start_point = _cand_._get_warm_start()
+        self.score_best = _cand_.score_best
+
+        para = _cand_._space_.pos2para(_cand_.pos_best)
+        self.model_best = _cand_._model_._create_model(para)
+
+        if self.verbosity:
+            print("\n", self.metric, self.score_best)
+            print("start_point =", start_point)
+
+    def _run_multiple_jobs(self, X, y):
+        _cand_list = self._search_multiprocessing(X, y)
+
+        start_point_list = []
+        score_best_list = []
+        model_best_list = []
+        for _cand_ in _cand_list:
+            start_point = _cand_._get_warm_start()
+            score_best = _cand_.score_best
+
+            para = _cand_._space_.pos2para(_cand_.pos_best)
+            model_best = _cand_._model_._create_model(para)
+
+            start_point_list.append(start_point)
+            score_best_list.append(score_best)
+            model_best_list.append(model_best)
+
+        start_point_sorted, score_best_sorted = self._sort_for_best(
+            start_point_list, score_best_list
+        )
+
+        model_best_sorted, score_best_sorted = self._sort_for_best(
+            model_best_list, score_best_list
+        )
+
+        if self.verbosity:
+            print("\nList of start points (best first):")
+            for start_point, score_best in zip(start_point_sorted, score_best_sorted):
+                print("\n", self.metric, score_best)
+                print("start_point =", start_point)
+
+        self.score_best = score_best_sorted[0]
+        self.model_best = model_best_sorted[0]
+
     def fit(self, X, y):
         """Public method for starting the search with the training data (X, y)
 
@@ -327,53 +379,10 @@ class BaseOptimizer:
             self.n_jobs = 1
 
         if self.n_jobs == 1:
-            _cand_ = self.search(0, X, y)
-
-            start_point = _cand_._get_warm_start()
-            self.score_best = _cand_.score_best
-
-            para = _cand_._space_.pos2para(_cand_.pos_best)
-            self.model_best = _cand_._model_._create_model(para)
-
-            if self.verbosity:
-                print("\n", self.metric, self.score_best)
-                print("start_point =", start_point)
+            self._run_one_job(X, y)
 
         else:
-            _cand_list = self._search_multiprocessing(X, y)
-
-            start_point_list = []
-            score_best_list = []
-            model_best_list = []
-            for _cand_ in _cand_list:
-                start_point = _cand_._get_warm_start()
-                score_best = _cand_.score_best
-
-                para = _cand_._space_.pos2para(_cand_.pos_best)
-                model_best = _cand_._model_._create_model(para)
-
-                start_point_list.append(start_point)
-                score_best_list.append(score_best)
-                model_best_list.append(model_best)
-
-            start_point_sorted, score_best_sorted = self._sort_for_best(
-                start_point_list, score_best_list
-            )
-
-            model_best_sorted, score_best_sorted = self._sort_for_best(
-                model_best_list, score_best_list
-            )
-
-            if self.verbosity:
-                print("\nList of start points (best first):")
-                for start_point, score_best in zip(
-                    start_point_sorted, score_best_sorted
-                ):
-                    print("\n", self.metric, score_best)
-                    print("start_point =", start_point)
-
-            self.score_best = score_best_sorted[0]
-            self.model_best = model_best_sorted[0]
+            self._run_multiple_jobs(X, y)
 
         self.model_best.fit(X, y)
 
