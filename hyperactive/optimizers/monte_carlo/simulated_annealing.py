@@ -3,15 +3,13 @@
 # License: MIT License
 
 
-import random
-
 import numpy as np
 
-from ...base import BaseOptimizer
+from ..local import StochasticHillClimbingOptimizer
 from ...base import BasePositioner
 
 
-class SimulatedAnnealingOptimizer(BaseOptimizer):
+class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def __init__(
         self,
         search_config,
@@ -47,12 +45,15 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
 
         self.initializer = self._init_annealing
 
+    # use _consider from simulated_annealing
+    """
     def _consider(self, _p_, p_accept):
         rand = random.uniform(0, 1)
 
         if p_accept > rand:
             _p_.score_current = _p_.score_new
             _p_.pos_current = _p_.pos_new
+    """
 
     def _accept(self, _p_):
         score_diff_norm = (_p_.score_new - _p_.score_current) / (
