@@ -23,19 +23,8 @@ from .candidate import DlCandidate
 
 
 class BaseOptimizer:
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-    ):
+    def __init__(self, *args, **kwargs):
+
         """
 
         Parameters
@@ -70,32 +59,39 @@ class BaseOptimizer:
         None
 
         """
+        self._config_ = Config(*args, **kwargs)
 
-        self.search_config = search_config
-        self.n_iter = n_iter
-        self.metric = metric
-        self.n_jobs = n_jobs
-        self.cv = cv
-        self.verbosity = verbosity
-        self.random_state = random_state
-        self.warm_start = warm_start
-        self.memory = memory
-        self.scatter_init = scatter_init
+        self.search_config = self._config_.search_config
+        self.n_iter = self._config_.n_iter
 
-        self.X_train = None
-        self.y_train = None
-
-        self._config_ = Config(search_config, n_jobs)
+        self.metric = self._config_.kwargs_base["metric"]
+        self.n_jobs = self._config_.kwargs_base["n_jobs"]
+        self.cv = self._config_.kwargs_base["cv"]
+        self.verbosity = self._config_.kwargs_base["verbosity"]
+        self.random_state = self._config_.kwargs_base["random_state"]
+        self.warm_start = self._config_.kwargs_base["warm_start"]
+        self.memory = self._config_.kwargs_base["memory"]
+        self.scatter_init = self._config_.kwargs_base["scatter_init"]
 
         self._config_.get_model_type()
 
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
-        self._config_.set_n_jobs()
+        # self._config_.set_n_jobs()
 
-        self._n_process_range = range(0, int(self._config_.n_jobs))
+        self._n_process_range = range(0, int(self.n_jobs))
         self.opt_type = None
+
+    def _base_args(self, args, kwargs):
+        pos_args = {}
+        for i, key in enumerate(["search_config", "n_iter"]):
+            if i < len(args):
+                pos_args[key] = args[i]
+            else:
+                pos_args[key] = kwargs[key]
+
+        return pos_args
 
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
@@ -123,8 +119,8 @@ class BaseOptimizer:
 
     def _get_sklearn_model(self, nth_process):
         """Gets a model_key from the model_list for each thread"""
-        if self.n_models > self._config_.n_jobs:
-            diff = self.n_models - self._config_.n_jobs
+        if self.n_models > self.n_jobs:
+            diff = self.n_models - self.n_jobs
 
             if nth_process == 0:
                 print(
@@ -142,8 +138,8 @@ class BaseOptimizer:
 
     def _set_n_steps(self, nth_process):
         """Calculates the number of steps each process has to do"""
-        n_steps = int(self.n_iter / self._config_.n_jobs)
-        remain = self.n_iter % self._config_.n_jobs
+        n_steps = int(self.n_iter / self.n_jobs)
+        remain = self.n_iter % self.n_jobs
 
         if nth_process < remain:
             n_steps += 1
@@ -230,7 +226,7 @@ class BaseOptimizer:
 
         return model
 
-    def _initialize(self, _cand_, X, y, positioner=None, pos_para={}):
+    def _initialize(self, _cand_, positioner=None, pos_para={}):
         if positioner:
             _p_ = positioner(**pos_para)
         else:
@@ -263,7 +259,7 @@ class BaseOptimizer:
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-        pool = multiprocessing.Pool(self._config_.n_jobs)
+        pool = multiprocessing.Pool(self.n_jobs)
         search = partial(self.search, X=X, y=y)
 
         _cand_list = pool.map(search, self._n_process_range)
@@ -342,9 +338,9 @@ class BaseOptimizer:
         X, y = self._check_data(X, y)
 
         if self._config_.model_type == "keras":
-            self._config_.n_jobs = 1
+            self.n_jobs = 1
 
-        if self._config_.n_jobs == 1:
+        if self.n_jobs == 1:
             self._run_one_job(X, y)
 
         else:

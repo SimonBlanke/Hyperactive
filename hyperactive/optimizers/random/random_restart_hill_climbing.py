@@ -4,40 +4,17 @@
 
 
 from ...base_optimizer import BaseOptimizer
-from ...base_positioner import BasePositioner
 
 
 class RandomRestartHillClimbingOptimizer(BaseOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        eps=1,
-        n_restarts=10,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": eps}
-        self.n_restarts = n_restarts
+        kwargs["eps"] = 1
+        kwargs["n_restarts"] = 10
+
+        self.pos_para = {"eps": kwargs["eps"]}
+        self.n_restarts = kwargs["n_restarts"]
 
         self.n_iter_restart = int(self.n_iter / self.n_restarts)
 
@@ -56,4 +33,4 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_rr_climber(self, _cand_, X, y):
-        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)
+        return super()._initialize(_cand_, pos_para=self.pos_para)

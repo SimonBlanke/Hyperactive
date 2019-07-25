@@ -8,42 +8,18 @@ from scipy.stats import norm
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern
 
-# from sklearn.gaussian_process.kernels import ConstantKernel, Matern
-# from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
-
 from ...base_optimizer import BaseOptimizer
 
 
 class BayesianOptimizer(BaseOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        kernel=Matern(nu=2.5),
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        kwargs["kernel"] = Matern(nu=2.5)
+
+        self.kernel = kwargs["kernel"]
 
         self.xi = 0.01
-        self.kernel = kernel
         self.initializer = self.init_bayesian
 
         # Gaussian process with Mat??rn kernel as surrogate model

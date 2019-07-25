@@ -7,34 +7,11 @@ from ...base_optimizer import BaseOptimizer
 
 
 class HillClimbingOptimizer(BaseOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        eps=1,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": eps}
+        kwargs["eps"] = 1
+        self.pos_para = {"eps": kwargs["eps"]}
         self.initializer = self._init_climber
 
     def _iterate(self, i, _cand_, _p_, X, y):
@@ -47,4 +24,4 @@ class HillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_climber(self, _cand_, X, y):
-        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)
+        return super()._initialize(_cand_, pos_para=self.pos_para)

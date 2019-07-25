@@ -12,53 +12,34 @@ from ...base_positioner import BasePositioner
 
 
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        eps=1,
-        t_rate=0.98,
-        n_neighbours=1,
-        system_temps=[0.1, 0.2, 0.01],
-        n_swaps=10,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.eps = eps
-        self.t_rate = t_rate
-        self.temp = 0.1
-        self.n_neighbours = n_neighbours
-        self.system_temps = system_temps
-        self.n_swaps = n_swaps
+        kwargs["eps"] = 1
+        kwargs["t_rate"] = 0.98
+        kwargs["n_neighbours"] = 1
+        kwargs["system_temps"] = [0.1, 0.2, 0.01]
+        kwargs["n_swaps"] = 10
+
+        self.pos_para = {"eps": kwargs["eps"]}
+        self.t_rate = kwargs["t_rate"]
+        self.n_neighbours = kwargs["n_neighbours"]
+        self.system_temps = kwargs["system_temps"]
+        self.n_swaps = kwargs["n_swaps"]
 
         self.n_iter_swap = int(self.n_iter / self.n_swaps)
 
         self.initializer = self._init_tempering
 
     def _init_annealers(self, _cand_):
-        _p_list_ = [HillClimber(temp=temp) for temp in self.system_temps]
-        for _p_ in _p_list_:
-            _p_.pos_current = _p_.move_random(_cand_)
-            _p_.pos_best = _p_.pos_current
+        _p_list_ = []
+
+        for temp in self.system_temps:
+            pos_para = self.pos_para
+            pos_para["temp"] = temp
+
+            _p_ = super()._initialize(_cand_, positioner=System, pos_para=pos_para)
+            _p_list_.append(_p_)
 
         return _p_list_
 
@@ -109,7 +90,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         return _p_list_
 
 
-class HillClimber(BasePositioner):
+class System(BasePositioner):
     def __init__(self, eps=1, temp=1):
         super().__init__(eps)
         self.temp = temp

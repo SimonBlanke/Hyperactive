@@ -9,50 +9,22 @@ from ..local import StochasticHillClimbingOptimizer
 
 
 class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        eps=1,
-        t_rate=0.98,
-        n_neighbours=1,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": eps}
-        self.t_rate = t_rate
-        self.temp = 0.01
+        kwargs["eps"] = 1
+        kwargs["t_rate"] = 0.98
+        kwargs["n_neighbours"] = 1
+
+        self.pos_para = {"eps": kwargs["eps"]}
+        self.t_rate = kwargs["t_rate"]
+        self.n_neighbours = kwargs["n_neighbours"]
+
+        self.temp = 0.1
 
         self.initializer = self._init_annealing
 
     # use _consider from simulated_annealing
-    """
-    def _consider(self, _p_, p_accept):
-        rand = random.uniform(0, 1)
-
-        if p_accept > rand:
-            _p_.score_current = _p_.score_new
-            _p_.pos_current = _p_.pos_new
-    """
 
     def _accept(self, _p_):
         score_diff_norm = (_p_.score_new - _p_.score_current) / (
@@ -75,4 +47,4 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
         return _cand_
 
     def _init_annealing(self, _cand_, X, y):
-        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)
+        return super()._initialize(_cand_, pos_para=self.pos_para)

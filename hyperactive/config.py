@@ -6,15 +6,36 @@ import multiprocessing
 
 
 class Config:
-    def __init__(self, search_config, n_jobs):
-        self.search_config = search_config
-        self.n_jobs = n_jobs
+    def __init__(self, *args, **kwargs):
+        self.kwargs_base = {
+            "metric": "accuracy",
+            "n_jobs": 1,
+            "cv": 5,
+            "verbosity": 1,
+            "random_state": None,
+            "warm_start": False,
+            "memory": True,
+            "scatter_init": False,
+        }
+
+        if "search_config" in list(kwargs.keys()):
+            self.search_config = kwargs["search_config"]
+        else:
+            self.search_config = args[0]
+        if "n_iter" in list(kwargs.keys()):
+            self.n_iter = kwargs["n_iter"]
+        else:
+            self.n_iter = args[1]
+
+        self.kwargs_base.update(kwargs)
+
+        self.set_n_jobs()
 
     def set_n_jobs(self):
         """Sets the number of jobs to run in parallel"""
         num_cores = multiprocessing.cpu_count()
-        if self.n_jobs == -1 or self.n_jobs > num_cores:
-            self.n_jobs = num_cores
+        if self.kwargs_base["n_jobs"] == -1 or self.kwargs_base["n_jobs"] > num_cores:
+            self.kwargs_base["n_jobs"] = num_cores
 
     def _is_all_same(self, list):
         """Checks if model names in search_config are consistent"""

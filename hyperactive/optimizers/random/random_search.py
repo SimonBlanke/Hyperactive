@@ -7,31 +7,8 @@ from ...base_optimizer import BaseOptimizer
 
 
 class RandomSearchOptimizer(BaseOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.initializer = self._init_random
 
@@ -46,4 +23,4 @@ class RandomSearchOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_random(self, _cand_, X, y):
-        return super()._initialize(_cand_, X, y)
+        return super()._initialize(_cand_)

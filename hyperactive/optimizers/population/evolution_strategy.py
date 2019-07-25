@@ -11,41 +11,19 @@ from ...base_positioner import BasePositioner
 
 
 class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        individuals=10,
-        mutation_rate=0.7,
-        crossover_rate=0.3,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.individuals = individuals
-        self.mutation_rate = mutation_rate
-        self.crossover_rate = crossover_rate
+        kwargs["individuals"] = 10
+        kwargs["mutation_rate"] = 0.7
+        kwargs["crossover_rate"] = 0.3
 
-        self.n_mutations = int(round(self.individuals * mutation_rate))
-        self.n_crossovers = int(round(self.individuals * crossover_rate))
+        self.individuals = kwargs["individuals"]
+        self.mutation_rate = kwargs["mutation_rate"]
+        self.crossover_rate = kwargs["crossover_rate"]
+
+        self.n_mutations = int(round(self.individuals * self.mutation_rate))
+        self.n_crossovers = int(round(self.individuals * self.crossover_rate))
 
         self.initializer = self._init_evo
 

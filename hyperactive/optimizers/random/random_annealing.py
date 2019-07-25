@@ -4,40 +4,18 @@
 
 
 from ...base_optimizer import BaseOptimizer
-from ...base_positioner import BasePositioner
 
 
 class RandomAnnealingOptimizer(BaseOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        eps=100,
-        t_rate=0.98,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": eps}
-        self.t_rate = t_rate
+        kwargs["eps"] = 100
+        kwargs["t_rate"] = 0.98
+
+        self.pos_para = {"eps": kwargs["eps"]}
+        self.t_rate = kwargs["t_rate"]
+
         self.temp = 1
 
         self.initializer = self._init_rnd_annealing
@@ -54,4 +32,4 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_rnd_annealing(self, _cand_, X, y):
-        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)
+        return super()._initialize(_cand_, pos_para=self.pos_para)

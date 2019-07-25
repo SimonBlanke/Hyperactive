@@ -12,40 +12,17 @@ from ...base_positioner import BasePositioner
 
 
 class ParticleSwarmOptimizer(BaseOptimizer):
-    def __init__(
-        self,
-        search_config,
-        n_iter,
-        metric="accuracy",
-        n_jobs=1,
-        cv=5,
-        verbosity=1,
-        random_state=None,
-        warm_start=False,
-        memory=True,
-        scatter_init=False,
-        n_part=10,
-        w=0.5,
-        c_k=0.5,
-        c_s=0.9,
-    ):
-        super().__init__(
-            search_config,
-            n_iter,
-            metric,
-            n_jobs,
-            cv,
-            verbosity,
-            random_state,
-            warm_start,
-            memory,
-            scatter_init,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.n_part = n_part
-        self.w = w
-        self.c_k = c_k
-        self.c_s = c_s
+        kwargs["n_part"] = 10
+        kwargs["w"] = 0.5
+        kwargs["c_k"] = 0.5
+        kwargs["c_s"] = 0.9
+        self.n_part = kwargs["n_part"]
+        self.w = kwargs["w"]
+        self.c_k = kwargs["c_k"]
+        self.c_s = kwargs["c_s"]
 
         self.initializer = self._init_part
 
