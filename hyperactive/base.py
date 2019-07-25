@@ -259,6 +259,15 @@ class BaseOptimizer(object):
 
         return model
 
+    def _update_pos(self, _cand_, _p_):
+        _cand_.pos_best = _p_.pos_new
+        _cand_.score_best = _p_.score_new
+
+        _p_.pos_current = _p_.pos_new
+        _p_.score_current = _p_.score_new
+
+        return _cand_, _p_
+
     def search(self, nth_process, X, y):
         _cand_, _p_ = self._init_search(nth_process, X, y)
 
