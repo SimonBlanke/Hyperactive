@@ -3,12 +3,9 @@
 # License: MIT License
 
 
-import random
-
 import numpy as np
 
 from .simulated_annealing import SimulatedAnnealingOptimizer
-from ...base import BasePositioner
 
 
 class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
@@ -42,7 +39,7 @@ class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
             scatter_init,
         )
 
-        self.eps = eps
+        self.pos_para = {"eps": eps}
         self.t_rate = t_rate
         self.n_neighbours = n_neighbours
         self.gamma = gamma
@@ -62,14 +59,4 @@ class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
     # _iterate same as simulated_annealing
 
     def _init_tunneling(self, _cand_, X, y):
-        _p_ = HillClimber()
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
-
-
-class HillClimber(BasePositioner):
-    def __init__(self, eps=1):
-        super().__init__(eps)
+        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)

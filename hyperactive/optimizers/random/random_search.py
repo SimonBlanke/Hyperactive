@@ -4,7 +4,6 @@
 
 
 from ...base import BaseOptimizer
-from ...base import BasePositioner
 
 
 class RandomSearchOptimizer(BaseOptimizer):
@@ -47,14 +46,4 @@ class RandomSearchOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_random(self, _cand_, X, y):
-        _p_ = Random()
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
-
-
-class Random(BasePositioner):
-    def __init__(self, eps=1):
-        super().__init__(eps)
+        return super()._initialize(_cand_, X, y)

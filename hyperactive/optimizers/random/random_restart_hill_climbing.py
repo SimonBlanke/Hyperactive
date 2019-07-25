@@ -36,7 +36,7 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
             scatter_init,
         )
 
-        self.eps = eps
+        self.pos_para = {"eps": eps}
         self.n_restarts = n_restarts
 
         self.n_iter_restart = int(self.n_iter / self.n_restarts)
@@ -56,14 +56,4 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_rr_climber(self, _cand_, X, y):
-        _p_ = HillClimber()
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
-
-
-class HillClimber(BasePositioner):
-    def __init__(self, eps=1):
-        self.eps = eps
+        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)

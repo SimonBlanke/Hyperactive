@@ -36,7 +36,7 @@ class TabuOptimizer(BaseOptimizer):
             scatter_init,
         )
 
-        self.eps = eps
+        self.pos_para = {"eps": eps}
         self.tabu_memory = tabu_memory
 
         self.initializer = self._init_tabu
@@ -67,15 +67,10 @@ class TabuOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_tabu(self, _cand_, X, y):
-        _p_ = HillClimber()
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
+        return super()._initialize(_cand_, X, y, TabuPositioner, pos_para=self.pos_para)
 
 
-class HillClimber(BasePositioner):
+class TabuPositioner(BasePositioner):
     def __init__(self, eps=1):
         super().__init__(eps)
 

@@ -36,7 +36,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
             scatter_init,
         )
 
-        self.eps = eps
+        self.pos_para = {"eps": eps}
         self.t_rate = t_rate
         self.temp = 1
 
@@ -54,14 +54,4 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_rnd_annealing(self, _cand_, X, y):
-        _p_ = HillClimber()
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
-
-
-class HillClimber(BasePositioner):
-    def __init__(self, eps=1):
-        super().__init__(eps)
+        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)

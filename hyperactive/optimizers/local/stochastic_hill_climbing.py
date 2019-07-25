@@ -6,7 +6,6 @@
 import random
 
 from ...base import BaseOptimizer
-from ...base import BasePositioner
 
 
 class StochasticHillClimbingOptimizer(BaseOptimizer):
@@ -38,7 +37,7 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
             scatter_init,
         )
 
-        self.eps = eps
+        self.pos_para = {"eps": eps}
         self.r = r
 
         self.initializer = self._init_stoch_climber
@@ -66,14 +65,4 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_stoch_climber(self, _cand_, X, y):
-        _p_ = HillClimber()
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
-
-
-class HillClimber(BasePositioner):
-    def __init__(self, eps=1):
-        self.eps = eps
+        return super()._initialize(_cand_, X, y, pos_para=self.pos_para)

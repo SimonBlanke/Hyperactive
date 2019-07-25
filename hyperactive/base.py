@@ -19,7 +19,7 @@ from .candidate import MlCandidate
 from .candidate import DlCandidate
 
 
-class BaseOptimizer(object):
+class BaseOptimizer:
     def __init__(
         self,
         search_config,
@@ -259,6 +259,17 @@ class BaseOptimizer(object):
 
         return model
 
+    def _initialize(self, _cand_, X, y, positioner=None, pos_para={}):
+        if positioner:
+            _p_ = positioner(**pos_para)
+        else:
+            _p_ = BasePositioner(**pos_para)
+
+        _p_.pos_current = _cand_.pos_best
+        _p_.score_current = _cand_.score_best
+
+        return _p_
+
     def _update_pos(self, _cand_, _p_):
         _cand_.pos_best = _p_.pos_new
         _cand_.score_best = _p_.score_new
@@ -412,8 +423,8 @@ class BaseOptimizer(object):
             pickle.dump(self.model_best, open(filename, "wb"))
 
 
-class BasePositioner(object):
-    def __init__(self, eps):
+class BasePositioner:
+    def __init__(self, eps=1):
         self.eps = eps
 
         self.pos_new = None
