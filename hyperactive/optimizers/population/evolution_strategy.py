@@ -6,11 +6,11 @@
 import numpy as np
 import random
 
-from ...base import BaseOptimizer
+from .particle_swarm_optimization import ParticleSwarmOptimizer
 from ...base import BasePositioner
 
 
-class EvolutionStrategyOptimizer(BaseOptimizer):
+class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
     def __init__(
         self,
         search_config,
@@ -95,15 +95,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
         self._crossover(_cand_, _p_list_, cross_idx, replace_idx)
 
     def _eval_individuals(self, _cand_, _p_list_, X, y):
-        for _p_ in _p_list_:
-            _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
-
-            if _p_.score_new > _cand_.score_best:
-                _cand_.score_best = _p_.score_new
-                _cand_.pos_best = _p_.pos_new
-
-                _p_.pos_current = _p_.pos_new
-                _p_.score_current = _p_.score_new
+        super()._eval_particles(_cand_, _p_list_, X, y)
 
     def _rank_individuals(self, _p_list_):
         scores_list = []
