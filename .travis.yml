@@ -14,13 +14,13 @@ install:
   - pip install scipy
   - pip install pandas
   - pip install scikit-learn
-  - pip install coverage
+  - pip install pytest
+  - pip install pytest-cov
   - pip install coveralls
   - pip install .
 
 script:
-  - pytest
+  - pytest --cov=hyperactive/
 
 after_success:
-  - coverage report -m
   - coveralls
