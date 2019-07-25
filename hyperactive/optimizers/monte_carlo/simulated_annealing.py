@@ -65,8 +65,8 @@ class SimulatedAnnealingOptimizer(BaseOptimizer):
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
         if _p_.score_new > _cand_.score_best:
-            _cand_.score_best = _p_.score_new
             _cand_.pos_best = _p_.pos_new
+            _cand_.score_best = _p_.score_new
 
             _p_.pos_current = _p_.pos_new
             _p_.score_current = _p_.score_new

@@ -7,11 +7,11 @@ import random
 
 import numpy as np
 
-from ...base import BaseOptimizer
+from .simulated_annealing import SimulatedAnnealingOptimizer
 from ...base import BasePositioner
 
 
-class StochasticTunnelingOptimizer(BaseOptimizer):
+class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(
         self,
         search_config,
@@ -50,12 +50,7 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
 
         self.initializer = self._init_tunneling
 
-    def _consider(self, _p_, p_accept):
-        rand = random.uniform(0, 1)
-
-        if p_accept > rand:
-            _p_.score_current = _p_.score_new
-            _p_.pos_current = _p_.pos_new
+    # _consider same as simulated_annealing
 
     def _accept(self, _p_):
         score_diff_norm = (_p_.score_new - _p_.score_current) / (
@@ -64,23 +59,7 @@ class StochasticTunnelingOptimizer(BaseOptimizer):
         f_stun = 1 - np.exp(-self.gamma * score_diff_norm)
         return np.exp(-f_stun / self.temp)
 
-    def _iterate(self, i, _cand_, _p_, X, y):
-        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
-        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
-
-        if _p_.score_new > _cand_.score_best:
-            _cand_.score_best = _p_.score_new
-            _cand_.pos_best = _p_.pos_new
-
-            _p_.pos_current = _p_.pos_new
-            _p_.score_current = _p_.score_new
-        else:
-            p_tunnel = self._accept(_p_)
-            self._consider(_p_, p_tunnel)
-
-        self.temp = self.temp * self.t_rate
-
-        return _cand_
+    # _iterate same as simulated_annealing
 
     def _init_tunneling(self, _cand_, X, y):
         _p_ = HillClimber()
