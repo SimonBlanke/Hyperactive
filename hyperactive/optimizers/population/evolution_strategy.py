@@ -7,7 +7,7 @@ import numpy as np
 import random
 
 from .particle_swarm_optimization import ParticleSwarmOptimizer
-from ...base import BasePositioner
+from ...base_positioner import BasePositioner
 
 
 class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):

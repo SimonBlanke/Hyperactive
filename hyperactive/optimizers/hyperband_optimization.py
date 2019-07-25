@@ -5,7 +5,7 @@
 
 import tqdm
 
-from ...base import BaseOptimizer
+from ...base_optimizer import BaseOptimizer
 
 # TODO
 

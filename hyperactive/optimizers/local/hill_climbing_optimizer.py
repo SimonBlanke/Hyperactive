@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from ...base import BaseOptimizer
+from ...base_optimizer import BaseOptimizer
 
 
 class HillClimbingOptimizer(BaseOptimizer):

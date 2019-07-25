@@ -3,8 +3,8 @@
 # License: MIT License
 
 
-from ...base import BaseOptimizer
-from ...base import BasePositioner
+from ...base_optimizer import BaseOptimizer
+from ...base_positioner import BasePositioner
 
 
 class RandomAnnealingOptimizer(BaseOptimizer):

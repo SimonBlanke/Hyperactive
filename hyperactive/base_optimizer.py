@@ -15,6 +15,9 @@ import pandas as pd
 from importlib import import_module
 from functools import partial
 
+from .base_positioner import BasePositioner
+from .config import Config
+
 from .candidate import MlCandidate
 from .candidate import DlCandidate
 
@@ -81,16 +84,17 @@ class BaseOptimizer:
 
         self.X_train = None
         self.y_train = None
-        self.model_type = None
 
-        self._get_model_type()
+        self._config_ = Config(search_config, n_jobs)
+
+        self._config_.get_model_type()
 
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
-        self._set_n_jobs()
+        self._config_.set_n_jobs()
 
-        self._n_process_range = range(0, int(self.n_jobs))
+        self._n_process_range = range(0, int(self._config_.n_jobs))
         self.opt_type = None
 
     def _tqdm_dict(self, _cand_):
@@ -117,43 +121,10 @@ class BaseOptimizer:
             np.random.seed(rand + thread)
             scipy.random.seed(rand + thread)
 
-    def _is_all_same(self, list):
-        """Checks if model names in search_config are consistent"""
-        if len(set(list)) == 1:
-            return True
-        else:
-            return False
-
-    def _get_model_str(self):
-        model_type_list = []
-
-        for model_type_key in self.search_config.keys():
-            if "sklearn" in model_type_key:
-                model_type_list.append("sklearn")
-            elif "xgboost" in model_type_key:
-                model_type_list.append("xgboost")
-            elif "keras" in model_type_key:
-                model_type_list.append("keras")
-            elif "torch" in model_type_key:
-                model_type_list.append("torch")
-            else:
-                raise Exception("\n No valid model string in search_config")
-
-        return model_type_list
-
-    def _get_model_type(self):
-        """extracts the model type from the search_config (important for search space construction)"""
-        model_type_list = self._get_model_str()
-
-        if self._is_all_same(model_type_list):
-            self.model_type = model_type_list[0]
-        else:
-            raise Exception("\n Model strings in search_config keys are inconsistent")
-
     def _get_sklearn_model(self, nth_process):
         """Gets a model_key from the model_list for each thread"""
-        if self.n_models > self.n_jobs:
-            diff = self.n_models - self.n_jobs
+        if self.n_models > self._config_.n_jobs:
+            diff = self.n_models - self._config_.n_jobs
 
             if nth_process == 0:
                 print(
@@ -169,18 +140,10 @@ class BaseOptimizer:
 
         return model_key
 
-    def _set_n_jobs(self):
-        """Sets the number of jobs to run in parallel"""
-        num_cores = multiprocessing.cpu_count()
-        if self.n_jobs == -1 or self.n_jobs > num_cores:
-            self.n_jobs = num_cores
-        # if self.n_jobs > self.n_iter:
-        #     self.n_iter = self.n_jobs
-
     def _set_n_steps(self, nth_process):
         """Calculates the number of steps each process has to do"""
-        n_steps = int(self.n_iter / self.n_jobs)
-        remain = self.n_iter % self.n_jobs
+        n_steps = int(self.n_iter / self._config_.n_jobs)
+        remain = self.n_iter % self._config_.n_jobs
 
         if nth_process < remain:
             n_steps += 1
@@ -202,7 +165,7 @@ class BaseOptimizer:
     def _show_progress_bar(self):
         show = False
 
-        if self.model_type == "keras" or self.model_type == "torch":
+        if self._config_.model_type == "keras" or self._config_.model_type == "torch":
             return show
 
         if self.verbosity > 0:
@@ -216,7 +179,10 @@ class BaseOptimizer:
 
         # self.n_steps = self._set_n_steps(nth_process)
 
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
+        if (
+            self._config_.model_type == "sklearn"
+            or self._config_.model_type == "xgboost"
+        ):
 
             search_config_key = self._get_sklearn_model(nth_process)
             _cand_ = MlCandidate(
@@ -230,7 +196,7 @@ class BaseOptimizer:
                 search_config_key,
             )
 
-        elif self.model_type == "keras":
+        elif self._config_.model_type == "keras":
             _cand_ = DlCandidate(
                 nth_process,
                 self.search_config,
@@ -297,7 +263,7 @@ class BaseOptimizer:
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-        pool = multiprocessing.Pool(self.n_jobs)
+        pool = multiprocessing.Pool(self._config_.n_jobs)
         search = partial(self.search, X=X, y=y)
 
         _cand_list = pool.map(search, self._n_process_range)
@@ -375,10 +341,10 @@ class BaseOptimizer:
         """
         X, y = self._check_data(X, y)
 
-        if self.model_type == "keras":
-            self.n_jobs = 1
+        if self._config_.model_type == "keras":
+            self._config_.n_jobs = 1
 
-        if self.n_jobs == 1:
+        if self._config_.n_jobs == 1:
             self._run_one_job(X, y)
 
         else:
@@ -412,9 +378,12 @@ class BaseOptimizer:
         -------
         (unnamed float) : float
         """
-        if self.model_type == "sklearn" or self.model_type == "xgboost":
+        if (
+            self._config_.model_type == "sklearn"
+            or self._config_.model_type == "xgboost"
+        ):
             return self.model_best.score(X_test, y_test)
-        elif self.model_type == "keras":
+        elif self._config_.model_type == "keras":
             return self.model_best.evaluate(X_test, y_test)[1]
 
     def export(self, filename):
@@ -430,39 +399,3 @@ class BaseOptimizer:
         """
         if self.model_best:
             pickle.dump(self.model_best, open(filename, "wb"))
-
-
-class BasePositioner:
-    def __init__(self, eps=1):
-        self.eps = eps
-
-        self.pos_new = None
-        self.score_new = -1000
-
-        self.pos_current = None
-        self.score_current = -1000
-
-        self.pos_best = None
-        self.score_best = -1000
-
-    def move_climb(self, _cand_, pos, eps_mod=1):
-
-        sigma = (_cand_._space_.dim / 33) * self.eps / eps_mod + 1
-        pos_new = np.random.normal(pos, sigma, pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        n_zeros = [0] * len(_cand_._space_.dim)
-        pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
-        """
-
-        # if np.array_equal(_cand_.pos_best, pos):
-        pos_new = np.random.uniform(pos - 1, pos + 1, pos.shape)
-        pos_new_int = np.rint(pos_new)
-
-        n_zeros = [0] * len(_cand_._space_.dim)
-        pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
-        """
-        return pos
-
-    def move_random(self, _cand_):
-        return _cand_._space_.get_random_pos()

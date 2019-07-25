@@ -11,7 +11,7 @@ from sklearn.gaussian_process.kernels import Matern
 # from sklearn.gaussian_process.kernels import ConstantKernel, Matern
 # from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 
-from ...base import BaseOptimizer
+from ...base_optimizer import BaseOptimizer
 
 
 class BayesianOptimizer(BaseOptimizer):

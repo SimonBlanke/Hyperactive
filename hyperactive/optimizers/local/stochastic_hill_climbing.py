@@ -5,7 +5,7 @@
 
 import random
 
-from ...base import BaseOptimizer
+from ...base_optimizer import BaseOptimizer
 
 
 class StochasticHillClimbingOptimizer(BaseOptimizer):

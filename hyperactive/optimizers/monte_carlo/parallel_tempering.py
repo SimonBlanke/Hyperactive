@@ -8,7 +8,7 @@ import random
 import numpy as np
 
 from .simulated_annealing import SimulatedAnnealingOptimizer
-from ...base import BasePositioner
+from ...base_positioner import BasePositioner
 
 
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
