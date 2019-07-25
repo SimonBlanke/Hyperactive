@@ -17,29 +17,6 @@ Hyperactive
 
 <br>
 
-
-<p align="center">
-  
-  <a href="https://pypi.org/project/hyperactive/">
-    <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?logo=python&logoColor=white">
-  </a>
-
-  <a href="https://pypi.python.org/pypi/hyperactive">
-    <img src="https://img.shields.io/pypi/v/hyperactive.svg?colorB=4cc61e">
-  </a>
-
-  <a href="https://github.com/SimonBlanke/hyperactive/blob/master/LICENSE">
-    <img src="https://img.shields.io/pypi/l/hyperactive.svg">
-  </a>
-
-  <a href="https://pepy.tech/project/hyperactive">
-    <img src="https://pepy.tech/badge/hyperactive">
-  </a>
-  <a href="https://github.com/python/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
-  </a>
-
-</p>
-
 ---
 
 <p align="center">
@@ -48,7 +25,8 @@ Hyperactive
   <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
   <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
   <a href="https://github.com/SimonBlanke/Hyperactive#advanced-features">Advanced Features</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a>
+  <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
+  <a href="https://github.com/SimonBlanke/Hyperactive#license-api">License</a>
 </p>
 
 ---
@@ -57,6 +35,7 @@ Hyperactive
 <br>
 
 ## Overview
+
 - Optimize hyperparameters of machine- or deep-learning models, using a simple API.
 - Choose from a variety of different optimization techniques to improve your model.
 - Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing.
@@ -142,15 +121,26 @@ The 'No Opt'-bar shows the training time of a default Gradient-Boosting-Classifi
 
 <br>
 
+
 ## Installation
 
-Hyperactive is developed and tested in python 3 and is available on PyPI:
+Hyperactive is developed and tested in python 3:
+
+![https://pypi.org/project/hyperactive](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)
+
+<br>
+
+Hyperactive is available on PyPi:
+
+![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e) 
+![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge)
+
 ```console
 pip install hyperactive
 ```
 
-
 <br>
+
 
 ## Examples
 
@@ -304,6 +294,7 @@ score = Optimizer.score(X_test, y_test)
 
 
 <br>
+
 
 ## Advanced Features
 
@@ -574,6 +565,7 @@ start_point = {
 
 <br>
 
+
 ## Hyperactive API
 
 ### Classes:
@@ -729,3 +721,11 @@ export(self, filename)
 | Argument | Type | Description |
 | ------ | ------ | ------ |
 | filename  | str | file name and path for model export |
+
+<br>
+
+
+## License
+
+![https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)
+
