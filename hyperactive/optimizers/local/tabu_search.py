@@ -26,7 +26,7 @@ class TabuOptimizer(BaseOptimizer):
                 del _p_.tabu_memory_[i][0]
 
     def _iterate(self, i, _cand_, _p_, X, y):
-        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+        _p_.pos_new = _p_.climb_tabu(_cand_, _p_.pos_current)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
         if _p_.score_new > _cand_.score_best:
@@ -50,11 +50,15 @@ class TabuPositioner(BasePositioner):
 
         self.tabu_memory_ = [tabu_memory_short, tabu_memory_mid, tabu_memory_long]
 
-    def climb_tabu(self, _cand_, eps_mod=1):
+    def climb_tabu(self, _cand_, pos, eps_mod=1):
         in_tabu_mem = True
+        pos_new = None
+
         while in_tabu_mem:
-            pos_new = self.move_climb(_cand_)
+            pos_new = self.move_climb(_cand_, pos)
 
             for i in range(3):
                 if not any((pos_new == pos).all() for pos in self.tabu_memory_[i]):
                     in_tabu_mem = False
+
+        return pos_new
