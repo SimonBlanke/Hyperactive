@@ -46,7 +46,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
     def _swap_pos(self, _cand_, _p_list_):
         _p_list_temp = _p_list_[:]
 
-        for i, _p1_ in enumerate(_p_list_):
+        for _p1_ in _p_list_:
             rand = random.uniform(0, 1)
             _p2_ = np.random.choice(_p_list_temp)
 

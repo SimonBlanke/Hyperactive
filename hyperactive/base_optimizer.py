@@ -83,16 +83,6 @@ class BaseOptimizer:
         self._n_process_range = range(0, int(self.n_jobs))
         self.opt_type = None
 
-    def _base_args(self, args, kwargs):
-        pos_args = {}
-        for i, key in enumerate(["search_config", "n_iter"]):
-            if i < len(args):
-                pos_args[key] = args[i]
-            else:
-                pos_args[key] = kwargs[key]
-
-        return pos_args
-
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {

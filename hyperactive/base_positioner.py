@@ -26,15 +26,10 @@ class BasePositioner:
 
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
-        """
 
         # if np.array_equal(_cand_.pos_best, pos):
-        pos_new = np.random.uniform(pos - 1, pos + 1, pos.shape)
-        pos_new_int = np.rint(pos_new)
+        # pos_new = np.random.uniform(pos - 1, pos + 1, pos.shape)
 
-        n_zeros = [0] * len(_cand_._space_.dim)
-        pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
-        """
         return pos
 
     def move_random(self, _cand_):

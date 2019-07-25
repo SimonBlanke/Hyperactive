@@ -43,41 +43,13 @@ class InitSearchPosition:
 
     def _scatter_init(self, nth_process, X, y):
         pos_list = []
-        for i in range(self.scatter_init):
+        for _ in range(self.scatter_init):
             pos = self._space_.get_random_pos()
             pos_list.append(pos)
 
-        """
-        print("\n test:")
-        for pos in pos_list:
-            para = self._space_.pos2para(pos)
-            score, _, _ = self._model_.train_model(para, X, y)
-
-            print("score", score)
-            print("pos  ", pos)
-
-        print("\n\n")
-
-
-        hb_init = self.scatter_init
-        while hb_init > 1:
-            pos_best_list, score_best_list = self._hyperband_train(
-                X, y, hb_init, pos_list
-            )
-
-            pos_best_sorted, score_best_sorted = self._sort_for_best(
-                pos_best_list, score_best_list
-            )
-
-            hb_init = int(hb_init / 2)
-            pos_list = pos_best_sorted[:hb_init]
-        """
-
         pos_best_list, score_best_list = self._scatter_train(X, y, pos_list)
 
-        pos_best_sorted, score_best_sorted = self._sort_for_best(
-            pos_best_list, score_best_list
-        )
+        pos_best_sorted, _ = self._sort_for_best(pos_best_list, score_best_list)
 
         nth_best_pos = nth_process - self.n_warm_start_keys
 
@@ -145,44 +117,11 @@ class InitMLSearchPosition(InitSearchPosition):
                     *self.warm_start[start_point_key][hyperpara_name]
                 )
 
-            # what if warm start not in search_config range?
+            """what if warm start not in search_config range?"""
 
             pos.append(search_position)
 
         return np.array(pos)
-
-    """
-    def _add_list_to_dict_values(self, dict_, model_str):
-        dict__ = {}
-
-        for key in self.search_config[model_str].keys():
-            dict__[key] = [dict_[key]]
-
-        return dict__
-
-
-    def set_default_warm_start(self):
-        if self.warm_start is False:
-            warm_start = {}
-            for i, model_str in enumerate(self.search_config.keys()):
-                model = self._get_model(model_str)
-                warm_start_dict = self._add_list_to_dict_values(
-                    model().get_params(), model_str
-                )
-
-                dict_key = model_str + "." + str(i)
-                warm_start[dict_key] = warm_start_dict
-
-            self.warm_start = warm_start
-
-
-    def _get_model(self, model):
-        module_str, model_str = model.rsplit(".", 1)
-        module = import_module(module_str)
-        model = getattr(module, model_str)
-
-        return model
-    """
 
 
 class InitDLSearchPosition(InitSearchPosition):

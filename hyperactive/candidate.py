@@ -68,23 +68,6 @@ class MlCandidate(Candidate):
 
         return warm_start
 
-    """
-    def _get_finished_model(self, warm_start):
-        model, nr = list(warm_start.keys())[0].rsplit(".", 1)
-
-        model = self._model_._get_model(model)
-        para = warm_start[list(warm_start.keys())[0]]
-
-        # convert listed values to unlisted values
-        sklearn_para = {}
-        for para_key in para:
-            sklearn_para[para_key] = para[para_key][0]
-
-        sklearn_model = model(**sklearn_para)
-
-        return sklearn_model
-    """
-
 
 class DlCandidate(Candidate):
     def __init__(
