@@ -16,11 +16,11 @@ install:
   - pip install keras
   - pip install pytest
   - pip install pytest-cov
-  - pip install codecov
+  - pip install coveralls
   - pip install .
 
 script:
   - pytest --cov=hyperactive/
 
 after_success:
-  - codecov
+  - coveralls
