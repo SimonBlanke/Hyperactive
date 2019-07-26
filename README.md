@@ -44,7 +44,7 @@ Hyperactive
   <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
   <a href="https://github.com/SimonBlanke/Hyperactive#advanced-features">Advanced Features</a> |
   <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#license-api">License</a>
+  <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
 </p>
 
 ---
@@ -629,14 +629,16 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | scatter_init  |  int | False  |  Chooses better initial position by training on multiple random positions with smaller training dataset (split into int subsets)  |
 
 
-### Specific keyword arguments (hill climbing):
+### Specific keyword arguments:
+
+#### [Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/hill_climbing_optimizer.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
 
 
-### Specific keyword arguments (stochastic hill climbing):
+#### [Stochastic Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/stochastic_hill_climbing.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -644,14 +646,14 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 |  r | float  |  1e-6 | acceptance factor  |
 
 
-### Specific keyword arguments (tabu search):
+#### [Tabu Search](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/tabu_search.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
 |  tabu_memory | list  |  [3, 6, 9] | length of short/mid/long-term memory  |
 
-### Specific keyword arguments (random restart hill climbing):
+#### [Random Restart Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_restart_hill_climbing.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -659,21 +661,22 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | n_restarts  | int  | 10  | number of restarts  |
 
 
-### Specific keyword arguments (random annealing):
+#### [Random Annealing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_annealing.py)
+
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | eps  | int | 100 | epsilon |
 | t_rate | float | 0.98 | cooling rate  |
 
-### Specific keyword arguments (simulated annealing):
+#### [Simulated Annealing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/monte_carlo/simulated_annealing.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | eps  | int | 1 | epsilon |
 | t_rate | float | 0.98 | cooling rate  |
 
-### Specific keyword arguments (stochastic tunneling):
+#### [Stochastic Tunneling](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/monte_carlo/stochastic_tunneling.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -682,7 +685,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | gamma  | float  |  1 | tunneling factor  |
 
 
-### Specific keyword arguments (parallel tempering):
+#### [Parallel Tempering](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/monte_carlo/parallel_tempering.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -692,7 +695,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 |  n_swaps | int  | 10  | number of swaps  |
 
 
-### Specific keyword arguments (particle swarm optimization):
+#### [Particle Swarm Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/particle_swarm_optimization.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -701,13 +704,20 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | c_k | float | 0.8 | cognitive factor |
 | c_s | float | 0.9 | social factor |
 
-### Specific keyword arguments (evolution strategy optimization):
+#### [Evolution Strategy](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/evolution_strategy.py)
 
 | Argument | Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | individuals  | int | 10 | number of individuals |
 | mutation_rate | float | 0.7 | mutation rate |
 | crossover_rate | float | 0.3 | crossover rate |
+
+#### [Bayesian Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/sequence_model/bayesian_optimization.py)
+
+| Argument | Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| kernel  | class | Matern | Kernel used for the gaussian process |
+
 
 ### General methods:
 ```
