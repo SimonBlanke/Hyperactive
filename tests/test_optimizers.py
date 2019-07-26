@@ -1,0 +1,203 @@
+# Author: Simon Blanke
+# Email: simon.blanke@yahoo.com
+# License: MIT License
+
+from sklearn.datasets import load_iris
+
+data = load_iris()
+X = data.data
+y = data.target
+
+n_iter_0 = 50
+random_state = 0
+cv = 2
+n_jobs = 2
+
+search_config = {
+    "sklearn.ensemble.GradientBoostingClassifier": {
+        "n_estimators": range(1, 20, 5),
+        "max_depth": range(1, 11),
+    }
+}
+
+warm_start = False
+
+
+def test_HillClimbingOptimizer():
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=n_jobs,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_StochasticHillClimbingOptimizer():
+    from hyperactive import StochasticHillClimbingOptimizer
+
+    opt = StochasticHillClimbingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_TabuOptimizer():
+    from hyperactive import TabuOptimizer
+
+    opt = TabuOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_RandomSearchOptimizer():
+    from hyperactive import RandomSearchOptimizer
+
+    opt = RandomSearchOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_RandomRestartHillClimbingOptimizer():
+    from hyperactive import RandomRestartHillClimbingOptimizer
+
+    opt = RandomRestartHillClimbingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_RandomAnnealingOptimizer():
+    from hyperactive import RandomAnnealingOptimizer
+
+    opt = RandomAnnealingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_SimulatedAnnealingOptimizer():
+    from hyperactive import SimulatedAnnealingOptimizer
+
+    opt = SimulatedAnnealingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_StochasticTunnelingOptimizer():
+    from hyperactive import StochasticTunnelingOptimizer
+
+    opt = StochasticTunnelingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_ParallelTemperingOptimizer():
+    from hyperactive import ParallelTemperingOptimizer
+
+    opt = ParallelTemperingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_ParticleSwarmOptimizer():
+    from hyperactive import ParticleSwarmOptimizer
+
+    opt = ParticleSwarmOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_EvolutionStrategyOptimizer():
+    from hyperactive import EvolutionStrategyOptimizer
+
+    opt = EvolutionStrategyOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_BayesianOptimizer():
+    from hyperactive import BayesianOptimizer
+
+    opt = BayesianOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=1,
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
