@@ -9,14 +9,14 @@ X = data.data
 y = data.target
 
 n_iter_0 = 0
-n_iter_1 = 3
+n_iter_1 = 10
 random_state = 0
 cv = 2
 n_jobs = 1
 
 search_config = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [1], "batch_size": [500], "verbose": [0]},
+    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
     "keras.layers.Dense.1": {
         "units": range(1, 50, 1),
         "activation": ["relu"],
@@ -27,7 +27,7 @@ search_config = {
 
 warm_start = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [1], "batch_size": [500], "verbose": [0]},
+    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
     "keras.layers.Dense.1": {
         "units": [2],
         "activation": ["relu"],
