@@ -16,7 +16,7 @@ n_jobs = 1
 
 search_config = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": range(0, 3), "batch_size": [500], "verbose": [0]},
+    "keras.fit.0": {"epochs": range(0, 5), "batch_size": [500], "verbose": [0]},
     "keras.layers.Dense.1": {
         "units": range(1, 100, 1),
         "activation": ["relu", "tanh", "linear", "sigmoid"],

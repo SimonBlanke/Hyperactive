@@ -10,7 +10,7 @@ X = data.data
 y = data.target
 
 n_iter_0 = 0
-n_iter_1 = 3
+n_iter_1 = 33
 random_state = 0
 cv = 2
 n_jobs = 2
