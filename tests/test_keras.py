@@ -2,9 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_digits
 
-data = load_breast_cancer()
+data = load_digits()
 X = data.data
 y = data.target
 
@@ -16,22 +16,22 @@ n_jobs = 1
 
 search_config = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
+    "keras.fit.0": {"epochs": range(0, 3), "batch_size": [500], "verbose": [0]},
     "keras.layers.Dense.1": {
-        "units": range(1, 50, 1),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
+        "units": range(1, 100, 1),
+        "activation": ["relu", "tanh", "linear", "sigmoid"],
+        "kernel_initializer": ["RandomUniform"],
     },
     "keras.layers.Dense.2": {"units": [1], "activation": ["sigmoid"]},
 }
 
 warm_start = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
+    "keras.fit.0": {"epochs": [1], "batch_size": [500], "verbose": [0]},
     "keras.layers.Dense.1": {
-        "units": [2],
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
+        "units": [1],
+        "activation": ["linear"],
+        "kernel_initializer": ["RandomUniform"],
     },
     "keras.layers.Dense.2": {"units": [1], "activation": ["sigmoid"]},
 }
