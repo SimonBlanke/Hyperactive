@@ -272,7 +272,7 @@ class BaseOptimizer:
         self.score_best = _cand_.score_best
 
         para = _cand_._space_.pos2para(_cand_.pos_best)
-        self.model_best = _cand_._model_._create_model(para)
+        self.model_best, _ = _cand_._model_._create_model(para)
 
         if self.verbosity:
             print("\n", self.metric, self.score_best)
@@ -336,7 +336,7 @@ class BaseOptimizer:
         else:
             self._run_multiple_jobs(X, y)
 
-        self.model_best.fit(X, y)
+        # self.model_best.fit(X, y)
 
     def predict(self, X_test):
         """Returns the prediction of X_test after a model was searched by `fit`
