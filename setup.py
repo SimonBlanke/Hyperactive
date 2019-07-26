@@ -36,6 +36,7 @@ setup(
         "pandas",
         "tqdm",
         "scikit-learn>=0.18",
+        "tensorflow",
         "keras",
         "meta-learn",
     ],
