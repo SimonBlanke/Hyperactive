@@ -2,8 +2,10 @@
 Hyperactive
 </h1>
 
-<h3 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
+<br>
 
+
+<h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
 
 <p align="center">
@@ -24,14 +26,11 @@ Hyperactive
     <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=for-the-badge&logo=code-climate">
   </a>
 
+  <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
+    <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=for-the-badge">
+  </a>
+  
 </p>
-
-
-
-
-
-
-
 
 <br>
 
@@ -145,6 +144,9 @@ The 'No Opt'-bar shows the training time of a default Gradient-Boosting-Classifi
 Hyperactive is developed and tested in python 3:
 
 ![https://pypi.org/project/hyperactive](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)
+![https://github.com/SimonBlanke/Hyperactive/graphs/contributors](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=for-the-badge)
+![https://github.com/SimonBlanke/Hyperactive/commits/master](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=for-the-badge)
+
 
 <br>
 
