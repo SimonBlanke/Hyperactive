@@ -42,9 +42,9 @@ class Config:
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
-        self._n_process_range = range(0, int(self.n_jobs))
-
         self.set_n_jobs()
+
+        self._n_process_range = range(0, int(self.n_jobs))
 
     def _set_general_args(self, kwargs_base):
         self.metric = kwargs_base["metric"]

@@ -174,7 +174,7 @@ class BaseOptimizer:
         self.model_best, _ = _cand_._model_._create_model(para)
 
         if self._config_.verbosity:
-            print("\n", self.metric, self.score_best)
+            print("\n", self._config_.metric, self.score_best)
             print("start_point =", start_point)
 
     def _run_multiple_jobs(self, X, y):
@@ -205,8 +205,12 @@ class BaseOptimizer:
         if self._config_.verbosity:
             print("\nList of start points (best first):")
             for start_point, score_best in zip(start_point_sorted, score_best_sorted):
-                print("\n", self.metric, score_best)
+                print("\n", self._config_.metric, score_best)
                 print("start_point =", start_point)
+
+        print("self._config_.n_jobs  ", self._config_.n_jobs)
+        print("score_best_sorted     ", score_best_sorted)
+        print("model_best_sorted     ", model_best_sorted)
 
         self.score_best = score_best_sorted[0]
         self.model_best = model_best_sorted[0]
