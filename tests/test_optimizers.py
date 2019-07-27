@@ -49,7 +49,7 @@ def test_StochasticHillClimbingOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -64,7 +64,7 @@ def test_TabuOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -79,7 +79,7 @@ def test_RandomSearchOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -94,7 +94,7 @@ def test_RandomRestartHillClimbingOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -109,7 +109,7 @@ def test_RandomAnnealingOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -124,7 +124,7 @@ def test_SimulatedAnnealingOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -139,7 +139,7 @@ def test_StochasticTunnelingOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -154,7 +154,7 @@ def test_ParallelTemperingOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -169,7 +169,7 @@ def test_ParticleSwarmOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -184,7 +184,7 @@ def test_EvolutionStrategyOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
@@ -199,7 +199,7 @@ def test_BayesianOptimizer():
         random_state=random_state,
         verbosity=0,
         cv=cv,
-        n_jobs=1,
+        n_jobs=n_jobs,
         warm_start=warm_start,
     )
     opt.fit(X, y)
