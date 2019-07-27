@@ -97,10 +97,7 @@ class BaseOptimizer:
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
-        # self._config_.set_n_jobs()
-
         self._n_process_range = range(0, int(self.n_jobs))
-        self.opt_type = None
 
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
@@ -145,16 +142,6 @@ class BaseOptimizer:
 
         return model_key
 
-    def _set_n_steps(self, nth_process):
-        """Calculates the number of steps each process has to do"""
-        n_steps = int(self.n_iter / self.n_jobs)
-        remain = self.n_iter % self.n_jobs
-
-        if nth_process < remain:
-            n_steps += 1
-
-        return n_steps
-
     def _sort_for_best(self, sort, sort_by):
         """Returns two lists sorted by the second"""
         sort = np.array(sort)
@@ -181,8 +168,6 @@ class BaseOptimizer:
     def _init_search(self, nth_process, X, y, init=None):
         """Initializes the search by instantiating the ml- or dl-candidate for each process"""
         self._set_random_seed(nth_process)
-
-        # self.n_steps = self._set_n_steps(nth_process)
 
         if (
             self._config_.model_type == "sklearn"
@@ -226,14 +211,6 @@ class BaseOptimizer:
             self.p_bar = tqdm.tqdm(**self._tqdm_dict(_cand_))
 
         return _cand_, _p_
-
-    def _get_model(self, model):
-        """Imports model from search_config key and returns usable model-class"""
-        module_str, model_str = model.rsplit(".", 1)
-        module = import_module(module_str)
-        model = getattr(module, model_str)
-
-        return model
 
     def _initialize(self, _cand_, positioner=None, pos_para={}):
         if positioner:
