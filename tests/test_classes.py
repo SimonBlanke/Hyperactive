@@ -3,73 +3,89 @@
 # License: MIT License
 
 
+search_config = {
+    "sklearn.tree.DecisionTreeClassifier": {
+        "criterion": ["gini", "entropy"],
+        "max_depth": range(1, 21),
+        "min_samples_split": range(2, 21),
+        "min_samples_leaf": range(1, 21),
+    }
+}
+
+
+def test_import_Chimaera():
+    from hyperactive import Chimaera
+
+    _ = Chimaera()
+
+
 def test_import_HillClimbingOptimizer():
     from hyperactive import HillClimbingOptimizer
 
-    _ = HillClimbingOptimizer  # avoids unused warning
+    _ = HillClimbingOptimizer(search_config, 1)
 
 
 def test_import_StochasticHillClimbingOptimizer():
     from hyperactive import StochasticHillClimbingOptimizer
 
-    _ = StochasticHillClimbingOptimizer  # avoids unused warning
+    _ = StochasticHillClimbingOptimizer(search_config, 1)
 
 
 def test_import_TabuOptimizer():
     from hyperactive import TabuOptimizer
 
-    _ = TabuOptimizer  # avoids unused warning
+    _ = TabuOptimizer(search_config, 1)
 
 
 def test_import_RandomSearchOptimizer():
     from hyperactive import RandomSearchOptimizer
 
-    _ = RandomSearchOptimizer  # avoids unused warning
+    _ = RandomSearchOptimizer(search_config, 1)
 
 
 def test_import_RandomRestartHillClimbingOptimizer():
     from hyperactive import RandomRestartHillClimbingOptimizer
 
-    _ = RandomRestartHillClimbingOptimizer  # avoids unused warning
+    _ = RandomRestartHillClimbingOptimizer(search_config, 1)
 
 
 def test_import_RandomAnnealingOptimizer():
     from hyperactive import RandomAnnealingOptimizer
 
-    _ = RandomAnnealingOptimizer  # avoids unused warning
+    _ = RandomAnnealingOptimizer(search_config, 1)
 
 
 def test_import_SimulatedAnnealingOptimizer():
     from hyperactive import SimulatedAnnealingOptimizer
 
-    _ = SimulatedAnnealingOptimizer  # avoids unused warning
+    _ = SimulatedAnnealingOptimizer(search_config, 1)
 
 
 def test_import_StochasticTunnelingOptimizer():
     from hyperactive import StochasticTunnelingOptimizer
 
-    _ = StochasticTunnelingOptimizer  # avoids unused warning
+    _ = StochasticTunnelingOptimizer(search_config, 1)
 
 
 def test_import_ParallelTemperingOptimizer():
     from hyperactive import ParallelTemperingOptimizer
 
-    _ = ParallelTemperingOptimizer  # avoids unused warning
+    _ = ParallelTemperingOptimizer(search_config, 1)
 
 
 def test_import_ParticleSwarmOptimizer():
     from hyperactive import ParticleSwarmOptimizer
 
-    _ = ParticleSwarmOptimizer  # avoids unused warning
+    _ = ParticleSwarmOptimizer(search_config, 1)
 
 
 def test_import_EvolutionStrategyOptimizer():
     from hyperactive import EvolutionStrategyOptimizer
 
-    _ = EvolutionStrategyOptimizer  # avoids unused warning
+    _ = EvolutionStrategyOptimizer(search_config, 1)
 
 
 def test_import_BayesianOptimizer():
     from hyperactive import BayesianOptimizer
 
-    _ = BayesianOptimizer  # avoids unused warning
+    _ = BayesianOptimizer(search_config, 1)
