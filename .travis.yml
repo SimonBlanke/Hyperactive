@@ -7,12 +7,14 @@ language: python
 python:
   - "3.6"
 
+before_install:
+  - sudo apt-get install libgomp1
+  
 install:
   - pip install numpy
   - pip install scipy
   - pip install pandas
   - pip install scikit-learn
-  - apt-get install libgomp1 
   - pip install xgboost
   - pip install tensorflow
   - pip install keras
