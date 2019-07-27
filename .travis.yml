@@ -12,6 +12,7 @@ install:
   - pip install scipy
   - pip install pandas
   - pip install scikit-learn
+  - apt-get install libgomp1 
   - pip install xgboost
   - pip install tensorflow
   - pip install keras
