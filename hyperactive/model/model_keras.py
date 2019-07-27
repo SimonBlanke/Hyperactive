@@ -47,20 +47,8 @@ class DeepLearner(Model):
             if list(self.search_config.keys())[1] == "keras.fit.0":
                 del self.search_config_onlyLayers["keras.fit.0"]
 
-        elif list(self.search_config.keys())[0] == "keras.fit.0":
-            del self.search_config_onlyLayers["keras.fit.0"]
-
-    def _get_dict_lengths(self, dict, depth):
-        if depth == 0:
-            return len(list(dict.keys()))
-        elif depth == 1:
-            length_list = []
-
-            for key in dict:
-                length = len(list(dict[key]))
-                length_list.append(length)
-
-            return length_list
+        # elif list(self.search_config.keys())[0] == "keras.fit.0":
+        #     del self.search_config_onlyLayers["keras.fit.0"]
 
     def _layer_dict(self, search_config):
         layerStr_2_kerasLayer_dict = {}
