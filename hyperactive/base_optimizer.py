@@ -208,10 +208,6 @@ class BaseOptimizer:
                 print("\n", self._config_.metric, score_best)
                 print("start_point =", start_point)
 
-        print("self._config_.n_jobs  ", self._config_.n_jobs)
-        print("score_best_sorted     ", score_best_sorted)
-        print("model_best_sorted     ", model_best_sorted)
-
         self.score_best = score_best_sorted[0]
         self.model_best = model_best_sorted[0]
 

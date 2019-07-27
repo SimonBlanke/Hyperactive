@@ -11,7 +11,7 @@ y = data.target
 n_iter_0 = 100
 random_state = 0
 cv = 2
-n_jobs = 2
+n_jobs = 4
 
 search_config = {
     "sklearn.tree.DecisionTreeClassifier": {
