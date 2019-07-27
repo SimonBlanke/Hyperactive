@@ -25,6 +25,44 @@ search_config = {
 warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
 
 
+def test_positional_args():
+    from hyperactive import HillClimbingOptimizer
+
+    opt0 = HillClimbingOptimizer(
+        search_config, n_iter_0, verbosity=0, cv=cv, random_state=False
+    )
+    opt0.fit(X, y)
+
+    opt1 = HillClimbingOptimizer(
+        search_config, n_iter=n_iter_0, verbosity=1, cv=cv, random_state=1
+    )
+    opt1.fit(X, y)
+
+    opt2 = HillClimbingOptimizer(
+        search_config=search_config, n_iter=n_iter_0, verbosity=1, cv=cv, random_state=1
+    )
+    opt2.fit(X, y)
+
+
+def test_random_state():
+    from hyperactive import HillClimbingOptimizer
+
+    opt0 = HillClimbingOptimizer(
+        search_config, n_iter_0, verbosity=0, cv=cv, random_state=False
+    )
+    opt0.fit(X, y)
+
+    opt1 = HillClimbingOptimizer(
+        search_config, n_iter_0, verbosity=1, cv=cv, random_state=0
+    )
+    opt1.fit(X, y)
+
+    opt2 = HillClimbingOptimizer(
+        search_config, n_iter_0, verbosity=1, cv=cv, random_state=1
+    )
+    opt2.fit(X, y)
+
+
 def test_memory():
     from hyperactive import HillClimbingOptimizer
 

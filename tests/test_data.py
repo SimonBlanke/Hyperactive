@@ -2,17 +2,20 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import pandas as pd
 from sklearn.datasets import load_iris
 
 data = load_iris()
-X = data.data
+X_np = data.data
 y = data.target
 
+iris_X_train_columns = ["x1", "x2", "x3", "x4"]
+X_pd = pd.DataFrame(X_np, columns=iris_X_train_columns)
+
 n_iter_0 = 0
-n_iter_1 = 3
+n_iter_1 = 10
 random_state = 0
 cv = 2
-n_jobs = 2
 
 search_config = {
     "sklearn.tree.DecisionTreeClassifier": {
@@ -23,19 +26,16 @@ search_config = {
     }
 }
 
-warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
-
 
 def test_sklearn():
     from hyperactive import HillClimbingOptimizer
 
     opt0 = HillClimbingOptimizer(
-        search_config,
-        n_iter_0,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=1,
-        warm_start=warm_start,
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
     )
-    opt0.fit(X, y)
+    opt0.fit(X_np, y)
+
+    opt1 = HillClimbingOptimizer(
+        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
+    )
+    opt1.fit(X_pd, y)

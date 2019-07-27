@@ -2,9 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_iris
 
-data = load_breast_cancer()
+data = load_iris()
 X = data.data
 y = data.target
 
