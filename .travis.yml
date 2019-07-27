@@ -3,7 +3,7 @@
 # License: MIT License
 os:
   - linux
-  
+
 language: python
 
 python:
@@ -11,7 +11,6 @@ python:
 
 before_install:
   - sudo apt-get install libgomp1
-  - sudo apt-get install libomp-dev
   
 install:
   - pip install numpy
