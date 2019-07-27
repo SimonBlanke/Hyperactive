@@ -1,7 +1,9 @@
 # Author: Simon Blanke
 # Email: simon.blanke@yahoo.com
 # License: MIT License
-
+os:
+  - linux
+  
 language: python
 
 python:
