@@ -10,14 +10,9 @@ class RandomAnnealingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["eps"] = 100
-        kwargs["t_rate"] = 0.98
-
-        self.pos_para = {"eps": kwargs["eps"]}
-        self.t_rate = kwargs["t_rate"]
+        self.pos_para = {"eps": self.eps_global}
 
         self.temp = 1
-
         self.initializer = self._init_rnd_annealing
 
     def _iterate(self, i, _cand_, _p_, X, y):

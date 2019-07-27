@@ -12,11 +12,7 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["eps"] = 1
-        kwargs["r"] = 1
-        self.r = kwargs["r"]
-        self.pos_para = {"eps": kwargs["eps"]}
-
+        self.pos_para = {"eps": self.eps}
         self.initializer = self._init_stoch_climber
 
     def _consider(self, _p_, p_accept):

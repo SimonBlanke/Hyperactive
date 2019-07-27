@@ -6,7 +6,7 @@
 import numpy as np
 from scipy.stats import norm
 from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import Matern
+
 
 from ...base_optimizer import BaseOptimizer
 
@@ -14,10 +14,6 @@ from ...base_optimizer import BaseOptimizer
 class BayesianOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        kwargs["kernel"] = Matern(nu=2.5)
-
-        self.kernel = kwargs["kernel"]
 
         self.xi = 0.01
         self.initializer = self.init_bayesian

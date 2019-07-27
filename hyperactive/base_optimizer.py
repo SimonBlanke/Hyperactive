@@ -73,6 +73,25 @@ class BaseOptimizer:
         self.memory = self._config_.kwargs_base["memory"]
         self.scatter_init = self._config_.kwargs_base["scatter_init"]
 
+        self.eps = self._config_.kwargs_base["eps"]
+        self.r = self._config_.kwargs_base["r"]
+        self.tabu_memory = self._config_.kwargs_base["tabu_memory"]
+        self.n_restarts = self._config_.kwargs_base["n_restarts"]
+        self.eps_global = self._config_.kwargs_base["eps_global"]
+        self.t_rate = self._config_.kwargs_base["t_rate"]
+        self.n_neighbours = self._config_.kwargs_base["n_neighbours"]
+        self.gamma = self._config_.kwargs_base["gamma"]
+        self.system_temps = self._config_.kwargs_base["system_temps"]
+        self.n_swaps = self._config_.kwargs_base["n_swaps"]
+        self.n_part = self._config_.kwargs_base["n_part"]
+        self.w = self._config_.kwargs_base["w"]
+        self.c_k = self._config_.kwargs_base["c_k"]
+        self.c_s = self._config_.kwargs_base["c_s"]
+        self.individuals = self._config_.kwargs_base["individuals"]
+        self.mutation_rate = self._config_.kwargs_base["mutation_rate"]
+        self.crossover_rate = self._config_.kwargs_base["crossover_rate"]
+        self.kernel = self._config_.kwargs_base["kernel"]
+
         self._config_.get_model_type()
 
         self.model_list = list(self.search_config.keys())

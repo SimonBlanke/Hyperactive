@@ -14,17 +14,8 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["individuals"] = 10
-        kwargs["mutation_rate"] = 0.7
-        kwargs["crossover_rate"] = 0.3
-
-        self.individuals = kwargs["individuals"]
-        self.mutation_rate = kwargs["mutation_rate"]
-        self.crossover_rate = kwargs["crossover_rate"]
-
         self.n_mutations = int(round(self.individuals * self.mutation_rate))
         self.n_crossovers = int(round(self.individuals * self.crossover_rate))
-
         self.initializer = self._init_evo
 
     def _init_individuals(self, _cand_):

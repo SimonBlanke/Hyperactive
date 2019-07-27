@@ -12,19 +12,11 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["eps"] = 1
-        kwargs["t_rate"] = 0.98
-        kwargs["n_neighbours"] = 1
-
-        self.pos_para = {"eps": kwargs["eps"]}
-        self.t_rate = kwargs["t_rate"]
-        self.n_neighbours = kwargs["n_neighbours"]
-
+        self.pos_para = {"eps": self.eps}
         self.temp = 0.1
-
         self.initializer = self._init_annealing
 
-    # use _consider from simulated_annealing
+    # use _consider from StochasticHillClimbingOptimizer
 
     def _accept(self, _p_):
         score_diff_norm = (_p_.score_new - _p_.score_current) / (

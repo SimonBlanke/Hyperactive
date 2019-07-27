@@ -11,10 +11,7 @@ class TabuOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["eps"] = 1
-        kwargs["tabu_memory"] = [3, 6, 9]
-        self.tabu_memory = kwargs["tabu_memory"]
-        self.pos_para = {"eps": kwargs["eps"]}
+        self.pos_para = {"eps": self.eps}
 
         self.initializer = self._init_tabu
 

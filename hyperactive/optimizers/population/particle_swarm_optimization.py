@@ -15,15 +15,6 @@ class ParticleSwarmOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["n_part"] = 10
-        kwargs["w"] = 0.5
-        kwargs["c_k"] = 0.5
-        kwargs["c_s"] = 0.9
-        self.n_part = kwargs["n_part"]
-        self.w = kwargs["w"]
-        self.c_k = kwargs["c_k"]
-        self.c_s = kwargs["c_s"]
-
         self.initializer = self._init_part
 
     def _init_particles(self, _cand_):

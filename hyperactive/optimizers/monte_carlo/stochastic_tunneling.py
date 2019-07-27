@@ -12,18 +12,7 @@ class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        kwargs["eps"] = 1
-        kwargs["t_rate"] = 0.98
-        kwargs["n_neighbours"] = 1
-        kwargs["gamma"] = 1
-
-        self.pos_para = {"eps": kwargs["eps"]}
-        self.t_rate = kwargs["t_rate"]
-        self.n_neighbours = kwargs["n_neighbours"]
-        self.gamma = kwargs["gamma"]
-
         self.initializer = self._init_tunneling
-
         self.temp = 0.01
 
     # _consider same as simulated_annealing
