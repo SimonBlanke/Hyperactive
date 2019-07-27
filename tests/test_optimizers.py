@@ -11,7 +11,7 @@ y = data.target
 n_iter_0 = 100
 random_state = 0
 cv = 2
-n_jobs = 4
+n_jobs = 1
 
 search_config = {
     "sklearn.tree.DecisionTreeClassifier": {
@@ -22,7 +22,7 @@ search_config = {
     }
 }
 
-warm_start = False
+warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
 
 
 def test_HillClimbingOptimizer():
@@ -30,7 +30,7 @@ def test_HillClimbingOptimizer():
 
     opt = HillClimbingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -45,7 +45,7 @@ def test_StochasticHillClimbingOptimizer():
 
     opt = StochasticHillClimbingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -60,7 +60,7 @@ def test_TabuOptimizer():
 
     opt = TabuOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -75,7 +75,7 @@ def test_RandomSearchOptimizer():
 
     opt = RandomSearchOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -90,7 +90,7 @@ def test_RandomRestartHillClimbingOptimizer():
 
     opt = RandomRestartHillClimbingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -105,7 +105,7 @@ def test_RandomAnnealingOptimizer():
 
     opt = RandomAnnealingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -120,7 +120,7 @@ def test_SimulatedAnnealingOptimizer():
 
     opt = SimulatedAnnealingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -135,7 +135,7 @@ def test_StochasticTunnelingOptimizer():
 
     opt = StochasticTunnelingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -150,7 +150,7 @@ def test_ParallelTemperingOptimizer():
 
     opt = ParallelTemperingOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -165,7 +165,7 @@ def test_ParticleSwarmOptimizer():
 
     opt = ParticleSwarmOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -180,7 +180,7 @@ def test_EvolutionStrategyOptimizer():
 
     opt = EvolutionStrategyOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
@@ -195,7 +195,7 @@ def test_BayesianOptimizer():
 
     opt = BayesianOptimizer(
         search_config,
-        n_iter_0,
+        100,
         random_state=random_state,
         verbosity=0,
         cv=cv,
