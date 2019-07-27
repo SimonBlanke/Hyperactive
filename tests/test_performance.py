@@ -2,10 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_iris
 
-data = load_breast_cancer()
+data = load_iris()
 X = data.data
 y = data.target
 
@@ -16,17 +15,15 @@ cv = 2
 n_jobs = 2
 
 search_config = {
-    "sklearn.ensemble.GradientBoostingClassifier": {
-        "n_estimators": range(1, 80, 5),
-        "max_depth": range(1, 11),
-        "min_samples_split": range(2, 11),
-        "min_samples_leaf": [1],
-        "subsample": np.arange(0.09, 1.01, 0.1),
-        "max_features": np.arange(0.09, 1.01, 0.1),
+    "sklearn.tree.DecisionTreeClassifier": {
+        "criterion": ["gini", "entropy"],
+        "max_depth": range(1, 21),
+        "min_samples_split": range(2, 21),
+        "min_samples_leaf": range(1, 21),
     }
 }
 
-warm_start = {"sklearn.ensemble.GradientBoostingClassifier": {"n_estimators": [1]}}
+warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
 
 
 def test_HillClimbingOptimizer():
@@ -36,7 +33,7 @@ def test_HillClimbingOptimizer():
         search_config,
         n_iter_0,
         random_state=random_state,
-        verbosity=0,
+        verbosity=1,
         cv=cv,
         n_jobs=1,
         warm_start=warm_start,
@@ -47,7 +44,7 @@ def test_HillClimbingOptimizer():
         search_config,
         n_iter_1,
         random_state=random_state,
-        verbosity=0,
+        verbosity=1,
         cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
