@@ -10,8 +10,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps_global}
-
+        self.pos_para = {"eps": self._arg_.eps_global}
         self.temp = 1
         self.initializer = self._init_rnd_annealing
 
@@ -22,7 +21,7 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         if _p_.score_new > _cand_.score_best:
             _cand_, _p_ = self._update_pos(_cand_, _p_)
 
-        self.temp = self.temp * self.t_rate
+        self.temp = self.temp * self._arg_.t_rate
 
         return _cand_
 

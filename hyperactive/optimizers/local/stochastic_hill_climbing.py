@@ -12,11 +12,11 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps}
+        self.pos_para = {"eps": self._arg_.eps}
         self.initializer = self._init_stoch_climber
 
     def _consider(self, _p_, p_accept):
-        rand = random.uniform(0, self.r)
+        rand = random.uniform(0, self._arg_.r)
 
         if p_accept > rand:
             _p_.score_current = _p_.score_new

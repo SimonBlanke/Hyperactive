@@ -5,17 +5,15 @@
 
 import pickle
 import multiprocessing
-import random
+
 
 import tqdm
-import scipy
 import numpy as np
-import pandas as pd
-
 from functools import partial
 
 from .base_positioner import BasePositioner
 from .config import Config
+from .opt_args import Arguments
 
 from .candidate import MlCandidate
 from .candidate import DlCandidate
@@ -58,88 +56,14 @@ class BaseOptimizer:
         None
 
         """
+
         self._config_ = Config(*args, **kwargs)
+        self._arg_ = Arguments(**kwargs)
 
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
 
-        self.metric = self._config_.kwargs_base["metric"]
-        self.n_jobs = self._config_.kwargs_base["n_jobs"]
-        self.cv = self._config_.kwargs_base["cv"]
-        self.verbosity = self._config_.kwargs_base["verbosity"]
-        self.random_state = self._config_.kwargs_base["random_state"]
-        self.warm_start = self._config_.kwargs_base["warm_start"]
-        self.memory = self._config_.kwargs_base["memory"]
-        self.scatter_init = self._config_.kwargs_base["scatter_init"]
-
-        self.eps = self._config_.kwargs_base["eps"]
-        self.r = self._config_.kwargs_base["r"]
-        self.tabu_memory = self._config_.kwargs_base["tabu_memory"]
-        self.n_restarts = self._config_.kwargs_base["n_restarts"]
-        self.eps_global = self._config_.kwargs_base["eps_global"]
-        self.t_rate = self._config_.kwargs_base["t_rate"]
-        self.n_neighbours = self._config_.kwargs_base["n_neighbours"]
-        self.gamma = self._config_.kwargs_base["gamma"]
-        self.system_temps = self._config_.kwargs_base["system_temps"]
-        self.n_swaps = self._config_.kwargs_base["n_swaps"]
-        self.n_part = self._config_.kwargs_base["n_part"]
-        self.w = self._config_.kwargs_base["w"]
-        self.c_k = self._config_.kwargs_base["c_k"]
-        self.c_s = self._config_.kwargs_base["c_s"]
-        self.individuals = self._config_.kwargs_base["individuals"]
-        self.mutation_rate = self._config_.kwargs_base["mutation_rate"]
-        self.crossover_rate = self._config_.kwargs_base["crossover_rate"]
-        self.kernel = self._config_.kwargs_base["kernel"]
-
         self._config_.get_model_type()
-
-        self.model_list = list(self.search_config.keys())
-        self.n_models = len(self.model_list)
-
-        self._n_process_range = range(0, int(self.n_jobs))
-
-    def _tqdm_dict(self, _cand_):
-        """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
-        return {
-            "iterable": range(self.n_iter),
-            "desc": "Search " + str(_cand_.nth_process),
-            "position": _cand_.nth_process,
-            "leave": False,
-        }
-
-    def _set_random_seed(self, thread=0):
-        """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
-        if self.random_state:
-            # print("self.random_state", self.random_state)
-            rand = int(self.random_state)
-            random.seed(rand + thread)
-            np.random.seed(rand + thread)
-            scipy.random.seed(rand + thread)
-
-        else:
-            rand = 0
-            random.seed(rand + thread)
-            np.random.seed(rand + thread)
-            scipy.random.seed(rand + thread)
-
-    def _get_sklearn_model(self, nth_process):
-        """Gets a model_key from the model_list for each thread"""
-        if self.n_models > self.n_jobs:
-            diff = self.n_models - self.n_jobs
-
-            if nth_process == 0:
-                print(
-                    "\nNot enough jobs to process models. The last",
-                    diff,
-                    "model(s) will not be processed",
-                )
-            model_key = self.model_list[nth_process]
-        elif nth_process < self.n_models:
-            model_key = self.model_list[nth_process]
-        else:
-            model_key = random.choice(self.model_list)
-
-        return model_key
 
     def _sort_for_best(self, sort, sort_by):
         """Returns two lists sorted by the second"""
@@ -153,47 +77,36 @@ class BaseOptimizer:
 
         return sort_sorted, sort_by_sorted
 
-    def _show_progress_bar(self):
-        show = False
-
-        if self._config_.model_type == "keras" or self._config_.model_type == "torch":
-            return show
-
-        if self.verbosity > 0:
-            show = True
-
-        return show
-
     def _init_search(self, nth_process, X, y, init=None):
         """Initializes the search by instantiating the ml- or dl-candidate for each process"""
-        self._set_random_seed(nth_process)
+        self._config_._set_random_seed(nth_process)
 
         if (
             self._config_.model_type == "sklearn"
             or self._config_.model_type == "xgboost"
         ):
 
-            search_config_key = self._get_sklearn_model(nth_process)
+            search_config_key = self._config_._get_sklearn_model(nth_process)
             _cand_ = MlCandidate(
                 nth_process,
-                self.search_config,
-                self.metric,
-                self.cv,
-                self.warm_start,
-                self.memory,
-                self.scatter_init,
+                self._config_.search_config,
+                self._config_.metric,
+                self._config_.cv,
+                self._config_.warm_start,
+                self._config_.memory,
+                self._config_.scatter_init,
                 search_config_key,
             )
 
         elif self._config_.model_type == "keras":
             _cand_ = DlCandidate(
                 nth_process,
-                self.search_config,
-                self.metric,
-                self.cv,
-                self.warm_start,
-                self.memory,
-                self.scatter_init,
+                self._config_.search_config,
+                self._config_.metric,
+                self._config_.cv,
+                self._config_.warm_start,
+                self._config_.memory,
+                self._config_.scatter_init,
             )
 
         pos = _cand_._init_._set_start_pos(nth_process, X, y)
@@ -206,8 +119,8 @@ class BaseOptimizer:
             _p_ = self.initializer(_cand_, X, y)
 
         # create progress bar
-        if self._show_progress_bar():
-            self.p_bar = tqdm.tqdm(**self._tqdm_dict(_cand_))
+        if self._config_._show_progress_bar():
+            self.p_bar = tqdm.tqdm(**self._config_._tqdm_dict(_cand_))
 
         return _cand_, _p_
 
@@ -234,31 +147,22 @@ class BaseOptimizer:
     def search(self, nth_process, X, y):
         _cand_, _p_ = self._init_search(nth_process, X, y)
 
-        for i in range(self.n_iter):
+        for i in range(self._config_.n_iter):
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
 
-            if self._show_progress_bar():
+            if self._config_._show_progress_bar():
                 self.p_bar.update(1)
 
         return _cand_
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-        pool = multiprocessing.Pool(self.n_jobs)
+        pool = multiprocessing.Pool(self._config_.n_jobs)
         search = partial(self.search, X=X, y=y)
 
-        _cand_list = pool.map(search, self._n_process_range)
+        _cand_list = pool.map(search, self._config_._n_process_range)
 
         return _cand_list
-
-    def _check_data(self, X, y):
-        """Checks if data is pandas Dataframe and converts to numpy array if necessary"""
-        if isinstance(X, pd.core.frame.DataFrame):
-            X = X.values
-        if isinstance(X, pd.core.frame.DataFrame):
-            y = y.values
-
-        return X, y
 
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
@@ -269,7 +173,7 @@ class BaseOptimizer:
         para = _cand_._space_.pos2para(_cand_.pos_best)
         self.model_best, _ = _cand_._model_._create_model(para)
 
-        if self.verbosity:
+        if self._config_.verbosity:
             print("\n", self.metric, self.score_best)
             print("start_point =", start_point)
 
@@ -298,7 +202,7 @@ class BaseOptimizer:
             model_best_list, score_best_list
         )
 
-        if self.verbosity:
+        if self._config_.verbosity:
             print("\nList of start points (best first):")
             for start_point, score_best in zip(start_point_sorted, score_best_sorted):
                 print("\n", self.metric, score_best)
@@ -320,12 +224,12 @@ class BaseOptimizer:
         -------
         None
         """
-        X, y = self._check_data(X, y)
+        X, y = self._config_._check_data(X, y)
 
         if self._config_.model_type == "keras":
-            self.n_jobs = 1
+            self._config_.n_jobs = 1
 
-        if self.n_jobs == 1:
+        if self._config_.n_jobs == 1:
             self._run_one_job(X, y)
 
         else:

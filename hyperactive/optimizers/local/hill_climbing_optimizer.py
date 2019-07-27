@@ -10,7 +10,7 @@ class HillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps}
+        self.pos_para = {"eps": self._arg_.eps}
         self.initializer = self._init_climber
 
     def _iterate(self, i, _cand_, _p_, X, y):

@@ -11,7 +11,7 @@ class TabuOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps}
+        self.pos_para = {"eps": self._arg_.eps}
 
         self.initializer = self._init_tabu
 
@@ -19,7 +19,7 @@ class TabuOptimizer(BaseOptimizer):
         for i in range(3):
             _p_.tabu_memory_[i].append(_cand_.pos_best)
 
-            if len(_p_.tabu_memory_[i]) > self.tabu_memory[0]:
+            if len(_p_.tabu_memory_[i]) > self._arg_.tabu_memory[0]:
                 del _p_.tabu_memory_[i][0]
 
     def _iterate(self, i, _cand_, _p_, X, y):

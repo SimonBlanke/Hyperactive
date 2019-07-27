@@ -12,7 +12,7 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps}
+        self.pos_para = {"eps": self._arg_.eps}
         self.temp = 0.1
         self.initializer = self._init_annealing
 
@@ -34,7 +34,7 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
             p_accept = self._accept(_p_)
             self._consider(_p_, p_accept)
 
-        self.temp = self.temp * self.t_rate
+        self.temp = self.temp * self._arg_.t_rate
 
         return _cand_
 

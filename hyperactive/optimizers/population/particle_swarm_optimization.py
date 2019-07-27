@@ -18,7 +18,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         self.initializer = self._init_part
 
     def _init_particles(self, _cand_):
-        _p_list_ = [Particle() for _ in range(self.n_part)]
+        _p_list_ = [Particle() for _ in range(self._arg_.n_part)]
         for i, _p_ in enumerate(_p_list_):
             _p_.nr = i
             _p_.pos_current = _cand_._space_.get_random_pos()
@@ -31,9 +31,9 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         for _p_ in _p_list_:
             r1, r2 = random.random(), random.random()
 
-            A = self.w * _p_.velo
-            B = self.c_k * r1 * np.subtract(_p_.pos_best, _p_.pos_current)
-            C = self.c_s * r2 * np.subtract(_cand_.pos_best, _p_.pos_current)
+            A = self._arg_.w * _p_.velo
+            B = self._arg_.c_k * r1 * np.subtract(_p_.pos_best, _p_.pos_current)
+            C = self._arg_.c_s * r2 * np.subtract(_cand_.pos_best, _p_.pos_current)
 
             new_velocity = A + B + C
 

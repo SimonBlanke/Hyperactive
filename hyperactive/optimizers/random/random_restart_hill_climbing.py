@@ -10,8 +10,8 @@ class RandomRestartHillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps}
-        self.n_iter_restart = int(self.n_iter / self.n_restarts)
+        self.pos_para = {"eps": self._arg_.eps}
+        self.n_iter_restart = int(self._config_.n_iter / self._arg_.n_restarts)
 
         self.initializer = self._init_rr_climber
 

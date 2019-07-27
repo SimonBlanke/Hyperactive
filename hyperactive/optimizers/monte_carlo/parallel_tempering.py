@@ -15,14 +15,14 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.pos_para = {"eps": self.eps}
-        self.n_iter_swap = int(self.n_iter / self.n_swaps)
+        self.pos_para = {"eps": self._arg_.eps}
+        self.n_iter_swap = int(self._config_.n_iter / self._arg_.n_swaps)
         self.initializer = self._init_tempering
 
     def _init_annealers(self, _cand_):
         _p_list_ = []
 
-        for temp in self.system_temps:
+        for temp in self._arg_.system_temps:
             pos_para = self.pos_para
             pos_para["temp"] = temp
 
@@ -62,7 +62,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 p_accept = self._accept(_p_)
                 self._consider(_p_, p_accept)
 
-            _p_.temp = _p_.temp * self.t_rate
+            _p_.temp = _p_.temp * self._arg_.t_rate
 
     def _iterate(self, i, _cand_, _p_list_, X, y):
         self._annealing_systems(_cand_, _p_list_, X, y)

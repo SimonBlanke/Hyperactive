@@ -23,7 +23,7 @@ class BayesianOptimizer(BaseOptimizer):
         # kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
         # self.gpr1 = GaussianProcessRegressor(kernel=kernel, alpha=0.02)
         self.gpr = GaussianProcessRegressor(
-            kernel=self.kernel,
+            kernel=self._arg_.kernel,
             alpha=1e-6,
             normalize_y=True,
             n_restarts_optimizer=25,

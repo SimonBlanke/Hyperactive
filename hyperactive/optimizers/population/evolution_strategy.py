@@ -14,12 +14,14 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.n_mutations = int(round(self.individuals * self.mutation_rate))
-        self.n_crossovers = int(round(self.individuals * self.crossover_rate))
+        self.n_mutations = int(round(self._arg_.individuals * self._arg_.mutation_rate))
+        self.n_crossovers = int(
+            round(self._arg_.individuals * self._arg_.crossover_rate)
+        )
         self.initializer = self._init_evo
 
     def _init_individuals(self, _cand_):
-        _p_list_ = [Individual() for _ in range(self.individuals)]
+        _p_list_ = [Individual() for _ in range(self._arg_.individuals)]
         for _p_ in _p_list_:
             _p_.pos_current = _p_.move_random(_cand_)
             _p_.pos_best = _p_.pos_current
@@ -80,7 +82,7 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         mutate_idx = index_best[: self.n_mutations]
         cross_idx = index_best[: self.n_crossovers]
 
-        n = self.individuals - max(self.n_mutations, self.n_crossovers)
+        n = self._arg_.individuals - max(self.n_mutations, self.n_crossovers)
         replace_idx = index_best[-n:]
 
         return mutate_idx, cross_idx, replace_idx
