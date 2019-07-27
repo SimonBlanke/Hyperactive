@@ -37,7 +37,7 @@ warm_start = {
 }
 
 
-def test_keras():
+def test_keras_score():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(
@@ -46,7 +46,22 @@ def test_keras():
         random_state=random_state,
         verbosity=1,
         cv=cv,
-        n_jobs=1,
+        metric="accuracy",
+        warm_start=warm_start,
+    )
+    opt.fit(X, y)
+
+
+def test_keras_loss():
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(
+        search_config,
+        n_iter_0,
+        random_state=random_state,
+        verbosity=1,
+        cv=cv,
+        metric="mean_squared_error",
         warm_start=warm_start,
     )
     opt.fit(X, y)

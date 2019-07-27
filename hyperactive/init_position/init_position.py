@@ -89,8 +89,3 @@ class InitSearchPosition:
             y_sample = y[idx]
 
             return X_sample, y_sample
-
-        else:
-            print("\nscatter_init aborted:")
-            print("X_train or y_train not numpy array")
-            return X, y

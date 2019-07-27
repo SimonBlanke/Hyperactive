@@ -12,7 +12,6 @@ import scipy
 import numpy as np
 import pandas as pd
 
-from importlib import import_module
 from functools import partial
 
 from .base_positioner import BasePositioner

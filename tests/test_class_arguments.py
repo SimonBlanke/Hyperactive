@@ -24,6 +24,24 @@ search_config = {
 
 warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
 
+warm_start_1 = {
+    "sklearn.tree.DecisionTreeClassifier.0": {"max_depth": [1]},
+    "sklearn.tree.DecisionTreeClassifier.1": {"max_depth": [2]},
+}
+
+
+def test_n_jobs():
+    from hyperactive import HillClimbingOptimizer
+
+    opt0 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=1)
+    opt0.fit(X, y)
+
+    opt1 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=2)
+    opt1.fit(X, y)
+
+    opt2 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=-1)
+    opt2.fit(X, y)
+
 
 def test_positional_args():
     from hyperactive import HillClimbingOptimizer
@@ -53,12 +71,12 @@ def test_random_state():
     opt0.fit(X, y)
 
     opt1 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=1, cv=cv, random_state=0
+        search_config, n_iter_0, verbosity=0, cv=cv, random_state=0
     )
     opt1.fit(X, y)
 
     opt2 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=1, cv=cv, random_state=1
+        search_config, n_iter_0, verbosity=0, cv=cv, random_state=1
     )
     opt2.fit(X, y)
 
@@ -119,7 +137,7 @@ def test_scatter_init():
 def test_scatter_init_and_warm_start():
     from hyperactive import HillClimbingOptimizer
 
-    opt = HillClimbingOptimizer(
+    opt1 = HillClimbingOptimizer(
         search_config,
         n_iter_1,
         random_state=random_state,
@@ -129,4 +147,31 @@ def test_scatter_init_and_warm_start():
         warm_start=warm_start,
         scatter_init=10,
     )
-    opt.fit(X, y)
+    opt1.fit(X, y)
+
+    opt2 = HillClimbingOptimizer(
+        search_config,
+        n_iter_1,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=2,
+        warm_start=warm_start_1,
+        scatter_init=10,
+    )
+    opt2.fit(X, y)
+
+
+def test_warm_start():
+    from hyperactive import HillClimbingOptimizer
+
+    opt1 = HillClimbingOptimizer(
+        search_config,
+        n_iter_1,
+        random_state=random_state,
+        verbosity=0,
+        cv=cv,
+        n_jobs=4,
+        warm_start=warm_start,
+    )
+    opt1.fit(X, y)

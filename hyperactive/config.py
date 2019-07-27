@@ -71,8 +71,8 @@ class Config:
         """Checks if model names in search_config are consistent"""
         if len(set(list)) == 1:
             return True
-        else:
-            return False
+
+        return False
 
     def _get_model_str(self):
         model_type_list = []
@@ -84,10 +84,8 @@ class Config:
                 model_type_list.append("xgboost")
             elif "keras" in model_type_key:
                 model_type_list.append("keras")
-            elif "torch" in model_type_key:
-                model_type_list.append("torch")
-            else:
-                raise Exception("\n No valid model string in search_config")
+            # elif "torch" in model_type_key:
+            #     model_type_list.append("torch")
 
         return model_type_list
 

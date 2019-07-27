@@ -63,7 +63,3 @@ class SearchSpace:
                 values_dict[key] = list(self.para_space[key])[pos_]
 
             return values_dict
-        else:
-            print("\n para_space", self.para_space)
-            print("\n pos shape", pos.shape)
-            raise ValueError("para_space and pos have different size")
