@@ -8,12 +8,12 @@ import multiprocessing
 
 
 import tqdm
-import numpy as np
 from functools import partial
 
 from .base_positioner import BasePositioner
 from .config import Config
 from .opt_args import Arguments
+from .util import sort_for_best
 
 from .candidate import MlCandidate
 from .candidate import DlCandidate
@@ -64,18 +64,6 @@ class BaseOptimizer:
         self.n_iter = self._config_.n_iter
 
         self._config_.get_model_type()
-
-    def _sort_for_best(self, sort, sort_by):
-        """Returns two lists sorted by the second"""
-        sort = np.array(sort)
-        sort_by = np.array(sort_by)
-
-        index_best = list(sort_by.argsort()[::-1])
-
-        sort_sorted = sort[index_best]
-        sort_by_sorted = sort_by[index_best]
-
-        return sort_sorted, sort_by_sorted
 
     def _init_search(self, nth_process, X, y, init=None):
         """Initializes the search by instantiating the ml- or dl-candidate for each process"""
@@ -176,11 +164,11 @@ class BaseOptimizer:
             score_best_list.append(score_best)
             model_best_list.append(model_best)
 
-        start_point_sorted, score_best_sorted = self._sort_for_best(
+        start_point_sorted, score_best_sorted = sort_for_best(
             start_point_list, score_best_list
         )
 
-        model_best_sorted, score_best_sorted = self._sort_for_best(
+        model_best_sorted, score_best_sorted = sort_for_best(
             model_best_list, score_best_list
         )
 

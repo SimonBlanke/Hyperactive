@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 
+from .util import merge_dicts
+
 
 class Config:
     def __init__(self, *args, **kwargs):
@@ -23,28 +25,29 @@ class Config:
             "scatter_init": False,
         }
 
-        if "search_config" in list(kwargs.keys()):
-            self.search_config = kwargs["search_config"]
-        else:
-            self.search_config = args[0]
-        if "n_iter" in list(kwargs.keys()):
-            self.n_iter = kwargs["n_iter"]
-        else:
-            self.n_iter = args[1]
+        self.pos_args = ["search_config", "n_iter"]
 
-        # overwrite default values
-        for key in kwargs_base.keys():
-            if key in list(kwargs.keys()):
-                kwargs_base[key] = kwargs[key]
-
+        self._process_pos_args(args, kwargs)
+        kwargs_base = merge_dicts(kwargs_base, kwargs)
         self._set_general_args(kwargs_base)
 
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
         self.set_n_jobs()
-
         self._n_process_range = range(0, int(self.n_jobs))
+
+    def _process_pos_args(self, args, kwargs):
+        pos_args_attr = [None, None]
+
+        for idx, pos_arg in enumerate(self.pos_args):
+            if pos_arg in list(kwargs.keys()):
+                pos_args_attr[idx] = kwargs[pos_arg]
+            else:
+                pos_args_attr[idx] = args[idx]
+
+        self.search_config = pos_args_attr[0]
+        self.n_iter = pos_args_attr[1]
 
     def _set_general_args(self, kwargs_base):
         self.metric = kwargs_base["metric"]

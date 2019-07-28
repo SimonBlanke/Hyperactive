@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+from .util import merge_dicts
 
 from sklearn.gaussian_process.kernels import Matern
 
@@ -40,10 +41,7 @@ class Arguments:
             "kernel": Matern(nu=2.5),
         }
 
-        # overwrite default values
-        for key in kwargs_opt.keys():
-            if key in list(kwargs.keys()):
-                kwargs_opt[key] = kwargs[key]
+        kwargs_opt = merge_dicts(kwargs_opt, kwargs)
 
         self._set_specific_args(kwargs_opt)
 
