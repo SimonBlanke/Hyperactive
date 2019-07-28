@@ -124,12 +124,7 @@ def test_metrics():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(
-        search_config,
-        n_iter_0,
-        metric="neg_mean_absolute_error",
-        verbosity=0,
-        cv=cv,
-        n_jobs=1,
+        search_config, n_iter_0, metric="neg_mean_absolute_error", n_jobs=1
     )
     opt.fit(X, y)
 
@@ -137,15 +132,7 @@ def test_metrics():
 def test_scatter_init():
     from hyperactive import HillClimbingOptimizer
 
-    opt = HillClimbingOptimizer(
-        search_config,
-        n_iter_1,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=1,
-        scatter_init=10,
-    )
+    opt = HillClimbingOptimizer(search_config, n_iter_1, n_jobs=1, scatter_init=10)
     opt.fit(X, y)
 
 
@@ -153,43 +140,27 @@ def test_scatter_init_and_warm_start():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(
-        search_config,
-        n_iter_1,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=2,
-        warm_start=warm_start,
-        scatter_init=10,
+        search_config, n_iter_1, n_jobs=2, warm_start=warm_start, scatter_init=10
     )
     opt.fit(X, y)
 
 
-def test_and_warm_start():
+def test_warm_starts():
     from hyperactive import HillClimbingOptimizer
 
-    opt = HillClimbingOptimizer(
-        search_config,
-        n_iter_1,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=2,
-        warm_start=warm_start_1,
-    )
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1, warm_start=warm_start_1)
+    opt.fit(X, y)
+
+
+def test_warm_start_multiple_jobs():
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=4, warm_start=warm_start)
     opt.fit(X, y)
 
 
 def test_warm_start():
     from hyperactive import HillClimbingOptimizer
 
-    opt1 = HillClimbingOptimizer(
-        search_config,
-        n_iter_1,
-        random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=4,
-        warm_start=warm_start,
-    )
-    opt1.fit(X, y)
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1, warm_start=warm_start)
+    opt.fit(X, y)
