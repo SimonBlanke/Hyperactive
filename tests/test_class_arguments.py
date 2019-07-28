@@ -30,6 +30,18 @@ warm_start_1 = {
 }
 
 
+def test_multiple_models_one_job():
+    search_config = {
+        "sklearn.tree.DecisionTreeClassifier.0": {"max_depth": range(1, 21)},
+        "sklearn.tree.DecisionTreeClassifier.1": {"max_depth": range(1, 21)},
+    }
+
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=1)
+    opt.fit(X, y)
+
+
 def test_n_jobs():
     from hyperactive import HillClimbingOptimizer
 
@@ -137,7 +149,7 @@ def test_scatter_init():
 def test_scatter_init_and_warm_start():
     from hyperactive import HillClimbingOptimizer
 
-    opt1 = HillClimbingOptimizer(
+    opt = HillClimbingOptimizer(
         search_config,
         n_iter_1,
         random_state=random_state,
@@ -147,9 +159,13 @@ def test_scatter_init_and_warm_start():
         warm_start=warm_start,
         scatter_init=10,
     )
-    opt1.fit(X, y)
+    opt.fit(X, y)
 
-    opt2 = HillClimbingOptimizer(
+
+def test_and_warm_start():
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(
         search_config,
         n_iter_1,
         random_state=random_state,
@@ -157,9 +173,8 @@ def test_scatter_init_and_warm_start():
         cv=cv,
         n_jobs=2,
         warm_start=warm_start_1,
-        scatter_init=10,
     )
-    opt2.fit(X, y)
+    opt.fit(X, y)
 
 
 def test_warm_start():
