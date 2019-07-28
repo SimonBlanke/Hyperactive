@@ -15,7 +15,7 @@ class Config:
         kwargs_base = {
             "metric": "accuracy",
             "n_jobs": 1,
-            "cv": 5,
+            "cv": 2,
             "verbosity": 1,
             "random_state": None,
             "warm_start": False,
