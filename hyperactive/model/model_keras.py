@@ -34,10 +34,6 @@ class DeepLearner(Model):
             self.metric_type = "score"
         elif self.metric[0] in self.losses:
             self.metric_type = "loss"
-        else:
-            raise ValueError(
-                "\n", self.metric, "not in list of compatible scoring functions"
-            )
 
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
