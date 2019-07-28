@@ -21,7 +21,14 @@ search_config = {
         "min_samples_leaf": range(1, 21),
     }
 }
-
+search_config_1 = {
+    "sklearn.tree.DecisionTreeClassifier": {"max_depth": range(1, 21)},
+    "sklearn.neighbors.KNeighborsClassifier": {
+        "n_neighbors": range(1, 101),
+        "weights": ["uniform", "distance"],
+        "p": [1, 2],
+    },
+}
 warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
 
 warm_start_1 = {
@@ -31,14 +38,10 @@ warm_start_1 = {
 
 
 def test_multiple_models_one_job():
-    search_config = {
-        "sklearn.tree.DecisionTreeClassifier.0": {"max_depth": range(1, 21)},
-        "sklearn.tree.DecisionTreeClassifier.1": {"max_depth": range(1, 21)},
-    }
 
     from hyperactive import HillClimbingOptimizer
 
-    opt = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=1)
+    opt = HillClimbingOptimizer(search_config_1, n_iter_0, verbosity=0, cv=cv, n_jobs=1)
     opt.fit(X, y)
 
 
