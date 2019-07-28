@@ -31,8 +31,6 @@ class MachineLearner(Model):
             self.metric_type = "score"
         elif self.metric in self.losses:
             self.metric_type = "loss"
-        else:
-            raise ValueError("\n Metric not compatible with sklearn scoring functions")
 
     def create_start_point(self, sklearn_para_dict, nth_process):
         start_point = {}
