@@ -8,18 +8,18 @@ from .model import Model
 
 
 class DeepLearner(Model):
-    def __init__(self, search_config, metric, cv):
-        super().__init__(search_config, metric, cv)
+    def __init__(self, _config_):
+        super().__init__(_config_)
 
-        self.search_config = search_config
-        self.metric = metric
-        self.cv = cv
+        self.search_config = _config_.search_config
+        self.metric = _config_.metric
+        self.cv = _config_.cv
 
         # if no metric was passed
         if isinstance(self.metric, str):
             self.metric = [self.metric]
 
-        self.layerStr_2_kerasLayer_dict = self._layer_dict(search_config)
+        self.layerStr_2_kerasLayer_dict = self._layer_dict(_config_.search_config)
         # self.n_layer = len(self.layerStr_2_kerasLayer_dict.keys())
 
         self._get_search_config_onlyLayers()

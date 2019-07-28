@@ -8,10 +8,10 @@ import numpy as np
 
 
 class SearchSpace:
-    def __init__(self, search_config, warm_start, scatter_init):
-        self.search_config = search_config
-        self.warm_start = warm_start
-        self.scatter_init = scatter_init
+    def __init__(self, _config_):
+        self.search_config = _config_.search_config
+        self.warm_start = _config_.warm_start
+        self.scatter_init = _config_.scatter_init
 
         self.memory = {}
 

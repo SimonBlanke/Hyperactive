@@ -8,20 +8,16 @@ from ..init_position import InitDLSearchPosition
 
 
 class DlCandidate(Candidate):
-    def __init__(
-        self, nth_process, search_config, metric, cv, warm_start, memory, scatter_init
-    ):
-        super().__init__(
-            nth_process, search_config, metric, cv, warm_start, memory, scatter_init
-        )
+    def __init__(self, nth_process, _config_):
+        super().__init__(nth_process, _config_)
 
         self.nth_process = nth_process
 
         self._space_.create_kerasSearchSpace()
-        self._model_ = DeepLearner(search_config, metric, cv)
+        self._model_ = DeepLearner(_config_)
 
         self._init_ = InitDLSearchPosition(
-            self._space_, self._model_, warm_start, scatter_init
+            self._space_, self._model_, _config_.warm_start, _config_.scatter_init
         )
 
     def _get_warm_start(self):

@@ -6,16 +6,14 @@ from ..search_space import SearchSpace
 
 
 class Candidate:
-    def __init__(
-        self, nth_process, search_config, metric, cv, warm_start, memory, scatter_init
-    ):
-        self.search_config = search_config
-        self.memory = memory
+    def __init__(self, nth_process, _config_):
+        self.search_config = _config_.search_config
+        self.memory = _config_.memory
 
         self._score_best = -1000
         self.pos_best = None
 
-        self._space_ = SearchSpace(search_config, warm_start, scatter_init)
+        self._space_ = SearchSpace(_config_)
 
     def eval_pos(self, pos, X, y):
         pos_str = pos.tostring()

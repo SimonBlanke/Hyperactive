@@ -6,10 +6,8 @@ from importlib import import_module
 
 
 class Model:
-    def __init__(self, search_config, metric, cv):
-        self.search_config = search_config
-        self.metric = metric
-        self.cv = cv
+    def __init__(self, _config_):
+        pass
 
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)

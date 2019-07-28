@@ -86,28 +86,10 @@ class BaseOptimizer:
             or self._config_.model_type == "xgboost"
         ):
 
-            search_config_key = self._config_._get_sklearn_model(nth_process)
-            _cand_ = MlCandidate(
-                nth_process,
-                self._config_.search_config,
-                self._config_.metric,
-                self._config_.cv,
-                self._config_.warm_start,
-                self._config_.memory,
-                self._config_.scatter_init,
-                search_config_key,
-            )
+            _cand_ = MlCandidate(nth_process, self._config_)
 
         elif self._config_.model_type == "keras":
-            _cand_ = DlCandidate(
-                nth_process,
-                self._config_.search_config,
-                self._config_.metric,
-                self._config_.cv,
-                self._config_.warm_start,
-                self._config_.memory,
-                self._config_.scatter_init,
-            )
+            _cand_ = DlCandidate(nth_process, self._config_)
 
         pos = _cand_._init_._set_start_pos(nth_process, X, y)
         score = _cand_.eval_pos(pos, X, y)

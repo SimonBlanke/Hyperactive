@@ -11,15 +11,14 @@ from .model import Model
 
 
 class MachineLearner(Model):
-    def __init__(self, search_config, metric, cv, model_str):
-        super().__init__(search_config, metric, cv)
+    def __init__(self, _config_, search_config_key):
+        super().__init__(_config_)
 
-        self.search_config = search_config
-        self.metric = metric
-        self.cv = cv
-        self.model_str = model_str
+        self.metric = _config_.metric
+        self.cv = _config_.cv
+        self.search_config_key = search_config_key
 
-        self.model = self._get_model(model_str)
+        self.model = self._get_model(search_config_key)
 
         self.scores = ml_scores
         self.losses = ml_losses
@@ -34,7 +33,7 @@ class MachineLearner(Model):
 
     def create_start_point(self, sklearn_para_dict, nth_process):
         start_point = {}
-        model_str = self.model_str + "." + str(nth_process)
+        model_str = self.search_config_key + "." + str(nth_process)
 
         temp_dict = {}
         for para_key in sklearn_para_dict:
