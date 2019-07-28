@@ -10,10 +10,7 @@ from ...base_positioner import BasePositioner
 class TabuOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.pos_para = {"eps": self._arg_.eps}
-
-        self.initializer = self._init_tabu
 
     def _memorize(self, _cand_, _p_):
         for i in range(3):
@@ -33,8 +30,10 @@ class TabuOptimizer(BaseOptimizer):
 
         return _cand_
 
-    def _init_tabu(self, _cand_, X, y):
-        return super()._initialize(_cand_, TabuPositioner, pos_para=self.pos_para)
+    def _init_opt_positioner(self, _cand_, X, y):
+        return super()._init_base_positioner(
+            _cand_, TabuPositioner, pos_para=self.pos_para
+        )
 
 
 class TabuPositioner(BasePositioner):

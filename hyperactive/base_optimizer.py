@@ -85,8 +85,7 @@ class BaseOptimizer:
         _cand_.pos_best = pos
 
         # initialize optimizer specific objects
-        if self.initializer:
-            _p_ = self.initializer(_cand_, X, y)
+        _p_ = self._init_opt_positioner(_cand_, X, y)
 
         # create progress bar
         if self._config_._show_progress_bar():
@@ -94,7 +93,16 @@ class BaseOptimizer:
 
         return _cand_, _p_
 
-    def _initialize(self, _cand_, positioner=None, pos_para={}):
+    def _hill_climb_iteration(self, _cand_, _p_, X, y):
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
+
+        if _p_.score_new > _cand_.score_best:
+            _cand_, _p_ = self._update_pos(_cand_, _p_)
+
+        return _cand_, _p_
+
+    def _init_base_positioner(self, _cand_, positioner=None, pos_para={}):
         if positioner:
             _p_ = positioner(**pos_para)
         else:

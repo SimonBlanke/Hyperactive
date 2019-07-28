@@ -10,8 +10,6 @@ class RandomSearchOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.initializer = self._init_random
-
     def _iterate(self, i, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_random(_cand_)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
@@ -22,5 +20,5 @@ class RandomSearchOptimizer(BaseOptimizer):
 
         return _cand_
 
-    def _init_random(self, _cand_, X, y):
-        return super()._initialize(_cand_)
+    def _init_opt_positioner(self, _cand_, X, y):
+        return super()._init_base_positioner(_cand_)

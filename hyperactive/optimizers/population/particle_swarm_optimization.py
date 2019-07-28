@@ -15,8 +15,6 @@ class ParticleSwarmOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.initializer = self._init_part
-
     def _init_particles(self, _cand_):
         _p_list_ = [Particle() for _ in range(self._arg_.n_part)]
         for i, _p_ in enumerate(_p_list_):
@@ -53,7 +51,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
 
         return _cand_
 
-    def _init_part(self, _cand_, X, y):
+    def _init_opt_positioner(self, _cand_, X, y):
         _p_list_ = self._init_particles(_cand_)
 
         return _p_list_

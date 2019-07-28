@@ -13,12 +13,10 @@ from ...base_positioner import BasePositioner
 class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.n_mutations = int(round(self._arg_.individuals * self._arg_.mutation_rate))
         self.n_crossovers = int(
             round(self._arg_.individuals * self._arg_.crossover_rate)
         )
-        self.initializer = self._init_evo
 
     def _init_individuals(self, _cand_):
         _p_list_ = [Individual() for _ in range(self._arg_.individuals)]
@@ -93,7 +91,7 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
         return _cand_
 
-    def _init_evo(self, _cand_, X, y):
+    def _init_opt_positioner(self, _cand_, X, y):
         _p_list_ = self._init_individuals(_cand_)
 
         for _p_ in _p_list_:

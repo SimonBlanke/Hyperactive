@@ -14,10 +14,8 @@ from ...base_positioner import BasePositioner
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.pos_para = {"eps": self._arg_.eps}
         self.n_iter_swap = int(self._config_.n_iter / self._arg_.n_swaps)
-        self.initializer = self._init_tempering
 
     def _init_annealers(self, _cand_):
         _p_list_ = []
@@ -26,7 +24,9 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
             pos_para = self.pos_para
             pos_para["temp"] = temp
 
-            _p_ = super()._initialize(_cand_, positioner=System, pos_para=pos_para)
+            _p_ = super()._init_base_positioner(
+                _cand_, positioner=System, pos_para=pos_para
+            )
             _p_list_.append(_p_)
 
         return _p_list_
@@ -53,26 +53,19 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
 
     def _annealing_systems(self, _cand_, _p_list_, X, y):
         for _p_ in _p_list_:
-            _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
-            _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
+            _cand_ = super()._iterate(0, _cand_, _p_, X, y)
 
-            if _p_.score_new > _cand_.score_best:
-                _cand_, _p_ = self._update_pos(_cand_, _p_)
-            else:
-                p_accept = self._accept(_p_)
-                self._consider(_p_, p_accept)
-
-            _p_.temp = _p_.temp * self._arg_.t_rate
+        return _cand_
 
     def _iterate(self, i, _cand_, _p_list_, X, y):
-        self._annealing_systems(_cand_, _p_list_, X, y)
+        _cand_ = self._annealing_systems(_cand_, _p_list_, X, y)
 
         if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
             self._swap_pos(_cand_, _p_list_)
 
         return _cand_
 
-    def _init_tempering(self, _cand_, X, y):
+    def _init_opt_positioner(self, _cand_, X, y):
         _p_list_ = self._init_annealers(_cand_)
 
         return _p_list_

@@ -14,10 +14,7 @@ from ...base_optimizer import BaseOptimizer
 class BayesianOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.xi = 0.01
-        self.initializer = self.init_bayesian
-
         # Gaussian process with Mat??rn kernel as surrogate model
         # m52 = ConstantKernel(1.0) * Matern(length_scale=1.0, nu=2.5)
         # kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
@@ -77,7 +74,7 @@ class BayesianOptimizer(BaseOptimizer):
 
         return _cand_
 
-    def init_bayesian(self, _cand_, X, y):
+    def _init_opt_positioner(self, _cand_, X, y):
         _p_ = Bayesian()
 
         self._all_possible_pos(_cand_)

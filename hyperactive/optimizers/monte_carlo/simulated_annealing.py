@@ -11,10 +11,8 @@ from ..local import StochasticHillClimbingOptimizer
 class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.pos_para = {"eps": self._arg_.eps}
         self.temp = 0.1
-        self.initializer = self._init_annealing
 
     # use _consider from StochasticHillClimbingOptimizer
 
@@ -25,12 +23,9 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
         return np.exp(-(score_diff_norm / self.temp))
 
     def _iterate(self, i, _cand_, _p_, X, y):
-        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
-        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
+        _cand_, _p_ = self._hill_climb_iteration(_cand_, _p_, X, y)
 
-        if _p_.score_new > _cand_.score_best:
-            _cand_, _p_ = self._update_pos(_cand_, _p_)
-        else:
+        if _p_.score_new <= _cand_.score_best:
             p_accept = self._accept(_p_)
             self._consider(_p_, p_accept)
 
@@ -38,5 +33,5 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
 
         return _cand_
 
-    def _init_annealing(self, _cand_, X, y):
-        return super()._initialize(_cand_, pos_para=self.pos_para)
+    def _init_opt_positioner(self, _cand_, X, y):
+        return super()._init_base_positioner(_cand_, pos_para=self.pos_para)

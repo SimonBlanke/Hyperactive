@@ -11,9 +11,7 @@ from ...base_optimizer import BaseOptimizer
 class StochasticHillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.pos_para = {"eps": self._arg_.eps}
-        self.initializer = self._init_stoch_climber
 
     def _consider(self, _p_, p_accept):
         rand = random.uniform(0, self._arg_.r)
@@ -37,5 +35,5 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
 
         return _cand_
 
-    def _init_stoch_climber(self, _cand_, X, y):
-        return super()._initialize(_cand_, pos_para=self.pos_para)
+    def _init_opt_positioner(self, _cand_, X, y):
+        return super()._init_base_positioner(_cand_, pos_para=self.pos_para)

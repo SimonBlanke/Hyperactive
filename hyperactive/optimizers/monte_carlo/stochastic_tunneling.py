@@ -11,8 +11,6 @@ from .simulated_annealing import SimulatedAnnealingOptimizer
 class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.initializer = self._init_tunneling
         self.temp = 0.01
 
     # _consider same as simulated_annealing
@@ -26,5 +24,5 @@ class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
 
     # _iterate same as simulated_annealing
 
-    def _init_tunneling(self, _cand_, X, y):
-        return super()._initialize(_cand_, pos_para=self.pos_para)
+    def _init_opt_positioner(self, _cand_, X, y):
+        return super()._init_base_positioner(_cand_, pos_para=self.pos_para)
