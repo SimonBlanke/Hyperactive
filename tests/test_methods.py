@@ -30,5 +30,5 @@ def test_methods():
 
     Optimizer = RandomSearchOptimizer(search_config, n_iter=10, verbosity=0)
     Optimizer.fit(X_train, y_train)
-    # Optimizer.predict(X_test)
-    # Optimizer.score(X_test, y_test)
+    Optimizer.predict(X_test)
+    Optimizer.score(X_test, y_test)

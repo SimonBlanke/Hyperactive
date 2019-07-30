@@ -124,7 +124,7 @@ def test_metrics():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(
-        search_config, n_iter_0, metric="neg_mean_absolute_error", n_jobs=1
+        search_config, n_iter_0, metric="mean_absolute_error", n_jobs=1
     )
     opt.fit(X, y)
 

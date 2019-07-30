@@ -50,6 +50,11 @@ def test_keras_score():
         warm_start=warm_start,
     )
     opt.fit(X, y)
+    opt.predict(X)
+    opt.score(X, y)
+
+
+test_keras_score()
 
 
 def test_keras_loss():
@@ -65,3 +70,5 @@ def test_keras_loss():
         warm_start=warm_start,
     )
     opt.fit(X, y)
+    opt.predict(X)
+    opt.score(X, y)

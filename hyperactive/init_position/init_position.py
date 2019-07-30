@@ -72,7 +72,7 @@ class InitSearchPosition:
 
         for pos in pos_list:
             para = self._space_.pos2para(pos)
-            score, _, _ = self._model_.train_model(para, X, y)
+            score, _ = self._model_.train_model(para, X, y)
 
             pos_best_list.append(pos)
             score_best_list.append(score)

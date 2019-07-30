@@ -1,28 +1,24 @@
 ml_scores = [
-    "accuracy",
-    "balanced_accuracy",
-    "average_precision",
-    "f1",
-    "f1_micro",
-    "f1_macro",
-    "f1_weighted",
-    "f1_samples",
-    "precision",
-    "recall",
-    "jaccard",
-    "roc_auc",
-    "explained_variance",
-    "r2",
+    "accuracy_score",
+    "balanced_accuracy_score",
+    "average_precision_score",
+    "f1_score",
+    "precision_score",
+    "recall_score",
+    "jaccard_score",
+    "roc_auc_score",
+    "explained_variance_score",
+    "r2_score",
 ]
 
 ml_losses = [
     "brier_score_loss",
-    "neg_log_loss",
+    "log_loss",
     "max_error",
-    "neg_mean_absolute_error",
-    "neg_mean_squared_error",
-    "neg_mean_squared_log_error",
-    "neg_median_absolute_error",
+    "mean_absolute_error",
+    "mean_squared_error",
+    "mean_squared_log_error",
+    "median_absolute_error",
 ]
 
 

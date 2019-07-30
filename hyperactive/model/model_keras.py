@@ -91,10 +91,10 @@ class DeepLearner(Model):
 
         return layers_para_dict
 
-    def _create_model(self, keras_para_dict):
+    def _create_model(self, layers_para_dict):
+
         from keras.models import Sequential
 
-        layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
         model = Sequential()
 
         for layer_key in self.layerStr_2_kerasLayer_dict.keys():
@@ -102,7 +102,7 @@ class DeepLearner(Model):
 
             model.add(layer(**layers_para_dict[layer_key]))
 
-        return model, layers_para_dict
+        return model
 
     def _get_compile_parameter(self, layers_para_dict):
         compile_para_dict = layers_para_dict[list(layers_para_dict.keys())[0]]
@@ -114,8 +114,13 @@ class DeepLearner(Model):
 
         return fit_para_dict
 
-    def train_model(self, keras_para_dict, X_train, y_train):
-        model, layers_para_dict = self._create_model(keras_para_dict)
+    def _train_split(self, model, fit_para_dict, X, y):
+        model.fit(**fit_para_dict)
+        return model.evaluate(X, y)[1], model
+
+    def train_model(self, keras_para_dict, X, y):
+        layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
+        model = self._create_model(layers_para_dict)
 
         if list(layers_para_dict.keys())[0] == "keras.compile.0":
             compile_para_dict = self._get_compile_parameter(layers_para_dict)
@@ -130,15 +135,14 @@ class DeepLearner(Model):
         del layers_para_dict["keras.fit.0"]
 
         compile_para_dict["metrics"] = self.metric
-        fit_para_dict["x"] = X_train
-        fit_para_dict["y"] = y_train
+        fit_para_dict["x"] = X
+        fit_para_dict["y"] = y
 
         model.compile(**compile_para_dict)
-        model.fit(**fit_para_dict)
 
-        score = model.evaluate(X_train, y_train)[1]
+        score, model = self._train_split(model, fit_para_dict, X, y)
 
         if self.metric_type == "score":
-            return score, 0, model
+            return score, model
         elif self.metric_type == "loss":
-            return -score, 0, model
+            return -score, model

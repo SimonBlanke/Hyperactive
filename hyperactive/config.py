@@ -15,7 +15,7 @@ from .util import merge_dicts
 class Config:
     def __init__(self, *args, **kwargs):
         kwargs_base = {
-            "metric": "accuracy",
+            "metric": "accuracy_score",
             "n_jobs": 1,
             "cv": 2,
             "verbosity": 1,

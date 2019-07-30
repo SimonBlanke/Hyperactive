@@ -2,9 +2,10 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import time
-
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+from importlib import import_module
+from sklearn.metrics import make_scorer
 
 from .metrics import ml_scores, ml_losses
 from .model import Model
@@ -46,16 +47,32 @@ class MachineLearner(Model):
     def _create_model(self, sklearn_para_dict):
         return self.model(**sklearn_para_dict), 1
 
-    def train_model(self, sklearn_para_dict, X_train, y_train):
+    def _train_cross_val(self, sklearn_model, X, y, metric):
+        scorer = make_scorer(metric)
+
+        scores = cross_val_score(sklearn_model, X, y, scoring=scorer, cv=self.cv)
+        return scores.mean(), sklearn_model
+
+    def train_model(self, sklearn_para_dict, X, y):
         sklearn_model, _ = self._create_model(sklearn_para_dict)
 
-        time_temp = time.perf_counter()
-        scores = cross_val_score(
-            sklearn_model, X_train, y_train, scoring=self.metric, cv=self.cv
-        )
-        train_time = (time.perf_counter() - time_temp) / self.cv
+        module = import_module("sklearn.metrics")
+        metric = getattr(module, self.metric)
+
+        if self.cv > 1:
+            score, model = self._train_cross_val(sklearn_model, X, y, metric)
+        elif self.cv < 1:
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, train_size=self.cv
+            )
+            model = sklearn_model.fit(X_train, y_train)
+            y_pred = model.predict(X_test)
+            score = metric(y_test, y_pred)
+        else:
+            score = 0
+            model = sklearn_model.fit(X, y)
 
         if self.metric_type == "score":
-            return scores.mean(), train_time, sklearn_model
+            return score, model
         elif self.metric_type == "loss":
-            return -scores.mean(), train_time, sklearn_model
+            return -score, model

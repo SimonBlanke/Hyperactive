@@ -6,17 +6,15 @@
 import pickle
 import multiprocessing
 
-
-import tqdm
+from importlib import import_module
 from functools import partial
 
+from .init_search import initialize_search
+from .finish_search import finish_search
 from .base_positioner import BasePositioner
 from .config import Config
 from .opt_args import Arguments
 from .util import sort_for_best
-
-from .candidate import MlCandidate
-from .candidate import DlCandidate
 
 
 class BaseOptimizer:
@@ -65,34 +63,6 @@ class BaseOptimizer:
 
         self._config_.get_model_type()
 
-    def _init_search(self, nth_process, X, y, init=None):
-        """Initializes the search by instantiating the ml- or dl-candidate for each process"""
-        self._config_._set_random_seed(nth_process)
-
-        if (
-            self._config_.model_type == "sklearn"
-            or self._config_.model_type == "xgboost"
-        ):
-
-            _cand_ = MlCandidate(nth_process, self._config_)
-
-        elif self._config_.model_type == "keras":
-            _cand_ = DlCandidate(nth_process, self._config_)
-
-        pos = _cand_._init_._set_start_pos(nth_process, X, y)
-        score = _cand_.eval_pos(pos, X, y)
-        _cand_.score_best = score
-        _cand_.pos_best = pos
-
-        # initialize optimizer specific objects
-        _p_ = self._init_opt_positioner(_cand_, X, y)
-
-        # create progress bar
-        if self._config_._show_progress_bar():
-            self.p_bar = tqdm.tqdm(**self._config_._tqdm_dict(_cand_))
-
-        return _cand_, _p_
-
     def _hill_climb_iteration(self, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
@@ -123,13 +93,17 @@ class BaseOptimizer:
         return _cand_, _p_
 
     def search(self, nth_process, X, y):
-        _cand_, _p_ = self._init_search(nth_process, X, y)
+        _cand_, p_bar = initialize_search(self._config_, nth_process, X, y)
+        _p_ = self._init_opt_positioner(_cand_, X, y)
 
         for i in range(self._config_.n_iter):
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
 
             if self._config_._show_progress_bar():
-                self.p_bar.update(1)
+                p_bar.update(1)
+
+        p_bar.close()
+        _cand_ = finish_search(_cand_, X, y)
 
         return _cand_
 
@@ -145,11 +119,9 @@ class BaseOptimizer:
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
 
-        start_point = _cand_._get_warm_start()
+        self.model_best = _cand_.model
         self.score_best = _cand_.score_best
-
-        para = _cand_._space_.pos2para(_cand_.pos_best)
-        self.model_best, _ = _cand_._model_._create_model(para)
+        start_point = _cand_._get_warm_start()
 
         if self._config_.verbosity:
             print("\n", self._config_.metric, self.score_best)
@@ -162,11 +134,9 @@ class BaseOptimizer:
         score_best_list = []
         model_best_list = []
         for _cand_ in _cand_list:
-            start_point = _cand_._get_warm_start()
+            model_best = _cand_.model
             score_best = _cand_.score_best
-
-            para = _cand_._space_.pos2para(_cand_.pos_best)
-            model_best = _cand_._model_._create_model(para)
+            start_point = _cand_._get_warm_start()
 
             start_point_list.append(start_point)
             score_best_list.append(score_best)
@@ -213,8 +183,6 @@ class BaseOptimizer:
         else:
             self._run_multiple_jobs(X, y)
 
-        # self.model_best.fit(X, y)
-
     def predict(self, X_test):
         """Returns the prediction of X_test after a model was searched by `fit`
 
@@ -241,11 +209,16 @@ class BaseOptimizer:
         -------
         (unnamed float) : float
         """
+
         if (
             self._config_.model_type == "sklearn"
             or self._config_.model_type == "xgboost"
         ):
-            return self.model_best.score(X_test, y_test)
+            module = import_module("sklearn.metrics")
+            metric = getattr(module, self._config_.metric)
+            y_pred = self.model_best.predict(X_test)
+
+            return metric(y_test, y_pred)
         elif self._config_.model_type == "keras":
             return self.model_best.evaluate(X_test, y_test)[1]
 

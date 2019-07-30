@@ -29,7 +29,7 @@ warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
 def test_sklearn():
     from hyperactive import HillClimbingOptimizer
 
-    opt0 = HillClimbingOptimizer(
+    opt = HillClimbingOptimizer(
         search_config,
         n_iter_0,
         random_state=random_state,
@@ -38,4 +38,6 @@ def test_sklearn():
         n_jobs=1,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt.fit(X, y)
+    opt.predict(X)
+    opt.score(X, y)
