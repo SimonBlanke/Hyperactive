@@ -10,7 +10,7 @@ from importlib import import_module
 from functools import partial
 
 from .init_search import initialize_search
-from .finish_search import finish_search
+from .finish_search import finish_search_
 from .base_positioner import BasePositioner
 from .config import Config
 from .opt_args import Arguments
@@ -103,7 +103,7 @@ class BaseOptimizer:
                 p_bar.update(1)
 
         p_bar.close()
-        _cand_ = finish_search(_cand_, X, y)
+        _cand_ = finish_search_(_cand_, X, y)
 
         return _cand_
 

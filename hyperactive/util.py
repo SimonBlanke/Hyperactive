@@ -16,7 +16,7 @@ def merge_dicts(base_dict, added_dict):
 
 
 def sort_for_best(sort, sort_by):
-    """Returns two lists sorted by the second"""
+    # Returns two lists sorted by the second
     sort = np.array(sort)
     sort_by = np.array(sort_by)
 
