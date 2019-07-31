@@ -610,12 +610,16 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 
 ```
 
+<br>
+
 ### General positional argument:
 
 | Argument | Type | Description |
 | ------ | ------ | ------ |
 | search_config  | dict | hyperparameter search space to explore by the optimizer |
 | n_iter | int | number of iterations to perform |
+
+<br>
 
 ### General keyword arguments:
 
@@ -630,6 +634,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | memory  |  bool | True  |  Stores explored evaluations in a dictionary to save computing time |
 | scatter_init  |  int | False  |  Chooses better initial position by training on multiple random positions with smaller training dataset (split into int subsets)  |
 
+<br>
 
 ### Specific keyword arguments:
 
@@ -720,6 +725,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | ------ | ------ | ------ | ------ |
 | kernel  | class | Matern | Kernel used for the gaussian process |
 
+<br>
 
 ### General methods:
 ```
@@ -754,6 +760,41 @@ export(self, filename)
 
 <br>
 
+### Available Metrics:
+
+#### Scikit-learn
+
+| Machine Learning Scores | Machine Learning Losses |
+| ------ | ------ |
+| accuracy_score | brier_score_loss |
+| balanced_accuracy_score | log_loss |
+| average_precision_score | max_error |
+| f1_score | mean_absolute_error |
+| recall_score | mean_squared_error |
+| jaccard_score | mean_squared_log_error |
+| roc_auc_score | median_absolute_error |
+| explained_variance_score |  |
+
+#### Keras
+
+| Deep Learning Scores | Deep Learning Losses |
+| ------ | ------ |
+| accuracy | mean_squared_error |
+| binary_accuracy | mean_absolute_error |
+| categorical_accuracy | mean_absolute_percentage_error |
+| sparse_categorical_accuracy | mean_squared_logarithmic_error |
+| top_k_categorical_accuracy | squared_hinge |
+| sparse_top_k_categorical_accuracy | hinge |
+|  | categorical_hinge |
+|  | logcosh |
+|  | categorical_crossentropy |
+|  | sparse_categorical_crossentropy |
+|  | binary_crossentropy |
+|  | kullback_leibler_divergence |
+|  | poisson |
+|  | cosine_proximity |
+
+<br>
 
 ## License
 
