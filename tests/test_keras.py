@@ -11,7 +11,7 @@ y = data.target
 n_iter_0 = 0
 n_iter_1 = 3
 random_state = 0
-cv = 2
+cv = 3
 n_jobs = 1
 
 search_config = {

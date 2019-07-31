@@ -14,11 +14,7 @@ from .model import Model
 class MachineLearner(Model):
     def __init__(self, _config_, search_config_key):
         super().__init__(_config_)
-
-        self.metric = _config_.metric
-        self.cv = _config_.cv
         self.search_config_key = search_config_key
-
         self.model = self._get_model(search_config_key)
 
         self.scores = ml_scores

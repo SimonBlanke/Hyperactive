@@ -2,6 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
+from sklearn.model_selection import KFold
 
 from .metrics import dl_scores, dl_losses
 from .model import Model
@@ -10,10 +12,7 @@ from .model import Model
 class DeepLearner(Model):
     def __init__(self, _config_):
         super().__init__(_config_)
-
         self.search_config = _config_.search_config
-        self.metric = _config_.metric
-        self.cv = _config_.cv
 
         # if no metric was passed
         if isinstance(self.metric, str):
@@ -114,6 +113,20 @@ class DeepLearner(Model):
 
         return fit_para_dict
 
+    def _cross_val_keras(self, model, X, y):
+        scores = []
+
+        kf = KFold(n_splits=self.cv, shuffle=True)
+        for train_index, test_index in kf.split(X):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+
+            model.fit(X_train, y_train)
+            score = model.evaluate(X_test, y_test)[1]
+            scores.append(score)
+
+        return np.array(scores).mean()
+
     def _train_split(self, model, fit_para_dict, X, y):
         model.fit(**fit_para_dict)
         return model.evaluate(X, y)[1], model
@@ -140,7 +153,13 @@ class DeepLearner(Model):
 
         model.compile(**compile_para_dict)
 
-        score, model = self._train_split(model, fit_para_dict, X, y)
+        if self.cv > 1:
+            score = self._cross_val_keras(model, X, y)
+        elif self.cv < 1:
+            fit_para_dict["validation_split"] = self.cv
+            score, model = self._train_split(model, fit_para_dict, X, y)
+        else:
+            score, model = self._train_split(model, fit_para_dict, X, y)
 
         if self.metric_type == "score":
             return score, model
