@@ -75,8 +75,11 @@ class Config:
                 model_type_list.append("sklearn")
             elif "xgboost" in model_type_key:
                 model_type_list.append("xgboost")
+            elif "lightgbm" in model_type_key:
+                model_type_list.append("lightgbm")
             elif "keras" in model_type_key:
                 model_type_list.append("keras")
+                self.metric = "accuracy"
             # elif "torch" in model_type_key:
             #     model_type_list.append("torch")
 
