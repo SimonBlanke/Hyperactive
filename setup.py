@@ -35,6 +35,7 @@ setup(
         "tqdm",
         "scikit-learn>=0.18",
         "xgboost",
+        "lightgbm",
         "tensorflow",
         "keras",
         "meta-learn",
