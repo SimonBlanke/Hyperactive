@@ -5,11 +5,18 @@
 
 from importlib import import_module
 
+from .metrics import scores, losses
+
 
 class Model:
     def __init__(self, _config_):
         self.metric = _config_.metric
         self.cv = _config_.cv
+
+        self.scores = scores
+        self.losses = losses
+
+        self._get_metric_type()
 
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)

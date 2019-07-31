@@ -17,7 +17,7 @@ class Config:
         kwargs_base = {
             "metric": "accuracy_score",
             "n_jobs": 1,
-            "cv": 2,
+            "cv": 0.75,
             "verbosity": 1,
             "random_state": None,
             "warm_start": False,
@@ -73,15 +73,12 @@ class Config:
         for model_type_key in self.search_config.keys():
             if "sklearn" in model_type_key:
                 model_type_list.append("sklearn")
-                self.metric = "accuracy_score"
             elif "xgboost" in model_type_key:
                 model_type_list.append("xgboost")
-                self.metric = "accuracy_score"
             elif "lightgbm" in model_type_key:
                 model_type_list.append("lightgbm")
             elif "keras" in model_type_key:
                 model_type_list.append("keras")
-                self.metric = "accuracy"
             # elif "torch" in model_type_key:
             #     model_type_list.append("torch")
             # self.metric =

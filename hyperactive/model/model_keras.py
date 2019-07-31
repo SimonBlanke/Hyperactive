@@ -4,8 +4,11 @@
 
 import numpy as np
 from sklearn.model_selection import KFold
+from importlib import import_module
+from sklearn.model_selection import train_test_split
 
-from .metrics import dl_scores, dl_losses
+
+# from .metrics import dl_scores, dl_losses
 from .model import Model
 
 
@@ -15,24 +18,13 @@ class KerasModel(Model):
         self.search_config = _config_.search_config
 
         # if no metric was passed
-        if isinstance(self.metric, str):
-            self.metric = [self.metric]
+        # if isinstance(self.metric, str):
+        #     self.metric_keras = [self.metric]
 
         self.layerStr_2_kerasLayer_dict = self._layer_dict(_config_.search_config)
         # self.n_layer = len(self.layerStr_2_kerasLayer_dict.keys())
 
         self._get_search_config_onlyLayers()
-
-        self.scores = dl_scores
-        self.losses = dl_losses
-
-        self._get_metric_type_keras()
-
-    def _get_metric_type_keras(self):
-        if self.metric[0] in self.scores:
-            self.metric_type = "score"
-        elif self.metric[0] in self.losses:
-            self.metric_type = "loss"
 
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
@@ -113,7 +105,7 @@ class KerasModel(Model):
 
         return fit_para_dict
 
-    def _cross_val_keras(self, model, X, y):
+    def _cross_val_keras(self, model, X, y, metric):
         scores = []
 
         kf = KFold(n_splits=self.cv, shuffle=True)
@@ -122,14 +114,11 @@ class KerasModel(Model):
             y_train, y_test = y[train_index], y[test_index]
 
             model.fit(X_train, y_train)
-            score = model.evaluate(X_test, y_test)[1]
+            y_pred = model.predict(X_test)
+            score = metric(y_test, y_pred)
             scores.append(score)
 
         return np.array(scores).mean()
-
-    def _train_split(self, model, fit_para_dict, X, y):
-        model.fit(**fit_para_dict)
-        return model.evaluate(X, y)[1], model
 
     def train_model(self, keras_para_dict, X, y):
         layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
@@ -147,19 +136,27 @@ class KerasModel(Model):
         del layers_para_dict["keras.compile.0"]
         del layers_para_dict["keras.fit.0"]
 
-        compile_para_dict["metrics"] = self.metric
+        # compile_para_dict["metrics"] = self.metric_keras
         fit_para_dict["x"] = X
         fit_para_dict["y"] = y
 
         model.compile(**compile_para_dict)
 
+        module = import_module("sklearn.metrics")
+        metric = getattr(module, self.metric)
+
         if self.cv > 1:
-            score = self._cross_val_keras(model, X, y)
+            score = self._cross_val_keras(model, X, y, metric)
         elif self.cv < 1:
-            fit_para_dict["validation_split"] = self.cv
-            score, model = self._train_split(model, fit_para_dict, X, y)
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, train_size=self.cv
+            )
+            model.fit(X_train, y_train)
+            y_pred = model.predict(X_test)
+            score = metric(y_test, y_pred)
         else:
-            score, model = self._train_split(model, fit_para_dict, X, y)
+            score = 0
+            model.fit(X, y)
 
         if self.metric_type == "score":
             return score, model

@@ -1,4 +1,4 @@
-ml_scores = [
+scores = [
     "accuracy_score",
     "balanced_accuracy_score",
     "average_precision_score",
@@ -11,7 +11,7 @@ ml_scores = [
     "r2_score",
 ]
 
-ml_losses = [
+losses = [
     "brier_score_loss",
     "log_loss",
     "max_error",

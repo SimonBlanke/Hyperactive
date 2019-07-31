@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from importlib import import_module
 from sklearn.metrics import make_scorer
 
-from .metrics import ml_scores, ml_losses
+
 from .model import Model
 
 
@@ -16,11 +16,6 @@ class ScikitLearnModel(Model):
         super().__init__(_config_)
         self.search_config_key = search_config_key
         self.model = self._get_model(search_config_key)
-
-        self.scores = ml_scores
-        self.losses = ml_losses
-
-        self._get_metric_type()
 
     def create_start_point(self, sklearn_para_dict, nth_process):
         start_point = {}

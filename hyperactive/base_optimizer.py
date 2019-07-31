@@ -209,18 +209,11 @@ class BaseOptimizer:
         -------
         (unnamed float) : float
         """
+        module = import_module("sklearn.metrics")
+        metric = getattr(module, self._config_.metric)
+        y_pred = self.model_best.predict(X_test)
 
-        if (
-            self._config_.model_type == "sklearn"
-            or self._config_.model_type == "xgboost"
-        ):
-            module = import_module("sklearn.metrics")
-            metric = getattr(module, self._config_.metric)
-            y_pred = self.model_best.predict(X_test)
-
-            return metric(y_test, y_pred)
-        elif self._config_.model_type == "keras":
-            return self.model_best.evaluate(X_test, y_test)[1]
+        return metric(y_test, y_pred)
 
     def export(self, filename):
         """Exports the best model, that was found by the optimizer during `fit`

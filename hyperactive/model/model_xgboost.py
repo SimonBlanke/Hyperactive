@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from .metrics import ml_scores, ml_losses
 from .model_sklearn import ScikitLearnModel
 
 
@@ -12,8 +11,3 @@ class XGBoostModel(ScikitLearnModel):
 
         self.search_config_key = search_config_key
         self.model = self._get_model(search_config_key)
-
-        self.scores = ml_scores
-        self.losses = ml_losses
-
-        self._get_metric_type()
