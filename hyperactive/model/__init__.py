@@ -3,8 +3,10 @@
 # License: MIT License
 
 
-from .model_sklearn import MachineLearner
-from .model_keras import DeepLearner
+from .model_sklearn import ScikitLearnModel
+from .model_xgboost import XGBoostModel
+from .model_light_gbm import LightGbmModel
+from .model_keras import KerasModel
 
 
-__all__ = ["MachineLearner", "DeepLearner"]
+__all__ = ["ScikitLearnModel", "XGBoostModel", "LightGbmModel", "KerasModel"]

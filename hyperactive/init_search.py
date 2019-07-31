@@ -20,9 +20,12 @@ def initialize_search(_config_, nth_process, X, y):
 def _init_candidate(_config_, nth_process):
     _config_._set_random_seed(nth_process)
 
-    if _config_.model_type == "sklearn" or _config_.model_type == "xgboost":
+    if _config_.model_type == "sklearn":
         _cand_ = MlCandidate(nth_process, _config_)
-
+    elif _config_.model_type == "xgboost":
+        _cand_ = MlCandidate(nth_process, _config_)
+    elif _config_.model_type == "lightgbm":
+        _cand_ = MlCandidate(nth_process, _config_)
     elif _config_.model_type == "keras":
         _cand_ = DlCandidate(nth_process, _config_)
 

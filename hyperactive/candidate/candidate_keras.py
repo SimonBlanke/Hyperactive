@@ -3,7 +3,7 @@
 # License: MIT License
 
 from .candidate import Candidate
-from ..model import DeepLearner
+from ..model import KerasModel
 from ..init_position import InitDLSearchPosition
 
 
@@ -14,7 +14,7 @@ class DlCandidate(Candidate):
         self.nth_process = nth_process
 
         self._space_.create_kerasSearchSpace()
-        self._model_ = DeepLearner(_config_)
+        self._model_ = KerasModel(_config_)
 
         self._init_ = InitDLSearchPosition(
             self._space_, self._model_, _config_.warm_start, _config_.scatter_init

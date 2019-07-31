@@ -11,7 +11,7 @@ from .metrics import ml_scores, ml_losses
 from .model import Model
 
 
-class MachineLearner(Model):
+class ScikitLearnModel(Model):
     def __init__(self, _config_, search_config_key):
         super().__init__(_config_)
         self.search_config_key = search_config_key
