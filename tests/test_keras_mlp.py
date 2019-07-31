@@ -10,13 +10,8 @@ y = data.target
 
 search_config = {
     "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [1], "batch_size": [500], "verbose": [0]},
-    "keras.layers.Dense.1": {
-        "units": range(1, 10, 1),
-        "activation": ["relu", "tanh", "linear", "sigmoid"],
-        "kernel_initializer": ["RandomUniform"],
-    },
-    "keras.layers.Dense.2": {"units": [1], "activation": ["sigmoid"]},
+    "keras.fit.0": {"epochs": [1], "batch_size": [300], "verbose": [0]},
+    "keras.layers.Dense.1": {"units": [1], "activation": ["softmax"]},
 }
 
 
@@ -32,15 +27,8 @@ def test_keras():
 def test_keras_score():
     from hyperactive import HillClimbingOptimizer
 
-    dl_scores = [
-        "accuracy",
-        "binary_accuracy",
-        "categorical_accuracy",
-        "sparse_categorical_accuracy",
-        "top_k_categorical_accuracy",
-        "sparse_top_k_categorical_accuracy",
-    ]
-    for score in dl_scores:
+    scores = ["accuracy_score"]
+    for score in scores:
         opt = HillClimbingOptimizer(search_config, 1, metric=score)
         opt.fit(X, y)
         opt.predict(X)
@@ -50,24 +38,14 @@ def test_keras_score():
 def test_keras_loss():
     from hyperactive import HillClimbingOptimizer
 
-    dl_losses = [
-        "mean_squared_error",
+    losses = [
         "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_logarithmic_error",
-        "squared_hinge",
-        "hinge",
-        "categorical_hinge",
-        "logcosh",
-        "categorical_crossentropy",
-        "sparse_categorical_crossentropy",
-        "binary_crossentropy",
-        "kullback_leibler_divergence",
-        "poisson",
-        "cosine_proximity",
+        "mean_squared_error",
+        "mean_squared_log_error",
+        "median_absolute_error",
     ]
 
-    for loss in dl_losses:
+    for loss in losses:
         opt = HillClimbingOptimizer(search_config, 1, metric=loss)
         opt.fit(X, y)
         opt.predict(X)
@@ -88,7 +66,7 @@ def test_keras_n_jobs():
 def test_keras_n_iter():
     from hyperactive import HillClimbingOptimizer
 
-    n_iter_list = [0, 1, 3, 10, 100]
+    n_iter_list = [0, 1, 3]
     for n_iter in n_iter_list:
         opt = HillClimbingOptimizer(search_config, n_iter)
         opt.fit(X, y)
@@ -99,7 +77,7 @@ def test_keras_n_iter():
 def test_keras_cv():
     from hyperactive import HillClimbingOptimizer
 
-    cv_list = [0.1, 0.5, 0.9, 2, 4]
+    cv_list = [0.1, 0.5, 0.9, 2]
     for cv in cv_list:
         opt = HillClimbingOptimizer(search_config, 1, cv=cv)
         opt.fit(X, y)
@@ -134,13 +112,8 @@ def test_keras_warm_start():
 
     warm_start = {
         "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-        "keras.fit.0": {"epochs": [1], "batch_size": [500], "verbose": [0]},
-        "keras.layers.Dense.1": {
-            "units": [1],
-            "activation": ["linear"],
-            "kernel_initializer": ["RandomUniform"],
-        },
-        "keras.layers.Dense.2": {"units": [1], "activation": ["sigmoid"]},
+        "keras.fit.0": {"epochs": [1], "batch_size": [300], "verbose": [0]},
+        "keras.layers.Dense.1": {"units": [1], "activation": ["softmax"]},
     }
 
     warm_start_list = [None, warm_start]

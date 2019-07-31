@@ -1,24 +1,29 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+from keras.datasets import cifar10
+from keras.utils import to_categorical
 
-from sklearn.datasets import load_iris
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
-data = load_iris()
-X = data.data
-y = data.target
+X = X_train[0:1000]
+y = y_train[0:1000]
+
+y = to_categorical(y)
+y_test = to_categorical(y_test)
 
 search_config = {
-    "sklearn.tree.DecisionTreeClassifier": {
-        "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 21),
-        "min_samples_split": range(2, 21),
-        "min_samples_leaf": range(1, 21),
-    }
+    "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
+    "keras.fit.0": {"epochs": [1], "batch_size": [300], "verbose": [0]},
+    "keras.layers.Conv2D.1": {
+        "filters": [32, 64, 128],
+        "kernel_size": [3],
+        "activation": ["relu"],
+    },
+    "keras.layers.MaxPooling2D.2": {"pool_size": [(4, 4)]},
+    "keras.layers.Flatten.3": {},
+    "keras.layers.Dense.4": {"units": [10], "activation": ["softmax"]},
 }
 
 
-def test_sklearn():
+def test_keras():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(search_config, 1)
@@ -27,36 +32,35 @@ def test_sklearn():
     opt.score(X, y)
 
 
-def test_sklearn_score():
+def test_keras_score():
     from hyperactive import HillClimbingOptimizer
 
-    ml_scores = ["accuracy_score"]
-
-    for score in ml_scores:
+    scores = ["accuracy_score"]
+    for score in scores:
         opt = HillClimbingOptimizer(search_config, 1, metric=score)
         opt.fit(X, y)
         opt.predict(X)
         opt.score(X, y)
 
 
-def test_sklearn_loss():
+def test_keras_loss():
     from hyperactive import HillClimbingOptimizer
 
-    ml_losses = [
+    losses = [
         "mean_absolute_error",
         "mean_squared_error",
         "mean_squared_log_error",
         "median_absolute_error",
     ]
 
-    for loss in ml_losses:
+    for loss in losses:
         opt = HillClimbingOptimizer(search_config, 1, metric=loss)
         opt.fit(X, y)
         opt.predict(X)
         opt.score(X, y)
 
 
-def test_sklearn_n_jobs():
+def test_keras_n_jobs():
     from hyperactive import HillClimbingOptimizer
 
     n_jobs_list = [1, 2, 3, 4, -1]
@@ -67,10 +71,10 @@ def test_sklearn_n_jobs():
         opt.score(X, y)
 
 
-def test_sklearn_n_iter():
+def test_keras_n_iter():
     from hyperactive import HillClimbingOptimizer
 
-    n_iter_list = [0, 1, 3, 10, 100]
+    n_iter_list = [0, 1, 3]
     for n_iter in n_iter_list:
         opt = HillClimbingOptimizer(search_config, n_iter)
         opt.fit(X, y)
@@ -78,10 +82,10 @@ def test_sklearn_n_iter():
         opt.score(X, y)
 
 
-def test_sklearn_cv():
+def test_keras_cv():
     from hyperactive import HillClimbingOptimizer
 
-    cv_list = [0.1, 0.5, 0.9, 2, 4]
+    cv_list = [0.1, 0.5, 0.9, 2]
     for cv in cv_list:
         opt = HillClimbingOptimizer(search_config, 1, cv=cv)
         opt.fit(X, y)
@@ -89,7 +93,7 @@ def test_sklearn_cv():
         opt.score(X, y)
 
 
-def test_sklearn_verbosity():
+def test_keras_verbosity():
     from hyperactive import HillClimbingOptimizer
 
     verbosity_list = [0, 1, 2]
@@ -100,7 +104,7 @@ def test_sklearn_verbosity():
         opt.score(X, y)
 
 
-def test_sklearn_random_state():
+def test_keras_random_state():
     from hyperactive import HillClimbingOptimizer
 
     random_state_list = [None, 0, 1, 2]
@@ -111,10 +115,24 @@ def test_sklearn_random_state():
         opt.score(X, y)
 
 
-def test_sklearn_warm_start():
+def test_keras_warm_start():
     from hyperactive import HillClimbingOptimizer
 
-    warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
+    warm_start = {
+        "keras.compile.0": {
+            "loss": ["categorical_crossentropy"],
+            "optimizer": ["adam"],
+        },
+        "keras.fit.0": {"epochs": [1], "batch_size": [300], "verbose": [0]},
+        "keras.layers.Conv2D.1": {
+            "filters": [64],
+            "kernel_size": [3],
+            "activation": ["relu"],
+        },
+        "keras.layers.MaxPooling2D.2": {"pool_size": [(4, 4)]},
+        "keras.layers.Flatten.3": {},
+        "keras.layers.Dense.4": {"units": [10], "activation": ["softmax"]},
+    }
 
     warm_start_list = [None, warm_start]
     for warm_start in warm_start_list:
@@ -124,7 +142,7 @@ def test_sklearn_warm_start():
         opt.score(X, y)
 
 
-def test_sklearn_memory():
+def test_keras_memory():
     from hyperactive import HillClimbingOptimizer
 
     memory_list = [False, True]
@@ -135,7 +153,7 @@ def test_sklearn_memory():
         opt.score(X, y)
 
 
-def test_sklearn_scatter_init():
+def test_keras_scatter_init():
     from hyperactive import HillClimbingOptimizer
 
     scatter_init_list = [False, 2, 3, 4]
