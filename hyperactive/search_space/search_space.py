@@ -18,7 +18,6 @@ class SearchSpace:
     def pos_space_limit(self):
         dim = []
 
-        print("\n self.para_space", self.para_space, "\n")
         for pos_key in self.para_space:
             dim.append(len(self.para_space[pos_key]) - 1)
 

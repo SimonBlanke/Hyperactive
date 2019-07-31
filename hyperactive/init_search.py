@@ -30,6 +30,8 @@ def _init_candidate(_config_, nth_process):
         _cand_ = LightGbmCandidate(nth_process, _config_)
     elif _config_.model_type == "keras":
         _cand_ = KerasCandidate(nth_process, _config_)
+    # elif _config_.model_type == "torch":
+    #     _cand_ = KerasCandidate(nth_process, _config_)
 
     return _cand_
 

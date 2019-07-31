@@ -84,6 +84,7 @@ class Config:
                 self.metric = "accuracy"
             # elif "torch" in model_type_key:
             #     model_type_list.append("torch")
+            # self.metric =
 
         return model_type_list
 
