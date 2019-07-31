@@ -58,6 +58,7 @@ def test_lightgbm_loss():
         opt.score(X, y)
 
 
+"""
 def test_lightgbm_n_jobs():
     from hyperactive import HillClimbingOptimizer
 
@@ -67,6 +68,7 @@ def test_lightgbm_n_jobs():
         opt.fit(X, y)
         opt.predict(X)
         opt.score(X, y)
+"""
 
 
 def test_lightgbm_n_iter():
