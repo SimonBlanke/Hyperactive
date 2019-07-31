@@ -5,7 +5,6 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
 from importlib import import_module
-from sklearn.metrics import make_scorer
 from sklearn.model_selection import KFold
 
 from .metrics import ml_scores, ml_losses
@@ -47,27 +46,12 @@ class LightGbmModel(Model):
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
 
-            model = model.fit(X_train, y_train, eval_metric="l2")
+            model = model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
             score = metric(y_test, y_pred)
             scores.append(score)
 
         return np.array(scores).mean(), model
-
-    def _cross_val_lightx(self, model, X, y, metric):
-        scores = []
-
-        kf = KFold(n_splits=self.cv, shuffle=True)
-        for train_index, test_index in kf.split(X):
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-
-            model = model.fit(X_train, y_train, eval_metric="l2")
-            y_pred = model.predict(X_test)
-            score = metric(y_test, y_pred)
-            scores.append(score)
-
-        return np.array(scores).mean()
 
     def train_model(self, sklearn_para_dict, X, y):
         lightgbm_model = self._create_model(sklearn_para_dict)
@@ -82,7 +66,7 @@ class LightGbmModel(Model):
                 X, y, train_size=self.cv
             )
 
-            model = lightgbm_model.fit(X_train, y_train, eval_metric="l2")
+            model = lightgbm_model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
             score = metric(y_test, y_pred)
         else:
