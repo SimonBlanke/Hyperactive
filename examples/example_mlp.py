@@ -23,7 +23,7 @@ search_config = {
         "activation": ["relu"],
         "kernel_initializer": ["uniform"],
     },
-    "keras.layers.Dense.3": {"units": [1], "activation": ["sigmoid"]},
+    "keras.layers.Dense.3": {"units": [1], "activation": ["softmax"]},
 }
 
 Optimizer = ParticleSwarmOptimizer(
