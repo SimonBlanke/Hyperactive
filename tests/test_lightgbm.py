@@ -61,7 +61,7 @@ def test_lightgbm_loss():
 def test_lightgbm_n_jobs():
     from hyperactive import HillClimbingOptimizer
 
-    n_jobs_list = [1, 2, 3, 4, -1]
+    n_jobs_list = [1, 2, 3, 4]
     for n_jobs in n_jobs_list:
         opt = HillClimbingOptimizer(search_config, 1, n_jobs=n_jobs)
         opt.fit(X, y)
@@ -72,7 +72,7 @@ def test_lightgbm_n_jobs():
 def test_lightgbm_n_iter():
     from hyperactive import HillClimbingOptimizer
 
-    n_iter_list = [0, 1, 3, 10, 100]
+    n_iter_list = [0, 1, 3, 10]
     for n_iter in n_iter_list:
         opt = HillClimbingOptimizer(search_config, n_iter)
         opt.fit(X, y)

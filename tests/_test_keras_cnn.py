@@ -63,7 +63,7 @@ def test_keras_loss():
 def test_keras_n_jobs():
     from hyperactive import HillClimbingOptimizer
 
-    n_jobs_list = [1, 2, 3, 4, -1]
+    n_jobs_list = [1, 2, 3, 4]
     for n_jobs in n_jobs_list:
         opt = HillClimbingOptimizer(search_config, 1, n_jobs=n_jobs)
         opt.fit(X, y)
