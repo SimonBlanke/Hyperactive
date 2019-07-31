@@ -73,8 +73,10 @@ class Config:
         for model_type_key in self.search_config.keys():
             if "sklearn" in model_type_key:
                 model_type_list.append("sklearn")
+                self.metric = "accuracy_score"
             elif "xgboost" in model_type_key:
                 model_type_list.append("xgboost")
+                self.metric = "accuracy_score"
             elif "lightgbm" in model_type_key:
                 model_type_list.append("lightgbm")
             elif "keras" in model_type_key:

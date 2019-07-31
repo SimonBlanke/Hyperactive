@@ -3,11 +3,11 @@
 # License: MIT License
 
 from .candidate import Candidate
-from ..model import ScikitLearnModel
+from ..model import LightGbmModel
 from ..init_position import InitMLSearchPosition
 
 
-class ScikitLearnCandidate(Candidate):
+class LightGbmCandidate(Candidate):
     def __init__(self, nth_process, _config_):
         super().__init__(nth_process, _config_)
 
@@ -15,7 +15,7 @@ class ScikitLearnCandidate(Candidate):
         search_config_key = _config_._get_sklearn_model(nth_process)
 
         self._space_.create_mlSearchSpace(search_config_key)
-        self._model_ = ScikitLearnModel(_config_, search_config_key)
+        self._model_ = LightGbmModel(_config_, search_config_key)
 
         self._init_ = InitMLSearchPosition(
             self._space_, self._model_, _config_.warm_start, _config_.scatter_init

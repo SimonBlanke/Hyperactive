@@ -5,8 +5,10 @@
 
 import tqdm
 
-from .candidate import MlCandidate
-from .candidate import DlCandidate
+from .candidate import ScikitLearnCandidate
+from .candidate import XGBoostCandidate
+from .candidate import LightGbmCandidate
+from .candidate import KerasCandidate
 
 
 def initialize_search(_config_, nth_process, X, y):
@@ -21,13 +23,13 @@ def _init_candidate(_config_, nth_process):
     _config_._set_random_seed(nth_process)
 
     if _config_.model_type == "sklearn":
-        _cand_ = MlCandidate(nth_process, _config_)
+        _cand_ = ScikitLearnCandidate(nth_process, _config_)
     elif _config_.model_type == "xgboost":
-        _cand_ = MlCandidate(nth_process, _config_)
+        _cand_ = XGBoostCandidate(nth_process, _config_)
     elif _config_.model_type == "lightgbm":
-        _cand_ = MlCandidate(nth_process, _config_)
+        _cand_ = LightGbmCandidate(nth_process, _config_)
     elif _config_.model_type == "keras":
-        _cand_ = DlCandidate(nth_process, _config_)
+        _cand_ = KerasCandidate(nth_process, _config_)
 
     return _cand_
 

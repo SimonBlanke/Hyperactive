@@ -20,13 +20,7 @@ class ScikitLearnModel(Model):
         self.scores = ml_scores
         self.losses = ml_losses
 
-        self._get_metric_type_sklearn()
-
-    def _get_metric_type_sklearn(self):
-        if self.metric in self.scores:
-            self.metric_type = "score"
-        elif self.metric in self.losses:
-            self.metric_type = "loss"
+        self._get_metric_type()
 
     def create_start_point(self, sklearn_para_dict, nth_process):
         start_point = {}
@@ -41,7 +35,7 @@ class ScikitLearnModel(Model):
         return start_point
 
     def _create_model(self, sklearn_para_dict):
-        return self.model(**sklearn_para_dict), 1
+        return self.model(**sklearn_para_dict)
 
     def _train_cross_val(self, sklearn_model, X, y, metric):
         scorer = make_scorer(metric)
@@ -50,7 +44,7 @@ class ScikitLearnModel(Model):
         return scores.mean(), sklearn_model
 
     def train_model(self, sklearn_para_dict, X, y):
-        sklearn_model, _ = self._create_model(sklearn_para_dict)
+        sklearn_model = self._create_model(sklearn_para_dict)
 
         module = import_module("sklearn.metrics")
         metric = getattr(module, self.metric)

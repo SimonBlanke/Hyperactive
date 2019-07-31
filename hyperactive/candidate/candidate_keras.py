@@ -7,7 +7,7 @@ from ..model import KerasModel
 from ..init_position import InitDLSearchPosition
 
 
-class DlCandidate(Candidate):
+class KerasCandidate(Candidate):
     def __init__(self, nth_process, _config_):
         super().__init__(nth_process, _config_)
 

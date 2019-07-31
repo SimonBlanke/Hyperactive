@@ -17,3 +17,9 @@ class Model:
         model = getattr(module, model_str)
 
         return model
+
+    def _get_metric_type(self):
+        if self.metric in self.scores:
+            self.metric_type = "score"
+        elif self.metric in self.losses:
+            self.metric_type = "loss"
