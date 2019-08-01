@@ -18,6 +18,9 @@ class Model:
 
         self._get_metric_type()
 
+        module = import_module("sklearn.metrics")
+        self.metric_class = getattr(module, self.metric)
+
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)
         module = import_module(module_str)
