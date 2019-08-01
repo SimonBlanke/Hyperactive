@@ -37,6 +37,8 @@ class Config:
         self.set_n_jobs()
         self._n_process_range = range(0, int(self.n_jobs))
 
+        self._get_model_str()
+
     def _process_pos_args(self, args, kwargs):
         pos_args_attr = [None, None]
 
@@ -68,29 +70,15 @@ class Config:
         return same
 
     def _get_model_str(self):
-        model_type_list = []
+        model_keys = list(self.search_config.keys())
 
-        for model_type_key in self.search_config.keys():
-            if "sklearn" in model_type_key:
-                model_type_list.append("sklearn")
-            elif "xgboost" in model_type_key:
-                model_type_list.append("xgboost")
-            elif "lightgbm" in model_type_key:
-                model_type_list.append("lightgbm")
-            elif "keras" in model_type_key:
-                model_type_list.append("keras")
-            # elif "torch" in model_type_key:
-            #     model_type_list.append("torch")
-            # self.metric =
+        module_str_list = []
+        for model_key in model_keys:
+            module_str = model_key.split(".")[0]
+            module_str_list.append(module_str)
 
-        return model_type_list
-
-    def get_model_type(self):
-        """extracts the model type from the search_config (important for search space construction)"""
-        model_type_list = self._get_model_str()
-
-        if self._is_all_same(model_type_list):
-            self.model_type = model_type_list[0]
+        if self._is_all_same(module_str_list):
+            self.model_type = model_keys[0].split(".")[0]
         else:
             raise Exception("\n Model strings in search_config keys are inconsistent")
 

@@ -61,8 +61,6 @@ class BaseOptimizer:
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
 
-        self._config_.get_model_type()
-
     def _hill_climb_iteration(self, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)

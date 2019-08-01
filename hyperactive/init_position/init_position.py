@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+from ..util import sort_for_best
 import numpy as np
 
 
@@ -20,20 +20,27 @@ class InitSearchPosition:
 
     def _set_start_pos(self, nth_process, X, y):
         if self.warm_start and self.scatter_init:
-            if self.n_warm_start_keys > nth_process:
-                pos = self._create_warm_start(nth_process)
-            else:
-                pos = self._scatter_init(nth_process, X, y)
-
+            pos = self._warm_start_scatter_init(nth_process, X, y)
         elif self.warm_start:
-            if self.n_warm_start_keys > nth_process:
-                pos = self._create_warm_start(nth_process)
-            else:
-                pos = self._space_.get_random_pos()
-
+            pos = self._warm_start(nth_process)
         elif self.scatter_init:
             pos = self._scatter_init(nth_process, X, y)
+        else:
+            pos = self._space_.get_random_pos()
 
+        return pos
+
+    def _warm_start_scatter_init(self, nth_process, X, y):
+        if self.n_warm_start_keys > nth_process:
+            pos = self._create_warm_start(nth_process)
+        else:
+            pos = self._scatter_init(nth_process, X, y)
+
+        return pos
+
+    def _warm_start(self, nth_process):
+        if self.n_warm_start_keys > nth_process:
+            pos = self._create_warm_start(nth_process)
         else:
             pos = self._space_.get_random_pos()
 
@@ -47,22 +54,11 @@ class InitSearchPosition:
 
         pos_best_list, score_best_list = self._scatter_train(X, y, pos_list)
 
-        pos_best_sorted, _ = self._sort_for_best(pos_best_list, score_best_list)
+        pos_best_sorted, _ = sort_for_best(pos_best_list, score_best_list)
 
         nth_best_pos = nth_process - self.n_warm_start_keys
 
         return pos_best_sorted[nth_best_pos]
-
-    def _sort_for_best(self, sort, sort_by):
-        sort = np.array(sort)
-        sort_by = np.array(sort_by)
-
-        index_best = list(sort_by.argsort()[::-1])
-
-        sort_sorted = sort[index_best]
-        sort_by_sorted = sort_by[index_best]
-
-        return sort_sorted, sort_by_sorted
 
     def _scatter_train(self, X, y, pos_list):
         pos_best_list = []
