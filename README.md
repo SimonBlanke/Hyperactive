@@ -762,9 +762,7 @@ export(self, filename)
 
 ### Available Metrics:
 
-#### Scikit-learn
-
-| Machine Learning Scores | Machine Learning Losses |
+|  Scores |  Losses |
 | ------ | ------ |
 | accuracy_score | brier_score_loss |
 | balanced_accuracy_score | log_loss |
@@ -775,24 +773,6 @@ export(self, filename)
 | roc_auc_score | median_absolute_error |
 | explained_variance_score |  |
 
-#### Keras
-
-| Deep Learning Scores | Deep Learning Losses |
-| ------ | ------ |
-| accuracy | mean_squared_error |
-| binary_accuracy | mean_absolute_error |
-| categorical_accuracy | mean_absolute_percentage_error |
-| sparse_categorical_accuracy | mean_squared_logarithmic_error |
-| top_k_categorical_accuracy | squared_hinge |
-| sparse_top_k_categorical_accuracy | hinge |
-|  | categorical_hinge |
-|  | logcosh |
-|  | categorical_crossentropy |
-|  | sparse_categorical_crossentropy |
-|  | binary_crossentropy |
-|  | kullback_leibler_divergence |
-|  | poisson |
-|  | cosine_proximity |
 
 <br>
 
