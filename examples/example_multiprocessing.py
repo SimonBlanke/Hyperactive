@@ -42,7 +42,7 @@ search_config = {
     },
 }
 
-Optimizer = RandomSearchOptimizer(search_config, n_iter=10, n_jobs=-1, verbosity=0)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=10000, n_jobs=-1, verbosity=0)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)

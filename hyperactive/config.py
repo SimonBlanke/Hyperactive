@@ -94,17 +94,13 @@ class Config:
     def _set_random_seed(self, thread=0):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
         if self.random_state:
-            # print("self.random_state", self.random_state)
             rand = int(self.random_state)
-            random.seed(rand + thread)
-            np.random.seed(rand + thread)
-            scipy.random.seed(rand + thread)
-
         else:
             rand = 0
-            random.seed(rand + thread)
-            np.random.seed(rand + thread)
-            scipy.random.seed(rand + thread)
+
+        random.seed(rand + thread)
+        np.random.seed(rand + thread)
+        scipy.random.seed(rand + thread)
 
     def _get_sklearn_model(self, nth_process):
         """Gets a model_key from the model_list for each thread"""
@@ -131,8 +127,7 @@ class Config:
         if self.model_type == "keras" or self.model_type == "torch":
             return show
 
-        if self.verbosity > 0:
-            show = True
+        show = True
 
         return show
 
