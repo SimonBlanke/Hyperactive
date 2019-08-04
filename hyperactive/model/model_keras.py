@@ -26,6 +26,9 @@ class KerasModel(Model):
 
         self._get_search_config_onlyLayers()
 
+        module = import_module("sklearn.metrics")
+        self.metric_ = getattr(module, self.metric)
+
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
         if list(self.search_config.keys())[0] == "keras.compile.0":
@@ -105,7 +108,7 @@ class KerasModel(Model):
 
         return fit_para_dict
 
-    def _cross_val_keras(self, model, X, y, metric):
+    def _cross_val_keras(self, model, X, y, fit_para_dict):
         scores = []
 
         kf = KFold(n_splits=self.cv, shuffle=True)
@@ -113,9 +116,11 @@ class KerasModel(Model):
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
 
-            model.fit(X_train, y_train)
+            fit_para_dict["x"] = X_train
+            fit_para_dict["y"] = y_train
+            model.fit(**fit_para_dict)
             y_pred = model.predict(X_test)
-            score = metric(y_test, y_pred)
+            score = self.metric_(y_test, y_pred)
             scores.append(score)
 
         return np.array(scores).mean()
@@ -137,23 +142,21 @@ class KerasModel(Model):
         del layers_para_dict["keras.fit.0"]
 
         # compile_para_dict["metrics"] = self.metric_keras
-        fit_para_dict["x"] = X
-        fit_para_dict["y"] = y
 
         model.compile(**compile_para_dict)
 
-        module = import_module("sklearn.metrics")
-        metric = getattr(module, self.metric)
-
         if self.cv > 1:
-            score = self._cross_val_keras(model, X, y, metric)
+            score = self._cross_val_keras(model, X, y, fit_para_dict)
         elif self.cv < 1:
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, train_size=self.cv
             )
-            model.fit(X_train, y_train)
+
+            fit_para_dict["x"] = X_train
+            fit_para_dict["y"] = y_train
+            model.fit(**fit_para_dict)
             y_pred = model.predict(X_test)
-            score = metric(y_test, y_pred)
+            score = self.metric_(y_test, y_pred)
         else:
             score = 0
             model.fit(X, y)

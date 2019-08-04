@@ -38,6 +38,7 @@ class Config:
         self._n_process_range = range(0, int(self.n_jobs))
 
         self._get_model_str()
+        self._set_default_metric()
 
     def _process_pos_args(self, args, kwargs):
         pos_args_attr = [None, None]
@@ -68,6 +69,16 @@ class Config:
             same = True
 
         return same
+
+    def _set_default_metric(self):
+        default_metrics = {
+            "sklearn": "accuracy_score",
+            "xgboost": "accuracy_score",
+            "lightgbm": "accuracy_score",
+            "keras": "mean_squared_error",
+        }
+
+        self.metric = default_metrics[self.model_type]
 
     def _get_model_str(self):
         model_keys = list(self.search_config.keys())
