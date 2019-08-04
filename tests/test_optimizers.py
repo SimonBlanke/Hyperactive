@@ -10,13 +10,12 @@ y = data.target
 
 n_iter_0 = 100
 random_state = 0
-cv = 2
 n_jobs = 1
 
 search_config = {
     "sklearn.tree.DecisionTreeClassifier": {
         "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 21),
+        "max_depth": range(1, 30),
         "min_samples_split": range(2, 21),
         "min_samples_leaf": range(1, 21),
     }
@@ -33,7 +32,6 @@ def test_HillClimbingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -48,9 +46,9 @@ def test_StochasticHillClimbingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
+        memory=False,
     )
     opt.fit(X, y)
 
@@ -62,10 +60,9 @@ def test_TabuOptimizer():
         search_config,
         100,
         random_state=random_state,
-        verbosity=0,
-        cv=cv,
-        n_jobs=n_jobs,
+        n_jobs=1,
         warm_start=warm_start,
+        memory=False,
     )
     opt.fit(X, y)
 
@@ -78,7 +75,6 @@ def test_RandomSearchOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -93,7 +89,6 @@ def test_RandomRestartHillClimbingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -108,7 +103,6 @@ def test_RandomAnnealingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -123,7 +117,6 @@ def test_SimulatedAnnealingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -138,7 +131,6 @@ def test_StochasticTunnelingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -153,7 +145,6 @@ def test_ParallelTemperingOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -168,7 +159,6 @@ def test_ParticleSwarmOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -183,7 +173,6 @@ def test_EvolutionStrategyOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )
@@ -198,7 +187,6 @@ def test_BayesianOptimizer():
         100,
         random_state=random_state,
         verbosity=0,
-        cv=cv,
         n_jobs=n_jobs,
         warm_start=warm_start,
     )

@@ -16,7 +16,7 @@ class TabuOptimizer(BaseOptimizer):
         for i in range(3):
             _p_.tabu_memory_[i].append(_cand_.pos_best)
 
-            if len(_p_.tabu_memory_[i]) > self._arg_.tabu_memory[0]:
+            if len(_p_.tabu_memory_[i]) > self._arg_.tabu_memory[i]:
                 del _p_.tabu_memory_[i][0]
 
     def _iterate(self, i, _cand_, _p_, X, y):

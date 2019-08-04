@@ -128,7 +128,12 @@ def test_scatter_init_and_warm_start():
     from hyperactive import RandomSearchOptimizer
 
     opt = RandomSearchOptimizer(
-        search_config, 1, n_jobs=2, warm_start=warm_start, scatter_init=10
+        search_config, 1, warm_start=warm_start, scatter_init=10
+    )
+    opt.fit(X, y)
+
+    opt = RandomSearchOptimizer(
+        search_config, 2, warm_start=warm_start, scatter_init=10
     )
     opt.fit(X, y)
 

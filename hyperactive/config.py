@@ -31,14 +31,15 @@ class Config:
         kwargs_base = merge_dicts(kwargs_base, kwargs)
         self._set_general_args(kwargs_base)
 
+        self._get_model_str()
+        if "metric" not in kwargs:
+            self._set_default_metric()
+
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
 
         self.set_n_jobs()
         self._n_process_range = range(0, int(self.n_jobs))
-
-        self._get_model_str()
-        self._set_default_metric()
 
     def _process_pos_args(self, args, kwargs):
         pos_args_attr = [None, None]
@@ -90,13 +91,11 @@ class Config:
 
         if self._is_all_same(module_str_list):
             self.model_type = model_keys[0].split(".")[0]
-        else:
-            raise Exception("\n Model strings in search_config keys are inconsistent")
 
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {
-            "iterable": range(self.n_iter),
+            "total": self.n_iter,
             "desc": "Search " + str(_cand_.nth_process),
             "position": _cand_.nth_process,
             "leave": False,
