@@ -109,6 +109,7 @@ Hyperactive
           <ul>
               <li>Scikit-learn</li>
               <li>XGBoost</li>
+              <li>LightGBM</li>
           </ul>
         <a>Deep Learning:</a>
           <ul>
@@ -122,7 +123,6 @@ Hyperactive
     </tr>
   </tbody>
 </table>
-
 
 <br>
 
