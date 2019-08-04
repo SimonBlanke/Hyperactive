@@ -146,7 +146,7 @@ class Config:
         """Checks if data is pandas Dataframe and converts to numpy array if necessary"""
         if isinstance(X, pd.core.frame.DataFrame):
             X = X.values
-        if isinstance(X, pd.core.frame.DataFrame):
+        if isinstance(y, pd.core.frame.DataFrame):
             y = y.values
 
         return X, y

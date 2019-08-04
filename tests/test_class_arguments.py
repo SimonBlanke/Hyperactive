@@ -8,10 +8,6 @@ data = load_iris()
 X = data.data
 y = data.target
 
-n_iter_0 = 0
-n_iter_1 = 10
-random_state = 0
-cv = 2
 
 search_config = {
     "sklearn.tree.DecisionTreeClassifier": {
@@ -41,82 +37,74 @@ def test_multiple_models_one_job():
 
     from hyperactive import HillClimbingOptimizer
 
-    opt = HillClimbingOptimizer(search_config_1, n_iter_0, verbosity=0, cv=cv, n_jobs=1)
+    opt = HillClimbingOptimizer(search_config_1, 1, n_jobs=1)
     opt.fit(X, y)
 
 
-def test_n_jobs():
+def test_n_jobs_1():
     from hyperactive import HillClimbingOptimizer
 
-    opt0 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=1)
-    opt0.fit(X, y)
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1)
+    opt.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=2)
-    opt1.fit(X, y)
 
-    opt2 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv, n_jobs=-1)
-    opt2.fit(X, y)
+def test_n_jobs_2():
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=2)
+    opt.fit(X, y)
+
+
+def test_n_jobs_4():
+    from hyperactive import HillClimbingOptimizer
+
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=4)
+    opt.fit(X, y)
 
 
 def test_positional_args():
     from hyperactive import HillClimbingOptimizer
 
-    opt0 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=0, cv=cv, random_state=False
-    )
+    opt0 = HillClimbingOptimizer(search_config, 1, random_state=False)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(
-        search_config, n_iter=n_iter_0, verbosity=1, cv=cv, random_state=1
-    )
+    opt1 = HillClimbingOptimizer(search_config, n_iter=1, random_state=1)
     opt1.fit(X, y)
 
-    opt2 = HillClimbingOptimizer(
-        search_config=search_config, n_iter=n_iter_0, verbosity=1, cv=cv, random_state=1
-    )
+    opt2 = HillClimbingOptimizer(search_config=search_config, n_iter=1, random_state=1)
     opt2.fit(X, y)
 
 
 def test_random_state():
     from hyperactive import HillClimbingOptimizer
 
-    opt0 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=0, cv=cv, random_state=False
-    )
+    opt0 = HillClimbingOptimizer(search_config, 1, random_state=False)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=0, cv=cv, random_state=0
-    )
+    opt1 = HillClimbingOptimizer(search_config, 1, random_state=0)
     opt1.fit(X, y)
 
-    opt2 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=0, cv=cv, random_state=1
-    )
+    opt2 = HillClimbingOptimizer(search_config, 1, random_state=1)
     opt2.fit(X, y)
 
 
 def test_memory():
     from hyperactive import HillClimbingOptimizer
 
-    opt0 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=0, cv=cv, memory=True
-    )
+    opt0 = HillClimbingOptimizer(search_config, 1, memory=True)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(
-        search_config, n_iter_0, verbosity=1, cv=cv, memory=False
-    )
+    opt1 = HillClimbingOptimizer(search_config, 1, memory=False)
     opt1.fit(X, y)
 
 
 def test_verbosity():
     from hyperactive import HillClimbingOptimizer
 
-    opt0 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=0, cv=cv)
+    opt0 = HillClimbingOptimizer(search_config, 1, verbosity=0)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(search_config, n_iter_0, verbosity=1, cv=cv)
+    opt1 = HillClimbingOptimizer(search_config, 1, verbosity=1)
     opt1.fit(X, y)
 
 
@@ -124,7 +112,7 @@ def test_metrics():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(
-        search_config, n_iter_0, metric="mean_absolute_error", n_jobs=1
+        search_config, 1, metric="mean_absolute_error", n_jobs=1
     )
     opt.fit(X, y)
 
@@ -132,7 +120,7 @@ def test_metrics():
 def test_scatter_init():
     from hyperactive import HillClimbingOptimizer
 
-    opt = HillClimbingOptimizer(search_config, n_iter_1, n_jobs=1, scatter_init=10)
+    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1, scatter_init=10)
     opt.fit(X, y)
 
 
@@ -140,7 +128,7 @@ def test_scatter_init_and_warm_start():
     from hyperactive import HillClimbingOptimizer
 
     opt = HillClimbingOptimizer(
-        search_config, n_iter_1, n_jobs=2, warm_start=warm_start, scatter_init=10
+        search_config, 1, n_jobs=2, warm_start=warm_start, scatter_init=10
     )
     opt.fit(X, y)
 

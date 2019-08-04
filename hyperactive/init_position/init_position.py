@@ -31,6 +31,7 @@ class InitSearchPosition:
         return pos
 
     def _warm_start_scatter_init(self, nth_process, X, y):
+
         if self.n_warm_start_keys > nth_process:
             pos = self._create_warm_start(nth_process)
         else:
