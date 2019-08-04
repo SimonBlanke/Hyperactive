@@ -35,120 +35,120 @@ warm_start_1 = {
 
 def test_multiple_models_one_job():
 
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config_1, 1, n_jobs=1)
+    opt = RandomSearchOptimizer(search_config_1, 1, n_jobs=1)
     opt.fit(X, y)
 
 
 def test_n_jobs_1():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=1)
     opt.fit(X, y)
 
 
 def test_n_jobs_2():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=2)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=2)
     opt.fit(X, y)
 
 
 def test_n_jobs_4():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=4)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=4)
     opt.fit(X, y)
 
 
 def test_positional_args():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt0 = HillClimbingOptimizer(search_config, 1, random_state=False)
+    opt0 = RandomSearchOptimizer(search_config, 1, random_state=False)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(search_config, n_iter=1, random_state=1)
+    opt1 = RandomSearchOptimizer(search_config, n_iter=1, random_state=1)
     opt1.fit(X, y)
 
-    opt2 = HillClimbingOptimizer(search_config=search_config, n_iter=1, random_state=1)
+    opt2 = RandomSearchOptimizer(search_config=search_config, n_iter=1, random_state=1)
     opt2.fit(X, y)
 
 
 def test_random_state():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt0 = HillClimbingOptimizer(search_config, 1, random_state=False)
+    opt0 = RandomSearchOptimizer(search_config, 1, random_state=False)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(search_config, 1, random_state=0)
+    opt1 = RandomSearchOptimizer(search_config, 1, random_state=0)
     opt1.fit(X, y)
 
-    opt2 = HillClimbingOptimizer(search_config, 1, random_state=1)
+    opt2 = RandomSearchOptimizer(search_config, 1, random_state=1)
     opt2.fit(X, y)
 
 
 def test_memory():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt0 = HillClimbingOptimizer(search_config, 1, memory=True)
+    opt0 = RandomSearchOptimizer(search_config, 1, memory=True)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(search_config, 1, memory=False)
+    opt1 = RandomSearchOptimizer(search_config, 1, memory=False)
     opt1.fit(X, y)
 
 
 def test_verbosity():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt0 = HillClimbingOptimizer(search_config, 1, verbosity=0)
+    opt0 = RandomSearchOptimizer(search_config, 1, verbosity=0)
     opt0.fit(X, y)
 
-    opt1 = HillClimbingOptimizer(search_config, 1, verbosity=1)
+    opt1 = RandomSearchOptimizer(search_config, 1, verbosity=1)
     opt1.fit(X, y)
 
 
 def test_metrics():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(
+    opt = RandomSearchOptimizer(
         search_config, 1, metric="mean_absolute_error", n_jobs=1
     )
     opt.fit(X, y)
 
 
 def test_scatter_init():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1, scatter_init=10)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=1, scatter_init=10)
     opt.fit(X, y)
 
 
 def test_scatter_init_and_warm_start():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(
+    opt = RandomSearchOptimizer(
         search_config, 1, n_jobs=2, warm_start=warm_start, scatter_init=10
     )
     opt.fit(X, y)
 
 
 def test_warm_starts():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1, warm_start=warm_start_1)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=1, warm_start=warm_start_1)
     opt.fit(X, y)
 
 
 def test_warm_start_multiple_jobs():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=4, warm_start=warm_start)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=4, warm_start=warm_start)
     opt.fit(X, y)
 
 
 def test_warm_start():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import RandomSearchOptimizer
 
-    opt = HillClimbingOptimizer(search_config, 1, n_jobs=1, warm_start=warm_start)
+    opt = RandomSearchOptimizer(search_config, 1, n_jobs=1, warm_start=warm_start)
     opt.fit(X, y)
