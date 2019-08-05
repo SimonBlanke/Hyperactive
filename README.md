@@ -72,6 +72,10 @@ Hyperactive
         <b>Supported Packages</b>
         <img src="images/blue.jpg"/>
       </td>
+      <td>
+        <b>Advanced Features</b>
+        <img src="images/blue.jpg"/>
+      </td>
     </tr>
     <tr/>
     <tr valign="top">
@@ -118,6 +122,25 @@ Hyperactive
         <a>Distribution:</a>
           <ul>
               <li>Multiprocessing</li>
+          </ul>
+      </td>
+      <td>
+        <a>Position initialization:</a>
+          <ul>
+              <li>Scatter initialization</li>
+              <li>Warm-start</li>
+          </ul>
+        <a>Resources allocation:</a>
+          <ul>
+            <li>Memory</li>
+          </ul>
+        <a>Weight initialization:</a>
+          <ul>
+            <li>Transfer-learning</li>
+          </ul>
+        <a>Seach space manipulation:</a>
+          <ul>
+            <li>Repulsor (coming soon)</li>
           </ul>
       </td>
     </tr>
