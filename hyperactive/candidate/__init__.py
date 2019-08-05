@@ -6,6 +6,7 @@
 from .candidate_sklearn import ScikitLearnCandidate
 from .candidate_xgboost import XGBoostCandidate
 from .candidate_lightgbm import LightGbmCandidate
+from .candidate_catboost import CatBoostCandidate
 from .candidate_keras import KerasCandidate
 
 
@@ -13,5 +14,6 @@ __all__ = [
     "ScikitLearnCandidate",
     "XGBoostCandidate",
     "LightGbmCandidate",
+    "CatBoostCandidate",
     "KerasCandidate",
 ]

@@ -76,6 +76,7 @@ class Config:
             "sklearn": "accuracy_score",
             "xgboost": "accuracy_score",
             "lightgbm": "accuracy_score",
+            "catboost": "accuracy_score",
             "keras": "mean_squared_error",
         }
 

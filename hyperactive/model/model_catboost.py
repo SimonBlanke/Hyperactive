@@ -5,10 +5,10 @@
 import numpy as np
 from sklearn.model_selection import KFold
 
-from .model_sklearn import ScikitLearnModel
+from .model_light_gbm import LightGbmModel
 
 
-class CatBoostModel(ScikitLearnModel):
+class CatBoostModel(LightGbmModel):
     def __init__(self, _config_, search_config_key):
         super().__init__(_config_, search_config_key)
 
