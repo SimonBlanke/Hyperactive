@@ -9,6 +9,7 @@ pytest test_optimizers.py -p no:warnings
 pytest test_sklearn.py -p no:warnings
 pytest test_xgboost.py -p no:warnings
 pytest test_lightgbm.py -p no:warnings
+pytest test_catboost.py -p no:warnings
 pytest test_keras_mlp.py -p no:warnings
 pytest _test_keras_cnn.py -p no:warnings
 
