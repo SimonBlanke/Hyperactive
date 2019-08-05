@@ -5,10 +5,10 @@
 
 import tqdm
 
-from .candidate import ScikitLearnCandidate
-from .candidate import XGBoostCandidate
-from .candidate import LightGbmCandidate
-from .candidate import KerasCandidate
+from ..candidate import ScikitLearnCandidate
+from ..candidate import XGBoostCandidate
+from ..candidate import LightGbmCandidate
+from ..candidate import KerasCandidate
 
 
 def initialize_search(_config_, nth_process, X, y):

@@ -9,12 +9,10 @@ import multiprocessing
 from importlib import import_module
 from functools import partial
 
-from .init_search import initialize_search
-from .finish_search import finish_search_
 from .base_positioner import BasePositioner
 from .config import Config
 from .opt_args import Arguments
-from .util import sort_for_best
+from .util import initialize_search, finish_search_, sort_for_best
 
 
 class BaseOptimizer:
