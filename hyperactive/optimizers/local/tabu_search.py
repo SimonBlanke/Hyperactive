@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import random
 
 from ...base_optimizer import BaseOptimizer
 from ...base_positioner import BasePositioner
@@ -56,5 +57,8 @@ class TabuPositioner(BasePositioner):
             for i in range(3):
                 if not any((pos_new == pos).all() for pos in self.tabu_memory_[i]):
                     in_tabu_mem = False
+                else:
+                    if random.uniform(0, 1) < 0.1:
+                        in_tabu_mem = False
 
         return pos_new
