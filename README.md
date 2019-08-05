@@ -55,10 +55,7 @@ Hyperactive
 
 - Optimize hyperparameters of machine- or deep-learning models, using a simple API.
 - Choose from a variety of different optimization techniques to improve your model.
-- Never lose progress of previous optimizations: Just pass one or more models as start points and continue optimizing.
-- Use transfer learning during the optimization process to build a more accurate model, while saving training and optimization time.
-- Utilize multiprocessing for machine learning or your gpu for deep learning models.
-
+- Utilize advanced features to improve the performance of all optimization techniques.
 
 
 <table>
