@@ -53,8 +53,8 @@ Hyperactive
 ## Overview
 
 - Optimize hyperparameters of machine- or deep-learning models, using a simple API.
-- Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers) to improve your model.
-- Utilize [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive) to improve the performance of all optimization techniques.
+- Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques) to improve your model.
+- Utilize [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) to improve the performance of all optimization techniques.
 
 
 <table>
