@@ -22,7 +22,7 @@ from .optimizers.population import EvolutionStrategyOptimizer
 
 from .optimizers.sequence_model import BayesianOptimizer
 
-from .chimaera import Chimaera
+from .hydra import Hydra
 
 
 __all__ = [
@@ -38,5 +38,5 @@ __all__ = [
     "ParticleSwarmOptimizer",
     "EvolutionStrategyOptimizer",
     "BayesianOptimizer",
-    "Chimaera",
+    "Hydra",
 ]
