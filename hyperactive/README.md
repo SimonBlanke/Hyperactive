@@ -1,17 +1,17 @@
-## Advanced Features
+# Advanced Features
 
 The features listed below can be activated during the instantiation of the optimizer ([see API](https://github.com/SimonBlanke/hyperactive#hyperactive-api)) and works with every optimizer in the hyperactive package.
 
 
-#### [Memory](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_memory.py)
+### [Memory](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_memory.py)
 After the evaluation of a model the position (in the hyperparameter search dictionary) and the cross-validation score are written to a dictionary. If the optimizer tries to evaluate this position again it can quickly lookup if a score for this position is present and use it instead of going through the extensive training and prediction process.
 
 
-#### [Scatter-Initialization](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_scatter_init.py)
+### [Scatter-Initialization](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_scatter_init.py)
 This technique was inspired by the 'Hyperband Optimization' and aims to find a good initial position for the optimization. It does so by evaluating n random positions with a training subset of 1/n the size of the original dataset. The position that achieves the best score is used as the starting position for the optimization.
 
 
-#### [Multiprocessing](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_multiprocessing.py)
+### [Multiprocessing](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_multiprocessing.py)
 The multiprocessing in hyperactive works by creating additional searches, that run in parallel without any shared memory. This provides the possibility of hyperparameter-tuning of different models at the same time. If one single model should be tuned as fast as possible n_jobs in the optimizer should be set to '1', while n_jobs (of the model) in the search_config should be set to '-1'.
 
 <details><summary>Two searches with eight cpu-cores:</summary>
@@ -151,7 +151,7 @@ Optimizer = RandomSearchOptimizer(search_config, n_iter=300, n_jobs=-1, verbosit
 </details>
 
 
-#### [Transfer-Learning](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_transfer_learning.py)
+### [Transfer-Learning](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_transfer_learning.py)
 In the current implementation transfer-learning works by using a predefined model (with optional pretrained weights) provided by the keras package. The import path can be inserted as a layer (with its parameters in an sub-dictionary), like in a regular search dictionary. The following snippet provides an example:
 
 <details><summary>Transfer-learning example:</summary>
@@ -198,7 +198,7 @@ Optimizer = SimulatedAnnealingOptimizer(
 </details>
 
 
-#### [Warm-Start](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_warm_start_sklearn.py)
+### [Warm-Start](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_warm_start_sklearn.py)
 
 When a search is finished the warm-start-dictionary for the best position in the hyperparameter search space (and its metric) is printed in the command line (at verbosity=1). If multiple searches ran in parallel the warm-start-dictionaries are sorted by the best metric in decreasing order. If the start position in the warm-start-dictionary is not within the search space defined in the search_config an error will occure.
 
