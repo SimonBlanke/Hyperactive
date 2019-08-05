@@ -13,10 +13,10 @@ search_config = {
 }
 
 
-def test_import_Chimaera():
-    from hyperactive import Chimaera
+def test_import_Hydra():
+    from hyperactive import Hydra
 
-    _ = Chimaera()
+    _ = Hydra()
 
 
 def test_import_HillClimbingOptimizer():

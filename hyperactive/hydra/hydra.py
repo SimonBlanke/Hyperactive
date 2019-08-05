@@ -3,6 +3,6 @@
 # License: MIT License
 
 
-class Chimaera:
+class Hydra:
     def __init__(self):
         pass
