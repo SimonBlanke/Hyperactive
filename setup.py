@@ -36,6 +36,7 @@ setup(
         "scikit-learn>=0.18",
         "xgboost",
         "lightgbm",
+        "catboost",
         "tensorflow",
         "keras",
         "meta-learn",

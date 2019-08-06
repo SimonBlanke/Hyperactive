@@ -16,6 +16,7 @@ install:
   - pip install scikit-learn
   - pip install xgboost
   - pip install lightgbm
+  - pip install catboost
   - pip install tensorflow
   - pip install keras
   - pip install pytest
