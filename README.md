@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="https://github.com/SimonBlanke/Hyperactive/blob/master/images/Hyperactive.png" width="550"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="https://github.com/SimonBlanke/Hyperactive/blob/master/images/Hyperactive.png" width="650"></a>
 </h1>
 
 <h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
