@@ -5,15 +5,15 @@
 <h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
 <p align="center">
-  
+
   <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
     <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=for-the-badge&logo=appveyor">
   </a>
- 
+
   <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
     <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=for-the-badge&logo=codecov">
   </a>
- 
+
   <a href="https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard">
     <img src="https://img.shields.io/codacy/grade/acb6989093c44fb08cc3be1dd2df1be7?style=for-the-badge&logo=codacy">
   </a>
@@ -25,7 +25,7 @@
   <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
     <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=for-the-badge">
   </a>
-  
+
 </p>
 
 <br>
@@ -164,7 +164,7 @@ Hyperactive is developed and tested in python 3:
 
 Hyperactive is available on PyPi:
 
-![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e) 
+![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e)
 ![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge)
 
 ```console
@@ -517,4 +517,3 @@ export(self, filename)
 ## License
 
 ![https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)
-

@@ -1,8 +1,10 @@
-*_.sh
+*___.sh
 *___.py
 *.pyc
 *.xml
 *.iml
+*.pkl
+*.npy
 *.pypirc
 **/__pycache__/
 **/build/
