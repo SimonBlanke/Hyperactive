@@ -9,10 +9,10 @@ from sklearn.model_selection import train_test_split
 
 
 # from .metrics import dl_scores, dl_losses
-from .model import Model
+from .model import DeepLearningModel
 
 
-class KerasModel(Model):
+class KerasModel(DeepLearningModel):
     def __init__(self, _config_):
         super().__init__(_config_)
         self.search_config = _config_.search_config
@@ -131,17 +131,12 @@ class KerasModel(Model):
 
         if list(layers_para_dict.keys())[0] == "keras.compile.0":
             compile_para_dict = self._get_compile_parameter(layers_para_dict)
-        # else:
-        #     compile_para_dict = {"loss": "binary_crossentropy", "optimizer": "SGD"}
+
         if list(layers_para_dict.keys())[1] == "keras.fit.0":
             fit_para_dict = self._get_fit_parameter(layers_para_dict)
-        # else:
-        #     fit_para_dict = {"epochs": 10, "batch_size": 100}
 
         del layers_para_dict["keras.compile.0"]
         del layers_para_dict["keras.fit.0"]
-
-        # compile_para_dict["metrics"] = self.metric_keras
 
         model.compile(**compile_para_dict)
 

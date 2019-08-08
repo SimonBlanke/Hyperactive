@@ -40,6 +40,5 @@ setup(
         "catboost",
         "tensorflow",
         "keras",
-        "meta-learn",
     ],
 )

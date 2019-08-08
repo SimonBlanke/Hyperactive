@@ -9,6 +9,7 @@ from ..candidate import ScikitLearnCandidate
 from ..candidate import XGBoostCandidate
 from ..candidate import LightGbmCandidate
 from ..candidate import KerasCandidate
+from ..candidate import PytorchCandidate
 
 
 def initialize_search(_config_, nth_process, X, y):
@@ -32,8 +33,8 @@ def _init_candidate(_config_, nth_process):
         _cand_ = LightGbmCandidate(nth_process, _config_)
     elif _config_.model_type == "keras":
         _cand_ = KerasCandidate(nth_process, _config_)
-    # elif _config_.model_type == "torch":
-    #     _cand_ = KerasCandidate(nth_process, _config_)
+    elif _config_.model_type == "torch":
+        _cand_ = PytorchCandidate(nth_process, _config_)
 
     return _cand_
 

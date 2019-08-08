@@ -22,7 +22,9 @@ from .optimizers.population import EvolutionStrategyOptimizer
 
 from .optimizers.sequence_model import BayesianOptimizer
 
-from .hydra import Hydra
+from .sub_packages import Hydra
+from .sub_packages import MetaLearn
+from .sub_packages import Iota
 
 
 __all__ = [
@@ -39,4 +41,6 @@ __all__ = [
     "EvolutionStrategyOptimizer",
     "BayesianOptimizer",
     "Hydra",
+    "MetaLearn",
+    "Iota",
 ]

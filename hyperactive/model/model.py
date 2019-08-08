@@ -56,3 +56,13 @@ class Model:
             return score, model
         elif self.metric_type == "loss":
             return -score, model
+
+
+class MachineLearningModel(Model):
+    def __init__(self, _config_):
+        super().__init__(_config_)
+
+
+class DeepLearningModel(Model):
+    def __init__(self, _config_):
+        super().__init__(_config_)

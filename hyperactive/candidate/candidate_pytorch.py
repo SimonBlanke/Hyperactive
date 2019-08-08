@@ -3,18 +3,18 @@
 # License: MIT License
 
 from .candidate import Candidate
-from ..model import ChainerModel
+from ..model import PytorchModel
 from ..init_position import InitDLSearchPosition
 
 
-class ChainerCandidate(Candidate):
+class PytorchCandidate(Candidate):
     def __init__(self, nth_process, _config_):
         super().__init__(nth_process, _config_)
 
         self.nth_process = nth_process
 
-        # self._space_.create_kerasSearchSpace()
-        self._model_ = ChainerModel(_config_)
+        self._space_.create_kerasSearchSpace()
+        self._model_ = PytorchModel(_config_)
 
         self._init_ = InitDLSearchPosition(
             self._space_, self._model_, _config_.warm_start, _config_.scatter_init

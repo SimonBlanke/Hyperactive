@@ -78,6 +78,7 @@ class Config:
             "lightgbm": "accuracy_score",
             "catboost": "accuracy_score",
             "keras": "mean_squared_error",
+            "torch": "mean_squared_error",
         }
 
         self.metric = default_metrics[self.model_type]

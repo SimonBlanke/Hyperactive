@@ -8,6 +8,7 @@ from .candidate_xgboost import XGBoostCandidate
 from .candidate_lightgbm import LightGbmCandidate
 from .candidate_catboost import CatBoostCandidate
 from .candidate_keras import KerasCandidate
+from .candidate_pytorch import PytorchCandidate
 
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "LightGbmCandidate",
     "CatBoostCandidate",
     "KerasCandidate",
+    "PytorchCandidate",
 ]

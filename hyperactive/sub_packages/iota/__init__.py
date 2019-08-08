@@ -3,5 +3,6 @@
 # License: MIT License
 
 
-__version__ = "0.1.0"
-__license__ = "MIT"
+from .iota import Iota
+
+__all__ = ["Iota"]
