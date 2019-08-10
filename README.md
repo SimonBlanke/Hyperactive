@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo.png" width="950"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo.png" width="1200"></a>
 </h1>
 
 <br>
