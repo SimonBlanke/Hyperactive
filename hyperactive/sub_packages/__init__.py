@@ -5,6 +5,6 @@
 from .hydra import Hydra
 from .meta_learn import MetaLearn
 from .iota import Iota
+from .insight import Insight
 
-
-__all__ = ["Hydra", "MetaLearn", "Iota"]
+__all__ = ["Hydra", "MetaLearn", "Iota", "Insight"]
