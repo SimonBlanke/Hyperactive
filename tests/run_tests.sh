@@ -14,3 +14,5 @@ pytest test_keras_mlp.py -p no:warnings
 pytest _test_keras_cnn.py -p no:warnings
 
 pytest test_performance.py -p no:warnings
+
+pytest test_meta_learn.py -p no:warnings
