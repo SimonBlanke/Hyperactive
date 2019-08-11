@@ -31,11 +31,9 @@ class KerasModel(DeepLearningModel):
 
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
-        if list(self.search_config.keys())[0] == "keras.compile.0":
-            del self.search_config_onlyLayers["keras.compile.0"]
 
-            if list(self.search_config.keys())[1] == "keras.fit.0":
-                del self.search_config_onlyLayers["keras.fit.0"]
+        del self.search_config_onlyLayers["keras.compile.0"]
+        del self.search_config_onlyLayers["keras.fit.0"]
 
         # elif list(self.search_config.keys())[0] == "keras.fit.0":
         #     del self.search_config_onlyLayers["keras.fit.0"]
@@ -129,11 +127,8 @@ class KerasModel(DeepLearningModel):
         layers_para_dict = self._trafo_hyperpara_dict(keras_para_dict)
         model = self._create_model(layers_para_dict)
 
-        if list(layers_para_dict.keys())[0] == "keras.compile.0":
-            compile_para_dict = self._get_compile_parameter(layers_para_dict)
-
-        if list(layers_para_dict.keys())[1] == "keras.fit.0":
-            fit_para_dict = self._get_fit_parameter(layers_para_dict)
+        compile_para_dict = self._get_compile_parameter(layers_para_dict)
+        fit_para_dict = self._get_fit_parameter(layers_para_dict)
 
         del layers_para_dict["keras.compile.0"]
         del layers_para_dict["keras.fit.0"]
