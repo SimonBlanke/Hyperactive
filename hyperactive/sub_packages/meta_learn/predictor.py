@@ -19,7 +19,7 @@ class Predictor:
         self.model_list = list(self.search_config.keys())
         self.model_name = self.model_list[0]
 
-        # self._get_hyperpara()
+        self._get_hyperpara()
 
         self.meta_regressor = None
 
@@ -40,7 +40,7 @@ class Predictor:
 
     def _get_meta_regressor_path(self):
         model_key = self.search_config.keys()
-        path = self.meta_regressor_path + str(*model_key) + ":meta_regressor.pkl"
+        path = self.meta_regressor_path + str(*model_key) + "_metaregressor.pkl"
         print("Load meta regressor from" + path)
 
         return path

@@ -25,7 +25,9 @@ class MetaLearn:
 
         self.insight = Insight()
 
-        self.memory = Collector(self.search_config, meta_data_path=meta_data_path, cv=3)
+        self.collector = Collector(
+            self.search_config, meta_data_path=meta_data_path, cv=3
+        )
         self.meta_regressor = MetaRegressor(meta_learn_path)
         self.recognizer = Recognizer(search_config)
         self.predictor = Predictor(search_config, meta_regressor_path)
@@ -34,12 +36,12 @@ class MetaLearn:
 
     def collect(self, X, y):
         self.dataset_str = self.insight.recognize_data(X, y)
-        self.memory.extract(X, y, self.dataset_str)
+        self.collector.extract(X, y, self.dataset_str)
 
     def train(self):
         self.meta_regressor.train_meta_regressor(self.model_list, self.dataset_str)
 
-    def search(self, dataset_config):
-        X_test = self.recognizer.get_test_metadata(dataset_config)
+    def search(self, X, y):
+        X_test = self.recognizer.get_test_metadata([X, y], self.dataset_str)
 
         self.best_hyperpara_dict, self.best_score = self.predictor.search(X_test)

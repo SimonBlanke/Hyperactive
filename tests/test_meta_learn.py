@@ -19,3 +19,4 @@ def test_metalearn():
     ml = MetaLearn(search_config)
     ml.collect(X, y)
     ml.train()
+    ml.search(X, y)

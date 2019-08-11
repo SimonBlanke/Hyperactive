@@ -31,7 +31,7 @@ class Recognizer:
 
         self.hyperpara_dict = None
 
-        self.memory = Collector(search_config)
+        self.collector = Collector(search_config)
 
         self.model_list = list(self.search_config.keys())
 
@@ -54,13 +54,10 @@ class Recognizer:
 
             return hyperpara_dict, best_score
 
-    def get_test_metadata(self, data_config):
-
-        for data_name, data_train in data_config.items():
-
-            features_from_dataset = self.memory.dataCollector_dataset.collect(
-                self.model_name, data_name, data_train
-            )
+    def get_test_metadata(self, data_train, dataset_str):
+        features_from_dataset = self.collector.dataCollector_dataset.collect(
+            self.model_name, dataset_str, data_train
+        )
         self.hyperpara_dict = self._get_hyperpara(self.model_name)
 
         model = self._import_model(self.model_name)
@@ -68,7 +65,7 @@ class Recognizer:
 
         features_from_model = self._features_from_model()
 
-        X_test = self.memory._merge_data(features_from_dataset, features_from_model)
+        X_test = self.collector._merge_data(features_from_dataset, features_from_model)
 
         print("\nblablabla")
         return X_test
@@ -117,10 +114,10 @@ class Recognizer:
 
         features_from_model = pd.DataFrame(meta_reg_input)
 
-        default_hyperpara_df = self.memory.dataCollector_model._get_default_hyperpara(
+        default_hyperpara_df = self.collector.dataCollector_model._get_default_hyperpara(
             self.model, len(features_from_model)
         )
-        features_from_model = self.memory.dataCollector_model._merge_dict(
+        features_from_model = self.collector.dataCollector_model._merge_dict(
             features_from_model, default_hyperpara_df
         )
         features_from_model = features_from_model.reindex_axis(
