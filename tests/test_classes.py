@@ -13,6 +13,18 @@ search_config = {
 }
 
 
+def test_import_Iota():
+    from hyperactive import Iota
+
+    _ = Iota()
+
+
+def test_import_Insight():
+    from hyperactive import Insight
+
+    _ = Insight()
+
+
 def test_import_Hydra():
     from hyperactive import Hydra
 
