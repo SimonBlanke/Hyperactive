@@ -8,6 +8,7 @@ import tqdm
 from ..candidate import ScikitLearnCandidate
 from ..candidate import XGBoostCandidate
 from ..candidate import LightGbmCandidate
+from ..candidate import CatBoostCandidate
 from ..candidate import KerasCandidate
 from ..candidate import PytorchCandidate
 
@@ -30,7 +31,7 @@ def _init_candidate(_config_, nth_process):
     elif _config_.model_type == "lightgbm":
         _cand_ = LightGbmCandidate(nth_process, _config_)
     elif _config_.model_type == "catboost":
-        _cand_ = LightGbmCandidate(nth_process, _config_)
+        _cand_ = CatBoostCandidate(nth_process, _config_)
     elif _config_.model_type == "keras":
         _cand_ = KerasCandidate(nth_process, _config_)
     elif _config_.model_type == "torch":

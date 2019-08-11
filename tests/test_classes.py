@@ -3,101 +3,41 @@
 # License: MIT License
 
 
-search_config = {
-    "sklearn.tree.DecisionTreeClassifier": {
-        "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 21),
-        "min_samples_split": range(2, 21),
-        "min_samples_leaf": range(1, 21),
-    }
-}
+search_config = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": range(1, 21)}}
 
 
-def test_import_Iota():
-    from hyperactive import Iota
+def test_import_and_inits():
 
-    _ = Iota()
-
-
-def test_import_Insight():
-    from hyperactive import Insight
-
-    _ = Insight()
-
-
-def test_import_Hydra():
-    from hyperactive import Hydra
+    from hyperactive import Hydra, Insight, Iota
 
     _ = Hydra()
+    _ = Insight()
+    _ = Iota()
 
-
-def test_import_HillClimbingOptimizer():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import (
+        HillClimbingOptimizer,
+        StochasticHillClimbingOptimizer,
+        TabuOptimizer,
+        RandomSearchOptimizer,
+        RandomRestartHillClimbingOptimizer,
+        RandomAnnealingOptimizer,
+        SimulatedAnnealingOptimizer,
+        StochasticTunnelingOptimizer,
+        ParallelTemperingOptimizer,
+        ParticleSwarmOptimizer,
+        EvolutionStrategyOptimizer,
+        BayesianOptimizer,
+    )
 
     _ = HillClimbingOptimizer(search_config, 1)
-
-
-def test_import_StochasticHillClimbingOptimizer():
-    from hyperactive import StochasticHillClimbingOptimizer
-
     _ = StochasticHillClimbingOptimizer(search_config, 1)
-
-
-def test_import_TabuOptimizer():
-    from hyperactive import TabuOptimizer
-
     _ = TabuOptimizer(search_config, 1)
-
-
-def test_import_RandomSearchOptimizer():
-    from hyperactive import RandomSearchOptimizer
-
     _ = RandomSearchOptimizer(search_config, 1)
-
-
-def test_import_RandomRestartHillClimbingOptimizer():
-    from hyperactive import RandomRestartHillClimbingOptimizer
-
     _ = RandomRestartHillClimbingOptimizer(search_config, 1)
-
-
-def test_import_RandomAnnealingOptimizer():
-    from hyperactive import RandomAnnealingOptimizer
-
     _ = RandomAnnealingOptimizer(search_config, 1)
-
-
-def test_import_SimulatedAnnealingOptimizer():
-    from hyperactive import SimulatedAnnealingOptimizer
-
     _ = SimulatedAnnealingOptimizer(search_config, 1)
-
-
-def test_import_StochasticTunnelingOptimizer():
-    from hyperactive import StochasticTunnelingOptimizer
-
     _ = StochasticTunnelingOptimizer(search_config, 1)
-
-
-def test_import_ParallelTemperingOptimizer():
-    from hyperactive import ParallelTemperingOptimizer
-
     _ = ParallelTemperingOptimizer(search_config, 1)
-
-
-def test_import_ParticleSwarmOptimizer():
-    from hyperactive import ParticleSwarmOptimizer
-
     _ = ParticleSwarmOptimizer(search_config, 1)
-
-
-def test_import_EvolutionStrategyOptimizer():
-    from hyperactive import EvolutionStrategyOptimizer
-
     _ = EvolutionStrategyOptimizer(search_config, 1)
-
-
-def test_import_BayesianOptimizer():
-    from hyperactive import BayesianOptimizer
-
     _ = BayesianOptimizer(search_config, 1)
