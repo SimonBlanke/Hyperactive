@@ -16,12 +16,12 @@ from .dataset_features import get_number_of_instances
 from .dataset_features import get_number_of_features
 from .dataset_features import get_default_score
 
-from .label_encoder_dict import label_encoder_dict
+from .label_encoder import label_encoder_dict
 
 
-class Memory:
+class Collector:
     def __init__(
-        self, search_config, metric="accuracy", cv=5, n_jobs=-1, meta_data_path=None
+        self, search_config, metric="accuracy", cv=5, n_jobs=1, meta_data_path=None
     ):
         self.metric = metric
         self.cv = cv
@@ -31,27 +31,16 @@ class Memory:
 
         self.meta_knowledge_dict = {}
 
-        self.path_name = meta_data_path
+        self.meta_data_path = meta_data_path
 
         self.dataCollector_model = ModelMetaDataCollector(self.search_config)
         self.dataCollector_dataset = DatasetMetaDataCollector()
 
-    def extract(self, dataset_config, augment_data=False):
+    def extract(self, X, y, dataset_str):
+        for model_str in self.search_config.keys():
 
-        meta_knowledge_from_model = {}
-        for model_name in self.search_config.keys():
-
-            meta_knowledge_from_dataset = {}
-            for data_name, data_train in dataset_config.items():
-                meta_data = self._get_meta_data(model_name, data_name, data_train)
-
-                self._save_toCSV(meta_data, model_name)
-                meta_knowledge_from_dataset[data_name] = meta_data
-
-            meta_knowledge_from_model[model_name] = meta_knowledge_from_dataset
-
-        print("\nblablabla")
-        return meta_knowledge_from_model
+            meta_data = self._get_meta_data(model_str, dataset_str, [X, y])
+            self._save_toCSV(meta_data, model_str, dataset_str)
 
     def _get_meta_data(self, model_name, data_name, data_train):
         X_train = data_train[0]
@@ -90,21 +79,26 @@ class Memory:
 
         return all_features
 
-    def _save_toHDF(self, dataframe, key, path=""):
-        # today = datetime.date.today()
-        # path_name = path + "meta_knowledge"
-        path1 = "./meta_learn/data/" + "meta_knowledge"
+    def _save_toCSV(self, meta_data_new, model_str, data_hash):
+        if not os.path.exists(self.meta_data_path):
+            os.makedirs(self.meta_data_path)
 
-        dataframe.to_hdf(path1, key="a", mode="a", format="table", append=True)
+        file_name = model_str + "___" + data_hash + "___metadata.csv"
+        path = self.meta_data_path + file_name
 
-    def _save_toCSV(self, dataframe, model_name, path=""):
-        # today = datetime.date.today()
-        if not os.path.exists(self.path_name):
-            os.makedirs(self.path_name)
+        if os.path.exists(path):
+            meta_data_old = pd.read_csv(path)
+            meta_data = meta_data_old.append(meta_data_new)
 
-        path = self.path_name + model_name + ":meta_data"
-        dataframe.to_csv(path, index=False)
-        # print('saving', len(dataframe), 'examples of', str(key), 'meta data')
+            columns = list(meta_data.columns)
+            noScore = ["mean_test_score", "cv_default_score"]
+            columns_noScore = [c for c in columns if c not in noScore]
+
+            meta_data = meta_data.drop_duplicates(subset=columns_noScore)
+        else:
+            meta_data = meta_data_new
+
+        meta_data.to_csv(path, index=False)
 
 
 class DatasetMetaDataCollector:
@@ -155,7 +149,7 @@ class DatasetMetaDataCollector:
 
 
 class ModelMetaDataCollector:
-    def __init__(self, search_config, cv=5, n_jobs=-1):
+    def __init__(self, search_config, cv=2, n_jobs=-1):
         self.search_config = search_config
         self.cv = cv
         self.n_jobs = n_jobs
