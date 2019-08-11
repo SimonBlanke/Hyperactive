@@ -23,23 +23,26 @@ class MetaRegressor(object):
         self.path_name = meta_learn_path
         self.path_meta_data = self.path_name + "/meta_data/"
 
-    def train_meta_regressor(self, model_list):
+    def train_meta_regressor(self, model_list, dataset_str):
         for model_str in model_list:
-            X_train, y_train = self._read_meta_data(model_str)
+            X_train, y_train = self._read_meta_data(model_str, dataset_str)
 
             self._train_regressor(X_train, y_train)
             self._store_model(model_str)
 
-    def _get_dataset_name(self, model_str):
-        return model_str + ":meta_data"
+    def _get_dataset_name(self, model_str, data_hash):
+        file_name = model_str + "___" + data_hash + "___metadata.csv"
+        return file_name
 
     def _get_model_name(self):
         model_name = self.path.split("/")[-1]
         return model_name
 
-    def _read_meta_data(self, model_str):
+    def _read_meta_data(self, model_str, dataset_str):
         # data = pd.read_csv(self.path)
-        dataset_name_path = self.path_meta_data + self._get_dataset_name(model_str)
+        dataset_name_path = self.path_meta_data + self._get_dataset_name(
+            model_str, dataset_str
+        )
         meta_data = pd.read_csv(dataset_name_path)
 
         column_names = meta_data.columns
@@ -77,7 +80,7 @@ class MetaRegressor(object):
 
     def _store_model(self, model_str):
         filename = (
-            self.path_name + "/meta_regressor/" + model_str + ":meta_regressor.pkl"
+            self.path_name + "/meta_regressor/" + model_str + "_metaregressor.pkl"
         )
         # print(filename)
         joblib.dump(self.meta_regressor, filename)

@@ -7,7 +7,7 @@ from pathlib import Path
 from sklearn.externals import joblib
 
 from .meta_regressor import MetaRegressor
-from .label_encoder_dict import label_encoder_dict
+from .label_encoder import label_encoder_dict
 
 
 class Predictor:
@@ -19,7 +19,7 @@ class Predictor:
         self.model_list = list(self.search_config.keys())
         self.model_name = self.model_list[0]
 
-        self._get_hyperpara()
+        # self._get_hyperpara()
 
         self.meta_regressor = None
 

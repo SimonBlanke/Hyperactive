@@ -10,8 +10,8 @@ from tqdm import tqdm
 
 from importlib import import_module
 
-from .memory import Memory
-from .label_encoder_dict import label_encoder_dict
+from .collector import Collector
+from .label_encoder import label_encoder_dict
 
 
 class Recognizer:
@@ -31,7 +31,7 @@ class Recognizer:
 
         self.hyperpara_dict = None
 
-        self.memory = Memory(search_config)
+        self.memory = Collector(search_config)
 
         self.model_list = list(self.search_config.keys())
 

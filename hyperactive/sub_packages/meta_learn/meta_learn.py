@@ -1,7 +1,5 @@
 import os
 
-from importlib import import_module
-
 from ..insight import Insight
 
 from .collector import Collector
@@ -35,11 +33,11 @@ class MetaLearn:
         self.model_list = list(self.search_config.keys())
 
     def collect(self, X, y):
-        dataset_str = self.insight.recognize_data(X, y)
-        self.memory.extract(X, y, dataset_str)
+        self.dataset_str = self.insight.recognize_data(X, y)
+        self.memory.extract(X, y, self.dataset_str)
 
-    def train(self, model_list):
-        self.meta_regressor.train_meta_regressor(model_list)
+    def train(self):
+        self.meta_regressor.train_meta_regressor(self.model_list, self.dataset_str)
 
     def search(self, dataset_config):
         X_test = self.recognizer.get_test_metadata(dataset_config)
