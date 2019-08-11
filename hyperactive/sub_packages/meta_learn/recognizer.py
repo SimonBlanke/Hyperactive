@@ -5,8 +5,6 @@
 import itertools
 import pandas as pd
 
-from tqdm import tqdm
-
 
 from importlib import import_module
 
@@ -38,22 +36,6 @@ class Recognizer:
         self.model_name = self.model_list[0]
         self.search_space = self.search_config[self.model_name]
 
-    def search_optimum(self, data_dict):
-        for data_name, data_test in tqdm(data_dict.items()):
-            self.data_name = data_name
-            self.data_test = data_test
-
-            self._load_model()
-
-            if not self.meta_regressor:
-                print("Error: No meta regressor loaded\n")
-                return 0
-
-            self._search(self.X_train)
-            hyperpara_dict, best_score = self._predict()
-
-            return hyperpara_dict, best_score
-
     def get_test_metadata(self, data_train, dataset_str):
         features_from_dataset = self.collector.dataCollector_dataset.collect(
             self.model_name, dataset_str, data_train
@@ -67,36 +49,7 @@ class Recognizer:
 
         X_test = self.collector._merge_data(features_from_dataset, features_from_model)
 
-        print("\nblablabla")
         return X_test
-
-    def _search(self, X_train):
-        for model_key in self.search_config.keys():
-            self.model_name = model_key
-
-            self.hyperpara_dict = self._get_hyperpara(model_key)
-
-            model = self._import_model(model_key)
-            self.model = model()
-
-            features_from_model = self._features_from_model()
-
-            dataCollector_dataset = DataCollector_dataset(self.search_config)
-            features_from_dataset = dataCollector_dataset.collect(
-                self.data_name, self.data_test
-            )
-
-            features_from_dataset = pd.DataFrame(
-                features_from_dataset, index=range(len(features_from_model))
-            )
-
-            columns = features_from_dataset.columns
-            for column in columns:
-                features_from_dataset[column] = features_from_dataset[column][0]
-
-            self.meta_knowledge = self._concat_dataframes(
-                features_from_dataset, features_from_model
-            )
 
     def _import_model(self, model):
         sklearn, submod_func = model.rsplit(".", 1)
@@ -120,7 +73,7 @@ class Recognizer:
         features_from_model = self.collector.dataCollector_model._merge_dict(
             features_from_model, default_hyperpara_df
         )
-        features_from_model = features_from_model.reindex_axis(
+        features_from_model = features_from_model.reindex(
             sorted(features_from_model.columns), axis=1
         )
 

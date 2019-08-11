@@ -96,6 +96,6 @@ class Predictor:
         for hyperpara_key in self.hyperpara_dict:
             to_replace = {hyperpara_key: self.hyperpara_dict[hyperpara_key]}
             X_train = X_train.replace(to_replace)
-        X_train = X_train.convert_objects()
+        X_train = X_train.infer_objects()
 
         return X_train
