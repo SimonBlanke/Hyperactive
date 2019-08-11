@@ -6,8 +6,8 @@
 from sklearn.model_selection import cross_val_score
 
 
-def add_dataset_name(self):
-    return "Dataset_name", self.data_name
+# def add_dataset_name(self):
+#     return "Dataset_name", self.data_name
 
 
 def get_number_of_instances(self):

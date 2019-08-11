@@ -11,7 +11,6 @@ from tqdm import tqdm
 from sklearn.model_selection import GridSearchCV
 
 
-from .dataset_features import add_dataset_name
 from .dataset_features import get_number_of_instances
 from .dataset_features import get_number_of_features
 from .dataset_features import get_default_score
@@ -102,8 +101,6 @@ class Collector:
 
 
 class DatasetMetaDataCollector:
-
-    add_dataset_name = add_dataset_name
     get_number_of_instances = get_number_of_instances
     get_number_of_features = get_number_of_features
     get_default_score = get_default_score
