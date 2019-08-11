@@ -15,5 +15,7 @@ class Insight:
         x_hash = self._get_hash(X)
         # if hash recog fails: try to recog data by other properties
 
+        return x_hash
+
     def _get_hash(self, object):
         return hashlib.sha1(object).hexdigest()
