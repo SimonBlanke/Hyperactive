@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
 import time
 import pandas as pd
 
@@ -79,8 +80,10 @@ class MetaRegressor(object):
             print("\nmeta_regressor training time: ", round((time.time() - time1), 4))
 
     def _store_model(self, model_str):
-        filename = (
-            self.path_name + "/meta_regressor/" + model_str + "_metaregressor.pkl"
-        )
-        # print(filename)
-        joblib.dump(self.meta_regressor, filename)
+        meta_regressor_path = self.path_name + "/meta_regressor/"
+        if not os.path.exists(meta_regressor_path):
+            os.makedirs(meta_regressor_path)
+
+        path = meta_regressor_path + model_str + "_metaregressor.pkl"
+
+        joblib.dump(self.meta_regressor, path)
