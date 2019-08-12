@@ -89,17 +89,14 @@ class BaseOptimizer:
         return _cand_, _p_
 
     def search(self, nth_process, X, y):
-        _cand_, p_bar = initialize_search(self._config_, nth_process, X, y)
+        self._config_, _cand_ = initialize_search(self._config_, nth_process, X, y)
         _p_ = self._init_opt_positioner(_cand_, X, y)
 
         for i in range(self._config_.n_iter):
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
+            self._config_.update_p_bar(1)
 
-            if self._config_._show_progress_bar():
-                p_bar.update(1)
-
-        p_bar.close()
-        _cand_ = finish_search_(_cand_, X, y)
+        _cand_ = finish_search_(self._config_, _cand_, X, y)
 
         return _cand_
 

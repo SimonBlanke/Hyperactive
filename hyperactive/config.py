@@ -4,6 +4,7 @@
 
 
 import random
+import tqdm
 import scipy
 import numpy as np
 import pandas as pd
@@ -95,6 +96,20 @@ class Config:
 
         if self._is_all_same(module_str_list):
             self.model_type = model_keys[0].split(".")[0]
+
+    def init_p_bar(self, _config_, _cand_):
+        if self._show_progress_bar():
+            self.p_bar = tqdm.tqdm(**_config_._tqdm_dict(_cand_))
+        else:
+            self.p_bar = None
+
+    def update_p_bar(self, n):
+        if self.p_bar:
+            self.p_bar.update(n)
+
+    def close_p_bar(self):
+        if self.p_bar:
+            self.p_bar.close()
 
     def _tqdm_dict(self, _cand_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""

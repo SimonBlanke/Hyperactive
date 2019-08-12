@@ -3,8 +3,6 @@
 # License: MIT License
 
 
-import tqdm
-
 from ..candidate import ScikitLearnCandidate
 from ..candidate import XGBoostCandidate
 from ..candidate import LightGbmCandidate
@@ -16,9 +14,9 @@ from ..candidate import PytorchCandidate
 def initialize_search(_config_, nth_process, X, y):
     _cand_ = _init_candidate(_config_, nth_process)
     _cand_ = _init_eval(_cand_, nth_process, X, y)
-    p_bar = _init_progress_bar(_config_, _cand_)
+    _config_.init_p_bar(_config_, _cand_)
 
-    return _cand_, p_bar
+    return _config_, _cand_
 
 
 def _init_candidate(_config_, nth_process):
@@ -47,8 +45,3 @@ def _init_eval(_cand_, nth_process, X, y):
     _cand_.pos_best = pos
 
     return _cand_
-
-
-def _init_progress_bar(_config_, _cand_):
-    # create progress bar
-    return tqdm.tqdm(**_config_._tqdm_dict(_cand_))

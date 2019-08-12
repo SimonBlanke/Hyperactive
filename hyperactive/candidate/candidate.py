@@ -14,7 +14,6 @@ class Candidate:
         self.pos_best = None
 
         self.model = None
-
         self._space_ = SearchSpace(_config_)
 
     @property
