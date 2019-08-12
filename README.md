@@ -1,8 +1,8 @@
-<h1 align="center">
+<p align="center">
   <br>
   <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo.png" width="1200"></a>
   <br>
-</h1>
+</p>
 
 <br>
 
