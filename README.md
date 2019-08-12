@@ -257,7 +257,7 @@ search_config = {
 }
 
 Optimizer = ParticleSwarmOptimizer(
-    search_config, n_iter=3, metric=["mean_absolute_error"], verbosity=0
+    search_config, n_iter=3, metric="mean_absolute_error", verbosity=0
 )
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
