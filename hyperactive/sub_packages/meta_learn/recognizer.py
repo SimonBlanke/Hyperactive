@@ -10,6 +10,7 @@ from importlib import import_module
 
 from .collector import Collector
 from .label_encoder import label_encoder_dict
+from ..insight import Insight
 
 
 class Recognizer:
@@ -36,10 +37,11 @@ class Recognizer:
         self.model_name = self.model_list[0]
         self.search_space = self.search_config[self.model_name]
 
-    def get_test_metadata(self, data_train, dataset_str):
-        features_from_dataset = self.collector.dataCollector_dataset.collect(
-            self.model_name, dataset_str, data_train
-        )
+    def get_test_metadata(self, data_train):
+        self.insight = Insight(data_train[0], data_train[1])
+
+        features_from_dataset = self.insight.collect(self.model_name, data_train)
+
         self.hyperpara_dict = self._get_hyperpara(self.model_name)
 
         model = self._import_model(self.model_name)

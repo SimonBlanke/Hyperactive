@@ -35,9 +35,9 @@ class MetaLearn:
         self.collector.extract(X, y, _cand_list)
 
     def train(self):
-        self.meta_regressor.train_meta_regressor(self.model_list, self.dataset_str)
+        self.meta_regressor.train_meta_regressor(self.model_list)
 
     def search(self, X, y):
-        X_test = self.recognizer.get_test_metadata([X, y], self.dataset_str)
+        X_test = self.recognizer.get_test_metadata([X, y])
 
         self.best_hyperpara_dict, self.best_score = self.predictor.search(X_test)

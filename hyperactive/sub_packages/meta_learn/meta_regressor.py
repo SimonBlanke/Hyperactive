@@ -3,6 +3,8 @@
 # License: MIT License
 
 import os
+import glob
+import fnmatch
 import time
 import pandas as pd
 
@@ -24,27 +26,29 @@ class MetaRegressor(object):
         self.path_name = meta_learn_path
         self.path_meta_data = self.path_name + "/meta_data/"
 
-    def train_meta_regressor(self, model_list, dataset_str):
+    def train_meta_regressor(self, model_list):
         for model_str in model_list:
-            X_train, y_train = self._read_meta_data(model_str, dataset_str)
+            X_train, y_train = self._read_meta_data(model_str)
 
             self._train_regressor(X_train, y_train)
             self._store_model(model_str)
-
-    def _get_dataset_name(self, model_str, data_hash):
-        file_name = model_str + "___" + data_hash + "___metadata.csv"
-        return file_name
 
     def _get_model_name(self):
         model_name = self.path.split("/")[-1]
         return model_name
 
-    def _read_meta_data(self, model_str, dataset_str):
+    def _read_meta_data(self, model_str):
         # data = pd.read_csv(self.path)
-        dataset_name_path = self.path_meta_data + self._get_dataset_name(
-            model_str, dataset_str
-        )
-        meta_data = pd.read_csv(dataset_name_path)
+
+        data_str = self.path_meta_data + model_str + "*.csv"
+        metadata_name_list = glob.glob(data_str)
+
+        meta_data_list = []
+        for metadata_name in metadata_name_list:
+            meta_data = pd.read_csv(metadata_name)
+            meta_data_list.append(meta_data)
+
+        meta_data = pd.concat(meta_data_list, ignore_index=True)
 
         column_names = meta_data.columns
         score_name = [name for name in column_names if self.score_col_name in name]
