@@ -11,8 +11,8 @@ def test_import_and_inits():
     from hyperactive import Hydra, Insight, Iota
 
     _ = Hydra()
-    _ = Insight()
-    _ = Iota()
+    # _ = Insight()
+    # _ = Iota()
 
     from hyperactive import (
         HillClimbingOptimizer,

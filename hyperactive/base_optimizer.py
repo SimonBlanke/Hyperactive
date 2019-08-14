@@ -56,7 +56,9 @@ class BaseOptimizer:
 
         self._config_ = Config(*args, **kwargs)
         self._arg_ = Arguments(**kwargs)
-        self._meta_ = MetaLearn(self._config_.search_config)
+
+        if self._config_.meta_learn:
+            self._meta_ = MetaLearn(self._config_.search_config)
 
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
