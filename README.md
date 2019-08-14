@@ -299,10 +299,11 @@ y = breast_cancer_data.target
 # this defines the model and hyperparameter search space
 search_config = {
     "catboost.CatBoostClassifier": {
-        "iterations": [10],
+        "iterations": [3],
         "learning_rate": np.arange(0.01, 0.1, 0.01),
         "depth": range(2, 20),
         "verbose": [0],
+        "thread_count": [1],
     }
 }
 
