@@ -186,8 +186,6 @@ pip install hyperactive
 
 ```python
 from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-
 from hyperactive import RandomSearchOptimizer
 
 iris_data = load_iris()
@@ -203,7 +201,7 @@ search_config = {
     }
 }
 
-opt = RandomSearchOptimizer(search_config, n_iter=1000, n_jobs=2,cv=3)
+opt = RandomSearchOptimizer(search_config, n_iter=1000, n_jobs=2, cv=3)
 
 # search best hyperparameter for given data
 opt.fit(X, y)
@@ -221,8 +219,6 @@ opt.fit(X, y)
 import numpy as np
 
 from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-
 from hyperactive import RandomAnnealingOptimizer
 
 breast_cancer_data = load_breast_cancer()
@@ -258,7 +254,6 @@ opt.fit(X, y)
 
 ```python
 import numpy as np
-
 from sklearn.datasets import load_breast_cancer
 from hyperactive import RandomSearchOptimizer
 
@@ -294,7 +289,6 @@ opt.fit(X, y)
 
 ```python
 import numpy as np
-
 from sklearn.datasets import load_breast_cancer
 from hyperactive import RandomSearchOptimizer
 
@@ -328,10 +322,8 @@ opt.fit(X, y)
 
 ```python
 import numpy as np
-
 from keras.datasets import mnist
 from keras.utils import to_categorical
-
 from hyperactive import RandomSearchOptimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
