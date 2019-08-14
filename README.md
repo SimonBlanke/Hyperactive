@@ -36,17 +36,18 @@
 
 ---
 
-<p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#performance">Performance</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
-</p>
+<div align="center"><a name="menu"></a>
+  <h4>
+    <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#performance">Performance</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
+  </h4>
+</div>
 
 ---
-
 
 <br>
 
@@ -180,42 +181,30 @@ pip install hyperactive
 
 ## Examples
 
-<details><summary>Basic sklearn example:</summary>
+<details><summary>Scikit-learn:</summary>
 <p>
 
 ```python
 from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-
-from hyperactive import SimulatedAnnealingOptimizer
+from hyperactive import RandomSearchOptimizer
 
 iris_data = load_iris()
 X = iris_data.data
 y = iris_data.target
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-
 # this defines the model and hyperparameter search space
 search_config = {
-    "sklearn.ensemble.RandomForestClassifier": {
-        "n_estimators": range(10, 100, 10),
-        "max_depth": [3, 4, 5, 6],
-        "criterion": ["gini", "entropy"],
-        "min_samples_split": range(2, 21),
-        "min_samples_leaf": range(2, 21),
+    'sklearn.neighbors.KNeighborsClassifier': {
+        'n_neighbors': range(1, 100),
+        'weights': ["uniform", "distance"],
+        'p': [1, 2]
     }
 }
 
-Optimizer = SimulatedAnnealingOptimizer(search_config, n_iter=100, n_jobs=4)
+opt = RandomSearchOptimizer(search_config, n_iter=1000, n_jobs=2, cv=3)
 
 # search best hyperparameter for given data
-Optimizer.fit(X_train, y_train)
-
-# predict from test data
-prediction = Optimizer.predict(X_test)
-
-# calculate accuracy score
-score = Optimizer.score(X_test, y_test)
+opt.fit(X, y)
 ```
 
 </p>
@@ -223,60 +212,119 @@ score = Optimizer.score(X_test, y_test)
 
 
 
-
-<details><summary>Example with a multi-layer-perceptron in keras:</summary>
-<p>
-
-```python
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from hyperactive import ParticleSwarmOptimizer
-
-breast_cancer_data = load_breast_cancer()
-
-X = breast_cancer_data.data
-y = breast_cancer_data.target
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-
-# this defines the structure of the model and the search space in each layer
-search_config = {
-    "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [3], "batch_size": [100], "verbose": [0]},
-    "keras.layers.Dense.1": {
-        "units": range(5, 15),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
-    },
-    "keras.layers.Dense.2": {
-        "units": range(5, 15),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
-    },
-    "keras.layers.Dense.3": {"units": [1], "activation": ["sigmoid"]},
-}
-
-Optimizer = ParticleSwarmOptimizer(
-    search_config, n_iter=3, metric=["mean_absolute_error"], verbosity=0
-)
-# search best hyperparameter for given data
-Optimizer.fit(X_train, y_train)
-```
-
-</p>
-</details>
-
-
-
-<details><summary>Example with a convolutional neural network in keras:</summary>
+<details><summary>XGBoost:</summary>
 <p>
 
 ```python
 import numpy as np
 
+from sklearn.datasets import load_breast_cancer
+from hyperactive import RandomAnnealingOptimizer
+
+breast_cancer_data = load_breast_cancer()
+X = breast_cancer_data.data
+y = breast_cancer_data.target
+
+# this defines the model and hyperparameter search space
+search_config = {
+    "xgboost.XGBClassifier": {
+        "n_estimators": range(3, 50, 1),
+        "max_depth": range(1, 21),
+        "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
+        "subsample": np.arange(0.1, 1.01, 0.1),
+        "min_child_weight": range(1, 21),
+        "nthread": [1],
+    }
+}
+
+opt = RandomAnnealingOptimizer(search_config, n_iter=100, n_jobs=4, cv=3)
+
+# search best hyperparameter for given data
+opt.fit(X, y)
+```
+
+</p>
+</details>
+
+
+
+
+<details><summary>LightGBM:</summary>
+<p>
+
+```python
+import numpy as np
+from sklearn.datasets import load_breast_cancer
+from hyperactive import RandomSearchOptimizer
+
+breast_cancer_data = load_breast_cancer()
+X = breast_cancer_data.data
+y = breast_cancer_data.target
+
+# this defines the model and hyperparameter search space
+search_config = {
+    "lightgbm.LGBMClassifier": {
+        "boosting_type": ["gbdt"],
+        "num_leaves": range(2, 20),
+        "learning_rate": np.arange(0.01, 0.1, 0.01),
+        "feature_fraction": np.arange(0.1, 0.95, 0.1),
+        "bagging_fraction": np.arange(0.1, 0.95, 0.1),
+        "bagging_freq": range(2, 10, 1),
+    }
+}
+
+opt = RandomSearchOptimizer(search_config, n_iter=10, n_jobs=4, cv=3)
+
+# search best hyperparameter for given data
+opt.fit(X, y)
+```
+
+</p>
+</details>
+
+
+
+<details><summary>CatBoost:</summary>
+<p>
+
+```python
+import numpy as np
+from sklearn.datasets import load_breast_cancer
+from hyperactive import RandomSearchOptimizer
+
+breast_cancer_data = load_breast_cancer()
+X = breast_cancer_data.data
+y = breast_cancer_data.target
+
+# this defines the model and hyperparameter search space
+search_config = {
+    "catboost.CatBoostClassifier": {
+        "iterations": [3],
+        "learning_rate": np.arange(0.01, 0.1, 0.01),
+        "depth": range(2, 20),
+        "verbose": [0],
+        "thread_count": [1],
+    }
+}
+
+opt = RandomSearchOptimizer(search_config, n_iter=10, n_jobs=4, cv=3)
+
+# search best hyperparameter for given data
+opt.fit(X, y)
+```
+
+</p>
+</details>
+
+
+
+<details><summary>Keras:</summary>
+<p>
+
+```python
+import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
-
 from hyperactive import RandomSearchOptimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -291,7 +339,7 @@ y_test = to_categorical(y_test)
 # this defines the structure of the model and the search space in each layer
 search_config = {
     "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [20], "batch_size": [500], "verbose": [2]},
+    "keras.fit.0": {"epochs": [10], "batch_size": [500], "verbose": [2]},
     "keras.layers.Conv2D.1": {
         "filters": [32, 64, 128],
         "kernel_size": range(3, 4),
@@ -311,16 +359,10 @@ search_config = {
     "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = RandomSearchOptimizer(search_config, n_iter=20)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=10)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
-
-# predict from test data
-prediction = Optimizer.predict(X_test)
-
-# calculate accuracy score
-score = Optimizer.score(X_test, y_test)
 ```
 
 </p>
