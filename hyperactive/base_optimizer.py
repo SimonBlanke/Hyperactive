@@ -12,6 +12,7 @@ from functools import partial
 from .base_positioner import BasePositioner
 from .config import Config
 from .opt_args import Arguments
+from .sub_packages import MetaLearn
 from .util import initialize_search, finish_search_, sort_for_best
 
 
@@ -55,6 +56,7 @@ class BaseOptimizer:
 
         self._config_ = Config(*args, **kwargs)
         self._arg_ = Arguments(**kwargs)
+        self._meta_ = MetaLearn(self._config_.search_config)
 
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
@@ -111,6 +113,8 @@ class BaseOptimizer:
 
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
+        if self._config_.meta_learn:
+            self._meta_.collect(X, y, _cand_list=[_cand_])
 
         self.model_best = _cand_.model
         self.score_best = _cand_.score_best

@@ -10,10 +10,10 @@ from .model import Model
 
 
 class ScikitLearnModel(Model):
-    def __init__(self, _config_, search_config_key):
+    def __init__(self, _config_, model_key):
         super().__init__(_config_)
-        self.search_config_key = search_config_key
-        self.model = self._get_model(search_config_key)
+        self.model_key = model_key
+        self.model = self._get_model(model_key)
 
     def _create_model(self, para):
         return self.model(**para)

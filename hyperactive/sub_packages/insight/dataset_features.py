@@ -21,5 +21,5 @@ def get_number_of_features(self):
 def get_default_score(self):
     return (
         "cv_default_score",
-        cross_val_score(self.model, self.X_train, self.y_train, cv=5).mean(),
+        cross_val_score(self.model, self.X_train, self.y_train, cv=3).mean(),
     )
