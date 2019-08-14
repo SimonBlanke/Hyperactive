@@ -12,6 +12,7 @@ class KerasCandidate(Candidate):
         super().__init__(nth_process, _config_)
 
         self.nth_process = nth_process
+        self.model_key = "Keras.Model"
 
         self._space_.create_kerasSearchSpace()
         self._model_ = KerasModel(_config_)

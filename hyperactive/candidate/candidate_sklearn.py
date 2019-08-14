@@ -12,10 +12,10 @@ class ScikitLearnCandidate(Candidate):
         super().__init__(nth_process, _config_)
 
         self.nth_process = nth_process
-        self.search_config_key = _config_._get_sklearn_model(nth_process)
+        self.model_key = _config_._get_sklearn_model(nth_process)
 
-        self._space_.create_mlSearchSpace(self.search_config_key)
-        self._model_ = ScikitLearnModel(_config_, self.search_config_key)
+        self._space_.create_mlSearchSpace(self.model_key)
+        self._model_ = ScikitLearnModel(_config_, self.model_key)
 
         self._init_ = InitMLSearchPosition(
             self._space_, self._model_, _config_.warm_start, _config_.scatter_init
@@ -23,7 +23,7 @@ class ScikitLearnCandidate(Candidate):
 
     def create_start_point(self, para):
         start_point = {}
-        model_str = self.search_config_key + "." + str(self.nth_process)
+        model_str = self.model_key + "." + str(self.nth_process)
 
         temp_dict = {}
         for para_key in para:
