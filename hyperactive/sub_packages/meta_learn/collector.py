@@ -25,7 +25,7 @@ class Collector:
         self.n_jobs = n_jobs
         self.meta_data_path = meta_data_path
 
-        self.dataCollector_model = ModelMetaDataCollector(self.search_config)
+        self.collector_model = ModelMetaDataCollector(self.search_config)
 
     def extract(self, X, y, _cand_list):
         self.insight = Insight(X, y)
@@ -39,7 +39,7 @@ class Collector:
         X = data_train[0]
         y = data_train[1]
 
-        md_model = self.dataCollector_model.collect(model_name, X, y, _cand_list)
+        md_model = self.collector_model.collect(model_name, X, y, _cand_list)
         md_dataset = self.insight.collect(model_name, data_train)
 
         meta_data = merge_meta_data(md_dataset, md_model)
