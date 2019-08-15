@@ -6,15 +6,15 @@ import numpy as np
 from pathlib import Path
 from sklearn.externals import joblib
 
-from .meta_regressor import MetaRegressor
 from .label_encoder import label_encoder_dict
+
+from .data_wrangler import find_best_hyperpara
 
 
 class Predictor:
     def __init__(self, search_config, meta_regressor_path):
         self.search_config = search_config
         self.meta_regressor_path = meta_regressor_path
-        # self.meta_regressor = MetaRegressor()
 
         self.model_list = list(self.search_config.keys())
         self.model_name = self.model_list[0]
@@ -50,7 +50,7 @@ class Predictor:
         # print(X_test.info())
         score_pred = self.meta_regressor.predict(X_test)
 
-        best_features, best_score = self._find_best_hyperpara(X_test, score_pred)
+        best_features, best_score = find_best_hyperpara(X_test, score_pred)
 
         list1 = list(self.search_config[str(*self.search_config.keys())].keys())
 
@@ -77,17 +77,6 @@ class Predictor:
                 hyperpara_dict[hyperpara_key] = inv_label_encoder_dict[encoded_values]
 
         return hyperpara_dict
-
-    def _find_best_hyperpara(self, features, scores):
-        N_best_features = 1
-
-        scores = np.array(scores)
-        index_best_scores = list(scores.argsort()[-N_best_features:][::-1])
-
-        best_score = scores[index_best_scores][0]
-        best_features = features.iloc[index_best_scores]
-
-        return best_features, best_score
 
     def _get_hyperpara(self):
         self.hyperpara_dict = label_encoder_dict[self.model_name]

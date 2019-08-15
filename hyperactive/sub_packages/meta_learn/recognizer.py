@@ -8,9 +8,10 @@ import pandas as pd
 
 from importlib import import_module
 
-from .collector import Collector
 from .label_encoder import label_encoder_dict
 from ..insight import Insight
+
+from .data_wrangler import merge_dict, merge_meta_data, get_default_hyperpara
 
 
 class Recognizer:
@@ -20,20 +21,10 @@ class Recognizer:
         self.meta_regressor = None
         self.meta_knowledge = None
 
-        self.model_name = None
-        self.search_space = None
-
         self.model = None
-
-        self.data_name = None
-        self.data_test = None
-
         self.hyperpara_dict = None
 
-        self.collector = Collector(search_config)
-
         self.model_list = list(self.search_config.keys())
-
         self.model_name = self.model_list[0]
         self.search_space = self.search_config[self.model_name]
 
@@ -49,7 +40,7 @@ class Recognizer:
 
         features_from_model = self._features_from_model()
 
-        X_test = self.collector._merge_data(features_from_dataset, features_from_model)
+        X_test = merge_meta_data(features_from_dataset, features_from_model)
 
         return X_test
 
@@ -69,12 +60,10 @@ class Recognizer:
 
         features_from_model = pd.DataFrame(meta_reg_input)
 
-        default_hyperpara_df = self.collector.dataCollector_model._get_default_hyperpara(
+        default_hyperpara_df = get_default_hyperpara(
             self.model, len(features_from_model)
         )
-        features_from_model = self.collector.dataCollector_model._merge_dict(
-            features_from_model, default_hyperpara_df
-        )
+        features_from_model = merge_dict(features_from_model, default_hyperpara_df)
         features_from_model = features_from_model.reindex(
             sorted(features_from_model.columns), axis=1
         )

@@ -4,7 +4,6 @@
 
 import os
 import glob
-import fnmatch
 import time
 import pandas as pd
 
