@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo_alt.png" height="200"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo_alt.png" height="250"></a>
   <br>
 </p>
 
