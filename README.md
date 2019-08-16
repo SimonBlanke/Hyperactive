@@ -128,7 +128,7 @@
               <li>Scatter initialization</li>
               <li>Warm-start</li>
           </ul>
-        <a>Resources allocation:</a>
+        <a>Resource allocation:</a>
           <ul>
             <li>Memory</li>
           </ul>
