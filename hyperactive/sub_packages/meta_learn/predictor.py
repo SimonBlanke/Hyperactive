@@ -2,12 +2,10 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
 from pathlib import Path
 from sklearn.externals import joblib
 
 from .label_encoder import label_encoder_dict
-
 from .data_wrangler import find_best_hyperpara
 
 

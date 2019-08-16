@@ -5,12 +5,9 @@
 import itertools
 import pandas as pd
 
-
 from importlib import import_module
 
-from .label_encoder import label_encoder_dict
 from ..insight import Insight
-
 from .data_wrangler import merge_dict, merge_meta_data, get_default_hyperpara
 
 
