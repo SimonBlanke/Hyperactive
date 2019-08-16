@@ -60,17 +60,17 @@
 
 <table>
   <tbody>
-    <tr align="center" valign="bottom">
+    <tr align="center" valign="center">
       <td>
-        <b>Optimization Techniques</b>
+        <h3>Optimization Techniques</h2>
         <img src="images/blue.jpg"/>
       </td>
       <td>
-        <b>Supported Packages</b>
+        <h3>Supported Packages</h3>
         <img src="images/blue.jpg"/>
       </td>
       <td>
-        <b>Advanced Features</b>
+        <h3>Advanced Features</h3>
         <img src="images/blue.jpg"/>
       </td>
     </tr>
