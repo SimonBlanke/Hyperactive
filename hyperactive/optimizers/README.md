@@ -138,7 +138,7 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 
 ## Population Methods:
 
-#### [Particle Swarm Optimizer](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/particle_swarm_optimization.py)
+#### [Particle Swarm Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/particle_swarm_optimization.py)
 Particle swarm optimization works by initializing a number of positions at the same time and moving all of those closer to the best one after each iteration. 
 
 ###### Use case/properties:
