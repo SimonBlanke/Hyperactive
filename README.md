@@ -62,15 +62,15 @@
   <tbody>
     <tr align="center" valign="center">
       <td>
-        <h3>Optimization Techniques</h2>
+        <strong>Optimization Techniques</strong>
         <img src="images/blue.jpg"/>
       </td>
       <td>
-        <h3>Supported Packages</h3>
+        <strong>Supported Packages</strong>
         <img src="images/blue.jpg"/>
       </td>
       <td>
-        <h3>Advanced Features</h3>
+        <strong>Advanced Features</strong>
         <img src="images/blue.jpg"/>
       </td>
     </tr>
