@@ -80,29 +80,29 @@
         <a><b>Local Search:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#hill-climbing">Hill Climbing</a></li>
-            <li>Stochastic Hill Climbing</li>
-            <li>Tabu Search</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#tabu-search">Tabu Search</a></li>
          </ul>
-        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-methods">Random Methods:</a> </a>
+        <a><b>Random Methods:</b></a>
           <ul>
-            <li>Random Search</li>
-            <li>Random Restart Hill Climbing</li>
-            <li>Random Annealing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</li>
          </ul>
-        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#markov-chain-monte-carlo">Markov Chain Monte Carlo:</a> </a>
+        <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
-            <li>Simulated Annealing</li>
-            <li>Stochastic Tunneling</li>
-            <li>Parallel Tempering</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#simulated-annealing">Simulated Annealing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#stochastic-tunneling">Stochastic Tunneling</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#parallel-tempering">Parallel Tempering</li>
           </ul>
-        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#population-methods">Population Methods:</a> </a>
+        <a><b>Population Methods:</b></a>
           <ul>
-            <li>Particle Swarm Optimizer</li>
-            <li>Evolution Strategy</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#particle-swarm-optimization">Particle Swarm Optimizer</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#evolution-strategy">Evolution Strategy</li>
           </ul>
-        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#sequential-methods">Sequential Methods:</a> </a>
+        <a><b>Sequential Methods:</b></a>
           <ul>
-            <li>Bayesian Optimization</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#bayesian-optimization">Bayesian Optimization</li>
           </ul>
       </td>
       <td>
