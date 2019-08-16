@@ -77,9 +77,9 @@
     <tr/>
     <tr valign="top">
       <td>
-        <a> <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#local-search">Local Search:</a> </a>
+        <a><b>Local Search:</b></a>
           <ul>
-            <li>Hill Climbing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#hill-climbing">Hill Climbing</a></li>
             <li>Stochastic Hill Climbing</li>
             <li>Tabu Search</li>
          </ul>
@@ -106,33 +106,33 @@
           </ul>
       </td>
       <td>
-        <a>Machine Learning:</a>
+        <a><b>Machine Learning:</b></a>
           <ul>
               <li>Scikit-learn</li>
               <li>XGBoost</li>
               <li>LightGBM</li>
               <li>CatBoost</li>
           </ul>
-        <a>Deep Learning:</a>
+        <a><b>Deep Learning:</b></a>
           <ul>
               <li>Keras</li>
           </ul>
-        <a>Distribution:</a>
+        <a><b>Distribution:</b></a>
           <ul>
               <li>Multiprocessing</li>
           </ul>
       </td>
       <td>
-        <a>Position initialization:</a>
+        <a><b>Position initialization:</b></a>
           <ul>
               <li>Scatter initialization</li>
               <li>Warm-start</li>
           </ul>
-        <a>Resource allocation:</a>
+        <a><b>Resource allocation:</b></a>
           <ul>
             <li>Memory</li>
           </ul>
-        <a>Weight initialization:</a>
+        <a><b>Weight initialization:</b></a>
           <ul>
             <li>Transfer-learning</li>
           </ul>
