@@ -4,7 +4,7 @@
 
 
 import random
-import tqdm
+from tqdm.auto import tqdm
 import scipy
 import numpy as np
 import pandas as pd
@@ -99,7 +99,7 @@ class Config:
 
     def init_p_bar(self, _config_, _cand_):
         if self._show_progress_bar():
-            self.p_bar = tqdm.tqdm(**_config_._tqdm_dict(_cand_))
+            self.p_bar = tqdm(**_config_._tqdm_dict(_cand_))
         else:
             self.p_bar = None
 
