@@ -125,16 +125,16 @@
       <td>
         <a><b>Position initialization:</b></a>
           <ul>
-              <li>Scatter initialization</li>
-              <li>Warm-start</li>
+              <li><a href="https://https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter initialization</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#warm-start">Warm-start</a></li>
           </ul>
         <a><b>Resource allocation:</b></a>
           <ul>
-            <li>Memory</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#memory">Memory</a></li>
           </ul>
         <a><b>Weight initialization:</b></a>
           <ul>
-            <li>Transfer-learning</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#transfer-learning">Transfer-learning</a></li>
           </ul>
       </td>
     </tr>
