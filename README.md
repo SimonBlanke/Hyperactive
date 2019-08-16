@@ -125,7 +125,7 @@
       <td>
         <a><b>Position initialization:</b></a>
           <ul>
-              <li><a href="https://https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter initialization</a></li>
+              <li><a href="https://https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter Initialization</a></li>
               <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#warm-start">Warm-start</a></li>
           </ul>
         <a><b>Resource allocation:</b></a>
