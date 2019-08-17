@@ -85,41 +85,41 @@
          </ul>
         <a><b>Random Methods:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a></li>
          </ul>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#simulated-annealing">Simulated Annealing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#simulated-annealing">Simulated Annealing</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#stochastic-tunneling">Stochastic Tunneling</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#parallel-tempering">Parallel Tempering</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#parallel-tempering">Parallel Tempering</a></li>
           </ul>
         <a><b>Population Methods:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#particle-swarm-optimization">Particle Swarm Optimizer</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#evolution-strategy">Evolution Strategy</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#evolution-strategy">Evolution Strategy</a></li>
           </ul>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#bayesian-optimization">Bayesian Optimization</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#bayesian-optimization">Bayesian Optimization</a></li>
           </ul>
       </td>
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li>Scikit-learn</li>
-              <li>XGBoost</li>
-              <li>LightGBM</li>
-              <li>CatBoost</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#scikit-learn">Scikit-learn</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#xgboost">XGBoost</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#lightgbm">LightGBM</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#catboost">CatBoost</a></li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li>Keras</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#keras">Keras</a></li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
-              <li>Multiprocessing</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#multiprocessing">Multiprocessing</a></li>
           </ul>
       </td>
       <td>
