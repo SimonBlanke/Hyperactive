@@ -53,7 +53,8 @@
 
 ## Overview
 
-- Optimize hyperparameters of machine- or deep-learning models, using a simple API.
+- Optimize hyperparameters of [machine- or deep-learning models](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages
+), using a simple API.
 - Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques) to improve your model.
 - Utilize [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) to improve the performance of all optimization techniques.
 
@@ -148,17 +149,16 @@
 
 Hyperactive is developed and tested in python 3:
 
-![https://pypi.org/project/hyperactive](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)
-![https://github.com/SimonBlanke/Hyperactive/graphs/contributors](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=for-the-badge)
-![https://github.com/SimonBlanke/Hyperactive/commits/master](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=for-the-badge)
-
+[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)](https://pypi.org/project/hyperactive)
+[![commit-activity](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/graphs/contributors)
+[![last-commit](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/commits/master)
 
 <br>
 
 Hyperactive is available on PyPi:
 
-![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e)
-![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge)
+[![version](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e)](https://pypi.python.org/pypi/hyperactive)
+[![downloads](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge)](https://pypi.python.org/pypi/hyperactive)
 
 ```console
 pip install hyperactive
