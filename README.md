@@ -363,22 +363,22 @@ Optimizer.fit(X_train, y_train)
 ### Classes:
 ```python
 
-HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, r=1e-6)
-StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
-TabuOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, tabu_memory=[3, 6, 9])
+HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, r=1e-6)
+StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
+TabuOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, tabu_memory=[3, 6, 9])
 
-RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
-RandomRestartHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_restarts=10)
-RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=100, t_rate=0.98)
+RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
+RandomRestartHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_restarts=10)
+RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=100, t_rate=0.98)
 
-SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98)
-StochasticTunnelingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, gamma=1)
-ParallelTemperingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, system_temps=[0.1, 0.2, 0.01], n_swaps=10)
+SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98)
+StochasticTunnelingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, gamma=1)
+ParallelTemperingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, system_temps=[0.1, 0.2, 0.01], n_swaps=10)
 
-ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
-EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
+ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
+EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
 
-BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
+BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
 
 ```
 
@@ -399,7 +399,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | ------ | ------ | ------ | ------ |
 | metric  | str | "accuracy" | metric for model evaluation |
 | n_jobs | int | 1 | number of jobs to run in parallel (-1 for maximum) |
-| cv | int | 5 | cross-validation |
+| cv | int | 3 | cross-validation |
 | verbosity | int | 1 | Shows model and metric information |
 | random_state | int | None | The seed for random number generator |
 | warm_start | dict | None | Hyperparameter configuration to start from |
