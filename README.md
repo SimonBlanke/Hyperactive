@@ -53,7 +53,8 @@
 
 ## Overview
 
-- Optimize hyperparameters of machine- or deep-learning models, using a simple API.
+- Optimize hyperparameters of [machine- or deep-learning models](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages
+), using a simple API.
 - Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques) to improve your model.
 - Utilize [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) to improve the performance of all optimization techniques.
 
@@ -85,41 +86,41 @@
          </ul>
         <a><b>Random Methods:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a></li>
          </ul>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#simulated-annealing">Simulated Annealing</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#simulated-annealing">Simulated Annealing</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#stochastic-tunneling">Stochastic Tunneling</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#parallel-tempering">Parallel Tempering</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#parallel-tempering">Parallel Tempering</a></li>
           </ul>
         <a><b>Population Methods:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#particle-swarm-optimization">Particle Swarm Optimizer</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#evolution-strategy">Evolution Strategy</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#evolution-strategy">Evolution Strategy</a></li>
           </ul>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#bayesian-optimization">Bayesian Optimization</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#bayesian-optimization">Bayesian Optimization</a></li>
           </ul>
       </td>
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li>Scikit-learn</li>
-              <li>XGBoost</li>
-              <li>LightGBM</li>
-              <li>CatBoost</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#scikit-learn">Scikit-learn</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#xgboost">XGBoost</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#lightgbm">LightGBM</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#catboost">CatBoost</a></li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li>Keras</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#keras">Keras</a></li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
-              <li>Multiprocessing</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#multiprocessing">Multiprocessing</a></li>
           </ul>
       </td>
       <td>
@@ -148,17 +149,16 @@
 
 Hyperactive is developed and tested in python 3:
 
-![https://pypi.org/project/hyperactive](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)
-![https://github.com/SimonBlanke/Hyperactive/graphs/contributors](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=for-the-badge)
-![https://github.com/SimonBlanke/Hyperactive/commits/master](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=for-the-badge)
-
+[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)](https://pypi.org/project/hyperactive)
+[![commit-activity](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/graphs/contributors)
+[![last-commit](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/commits/master)
 
 <br>
 
 Hyperactive is available on PyPi:
 
-![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e)
-![https://pypi.python.org/pypi/hyperactive](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge)
+[![version](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&colorB=4cc61e)](https://pypi.python.org/pypi/hyperactive)
+[![downloads](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge)](https://pypi.python.org/pypi/hyperactive)
 
 ```console
 pip install hyperactive
@@ -363,22 +363,22 @@ Optimizer.fit(X_train, y_train)
 ### Classes:
 ```python
 
-HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, r=1e-6)
-StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
-TabuOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, tabu_memory=[3, 6, 9])
+HillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, r=1e-6)
+StochasticHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
+TabuOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, tabu_memory=[3, 6, 9])
 
-RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
-RandomRestartHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_restarts=10)
-RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=100, t_rate=0.98)
+RandomSearchOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
+RandomRestartHillClimbingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_restarts=10)
+RandomAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=100, t_rate=0.98)
 
-SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98)
-StochasticTunnelingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, gamma=1)
-ParallelTemperingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, system_temps=[0.1, 0.2, 0.01], n_swaps=10)
+SimulatedAnnealingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98)
+StochasticTunnelingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, gamma=1)
+ParallelTemperingOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, eps=1, t_rate=0.98, n_neighbours=1, system_temps=[0.1, 0.2, 0.01], n_swaps=10)
 
-ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
-EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
+ParticleSwarmOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, n_part=4, w=0.5, c_k=0.5, c_s=0.9)
+EvolutionStrategyOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False, individuals=10, mutation_rate=0.7, crossover_rate=0.3)
 
-BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
+BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verbosity=1, random_state=None, warm_start=False, memory=True, scatter_init=False)
 
 ```
 
@@ -399,7 +399,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=5, verb
 | ------ | ------ | ------ | ------ |
 | metric  | str | "accuracy" | metric for model evaluation |
 | n_jobs | int | 1 | number of jobs to run in parallel (-1 for maximum) |
-| cv | int | 5 | cross-validation |
+| cv | int | 3 | cross-validation |
 | verbosity | int | 1 | Shows model and metric information |
 | random_state | int | None | The seed for random number generator |
 | warm_start | dict | None | Hyperparameter configuration to start from |
