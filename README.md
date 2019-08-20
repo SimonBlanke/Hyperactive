@@ -8,29 +8,12 @@
 
 <h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
-<p align="center">
+<div align="center">
+  
+![Build Status][img-travis-ci-badge] ![img-coveralls-badge] ![img-codacy-badge] ![img-codeclimate-badge] ![img-codefactor-badge]
 
-  <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-    <img src="https://travis-ci.org/SimonBlanke/Hyperactive.svg?branch=master">
-  </a>
+</div>
 
-  <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
-    <img src="https://coveralls.io/repos/github/SimonBlanke/Hyperactive/badge.svg?branch=master">
-  </a>
-
-  <a href="https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard">
-    <img src="https://api.codacy.com/project/badge/Grade/acb6989093c44fb08cc3be1dd2df1be7?style=for-the-badge&logo=codacy">
-  </a>
-
-  <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
-    <img src="https://api.codeclimate.com/v1/badges/b8c64b817d1a4640d6c5/maintainability">
-  </a>
-
-  <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
-    <img src="https://www.codefactor.io/repository/github/simonblanke/hyperactive/badge">
-  </a>
-
-</p>
 
 <br>
 
@@ -551,3 +534,12 @@ export(self, filename)
 ## License
 
 ![https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)
+
+
+
+
+[img-travis-ci-badge]:https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=for-the-badge&logo=appveyor
+[img-coveralls-badge]:https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=for-the-badge&logo=codecov
+[img-codacy-badge]:https://img.shields.io/codacy/grade/acb6989093c44fb08cc3be1dd2df1be7?style=for-the-badge&logo=codacy
+[img-codeclimate-badge]:https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=for-the-badge&logo=code-climate
+[img-codefactor-badge]:https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=for-the-badge
