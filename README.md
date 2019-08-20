@@ -35,8 +35,9 @@
 
 ## Overview
 
-- Optimize hyperparameters of [machine- or deep-learning models](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages
-), using a simple API.
+- Optimize [machine- or deep-learning models](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages
+)
+- Very simple (scikit-learn inspired) API
 - Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques) to improve your model.
 - Utilize [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) to improve the performance of all optimization techniques.
 
@@ -149,7 +150,6 @@ pip install hyperactive
 
 <br>
 
-
 ## Examples
 
 <details><summary>Scikit-learn:</summary>
@@ -180,8 +180,6 @@ opt.fit(X, y)
 
 </p>
 </details>
-
-
 
 <details><summary>XGBoost:</summary>
 <p>
@@ -217,9 +215,6 @@ opt.fit(X, y)
 </p>
 </details>
 
-
-
-
 <details><summary>LightGBM:</summary>
 <p>
 
@@ -253,8 +248,6 @@ opt.fit(X, y)
 </p>
 </details>
 
-
-
 <details><summary>CatBoost:</summary>
 <p>
 
@@ -286,8 +279,6 @@ opt.fit(X, y)
 
 </p>
 </details>
-
-
 
 <details><summary>Keras:</summary>
 <p>
@@ -534,9 +525,6 @@ export(self, filename)
 ## License
 
 ![https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)
-
-
-
 
 [img-travis-ci-badge]:https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=for-the-badge&logo=appveyor
 [img-coveralls-badge]:https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=for-the-badge&logo=codecov
