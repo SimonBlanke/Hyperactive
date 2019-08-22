@@ -195,24 +195,25 @@ class BaseOptimizer:
         """
         return self.model_best.predict(X_test)
 
-    def score(self, X_test, y_test):
+    def score(self, X_test, y_true):
         """Returns the score calculated from the prediction of X_test and the true values from y_test
 
         Parameters
         ----------
         X_test : array-like or sparse matrix of shape = [n_samples, n_features]
 
-        y_test : array-like, shape = [n_samples] or [n_samples, n_outputs]
+        y_true : array-like, shape = [n_samples] or [n_samples, n_outputs]
 
         Returns
         -------
         (unnamed float) : float
         """
-        module = import_module("sklearn.metrics")
-        metric = getattr(module, self._config_.metric)
         y_pred = self.model_best.predict(X_test)
 
-        return metric(y_test, y_pred)
+        metric_type = list(self._config_.metric.keys())[0]
+        metric_class = self._config_.metric[metric_type]
+
+        return metric_class(y_true, y_pred)
 
     def export(self, filename):
         """Exports the best model, that was found by the optimizer during `fit`

@@ -2,9 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_breast_cancer
 
-data = load_iris()
+data = load_breast_cancer()
 X = data.data
 y = data.target
 
@@ -24,27 +24,78 @@ def test_keras():
     opt.score(X, y)
 
 
-def test_keras_score():
-    from hyperactive import HillClimbingOptimizer
+def test_keras_classification():
+    from hyperactive import RandomSearchOptimizer
 
-    scores = ["accuracy_score"]
-    for score in scores:
-        opt = HillClimbingOptimizer(search_config, 1, metric=score)
+    from sklearn.metrics import (
+        accuracy_score,
+        balanced_accuracy_score,
+        average_precision_score,
+        brier_score_loss,
+        f1_score,
+        log_loss,
+        precision_score,
+        recall_score,
+        jaccard_score,
+        roc_auc_score,
+    )
+
+    ml_scores = [
+        {"score": accuracy_score},
+        {"score": balanced_accuracy_score},
+        {"score": average_precision_score},
+        {"score": brier_score_loss},
+        {"score": f1_score},
+        {"loss": log_loss},
+        {"score": precision_score},
+        {"score": recall_score},
+        {"score": jaccard_score},
+        {"score": roc_auc_score},
+    ]
+
+    for score in ml_scores:
+        opt = RandomSearchOptimizer(search_config, 1, metric=score)
+        assert opt._config_.metric == score
         opt.fit(X, y)
+        assert opt._config_.metric == score
         opt.predict(X)
+        assert opt._config_.metric == score
         opt.score(X, y)
+        assert opt._config_.metric == score
 
 
-def test_keras_loss():
-    from hyperactive import HillClimbingOptimizer
+def test_keras_regression():
+    from hyperactive import RandomSearchOptimizer
 
-    losses = ["mean_absolute_error"]
+    from sklearn.metrics import (
+        explained_variance_score,
+        max_error,
+        mean_absolute_error,
+        mean_squared_error,
+        mean_squared_log_error,
+        median_absolute_error,
+        r2_score,
+    )
 
-    for loss in losses:
-        opt = HillClimbingOptimizer(search_config, 1, metric=loss)
+    ml_losses = [
+        {"score": explained_variance_score},
+        {"loss": max_error},
+        {"loss": mean_absolute_error},
+        {"loss": mean_squared_error},
+        {"loss": mean_squared_log_error},
+        {"loss": median_absolute_error},
+        {"score": r2_score},
+    ]
+
+    for loss in ml_losses:
+        opt = RandomSearchOptimizer(search_config, 1, metric=loss)
+        assert opt._config_.metric == loss
         opt.fit(X, y)
+        assert opt._config_.metric == loss
         opt.predict(X)
+        assert opt._config_.metric == loss
         opt.score(X, y)
+        assert opt._config_.metric == loss
 
 
 def test_keras_n_jobs():

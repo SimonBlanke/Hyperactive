@@ -108,15 +108,6 @@ def test_verbosity():
     opt1.fit(X, y)
 
 
-def test_metrics():
-    from hyperactive import RandomSearchOptimizer
-
-    opt = RandomSearchOptimizer(
-        search_config, 1, metric="mean_absolute_error", n_jobs=1
-    )
-    opt.fit(X, y)
-
-
 def test_scatter_init():
     from hyperactive import RandomSearchOptimizer
 

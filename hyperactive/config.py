@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 
+from sklearn.metrics import mean_squared_error
 from .util import merge_dicts
 
 
@@ -18,7 +19,7 @@ class Config:
         kwargs_base = {
             "metric": "accuracy_score",
             "n_jobs": 1,
-            "cv": 0.66,
+            "cv": 3,
             "verbosity": 1,
             "random_state": None,
             "warm_start": False,
@@ -76,12 +77,12 @@ class Config:
 
     def _set_default_metric(self):
         default_metrics = {
-            "sklearn": "accuracy_score",
-            "xgboost": "accuracy_score",
-            "lightgbm": "accuracy_score",
-            "catboost": "accuracy_score",
-            "keras": "mean_squared_error",
-            "torch": "mean_squared_error",
+            "sklearn": {"loss": mean_squared_error},
+            "xgboost": {"loss": mean_squared_error},
+            "lightgbm": {"loss": mean_squared_error},
+            "catboost": {"loss": mean_squared_error},
+            "keras": {"loss": mean_squared_error},
+            "torch": {"loss": mean_squared_error},
         }
 
         self.metric = default_metrics[self.model_type]

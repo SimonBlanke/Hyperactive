@@ -17,10 +17,8 @@ class Model:
         self.scores = scores
         self.losses = losses
 
-        self._get_metric_type()
-
-        module = import_module("sklearn.metrics")
-        self.metric_class = getattr(module, self.metric)
+        self.metric_type = list(_config_.metric.keys())[0]
+        self.metric_class = _config_.metric[self.metric_type]
 
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)
@@ -28,12 +26,6 @@ class Model:
         model = getattr(module, model_str)
 
         return model
-
-    def _get_metric_type(self):
-        if self.metric in self.scores:
-            self.metric_type = "score"
-        elif self.metric in self.losses:
-            self.metric_type = "loss"
 
     def train_model(self, para, X, y):
         model_ = self._create_model(para)

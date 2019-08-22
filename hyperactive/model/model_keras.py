@@ -26,9 +26,6 @@ class KerasModel(DeepLearningModel):
 
         self._get_search_config_onlyLayers()
 
-        module = import_module("sklearn.metrics")
-        self.metric_ = getattr(module, self.metric)
-
     def _get_search_config_onlyLayers(self):
         self.search_config_onlyLayers = dict(self.search_config)
 
@@ -118,7 +115,7 @@ class KerasModel(DeepLearningModel):
             fit_para_dict["y"] = y_train
             model.fit(**fit_para_dict)
             y_pred = model.predict(X_test)
-            score = self.metric_(y_test, y_pred)
+            score = self.metric_class(y_test, y_pred)
             scores.append(score)
 
         return np.array(scores).mean()
@@ -146,7 +143,7 @@ class KerasModel(DeepLearningModel):
             fit_para_dict["y"] = y_train
             model.fit(**fit_para_dict)
             y_pred = model.predict(X_test)
-            score = self.metric_(y_test, y_pred)
+            score = self.metric_class(y_test, y_pred)
         else:
             score = 0
             model.fit(X, y)
