@@ -44,7 +44,6 @@ def test_keras_classification():
     ]
 
     for score in ml_scores:
-        print("\n\n\n score", score)
         opt = RandomSearchOptimizer(search_config, 1, metric=score)
         assert opt._config_.metric == score
         opt.fit(X, y)

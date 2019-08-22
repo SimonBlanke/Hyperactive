@@ -163,7 +163,7 @@ def test_catboost_warm_start():
 
     warm_start = {
         "catboost.CatBoostClassifier": {
-            "iterations": [10],
+            "iterations": [3],
             "learning_rate": [1],
             "depth": [3],
             "verbose": [0],
