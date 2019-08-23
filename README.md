@@ -10,7 +10,11 @@
 
 <div align="center">
   
-![Build Status][img-travis-ci-badge] ![img-coveralls-badge] ![img-codacy-badge] ![img-codeclimate-badge] ![img-codefactor-badge]
+[![Build Status][img-travis-ci-badge]](https://travis-ci.com/SimonBlanke/Hyperactive)
+[![img-coveralls-badge][img-coveralls-badge]](https://coveralls.io/github/SimonBlanke/Hyperactive)
+[![img-codacy-badge][img-codacy-badge]](https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard)
+[![img-codeclimate-badge][img-codeclimate-badge]](https://codeclimate.com/github/SimonBlanke/Hyperactive)
+[![img-codefactor-badge][img-codefactor-badge]](https://www.codefactor.io/repository/github/simonblanke/hyperactive)
 
 </div>
 
@@ -524,7 +528,7 @@ export(self, filename)
 
 ## License
 
-![https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)
+[![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
 
 [img-travis-ci-badge]:https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=for-the-badge&logo=appveyor
 [img-coveralls-badge]:https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=for-the-badge&logo=codecov
