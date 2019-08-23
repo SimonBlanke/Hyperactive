@@ -10,11 +10,11 @@
 
 <div align="center">
   
-[![Build Status][img-travis-ci-badge]](https://travis-ci.com/SimonBlanke/Hyperactive)
-[![img-coveralls-badge][img-coveralls-badge]](https://coveralls.io/github/SimonBlanke/Hyperactive)
-[![img-codacy-badge][img-codacy-badge]](https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard)
-[![img-codeclimate-badge][img-codeclimate-badge]](https://codeclimate.com/github/SimonBlanke/Hyperactive)
-[![img-codefactor-badge][img-codefactor-badge]](https://www.codefactor.io/repository/github/simonblanke/hyperactive)
+[![img not loaded: try F5 :)][img-travis-ci-badge]](https://travis-ci.com/SimonBlanke/Hyperactive)
+[![img not loaded: try F5 :)][img-coveralls-badge]](https://coveralls.io/github/SimonBlanke/Hyperactive)
+[![img not loaded: try F5 :)][img-codacy-badge]](https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard)
+[![img not loaded: try F5 :)][img-codeclimate-badge]](https://codeclimate.com/github/SimonBlanke/Hyperactive)
+[![img not loaded: try F5 :)][img-codefactor-badge]](https://www.codefactor.io/repository/github/simonblanke/hyperactive)
 
 </div>
 
