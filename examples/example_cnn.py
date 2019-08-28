@@ -3,11 +3,11 @@ import numpy as np
 from keras.datasets import mnist
 from keras.utils import to_categorical
 
-from hyperactive import ParticleSwarmOptimizer
+from hyperactive import RandomSearchOptimizer
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-size = 6000
+size = 1000
 
 X_train = X_train[0:size]
 y_train = y_train[0:size]
@@ -42,9 +42,7 @@ search_config = {
     "keras.layers.Dense.8": {"units": [10], "activation": ["softmax"]},
 }
 
-Optimizer = ParticleSwarmOptimizer(
-    search_config, n_iter=3, metric="mean_squared_error", verbosity=0
-)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=3, metric="accuracy")
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -52,5 +50,5 @@ Optimizer.fit(X_train, y_train)
 # predict from test data
 prediction = Optimizer.predict(X_test)
 
-# calculate accuracy score
+# calculate score
 score = Optimizer.score(X_test, y_test)

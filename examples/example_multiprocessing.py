@@ -42,7 +42,7 @@ search_config = {
     },
 }
 
-Optimizer = RandomSearchOptimizer(search_config, n_iter=10000, n_jobs=-1, verbosity=0)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=100, n_jobs=-1, verbosity=0)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -50,5 +50,5 @@ Optimizer.fit(X_train, y_train)
 # predict from test data
 prediction = Optimizer.predict(X_test)
 
-# calculate accuracy score
+# calculate score
 score = Optimizer.score(X_test, y_test)

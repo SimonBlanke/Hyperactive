@@ -29,9 +29,7 @@ search_config = {
 }
 
 
-Optimizer = SimulatedAnnealingOptimizer(
-    search_config, n_iter=3, warm_start=False, verbosity=0
-)
+Optimizer = SimulatedAnnealingOptimizer(search_config, n_iter=3, warm_start=False)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
@@ -39,5 +37,5 @@ Optimizer.fit(X_train, y_train)
 # predict from test data
 prediction = Optimizer.predict(X_test)
 
-# calculate accuracy score
+# calculate score
 score = Optimizer.score(X_test, y_test)

@@ -1,6 +1,6 @@
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
-from hyperactive import ParticleSwarmOptimizer
+from hyperactive import RandomAnnealingOptimizer
 
 breast_cancer_data = load_breast_cancer()
 
@@ -26,12 +26,10 @@ search_config = {
     "keras.layers.Dense.3": {"units": [1], "activation": ["softmax"]},
 }
 
-Optimizer = ParticleSwarmOptimizer(
-    search_config, n_iter=3, metric=["mean_absolute_error"], verbosity=0
-)
+Optimizer = RandomAnnealingOptimizer(search_config, n_iter=3, metric="accuracy")
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
 # predict from test data
 prediction = Optimizer.predict(X_test)
-# calculate accuracy score
+# calculate score
 score = Optimizer.score(X_test, y_test)

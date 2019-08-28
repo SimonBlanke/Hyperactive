@@ -81,9 +81,7 @@ start_point = {
 }
 
 
-Optimizer = SimulatedAnnealingOptimizer(
-    search_config, n_iter=3, warm_start=start_point, verbosity=0
-)
+Optimizer = SimulatedAnnealingOptimizer(search_config, n_iter=3, warm_start=start_point)
 
 # search best hyperparameter for given data
 Optimizer.fit(X_train, y_train)
