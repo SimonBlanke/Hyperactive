@@ -17,9 +17,6 @@ class Model:
         self.scores = scores
         self.losses = losses
 
-        self.metric_type = list(_config_.metric.keys())[0]
-        self.metric_class = _config_.metric[self.metric_type]
-
     def _get_model(self, model):
         module_str, model_str = model.rsplit(".", 1)
         module = import_module(module_str)
@@ -44,15 +41,24 @@ class Model:
             score = 0
             model = model_.fit(X, y)
 
-        if self.metric_type == "score":
+        if self.metric in self.scores:
             return score, model
-        elif self.metric_type == "loss":
+        elif self.metric in self.losses:
             return -score, model
 
 
 class MachineLearningModel(Model):
     def __init__(self, _config_):
         super().__init__(_config_)
+
+        # self.metric_type = list(_config_.metric.keys())[0]
+        self.metric_class = self._get_metric_class(self.metric)
+
+    def _get_metric_class(self, metric):
+        module = import_module("sklearn.metrics")
+        metric_class = getattr(module, metric)
+
+        return metric_class
 
 
 class DeepLearningModel(Model):

@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 import multiprocessing
 
-from sklearn.metrics import mean_squared_error
 from .util import merge_dicts
 
 
@@ -26,6 +25,8 @@ class Config:
             "memory": True,
             "scatter_init": False,
             "meta_learn": False,
+            "data_prox": False,
+            "repulsor": False,
         }
 
         self.pos_args = ["search_config", "n_iter"]
@@ -77,12 +78,12 @@ class Config:
 
     def _set_default_metric(self):
         default_metrics = {
-            "sklearn": {"loss": mean_squared_error},
-            "xgboost": {"loss": mean_squared_error},
-            "lightgbm": {"loss": mean_squared_error},
-            "catboost": {"loss": mean_squared_error},
-            "keras": {"loss": mean_squared_error},
-            "torch": {"loss": mean_squared_error},
+            "sklearn": "accuracy_score",
+            "xgboost": "accuracy_score",
+            "lightgbm": "accuracy_score",
+            "catboost": "accuracy_score",
+            "keras": "accuracy",
+            "torch": "accuracy",
         }
 
         self.metric = default_metrics[self.model_type]

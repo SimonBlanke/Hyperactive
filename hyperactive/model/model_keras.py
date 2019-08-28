@@ -8,7 +8,7 @@ from importlib import import_module
 from sklearn.model_selection import train_test_split
 
 
-# from .metrics import dl_scores, dl_losses
+from .metrics import dl_scores, dl_losses
 from .model import DeepLearningModel
 
 
@@ -17,6 +17,8 @@ class KerasModel(DeepLearningModel):
         super().__init__(_config_)
         self.search_config = _config_.search_config
 
+        self.scores = dl_scores
+        self.losses = dl_losses
         # if no metric was passed
         # if isinstance(self.metric, str):
         #     self.metric_keras = [self.metric]
@@ -96,6 +98,8 @@ class KerasModel(DeepLearningModel):
     def _get_compile_parameter(self, layers_para_dict):
         compile_para_dict = layers_para_dict[list(layers_para_dict.keys())[0]]
 
+        compile_para_dict["metrics"] = [self.metric]
+
         return compile_para_dict
 
     def _get_fit_parameter(self, layers_para_dict):
@@ -114,8 +118,9 @@ class KerasModel(DeepLearningModel):
             fit_para_dict["x"] = X_train
             fit_para_dict["y"] = y_train
             model.fit(**fit_para_dict)
-            y_pred = model.predict(X_test)
-            score = self.metric_class(y_test, y_pred)
+            # y_pred = model.predict(X_test)
+            # score = self.metric_class(y_test, y_pred)
+            loss, score = model.evaluate(X_test, y_test, verbose=0)
             scores.append(score)
 
         return np.array(scores).mean()
@@ -142,13 +147,14 @@ class KerasModel(DeepLearningModel):
             fit_para_dict["x"] = X_train
             fit_para_dict["y"] = y_train
             model.fit(**fit_para_dict)
-            y_pred = model.predict(X_test)
-            score = self.metric_class(y_test, y_pred)
+            # y_pred = model.predict(X_test)
+            # score = self.metric_class(y_test, y_pred)
+            loss, score = model.evaluate(X_test, y_test, verbose=0)
         else:
             score = 0
             model.fit(X, y)
 
-        if self.metric_type == "score":
+        if self.metric in self.scores:
             return score, model
-        elif self.metric_type == "loss":
+        elif self.metric in self.losses:
             return -score, model

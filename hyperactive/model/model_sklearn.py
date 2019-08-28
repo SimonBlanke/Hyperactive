@@ -6,10 +6,10 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import make_scorer
 
 
-from .model import Model
+from .model import MachineLearningModel
 
 
-class ScikitLearnModel(Model):
+class ScikitLearnModel(MachineLearningModel):
     def __init__(self, _config_, model_key):
         super().__init__(_config_)
         self.model_key = model_key
