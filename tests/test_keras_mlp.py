@@ -24,33 +24,16 @@ def test_keras():
     opt.score(X, y)
 
 
-def test_keras_classification():
+def test_keras_scores():
     from hyperactive import RandomSearchOptimizer
 
-    from sklearn.metrics import (
-        accuracy_score,
-        balanced_accuracy_score,
-        average_precision_score,
-        brier_score_loss,
-        f1_score,
-        log_loss,
-        precision_score,
-        recall_score,
-        jaccard_score,
-        roc_auc_score,
-    )
-
     ml_scores = [
-        {"score": accuracy_score},
-        {"score": balanced_accuracy_score},
-        {"score": average_precision_score},
-        {"score": brier_score_loss},
-        {"score": f1_score},
-        {"loss": log_loss},
-        {"score": precision_score},
-        {"score": recall_score},
-        {"score": jaccard_score},
-        {"score": roc_auc_score},
+        "accuracy",
+        "binary_accuracy",
+        "categorical_accuracy",
+        "sparse_categorical_accuracy",
+        "top_k_categorical_accuracy",
+        "sparse_top_k_categorical_accuracy",
     ]
 
     for score in ml_scores:
@@ -64,27 +47,24 @@ def test_keras_classification():
         assert opt._config_.metric == score
 
 
-def test_keras_regression():
+def test_keras_losses():
     from hyperactive import RandomSearchOptimizer
 
-    from sklearn.metrics import (
-        explained_variance_score,
-        max_error,
-        mean_absolute_error,
-        mean_squared_error,
-        mean_squared_log_error,
-        median_absolute_error,
-        r2_score,
-    )
-
     ml_losses = [
-        {"score": explained_variance_score},
-        {"loss": max_error},
-        {"loss": mean_absolute_error},
-        {"loss": mean_squared_error},
-        {"loss": mean_squared_log_error},
-        {"loss": median_absolute_error},
-        {"score": r2_score},
+        "mean_squared_error",
+        "mean_absolute_error",
+        "mean_absolute_percentage_error",
+        "mean_squared_logarithmic_error",
+        "squared_hinge",
+        "hinge",
+        # "categorical_hinge",
+        "logcosh",
+        "categorical_crossentropy",
+        # "sparse_categorical_crossentropy",
+        "binary_crossentropy",
+        "kullback_leibler_divergence",
+        "poisson",
+        "cosine_proximity",
     ]
 
     for loss in ml_losses:

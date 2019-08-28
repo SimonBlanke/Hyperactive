@@ -32,30 +32,17 @@ def test_lightgbm():
 def test_lightgbm_classification():
     from hyperactive import RandomSearchOptimizer
 
-    from sklearn.metrics import (
-        accuracy_score,
-        balanced_accuracy_score,
-        average_precision_score,
-        brier_score_loss,
-        f1_score,
-        log_loss,
-        precision_score,
-        recall_score,
-        jaccard_score,
-        roc_auc_score,
-    )
-
     ml_scores = [
-        {"score": accuracy_score},
-        {"score": balanced_accuracy_score},
-        {"score": average_precision_score},
-        {"score": brier_score_loss},
-        {"score": f1_score},
-        {"loss": log_loss},
-        {"score": precision_score},
-        {"score": recall_score},
-        {"score": jaccard_score},
-        {"score": roc_auc_score},
+        "accuracy_score",
+        "balanced_accuracy_score",
+        "average_precision_score",
+        "brier_score_loss",
+        "f1_score",
+        "log_loss",
+        "precision_score",
+        "recall_score",
+        "jaccard_score",
+        "roc_auc_score",
     ]
 
     for score in ml_scores:
@@ -72,24 +59,14 @@ def test_lightgbm_classification():
 def test_lightgbm_regression():
     from hyperactive import RandomSearchOptimizer
 
-    from sklearn.metrics import (
-        explained_variance_score,
-        max_error,
-        mean_absolute_error,
-        mean_squared_error,
-        mean_squared_log_error,
-        median_absolute_error,
-        r2_score,
-    )
-
     ml_losses = [
-        {"score": explained_variance_score},
-        {"loss": max_error},
-        {"loss": mean_absolute_error},
-        {"loss": mean_squared_error},
-        {"loss": mean_squared_log_error},
-        {"loss": median_absolute_error},
-        {"score": r2_score},
+        "explained_variance_score",
+        "max_error",
+        "mean_absolute_error",
+        "mean_squared_error",
+        "mean_squared_log_error",
+        "median_absolute_error",
+        "r2_score",
     ]
 
     for loss in ml_losses:
