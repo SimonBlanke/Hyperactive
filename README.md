@@ -9,7 +9,7 @@
 <h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
 <div align="center">
-  
+
 [![img not loaded: try F5 :)][img-travis-ci-badge]](https://travis-ci.com/SimonBlanke/Hyperactive)
 [![img not loaded: try F5 :)][img-coveralls-badge]](https://coveralls.io/github/SimonBlanke/Hyperactive)
 [![img not loaded: try F5 :)][img-codacy-badge]](https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard)
@@ -511,6 +511,8 @@ export(self, filename)
 
 ### Available Metrics:
 
+#### Machine Learning
+
 |  Scores |  Losses |
 | ------ | ------ |
 | accuracy_score | brier_score_loss |
@@ -522,6 +524,24 @@ export(self, filename)
 | roc_auc_score | median_absolute_error |
 | explained_variance_score |  |
 
+#### Deep Learning
+
+|  Scores |  Losses |
+| ------ | ------ |
+|  accuracy |  mean_squared_error |
+|  binary_accuracy |  mean_absolute_error |
+|  categorical_accuracy |  mean_absolute_percentage_error |
+|  sparse_categorical_accuracy |  mean_squared_logarithmic_error |
+|  top_k_categorical_accuracy |  squared_hinge |
+|  sparse_top_k_categorical_accuracy |  hinge |
+|   |  categorical_hinge |
+|   |  logcosh |
+|   |  categorical_crossentropy |
+|   |  sparse_categorical_crossentropy |
+|   |  binary_crossentropy |
+|   |  kullback_leibler_divergence |
+|   |  poisson |
+|   |  cosine_proximity |
 
 <br>
 
