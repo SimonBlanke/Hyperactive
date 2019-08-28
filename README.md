@@ -25,7 +25,6 @@
 <div align="center"><a name="menu"></a>
   <h4>
     <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#performance">Performance</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
