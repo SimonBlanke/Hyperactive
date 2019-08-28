@@ -376,7 +376,7 @@ BayesianOptimizer(search_config, n_iter, metric="accuracy", n_jobs=1, cv=3, verb
 | ------ | ------ | ------ | ------ |
 | metric  | str | "accuracy" | metric for model evaluation |
 | n_jobs | int | 1 | number of jobs to run in parallel (-1 for maximum) |
-| cv | int | 3 | cross-validation |
+| cv | int | 3 | if cv > 1: cross-validation / if cv < 1: train/validation split, where cv-float marks the relative size of the train data |
 | verbosity | int | 1 | Shows model and metric information |
 | random_state | int | None | The seed for random number generator |
 | warm_start | dict | None | Hyperparameter configuration to start from |
