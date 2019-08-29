@@ -1,15 +1,15 @@
 import numpy as np
 
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 
-from hyperactive import SimulatedAnnealingOptimizer
+from hyperactive import EvolutionStrategyOptimizer
 
-iris_data = load_iris()
-X = iris_data.data
-y = iris_data.target
+cancer_data = load_breast_cancer()
+X = cancer_data.data
+y = cancer_data.target
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
 # this defines the model and hyperparameter search space
 search_config = {
@@ -23,13 +23,15 @@ search_config = {
     }
 }
 
-Optimizer = SimulatedAnnealingOptimizer(search_config, n_iter=10, n_jobs=4, verbosity=1)
+opt = EvolutionStrategyOptimizer(search_config, n_iter=10, n_jobs=4)
 
 # search best hyperparameter for given data
-Optimizer.fit(X_train, y_train)
+opt.fit(X_train, y_train)
 
 # predict from test data
-prediction = Optimizer.predict(X_test)
+prediction = opt.predict(X_test)
 
-# calculate accuracy score
-score = Optimizer.score(X_test, y_test)
+# calculate score
+score = opt.score(X_test, y_test)
+
+print("\ntest score of best model:", score)

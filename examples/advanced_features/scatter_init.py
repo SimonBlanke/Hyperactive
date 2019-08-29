@@ -15,14 +15,14 @@ search_config = {
 }
 
 # Without scatter initialization
-Optimizer = SimulatedAnnealingOptimizer(
-    search_config, n_iter=20, n_jobs=1, random_state=0, scatter_init=False, cv=3
+opt = SimulatedAnnealingOptimizer(
+    search_config, n_iter=20, random_state=0, scatter_init=False
 )
-Optimizer.fit(X, y)
+opt.fit(X, y)
 
 
 # With scatter initialization
-Optimizer = SimulatedAnnealingOptimizer(
-    search_config, n_iter=20, n_jobs=1, random_state=0, scatter_init=True, cv=3
+opt = SimulatedAnnealingOptimizer(
+    search_config, n_iter=20, random_state=0, scatter_init=True
 )
-Optimizer.fit(X, y)
+opt.fit(X, y)

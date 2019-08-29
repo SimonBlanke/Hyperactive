@@ -14,10 +14,12 @@ search_config = {
     }
 }
 
-
-Optimizer = RandomSearchOptimizer(
-    search_config, n_iter=1000, n_jobs=1, memory=True, cv=3
-)
+"""
+The memory will remember previous evaluations done during the optimization process.
+Instead of retraining the model, it accesses the memory and uses the saved score/loss.
+This shows as a speed up during the optimization process, since the whole search space has been explored.
+"""
+opt = RandomSearchOptimizer(search_config, n_iter=1000, memory=True)
 
 # search best hyperparameter for given data
-Optimizer.fit(X, y)
+opt.fit(X, y)

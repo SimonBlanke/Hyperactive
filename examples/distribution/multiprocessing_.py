@@ -1,15 +1,11 @@
 import numpy as np
-
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
 
 from hyperactive import RandomSearchOptimizer
 
-iris_data = load_iris()
-X = iris_data.data
-y = iris_data.target
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+breast_cancer_data = load_breast_cancer()
+X = breast_cancer_data.data
+y = breast_cancer_data.target
 
 # this defines the model and hyperparameter search space
 search_config = {
@@ -21,7 +17,7 @@ search_config = {
         "min_samples_leaf": range(2, 21),
     },
     "sklearn.neighbors.KNeighborsClassifier": {
-        "n_neighbors": range(1, 10),
+        "n_neighbors": range(1, 101),
         "weights": ["uniform", "distance"],
         "p": [1, 2],
     },
@@ -31,24 +27,18 @@ search_config = {
         "max_depth": range(1, 11),
         "min_samples_split": range(2, 21),
         "min_samples_leaf": range(1, 21),
-        "subsample": np.arange(0.05, 1.01, 0.05),
-        "max_features": np.arange(0.05, 1.01, 0.05),
+        "subsample": list(np.arange(0.05, 1.01, 0.05)),
+        "max_features": list(np.arange(0.05, 1.01, 0.05)),
     },
     "sklearn.tree.DecisionTreeClassifier": {
         "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 11),
+        "max_depth": range(1, 21),
         "min_samples_split": range(2, 21),
         "min_samples_leaf": range(1, 21),
     },
 }
 
-Optimizer = RandomSearchOptimizer(search_config, n_iter=100, n_jobs=-1, verbosity=0)
+Optimizer = RandomSearchOptimizer(search_config, n_iter=100, n_jobs=-1)
 
 # search best hyperparameter for given data
-Optimizer.fit(X_train, y_train)
-
-# predict from test data
-prediction = Optimizer.predict(X_test)
-
-# calculate score
-score = Optimizer.score(X_test, y_test)
+Optimizer.fit(X, y)

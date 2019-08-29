@@ -81,13 +81,13 @@ start_point = {
 }
 
 
-Optimizer = SimulatedAnnealingOptimizer(search_config, n_iter=3, warm_start=start_point)
+opt = SimulatedAnnealingOptimizer(search_config, n_iter=3, warm_start=start_point)
 
 # search best hyperparameter for given data
-Optimizer.fit(X_train, y_train)
+opt.fit(X_train, y_train)
 
 # predict from test data
-prediction = Optimizer.predict(X_test)
+prediction = opt.predict(X_test)
 
 # calculate accuracy score
-score = Optimizer.score(X_test, y_test)
+score = opt.score(X_test, y_test)
