@@ -152,6 +152,8 @@ Hyperactive (stable) is available on PyPi:
 pip install hyperactive
 ```
 
+<br>
+
 Hyperactive (development version) from Github:
 
 ```console
