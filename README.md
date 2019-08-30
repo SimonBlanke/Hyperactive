@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo_alt.png" height="210"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo_alt.png" height="200"></a>
   <br>
 </p>
 
@@ -159,9 +159,9 @@ pip install hyperactive
 ##### Choose an optimizer
 
 Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guidlines</b>, when choosing an optimizer:
-- only use local or mcmc optimizers, if you have a good start point
-- random optimizers are a good way to start exploring the search space
-- the mayority of the iteration-time should be the evaluation-time of the model
+- only use local or mcmc optimizers, if you have a <b>good start point</b>
+- random optimizers are a good way to <b>start exploring</b> the search space
+- the majority of the <b>iteration-time</b> should be the <b>evaluation-time</b> of the model
 
 You can choose an optimizer-class from the list provided in the [API](https://github.com/SimonBlanke/Hyperactive#hyperactive-api).
 All optimization techniques are explained in more detail [here](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques). A comparison between the iteration- and evaluation-time for different models can be seen [here](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages).
@@ -218,7 +218,7 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 ##### Evaluation (optional)
 
-You can optionaly change the evaluation of the model with the 'cv' and 'metric' keyword in the optimizer class. 
+You can optionaly <b>change the evaluation</b> of the model with the 'cv' and 'metric' keyword in the optimizer class. 
 
 The <b>'cv'</b> keyword-argument works like in sklearn but with the added possibility to have a value lower than 1. In this case the evaluation will be done by doing a training/validation-split in the training data. A cv of 0.75 will use 75% of the data for training and 25% for the validation of the model.
 
