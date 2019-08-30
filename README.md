@@ -167,7 +167,7 @@ pip install Hyperactive/
 
 #### Choose an optimizer
 
-Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guidlines</b>, when choosing an optimizer:
+Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guideline</b>, when choosing an optimizer:
 - only use local or mcmc optimizers, if you have a <b>good start point</b>
 - random optimizers are a good way to <b>start exploring</b> the search space
 - the majority of the <b>iteration-time</b> should be the <b>evaluation-time</b> of the model
@@ -229,7 +229,7 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 You can optionaly <b>change the evaluation</b> of the model with the 'cv' and 'metric' keyword in the optimizer class. 
 
-The <b>'cv'</b> keyword-argument works like in sklearn but with the added possibility to have a value lower than 1. In this case the evaluation will be done by doing a training/validation-split in the training data. A cv of 0.75 will use 75% of the data for training and 25% for the validation of the model.
+The <b>'cv'</b> keyword-argument works like in sklearn but with the added possibility to have a value lower than 1. In this case the evaluation will be done by doing a training/validation-split in the training data. A cv of 0.75 will use 75% of the data for training and 25% for the validation of the model. As a <b>general guideline</b>: You should set the cv-value high if your dataset is small. This avoids wrong evaluations. On large deep-learning dataset you can set cv to 0.5 - 0.8 without risking a noisy evaluation. For large datasets you can even select a cv-value close to 0.9.
 
 The <b>'metric'</b>-keyword-argument accepts one of the metrics (provided in the [API](https://github.com/SimonBlanke/Hyperactive#hyperactive-api).) as a string. To know, which of those metrics work with what kind of datasets you can take a look at [this notebook](https://github.com/SimonBlanke/Hyperactive/blob/master/notebooks/metrics.ipynb). In it every metric is tried out on popular datasets.
 
