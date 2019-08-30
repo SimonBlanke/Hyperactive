@@ -143,13 +143,20 @@ Hyperactive is developed and tested in python 3:
 
 <br>
 
-Hyperactive is available on PyPi:
+Hyperactive (stable) is available on PyPi:
 
 [![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
 [![Downloads](https://pepy.tech/badge/hyperactive)](https://pepy.tech/project/hyperactive)
 
 ```console
 pip install hyperactive
+```
+
+Hyperactive (development version) from Github:
+
+```console
+git clone https://github.com/SimonBlanke/Hyperactive.git
+pip install Hyperactive/
 ```
 
 <br>
