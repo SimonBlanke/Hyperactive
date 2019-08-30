@@ -26,6 +26,7 @@
   <h4>
     <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#how-to-use-hyperactive">How to</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
@@ -150,6 +151,83 @@ Hyperactive is available on PyPi:
 ```console
 pip install hyperactive
 ```
+
+<br>
+
+## How to use Hyperactive
+
+##### Choose an optimizer
+
+Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following guidlines, when choosing an optimizer:
+- only use local or mcmc optimizers, if you have a good start point
+- random optimizers are a good way to start exploring the search space
+- the mayority of the iteration-time should be the evaluation-time of the model
+
+You can choose an optimizer-class from the list provided in the [API](https://github.com/SimonBlanke/Hyperactive#hyperactive-api).
+All optimization techniques are explained in more detail [here](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques). A comparison between the iteration- and evaluation-time for different models can be seen [here](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages).
+
+
+---
+
+##### Create the search space
+
+The search space is created with a dictionary, containing the model-type, hyperparameters and list of values. 
+
+```python
+search_config = {
+    'sklearn.neighbors.KNeighborsClassifier': {
+        'n_neighbors': range(1, 100),
+        'weights': ["uniform", "distance"],
+        'p': [1, 2]
+    }
+}
+```
+
+```python
+search_config = {
+    "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
+    "keras.fit.0": {"epochs": [5], "batch_size": [200], "verbose": [1]},
+    "keras.layers.Dense.1": {
+        "units": range(5, 100),
+        "activation": ["relu"],
+        "kernel_initializer": ["uniform"],
+    },
+    "keras.layers.Dense.2": {"units": [1], "activation": ["softmax"]},
+}
+```
+
+
+---
+
+##### How many iterations?
+
+The number of iterations should be low for your first optimization to get to know the iteration-time.
+For the iteration-time you should take the following effects into account:
+- A k-fold-crossvalidation increases evaluation-time like training on k-1 times on the training data
+- If you lower cv below 1 the evaluation will deal with it like a train/validation-split, where cv marks the training data fraction. Therefore lower cv means faster evaluation.
+- Some optimizers will do (and need) multiple evaluations per iteration:
+  - Particle-swarm-optimization
+  - Evoluion strategy
+  - Parallel Tempering
+- The complexity of the machine-/deep-learning models will heavily influence the evaluation- and therefore iteration-time.
+- The number of epochs should probably be kept low. You just want to compare different types of models. Retrain the best model afterwards with more epochs.
+
+---
+
+##### Evaluation (optional)
+
+
+---
+
+##### Distribution (optional)
+
+
+---
+
+##### Advanced features (optional)
+
+[advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features)
+
 
 <br>
 
