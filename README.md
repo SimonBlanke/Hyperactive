@@ -156,7 +156,7 @@ pip install hyperactive
 
 ## How to use Hyperactive
 
-##### Choose an optimizer
+#### Choose an optimizer
 
 Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guidlines</b>, when choosing an optimizer:
 - only use local or mcmc optimizers, if you have a <b>good start point</b>
@@ -169,7 +169,7 @@ All optimization techniques are explained in more detail [here](https://github.c
 
 ---
 
-##### Create the search space
+#### Create the search space
 
 The search space of machine learning models is created with a dictionary, containing the model-type, hyperparameters and list of values. 
 
@@ -201,7 +201,7 @@ search_config = {
 
 ---
 
-##### How many iterations?
+#### How many iterations?
 
 The number of iterations should be low for your first optimization to get to know the iteration-time.
 For the <b>iteration-time</b> you should take the following effects into account:
@@ -216,7 +216,7 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 ---
 
-##### Evaluation (optional)
+#### Evaluation (optional)
 
 You can optionaly <b>change the evaluation</b> of the model with the 'cv' and 'metric' keyword in the optimizer class. 
 
@@ -226,13 +226,13 @@ The <b>'metric'</b>-keyword-argument accepts one of the metrics (provided in the
 
 ---
 
-##### Distribution (optional)
+#### Distribution (optional)
 
 You can start multiple optimizations in <b>parallel</b> by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
 
 ---
 
-##### Advanced features (optional)
+#### Advanced features (optional)
 
 The [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) can be very useful to improve the performance of the optimizers in some situations. The 'memory' is used by default, because it saves you a lot of time.
 
