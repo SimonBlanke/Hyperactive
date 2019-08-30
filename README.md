@@ -158,7 +158,7 @@ pip install hyperactive
 
 ##### Choose an optimizer
 
-Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following guidlines, when choosing an optimizer:
+Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guidlines</b>, when choosing an optimizer:
 - only use local or mcmc optimizers, if you have a good start point
 - random optimizers are a good way to start exploring the search space
 - the mayority of the iteration-time should be the evaluation-time of the model
@@ -202,9 +202,9 @@ search_config = {
 ##### How many iterations?
 
 The number of iterations should be low for your first optimization to get to know the iteration-time.
-For the iteration-time you should take the following effects into account:
+For the <b>iteration-time'</b> you should take the following effects into account:
 - A k-fold-crossvalidation increases evaluation-time like training on k-1 times on the training data
-- If you lower cv below 1 the evaluation will deal with it like a train/validation-split, where cv marks the training data fraction. Therefore lower cv means faster evaluation.
+- If you lower cv below 1 the evaluation will deal with it like a training/validation-split, where cv marks the training data fraction. Therefore lower cv means faster evaluation.
 - Some optimizers will do (and need) multiple evaluations per iteration:
   - Particle-swarm-optimization
   - Evoluion strategy
@@ -216,17 +216,23 @@ For the iteration-time you should take the following effects into account:
 
 ##### Evaluation (optional)
 
+You can optionaly change the evaluation of the model with the 'cv' and 'metric' keyword in the optimizer class. 
+
+The <b>'cv'</b> keyword-argument works like in sklearn but with the added possibility to have a value lower than 1. In this case the evaluation will be done by doing a training/validation-split in the training data. A cv of 0.75 will use 75% of the data for training and 25% for the validation of the model.
+
+The <b>'metric'</b>-keyword-argument accepts one of the metrics (provided in the [API](https://github.com/SimonBlanke/Hyperactive#hyperactive-api).) as a string. To know, which of those metrics work with what kind of datasets you can take a look at [this notebook](https://github.com/SimonBlanke/Hyperactive/blob/master/notebooks/metrics.ipynb). In it every metric is tried out on popular datasets.
 
 ---
 
 ##### Distribution (optional)
 
+You can start multiple optimizations in parallel by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
 
 ---
 
 ##### Advanced features (optional)
 
-[advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features)
+The [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) can be very useful to improve the performance of the optimizers in some situations. The 'memory' is used by default, because it saves you a lot of time.
 
 
 <br>
