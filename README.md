@@ -137,9 +137,9 @@
 
 Hyperactive is developed and tested in python 3:
 
-[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&logoColor=white)](https://pypi.org/project/hyperactive)
-[![commit-activity](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/graphs/contributors)
-[![last-commit](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/commits/master)
+[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/hyperactive)
+[![commit-activity](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=flat-square)](https://github.com/SimonBlanke/Hyperactive/graphs/contributors)
+[![last-commit](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=flat-square)](https://github.com/SimonBlanke/Hyperactive/commits/master)
 
 <br>
 
@@ -171,7 +171,7 @@ All optimization techniques are explained in more detail [here](https://github.c
 
 ##### Create the search space
 
-The search space is created with a dictionary, containing the model-type, hyperparameters and list of values. 
+The search space of machine learning models is created with a dictionary, containing the model-type, hyperparameters and list of values. 
 
 ```python
 search_config = {
@@ -182,6 +182,8 @@ search_config = {
     }
 }
 ```
+
+The search space of deep learning models is created with a dictionary, containing the layers (with the number of the layer) and list of values. In this dictionary 'compile' and 'fit' are in 'layer' zero. The first input layer starts at 1.
 
 ```python
 search_config = {
@@ -202,15 +204,15 @@ search_config = {
 ##### How many iterations?
 
 The number of iterations should be low for your first optimization to get to know the iteration-time.
-For the <b>iteration-time'</b> you should take the following effects into account:
-- A k-fold-crossvalidation increases evaluation-time like training on k-1 times on the training data
-- If you lower cv below 1 the evaluation will deal with it like a training/validation-split, where cv marks the training data fraction. Therefore lower cv means faster evaluation.
-- Some optimizers will do (and need) multiple evaluations per iteration:
+For the <b>iteration-time</b> you should take the following effects into account:
+- A <b>k-fold-crossvalidation</b> increases evaluation-time like training on k-1 times on the training data
+- If you lower <b>cv below 1</b> the evaluation will deal with it like a training/validation-split, where cv marks the training data fraction. Therefore lower cv means faster evaluation.
+- Some optimizers will do (and need) <b>multiple evaluations</b> per iteration:
   - Particle-swarm-optimization
   - Evoluion strategy
   - Parallel Tempering
-- The complexity of the machine-/deep-learning models will heavily influence the evaluation- and therefore iteration-time.
-- The number of epochs should probably be kept low. You just want to compare different types of models. Retrain the best model afterwards with more epochs.
+- The <b>complexity</b> of the machine-/deep-learning models will heavily influence the evaluation- and therefore iteration-time.
+- The <b>number of epochs</b> should probably be kept low. You just want to compare different types of models. Retrain the best model afterwards with more epochs.
 
 ---
 
@@ -226,7 +228,7 @@ The <b>'metric'</b>-keyword-argument accepts one of the metrics (provided in the
 
 ##### Distribution (optional)
 
-You can start multiple optimizations in parallel by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
+You can start multiple optimizations in <b>parallel</b> by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
 
 ---
 
