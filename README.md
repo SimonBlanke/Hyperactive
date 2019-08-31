@@ -165,7 +165,8 @@ pip install Hyperactive/
 
 ## How to use Hyperactive
 
-#### Choose an optimizer
+<details open><summary><b>Choose an optimizer</b></summary>
+<p>
 
 Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guideline</b>, when choosing an optimizer:
 - only use local or mcmc optimizers, if you have a <b>good start point</b>
@@ -175,10 +176,11 @@ Your decision to use a specific optimizer should be based on the time it takes t
 You can choose an optimizer-class from the list provided in the [API](https://github.com/SimonBlanke/Hyperactive#hyperactive-api).
 All optimization techniques are explained in more detail [here](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques). A comparison between the iteration- and evaluation-time for different models can be seen [here](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages).
 
+</p>
+</details>
 
----
-
-#### Create the search space
+<details open><summary><b>Create the search space</b></summary>
+<p>
 
 The search space of machine learning models is created with a dictionary, containing the model-type, hyperparameters and list of values. 
 
@@ -207,10 +209,11 @@ search_config = {
 }
 ```
 
+</p>
+</details>
 
----
-
-#### How many iterations?
+<details open><summary><b>How many iterations?</b></summary>
+<p>
 
 The number of iterations should be low for your first optimization to get to know the iteration-time.
 For the <b>iteration-time</b> you should take the following effects into account:
@@ -223,7 +226,8 @@ For the <b>iteration-time</b> you should take the following effects into account
 - The <b>complexity</b> of the machine-/deep-learning models will heavily influence the evaluation- and therefore iteration-time.
 - The <b>number of epochs</b> should probably be kept low. You just want to compare different types of models. Retrain the best model afterwards with more epochs.
 
----
+</p>
+</details>
 
 <details><summary><b>Evaluation (optional)</b></summary>
 <p>
