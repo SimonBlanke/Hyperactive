@@ -640,6 +640,11 @@ export(self, filename)
 
 <br>
 
+## References
+
+#### [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+
+
 ## License
 
 [![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
