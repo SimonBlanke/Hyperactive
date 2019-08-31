@@ -225,7 +225,8 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 ---
 
-#### Evaluation (optional)
+<details><summary><b>Evaluation (optional)</b></summary>
+<p>
 
 You can optionaly <b>change the evaluation</b> of the model with the 'cv' and 'metric' keyword in the optimizer class. 
 
@@ -233,18 +234,24 @@ The <b>'cv'</b> keyword-argument works like in sklearn but with the added possib
 
 The <b>'metric'</b>-keyword-argument accepts one of the metrics (provided in the [API](https://github.com/SimonBlanke/Hyperactive#hyperactive-api).) as a string. To know, which of those metrics work with what kind of datasets you can take a look at [this notebook](https://github.com/SimonBlanke/Hyperactive/blob/master/notebooks/metrics.ipynb). In it every metric is tried out on popular datasets.
 
----
+</p>
+</details>
 
-#### Distribution (optional)
-
+<details><summary><b>Distribution (optional)</b></summary>
+<p>
+  
 You can start multiple optimizations in <b>parallel</b> by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
+  
+</p>
+</details>
 
----
-
-#### Advanced features (optional)
+<details><summary><b>Advanced features (optional)</b></summary>
+<p>
 
 The [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) can be very useful to improve the performance of the optimizers in some situations. The 'memory' is used by default, because it saves you a lot of time.
 
+</p>
+</details>
 
 <br>
 
@@ -644,6 +651,7 @@ export(self, filename)
 
 #### [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
 
+<br>
 
 ## License
 
