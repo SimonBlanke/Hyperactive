@@ -120,6 +120,7 @@
         <a><b>Resource Allocation:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#memory">Memory</a></li>
+            <li>Proxy Datasets (coming soon)</li>
           </ul>
         <a><b>Weight Initialization:</b></a>
           <ul>
