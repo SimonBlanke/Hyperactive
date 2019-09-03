@@ -155,7 +155,11 @@ class Config:
     def _show_progress_bar(self):
         show = False
 
-        if self.model_type == "keras" or self.model_type == "torch":
+        if (
+            self.model_type == "keras"
+            or self.model_type == "torch"
+            or self.verbosity is None
+        ):
             return show
 
         show = True
