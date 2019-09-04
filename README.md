@@ -10,7 +10,7 @@
 
 <table>
   <tbody>
-    <tr align="center" valign="center">
+    <tr align="left" valign="center">
       <td>
         <strong>Master status:</strong>
       </td>
@@ -24,7 +24,7 @@
       </td>
     </tr>
     <tr/>
-    <tr valign="top">
+    <tr align="left" valign="center">
       <td>
          <strong>Code quality:</strong>
       </td>
