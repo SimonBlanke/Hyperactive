@@ -28,6 +28,7 @@ platform:
   - x64
   
 install:
+  - SET PATH=%PYTHON%;%path%
   - python --version
   - python -m pip install --upgrade pip
   - pip install numpy
