@@ -2,6 +2,8 @@ version: 1.0.{build}
 build:
   verbosity: minimal
   
+image: Visual Studio 2015
+  
 environment:
   matrix:
     - PYTHON: C:\Python36
