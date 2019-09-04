@@ -26,6 +26,19 @@
     <tr/>
     <tr align="left" valign="center">
       <td>
+        <strong>Dev status:</strong>
+      </td>
+      <td>
+        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive/development?style=for-the-badge&logo=appveyor" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive?branch=development">
+          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive/development?style=for-the-badge&logo=codecov" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+    <tr/>    <tr align="left" valign="center">
+      <td>
          <strong>Code quality:</strong>
       </td>
       <td>
