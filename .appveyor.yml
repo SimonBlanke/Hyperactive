@@ -1,0 +1,51 @@
+version: 1.0.{build}
+build:
+  verbosity: minimal
+  
+image: Visual Studio 2015
+  
+environment:
+  matrix:
+    - PYTHON: C:\Python36
+      PYTHON_VERSION: 3.6
+      PYTHON_ARCH: 32
+      TEST_MODE: fast
+
+    - PYTHON: C:\Python37
+      PYTHON_VERSION: 3.7
+      PYTHON_ARCH: 32
+      TEST_MODE: fast
+
+    - PYTHON: C:\Python36-x64
+      PYTHON_VERSION: 3.6
+      PYTHON_ARCH: 64
+      TEST_MODE: full
+
+    - PYTHON: C:\Python37-x64
+      PYTHON_VERSION: 3.7
+      PYTHON_ARCH: 64
+      TEST_MODE: full
+  
+platform:
+  - x64
+  
+install:
+  - SET PATH=%PYTHON%;%path%
+  - python --version
+  - python -m pip install --upgrade pip
+  - pip install numpy
+  - pip install scipy
+  - pip install pandas
+  - pip install scikit-learn
+  - pip install xgboost
+  - pip install lightgbm
+  - pip install catboost
+  - pip install tensorflow
+  - pip install keras
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install coveralls
+  - pip install .
+  
+test_script:
+  - pytest
