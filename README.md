@@ -8,6 +8,8 @@
 
 <h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
 
+<br>
+
 <table>
   <tbody>
     <tr align="left" valign="center">
