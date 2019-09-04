@@ -183,7 +183,7 @@ All optimization techniques are explained in more detail [here](https://github.c
 <details open><summary><b>Create the search space</b></summary>
 <p>
 
-The search space of machine learning models is created with a dictionary, containing the model-type, hyperparameters and list of values. 
+The search space of <b>machine learning models</b> is created with a dictionary, containing the model-type, hyperparameters and list of values. 
 
 ```python
 search_config = {
@@ -195,7 +195,7 @@ search_config = {
 }
 ```
 
-The search space of deep learning models is created with a dictionary, containing the layers (with the number of the layer) and list of values. In this dictionary 'compile' and 'fit' are in 'layer' zero. The first input layer starts at 1.
+The search space of <b>deep learning models</b> is created with a dictionary, containing the layers (with the number of the layer) and list of values. In this dictionary 'compile' and 'fit' are in 'layer' zero. The first input layer starts at 1.
 
 ```python
 search_config = {
