@@ -1,0 +1,21 @@
+version: 1.0.{build}
+build:
+  verbosity: minimal
+  
+install:
+  - pip install numpy
+  - pip install scipy
+  - pip install pandas
+  - pip install scikit-learn
+  - pip install xgboost
+  - pip install lightgbm
+  - pip install catboost
+  - pip install tensorflow
+  - pip install keras
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install coveralls
+  - pip install .
+  
+test_script:
+  - pytest
