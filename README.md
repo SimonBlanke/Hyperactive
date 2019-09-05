@@ -6,7 +6,9 @@
 
 <br>
 
-<h2 align="center">A hyperparameter optimization toolbox for convenient and fast prototyping</h3>
+---
+
+<h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-/deep-learning models.</h2>
 
 <br>
 
