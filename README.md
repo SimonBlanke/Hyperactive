@@ -50,7 +50,7 @@
         <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
         <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
         </a>
-        <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
+        <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
         <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
         </a> 
         <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
