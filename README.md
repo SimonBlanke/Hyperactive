@@ -159,8 +159,9 @@
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter-Initialization</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#warm-start">Warm-start</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter-Initialization</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#warm-start">Warm-start</a></li>
+            <li>Meta-Learn (coming soon)</li>
           </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
