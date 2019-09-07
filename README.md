@@ -84,8 +84,7 @@
 
 ## Overview
 
-- Optimize [machine- or deep-learning models](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#supported-packages
-)
+- Optimize machine- or deep-learning models
 - Very simple (scikit-learn inspired) API
 - Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques)
 - High performance: Optimizer time is neglectable for most models
