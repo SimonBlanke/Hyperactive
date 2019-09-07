@@ -29,6 +29,9 @@ version = str("_v" + hyperactive.__version__)
 
 #################################################################################################
 
+runs = 10
+n_iter = 100
+
 opt_dict = {"cv": 3, "n_jobs": 1, "memory": False, "verbosity": 0}
 
 opt_list = {
@@ -132,20 +135,17 @@ iris_X, iris_y = iris_data.data, iris_data.target
 KNN = KNeighborsClassifier()
 
 search_config_KNN = {
-    "sklearn.neighbors.KNeighborsClassifier": {
-        "n_neighbors": range(18, 20),
-        "p": [1, 2],
-    }
+    "sklearn.neighbors.KNeighborsClassifier": {"n_neighbors": range(5, 7), "p": [1, 2]}
 }
 
 data_runs = collect_data(
-    runs=30,
+    runs=runs,
     X=iris_X,
     y=iris_y,
     sklearn_model=KNN,
     opt_list=opt_list,
     search_config=search_config_KNN,
-    n_iter=100,
+    n_iter=n_iter,
     opt_dict=opt_dict,
 )
 
@@ -153,7 +153,6 @@ data_runs = collect_data(
 from sklearn.datasets import load_breast_cancer
 from sklearn.ensemble import GradientBoostingClassifier
 
-"""
 cancer_data = load_breast_cancer()
 cancer_X, cancer_y = cancer_data.data, cancer_data.target
 
@@ -167,13 +166,90 @@ search_config_GBC = {
 }
 
 data_runs = collect_data(
-    runs=10,
+    runs=runs,
     X=cancer_X,
     y=cancer_y,
     sklearn_model=GBC,
     opt_list=opt_list,
     search_config=search_config_GBC,
-    n_iter=10,
+    n_iter=n_iter,
     opt_dict=opt_dict,
 )
-"""
+
+#################################################################################################
+from sklearn.datasets import load_breast_cancer
+from sklearn.tree import DecisionTreeClassifier
+
+cancer_data = load_breast_cancer()
+cancer_X, cancer_y = cancer_data.data, cancer_data.target
+
+DTC = DecisionTreeClassifier()
+
+search_config_DTC = {
+    "sklearn.tree.DecisionTreeClassifier": {
+        "min_samples_split": [2, 3],
+        "min_samples_leaf": [1, 2],
+    }
+}
+
+data_runs = collect_data(
+    runs=runs,
+    X=cancer_X,
+    y=cancer_y,
+    sklearn_model=DTC,
+    opt_list=opt_list,
+    search_config=search_config_DTC,
+    n_iter=n_iter,
+    opt_dict=opt_dict,
+)
+
+#################################################################################################
+from sklearn.datasets import load_breast_cancer
+from sklearn.ensemble import GradientBoostingClassifier
+
+cancer_data = load_breast_cancer()
+cancer_X, cancer_y = cancer_data.data, cancer_data.target
+
+GBC = GradientBoostingClassifier()
+
+search_config_GBC = {
+    "sklearn.ensemble.GradientBoostingClassifier": {
+        "n_estimators": range(99, 102),
+        "max_depth": range(3, 4),
+    }
+}
+
+data_runs = collect_data(
+    runs=runs,
+    X=cancer_X,
+    y=cancer_y,
+    sklearn_model=GBC,
+    opt_list=opt_list,
+    search_config=search_config_GBC,
+    n_iter=n_iter,
+    opt_dict=opt_dict,
+)
+
+#################################################################################################
+from sklearn.datasets import load_breast_cancer
+from lightgbm import LGBMClassifier
+
+cancer_data = load_breast_cancer()
+cancer_X, cancer_y = cancer_data.data, cancer_data.target
+
+LGBMC = LGBMClassifier()
+
+search_config_LGBMC = {
+    "lightgbm.LGBMClassifier": {"num_leaves": [31, 32], "n_estimators": [100, 101]}
+}
+
+data_runs = collect_data(
+    runs=runs,
+    X=cancer_X,
+    y=cancer_y,
+    sklearn_model=LGBMC,
+    opt_list=opt_list,
+    search_config=search_config_LGBMC,
+    n_iter=n_iter,
+    opt_dict=opt_dict,
+)
