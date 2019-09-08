@@ -107,7 +107,7 @@ for opt in opt_list:
     pos_list = np.array(pos_list)
     score_list = np.array(score_list)
 
-    plt.figure(figsize=(15, 5))
+    plt.figure(figsize=(10, 4))
     plt.set_cmap("jet")
 
     pos_list = np.swapaxes(pos_list, 0, 1)
