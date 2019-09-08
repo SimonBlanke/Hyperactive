@@ -12,7 +12,7 @@ The 'No Opt'-bar shows the training time of a default model normalized to 1. The
 </p>
 
 <p align="center">
-<img src="./optimizer_time_sklearn.ensemble.GradientBoostingClassifier.png	" width="900"/>
+<img src="./optimizer_time_sklearn.ensemble.GradientBoostingClassifier.png" width="900"/>
 </p>
 
 <p align="center">
