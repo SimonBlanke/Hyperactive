@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
 from ..search_space import SearchSpace
 
 
@@ -31,11 +30,9 @@ class Candidate:
 
         if pos_str in self._space_.memory and self.memory and not force_eval:
             return self._space_.memory[pos_str]
-
         else:
             para = self._space_.pos2para(pos)
             score, self.model = self._model_.train_model(para, X, y)
-
             self._space_.memory[pos_str] = score
 
             return score

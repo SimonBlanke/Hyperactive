@@ -24,12 +24,8 @@ class BasePositioner:
         pos_new = np.random.normal(pos, sigma, pos.shape)
         pos_new_int = np.rint(pos_new)
 
-        # print("\n pos_new_int", pos_new_int)
-
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
-
-        # print("\n pos", pos)
 
         # if np.array_equal(_cand_.pos_best, pos):
         # pos_new = np.random.uniform(pos - 1, pos + 1, pos.shape)

@@ -4,6 +4,7 @@
 
 
 import pickle
+import numpy as np
 import multiprocessing
 
 from importlib import import_module
@@ -63,6 +64,10 @@ class BaseOptimizer:
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
 
+        if self._config_.get_search_path:
+            self.pos_list = []
+            self.score_list = []
+
     def _hill_climb_iteration(self, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
@@ -100,21 +105,44 @@ class BaseOptimizer:
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
             self._config_.update_p_bar(1)
 
+            if self._config_.get_search_path:
+                pos_list = []
+                score_list = []
+                if isinstance(_p_, list):
+                    for p in _p_:
+                        pos_list.append(p.pos_new)
+                        score_list.append(p.score_new)
+
+                        pos_list_ = np.array(pos_list)
+                        score_list_ = np.array(score_list)
+
+                    self.pos_list.append(pos_list_)
+                    self.score_list.append(score_list_)
+                else:
+                    pos_list.append(_p_.pos_new)
+                    score_list.append(_p_.score_new)
+
+                    pos_list_ = np.array(pos_list)
+                    score_list_ = np.array(score_list)
+
+                    self.pos_list.append(pos_list_)
+                    self.score_list.append(score_list_)
+
         _cand_ = finish_search_(self._config_, _cand_, X, y)
 
-        return _cand_
+        return _cand_, _p_
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._config_.n_jobs)
         search = partial(self.search, X=X, y=y)
 
-        _cand_list = pool.map(search, self._config_._n_process_range)
+        _cand_list, _p_list = pool.map(search, self._config_._n_process_range)
 
         return _cand_list
 
     def _run_one_job(self, X, y):
-        _cand_ = self.search(0, X, y)
+        _cand_, _p_ = self.search(0, X, y)
         if self._config_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
 
@@ -125,6 +153,9 @@ class BaseOptimizer:
         if self._config_.verbosity:
             print("\n", self._config_.metric, self.score_best)
             print("start_point =", start_point)
+
+        if self._config_.get_search_path:
+            self._p_ = _p_
 
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)

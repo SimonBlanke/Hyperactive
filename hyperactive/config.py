@@ -27,6 +27,7 @@ class Config:
             "meta_learn": False,
             "data_prox": False,
             "repulsor": False,
+            "get_search_path": False,
         }
 
         self.pos_args = ["search_config", "n_iter"]
@@ -67,6 +68,7 @@ class Config:
         self.memory = kwargs_base["memory"]
         self.scatter_init = kwargs_base["scatter_init"]
         self.meta_learn = kwargs_base["meta_learn"]
+        self.get_search_path = kwargs_base["get_search_path"]
 
     def _is_all_same(self, list):
         same = False

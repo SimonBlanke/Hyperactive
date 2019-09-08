@@ -19,20 +19,20 @@ class Arguments:
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
-            "eps_global": 100,
-            "t_rate": 0.98,
+            "eps_global": 66,
+            "t_rate": 0.95,
             # SimulatedAnnealingOptimizer
             "n_neighbours": 1,
             # StochasticTunnelingOptimizer
             "gamma": 1,
             # ParallelTemperingOptimizer
-            "system_temps": [0.1, 0.2, 0.01],
+            "system_temps": [0.001, 0.01, 0.1, 1, 10],
             "n_swaps": 10,
             # ParticleSwarmOptimizer
             "n_part": 10,
             "w": 0.5,
             "c_k": 0.5,
-            "c_s": 0.9,
+            "c_s": 0.5,
             # EvolutionStrategyOptimizer
             "individuals": 10,
             "mutation_rate": 0.7,
