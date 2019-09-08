@@ -130,19 +130,19 @@ class BaseOptimizer:
 
         _cand_ = finish_search_(self._config_, _cand_, X, y)
 
-        return _cand_, _p_
+        return _cand_
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._config_.n_jobs)
         search = partial(self.search, X=X, y=y)
 
-        _cand_list, _p_list = pool.map(search, self._config_._n_process_range)
+        _cand_list = pool.map(search, self._config_._n_process_range)
 
         return _cand_list
 
     def _run_one_job(self, X, y):
-        _cand_, _p_ = self.search(0, X, y)
+        _cand_ = self.search(0, X, y)
         if self._config_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
 
@@ -153,9 +153,6 @@ class BaseOptimizer:
         if self._config_.verbosity:
             print("\n", self._config_.metric, self.score_best)
             print("start_point =", start_point)
-
-        if self._config_.get_search_path:
-            self._p_ = _p_
 
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)
