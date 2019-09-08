@@ -29,6 +29,10 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - When you have a very good initial point to start from
 - If the search space is very simple and has few local optima or saddle points
 
+<p align="center">
+<img src="../../plots/search_path_Hill Climbing.png" width="1000"/>
+</p>
+
 #### [Stochastic Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/stochastic_hill_climbing.py)
 Stochastic hill climbing extends the normal hill climbing by a simple method against getting stuck in local optima. It has a parameter you can set, that determines the probability to accept worse solutions as a next position.
 
@@ -36,12 +40,19 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 - Never as a first method of optimization
 - When you have a very good initial point to start from
 
+<p align="center">
+<img src="../../plots/search_path_Stoch. Hill Climbing.png" width="1000"/>
+</p>
+
 #### [Tabu Search](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/tabu_search.py)
 Tabu search is a metaheuristic method, that explores new positions like hill climbing but memorizes previous positions and avoids those. This helps finding new trajectories through the search space.
 
 ###### Use case/properties:
 - When you have a good initial point to start from
 
+<p align="center">
+<img src="../../plots/search_path_Tabu Search.png" width="1000"/>
+</p>
 
 <br>
 
@@ -54,12 +65,20 @@ The random search explores by choosing a new position at random after each itera
 - Very good as a first method of optimization or to start exploring the search space
 - For a short optimization run to get an acceptable solution
 
+<p align="center">
+<img src="../../plots/search_path_Random Search.png" width="1000"/>
+</p>
+
 #### [Random Restart Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_restart_hill_climbing.py)
 Random restart hill climbing works by starting a hill climbing search and jumping to a random new position after a number of iterations.
 
 ###### Use case/properties:
 - Good as a first method of optimization
 - For a short optimization run to get an acceptable solution
+
+<p align="center">
+<img src="../../plots/search_path_Rand. Rest. Hill Climbing.png" width="1000"/>
+</p>
 
 #### [Random Annealing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_annealing.py)
 An algorithm that chooses a new position within a large hypersphere around the current position. This hypersphere gets smaller over time.
@@ -69,6 +88,9 @@ An algorithm that chooses a new position within a large hypersphere around the c
 - Good as a first method of optimization
 - For a short optimization run to get an acceptable solution
 
+<p align="center">
+<img src="../../plots/search_path_Random Annealing.png" width="1000"/>
+</p>
 
 <br>
 
@@ -95,6 +117,9 @@ It simulates a temperature that decreases with each iteration, similar to a mate
 - When you have a good initial point to start from, but expect the surrounding search space to be very complex
 - Good as a second method of optimization
 
+<p align="center">
+<img src="../../plots/search_path_Simulated Annealing.png" width="1000"/>
+</p>
 
 #### [Stochastic Tunneling](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/monte_carlo/stochastic_tunneling.py)
 Stochastic Tunneling works very similar to simulated annealing, but modifies its probability to accept worse solutions by an additional term:
@@ -113,7 +138,9 @@ This new acceptance factor is used instead of the delta f in the original equati
   </a>
 </p>
 
-
+<p align="center">
+<img src="../../plots/search_path_Stochastic Tunneling.png" width="1000"/>
+</p>
 
 ###### Use case/properties:
 - When you have a good initial point to start from, but expect the surrounding search space to be very complex
@@ -133,6 +160,9 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 - Not as dependend of a good initial position as simulated annealing
 - If you have enough time for many model evaluations
 
+<p align="center">
+<img src="../../plots/search_path_Parallel Tempering.png" width="1000"/>
+</p>
 
 <br>
 
@@ -145,6 +175,10 @@ Particle swarm optimization works by initializing a number of positions at the s
 - If the search space is complex and large
 - If you have enough time for many model evaluations
 
+<p align="center">
+<img src="../../plots/search_path_Particle Swarm.png" width="1000"/>
+</p>
+
 #### [Evolution Strategy](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/evolution_strategy.py)
 Evolution strategy mutates and combines the best individuals of a population across a number of generations without transforming them into an array of bits (like genetic algorithms) but uses the real values of the positions. 
 
@@ -152,6 +186,9 @@ Evolution strategy mutates and combines the best individuals of a population acr
 - If the search space is very complex and large
 - If you have enough time for many model evaluations
 
+<p align="center">
+<img src="../../plots/search_path_Evolution Strategy.png" width="1000"/>
+</p>
 
 <br>
 
@@ -165,6 +202,9 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 - If you do not want to do many iterations
 - If your search space is not to big
 
+<p align="center">
+<img src="../../plots/search_path_Bayesian Optimization.png" width="1000"/>
+</p>
 
 <br>
 
