@@ -69,8 +69,8 @@ class BayesianOptimizer(BaseOptimizer):
         if _p_.score_new > _cand_.score_best:
             _cand_, _p_ = self._update_pos(_cand_, _p_)
 
-        self.X_sample = np.vstack((self.X_sample, _cand_.pos_best))
-        self.Y_sample = np.vstack((self.Y_sample, _cand_.score_best))
+        self.X_sample = np.vstack((self.X_sample, _p_.pos_new))
+        self.Y_sample = np.vstack((self.Y_sample, _p_.score_new))
 
         return _cand_
 
