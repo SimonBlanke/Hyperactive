@@ -24,7 +24,10 @@ class StochasticHillClimbingOptimizer(BaseOptimizer):
         score_diff_norm = (_p_.score_new - _p_.score_current) / (
             _p_.score_new + _p_.score_current
         )
-        return 0.001 / abs(score_diff_norm)
+        if score_diff_norm == 0:
+            return 100
+        else:
+            return 0.001 / abs(score_diff_norm)
 
     def _iterate(self, i, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
