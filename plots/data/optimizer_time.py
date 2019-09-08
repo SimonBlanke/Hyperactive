@@ -12,6 +12,12 @@ import pandas as pd
 from sklearn.model_selection import cross_val_score
 
 
+from keras.datasets import cifar10
+
+from keras.utils import to_categorical
+from keras.wrappers.scikit_learn import KerasClassifier
+
+
 from hyperactive import HillClimbingOptimizer
 from hyperactive import StochasticHillClimbingOptimizer
 from hyperactive import TabuOptimizer
@@ -76,7 +82,7 @@ def collect_data(runs, X, y, sklearn_model, opt_list, search_config, n_iter, opt
         # data["No Opt"]["0"] = time_
 
         for key in opt_list.keys():
-            print("\n optimizer:", key)
+            print("optimizer:", key)
 
             n_iter_temp = n_iter
             opt_dict_temp = opt_dict
@@ -134,47 +140,20 @@ iris_X, iris_y = iris_data.data, iris_data.target
 
 KNN = KNeighborsClassifier()
 
-search_config_KNN = {
-    "sklearn.neighbors.KNeighborsClassifier": {"n_neighbors": range(5, 7), "p": [1, 2]}
+search_config_KNN = {"sklearn.neighbors.KNeighborsClassifier": {"n_neighbors": [5]}}
+
+data_runs_dict_KNN = {
+    "runs": runs,
+    "X": iris_X,
+    "y": iris_y,
+    "sklearn_model": KNN,
+    "opt_list": opt_list,
+    "search_config": search_config_KNN,
+    "n_iter": n_iter,
+    "opt_dict": opt_dict,
 }
 
-data_runs = collect_data(
-    runs=runs,
-    X=iris_X,
-    y=iris_y,
-    sklearn_model=KNN,
-    opt_list=opt_list,
-    search_config=search_config_KNN,
-    n_iter=n_iter,
-    opt_dict=opt_dict,
-)
-
-#################################################################################################
-from sklearn.datasets import load_breast_cancer
-from sklearn.ensemble import GradientBoostingClassifier
-
-cancer_data = load_breast_cancer()
-cancer_X, cancer_y = cancer_data.data, cancer_data.target
-
-GBC = GradientBoostingClassifier()
-
-search_config_GBC = {
-    "sklearn.ensemble.GradientBoostingClassifier": {
-        "n_estimators": range(99, 102),
-        "max_depth": range(3, 4),
-    }
-}
-
-data_runs = collect_data(
-    runs=runs,
-    X=cancer_X,
-    y=cancer_y,
-    sklearn_model=GBC,
-    opt_list=opt_list,
-    search_config=search_config_GBC,
-    n_iter=n_iter,
-    opt_dict=opt_dict,
-)
+# data_runs = collect_data(**data_runs_dict_KNN)
 
 #################################################################################################
 from sklearn.datasets import load_breast_cancer
@@ -185,23 +164,20 @@ cancer_X, cancer_y = cancer_data.data, cancer_data.target
 
 DTC = DecisionTreeClassifier()
 
-search_config_DTC = {
-    "sklearn.tree.DecisionTreeClassifier": {
-        "min_samples_split": [2, 3],
-        "min_samples_leaf": [1, 2],
-    }
+search_config_DTC = {"sklearn.tree.DecisionTreeClassifier": {"min_samples_split": [2]}}
+
+data_runs_dict_DTC = {
+    "runs": runs,
+    "X": cancer_X,
+    "y": cancer_y,
+    "sklearn_model": DTC,
+    "opt_list": opt_list,
+    "search_config": search_config_DTC,
+    "n_iter": n_iter,
+    "opt_dict": opt_dict,
 }
 
-data_runs = collect_data(
-    runs=runs,
-    X=cancer_X,
-    y=cancer_y,
-    sklearn_model=DTC,
-    opt_list=opt_list,
-    search_config=search_config_DTC,
-    n_iter=n_iter,
-    opt_dict=opt_dict,
-)
+# data_runs = collect_data(**data_runs_dict_DTC)
 
 #################################################################################################
 from sklearn.datasets import load_breast_cancer
@@ -213,22 +189,21 @@ cancer_X, cancer_y = cancer_data.data, cancer_data.target
 GBC = GradientBoostingClassifier()
 
 search_config_GBC = {
-    "sklearn.ensemble.GradientBoostingClassifier": {
-        "n_estimators": range(99, 102),
-        "max_depth": range(3, 4),
-    }
+    "sklearn.ensemble.GradientBoostingClassifier": {"n_estimators": [100]}
 }
 
-data_runs = collect_data(
-    runs=runs,
-    X=cancer_X,
-    y=cancer_y,
-    sklearn_model=GBC,
-    opt_list=opt_list,
-    search_config=search_config_GBC,
-    n_iter=n_iter,
-    opt_dict=opt_dict,
-)
+data_runs_dict_GBC = {
+    "runs": runs,
+    "X": cancer_X,
+    "y": cancer_y,
+    "sklearn_model": GBC,
+    "opt_list": opt_list,
+    "search_config": search_config_GBC,
+    "n_iter": n_iter,
+    "opt_dict": opt_dict,
+}
+
+# data_runs = collect_data(**data_runs_dict_GBC)
 
 #################################################################################################
 from sklearn.datasets import load_breast_cancer
@@ -237,19 +212,62 @@ from lightgbm import LGBMClassifier
 cancer_data = load_breast_cancer()
 cancer_X, cancer_y = cancer_data.data, cancer_data.target
 
-LGBMC = LGBMClassifier()
+LGBMC = LGBMClassifier(n_jobs=1)
 
-search_config_LGBMC = {
-    "lightgbm.LGBMClassifier": {"num_leaves": [31, 32], "n_estimators": [100, 101]}
+search_config_LGBMC = {"lightgbm.LGBMClassifier": {"num_leaves": [31], "n_jobs": [1]}}
+
+data_runs_dict_LGBMC = {
+    "runs": runs,
+    "X": cancer_X,
+    "y": cancer_y,
+    "sklearn_model": LGBMC,
+    "opt_list": opt_list,
+    "search_config": search_config_LGBMC,
+    "n_iter": n_iter,
+    "opt_dict": opt_dict,
 }
 
-data_runs = collect_data(
-    runs=runs,
-    X=cancer_X,
-    y=cancer_y,
-    sklearn_model=LGBMC,
-    opt_list=opt_list,
-    search_config=search_config_LGBMC,
-    n_iter=n_iter,
-    opt_dict=opt_dict,
-)
+data_runs = collect_data(**data_runs_dict_LGBMC)
+
+#################################################################################################
+
+
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+
+
+def make_model():
+    from keras.applications import mobilenet_v2
+    from keras.models import Model
+
+    mobilenet_v2 = mobilenet_v2.MobileNetV2(weights="imagenet")
+    mobilenet_v2_model = Model(inputs=mobilenet_v2.input, outputs=mobilenet_v2.output)
+    mobilenet_v2_model.compile(
+        loss="mean_squared_error", optimizer="adam", metrics=["accuracy"]
+    )
+
+    return mobilenet_v2_model
+
+
+mobilenet_v2_model = KerasClassifier(build_fn=make_model, batch_size=500, epochs=3)
+
+search_config_mobilenet_v2 = {
+    "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
+    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
+    "keras.applications.mobilenet_v2.1": {"weights": ["imagenet"]},
+}
+
+data_runs_dict_mobilenet_v2 = {
+    "runs": runs,
+    "X": X_train,
+    "y": y_train,
+    "sklearn_model": mobilenet_v2_model,
+    "opt_list": opt_list,
+    "search_config": search_config_mobilenet_v2,
+    "n_iter": n_iter,
+    "opt_dict": opt_dict,
+}
+
+# data_runs = collect_data(**data_runs_dict_mobilenet_v2)
