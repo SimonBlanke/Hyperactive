@@ -11,7 +11,6 @@ pytest test_xgboost.py -p no:warnings
 pytest test_lightgbm.py -p no:warnings
 pytest test_catboost.py -p no:warnings
 pytest test_keras_mlp.py -p no:warnings
-pytest _test_keras_cnn.py -p no:warnings
 
 pytest test_performance.py -p no:warnings
 
