@@ -142,18 +142,18 @@
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#scikit-learn">Scikit-learn</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#xgboost">XGBoost</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#lightgbm">LightGBM</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#catboost">CatBoost</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/blob/master/examples/machine_learning/sklearn_.py">Scikit-learn</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/blob/master/examples/machine_learning/xgboost_.py">XGBoost</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/blob/master/examples/machine_learning/lightgbm_.py">LightGBM</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/blob/master/examples/machine_learning/catboost_.py">CatBoost</a></li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#keras">Keras</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/deep_learning">Keras</a></li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#multiprocessing">Multiprocessing</a></li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/blob/master/examples/distribution/multiprocessing_.py">Multiprocessing</a></li>
           </ul>
       </td>
       <td>
