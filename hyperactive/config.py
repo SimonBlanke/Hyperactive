@@ -30,7 +30,7 @@ class Config:
             "get_search_path": False,
         }
 
-        self.pos_args = ["search_config", "n_iter"]
+        self.pos_args = ["optimizer", "search_config", "n_iter"]
 
         self._process_pos_args(args, kwargs)
         kwargs_base = merge_dicts(kwargs_base, kwargs)
@@ -47,7 +47,7 @@ class Config:
         self._n_process_range = range(0, int(self.n_jobs))
 
     def _process_pos_args(self, args, kwargs):
-        pos_args_attr = [None, None]
+        pos_args_attr = [None, None, None]
 
         for idx, pos_arg in enumerate(self.pos_args):
             if pos_arg in list(kwargs.keys()):
@@ -55,8 +55,9 @@ class Config:
             else:
                 pos_args_attr[idx] = args[idx]
 
-        self.search_config = pos_args_attr[0]
-        self.n_iter = pos_args_attr[1]
+        self.optimizer = pos_args_attr[0]
+        self.search_config = pos_args_attr[1]
+        self.n_iter = pos_args_attr[2]
 
     def _set_general_args(self, kwargs_base):
         self.metric = kwargs_base["metric"]
@@ -69,14 +70,6 @@ class Config:
         self.scatter_init = kwargs_base["scatter_init"]
         self.meta_learn = kwargs_base["meta_learn"]
         self.get_search_path = kwargs_base["get_search_path"]
-
-    def _is_all_same(self, list):
-        same = False
-        """Checks if model names in search_config are consistent"""
-        if len(set(list)) == 1:
-            same = True
-
-        return same
 
     def _set_default_metric(self):
         default_metrics = {
@@ -98,8 +91,7 @@ class Config:
             module_str = model_key.split(".")[0]
             module_str_list.append(module_str)
 
-        if self._is_all_same(module_str_list):
-            self.model_type = model_keys[0].split(".")[0]
+        self.model_type = model_keys[0].split(".")[0]
 
     def init_p_bar(self, _config_, _cand_):
         if self._show_progress_bar():

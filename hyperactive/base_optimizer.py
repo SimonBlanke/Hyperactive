@@ -11,14 +11,12 @@ from importlib import import_module
 from functools import partial
 
 from .base_positioner import BasePositioner
-from .config import Config
-from .opt_args import Arguments
 from .sub_packages import MetaLearn
 from .util import initialize_search, finish_search_, sort_for_best
 
 
 class BaseOptimizer:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, _config_, _arg_):
 
         """
 
@@ -34,7 +32,7 @@ class BaseOptimizer:
             The metric the model is evaluated by.
         n_jobs: int, optional (default: 1)
             The number of searches to run in parallel.
-        cv: int, optional (default: 5)
+        cv: int, optional (default: 3)
             The number of folds for the cross validation.
         verbosity: int, optional (default: 1)
             Verbosity level. 1 prints out warm_start points and their scores.
@@ -55,8 +53,8 @@ class BaseOptimizer:
 
         """
 
-        self._config_ = Config(*args, **kwargs)
-        self._arg_ = Arguments(**kwargs)
+        self._config_ = _config_
+        self._arg_ = _arg_
 
         if self._config_.meta_learn:
             self._meta_ = MetaLearn(self._config_.search_config)
