@@ -16,10 +16,13 @@ from .util import merge_dicts
 class Config:
     def __init__(self, *args, **kwargs):
         kwargs_base = {
+            "n_iter": 10,
+            "optimizer": "RandomSearch",
             "metric": "accuracy_score",
             "n_jobs": 1,
             "cv": 3,
             "verbosity": 1,
+            "warnings": True,
             "random_state": None,
             "warm_start": False,
             "memory": True,
@@ -47,23 +50,16 @@ class Config:
         self._n_process_range = range(0, int(self.n_jobs))
 
     def _process_pos_args(self, args, kwargs):
-        pos_args_attr = [None, None, None]
-
-        for idx, pos_arg in enumerate(self.pos_args):
-            if pos_arg in list(kwargs.keys()):
-                pos_args_attr[idx] = kwargs[pos_arg]
-            else:
-                pos_args_attr[idx] = args[idx]
-
-        self.optimizer = pos_args_attr[0]
-        self.search_config = pos_args_attr[1]
-        self.n_iter = pos_args_attr[2]
+        self.search_config = args
 
     def _set_general_args(self, kwargs_base):
+        self.n_iter = kwargs_base["n_iter"]
+        self.optimizer = kwargs_base["optimizer"]
         self.metric = kwargs_base["metric"]
         self.n_jobs = kwargs_base["n_jobs"]
         self.cv = kwargs_base["cv"]
         self.verbosity = kwargs_base["verbosity"]
+        self.warnings = kwargs_base["warnings"]
         self.random_state = kwargs_base["random_state"]
         self.warm_start = kwargs_base["warm_start"]
         self.memory = kwargs_base["memory"]

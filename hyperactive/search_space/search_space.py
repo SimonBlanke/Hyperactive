@@ -29,16 +29,22 @@ class SearchSpace:
         self.pos_space_limit()
 
     def create_kerasSearchSpace(self):
+        search_config_temp = dict(self.search_config)
+        del search_config_temp["keras"]
+
+        """
         para_space = {}
 
-        for layer_str in self.search_config.keys():
+        for para_key in search_config_temp.keys():
 
-            for param_str in self.search_config[layer_str].keys():
-                new_param_str = layer_str + "." + param_str
+            for param_str in search_config_temp[para_key].keys():
+                new_param_str = para_key + "." + param_str
 
-                para_space[new_param_str] = self.search_config[layer_str][param_str]
+                para_space[new_param_str] = search_config_temp[para_key][param_str]
 
-        self.para_space = para_space
+        """
+
+        self.para_space = search_config_temp
 
         self.pos_space_limit()
 

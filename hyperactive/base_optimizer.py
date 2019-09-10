@@ -56,6 +56,11 @@ class BaseOptimizer:
         self._config_ = _config_
         self._arg_ = _arg_
 
+        if self._config_.warnings:
+            print("")
+            print("")
+            print("")
+
         if self._config_.meta_learn:
             self._meta_ = MetaLearn(self._config_.search_config)
 

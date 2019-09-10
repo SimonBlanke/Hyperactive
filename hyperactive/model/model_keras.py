@@ -17,6 +17,20 @@ class KerasModel(DeepLearningModel):
         super().__init__(_config_)
         self.search_config = _config_.search_config
 
+        self.func_ = _config_.search_config["keras"]
+
+    def train_model(self, keras_para_dict, X, y):
+
+        score, model = self.func_(keras_para_dict, X, y)
+
+        return score, model
+
+
+class _KerasModel(DeepLearningModel):
+    def __init__(self, _config_):
+        super().__init__(_config_)
+        self.search_config = _config_.search_config
+
         self.scores = dl_scores
         self.losses = dl_losses
         # if no metric was passed
