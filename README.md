@@ -166,7 +166,7 @@
         <a><b>Resource Allocation:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#memory">Memory</a></li>
-            <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#[1]-proxy-datasets-for-training-convolutional-neural-networks">1</a>]
+            <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#1-proxy-datasets-for-training-convolutional-neural-networks">1</a>]
  (coming soon)</li>
           </ul>
         <a><b>Weight Initialization:</b></a>
