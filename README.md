@@ -121,7 +121,7 @@
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li> 
          </ul>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
@@ -159,14 +159,15 @@
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter-Initialization</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#warm-start">Warm-start</a></li>
             <li>Meta-Learn (coming soon)</li>
           </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#memory">Memory</a></li>
-            <li>Proxy Datasets (coming soon)</li>
+            <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#proxy-datasets-for-training-convolutional-neural-networks">1</a>]
+ (coming soon)</li>
           </ul>
         <a><b>Weight Initialization:</b></a>
           <ul>
@@ -698,9 +699,24 @@ export(self, filename)
 
 <br>
 
+## Experimental algorithms
+
+The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature. 
+If any of these algorithms still exist I ask you to share it with me in an issue.
+
+#### Random Annealing
+
+A combination between simulated annealing and random search. 
+
+#### Scatter Initialization
+
+Inspired by hyperband optimization.
+
+<br>
+
 ## References
 
-#### [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+#### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
 
 <br>
 
