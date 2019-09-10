@@ -20,7 +20,7 @@
       </td>
       <td>
         <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive.svg?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
+          <img src="https://img.shields.io/travis/com/SimonBlanke/Hyperactive/master?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
         </a>
         <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
           <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=flat-square&logo=codecov" alt="img not loaded: try F5 :)">
