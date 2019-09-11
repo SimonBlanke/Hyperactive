@@ -204,8 +204,8 @@ class BaseOptimizer:
         """
         X, y = self._config_._check_data(X, y)
 
-        if self._config_.model_type == "keras":
-            self._config_.n_jobs = 1
+        # if self._config_.model_type == "keras":
+        #    self._config_.n_jobs = 1
 
         if self._config_.n_jobs == 1:
             self._run_one_job(X, y)

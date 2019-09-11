@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+from ..candidate import Candidate
 from ..candidate import ScikitLearnCandidate
 from ..candidate import XGBoostCandidate
 from ..candidate import LightGbmCandidate
@@ -20,6 +20,13 @@ def initialize_search(_config_, nth_process, X, y):
 
 
 def _init_candidate(_config_, nth_process):
+    _config_._set_random_seed(nth_process)
+    _cand_ = KerasCandidate(nth_process, _config_)
+
+    return _cand_
+
+
+def _init_candidate1(_config_, nth_process):
     _config_._set_random_seed(nth_process)
 
     if _config_.model_type == "sklearn":

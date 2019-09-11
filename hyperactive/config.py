@@ -35,11 +35,13 @@ class Config:
 
         self.pos_args = ["optimizer", "search_config", "n_iter"]
 
-        self._process_pos_args(args, kwargs)
+        self._process_pos_args(*args)
         kwargs_base = merge_dicts(kwargs_base, kwargs)
         self._set_general_args(kwargs_base)
 
-        self._get_model_str()
+        print("self.search_config", self.search_config)
+
+        # self._get_model_str()
         if "metric" not in kwargs:
             self._set_default_metric()
 
@@ -49,7 +51,7 @@ class Config:
         self.set_n_jobs()
         self._n_process_range = range(0, int(self.n_jobs))
 
-    def _process_pos_args(self, args, kwargs):
+    def _process_pos_args(self, args):
         self.search_config = args
 
     def _set_general_args(self, kwargs_base):
@@ -77,7 +79,7 @@ class Config:
             "torch": "accuracy",
         }
 
-        self.metric = default_metrics[self.model_type]
+        # self.metric = default_metrics[self.model_type]
 
     def _get_model_str(self):
         model_keys = list(self.search_config.keys())
@@ -90,10 +92,11 @@ class Config:
         self.model_type = model_keys[0].split(".")[0]
 
     def init_p_bar(self, _config_, _cand_):
-        if self._show_progress_bar():
-            self.p_bar = tqdm(**_config_._tqdm_dict(_cand_))
-        else:
-            self.p_bar = None
+        # if self._show_progress_bar():
+        #     self.p_bar = tqdm(**_config_._tqdm_dict(_cand_))
+        # else:
+
+        self.p_bar = None
 
     def update_p_bar(self, n):
         if self.p_bar:

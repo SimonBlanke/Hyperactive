@@ -17,7 +17,7 @@ class KerasModel(DeepLearningModel):
         super().__init__(_config_)
         self.search_config = _config_.search_config
 
-        self.func_ = _config_.search_config["keras"]
+        self.func_ = list(_config_.search_config.keys())[0]
 
     def train_model(self, keras_para_dict, X, y):
 

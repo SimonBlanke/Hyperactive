@@ -12,7 +12,7 @@ class KerasCandidate(Candidate):
         super().__init__(nth_process, _config_)
 
         self.nth_process = nth_process
-        self.model_key = "Keras.Model"
+        self.func_ = list(_config_.search_config.keys())[0]
 
         self._space_.create_kerasSearchSpace()
         self._model_ = KerasModel(_config_)
@@ -23,18 +23,17 @@ class KerasCandidate(Candidate):
 
     def create_start_point(self, para):
         start_point = {}
-        model_str = "keras" + str(self.nth_process)
 
         temp_dict = {}
         for para_key in para:
             temp_dict[para_key] = [para[para_key]]
 
-        start_point[model_str] = temp_dict
+        start_point[self.func_] = temp_dict
 
         return start_point
 
     def _get_warm_start(self):
         para_best = self._space_.pos2para(self.pos_best)
-        warm_start = self._model_.trafo_hyperpara_dict_lists(para_best)
+        warm_start = self.create_start_point(para_best)
 
         return warm_start
