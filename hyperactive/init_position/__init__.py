@@ -3,8 +3,7 @@
 # License: MIT License
 
 
-from .init_position_sklearn import InitMLSearchPosition
-from .init_position_keras import InitDLSearchPosition
+from .init_position import InitSearchPosition
 
 
-__all__ = ["InitMLSearchPosition", "InitDLSearchPosition"]
+__all__ = ["InitSearchPosition"]

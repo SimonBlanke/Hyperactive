@@ -18,6 +18,20 @@ class InitSearchPosition:
         else:
             self.n_warm_start_keys = 0
 
+    def _create_warm_start(self, nth_process):
+        pos = []
+
+        for layer_key in self._space_.para_space.keys():
+            layer_str, para_str = layer_key.rsplit(".", 1)
+
+            search_position = self._space_.para_space[layer_key].index(
+                *self.warm_start[layer_str][para_str]
+            )
+
+            pos.append(search_position)
+
+        return np.array(pos)
+
     def _set_start_pos(self, nth_process, X, y):
         if self.warm_start and self.scatter_init:
             pos = self._warm_start_scatter_init(nth_process, X, y)
