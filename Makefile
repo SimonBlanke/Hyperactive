@@ -1,4 +1,4 @@
-clean: clean-pyc clean-ipynb clean-build clean-test
+clean: clean-pyc clean-ipynb clean-catboost clean-build clean-test
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -27,6 +27,7 @@ clean-test:
 test:
 	cd tests/; \
 		pytest
+		
 coverage:
 
 docs:
