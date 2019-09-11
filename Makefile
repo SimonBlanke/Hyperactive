@@ -1,4 +1,4 @@
-all: clean-pyc clean-ipynb clean-build clean-test
+clean: clean-pyc clean-ipynb clean-build clean-test
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -25,11 +25,23 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-
+	cd tests/; \
+		pytest
 coverage:
 
 docs:
 
-dist:
-
 release:
+	python setup.py sdist upload
+	python setup.py bdist_wheel upload
+
+dist:
+	python setup.py sdist
+	python setup.py bdist_wheel
+	ls -l dist
+
+install:
+	pip install .
+
+develop:
+	pip install -e .
