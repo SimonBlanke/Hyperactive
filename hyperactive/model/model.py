@@ -8,9 +8,6 @@ from importlib import import_module
 
 class Model:
     def __init__(self, _config_):
-        self.metric = _config_.metric
-        self.cv = _config_.cv
-
         self.func_ = list(_config_.search_config.keys())[0]
 
     def train_model(self, keras_para_dict, X, y):
