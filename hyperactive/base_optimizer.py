@@ -57,9 +57,9 @@ class BaseOptimizer:
         self._arg_ = _arg_
 
         if self._config_.warnings:
-            print("")
-            print("")
-            print("")
+            print("Warning: Since v0.5.0, this API is no longer supported.")
+            print("Please use the new hyperactive API in the following link:")
+            print("https://github.com/SimonBlanke/Hyperactive#how-to-use-hyperactive")
 
         if self._config_.meta_learn:
             self._meta_ = MetaLearn(self._config_.search_config)
