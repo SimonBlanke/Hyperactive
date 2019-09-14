@@ -4,6 +4,8 @@
 
 import pandas as pd
 from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import cross_val_score
 
 data = load_iris()
 X_np = data.data
@@ -13,13 +15,21 @@ iris_X_train_columns = ["x1", "x2", "x3", "x4"]
 X_pd = pd.DataFrame(X_np, columns=iris_X_train_columns)
 y_pd = pd.DataFrame(y_np, columns=["y1"])
 
-n_iter_0 = 0
-n_iter_1 = 10
-random_state = 0
-cv = 2
+
+def model(para, X_train, y_train):
+    model = DecisionTreeClassifier(
+        criterion=para["criterion"],
+        max_depth=para["max_depth"],
+        min_samples_split=para["min_samples_split"],
+        min_samples_leaf=para["min_samples_leaf"],
+    )
+    scores = cross_val_score(model, X_train, y_train, cv=3)
+
+    return scores.mean(), model
+
 
 search_config = {
-    "sklearn.tree.DecisionTreeClassifier": {
+    model: {
         "criterion": ["gini", "entropy"],
         "max_depth": range(1, 21),
         "min_samples_split": range(2, 21),
@@ -29,14 +39,10 @@ search_config = {
 
 
 def test_data():
-    from hyperactive import HillClimbingOptimizer
+    from hyperactive import Hyperactive
 
-    opt0 = HillClimbingOptimizer(
-        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
-    )
+    opt0 = Hyperactive(search_config)
     opt0.fit(X_np, y_np)
 
-    opt1 = HillClimbingOptimizer(
-        search_config, n_iter_0, random_state=random_state, verbosity=0, cv=cv, n_jobs=1
-    )
+    opt1 = Hyperactive(search_config)
     opt1.fit(X_pd, y_pd)

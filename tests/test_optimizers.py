@@ -3,6 +3,9 @@
 # License: MIT License
 
 from sklearn.datasets import load_iris
+from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeClassifier
+from hyperactive import Hyperactive
 
 data = load_iris()
 X = data.data
@@ -12,182 +15,84 @@ n_iter_0 = 100
 random_state = 0
 n_jobs = 1
 
+
+def model(para, X_train, y_train):
+    model = DecisionTreeClassifier(
+        criterion=para["criterion"],
+        max_depth=para["max_depth"],
+        min_samples_split=para["min_samples_split"],
+        min_samples_leaf=para["min_samples_leaf"],
+    )
+    scores = cross_val_score(model, X_train, y_train, cv=3)
+
+    return scores.mean(), model
+
+
 search_config = {
-    "sklearn.tree.DecisionTreeClassifier": {
+    model: {
         "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 30),
+        "max_depth": range(1, 21),
         "min_samples_split": range(2, 21),
         "min_samples_leaf": range(1, 21),
     }
 }
 
-warm_start = {"sklearn.tree.DecisionTreeClassifier": {"max_depth": [1]}}
-
 
 def test_HillClimbingOptimizer():
-    from hyperactive import HillClimbingOptimizer
-
-    opt = HillClimbingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="HillClimbing")
     opt.fit(X, y)
 
 
 def test_StochasticHillClimbingOptimizer():
-    from hyperactive import StochasticHillClimbingOptimizer
-
-    opt = StochasticHillClimbingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-        memory=False,
-    )
+    opt = Hyperactive(search_config, optimizer="StochasticHillClimbing")
     opt.fit(X, y)
 
 
 def test_TabuOptimizer():
-    from hyperactive import TabuOptimizer
-
-    opt = TabuOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        n_jobs=1,
-        warm_start=warm_start,
-        memory=False,
-    )
+    opt = Hyperactive(search_config, optimizer="TabuSearch")
     opt.fit(X, y)
 
 
 def test_RandomSearchOptimizer():
-    from hyperactive import RandomSearchOptimizer
-
-    opt = RandomSearchOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="RandomSearch")
     opt.fit(X, y)
 
 
 def test_RandomRestartHillClimbingOptimizer():
-    from hyperactive import RandomRestartHillClimbingOptimizer
-
-    opt = RandomRestartHillClimbingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="RandomRestartHillClimbing")
     opt.fit(X, y)
 
 
 def test_RandomAnnealingOptimizer():
-    from hyperactive import RandomAnnealingOptimizer
-
-    opt = RandomAnnealingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="RandomAnnealing")
     opt.fit(X, y)
 
 
 def test_SimulatedAnnealingOptimizer():
-    from hyperactive import SimulatedAnnealingOptimizer
-
-    opt = SimulatedAnnealingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="SimulatedAnnealing")
     opt.fit(X, y)
 
 
 def test_StochasticTunnelingOptimizer():
-    from hyperactive import StochasticTunnelingOptimizer
-
-    opt = StochasticTunnelingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="StochasticTunneling")
     opt.fit(X, y)
 
 
 def test_ParallelTemperingOptimizer():
-    from hyperactive import ParallelTemperingOptimizer
-
-    opt = ParallelTemperingOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="ParallelTempering")
     opt.fit(X, y)
 
 
 def test_ParticleSwarmOptimizer():
-    from hyperactive import ParticleSwarmOptimizer
-
-    opt = ParticleSwarmOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="ParticleSwarm")
     opt.fit(X, y)
 
 
 def test_EvolutionStrategyOptimizer():
-    from hyperactive import EvolutionStrategyOptimizer
-
-    opt = EvolutionStrategyOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="EvolutionStrategy")
     opt.fit(X, y)
 
 
 def test_BayesianOptimizer():
-    from hyperactive import BayesianOptimizer
-
-    opt = BayesianOptimizer(
-        search_config,
-        100,
-        random_state=random_state,
-        verbosity=0,
-        n_jobs=n_jobs,
-        warm_start=warm_start,
-    )
+    opt = Hyperactive(search_config, optimizer="Bayesian")
     opt.fit(X, y)
