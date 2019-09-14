@@ -34,9 +34,9 @@
       </td>
       <td>
         <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive/development?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
+          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive/dev?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
         </a>
-        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive?branch=development">
+        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive?branch=dev">
           <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive/development?style=flat-square&logo=codecov" alt="img not loaded: try F5 :)">
         </a>
       </td>
