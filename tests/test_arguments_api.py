@@ -112,3 +112,8 @@ def test_warm_start_multiple_jobs():
 def test_warm_start():
     opt = Hyperactive(search_config, n_jobs=1, warm_start=warm_start)
     opt.fit(X, y)
+
+
+def test_get_search_path():
+    opt = Hyperactive(search_config, get_search_path=True)
+    opt.fit(X, y)
