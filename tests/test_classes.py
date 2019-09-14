@@ -12,5 +12,6 @@ y = data.target
 
 def test_classes():
     insight = Insight(X, y)
+    insight._get_data_type()
     hydra = Hydra()
     iota = Iota()

@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+import random
 import numpy as np
 
 
@@ -45,6 +45,12 @@ class SearchSpace:
 
         # n_zeros = [0] * len(self.dim)
         # pos = np.clip(pos_new_int, n_zeros, self.dim)
+        return pos
+
+    def get_random_pos_scalar(self, hyperpara_name):
+        n_para_values = len(self.para_space[hyperpara_name])
+        pos = random.randint(0, n_para_values - 1)
+
         return pos
 
     def pos2para(self, pos):
