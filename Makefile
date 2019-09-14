@@ -27,7 +27,7 @@ clean-test:
 test:
 	cd tests/; \
 		pytest
-		
+
 coverage:
 
 docs:
@@ -46,3 +46,9 @@ install:
 
 develop:
 	pip install -e .
+
+reinstall:
+	pip uninstall -y hyperactive
+	rm -fr build dist hyperactive.egg-info
+	python setup.py bdist_wheel
+	pip install dist/*
