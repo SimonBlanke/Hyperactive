@@ -3,11 +3,9 @@
 # License: MIT License
 
 
-import pickle
 import numpy as np
 import multiprocessing
 
-from importlib import import_module
 from functools import partial
 
 from .base_positioner import BasePositioner
@@ -212,62 +210,3 @@ class BaseOptimizer:
 
         else:
             self._run_multiple_jobs(X, y)
-
-    def predict(self, X_test):
-        """Returns the prediction of X_test after a model was searched by `fit`
-
-        Parameters
-        ----------
-        X_test : array-like or sparse matrix of shape = [n_samples, n_features]
-
-        Returns
-        -------
-        (unnamed array) : array-like, shape = [n_samples] or [n_samples, n_outputs]
-        """
-        return self.model_best.predict(X_test)
-
-    def score(self, X_test, y_true):
-        """Returns the score calculated from the prediction of X_test and the true values from y_test
-
-        Parameters
-        ----------
-        X_test : array-like or sparse matrix of shape = [n_samples, n_features]
-
-        y_true : array-like, shape = [n_samples] or [n_samples, n_outputs]
-
-        Returns
-        -------
-        (unnamed float) : float
-        """
-        if self._config_.model_type in ["sklearn", "xgboost", "lightgbm", "catboost"]:
-            module = import_module("sklearn.metrics")
-            metric_class = getattr(module, self._config_.metric)
-
-            y_pred = self.model_best.predict(X_test)
-            return metric_class(y_true, y_pred)
-        elif self._config_.model_type in ["keras"]:
-            loss, score = self.model_best.evaluate(X_test, y_true, verbose=0)
-            return score
-
-        """
-        y_pred = self.model_best.predict(X_test)
-
-        metric_type = list(self._config_.metric.keys())[0]
-        metric_class = self._config_.metric[metric_type]
-
-        return metric_class(y_true, y_pred)
-        """
-
-    def export(self, filename):
-        """Exports the best model, that was found by the optimizer during `fit`
-
-        Parameters
-        ----------
-        filename : string or path
-
-        Returns
-        -------
-        None
-        """
-        if self.model_best:
-            pickle.dump(self.model_best, open(filename, "wb"))

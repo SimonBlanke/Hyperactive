@@ -117,3 +117,6 @@ def test_warm_start():
 def test_get_search_path():
     opt = Hyperactive(search_config, get_search_path=True)
     opt.fit(X, y)
+
+    opt = Hyperactive(search_config, optimizer="ParticleSwarm", get_search_path=True)
+    opt.fit(X, y)

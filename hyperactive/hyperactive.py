@@ -94,31 +94,3 @@ class Hyperactive:
         None
         """
         self._optimizer_.fit(X, y)
-
-    def predict(self, X_test):
-        """Returns the prediction of X_test after a model was searched by `fit`
-
-        Parameters
-        ----------
-        X_test : array-like or sparse matrix of shape = [n_samples, n_features]
-
-        Returns
-        -------
-        (unnamed array) : array-like, shape = [n_samples] or [n_samples, n_outputs]
-        """
-        return self._optimizer_.predict(X_test)
-
-    def score(self, X_test, y_true):
-        """Returns the score calculated from the prediction of X_test and the true values from y_test
-
-        Parameters
-        ----------
-        X_test : array-like or sparse matrix of shape = [n_samples, n_features]
-
-        y_true : array-like, shape = [n_samples] or [n_samples, n_outputs]
-
-        Returns
-        -------
-        (unnamed float) : float
-        """
-        return self._optimizer_.score(X_test, y_true)
