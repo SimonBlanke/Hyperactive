@@ -11,10 +11,6 @@ data = load_iris()
 X = data.data
 y = data.target
 
-n_iter_0 = 100
-random_state = 0
-n_jobs = 1
-
 
 def model(para, X_train, y_train):
     model = DecisionTreeClassifier(

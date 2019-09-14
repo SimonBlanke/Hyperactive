@@ -21,12 +21,19 @@ class InitSearchPosition:
     def _create_warm_start(self, nth_process):
         pos = []
 
-        for layer_key in self._space_.para_space.keys():
-            layer_str, para_str = layer_key.rsplit(".", 1)
+        for hyperpara_name in self._space_.para_space.keys():
+            start_point_key = list(self.warm_start.keys())[nth_process]
 
-            search_position = self._space_.para_space[layer_key].index(
-                *self.warm_start[layer_str][para_str]
-            )
+            if hyperpara_name not in list(self.warm_start[start_point_key].keys()):
+                # print(hyperpara_name, "not in warm_start selecting random scalar")
+                search_position = self._space_.get_random_pos_scalar(hyperpara_name)
+
+            else:
+                search_position = self._space_.para_space[hyperpara_name].index(
+                    *self.warm_start[start_point_key][hyperpara_name]
+                )
+
+            # what if warm start not in search_config range?
 
             pos.append(search_position)
 
