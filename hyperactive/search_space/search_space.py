@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-import random
 import numpy as np
 
 
@@ -22,11 +21,6 @@ class SearchSpace:
             dim.append(len(self.para_space[pos_key]) - 1)
 
         self.dim = np.array(dim)
-
-    def create_mlSearchSpace(self, model_str):
-        self.para_space = self.search_config[model_str]
-
-        self.pos_space_limit()
 
     def create_kerasSearchSpace(self):
         """
@@ -51,12 +45,6 @@ class SearchSpace:
 
         # n_zeros = [0] * len(self.dim)
         # pos = np.clip(pos_new_int, n_zeros, self.dim)
-        return pos
-
-    def get_random_pos_scalar(self, hyperpara_name):
-        n_para_values = len(self.para_space[hyperpara_name])
-        pos = random.randint(0, n_para_values - 1)
-
         return pos
 
     def pos2para(self, pos):
