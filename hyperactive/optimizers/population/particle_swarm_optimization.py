@@ -25,7 +25,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
 
         return _p_list_
 
-    def _move_particles(self, _cand_, _p_list_):
+    def _move_positioners(self, _cand_, _p_list_):
         for _p_ in _p_list_:
             r1, r2 = random.random(), random.random()
 
@@ -46,7 +46,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
                 _cand_, _p_ = self._update_pos(_cand_, _p_)
 
     def _iterate(self, i, _cand_, _p_list_, X, y):
-        self._move_particles(_cand_, _p_list_)
+        self._move_positioners(_cand_, _p_list_)
         self._eval_particles(_cand_, _p_list_, X, y)
 
         return _cand_

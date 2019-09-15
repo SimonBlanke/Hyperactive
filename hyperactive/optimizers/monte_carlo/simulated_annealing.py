@@ -11,7 +11,6 @@ from ..local import StochasticHillClimbingOptimizer
 class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"eps": self._arg_.eps}
         self.temp = 0.1
 
     # use _consider from StochasticHillClimbingOptimizer

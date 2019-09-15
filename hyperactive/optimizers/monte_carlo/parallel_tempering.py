@@ -14,7 +14,6 @@ from ...base_positioner import BasePositioner
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"eps": self._arg_.eps}
         self.n_iter_swap = int(self._config_.n_iter / self._arg_.n_swaps)
 
     def _init_annealers(self, _cand_):

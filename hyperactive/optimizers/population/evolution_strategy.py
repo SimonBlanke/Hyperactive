@@ -56,15 +56,12 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
         return np.array(pos_new)
 
-    def _new_generation(self, _cand_, _p_list_):
+    def _move_positioners(self, _cand_, _p_list_):
         idx_sorted_ind = self._rank_individuals(_p_list_)
         mutate_idx, cross_idx, replace_idx = self._select_individuals(idx_sorted_ind)
 
         self._mutate_individuals(_cand_, _p_list_, mutate_idx)
         self._crossover(_cand_, _p_list_, cross_idx, replace_idx)
-
-    def _eval_individuals(self, _cand_, _p_list_, X, y):
-        super()._eval_particles(_cand_, _p_list_, X, y)
 
     def _rank_individuals(self, _p_list_):
         scores_list = []
@@ -85,11 +82,7 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
         return mutate_idx, cross_idx, replace_idx
 
-    def _iterate(self, i, _cand_, _p_list_, X, y):
-        self._new_generation(_cand_, _p_list_)
-        self._eval_individuals(_cand_, _p_list_, X, y)
-
-        return _cand_
+    # use _iterate from ParticleSwarmOptimizer
 
     def _init_opt_positioner(self, _cand_, X, y):
         _p_list_ = self._init_individuals(_cand_)

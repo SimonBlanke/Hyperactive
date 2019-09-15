@@ -4,14 +4,13 @@
 
 import random
 
-from ...base_optimizer import BaseOptimizer
+from . import HillClimbingOptimizer
 from ...base_positioner import BasePositioner
 
 
-class TabuOptimizer(BaseOptimizer):
+class TabuOptimizer(HillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"eps": self._arg_.eps}
 
     def _memorize(self, _cand_, _p_):
         for i in range(3):
