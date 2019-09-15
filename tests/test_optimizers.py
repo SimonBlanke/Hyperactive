@@ -11,6 +11,8 @@ data = load_iris()
 X = data.data
 y = data.target
 
+n_iter = 100
+
 
 def model(para, X_train, y_train):
     model = DecisionTreeClassifier(
@@ -19,7 +21,7 @@ def model(para, X_train, y_train):
         min_samples_split=para["min_samples_split"],
         min_samples_leaf=para["min_samples_leaf"],
     )
-    scores = cross_val_score(model, X_train, y_train, cv=3)
+    scores = cross_val_score(model, X_train, y_train, cv=2)
 
     return scores.mean(), model
 
@@ -27,68 +29,70 @@ def model(para, X_train, y_train):
 search_config = {
     model: {
         "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 21),
-        "min_samples_split": range(2, 21),
-        "min_samples_leaf": range(1, 21),
+        "max_depth": range(1, 11),
+        "min_samples_split": range(2, 11),
+        "min_samples_leaf": range(1, 11),
     }
 }
 
 
 def test_HillClimbingOptimizer():
-    opt = Hyperactive(search_config, optimizer="HillClimbing")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
     opt.fit(X, y)
 
 
 def test_StochasticHillClimbingOptimizer():
-    opt = Hyperactive(search_config, optimizer="StochasticHillClimbing")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="StochasticHillClimbing")
     opt.fit(X, y)
 
 
 def test_TabuOptimizer():
-    opt = Hyperactive(search_config, optimizer="TabuSearch")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="TabuSearch")
     opt.fit(X, y)
 
 
 def test_RandomSearchOptimizer():
-    opt = Hyperactive(search_config, optimizer="RandomSearch")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="RandomSearch")
     opt.fit(X, y)
 
 
 def test_RandomRestartHillClimbingOptimizer():
-    opt = Hyperactive(search_config, optimizer="RandomRestartHillClimbing")
+    opt = Hyperactive(
+        search_config, n_iter=n_iter, optimizer="RandomRestartHillClimbing"
+    )
     opt.fit(X, y)
 
 
 def test_RandomAnnealingOptimizer():
-    opt = Hyperactive(search_config, optimizer="RandomAnnealing")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="RandomAnnealing")
     opt.fit(X, y)
 
 
 def test_SimulatedAnnealingOptimizer():
-    opt = Hyperactive(search_config, optimizer="SimulatedAnnealing")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="SimulatedAnnealing")
     opt.fit(X, y)
 
 
 def test_StochasticTunnelingOptimizer():
-    opt = Hyperactive(search_config, optimizer="StochasticTunneling")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="StochasticTunneling")
     opt.fit(X, y)
 
 
 def test_ParallelTemperingOptimizer():
-    opt = Hyperactive(search_config, optimizer="ParallelTempering")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="ParallelTempering")
     opt.fit(X, y)
 
 
 def test_ParticleSwarmOptimizer():
-    opt = Hyperactive(search_config, optimizer="ParticleSwarm")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="ParticleSwarm")
     opt.fit(X, y)
 
 
 def test_EvolutionStrategyOptimizer():
-    opt = Hyperactive(search_config, optimizer="EvolutionStrategy")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="EvolutionStrategy")
     opt.fit(X, y)
 
 
 def test_BayesianOptimizer():
-    opt = Hyperactive(search_config, optimizer="Bayesian")
+    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="Bayesian")
     opt.fit(X, y)
