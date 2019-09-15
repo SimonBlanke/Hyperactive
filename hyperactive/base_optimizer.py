@@ -9,7 +9,6 @@ import multiprocessing
 from functools import partial
 
 from .base_positioner import BasePositioner
-from .sub_packages import MetaLearn
 from .util import initialize_search, finish_search_, sort_for_best
 
 

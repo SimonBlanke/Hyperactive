@@ -24,11 +24,6 @@ from .optimizers.sequence_model import BayesianOptimizer
 
 from .hyperactive import Hyperactive
 
-from .sub_packages import Hydra
-from .sub_packages import MetaLearn
-from .sub_packages import Iota
-from .sub_packages import Insight
-
 
 __all__ = [
     "Hyperactive",
@@ -44,8 +39,4 @@ __all__ = [
     "ParticleSwarmOptimizer",
     "EvolutionStrategyOptimizer",
     "BayesianOptimizer",
-    "Hydra",
-    "MetaLearn",
-    "Iota",
-    "Insight",
 ]
