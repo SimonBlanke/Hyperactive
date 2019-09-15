@@ -54,7 +54,7 @@ def test_TabuOptimizer():
     opt1 = Hyperactive(
         search_config,
         optimizer="TabuSearch",
-        n_iter=30,
+        n_iter=100,
         random_state=random_state,
         verbosity=0,
         n_jobs=n_jobs,
