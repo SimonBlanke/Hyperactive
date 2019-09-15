@@ -11,7 +11,7 @@ data = load_iris()
 X = data.data
 y = data.target
 
-n_iter = 100
+n_iter = 1
 
 
 def model(para, X_train, y_train):
