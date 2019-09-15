@@ -1,13 +1,3 @@
-<p align="center">
-  <br>
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo_alt.png" height="200"></a>
-  <br>
-</p>
-
-<br>
-
----
-
 <h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-/deep-learning models.</h2>
 
 <br>
@@ -54,10 +44,10 @@
         </a>
         <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
         <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-        </a> 
+        </a>
         <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
         <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=flat-square" alt="img not loaded: try F5 :)">
-        </a>     
+        </a>
       </td>
     </tr>
   </tbody>
@@ -123,7 +113,7 @@
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li> 
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
          </ul>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
@@ -232,7 +222,7 @@ All optimization techniques are explained in more detail [here](https://github.c
 <details open><summary><b>Create the search space</b></summary>
 <p>
 
-The search space of <b>machine learning models</b> is created with a dictionary, containing the model-type, hyperparameters and list of values. 
+The search space of <b>machine learning models</b> is created with a dictionary, containing the model-type, hyperparameters and list of values.
 
 ```python
 search_config = {
@@ -282,7 +272,7 @@ For the <b>iteration-time</b> you should take the following effects into account
 <details><summary><b>Evaluation (optional)</b></summary>
 <p>
 
-You can optionaly <b>change the evaluation</b> of the model with the 'cv' and 'metric' keyword in the optimizer class. 
+You can optionaly <b>change the evaluation</b> of the model with the 'cv' and 'metric' keyword in the optimizer class.
 
 The <b>'cv'</b> keyword-argument works like in sklearn but with the added possibility to have a value lower than 1. In this case the evaluation will be done by doing a training/validation-split in the training data. A cv of 0.75 will use 75% of the data for training and 25% for the validation of the model. As a <b>general guideline</b>: You should set the cv-value high (bigger than 3) if your dataset is small. This avoids wrong evaluations. On large deep-learning dataset you can set cv to 0.5 - 0.8 without risking a noisy evaluation. For large datasets you can even select a cv-value close to 0.9.
 
@@ -293,9 +283,9 @@ The <b>'metric'</b>-keyword-argument accepts one of the metrics (provided in the
 
 <details><summary><b>Distribution (optional)</b></summary>
 <p>
-  
+
 You can start multiple optimizations in <b>parallel</b> by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
-  
+
 </p>
 </details>
 
@@ -703,12 +693,12 @@ export(self, filename)
 
 ## Experimental algorithms
 
-The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature. 
+The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
 If any of these algorithms still exist I ask you to share it with me in an issue.
 
 #### Random Annealing
 
-A combination between simulated annealing and random search. 
+A combination between simulated annealing and random search.
 
 #### Scatter Initialization
 
@@ -725,4 +715,3 @@ Inspired by hyperband optimization.
 ## License
 
 [![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
-
