@@ -59,6 +59,7 @@ def test_TabuOptimizer():
         verbosity=0,
         n_jobs=n_jobs,
         warm_start=warm_start,
+        eps=10,
     )
     opt1.fit(X, y)
 
