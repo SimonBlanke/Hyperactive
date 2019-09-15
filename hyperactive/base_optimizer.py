@@ -54,12 +54,9 @@ class BaseOptimizer:
         self._arg_ = _arg_
 
         if self._config_.warnings:
-            print("Warning: Since v0.5.0, this API is no longer supported.")
+            print("\nWarning: Since v0.5.0, this API is no longer supported.")
             print("Please use the new hyperactive API in the following link:")
-            print("https://github.com/SimonBlanke/Hyperactive#how-to-use-hyperactive")
-
-        if self._config_.meta_learn:
-            self._meta_ = MetaLearn(self._config_.search_config)
+            print("https://github.com/SimonBlanke/Hyperactive#how-to-use-hyperactive\n")
 
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
@@ -143,8 +140,6 @@ class BaseOptimizer:
 
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
-        if self._config_.meta_learn:
-            self._meta_.collect(X, y, _cand_list=[_cand_])
 
         self.model_best = _cand_.model
         self.score_best = _cand_.score_best
