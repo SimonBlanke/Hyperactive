@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo_alt.png" height="200"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./images/hyperactive_logo.png" height="200"></a>
   <br>
 </p>
 
@@ -170,10 +170,6 @@
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#memory">Memory</a></li>
             <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#1-proxy-datasets-for-training-convolutional-neural-networks">1</a>]
  (coming soon)</li>
-          </ul>
-        <a><b>Weight Initialization:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#transfer-learning">Transfer-learning</a></li>
           </ul>
       </td>
     </tr>
