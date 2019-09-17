@@ -1,5 +1,5 @@
 from sklearn.model_selection import cross_val_score
-from catboost import CatBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.datasets import load_breast_cancer
 from hyperactive import Hyperactive
 
@@ -8,7 +8,11 @@ X, y = data.data, data.target
 
 
 def model(para, X_train, y_train):
-    model = CatBoostClassifier(depth=para["depth"], learning_rate=para["learning_rate"])
+    model = GradientBoostingClassifier(
+        n_estimators=para["n_estimators"],
+        max_depth=para["max_depth"],
+        min_samples_split=para["min_samples_split"],
+    )
     scores = cross_val_score(model, X_train, y_train, cv=3)
 
     return scores.mean(), model
@@ -16,7 +20,11 @@ def model(para, X_train, y_train):
 
 # this defines the model and hyperparameter search space
 search_config = {
-    model: {"depth": range(2, 22), "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0]}
+    model: {
+        "n_estimators": range(10, 200, 10),
+        "max_depth": range(2, 12),
+        "min_samples_split": range(2, 12),
+    }
 }
 
 

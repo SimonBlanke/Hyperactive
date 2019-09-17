@@ -1,83 +1,34 @@
-<table>
-  <tbody>
-    <tr align="center" valign="center">
-      <td>
-        <strong>Optimization Techniques</strong>
-        <img src="images/blue.jpg"/>
-      </td>
-      <td>
-        <strong>Supported Packages</strong>
-        <img src="images/blue.jpg"/>
-      </td>
-      <td>
-        <strong>Advanced Features</strong>
-        <img src="images/blue.jpg"/>
-      </td>
-    </tr>
-    <tr/>
-    <tr valign="top">
-      <td>
-        <a><b>Local Search:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#hill-climbing">Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#tabu-search">Tabu Search</a></li>
-         </ul>
-        <a><b>Random Methods:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-search">Random Search</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-annealing">Random Annealing</a></li>
-         </ul>
-        <a><b>Markov Chain Monte Carlo:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#simulated-annealing">Simulated Annealing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#stochastic-tunneling">Stochastic Tunneling</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#parallel-tempering">Parallel Tempering</a></li>
-          </ul>
-        <a><b>Population Methods:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#particle-swarm-optimization">Particle Swarm Optimizer</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#evolution-strategy">Evolution Strategy</a></li>
-          </ul>
-        <a><b>Sequential Methods:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#bayesian-optimization">Bayesian Optimization</a></li>
-          </ul>
-      </td>
-      <td>
-        <a><b>Machine Learning:</b></a>
-          <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#scikit-learn">Scikit-learn</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#xgboost">XGBoost</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#lightgbm">LightGBM</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#catboost">CatBoost</a></li>
-          </ul>
-        <a><b>Deep Learning:</b></a>
-          <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#keras">Keras</a></li>
-          </ul>
-        <a><b>Distribution:</b></a>
-          <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/model#multiprocessing">Multiprocessing</a></li>
-          </ul>
-      </td>
-      <td>
-        <a><b>Position Initialization:</b></a>
-          <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#scatter-initialization">Scatter-Initialization</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#warm-start">Warm-start</a></li>
-          </ul>
-        <a><b>Resource Allocation:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#memory">Memory</a></li>
-            <li>Proxy Datasets (coming soon)</li>
-          </ul>
-        <a><b>Weight Initialization:</b></a>
-          <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#transfer-learning">Transfer-learning</a></li>
-          </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
+from sklearn.model_selection import cross_val_score
+from xgboost import XGBClassifier
+from sklearn.datasets import load_breast_cancer
+from hyperactive import Hyperactive
+
+data = load_breast_cancer()
+X, y = data.data, data.target
+
+
+def model(para, X_train, y_train):
+    model = XGBClassifier(
+        n_estimators=para["n_estimators"],
+        max_depth=para["max_depth"],
+        learning_rate=para["learning_rate"],
+    )
+    scores = cross_val_score(model, X_train, y_train, cv=3)
+
+    return scores.mean(), model
+
+
+# this defines the model and hyperparameter search space
+search_config = {
+    model: {
+        "n_estimators": range(10, 200, 10),
+        "max_depth": range(2, 12),
+        "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
+    }
+}
+
+
+opt = Hyperactive(search_config, n_iter=100, n_jobs=2)
+
+# search best hyperparameter for given data
+opt.fit(X, y)
