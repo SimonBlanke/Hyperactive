@@ -1,8 +1,10 @@
+## How to use Hyperactive
+
 <details open><summary><b>Create the search space</b></summary>
 <p>
 
 Since v0.5.0 the search space is created by defining:
-  - a function for the model 
+  - a function for the model
   - a parameter dictionary
 
 
@@ -10,8 +12,8 @@ The function receives 3 arguments:
   - para : This defines what part of the model-function should be optimized
   - X : Training features
   - y : Training target
-  
- The function should return some kind of metric that will be <b>maximized</b> during the search. 
+
+ The function should return some kind of metric that will be <b>maximized</b> during the search.
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
@@ -40,7 +42,7 @@ search_config = {
 This way of creating the search space has <b>multiple advantages</b>:
   - No new syntax to learn. You can create the model as you are used to.
   - It makes the usage of hyperactive very versatile, because you can define <b>any kind of function</b> and optimize it. This enables:
-    - The optimization of: 
+    - The optimization of:
       - complex machine-learning pipelines and ensembles
       - deep neural network architecture
     - The usage of <b>any machine learning framework</b> you like. The following are tested:
@@ -85,9 +87,9 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 <details><summary><b>Distribution (optional)</b></summary>
 <p>
-  
+
 You can start multiple optimizations in <b>parallel</b> by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
-  
+
 </p>
 </details>
 

@@ -1,4 +1,4 @@
-# Optimization Techniques
+## Optimization Techniques
 
 Hyperactive offers a wide variety of basic, meta-heuristic and sequential model-based optimization techniques for machine learning model selection and hyperparameter tuning. This readme provides an overview[*](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#disclaimer) and brief explainations of those techniques and proposes a possible field of application.
 
@@ -169,7 +169,7 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 ## Population Methods
 
 #### [Particle Swarm Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/particle_swarm_optimization.py)
-Particle swarm optimization works by initializing a number of positions at the same time and moving all of those closer to the best one after each iteration. 
+Particle swarm optimization works by initializing a number of positions at the same time and moving all of those closer to the best one after each iteration.
 
 ###### Use case/properties:
 - If the search space is complex and large
@@ -180,7 +180,7 @@ Particle swarm optimization works by initializing a number of positions at the s
 </p>
 
 #### [Evolution Strategy](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/evolution_strategy.py)
-Evolution strategy mutates and combines the best individuals of a population across a number of generations without transforming them into an array of bits (like genetic algorithms) but uses the real values of the positions. 
+Evolution strategy mutates and combines the best individuals of a population across a number of generations without transforming them into an array of bits (like genetic algorithms) but uses the real values of the positions.
 
 ###### Use case/properties:
 - If the search space is very complex and large
@@ -212,4 +212,3 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 
 ##### Disclaimer
 The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
-

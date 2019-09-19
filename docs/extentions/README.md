@@ -1,4 +1,4 @@
-# Advanced Features
+## Optimization Extensions
 
 The features listed below can be activated during the instantiation of the optimizer ([see API](https://github.com/SimonBlanke/hyperactive#hyperactive-api)) and works with every optimizer in the hyperactive package.
 
@@ -81,53 +81,3 @@ start_point = {
 
 #### [Memory](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_memory.py)
 After the evaluation of a model the position (in the hyperparameter search dictionary) and the cross-validation score are written to a dictionary. If the optimizer tries to evaluate this position again it can quickly lookup if a score for this position is present and use it instead of going through the extensive training and prediction process.
-
-
-## Weight initialization
-
-
-#### [Transfer-Learning](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/example_transfer_learning.py)
-In the current implementation transfer-learning works by using a predefined model (with optional pretrained weights) provided by the keras package. The import path can be inserted as a layer (with its parameters in an sub-dictionary), like in a regular search dictionary. The following snippet provides an example:
-
-<details><summary>Transfer-learning example:</summary>
-<p>
-
-```python
-from keras.datasets import cifar10
-from keras.utils import to_categorical
-
-from hyperactive import SimulatedAnnealingOptimizer
-
-(X_train, y_train), (X_test, y_test) = cifar10.load_data()
-
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
-
-
-# this defines the structure of the model and the search space in each layer
-search_config = {
-    "keras.compile.0": {"loss": ["binary_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [1], "batch_size": [300], "verbose": [0]},
-    # just add the pretrained model as a layer like this:
-    "keras.applications.MobileNet.1": {
-        "weights": ["imagenet"],
-        "input_shape": [(32, 32, 3)],
-        "include_top": [False],
-    },
-    "keras.layers.Flatten.2": {},
-    "keras.layers.Dense.3": {
-        "units": range(5, 15),
-        "activation": ["relu"],
-        "kernel_initializer": ["uniform"],
-    },
-    "keras.layers.Dense.4": {"units": [10], "activation": ["sigmoid"]},
-}
-
-
-Optimizer = SimulatedAnnealingOptimizer(
-    search_config, n_iter=3, warm_start=False, verbosity=0
-)
-```
-
-</p>
-</details>
