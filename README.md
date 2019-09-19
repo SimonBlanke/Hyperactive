@@ -68,14 +68,12 @@
 ---
 
 <div align="center"><a name="menu"></a>
-  <h4>
+  <h3>
+    <a href="https://simonblanke.github.io/Hyperactive/">Documentation</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#how-to-use-hyperactive">How to</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#examples">Examples</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api">Hyperactive API</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
-  </h4>
+  </h3>
 </div>
 
 ---
@@ -95,14 +93,6 @@
 <br>
 
 ## Installation
-
-Hyperactive is developed and tested in python 3:
-
-[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/hyperactive)
-[![commit-activity](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=flat-square)](https://github.com/SimonBlanke/Hyperactive/graphs/contributors)
-[![last-commit](https://img.shields.io/github/last-commit/SimonBlanke/Hyperactive?style=flat-square)](https://github.com/SimonBlanke/Hyperactive/commits/master)
-
-<br>
 
 Hyperactive (stable) is available on PyPi:
 
