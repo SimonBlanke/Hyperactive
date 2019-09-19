@@ -1,5 +1,9 @@
-from sklearn.model_selection import cross_val_score
-from lightgbm import LGBMRegressor
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.optimizers import RMSprop
+
+from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
 from hyperactive import Hyperactive
 
@@ -37,7 +41,7 @@ search_config = {
 }
 
 
-opt = Hyperactive(search_config, n_iter=100, n_jobs=2)
+opt = Hyperactive(search_config, n_iter=10)
 
 # search best hyperparameter for given data
 opt.fit(X, y)
