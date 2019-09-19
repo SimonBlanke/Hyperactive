@@ -43,7 +43,7 @@ search_config = {
 }
 
 
-opt = Hyperactive(search_config, n_iter=100, n_jobs=1)
+opt = Hyperactive(search_config, n_iter=10)
 
 # search best hyperparameter for given data
 opt.fit(X, y)
