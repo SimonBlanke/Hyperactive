@@ -84,11 +84,13 @@
 
 - Very simple (scikit-learn inspired) API
 - Optimize:
-  - Complex machine learning pipelines
+  - Complex machine learning pipelines or ensembles
   - Deep neural network architecture
 - Choose from a variety of different [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques)
 - [High performance](https://github.com/SimonBlanke/Hyperactive/tree/master/plots#performance): Optimizer time is neglectable for most models
 - Utilize [advanced features](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) to improve the optimization
+
+This readme provides only a short introduction. For <b>more information</b> check out the [full documentation](https://simonblanke.github.io/Hyperactive/).
 
 <br>
 
