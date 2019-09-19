@@ -82,6 +82,9 @@
 
 <br>
 
+#### Important: 
+Hyperactive v0.5.0 will be released within the next few days, with a new (and powerful) API. The how to and examples in this readme are still for v0.4.2
+
 ## Overview
 
 - Very simple (scikit-learn inspired) API
