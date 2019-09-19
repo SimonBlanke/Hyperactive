@@ -19,7 +19,7 @@ Hyperactive offers a wide variety of basic, meta-heuristic and sequential model-
 
 <br>
 
-## Local Search:
+## Local Search
 
 #### [Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/hill_climbing_optimizer.py)
 Hill climbing is a very basic optimization technique, that explores the search space only localy. It starts at an initial point, which is often chosen randomly and continues to move to positions with a better solution. It has no method against getting stuck in local optima.
@@ -56,7 +56,7 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 
 <br>
 
-## Random Methods:
+## Random Methods
 
 #### [Random Search](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_search.py)
 The random search explores by choosing a new position at random after each iteration. Some random seach implementations choose a new position within a large hypersphere around the current position. The implementation in hyperactive is purely random across the search space in each step.
@@ -94,7 +94,7 @@ An algorithm that chooses a new position within a large hypersphere around the c
 
 <br>
 
-## Markov Chain Monte Carlo:
+## Markov Chain Monte Carlo
 
 #### [Simulated Annealing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/monte_carlo/simulated_annealing.py)
 Simulated annealing chooses its next possible position similar to hill climbing, but it accepts worse results with a probability that decreases with time:
@@ -166,7 +166,7 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 
 <br>
 
-## Population Methods:
+## Population Methods
 
 #### [Particle Swarm Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/particle_swarm_optimization.py)
 Particle swarm optimization works by initializing a number of positions at the same time and moving all of those closer to the best one after each iteration. 
@@ -192,7 +192,7 @@ Evolution strategy mutates and combines the best individuals of a population acr
 
 <br>
 
-## Sequential Methods:
+## Sequential Methods
 
 #### [Bayesian Optimization](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/sequence_model/bayesian_optimization.py)
 Bayesian optimization chooses new positions by calculating the expected improvement of every position in the search space based on a gaussian process that trains on already evaluated solutions.
@@ -210,6 +210,6 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 
 <br>
 
-##### Disclaimer:
+##### Disclaimer
 The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
 
