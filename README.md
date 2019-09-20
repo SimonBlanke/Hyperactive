@@ -183,7 +183,7 @@
 
 <div align="center">
   <h3>
-    This readme provides only a short introduction. For more information check out the   
+    This readme provides only a short introduction. For more information check out the <br/>
     <a href="https://simonblanke.github.io/Hyperactive/">full documentation</a>
   </h3>
 </div>
