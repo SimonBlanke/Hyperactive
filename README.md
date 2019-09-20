@@ -99,12 +99,9 @@ This readme provides only a short introduction. For <b>more information</b> chec
 <br>
 
 ## Installation
+[![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
 
 Hyperactive (stable) is available on PyPi:
-
-[![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
-[![Downloads](https://pepy.tech/badge/hyperactive)](https://pepy.tech/project/hyperactive)
-
 ```console
 pip install hyperactive
 ```
