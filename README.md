@@ -95,13 +95,6 @@
 - [High performance](https://github.com/SimonBlanke/Hyperactive/tree/master/plots#performance): Optimizer time is neglectable for most models
 - Choose from a variety of different [optimization extensions](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive#advanced-features) to improve the optimization
 
-<div align="center">
-  <h3>
-    This readme provides only a short introduction. For more information check out the 
-    <a href="https://simonblanke.github.io/Hyperactive/">full documentation</a>
-  </h3>
-</div>
-
 <br>
 
 <table>
@@ -185,6 +178,15 @@
     </tr>
   </tbody>
 </table>
+
+<br>
+
+<div align="center">
+  <h3>
+    This readme provides only a short introduction. For more information check out the   
+    <a href="https://simonblanke.github.io/Hyperactive/">full documentation</a>
+  </h3>
+</div>
 
 <br>
 
