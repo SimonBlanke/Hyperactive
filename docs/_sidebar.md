@@ -14,22 +14,20 @@
 - Tutorial
 
  - [How to use Hyperactive](./tutorial/tutorial.md#how-to-use-hyperactive)
- - [Guide](./tutorial/tutorial.md)
 
 
-- Examples
+- Basic Examples
 
-  - Machine Learning
+  - [Scikit-learn](./examples.md#scikit-learn)
+  - [XGBoost](./examples.md#xgboost)
+  - [LightGBM](./examples.md#lightgbm)
+  - [CatBoost](./examples.md#catboost)
+  - [Keras](./examples.md#keras)
 
-     - [Scikit-learn](./examples/README.md)
-     - [XGBoost](./examples/README.md)
-     - [LightGBM](./examples/README.md)
-     - [CatBoost](./examples/README.md)
+- Advanced Examples
 
-  - Deep Learning
-
-     - [Keras](./examples/README.md)
-
+  - [Scikit-learn pipelines](./examples.md#scikit-learn-pipelines)
+  - [Stacking](./examples.md#stacking)
 
 - Optimization Techniques
 
