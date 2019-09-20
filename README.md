@@ -83,7 +83,7 @@
 ## Overview
 
 - Very simple but powerful API
-- Compatible with any python machine-learning framework
+- Compatible with <b>any python machine-learning framework</b>
 - Optimize:
   - Complex machine learning pipelines 
   - Multi-level ensembles
@@ -178,8 +178,6 @@
     </tr>
   </tbody>
 </table>
-
-<br>
 
 <div align="center">
   <h3>
