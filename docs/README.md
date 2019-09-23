@@ -2,27 +2,13 @@
 
 
 ## Installation
+
 PyPi always has the newest version of hyperactive:
 ```console
 pip install hyperactive
 ```
 
 ## Minimal example
-
-```og
-!main
-
-class Oglang<T>
-  Foo T
-  GetFoo: T -> @Foo
-
-main ->
-  foo := Oglang<int>
-    Foo: 42
-
-  foo.GetFoo()
-```
-
 
 ```python
 from sklearn.model_selection import cross_val_score
