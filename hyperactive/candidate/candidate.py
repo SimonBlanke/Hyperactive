@@ -21,6 +21,8 @@ class Candidate:
         self.nth_process = nth_process
         self.func_ = list(_config_.search_config.keys())[0]
 
+        self.func_name = str(self.func_).split(" ")[1]
+
         self._space_.create_kerasSearchSpace()
         self._model_ = Model(_config_)
 
@@ -35,7 +37,7 @@ class Candidate:
         for para_key in para:
             temp_dict[para_key] = [para[para_key]]
 
-        start_point[self.func_] = temp_dict
+        start_point[self.func_name] = temp_dict
 
         return start_point
 
@@ -61,7 +63,7 @@ class Candidate:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
-            score, self.model = self._model_.train_model(para, X, y)
+            score = self._model_.train_model(para, X, y)
             self._space_.memory[pos_str] = score
 
             return score
