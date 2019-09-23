@@ -1,11 +1,14 @@
-## Overview
+## Main features
 
-- Very simple but powerful API
+- Very simple but versatile API
+- Thoroughly tested code base
 - Compatible with <b>any python machine-learning framework</b>
 - Optimize:
-  - Complex machine learning pipelines 
-  - Multi-level ensembles
-  - Deep neural network architecture
+  - Anything from [simple models](./examples.md) <br/> to complex [machine-learning-pipelines](./examples.md)
+  - Multi-level [ensembles](./examples.md)
+  - [Deep neural network](./examples.md) architecture
+  - Other [optimization techniques](./examples.md) (meta-optimization)
+  - Or [any function](./examples.md) you can specify with this API
 - Utilize state of the art [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques) like:
     - Simulated annealing
     - Evolution strategy
@@ -20,15 +23,15 @@
     <tr align="center" valign="center">
       <td>
         <strong>Optimization Techniques</strong>
-        <img src="images/blue.jpg"/>
+        <img src="./_media/blue.jpg"/>
       </td>
       <td>
         <strong>Tested and Supported Packages</strong>
-        <img src="images/blue.jpg"/>
+        <img src="./_media/blue.jpg"/>
       </td>
       <td>
         <strong>Optimization Extentions</strong>
-        <img src="images/blue.jpg"/>
+        <img src="./_media/blue.jpg"/>
       </td>
     </tr>
     <tr/>
@@ -97,6 +100,23 @@
   </tbody>
 </table>
 
+<div align="center">
+  <h3>
+    This readme provides only a short introduction. For more information check out the <br/>
+    <a href="https://simonblanke.github.io/Hyperactive/">full documentation</a>
+  </h3>
+</div>
+
+<br>
+
+## Installation
+[![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
+
+The most recent version of Hyperactive is available on PyPi:
+```console
+pip install hyperactive
+```
+
 <br>
 
 ## Experimental algorithms
@@ -117,3 +137,9 @@ Inspired by hyperband optimization.
 ## References
 
 #### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+
+<br>
+
+## License
+
+[![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
