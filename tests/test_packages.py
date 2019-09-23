@@ -23,7 +23,7 @@ def test_sklearn():
         )
         scores = cross_val_score(model, X_train, y_train, cv=3)
 
-        return scores.mean(), model
+        return scores.mean()
 
     search_config = {
         model: {
@@ -49,7 +49,7 @@ def test_xgboost():
         )
         scores = cross_val_score(model, X_train, y_train, cv=3)
 
-        return scores.mean(), model
+        return scores.mean()
 
     search_config = {model: {"n_estimators": range(2, 20), "max_depth": range(1, 11)}}
 
@@ -68,7 +68,7 @@ def test_lightgbm():
         )
         scores = cross_val_score(model, X_train, y_train, cv=3)
 
-        return scores.mean(), model
+        return scores.mean()
 
     search_config = {
         model: {
@@ -94,7 +94,7 @@ def test_catboost():
         )
         scores = cross_val_score(model, X_train, y_train, cv=3)
 
-        return scores.mean(), model
+        return scores.mean()
 
     search_config = {
         model: {
@@ -147,7 +147,7 @@ def test_keras():
         )
         model.fit(X_train, y_train, epochs=1)
 
-        score = model.evaluate(x=X_test, y=y_test)
+        loss, score = model.evaluate(x=X_test, y=y_test)
 
         return score
 

@@ -12,16 +12,16 @@ X = data.data
 y = data.target
 
 
-def model(para, X_train, y_train):
+def model(para, X, y):
     model = DecisionTreeClassifier(
         criterion=para["criterion"],
         max_depth=para["max_depth"],
         min_samples_split=para["min_samples_split"],
         min_samples_leaf=para["min_samples_leaf"],
     )
-    scores = cross_val_score(model, X_train, y_train, cv=3)
+    scores = cross_val_score(model, X, y, cv=3)
 
-    return scores.mean(), model
+    return scores.mean()
 
 
 search_config = {

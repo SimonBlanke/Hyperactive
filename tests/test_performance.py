@@ -25,7 +25,7 @@ def model(para, X_train, y_train):
     )
     scores = cross_val_score(model, X_train, y_train, cv=2)
 
-    return scores.mean(), model
+    return scores.mean()
 
 
 search_config = {
