@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <a href="https://simonblanke.github.io/Hyperactive/"><img src="./images/hyperactive_logo.png" height="200"></a>
+  <a href="https://simonblanke.github.io/Hyperactive/"><img src="./docs/_media/hyperactive_logo.png" height="200"></a>
   <br>
 </p>
 
@@ -8,7 +8,7 @@
 
 ---
 
-<h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-/deep-learning models.</h2>
+<h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-learning models.</h2>
 
 <br>
 
@@ -70,7 +70,7 @@
 <div align="center"><a name="menu"></a>
   <h3>
     <a href="https://simonblanke.github.io/Hyperactive/">Documentation</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
   </h3>
@@ -80,14 +80,17 @@
 
 <br>
 
-## Overview
+## Main features
 
-- Very simple but powerful API
+- Very simple but versatile API
+- Thoroughly tested code base
 - Compatible with <b>any python machine-learning framework</b>
 - Optimize:
-  - Complex machine learning pipelines 
-  - Multi-level ensembles
-  - Deep neural network architecture
+  - Anything from [simple models](./docs/examples.md) <br/> to complex [machine-learning-pipelines](./docs/examples.md)
+  - Multi-level [ensembles](./docs/examples.md)
+  - [Deep neural network](./docs/examples.md) architecture
+  - Other [optimization techniques](./docs/examples.md) (meta-optimization)
+  - Or [any function](./docs/examples.md) you can specify with this API
 - Utilize state of the art [optimization techniques](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#optimization-techniques) like:
     - Simulated annealing
     - Evolution strategy
@@ -102,15 +105,15 @@
     <tr align="center" valign="center">
       <td>
         <strong>Optimization Techniques</strong>
-        <img src="images/blue.jpg"/>
+        <img src="./docs/_media/blue.jpg"/>
       </td>
       <td>
         <strong>Tested and Supported Packages</strong>
-        <img src="images/blue.jpg"/>
+        <img src="./docs/_media/blue.jpg"/>
       </td>
       <td>
         <strong>Optimization Extentions</strong>
-        <img src="images/blue.jpg"/>
+        <img src="./docs/_media/blue.jpg"/>
       </td>
     </tr>
     <tr/>
@@ -191,7 +194,7 @@
 ## Installation
 [![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
 
-Hyperactive (stable) is available on PyPi:
+The most recent version of Hyperactive is available on PyPi:
 ```console
 pip install hyperactive
 ```
