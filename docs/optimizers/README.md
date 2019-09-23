@@ -30,7 +30,7 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - If the search space is very simple and has few local optima or saddle points
 
 <p align="center">
-<img src="../../plots/search_path_Hill Climbing.png" width="1000"/>
+<img src="../plots/search_path_Hill Climbing.png" width="1000"/>
 </p>
 
 #### [Stochastic Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/stochastic_hill_climbing.py)
@@ -41,7 +41,7 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 - When you have a very good initial point to start from
 
 <p align="center">
-<img src="../../plots/search_path_Stoch. Hill Climbing.png" width="1000"/>
+<img src="../plots/search_path_Stoch. Hill Climbing.png" width="1000"/>
 </p>
 
 #### [Tabu Search](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/local/tabu_search.py)
@@ -51,7 +51,7 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 - When you have a good initial point to start from
 
 <p align="center">
-<img src="../../plots/search_path_Tabu Search.png" width="1000"/>
+<img src="../plots/search_path_Tabu Search.png" width="1000"/>
 </p>
 
 <br>
@@ -66,7 +66,7 @@ The random search explores by choosing a new position at random after each itera
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="../../plots/search_path_Random Search.png" width="1000"/>
+<img src="../plots/search_path_Random Search.png" width="1000"/>
 </p>
 
 #### [Random Restart Hill Climbing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_restart_hill_climbing.py)
@@ -77,7 +77,7 @@ Random restart hill climbing works by starting a hill climbing search and jumpin
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="../../plots/search_path_Rand. Rest. Hill Climbing.png" width="1000"/>
+<img src="../plots/search_path_Rand. Rest. Hill Climbing.png" width="1000"/>
 </p>
 
 #### [Random Annealing](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/random/random_annealing.py)
@@ -89,7 +89,7 @@ An algorithm that chooses a new position within a large hypersphere around the c
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="../../plots/search_path_Random Annealing.png" width="1000"/>
+<img src="../plots/search_path_Random Annealing.png" width="1000"/>
 </p>
 
 <br>
@@ -118,7 +118,7 @@ It simulates a temperature that decreases with each iteration, similar to a mate
 - Good as a second method of optimization
 
 <p align="center">
-<img src="../../plots/search_path_Simulated Annealing.png" width="1000"/>
+<img src="../plots/search_path_Simulated Annealing.png" width="1000"/>
 </p>
 
 #### [Stochastic Tunneling](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/monte_carlo/stochastic_tunneling.py)
@@ -139,7 +139,7 @@ This new acceptance factor is used instead of the delta f in the original equati
 </p>
 
 <p align="center">
-<img src="../../plots/search_path_Stochastic Tunneling.png" width="1000"/>
+<img src="../plots/search_path_Stochastic Tunneling.png" width="1000"/>
 </p>
 
 ###### Use case/properties:
@@ -161,7 +161,7 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="../../plots/search_path_Parallel Tempering.png" width="1000"/>
+<img src="../plots/search_path_Parallel Tempering.png" width="1000"/>
 </p>
 
 <br>
@@ -176,7 +176,7 @@ Particle swarm optimization works by initializing a number of positions at the s
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="../../plots/search_path_Particle Swarm.png" width="1000"/>
+<img src="../plots/search_path_Particle Swarm.png" width="1000"/>
 </p>
 
 #### [Evolution Strategy](https://github.com/SimonBlanke/Hyperactive/blob/master/hyperactive/optimizers/population/evolution_strategy.py)
@@ -187,7 +187,7 @@ Evolution strategy mutates and combines the best individuals of a population acr
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="../../plots/search_path_Evolution Strategy.png" width="1000"/>
+<img src="../plots/search_path_Evolution Strategy.png" width="1000"/>
 </p>
 
 <br>
@@ -203,7 +203,7 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 - If your search space is not to big
 
 <p align="center">
-<img src="../../plots/search_path_Bayesian Optimization.png" width="1000"/>
+<img src="../plots/search_path_Bayesian Optimization.png" width="1000"/>
 </p>
 
 <br>
