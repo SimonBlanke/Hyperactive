@@ -7,23 +7,17 @@ iris_data = load_iris()
 X = iris_data.data
 y = iris_data.target
 
-def model(para, X_train, y_train):
+
+def model(para, X, y):
     model = GradientBoostingClassifier(
-        n_estimators=para["n_estimators"],
-        max_depth=para["max_depth"],
-        min_samples_split=para["min_samples_split"],
+        n_estimators=para["n_estimators"], max_depth=para["max_depth"]
     )
-    scores = cross_val_score(model, X_train, y_train, cv=3)
+    scores = cross_val_score(model, X, y, cv=3)
 
-    return scores.mean(), model
+    return scores.mean()
 
-search_config = {
-    model: {
-        "n_estimators": range(10, 200, 10),
-        "max_depth": range(2, 12),
-        "min_samples_split": range(2, 12),
-    }
-}
+
+search_config = {model: {"n_estimators": range(10, 200, 10), "max_depth": range(2, 15)}}
 
 """
 The memory will remember previous evaluations done during the optimization process.

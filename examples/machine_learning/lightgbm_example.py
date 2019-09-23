@@ -7,18 +7,17 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def model(para, X_train, y_train):
+def model(para, X, y):
     model = LGBMRegressor(
         num_leaves=para["num_leaves"],
         bagging_freq=para["bagging_freq"],
         learning_rate=para["learning_rate"],
     )
-    scores = cross_val_score(model, X_train, y_train, cv=3)
+    scores = cross_val_score(model, X, y, cv=3)
 
-    return scores.mean(), model
+    return scores.mean()
 
 
-# this defines the model and hyperparameter search space
 search_config = {
     model: {
         "num_leaves": range(2, 20),
@@ -28,7 +27,5 @@ search_config = {
 }
 
 
-opt = Hyperactive(search_config, n_iter=100, n_jobs=2)
-
-# search best hyperparameter for given data
+opt = Hyperactive(search_config, n_iter=30)
 opt.fit(X, y)

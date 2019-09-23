@@ -1,21 +1,22 @@
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_breast_cancer
 from hyperactive import Hyperactive
 
-iris_data = load_iris()
-X = iris_data.data
-y = iris_data.target
+data = load_breast_cancer()
+X, y = data.data, data.target
 
-def model(para, X_train, y_train):
+
+def model(para, X, y):
     model = GradientBoostingClassifier(
         n_estimators=para["n_estimators"],
         max_depth=para["max_depth"],
         min_samples_split=para["min_samples_split"],
     )
-    scores = cross_val_score(model, X_train, y_train, cv=3)
+    scores = cross_val_score(model, X, y, cv=3)
 
-    return scores.mean(), model
+    return scores.mean()
+
 
 search_config = {
     model: {
@@ -26,14 +27,18 @@ search_config = {
 }
 
 # Without scatter initialization
-opt = SimulatedAnnealingOptimizer(
-    search_config, optimizer="HillClimbing", n_iter=20, random_state=0, scatter_init=False
+opt = Hyperactive(
+    search_config,
+    optimizer="HillClimbing",
+    n_iter=10,
+    random_state=0,
+    scatter_init=False,
 )
 opt.fit(X, y)
 
 
 # With scatter initialization
 opt = Hyperactive(
-    search_config, optimizer="HillClimbing", n_iter=20, random_state=0, scatter_init=True
+    search_config, optimizer="HillClimbing", n_iter=10, random_state=0, scatter_init=10
 )
 opt.fit(X, y)
