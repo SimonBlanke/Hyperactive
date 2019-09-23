@@ -8,6 +8,6 @@ class Model:
         self.func_ = list(_config_.search_config.keys())[0]
 
     def train_model(self, keras_para_dict, X, y):
-        score, model = self.func_(keras_para_dict, X, y)
+        score = self.func_(keras_para_dict, X, y)
 
-        return score, model
+        return score
