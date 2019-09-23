@@ -13,69 +13,6 @@ This technique was inspired by the 'Hyperband Optimization' and aims to find a g
 
 When a search is finished the warm-start-dictionary for the best position in the hyperparameter search space (and its metric) is printed in the command line (at verbosity=1). If multiple searches ran in parallel the warm-start-dictionaries are sorted by the best metric in decreasing order. If the start position in the warm-start-dictionary is not within the search space defined in the search_config an error will occure.
 
-<details><summary>Warm-start example for sklearn model:</summary>
-<p>
-
-```python
-start_point = {
-    "sklearn.ensemble.RandomForestClassifier.0": {
-        "n_estimators": [30],
-        "max_depth": [6],
-        "criterion": ["entropy"],
-        "min_samples_split": [12],
-        "min_samples_leaf": [16],
-    },
-    "sklearn.ensemble.RandomForestClassifier.1": {
-        "n_estimators": [50],
-        "max_depth": [3],
-        "criterion": ["entropy"],
-    },
-}
-```
-
-</p>
-</details>
-
-
-<details><summary>Warm-start example for keras model (cnn):</summary>
-<p>
-
-```python
-start_point = {
-    "keras.compile.0": {"loss": ["categorical_crossentropy"], "optimizer": ["adam"]},
-    "keras.fit.0": {"epochs": [3], "batch_size": [500], "verbose": [0]},
-    "keras.layers.Conv2D.1": {
-        "filters": [64],
-        "kernel_size": [3],
-        "activation": ["relu"],
-        "input_shape": [(28, 28, 1)],
-    },
-    "keras.layers.MaxPooling2D.2": {"pool_size": [(2, 2)]},
-    "keras.layers.Conv2D.3": {
-        "filters": [32],
-        "kernel_size": [3],
-        "activation": ["relu"],
-        "input_shape": [(28, 28, 1)],
-    },
-    "keras.layers.MaxPooling2D.4": {"pool_size": [(2, 2)]},
-    "keras.layers.Conv2D.5": {
-        "filters": [32],
-        "kernel_size": [3],
-        "activation": ["relu"],
-        "input_shape": [(28, 28, 1)],
-    },
-    "keras.layers.MaxPooling2D.6": {"pool_size": [(2, 2)]},
-    "keras.layers.Flatten.7": {},
-    "keras.layers.Dense.8": {"units": [50], "activation": ["softmax"]},
-    "keras.layers.Dropout.9": {"rate": [0.4]},
-"keras.layers.Dense.10": {"units": [10], "activation": ["softmax"]},
-}
-```
-
-</p>
-</details>
-
-
 
 ## Resources allocation
 
