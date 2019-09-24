@@ -13,7 +13,9 @@
 
 - Tutorial
 
-    - [How to use Hyperactive](./tutorial/tutorial.md#how-to-use-hyperactive)
+    - [Create the search space](./tutorial/search_space.md)
+    - [Choose an optimizer](./tutorial/optimizer.md)
+    - [How many iterations?](./tutorial/iterations.md)
 
 
 - Basic Examples
