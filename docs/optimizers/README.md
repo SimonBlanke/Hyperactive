@@ -2,21 +2,6 @@
 
 Hyperactive offers a wide variety of basic, meta-heuristic and sequential model-based optimization techniques for machine learning model selection and hyperparameter tuning. This readme provides an overview[*](https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#disclaimer) and brief explainations of those techniques and proposes a possible field of application.
 
-
-
----
-
-<p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#local-search">Local Search</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#random-methods">Random Methods</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#markov-chain-monte-carlo">Markov Chain Monte Carlo</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#population-methods">Population Methods</a> |
-  <a href="https://github.com/SimonBlanke/Hyperactive/tree/master/hyperactive/optimizers#sequential-methods">Sequential Methods</a>
-</p>
-
----
-
-
 <br>
 
 ## Local Search
