@@ -11,6 +11,7 @@ The function receives 3 arguments:
   - <b>y</b> : Training target
 
  The function should return some kind of metric that will be <b>maximized</b> during the search.
+ 
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
@@ -26,6 +27,7 @@ def model(para, X, y):
 ```
 
 The search_config is a dictionary, that has the <b>model-function as a key</b> and its <b>values defines the search space</b> for this model. The search space is an additional dictionary that will be used in 'para' within the model-function.
+
 ```python
 search_config = {
     model: {
