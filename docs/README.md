@@ -1,6 +1,3 @@
-# Hyperactive
-
-
 ## Installation
 PyPi always has the newest version of hyperactive:
 ```console
