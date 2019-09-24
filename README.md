@@ -219,6 +219,7 @@ Inspired by hyperband optimization.
 ## References
 
 #### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+#### [2] [An Empirical Investigation of Catastrophic Forgetting in Gradient-Based Neural Networks](https://arxiv.org/pdf/1312.6211.pdf)
 
 <br>
 
