@@ -1,5 +1,7 @@
 ## Installation
-PyPi always has the newest version of hyperactive:
+
+> PyPi always has the newest version of hyperactive:
+
 ```console
 pip install hyperactive
 ```
