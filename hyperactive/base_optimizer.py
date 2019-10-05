@@ -10,6 +10,7 @@ from functools import partial
 
 from .base_positioner import BasePositioner
 from .util import initialize_search, finish_search_, sort_for_best
+from meta_learn import HyperactiveWrapper
 
 
 class BaseOptimizer:
@@ -55,6 +56,9 @@ class BaseOptimizer:
 
         self.search_config = self._config_.search_config
         self.n_iter = self._config_.n_iter
+
+        if self._config_.meta_learn:
+            self._meta_ = HyperactiveWrapper(self._config_.search_config)
 
         if self._config_.get_search_path:
             self.pos_list = []
@@ -143,6 +147,11 @@ class BaseOptimizer:
         if self._config_.verbosity:
             print("\nscore       =", self.score_best)
             print("start_point =", start_point)
+
+        print([_cand_])
+
+        if self._config_.meta_learn:
+            self._meta_.collect(X, y, _cand_list=[_cand_])
 
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)
