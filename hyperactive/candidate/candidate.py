@@ -63,7 +63,7 @@ class Candidate:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
-            score = self._model_.train_model(para, X, y)
+            score, model = self._model_.train_model(para, X, y)
             self._space_.memory[pos_str] = score
 
             return score
