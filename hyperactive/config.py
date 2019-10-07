@@ -72,7 +72,7 @@ class Config:
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {
             "total": self.n_iter,
-            "desc": "Search " + str(_cand_.nth_process),
+            "desc": "Search " + str(_cand_.nth_process) + ": " + _cand_._model_.func_.__name__,
             "position": _cand_.nth_process,
             "leave": False,
         }
