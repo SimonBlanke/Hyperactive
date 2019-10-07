@@ -32,6 +32,14 @@ class Config:
         }
 
         self.search_config = args[0]
+        self.opt_para = None
+        
+        if "optimizer" in kwargs and isinstance(kwargs["optimizer"], dict):
+            opt = list(kwargs["optimizer"].keys())[0]
+            self.opt_para = kwargs["optimizer"][opt]
+            
+            kwargs["optimizer"] = opt
+            
         kwargs_base = merge_dicts(kwargs_base, kwargs)
         self._set_general_args(kwargs_base)
 
