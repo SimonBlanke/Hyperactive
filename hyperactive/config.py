@@ -32,7 +32,7 @@ class Config:
         }
 
         self.search_config = args[0]
-        self.opt_para = None
+        self.opt_para = dict()
         
         if "optimizer" in kwargs and isinstance(kwargs["optimizer"], dict):
             opt = list(kwargs["optimizer"].keys())[0]
