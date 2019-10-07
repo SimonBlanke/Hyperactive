@@ -75,7 +75,7 @@ class Hyperactive:
         }
 
         _config_ = Config(*args, **kwargs)
-        _arg_ = Arguments(**kwargs)
+        _arg_ = Arguments(**_config_.opt_para)
 
         optimizer_class = optimizer_dict[_config_.optimizer]
         self._optimizer_ = optimizer_class(_config_, _arg_)
