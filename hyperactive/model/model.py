@@ -8,6 +8,15 @@ class Model:
         self.func_ = list(_config_.search_config.keys())[0]
 
     def train_model(self, keras_para_dict, X, y):
-        score = self.func_(keras_para_dict, X, y)
+        result = self.func_(keras_para_dict, X, y)
+        
+        if isinstance(result, tuple):
+            score = result[0]
+            model = result[1]
+        elif isinstance(result, float):
+            score = result
+            model = None
+        else:
+            print("Error: model function must return float or tuple")
 
-        return score
+        return score, model
