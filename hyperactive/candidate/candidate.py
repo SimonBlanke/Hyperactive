@@ -53,7 +53,7 @@ class Candidate:
 
     @score_best.setter
     def score_best(self, value):
-        # self.model_best = self.model
+        self.model_best = self.model
         self._score_best = value
 
     def eval_pos(self, pos, X, y, force_eval=False):
@@ -63,7 +63,7 @@ class Candidate:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
-            score, model = self._model_.train_model(para, X, y)
+            score, self.model = self._model_.train_model(para, X, y)
             self._space_.memory[pos_str] = score
 
             return score
