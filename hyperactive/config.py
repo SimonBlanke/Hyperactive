@@ -33,13 +33,13 @@ class Config:
 
         self.search_config = args[0]
         self.opt_para = dict()
-        
+
         if "optimizer" in kwargs and isinstance(kwargs["optimizer"], dict):
             opt = list(kwargs["optimizer"].keys())[0]
             self.opt_para = kwargs["optimizer"][opt]
-            
+
             kwargs["optimizer"] = opt
-            
+
         kwargs_base = merge_dicts(kwargs_base, kwargs)
         self._set_general_args(kwargs_base)
 
@@ -68,9 +68,10 @@ class Config:
         else:
             self.p_bar = None
 
-    def update_p_bar(self, n):
+    def update_p_bar(self, n, _cand_):
         if self.p_bar:
             self.p_bar.update(n)
+            self.p_bar.set_postfix(score=str(_cand_.score_best))
 
     def close_p_bar(self):
         if self.p_bar:
@@ -80,7 +81,10 @@ class Config:
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {
             "total": self.n_iter,
-            "desc": "Search " + str(_cand_.nth_process) + ": " + _cand_._model_.func_.__name__,
+            "desc": "Thread "
+            + str(_cand_.nth_process)
+            + " -> "
+            + _cand_._model_.func_.__name__,
             "position": _cand_.nth_process,
             "leave": False,
         }

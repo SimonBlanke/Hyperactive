@@ -99,10 +99,7 @@ class BaseOptimizer:
 
         for i in range(self._config_.n_iter):
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
-            self._config_.update_p_bar(1)
-            
-            self._config_.verbosity > 1:
-                print("Best score:", _cand_._score_best, end="\r")
+            self._config_.update_p_bar(1, _cand_)
 
             if self._config_.get_search_path:
                 pos_list = []
