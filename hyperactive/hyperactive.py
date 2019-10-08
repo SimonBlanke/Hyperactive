@@ -94,3 +94,4 @@ class Hyperactive:
         None
         """
         self._optimizer_._fit(X, y)
+        self.score_best = self._optimizer_.score_best
