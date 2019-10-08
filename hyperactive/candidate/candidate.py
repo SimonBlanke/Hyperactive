@@ -16,15 +16,17 @@ class Candidate:
         self.pos_best = None
 
         self.model = None
-        self._space_ = SearchSpace(_config_)
 
         self.nth_process = nth_process
-        self.func_ = list(_config_.search_config.keys())[0]
+
+        model_nr = nth_process % _config_.n_models
+        self.func_ = list(_config_.search_config.keys())[model_nr]
+        self._space_ = SearchSpace(_config_, model_nr)
 
         self.func_name = str(self.func_).split(" ")[1]
 
         self._space_.create_kerasSearchSpace()
-        self._model_ = Model(_config_)
+        self._model_ = Model(self.func_, nth_process)
 
         self._init_ = InitSearchPosition(
             self._space_, self._model_, _config_.warm_start, _config_.scatter_init

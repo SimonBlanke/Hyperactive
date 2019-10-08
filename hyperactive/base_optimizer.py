@@ -175,10 +175,12 @@ class BaseOptimizer:
         )
 
         if self._config_.verbosity:
-            print("\nList of start points (best first):")
+            for i in range(int(self._config_.n_jobs / 2)):
+                print("\n")
+            print("\nList of start points (best first):\n")
             for start_point, score_best in zip(start_point_sorted, score_best_sorted):
-                print("\nscore       =", score_best)
-                print("start_point =", start_point)
+                print("score       =", score_best)
+                print("start_point =", start_point, "\n")
 
         self.score_best = score_best_sorted[0]
         self.model_best = model_best_sorted[0]
@@ -196,13 +198,8 @@ class BaseOptimizer:
         -------
         None
         """
-        X, y = self._config_._check_data(X, y)
-
-        # if self._config_.model_type == "keras":
-        #    self._config_.n_jobs = 1
 
         if self._config_.n_jobs == 1:
             self._run_one_job(X, y)
-
         else:
             self._run_multiple_jobs(X, y)

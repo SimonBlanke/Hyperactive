@@ -7,10 +7,11 @@ import numpy as np
 
 
 class SearchSpace:
-    def __init__(self, _config_):
+    def __init__(self, _config_, model_nr):
         self.search_config = _config_.search_config
         self.warm_start = _config_.warm_start
         self.scatter_init = _config_.scatter_init
+        self.model_nr = model_nr
 
         self.memory = {}
 
@@ -35,7 +36,7 @@ class SearchSpace:
 
         """
 
-        self.para_space = self.search_config[list(self.search_config)[0]]
+        self.para_space = self.search_config[list(self.search_config)[self.model_nr]]
 
         self.pos_space_limit()
 

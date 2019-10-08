@@ -4,12 +4,13 @@
 
 
 class Model:
-    def __init__(self, _config_):
-        self.func_ = list(_config_.search_config.keys())[0]
+    def __init__(self, func_, nth_process):
+        self.func_ = func_
+        self.nth_process = nth_process
 
     def train_model(self, keras_para_dict, X, y):
         result = self.func_(keras_para_dict, X, y)
-        
+
         if isinstance(result, tuple):
             score = result[0]
             model = result[1]
