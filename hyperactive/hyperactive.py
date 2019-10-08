@@ -80,7 +80,7 @@ class Hyperactive:
         optimizer_class = optimizer_dict[_config_.optimizer]
         self._optimizer_ = optimizer_class(_config_, _arg_)
 
-    def fit(self, X, y):
+    def search(self, X, y):
         """Public method for starting the search with the training data (X, y)
 
         Parameters
@@ -93,4 +93,4 @@ class Hyperactive:
         -------
         None
         """
-        self._optimizer_.fit(X, y)
+        self._optimizer_._fit(X, y)

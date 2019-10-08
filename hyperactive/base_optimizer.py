@@ -140,15 +140,13 @@ class BaseOptimizer:
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
 
-        self.model_best = _cand_.model
+        self.model_best = _cand_.model_best
         self.score_best = _cand_.score_best
         start_point = _cand_._get_warm_start()
 
         if self._config_.verbosity:
             print("\nscore       =", self.score_best)
             print("start_point =", start_point)
-
-        print([_cand_])
 
         if self._config_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
@@ -160,7 +158,7 @@ class BaseOptimizer:
         score_best_list = []
         model_best_list = []
         for _cand_ in _cand_list:
-            model_best = _cand_.model
+            model_best = _cand_.model_best
             score_best = _cand_.score_best
             start_point = _cand_._get_warm_start()
 
@@ -185,7 +183,7 @@ class BaseOptimizer:
         self.score_best = score_best_sorted[0]
         self.model_best = model_best_sorted[0]
 
-    def fit(self, X, y):
+    def _fit(self, X, y):
         """Public method for starting the search with the training data (X, y)
 
         Parameters
