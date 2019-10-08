@@ -1,5 +1,4 @@
 pytest test_packages.py -p no:warnings
-pytest test_data.py -p no:warnings
 pytest test_optimizers.py -p no:warnings
 pytest test_performance.py -p no:warnings
 pytest test_arguments_api.py -p no:warnings
