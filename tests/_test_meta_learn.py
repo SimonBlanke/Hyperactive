@@ -44,7 +44,7 @@ def test_metalearn():
 
 def test_metalearn1():
     opt = Hyperactive(search_config, meta_learn=True)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 test_metalearn()

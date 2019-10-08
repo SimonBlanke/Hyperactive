@@ -49,4 +49,4 @@ def cnn(para, X_train, y_train):
 search_config = {cnn: {"filter.0": [16, 32, 64, 128], "layer.0": range(100, 1000, 100)}}
 
 opt = Hyperactive(search_config, n_iter=5)
-opt.fit(X_train, y_train)
+opt.search(X_train, y_train)

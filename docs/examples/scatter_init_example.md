@@ -37,12 +37,12 @@ opt = Hyperactive(
     random_state=0,
     scatter_init=False,
 )
-opt.fit(X, y)
+opt.search(X, y)
 
 
 # With scatter initialization
 opt = Hyperactive(
     search_config, optimizer="HillClimbing", n_iter=10, random_state=0, scatter_init=10
 )
-opt.fit(X, y)
+opt.search(X, y)
 ```

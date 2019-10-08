@@ -28,7 +28,7 @@ def meta_opt(para, X, y):
     }
 
     opt = Hyperactive(search_config, optimizer={"StochasticHillClimbing": {"r": para["r"]}})
-    opt.fit(X, y)
+    opt.search(X, y)
 
     return score
 
@@ -40,4 +40,4 @@ search_config = {
 }
 
 opt = Hyperactive(search_config, optimizer="Bayesian", n_iter=3)
-opt.fit(X, y)
+opt.search(X, y)

@@ -70,4 +70,4 @@ search_config = {
 }
 
 opt = Hyperactive(search_config, n_iter=5)
-opt.fit(X_train, y_train)
+opt.search(X_train, y_train)

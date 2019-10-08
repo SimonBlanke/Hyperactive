@@ -48,7 +48,7 @@ def test_HillClimbing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -57,7 +57,7 @@ def test_HillClimbing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -70,7 +70,7 @@ def test_StochasticHillClimbing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -79,7 +79,7 @@ def test_StochasticHillClimbing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -92,7 +92,7 @@ def test_TabuOptimizer():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -101,7 +101,7 @@ def test_TabuOptimizer():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -114,7 +114,7 @@ def test_RandomSearch():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -123,7 +123,7 @@ def test_RandomSearch():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -136,7 +136,7 @@ def test_RandomRestartHillClimbing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -145,7 +145,7 @@ def test_RandomRestartHillClimbing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -158,7 +158,7 @@ def test_RandomAnnealing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -167,7 +167,7 @@ def test_RandomAnnealing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -180,7 +180,7 @@ def test_SimulatedAnnealing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -189,7 +189,7 @@ def test_SimulatedAnnealing():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -202,7 +202,7 @@ def test_StochasticTunneling():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -211,7 +211,7 @@ def test_StochasticTunneling():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -224,7 +224,7 @@ def test_ParallelTempering():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -233,7 +233,7 @@ def test_ParallelTempering():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -246,7 +246,7 @@ def test_ParticleSwarm():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -255,7 +255,7 @@ def test_ParticleSwarm():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -268,7 +268,7 @@ def test_EvolutionStrategy():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -277,7 +277,7 @@ def test_EvolutionStrategy():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best
 
@@ -290,7 +290,7 @@ def test_Bayesian():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(
         search_config,
@@ -299,6 +299,6 @@ def test_Bayesian():
         random_state=random_state,
         warm_start=warm_start,
     )
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     assert opt0._optimizer_.score_best < opt1._optimizer_.score_best

@@ -35,7 +35,7 @@ def test_sklearn():
     }
 
     opt = Hyperactive(search_config)
-    opt.fit(X, y)
+    opt.search(X, y)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -54,7 +54,7 @@ def test_xgboost():
     search_config = {model: {"n_estimators": range(2, 20), "max_depth": range(1, 11)}}
 
     opt = Hyperactive(search_config)
-    opt.fit(X, y)
+    opt.search(X, y)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -78,7 +78,7 @@ def test_lightgbm():
     }
 
     opt = Hyperactive(search_config)
-    opt.fit(X, y)
+    opt.search(X, y)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -105,7 +105,7 @@ def test_catboost():
     }
 
     opt = Hyperactive(search_config)
-    opt.fit(X, y)
+    opt.search(X, y)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -154,7 +154,7 @@ def test_keras():
     search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
 
     opt = Hyperactive(search_config)
-    opt.fit(X_train, y_train)
+    opt.search(X_train, y_train)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -234,7 +234,7 @@ def test_pytorch():
     search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
 
     opt = Hyperactive(search_config)
-    opt.fit(None, None)
+    opt.search(None, None)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -246,7 +246,7 @@ def test_chainer():
 
     search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
     opt = Hyperactive(search_config)
-    opt.fit(None, None)
+    opt.search(None, None)
     # opt.predict(X)
     # opt.score(X, y)
 """

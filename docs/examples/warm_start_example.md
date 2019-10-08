@@ -35,5 +35,5 @@ start_point = {
 
 
 opt = Hyperactive(search_config, warm_start=start_point)
-opt.fit(X, y)
+opt.search(X, y)
 ```

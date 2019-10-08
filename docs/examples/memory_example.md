@@ -30,5 +30,5 @@ This shows as a speed up during the optimization process, since the whole search
 opt = Hyperactive(search_config, n_iter=1000, memory=True)
 
 # search best hyperparameter for given data
-opt.fit(X, y)
+opt.search(X, y)
 ```

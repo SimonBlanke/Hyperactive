@@ -28,5 +28,5 @@ search_config = {
 }
 
 opt = Hyperactive(search_config)
-opt.fit(X, y)
+opt.search(X, y)
 ```

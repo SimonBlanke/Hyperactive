@@ -45,78 +45,78 @@ warm_start = {
 
 def test_n_jobs_2():
     opt = Hyperactive(search_config, n_jobs=2)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 def test_n_jobs_4():
     opt = Hyperactive(search_config, n_jobs=4)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 def test_positional_args():
     opt0 = Hyperactive(search_config, random_state=False)
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(search_config, random_state=1)
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     opt2 = Hyperactive(search_config, random_state=1)
-    opt2.fit(X, y)
+    opt2.search(X, y)
 
 
 def test_random_state():
     opt0 = Hyperactive(search_config, random_state=False)
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(search_config, random_state=0)
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
     opt2 = Hyperactive(search_config, random_state=1)
-    opt2.fit(X, y)
+    opt2.search(X, y)
 
 
 def test_memory():
     opt0 = Hyperactive(search_config, memory=True)
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(search_config, memory=False)
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
 
 def test_verbosity():
     opt0 = Hyperactive(search_config, verbosity=0)
-    opt0.fit(X, y)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(search_config, verbosity=1)
-    opt1.fit(X, y)
+    opt1.search(X, y)
 
 
 def test_scatter_init():
     opt = Hyperactive(search_config, scatter_init=10)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 def test_scatter_init_and_warm_start():
     opt = Hyperactive(search_config, warm_start=warm_start, scatter_init=10)
-    opt.fit(X, y)
+    opt.search(X, y)
 
     opt = Hyperactive(search_config, warm_start=warm_start, scatter_init=10)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 def test_warm_start_multiple_jobs():
     opt = Hyperactive(search_config, n_jobs=4, warm_start=warm_start)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 def test_warm_start():
     opt = Hyperactive(search_config, n_jobs=1, warm_start=warm_start)
-    opt.fit(X, y)
+    opt.search(X, y)
 
 
 def test_get_search_path():
     opt = Hyperactive(search_config, get_search_path=True)
-    opt.fit(X, y)
+    opt.search(X, y)
 
     opt = Hyperactive(search_config, optimizer="ParticleSwarm", get_search_path=True)
-    opt.fit(X, y)
+    opt.search(X, y)

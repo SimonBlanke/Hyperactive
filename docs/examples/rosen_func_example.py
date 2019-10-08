@@ -21,4 +21,4 @@ search_config = {
 }
 
 opt = Hyperactive(search_config, n_iter=1000000)
-opt.fit(0, 0)
+opt.search(0, 0)

@@ -42,7 +42,7 @@ def test_data():
     from hyperactive import Hyperactive
 
     opt0 = Hyperactive(search_config)
-    opt0.fit(X_np, y_np)
+    opt0.search(X_np, y_np)
 
     opt1 = Hyperactive(search_config)
-    opt1.fit(X_pd, y_pd)
+    opt1.search(X_pd, y_pd)
