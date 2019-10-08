@@ -27,7 +27,6 @@ class Config:
             "scatter_init": False,
             "meta_learn": False,
             "proxy_dataset": False,
-            "repulsor": False,
             "get_search_path": False,
         }
 
@@ -71,7 +70,7 @@ class Config:
     def update_p_bar(self, n, _cand_):
         if self.p_bar:
             self.p_bar.update(n)
-            self.p_bar.set_postfix(score=str(_cand_.score_best))
+            self.p_bar.set_postfix(best_score=str(_cand_.score_best))
 
     def close_p_bar(self):
         if self.p_bar:
@@ -86,7 +85,7 @@ class Config:
             + " -> "
             + _cand_._model_.func_.__name__,
             "position": _cand_.nth_process,
-            "leave": False,
+            "leave": True,
         }
 
     def _set_random_seed(self, thread=0):
