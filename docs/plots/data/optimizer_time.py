@@ -89,11 +89,11 @@ def collect_data(runs, X, y, sklearn_model, opt_list, search_config, n_iter, opt
 
             if key == "Parallel Tempering":
                 n_iter_temp = int(n_iter / 5)
-                opt_dict_temp["system_temps"] = [0.1, 0.2, 0.01, 0.2, 0.01]
+                opt_dict_temp["system_temperatures"] = [0.1, 0.2, 0.01, 0.2, 0.01]
 
             if key == "Particle Swarm":
                 n_iter_temp = int(n_iter / 5)
-                opt_dict_temp["n_part"] = 5
+                opt_dict_temp["n_particles"] = 5
 
             if key == "Evolution Strategy":
                 n_iter_temp = int(n_iter / 5)

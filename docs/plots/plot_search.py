@@ -85,11 +85,11 @@ for opt in opt_list:
 
     if opt == "Parallel Tempering":
         n_iter_temp = int(n_iter / 10)
-        opt_dict_temp["system_temps"] = [0.001, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
+        opt_dict_temp["system_temperatures"] = [0.001, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
 
     if opt == "Particle Swarm":
         n_iter_temp = int(n_iter / 10)
-        opt_dict_temp["n_part"] = 10
+        opt_dict_temp["n_particles"] = 10
 
     if opt == "Evolution Strategy":
         n_iter_temp = int(n_iter / 10)

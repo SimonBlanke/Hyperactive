@@ -9,17 +9,17 @@ from ...base_optimizer import BaseOptimizer
 class RandomAnnealingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"eps": self._arg_.eps_global}
+        self.pos_para = {"epsilon": self._arg_.epsilon_start}
         self.temp = 1
 
     def _iterate(self, i, _cand_, _p_, X, y):
-        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current, eps_mod=1 / self.temp)
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current, epsilon_mod=1 / self.temp)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
         if _p_.score_new > _cand_.score_best:
             _cand_, _p_ = self._update_pos(_cand_, _p_)
 
-        self.temp = self.temp * self._arg_.t_rate
+        self.temp = self.temp * self._arg_.annealing_rate
 
         return _cand_
 

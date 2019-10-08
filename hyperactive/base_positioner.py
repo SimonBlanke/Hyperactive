@@ -6,8 +6,8 @@ import numpy as np
 
 
 class BasePositioner:
-    def __init__(self, eps=1):
-        self.eps = eps
+    def __init__(self, epsilon=1):
+        self.epsilon = epsilon
 
         self.pos_new = None
         self.score_new = -1000
@@ -18,9 +18,9 @@ class BasePositioner:
         self.pos_best = None
         self.score_best = -1000
 
-    def move_climb(self, _cand_, pos, eps_mod=1):
+    def move_climb(self, _cand_, pos, epsilon_mod=1):
 
-        sigma = (_cand_._space_.dim / 33) * self.eps / eps_mod + 1
+        sigma = (_cand_._space_.dim / 33) * self.epsilon / epsilon_mod + 1
         pos_new = np.random.normal(pos, sigma, pos.shape)
         pos_new_int = np.rint(pos_new)
 

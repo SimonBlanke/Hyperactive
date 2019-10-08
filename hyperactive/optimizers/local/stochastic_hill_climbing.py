@@ -13,7 +13,7 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
         super().__init__(*args, **kwargs)
 
     def _consider(self, _p_, p_accept):
-        rand = random.uniform(0, self._arg_.r)
+        rand = random.uniform(0, self._arg_.p_down)
 
         if p_accept > rand:
             _p_.score_current = _p_.score_new

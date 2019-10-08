@@ -9,7 +9,7 @@ from ...base_optimizer import BaseOptimizer
 class RandomRestartHillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"eps": self._arg_.eps}
+        self.pos_para = {"epsilon": self._arg_.epsilon}
         self.n_iter_restart = int(self._config_.n_iter / self._arg_.n_restarts)
 
     def _iterate(self, i, _cand_, _p_, X, y):

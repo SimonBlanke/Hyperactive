@@ -28,7 +28,7 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
             p_accept = self._accept(_p_)
             self._consider(_p_, p_accept)
 
-        self.temp = self.temp * self._arg_.t_rate
+        self.temp = self.temp * self._arg_.annealing_rate
 
         return _cand_
 

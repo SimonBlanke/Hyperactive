@@ -17,7 +17,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         self.n_iter_swap = int(self._config_.n_iter / self._arg_.n_swaps)
 
     def _init_annealers(self, _cand_):
-        _p_list_ = [System(temp=temp) for temp in self._arg_.system_temps]
+        _p_list_ = [System(temp=temp) for temp in self._arg_.system_temperatures]
 
         for _p_ in _p_list_:
             _p_.pos_current = _cand_._space_.get_random_pos()
@@ -66,6 +66,6 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
 
 
 class System(BasePositioner):
-    def __init__(self, eps=1, temp=1):
-        super().__init__(eps)
+    def __init__(self, epsilon=1, temp=1):
+        super().__init__(epsilon)
         self.temp = temp

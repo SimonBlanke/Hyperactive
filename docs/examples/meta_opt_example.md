@@ -1,3 +1,6 @@
+#### Meta Optimization
+
+```python
 import numpy as np
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
@@ -30,7 +33,7 @@ def meta_opt(para, X, y):
     opt = Hyperactive(
         search_config,
         optimizer={
-            "ParticleSwarm": {"w": para["w"], "c_k": para["c_k"], "c_s": para["c_s"]}
+            "ParticleSwarm": {"inertia": para["inertia"], "cognitive_weight": para["cognitive_weight"], "social_weight": para["social_weight"]}
         },
         verbosity=None,
     )
@@ -41,11 +44,12 @@ def meta_opt(para, X, y):
 
 search_config = {
     meta_opt: {
-        "w": np.arange(0, 1, 0.01),
-        "c_k": np.arange(0, 1, 0.01),
-        "c_s": np.arange(0, 1, 0.01),
+        "inertia": np.arange(0, 1, 0.01),
+        "cognitive_weight": np.arange(0, 1, 0.01),
+        "social_weight": np.arange(0, 1, 0.01),
     }
 }
 
 opt = Hyperactive(search_config, optimizer="Bayesian", n_iter=50)
 opt.search(X, y)
+```

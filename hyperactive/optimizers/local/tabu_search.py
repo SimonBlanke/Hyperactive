@@ -37,8 +37,8 @@ class TabuOptimizer(HillClimbingOptimizer):
 
 
 class TabuPositioner(BasePositioner):
-    def __init__(self, eps=1):
-        super().__init__(eps)
+    def __init__(self, epsilon=1):
+        super().__init__(epsilon)
 
         tabu_memory_short = []
         tabu_memory_mid = []
@@ -46,7 +46,7 @@ class TabuPositioner(BasePositioner):
 
         self.tabu_memory_ = [tabu_memory_short, tabu_memory_mid, tabu_memory_long]
 
-    def climb_tabu(self, _cand_, pos, eps_mod=1):
+    def climb_tabu(self, _cand_, pos, epsilon_mod=1):
         in_tabu_mem = True
         pos_new = None
 
