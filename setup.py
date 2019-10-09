@@ -38,5 +38,6 @@ setup(
         "xgboost",
         "lightgbm",
         "catboost",
+        "meta-learn",
     ],
 )
