@@ -31,6 +31,24 @@ def data_aug(X, y, sample_multi=5, feature_multi=5):
 
     return X_list, y_list
 
+def model(para, X, y):
+    model = DecisionTreeClassifier(
+        max_depth=para["max_depth"],
+        min_samples_split=para["min_samples_split"],
+        min_samples_leaf=para["min_samples_leaf"],
+    )
+    scores = cross_val_score(model, X, y, cv=3)
+
+    return scores.mean()
+
+search_config_model = {
+    model: {
+        "max_depth": range(2, 50),
+        "min_samples_split": range(2, 50),
+        "min_samples_leaf": range(1, 50),
+    }
+}
+
 
 def meta_opt(para, X_list, y_list):
     scores = []
@@ -39,40 +57,24 @@ def meta_opt(para, X_list, y_list):
         X_list, y_list = data_aug(X, y, sample_multi=3, feature_multi=3)
 
         for X, y in zip(X_list, y_list):
-            def model(para, X, y):
-                model = DecisionTreeClassifier(
-                    max_depth=para["max_depth"],
-                    min_samples_split=para["min_samples_split"],
-                    min_samples_leaf=para["min_samples_leaf"],
+
+            for n_iter in [10, 25, 50, 100]:
+                opt = Hyperactive(
+                    search_config_model,
+                    optimizer={
+                        "ParticleSwarm": {"inertia": para["inertia"], "cognitive_weight": para["cognitive_weight"], "social_weight": para["social_weight"]}
+                    }, 
+                    n_iter=n_iter,
+                    verbosity=None,
                 )
-                scores = cross_val_score(model, X, y, cv=3)
-
-                return scores.mean()
-
-            search_config = {
-                model: {
-                    "max_depth": range(2, 50),
-                    "min_samples_split": range(2, 50),
-                    "min_samples_leaf": range(1, 50),
-                }
-            }
-
-            opt = Hyperactive(
-                search_config,
-                optimizer={
-                    "ParticleSwarm": {"inertia": para["inertia"], "cognitive_weight": para["cognitive_weight"], "social_weight": para["social_weight"]}
-                }, 
-                n_iter=30,
-                verbosity=None,
-            )
-            opt.search(X, y)
-            score = opt.score_best
-            scores.append(score)
+                opt.search(X, y)
+                score = opt.score_best
+                scores.append(score)
 
     return np.array(scores).mean()
 
 
-search_config = {
+search_config_meta = {
     meta_opt: {
         "inertia": np.arange(0, 1, 0.01),
         "cognitive_weight": np.arange(0, 1, 0.01),
@@ -80,5 +82,5 @@ search_config = {
     }
 }
 
-opt = Hyperactive(search_config, optimizer="Bayesian", n_iter=30)
+opt = Hyperactive(search_config_meta, optimizer="Bayesian", n_iter=30)
 opt.search(X_list, y_list)
