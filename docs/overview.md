@@ -18,6 +18,8 @@
 
 <br>
 
+<br>
+
 <table>
   <tbody>
     <tr align="center" valign="center">
@@ -42,24 +44,24 @@
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=hill-climbing">Hill Climbing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=tabu-search">Tabu Search</a></li>
-         </ul>
+         </ul><br>
         <a><b>Random Methods:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-search">Random Search</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li> 
-         </ul>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
+         </ul><br>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=simulated-annealing">Simulated Annealing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-tunneling">Stochastic Tunneling</li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=parallel-tempering">Parallel Tempering</a></li>
-          </ul>
+          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=evolution-strategy">Evolution Strategy</a></li>
-          </ul>
+          </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=bayesian-optimization">Bayesian Optimization</a></li>
@@ -72,11 +74,11 @@
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/xgboost_example?id=xgboost">XGBoost</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/lightgbm_example?id=lightgbm">LightGBM</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/catboost_example?id=catboost">CatBoost</a></li>
-          </ul>
+          </ul><br>
         <a><b>Deep Learning:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
-          </ul>
+          </ul><br>
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/multiprocessing_example?id=multiprocessing">Multiprocessing</a></li>
@@ -88,7 +90,7 @@
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=warm-start">Warm-start</a></li>
             <li>Meta-Learn (coming soon)</li>
-          </ul>
+          </ul><br>
         <a><b>Resource Allocation:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=memory">Memory</a></li>
@@ -104,12 +106,12 @@
 
 ## Experimental algorithms
 
-The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature. 
+The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
 If any of these algorithms still exist I ask you to share it with me in an issue.
 
 #### Random Annealing
 
-A combination between simulated annealing and random search. 
+A combination between simulated annealing and random search.
 
 #### Scatter Initialization
 
