@@ -82,7 +82,7 @@
 
 ## Main features
 
-- Very simple but versatile API
+- Very simple API
 - Thoroughly tested code base
 - Compatible with <b>any python machine-learning framework</b>
 - Optimize:
