@@ -35,21 +35,21 @@ def conv3(model):
 def cnn(para, X_train, y_train):
     model = Sequential()
     model.add(
-        Conv2D(para["filter.0"], (3, 3), padding="same", input_shape=X_train.shape[1:])
+        Conv2D(para["filters.0"], (3, 3), padding="same", input_shape=X_train.shape[1:])
     )
     model.add(Activation("relu"))
-    model.add(Conv2D(para["filter.0"], (3, 3)))
+    model.add(Conv2D(para["filters.0"], (3, 3)))
     model.add(Activation("relu"))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
-    model.add(Conv2D(para["filter.0"], (3, 3), padding="same"))
+    model.add(Conv2D(para["filters.0"], (3, 3), padding="same"))
     model.add(Activation("relu"))
-    model = para["layer.0"](model)
+    model = para["conv_layer.0"](model)
     model.add(Dropout(0.25))
 
     model.add(Flatten())
-    model.add(Dense(para["layer.0"]))
+    model.add(Dense(para["neurons.0"]))
     model.add(Activation("relu"))
     model.add(Dropout(0.5))
     model.add(Dense(10))
@@ -67,9 +67,9 @@ def cnn(para, X_train, y_train):
 
 search_config = {
     cnn: {
-        "layers.0": [conv1, conv2, conv3],
+        "conv_layer.0": [conv1, conv2, conv3],
         "filters.0": [16, 32, 64, 128],
-        "layer.0": range(100, 1000, 100),
+        "neurons.0": range(100, 1000, 100),
     }
 }
 
