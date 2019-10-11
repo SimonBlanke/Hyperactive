@@ -11,6 +11,12 @@ y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
 
 
+"""
+Efficient Neural Architecture Search via Parameter Sharing:
+https://arxiv.org/pdf/1802.03268.pdf
+"""
+
+
 def conv1(model):
     model.add(Conv2D(32, (3, 3)))
     model.add(Activation("relu"))
@@ -28,19 +34,62 @@ def conv3(model):
     return model
 
 
+model_pretrained = Sequential()
+model_pretrained.add(
+    Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:])
+)
+model_pretrained.add(Activation("relu"))
+model_pretrained.add(Conv2D(32, (3, 3)))
+model_pretrained.add(Activation("relu"))
+model_pretrained.add(MaxPooling2D(pool_size=(2, 2)))
+model_pretrained.add(Dropout(0.25))
+
+model_pretrained.add(Conv2D(32, (3, 3), padding="same"))
+model_pretrained.add(Activation("relu"))
+model_pretrained.add(Dropout(0.25))
+
+model_pretrained.add(Flatten())
+model_pretrained.add(Dense(200))
+model_pretrained.add(Activation("relu"))
+model_pretrained.add(Dropout(0.5))
+model_pretrained.add(Dense(10))
+model_pretrained.add(Activation("softmax"))
+
+model_pretrained.compile(
+    optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
+)
+model_pretrained.fit(X_train, y_train, epochs=50, batch_size=128)
+
+n_layers = len(model_pretrained.layers)
+
+for i in range(n_layers-8):
+    model_pretrained.pop()
+
+for layer in model_pretrained.layers:
+    layer.trainable = False
+
+print(model_pretrained.summary())
+
+
 def cnn(para, X_train, y_train):
+    '''
     model = Sequential()
     model.add(
-        Conv2D(para["filters.0"], (3, 3), padding="same", input_shape=X_train.shape[1:])
+        Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:])
     )
     model.add(Activation("relu"))
-    model.add(Conv2D(para["filters.0"], (3, 3)))
+    model.add(Conv2D(32, (3, 3)))
     model.add(Activation("relu"))
+
+
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
 
-    model.add(Conv2D(para["filters.0"], (3, 3), padding="same"))
+    model.add(Conv2D(32, (3, 3), padding="same"))
     model.add(Activation("relu"))
+    '''
+    model = model_pretrained
+
     model = para["conv_layer.0"](model)
     model.add(Dropout(0.25))
 
@@ -64,7 +113,6 @@ def cnn(para, X_train, y_train):
 search_config = {
     cnn: {
         "conv_layer.0": [conv1, conv2, conv3],
-        "filters.0": [16, 32, 64, 128],
         "neurons.0": range(100, 1000, 100),
     }
 }
