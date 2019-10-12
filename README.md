@@ -154,14 +154,21 @@
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/xgboost_example?id=xgboost">XGBoost</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/lightgbm_example?id=lightgbm">LightGBM</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/catboost_example?id=catboost">CatBoost</a></li>
+            <li>RGF</li>
+            <li>Mlxtend</li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
+              <li>Tensorflow</li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
+              <li>Tensorlayer</li>
+              <li>Pytorch</li>
+              <li>Skorch</li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/multiprocessing_example?id=multiprocessing">Multiprocessing</a></li>
+              <li>Ray</li>
           </ul>
       </td>
       <td>
