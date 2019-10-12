@@ -40,22 +40,22 @@
 
 - Optimization Techniques
 
-    - [Hill Climbing](./optimizers/README.md#hill-climbing)
-    - [Stochastic Hill Climbing](./optimizers/README.md#stochastic-hill-climbing)
-    - [Tabu Search](./optimizers/README.md#tabu-search)
+    - [Hill Climbing](./optimizers/HillClimbing.md#hill-climbing)
+    - [Stochastic Hill Climbing](./optimizers/StochasticHillClimbing.md#stochastic-hill-climbing)
+    - [Tabu Search](./optimizers/TabuSearch.md#tabu-search)
 
-    - [Random Search](./optimizers/README.md#random-search)
-    - [Random Restart Hill Climbing](./optimizers/README.md#random-restart-hill-climbing)
-    - [Random Annealing](./optimizers/README.md#random-annealing)
+    - [Random Search](./optimizers/RandomSearch.md#random-search)
+    - [Random Restart Hill Climbing](./optimizers/RandomRestartHillClimbing.md#random-restart-hill-climbing)
+    - [Random Annealing](./optimizers/RandomAnnealing.md#random-annealing)
 
-    - [Simulated Annealing](./optimizers/README.md#simulated-annealing)
-    - [Stochastic Tunneling](./optimizers/README.md#stochastic-tunneling)
-    - [Parallel Tempering](./optimizers/README.md#parallel-tempering)
+    - [Simulated Annealing](./optimizers/SimulatedAnnealing.md#simulated-annealing)
+    - [Stochastic Tunneling](./optimizers/StochasticTunneling.md#stochastic-tunneling)
+    - [Parallel Tempering](./optimizers/ParallelTempering.md#parallel-tempering)
 
-    - [Particle Swarm Optimization](./optimizers/README.md#particle-swarm-optimization)
-    - [Evolution Strategy](./optimizers/README.md#evolution-strategy)
+    - [Particle Swarm Optimization](./optimizers/ParticleSwarm.md#particle-swarm-optimization)
+    - [Evolution Strategy](./optimizers/EvolutionStrategy.md#evolution-strategy)
 
-    - [Bayesian Optimization](./optimizers/README.md#bayesian-optimization)
+    - [Bayesian Optimization](./optimizers/Bayesian.md#bayesian-optimization)
 
 
 - Optimization Extensions
@@ -64,3 +64,7 @@
     - [Warm start](./extentions/README.md#warm-start)
 
     - [Memory](./extentions/README.md#memory)
+
+
+- Hyperactive API
+    - []()
