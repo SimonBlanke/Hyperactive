@@ -6,21 +6,21 @@
 
 - Overview
 
-    - [Main Features](overview.md)
+    - [Main Features](overview.md#main-features)
     - [Installation options](./installation/README.md#installation)
     - [Performance](./performance/README.md#performance)
 
 
 - Tutorial
 
-    - [Create the search space](./tutorial/search_space.md)
-    - [Choose an optimizer](./tutorial/optimizer.md)
-    - [How many iterations?](./tutorial/iterations.md)
+    - [Create the search space](./tutorial/search_space.md#Create-the-search-space)
+    - [Choose an optimizer](./tutorial/optimizer.md#Choose-an-optimizer)
+    - [How many iterations?](./tutorial/iterations.md#how-many-iterations?)
 
 
 - Basic Examples
 
-    - [Scikit-learn](./examples/sklearn_examples.md#sklearn)
+    - [Scikit-learn](./examples/sklearn_examples.md#Scikit-learn)
     - [XGBoost](./examples/xgboost_example.md#xgboost)
     - [LightGBM](./examples/lightgbm_example.md#lightgbm)
     - [CatBoost](./examples/catboost_example.md#catboost)
