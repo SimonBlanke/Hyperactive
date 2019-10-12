@@ -1,8 +1,8 @@
-#### Random Search
+## Random Search
 
 The random search explores by choosing a new position at random after each iteration. Some random seach implementations choose a new position within a large hypersphere around the current position. The implementation in hyperactive is purely random across the search space in each step.
 
-###### Use case/properties:
+#### Use case/properties:
 - Very good as a first method of optimization or to start exploring the search space
 - For a short optimization run to get an acceptable solution
 

@@ -1,5 +1,4 @@
-
-#### Stacking
+## Stacking
 
 ```python
 from sklearn.datasets import load_breast_cancer

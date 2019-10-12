@@ -1,4 +1,4 @@
-#### Bayesian Optimization
+## Bayesian Optimization
 Bayesian optimization chooses new positions by calculating the expected improvement of every position in the search space based on a gaussian process that trains on already evaluated solutions.
 
 ###### Use case/properties:

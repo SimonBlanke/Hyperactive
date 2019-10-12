@@ -1,4 +1,4 @@
-#### Rosenbrock function
+## Rosenbrock function
 
 ```python
 import numpy as np

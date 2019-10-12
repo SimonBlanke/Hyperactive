@@ -1,4 +1,4 @@
-#### Parallel Tempering
+## Parallel Tempering
 
 Parallel Tempering initializes multiple simulated annealing seaches with different temperatures and chooses to swap those temperatures with the following probability:
 
@@ -9,7 +9,7 @@ Parallel Tempering initializes multiple simulated annealing seaches with differe
 </p>
 
 
-###### Use case/properties:
+#### Use case/properties:
 - Not as dependend of a good initial position as simulated annealing
 - If you have enough time for many model evaluations
 

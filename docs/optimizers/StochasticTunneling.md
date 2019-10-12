@@ -1,4 +1,4 @@
-#### Stochastic Tunneling
+## Stochastic Tunneling
 
 Stochastic Tunneling works very similar to simulated annealing, but modifies its probability to accept worse solutions by an additional term:
 
@@ -20,6 +20,6 @@ This new acceptance factor is used instead of the delta f in the original equati
 <img src="./plots/search_path_Stochastic Tunneling.png" width="1000"/>
 </p>
 
-###### Use case/properties:
+#### Use case/properties:
 - When you have a good initial point to start from, but expect the surrounding search space to be very complex
 - Good as a second method of optimization

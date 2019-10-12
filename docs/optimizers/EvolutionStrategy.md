@@ -1,9 +1,7 @@
-
-
-#### Evolution Strategy
+## Evolution Strategy
 Evolution strategy mutates and combines the best individuals of a population across a number of generations without transforming them into an array of bits (like genetic algorithms) but uses the real values of the positions.
 
-###### Use case/properties:
+#### Use case/properties:
 - If the search space is very complex and large
 - If you have enough time for many model evaluations
 

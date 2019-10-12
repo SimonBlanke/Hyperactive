@@ -1,8 +1,8 @@
-#### Random Restart Hill Climbing
+## Random Restart Hill Climbing
 
 Random restart hill climbing works by starting a hill climbing search and jumping to a random new position after a number of iterations.
 
-###### Use case/properties:
+#### Use case/properties:
 - Good as a first method of optimization
 - For a short optimization run to get an acceptable solution
 

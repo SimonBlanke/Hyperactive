@@ -1,5 +1,4 @@
-
-#### Keras CNN structure
+## Keras CNN structure
 
 ```python
 from keras.models import Sequential

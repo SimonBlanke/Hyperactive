@@ -1,4 +1,4 @@
-#### Meta Optimization
+## Meta Optimization
 
 ```python
 import numpy as np
