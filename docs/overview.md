@@ -104,16 +104,16 @@
 
 <br>
 
-## Experimental algorithms
+## Experimental Algorithms
 
 The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
-If any of these algorithms still exist I ask you to share it with me in an issue.
+If any of these algorithms already exist I would like to ask you to share it with me in an issue.
 
-#### Random Annealing
+### Random Annealing
 
 A combination between simulated annealing and random search.
 
-#### Scatter Initialization
+### Scatter Initialization
 
 Inspired by hyperband optimization.
 
@@ -121,7 +121,7 @@ Inspired by hyperband optimization.
 
 ## References
 
-#### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
 
 <br>
 

@@ -11,7 +11,7 @@
   :root {
       --theme-color   : purple;
       --zoomimage-overlay-background: rgba(0, 0, 0, 0.875);
-
+      --sidebar-width                               : 20rem;
   }
     body {
       font-size: 18px;
@@ -24,7 +24,7 @@
       min-width: 100px;
     }
     .sidebar ul li a, .app-nav a {
-      font-size: 17px;
+      font-size: 16px;
     }
     .markdown-section a {
       font-weight: normal;
@@ -49,13 +49,22 @@
     }
     h2:before {
       background-image: url('_media/icon_hex.png');
-      background-size: 21px 25px;
+      background-size: 26px 30px;
       display: inline-block;
-      width: 21px;
-      height: 25px;
+      width: 26px;
+      height: 30px;
       content:"";
     }
-
+    a:link {
+      color: darkblue;
+    }
+    a:visited {
+      color: darkblue;
+    }
+    a:hover {
+      color: blue;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -73,6 +82,9 @@
       logo: './_media/icon.png',
       themeColor: '#110c6e',
       executeScript: true,
+      themeable: {
+          readyTransition: true // default
+        }
     }
   </script>
   <script src="//unpkg.com/docsify-copy-code"></script>

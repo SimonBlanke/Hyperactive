@@ -1,6 +1,6 @@
 ## Installation
 
-Hyperactive is developed and tested in python 3:
+> Hyperactive is developed and tested in python 3:
 
 [![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/hyperactive)
 [![commit-activity](https://img.shields.io/github/commit-activity/w/SimonBlanke/Hyperactive?style=flat-square)](https://github.com/SimonBlanke/Hyperactive/graphs/contributors)
@@ -8,20 +8,20 @@ Hyperactive is developed and tested in python 3:
 
 <br>
 
-Hyperactive (stable) is available on PyPi:
+> Hyperactive (stable) is available on PyPi:
 
 [![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
 [![Downloads](https://pepy.tech/badge/hyperactive)](https://pepy.tech/project/hyperactive)
 
-```console
+```bash
 pip install hyperactive
 ```
 
 <br>
 
-Hyperactive (development version) from Github:
+> Hyperactive (development version) from Github:
 
-```console
+```bash
 git clone https://github.com/SimonBlanke/Hyperactive.git
 pip install Hyperactive/
 ```

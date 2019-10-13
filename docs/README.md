@@ -1,8 +1,10 @@
 ## Installation
 
-> PyPi always has the newest version of hyperactive:
+?> PyPi always has the newest version of hyperactive:
 
-```console
+[![PyPI version](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&logo=pypi&color=green&logoColor=white)](https://pypi.org/project/hyperactive/)
+
+```bash
 pip install hyperactive
 ```
 

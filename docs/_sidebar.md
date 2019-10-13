@@ -7,7 +7,8 @@
 - Overview
 
     - [Main Features](overview.md#main-features)
-    - [Installation options](./installation/README.md#installation)
+    - [Use Cases](use_cases.md#use-cases)
+    - [Installation Options](./installation/README.md#installation)
     - [Performance](./performance/README.md#performance)
 
 
@@ -43,18 +44,14 @@
     - [Hill Climbing](./optimizers/HillClimbing.md#hill-climbing)
     - [Stochastic Hill Climbing](./optimizers/StochasticHillClimbing.md#stochastic-hill-climbing)
     - [Tabu Search](./optimizers/TabuSearch.md#tabu-search)
-
     - [Random Search](./optimizers/RandomSearch.md#random-search)
     - [Random Restart Hill Climbing](./optimizers/RandomRestartHillClimbing.md#random-restart-hill-climbing)
     - [Random Annealing](./optimizers/RandomAnnealing.md#random-annealing)
-
     - [Simulated Annealing](./optimizers/SimulatedAnnealing.md#simulated-annealing)
     - [Stochastic Tunneling](./optimizers/StochasticTunneling.md#stochastic-tunneling)
     - [Parallel Tempering](./optimizers/ParallelTempering.md#parallel-tempering)
-
     - [Particle Swarm Optimization](./optimizers/ParticleSwarm.md#particle-swarm-optimization)
     - [Evolution Strategy](./optimizers/EvolutionStrategy.md#evolution-strategy)
-
     - [Bayesian Optimization](./optimizers/Bayesian.md#bayesian-optimization)
 
 
@@ -62,7 +59,6 @@
 
     - [Scatter initialization](./extentions/README.md#scatter-initialization)
     - [Warm start](./extentions/README.md#warm-start)
-
     - [Memory](./extentions/README.md#memory)
 
 

@@ -1,6 +1,6 @@
 ## Parallel Tempering
 
-Parallel Tempering initializes multiple simulated annealing seaches with different temperatures and chooses to swap those temperatures with the following probability:
+Parallel Tempering initializes multiple simulated annealing searches with different temperatures and chooses to swap those temperatures with the following probability:
 
 <p align="center">
   <a href="equation">
