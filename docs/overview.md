@@ -1,3 +1,58 @@
+## Status
+
+<table>
+  <tbody>
+    <tr align="left" valign="center">
+      <td>
+        <strong>Master status:</strong>
+      </td>
+      <td>
+        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/travis/com/SimonBlanke/Hyperactive/master?style=for-the-badge&logo=travis" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=for-the-badge&logo=codecov" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+    <tr/>
+    <tr align="left" valign="center">
+      <td>
+        <strong>Dev status:</strong>
+      </td>
+      <td>
+        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive/dev?style=for-the-badge&logo=travis" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive?branch=dev">
+          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive/dev?style=for-the-badge&logo=codecov" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+    <tr/>    <tr align="left" valign="center">
+      <td>
+         <strong>Code quality:</strong>
+      </td>
+      <td>
+        <a href="https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard">
+        <img src="https://img.shields.io/codacy/grade/acb6989093c44fb08cc3be1dd2df1be7?style=for-the-badge&logo=codacy" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
+        <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=for-the-badge&logo=code-climate" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
+        <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=for-the-badge&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
+        <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=for-the-badge" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
 ## Main features
 
 - Very simple but versatile API
@@ -41,7 +96,7 @@
       <td>
         <a><b>Local Search:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=hill-climbing">Hill Climbing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/HillClimbing?id=Hill-Climbing">Hill Climbing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=tabu-search">Tabu Search</a></li>
          </ul><br>
@@ -102,29 +157,29 @@
   </tbody>
 </table>
 
-<br>
+!> **Disclaimer:** The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
 
-## Experimental Algorithms
+### Experimental Algorithms
 
-The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
+?> The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
 If any of these algorithms already exist I would like to ask you to share it with me in an issue.
 
-### Random Annealing
+**Random Annealing**
 
 A combination between simulated annealing and random search.
 
-### Scatter Initialization
+**Scatter Initialization**
 
 Inspired by hyperband optimization.
 
 <br>
 
-## References
+### References
 
-### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+#### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
 
 <br>
 
-## License
+### License
 
 [![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
