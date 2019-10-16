@@ -15,10 +15,7 @@ class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
     # _consider same as simulated_annealing
 
     def _accept(self, _p_):
-        score_diff_norm = (_p_.score_new - _p_.score_current) / (
-            _p_.score_new + _p_.score_current
-        )
-        f_stun = 1 - np.exp(-self._arg_.gamma * score_diff_norm)
+        f_stun = 1 - np.exp(-self._arg_.gamma * self._score_norm(_p_))
         return np.exp(-f_stun / self.temp)
 
     # _iterate same as simulated_annealing

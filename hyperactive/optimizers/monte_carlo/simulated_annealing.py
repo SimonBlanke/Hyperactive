@@ -11,15 +11,12 @@ from ..local import StochasticHillClimbingOptimizer
 class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.temp = 0.1
+        self.temp = 1
 
     # use _consider from StochasticHillClimbingOptimizer
 
     def _accept(self, _p_):
-        score_diff_norm = (_p_.score_new - _p_.score_current) / (
-            _p_.score_new + _p_.score_current
-        )
-        return np.exp(-(score_diff_norm / self.temp))
+        return np.exp(-self._score_norm(_p_) / self.temp)
 
     def _iterate(self, i, _cand_, _p_, X, y):
         _cand_, _p_ = self._hill_climb_iteration(_cand_, _p_, X, y)

@@ -2,10 +2,15 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+import math
 import random
+import numpy as np
 
 from . import HillClimbingOptimizer
+
+
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))
 
 
 class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
@@ -19,14 +24,15 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
             _p_.score_current = _p_.score_new
             _p_.pos_current = _p_.pos_new
 
-    def _accept(self, _p_):
-        score_diff_norm = (_p_.score_new - _p_.score_current) / (
-            _p_.score_new + _p_.score_current
+    def _score_norm(self, _p_):
+        return (
+            100
+            * (_p_.score_current - _p_.score_new)
+            / (_p_.score_current + _p_.score_new)
         )
-        if score_diff_norm == 0:
-            return 100
-        else:
-            return 0.001 / abs(score_diff_norm)
+
+    def _accept(self, _p_):
+        return np.exp(-self._score_norm(_p_))
 
     def _iterate(self, i, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
