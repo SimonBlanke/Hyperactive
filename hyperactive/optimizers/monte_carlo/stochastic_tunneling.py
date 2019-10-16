@@ -11,7 +11,6 @@ from .simulated_annealing import SimulatedAnnealingOptimizer
 class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.temp = 0.01
 
     # _consider same as simulated_annealing
 
