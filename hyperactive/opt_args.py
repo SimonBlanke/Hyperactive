@@ -13,18 +13,18 @@ class Arguments:
             # HillClimbingOptimizer
             "epsilon": 1,
             # StochasticHillClimbingOptimizer
-            "p_down": 1,
+            "p_down": 0.03,
             # TabuOptimizer
             "tabu_memory": [3, 6, 9],
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
             "epsilon_start": 66,
-            "annealing_rate": 0.95,
+            "annealing_rate": 0.98,
             # SimulatedAnnealingOptimizer
             "n_neighbours": 1,
             # StochasticTunnelingOptimizer
-            "gamma": 1,
+            "gamma": 10,
             # ParallelTemperingOptimizer
             "system_temperatures": [0.001, 0.01, 0.1, 1, 10],
             "n_swaps": 10,
