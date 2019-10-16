@@ -16,10 +16,12 @@ This new acceptance factor is used instead of the delta f in the original equati
   </a>
 </p>
 
-<p align="center">
-<img src="./plots/search_path_Stochastic Tunneling.png" width="1000"/>
-</p>
+---
 
-#### Use case/properties:
+**Use case/properties:**
 - When you have a good initial point to start from, but expect the surrounding search space to be very complex
 - Good as a second method of optimization
+
+<p align="center">
+<img src="./plots/search_path_Stochastic Tunneling.png" width="1200"/>
+</p>

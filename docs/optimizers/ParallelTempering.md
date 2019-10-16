@@ -8,11 +8,12 @@ Parallel Tempering initializes multiple simulated annealing searches with differ
   </a>
 </p>
 
+---
 
-#### Use case/properties:
+**Use case/properties:**
 - Not as dependend of a good initial position as simulated annealing
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_path_Parallel Tempering.png" width="1000"/>
+<img src="./plots/search_path_Parallel Tempering.png" width="1200"/>
 </p>

@@ -16,10 +16,12 @@ It simulates a temperature that decreases with each iteration, similar to a mate
   </a>
 </p>
 
-#### Use case/properties:
+---
+
+**Use case/properties:**
 - When you have a good initial point to start from, but expect the surrounding search space to be very complex
 - Good as a second method of optimization
 
 <p align="center">
-<img src="./plots/search_path_Simulated Annealing.png" width="1000"/>
+<img src="./plots/search_path_Simulated Annealing.png" width="1200"/>
 </p>

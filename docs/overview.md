@@ -97,29 +97,29 @@
         <a><b>Local Search:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/HillClimbing?id=Hill-Climbing">Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=tabu-search">Tabu Search</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/StochasticHillClimbing?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/TabuSearch?id=tabu-search">Tabu Search</a></li>
          </ul><br>
         <a><b>Random Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-search">Random Search</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/RandomSearch?id=random-search">Random Search</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/RandomRestartHillClimbing?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/RandomAnnealing?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
          </ul><br>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=simulated-annealing">Simulated Annealing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-tunneling">Stochastic Tunneling</li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=parallel-tempering">Parallel Tempering</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/SimulatedAnnealing?id=simulated-annealing">Simulated Annealing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/StochasticTunneling?id=stochastic-tunneling">Stochastic Tunneling</li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/ParallelTempering?id=parallel-tempering">Parallel Tempering</a></li>
           </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=evolution-strategy">Evolution Strategy</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/ParticleSwarm?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/EvolutionStrategy?id=evolution-strategy">Evolution Strategy</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=bayesian-optimization">Bayesian Optimization</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/Bayesian?id=bayesian-optimization">Bayesian Optimization</a></li>
           </ul>
       </td>
       <td>
@@ -161,7 +161,7 @@
 
 ### Experimental Algorithms
 
-?> The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
+?> **Disclaimer:** The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
 If any of these algorithms already exist I would like to ask you to share it with me in an issue.
 
 **Random Annealing**

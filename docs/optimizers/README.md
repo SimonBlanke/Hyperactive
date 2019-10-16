@@ -194,6 +194,3 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 <br>
 
 <br>
-
-##### Disclaimer
-The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
