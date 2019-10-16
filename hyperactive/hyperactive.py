@@ -80,6 +80,9 @@ class Hyperactive:
         optimizer_class = optimizer_dict[_config_.optimizer]
         self._optimizer_ = optimizer_class(_config_, _arg_)
 
+        self.pos_list = self._optimizer_.pos_list
+        self.score_list = self._optimizer_.score_list
+
     def search(self, X, y):
         """Public method for starting the search with the training data (X, y)
 

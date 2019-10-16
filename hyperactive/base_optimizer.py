@@ -60,9 +60,8 @@ class BaseOptimizer:
         if self._config_.meta_learn:
             self._meta_ = HyperactiveWrapper(self._config_.search_config)
 
-        if self._config_.get_search_path:
-            self.pos_list = []
-            self.score_list = []
+        self.pos_list = []
+        self.score_list = []
 
     def _hill_climb_iteration(self, _cand_, _p_, X, y):
         _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
