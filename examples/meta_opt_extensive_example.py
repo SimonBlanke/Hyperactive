@@ -10,16 +10,17 @@ X, y = data.data, data.target
 
 X_list, y_list = [X], [y]
 
+
 def data_aug(X, y, sample_multi=5, feature_multi=5):
     X_list, y_list = [], []
 
     n_samples = X.shape[0]
     n_features = X.shape[1]
 
-    for sample in range(1, sample_multi+1):
+    for sample in range(1, sample_multi + 1):
         idx_sample = np.random.randint(n_samples, size=int(n_samples / sample))
 
-        for feature in range(1, feature_multi+1):
+        for feature in range(1, feature_multi + 1):
             idx_feature = np.random.randint(n_features, size=int(n_features / feature))
 
             X_temp_ = X[idx_sample, :]
@@ -31,6 +32,7 @@ def data_aug(X, y, sample_multi=5, feature_multi=5):
 
     return X_list, y_list
 
+
 def model(para, X, y):
     model = DecisionTreeClassifier(
         max_depth=para["max_depth"],
@@ -40,6 +42,7 @@ def model(para, X, y):
     scores = cross_val_score(model, X, y, cv=3)
 
     return scores.mean()
+
 
 search_config_model = {
     model: {
@@ -52,7 +55,7 @@ search_config_model = {
 
 def meta_opt(para, X_list, y_list):
     scores = []
-    
+
     for X, y in zip(X_list, y_list):
         X_list, y_list = data_aug(X, y, sample_multi=3, feature_multi=3)
 
@@ -62,8 +65,12 @@ def meta_opt(para, X_list, y_list):
                 opt = Hyperactive(
                     search_config_model,
                     optimizer={
-                        "ParticleSwarm": {"inertia": para["inertia"], "cognitive_weight": para["cognitive_weight"], "social_weight": para["social_weight"]}
-                    }, 
+                        "ParticleSwarm": {
+                            "inertia": para["inertia"],
+                            "cognitive_weight": para["cognitive_weight"],
+                            "social_weight": para["social_weight"],
+                        }
+                    },
                     n_iter=n_iter,
                     verbosity=None,
                 )
