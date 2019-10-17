@@ -11,22 +11,22 @@ class Arguments:
     def __init__(self, *args, **kwargs):
         kwargs_opt = {
             # HillClimbingOptimizer
-            "epsilon": 1,
+            "epsilon": 0.03,
             # StochasticHillClimbingOptimizer
-            "p_down": 0.03,
+            "p_down": 0.5,
             # TabuOptimizer
             "tabu_memory": [3, 6, 9],
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
-            "epsilon_start": 66,
-            "annealing_rate": 0.98,
+            "epsilon_start": 1,
+            "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
             "n_neighbours": 1,
             # StochasticTunnelingOptimizer
-            "gamma": 10,
+            "gamma": 0.5,
             # ParallelTemperingOptimizer
-            "system_temperatures": [0.001, 0.01, 0.1, 1, 10],
+            "system_temperatures": [0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10],
             "n_swaps": 10,
             # ParticleSwarmOptimizer
             "n_particles": 10,
