@@ -8,5 +8,5 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 - When you have a good initial point to start from
 
 <p align="center">
-<img src="./plots/search_path_Tabu Search.png" width="1200"/>
+<img src="./plots/search_path_TabuSearch.svg" width="1200"/>
 </p>

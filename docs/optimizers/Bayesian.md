@@ -9,7 +9,7 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 - If your search space is not to big
 
 <p align="center">
-<img src="./plots/search_path_Bayesian Optimization.png" width="1200"/>
+<img src="./plots/search_path_Bayesian.svg" width="1200"/>
 </p>
 
 <br>

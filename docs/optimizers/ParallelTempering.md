@@ -15,5 +15,5 @@ Parallel Tempering initializes multiple simulated annealing searches with differ
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_path_Parallel Tempering.png" width="1200"/>
+<img src="./plots/search_path_ParallelTempering.svg" width="1200"/>
 </p>

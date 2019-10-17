@@ -10,5 +10,5 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - If the search space is very simple and has few local optima or saddle points
 
 <p align="center">
-<img src="./plots/search_path_Hill Climbing.png" width="1200"/>
+<img src="./plots/search_path_HillClimbing.svg" width="1200"/>
 </p>

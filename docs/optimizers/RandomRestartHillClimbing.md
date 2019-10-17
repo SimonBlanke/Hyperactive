@@ -9,5 +9,5 @@ Random restart hill climbing works by starting a hill climbing search and jumpin
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="./plots/search_path_Rand. Rest. Hill Climbing.png" width="1200"/>
+<img src="./plots/search_path_RandomRestartHillClimbing.svg" width="1200"/>
 </p>

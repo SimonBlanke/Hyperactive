@@ -8,5 +8,5 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 - When you have a very good initial point to start from
 
 <p align="center">
-<img src="./plots/search_path_Stoch. Hill Climbing.png" width="1200"/>
+<img src="./plots/search_path_StochasticHillClimbing.svg" width="1200"/>
 </p>

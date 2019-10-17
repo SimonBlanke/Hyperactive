@@ -10,5 +10,5 @@ An algorithm that chooses a new position within a large hypersphere around the c
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="./plots/search_path_Random Annealing.png" width="1200"/>
+<img src="./plots/search_path_RandomAnnealing.svg" width="1200"/>
 </p>

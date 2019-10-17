@@ -23,5 +23,5 @@ This new acceptance factor is used instead of the delta f in the original equati
 - Good as a second method of optimization
 
 <p align="center">
-<img src="./plots/search_path_Stochastic Tunneling.png" width="1200"/>
+<img src="./plots/search_path_StochasticTunneling.svg" width="1200"/>
 </p>

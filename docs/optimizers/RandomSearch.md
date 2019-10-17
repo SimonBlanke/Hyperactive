@@ -9,5 +9,5 @@ The random search explores by choosing a new position at random after each itera
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="./plots/search_path_Random Search.png" width="1200"/>
+<img src="./plots/search_path_RandomSearch.svg" width="1200"/>
 </p>

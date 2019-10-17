@@ -9,5 +9,5 @@ Particle swarm optimization works by initializing a number of positions at the s
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_path_Particle Swarm.png" width="1200"/>
+<img src="./plots/search_path_ParticleSwarm.svg" width="1200"/>
 </p>

@@ -23,5 +23,5 @@ It simulates a temperature that decreases with each iteration, similar to a mate
 - Good as a second method of optimization
 
 <p align="center">
-<img src="./plots/search_path_Simulated Annealing.png" width="1200"/>
+<img src="./plots/search_path_SimulatedAnnealing.svg" width="1200"/>
 </p>

@@ -8,5 +8,5 @@ Evolution strategy mutates and combines the best individuals of a population acr
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_path_Evolution Strategy.png" width="1200"/>
+<img src="./plots/search_path_EvolutionStrategy.svg" width="1200"/>
 </p>
