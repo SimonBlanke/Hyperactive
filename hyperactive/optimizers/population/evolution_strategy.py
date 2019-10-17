@@ -95,5 +95,5 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
 
 class Individual(BasePositioner):
-    def __init__(self, epsilon=1):
-        super().__init__(epsilon)
+    def __init__(self):
+        super().__init__()
