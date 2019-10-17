@@ -3,61 +3,68 @@
 # License: MIT License
 
 import random
+import numpy as np
+
 
 from . import HillClimbingOptimizer
 from ...base_positioner import BasePositioner
+from scipy.spatial.distance import euclidean
+
+
+def gaussian(distance, sig):
+    return sig * np.exp(-np.power(distance, 2.0) / (2 * np.power(sig, 2.0)))
 
 
 class TabuOptimizer(HillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def _memorize(self, _cand_, _p_):
-        for i in range(3):
-            _p_.tabu_memory_[i].append(_cand_.pos_best)
+    def _tabu_pos(self, pos, _p_):
+        _p_.add_tabu(pos)
 
-            if len(_p_.tabu_memory_[i]) > self._arg_.tabu_memory[i]:
-                del _p_.tabu_memory_[i][0]
+        return _p_
 
     def _iterate(self, i, _cand_, _p_, X, y):
-        _p_.pos_new = _p_.climb_tabu(_cand_, _p_.pos_current)
+        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
         _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
         if _p_.score_new > _cand_.score_best:
             _cand_, _p_ = self._update_pos(_cand_, _p_)
-
-            self._memorize(_cand_, _p_)
+        else:
+            _p_ = self._tabu_pos(_p_.pos_new, _p_)
 
         return _cand_
 
     def _init_opt_positioner(self, _cand_, X, y):
         return super()._init_base_positioner(
-            _cand_, TabuPositioner, pos_para=self.pos_para
+            _cand_, positioner=TabuPositioner, pos_para=self.pos_para
         )
 
 
 class TabuPositioner(BasePositioner):
-    def __init__(self, epsilon=1):
+    def __init__(self, epsilon):
         super().__init__(epsilon)
+        self.tabus = []
 
-        tabu_memory_short = []
-        tabu_memory_mid = []
-        tabu_memory_long = []
+    def add_tabu(self, tabu):
+        self.tabus.append(tabu)
 
-        self.tabu_memory_ = [tabu_memory_short, tabu_memory_mid, tabu_memory_long]
+    def move_climb(self, _cand_, pos, epsilon_mod=1):
+        sigma = 3 + _cand_._space_.dim * self.epsilon * epsilon_mod
+        pos_normal = np.random.normal(pos, sigma, pos.shape)
+        pos_new_int = np.rint(pos_normal)
 
-    def climb_tabu(self, _cand_, pos, epsilon_mod=1):
-        in_tabu_mem = True
-        pos_new = None
+        for tabu in self.tabus:
+            distance = euclidean(pos_new_int, tabu)
+            sigma_mean = sigma.mean()
+            p_discard = gaussian(distance, sigma_mean)
+            rand = random.uniform(0, 1)
 
-        while in_tabu_mem:
-            pos_new = self.move_climb(_cand_, pos)
+            if p_discard > rand:
+                pos_normal = np.random.normal(pos, sigma, pos.shape)
+                pos_new_int = np.rint(pos_normal)
 
-            for i in range(3):
-                if not any((pos_new == pos).all() for pos in self.tabu_memory_[i]):
-                    in_tabu_mem = False
-                else:
-                    if random.uniform(0, 1) < 0.1:
-                        in_tabu_mem = False
+        n_zeros = [0] * len(_cand_._space_.dim)
+        pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
 
-        return pos_new
+        return pos
