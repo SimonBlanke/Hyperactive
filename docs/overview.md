@@ -157,7 +157,7 @@
   </tbody>
 </table>
 
-!> **Disclaimer:** The classification into the categories above is not necessarly scientificly accurate, but aims to provide an idea of the functionality of the methods.
+!> **Disclaimer:** The classification into the categories above is not necessarly scientifically accurate, but aims to provide an idea of the functionality of the methods.
 
 ### Experimental Algorithms
 
