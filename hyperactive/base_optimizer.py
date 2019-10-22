@@ -148,6 +148,8 @@ class BaseOptimizer:
         self.score_best = _cand_.score_best
         start_point = _cand_._get_warm_start()
 
+        self.results[self.score_best] = start_point
+
         if self._config_.verbosity:
             print("\nbest para =", start_point)
             print("score     =", self.score_best)
@@ -165,6 +167,8 @@ class BaseOptimizer:
             model_best = _cand_.model_best
             score_best = _cand_.score_best
             start_point = _cand_._get_warm_start()
+
+            self.results[score_best] = start_point
 
             start_point_list.append(start_point)
             score_best_list.append(score_best)
@@ -204,6 +208,7 @@ class BaseOptimizer:
         None
         """
         self.start_time = time.time()
+        self.results = {}
 
         if self._config_.n_jobs == 1:
             self._run_one_job(X, y)
