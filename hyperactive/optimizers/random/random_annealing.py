@@ -9,7 +9,6 @@ from ...base_optimizer import BaseOptimizer
 class RandomAnnealingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"epsilon": self._arg_.epsilon_start}
         self.temp = 1
 
     def _iterate(self, i, _cand_, _p_, X, y):
@@ -24,4 +23,4 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_opt_positioner(self, _cand_, X, y):
-        return super()._init_base_positioner(_cand_, pos_para=self.pos_para)
+        return super()._init_base_positioner(_cand_)

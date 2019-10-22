@@ -19,7 +19,9 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         )
 
     def _init_individuals(self, _cand_):
-        _p_list_ = [Individual() for _ in range(self._arg_.individuals)]
+        _p_list_ = [
+            Individual(**self._arg_.kwargs_opt) for _ in range(self._arg_.individuals)
+        ]
         for _p_ in _p_list_:
             _p_.pos_current = _p_.move_random(_cand_)
             _p_.pos_best = _p_.pos_current
@@ -95,5 +97,5 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
 
 class Individual(BasePositioner):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

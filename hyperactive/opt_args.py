@@ -13,8 +13,8 @@ class Arguments:
         kwargs_opt = {
             # HillClimbingOptimizer
             "epsilon": 0.03,
-            "climb_dist": normal,  # TODO
-            "n_neighbours": 1,  # TODO
+            "climb_dist": normal,
+            "n_neighbours": 1,
             # StochasticHillClimbingOptimizer
             "p_down": 0.5,
             # TabuOptimizer
@@ -51,12 +51,12 @@ class Arguments:
     def _set_specific_args(self, kwargs_opt):
         self.epsilon = kwargs_opt["epsilon"]
         self.climb_dist = kwargs_opt["climb_dist"]
+        self.n_neighbours = kwargs_opt["n_neighbours"]
         self.p_down = kwargs_opt["p_down"]
         self.tabu_memory = kwargs_opt["tabu_memory"]
         self.n_restarts = kwargs_opt["n_restarts"]
         self.epsilon_start = kwargs_opt["epsilon_start"]
         self.annealing_rate = kwargs_opt["annealing_rate"]
-        self.n_neighbours = kwargs_opt["n_neighbours"]
         self.gamma = kwargs_opt["gamma"]
         self.system_temperatures = kwargs_opt["system_temperatures"]
         self.n_swaps = kwargs_opt["n_swaps"]

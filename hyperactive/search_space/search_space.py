@@ -23,7 +23,7 @@ class SearchSpace:
 
         self.dim = np.array(dim)
 
-    def create_kerasSearchSpace(self):
+    def create_searchspace(self):
         """
         para_space = {}
 
@@ -44,8 +44,6 @@ class SearchSpace:
         pos_new = np.random.uniform(np.zeros(self.dim.shape), self.dim, self.dim.shape)
         pos = np.rint(pos_new)
 
-        # n_zeros = [0] * len(self.dim)
-        # pos = np.clip(pos_new_int, n_zeros, self.dim)
         return pos
 
     def get_random_pos_scalar(self, hyperpara_name):

@@ -64,10 +64,21 @@ class BaseOptimizer:
         self.score_list = []
 
     def _hill_climb_iteration(self, _cand_, _p_, X, y):
-        _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
-        _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
+        score_new = -1000
+        pos_new = None
 
-        if _p_.score_new > _cand_.score_best:
+        for i in range(self._arg_.n_neighbours):
+            _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
+            _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
+
+            if _p_.score_new > score_new:
+                score_new = _p_.score_new
+                pos_new = _p_.pos_new
+
+        if score_new > _cand_.score_best:
+            _p_.pos_new = pos_new
+            _p_.score_new = score_new
+
             _cand_, _p_ = self._update_pos(_cand_, _p_)
 
         return _cand_, _p_

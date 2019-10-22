@@ -25,7 +25,7 @@ class Candidate:
 
         self.func_name = str(self.func_).split(" ")[1]
 
-        self._space_.create_kerasSearchSpace()
+        self._space_.create_searchspace()
         self._model_ = Model(self.func_, nth_process)
 
         self._init_ = InitSearchPosition(
