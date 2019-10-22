@@ -149,8 +149,8 @@ class BaseOptimizer:
         start_point = _cand_._get_warm_start()
 
         if self._config_.verbosity:
-            print("\nscore       =", self.score_best)
-            print("start_point =", start_point)
+            print("\nbest para =", start_point)
+            print("score     =", self.score_best)
 
         if self._config_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
@@ -183,8 +183,9 @@ class BaseOptimizer:
                 print("\n")
             print("\nList of start points (best first):\n")
             for start_point, score_best in zip(start_point_sorted, score_best_sorted):
-                print("score       =", score_best)
-                print("start_point =", start_point, "\n")
+
+                print("best para =", start_point)
+                print("score     =", score_best, "\n")
 
         self.score_best = score_best_sorted[0]
         self.model_best = model_best_sorted[0]
