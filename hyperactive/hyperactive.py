@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .config import Config
+from .core import Core
 from .opt_args import Arguments
 from . import (
     HillClimbingOptimizer,
@@ -74,11 +74,11 @@ class Hyperactive:
             "Bayesian": BayesianOptimizer,
         }
 
-        _config_ = Config(*args, **kwargs)
-        _arg_ = Arguments(**_config_.opt_para)
+        _core_ = Core(*args, **kwargs)
+        _arg_ = Arguments(**_core_.opt_para)
 
-        optimizer_class = optimizer_dict[_config_.optimizer]
-        self._optimizer_ = optimizer_class(_config_, _arg_)
+        optimizer_class = optimizer_dict[_core_.optimizer]
+        self._optimizer_ = optimizer_class(_core_, _arg_)
 
         self.pos_list = self._optimizer_.pos_list
         self.score_list = self._optimizer_.score_list

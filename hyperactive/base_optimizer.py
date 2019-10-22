@@ -14,7 +14,7 @@ from meta_learn import HyperactiveWrapper
 
 
 class BaseOptimizer:
-    def __init__(self, _config_, _arg_):
+    def __init__(self, _core_, _arg_):
 
         """
 
@@ -51,14 +51,14 @@ class BaseOptimizer:
 
         """
 
-        self._config_ = _config_
+        self._core_ = _core_
         self._arg_ = _arg_
 
-        self.search_config = self._config_.search_config
-        self.n_iter = self._config_.n_iter
+        self.search_config = self._core_.search_config
+        self.n_iter = self._core_.n_iter
 
-        if self._config_.meta_learn:
-            self._meta_ = HyperactiveWrapper(self._config_.search_config)
+        if self._core_.meta_learn:
+            self._meta_ = HyperactiveWrapper(self._core_.search_config)
 
         self.pos_list = []
         self.score_list = []
@@ -93,19 +93,19 @@ class BaseOptimizer:
         return _cand_, _p_
 
     def search(self, nth_process, X, y):
-        self._config_, _cand_ = initialize_search(self._config_, nth_process, X, y)
+        self._core_, _cand_ = initialize_search(self._core_, nth_process, X, y)
         _p_ = self._init_opt_positioner(_cand_, X, y)
 
-        for i in range(self._config_.n_iter):
+        for i in range(self._core_.n_iter):
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
-            self._config_.update_p_bar(1, _cand_)
+            self._core_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
-            if run_time > self._config_.max_time:
+            if run_time > self._core_.max_time:
                 break
 
             # get_search_path
-            if self._config_.get_search_path:
+            if self._core_.get_search_path:
                 pos_list = []
                 score_list = []
                 if isinstance(_p_, list):
@@ -128,16 +128,16 @@ class BaseOptimizer:
                     self.pos_list.append(pos_list_)
                     self.score_list.append(score_list_)
 
-        _cand_ = finish_search_(self._config_, _cand_, X, y)
+        _cand_ = finish_search_(self._core_, _cand_, X, y)
 
         return _cand_
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-        pool = multiprocessing.Pool(self._config_.n_jobs)
+        pool = multiprocessing.Pool(self._core_.n_jobs)
         search = partial(self.search, X=X, y=y)
 
-        _cand_list = pool.map(search, self._config_._n_process_range)
+        _cand_list = pool.map(search, self._core_._n_process_range)
 
         return _cand_list
 
@@ -150,11 +150,11 @@ class BaseOptimizer:
 
         self.results[self.score_best] = start_point
 
-        if self._config_.verbosity:
+        if self._core_.verbosity:
             print("\nbest para =", start_point)
             print("score     =", self.score_best)
 
-        if self._config_.meta_learn:
+        if self._core_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
 
     def _run_multiple_jobs(self, X, y):
@@ -182,8 +182,8 @@ class BaseOptimizer:
             model_best_list, score_best_list
         )
 
-        if self._config_.verbosity:
-            for i in range(int(self._config_.n_jobs / 2)):
+        if self._core_.verbosity:
+            for i in range(int(self._core_.n_jobs / 2)):
                 print("\n")
             print("\nList of start points (best first):\n")
             for start_point, score_best in zip(start_point_sorted, score_best_sorted):
@@ -210,7 +210,7 @@ class BaseOptimizer:
         self.start_time = time.time()
         self.results = {}
 
-        if self._config_.n_jobs == 1:
+        if self._core_.n_jobs == 1:
             self._run_one_job(X, y)
         else:
             self._run_multiple_jobs(X, y)

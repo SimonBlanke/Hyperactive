@@ -8,9 +8,9 @@ from ..init_position import InitSearchPosition
 
 
 class Candidate:
-    def __init__(self, nth_process, _config_):
-        self.search_config = _config_.search_config
-        self.memory = _config_.memory
+    def __init__(self, nth_process, _core_):
+        self.search_config = _core_.search_config
+        self.memory = _core_.memory
 
         self._score_best = -1000
         self.pos_best = None
@@ -19,9 +19,9 @@ class Candidate:
 
         self.nth_process = nth_process
 
-        model_nr = nth_process % _config_.n_models
-        self.func_ = list(_config_.search_config.keys())[model_nr]
-        self._space_ = SearchSpace(_config_, model_nr)
+        model_nr = nth_process % _core_.n_models
+        self.func_ = list(_core_.search_config.keys())[model_nr]
+        self._space_ = SearchSpace(_core_, model_nr)
 
         self.func_name = str(self.func_).split(" ")[1]
 
@@ -29,7 +29,7 @@ class Candidate:
         self._model_ = Model(self.func_, nth_process)
 
         self._init_ = InitSearchPosition(
-            self._space_, self._model_, _config_.warm_start, _config_.scatter_init
+            self._space_, self._model_, _core_.warm_start, _core_.scatter_init
         )
 
     def create_start_point(self, para):
@@ -65,7 +65,7 @@ class Candidate:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
-            score, self.model = self._model_.train_model(para, X, y)
+            score, eval_time, self.model = self._model_.train_model(para, X, y)
             self._space_.memory[pos_str] = score
 
             return score

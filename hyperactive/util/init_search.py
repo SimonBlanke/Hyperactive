@@ -5,17 +5,17 @@
 from ..candidate import Candidate
 
 
-def initialize_search(_config_, nth_process, X, y):
-    _cand_ = _init_candidate(_config_, nth_process)
+def initialize_search(_core_, nth_process, X, y):
+    _cand_ = _init_candidate(_core_, nth_process)
     _cand_ = _init_eval(_cand_, nth_process, X, y)
-    _config_.init_p_bar(_config_, _cand_)
+    _core_.init_p_bar(_core_, _cand_)
 
-    return _config_, _cand_
+    return _core_, _cand_
 
 
-def _init_candidate(_config_, nth_process):
-    _config_._set_random_seed(nth_process)
-    _cand_ = Candidate(nth_process, _config_)
+def _init_candidate(_core_, nth_process):
+    _core_._set_random_seed(nth_process)
+    _cand_ = Candidate(nth_process, _core_)
 
     return _cand_
 
