@@ -7,8 +7,9 @@ import numpy as np
 
 
 class BasePositioner:
-    def __init__(self, epsilon=0.03):
+    def __init__(self, epsilon, climb_dist, *args, **kwargs):
         self.epsilon = epsilon
+        self.climb_dist = climb_dist
 
         self.pos_new = None
         self.score_new = -1000
@@ -20,8 +21,9 @@ class BasePositioner:
         self.score_best = -1000
 
     def move_climb(self, _cand_, pos, epsilon_mod=1):
+        # for i in range(n_neighbours):
         sigma = 3 + _cand_._space_.dim * self.epsilon * epsilon_mod
-        pos_normal = np.random.normal(pos, sigma, pos.shape)
+        pos_normal = self.climb_dist(pos, sigma, pos.shape)
         pos_new_int = np.rint(pos_normal)
 
         n_zeros = [0] * len(_cand_._space_.dim)

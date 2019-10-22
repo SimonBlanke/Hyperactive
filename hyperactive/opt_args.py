@@ -5,6 +5,7 @@
 from .util import merge_dicts
 
 from sklearn.gaussian_process.kernels import Matern
+from numpy.random import normal
 
 
 class Arguments:
@@ -12,17 +13,19 @@ class Arguments:
         kwargs_opt = {
             # HillClimbingOptimizer
             "epsilon": 0.03,
+            "climb_dist": normal,  # TODO
+            "n_neighbours": 1,  # TODO
             # StochasticHillClimbingOptimizer
             "p_down": 0.5,
             # TabuOptimizer
-            "tabu_memory": [3, 6, 9],
+            "tabu_memory": [3, 6, 9],  # TODO
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
             "epsilon_start": 1,
             "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
-            "n_neighbours": 1,
+            "start_temp": 1,  # TODO
             # StochasticTunnelingOptimizer
             "gamma": 0.5,
             # ParallelTemperingOptimizer
@@ -41,12 +44,13 @@ class Arguments:
             "kernel": Matern(nu=2.5),
         }
 
-        kwargs_opt = merge_dicts(kwargs_opt, kwargs)
+        self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
 
-        self._set_specific_args(kwargs_opt)
+        self._set_specific_args(self.kwargs_opt)
 
     def _set_specific_args(self, kwargs_opt):
         self.epsilon = kwargs_opt["epsilon"]
+        self.climb_dist = kwargs_opt["climb_dist"]
         self.p_down = kwargs_opt["p_down"]
         self.tabu_memory = kwargs_opt["tabu_memory"]
         self.n_restarts = kwargs_opt["n_restarts"]

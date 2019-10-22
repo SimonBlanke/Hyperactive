@@ -21,4 +21,4 @@ class HillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_opt_positioner(self, _cand_, X, y):
-        return super()._init_base_positioner(_cand_, pos_para=self.pos_para)
+        return super()._init_base_positioner(_cand_)

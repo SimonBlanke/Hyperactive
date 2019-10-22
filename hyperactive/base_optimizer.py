@@ -72,11 +72,11 @@ class BaseOptimizer:
 
         return _cand_, _p_
 
-    def _init_base_positioner(self, _cand_, positioner=None, pos_para={}):
+    def _init_base_positioner(self, _cand_, positioner=None):
         if positioner:
-            _p_ = positioner(**pos_para)
+            _p_ = positioner(**self._arg_.kwargs_opt)
         else:
-            _p_ = BasePositioner(**pos_para)
+            _p_ = BasePositioner(**self._arg_.kwargs_opt)
 
         _p_.pos_current = _cand_.pos_best
         _p_.score_current = _cand_.score_best
