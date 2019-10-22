@@ -2,6 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import time
+
 
 class Model:
     def __init__(self, func_, nth_process):
@@ -9,7 +11,9 @@ class Model:
         self.nth_process = nth_process
 
     def train_model(self, keras_para_dict, X, y):
+        start_time = time.time()
         result = self.func_(keras_para_dict, X, y)
+        eval_time = time.time() - start_time
 
         if isinstance(result, tuple):
             score = result[0]
@@ -20,4 +24,4 @@ class Model:
         else:
             print("Error: model function must return float or tuple")
 
-        return score, model
+        return score, eval_time, model
