@@ -17,6 +17,7 @@ class Config:
     def __init__(self, *args, **kwargs):
         kwargs_base = {
             "n_iter": 10,
+            "max_time": None,
             "optimizer": "RandomSearch",
             "n_jobs": 1,
             "verbosity": 2,
@@ -48,8 +49,12 @@ class Config:
         self.set_n_jobs()
         self._n_process_range = range(0, int(self.n_jobs))
 
+        if self.max_time:
+            self.max_time = self.max_time * 3600
+
     def _set_general_args(self, kwargs_base):
         self.n_iter = kwargs_base["n_iter"]
+        self.max_time = kwargs_base["max_time"]
         self.optimizer = kwargs_base["optimizer"]
         self.n_jobs = kwargs_base["n_jobs"]
         self.verbosity = kwargs_base["verbosity"]

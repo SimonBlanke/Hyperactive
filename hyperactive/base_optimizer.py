@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+import time
 import numpy as np
 import multiprocessing
 
@@ -100,6 +100,11 @@ class BaseOptimizer:
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
             self._config_.update_p_bar(1, _cand_)
 
+            run_time = time.time() - self.start_time
+            if run_time > self._config_.max_time:
+                break
+
+            # get_search_path
             if self._config_.get_search_path:
                 pos_list = []
                 score_list = []
@@ -197,6 +202,7 @@ class BaseOptimizer:
         -------
         None
         """
+        self.start_time = time.time()
 
         if self._config_.n_jobs == 1:
             self._run_one_job(X, y)
