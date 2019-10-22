@@ -19,11 +19,7 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
         return np.exp(-self._score_norm(_p_) / self.temp)
 
     def _iterate(self, i, _cand_, _p_, X, y):
-        _cand_, _p_ = self._hill_climb_iteration(_cand_, _p_, X, y)
-
-        if _p_.score_new <= _cand_.score_best:
-            p_accept = self._accept(_p_)
-            self._consider(_p_, p_accept)
+        _cand_ = self._stochastic_hill_climb_iter(_cand_, _p_, X, y)
 
         self.temp = self.temp * self._arg_.annealing_rate
 

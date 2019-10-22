@@ -3,17 +3,17 @@
 # License: MIT License
 
 
-from ...base_optimizer import BaseOptimizer
+from ..local import HillClimbingOptimizer
 
 
-class RandomRestartHillClimbingOptimizer(BaseOptimizer):
+class RandomRestartHillClimbingOptimizer(HillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.pos_para = {"epsilon": self._arg_.epsilon}
         self.n_iter_restart = int(self._core_.n_iter / self._arg_.n_restarts)
 
     def _iterate(self, i, _cand_, _p_, X, y):
-        _cand_, _p_ = self._hill_climb_iteration(_cand_, _p_, X, y)
+        _cand_, _p_ = self._hill_climb_iter(_cand_, _p_, X, y)
 
         if self.n_iter_restart != 0 and i % self.n_iter_restart == 0:
             _p_.pos_current = _p_.move_random(_cand_)
