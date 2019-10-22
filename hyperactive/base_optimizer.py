@@ -101,7 +101,7 @@ class BaseOptimizer:
             self._core_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
-            if run_time > self._core_.max_time:
+            if self._core_.max_time and run_time > self._core_.max_time:
                 break
 
             # get_search_path
