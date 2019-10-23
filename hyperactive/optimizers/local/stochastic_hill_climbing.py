@@ -2,15 +2,10 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import math
 import random
 import numpy as np
 
 from . import HillClimbingOptimizer
-
-
-def sigmoid(x):
-    return 1 / (1 + math.exp(-x))
 
 
 class StochasticHillClimbingOptimizer(HillClimbingOptimizer):

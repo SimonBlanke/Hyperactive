@@ -9,7 +9,6 @@ from ...base_optimizer import BaseOptimizer
 class HillClimbingOptimizer(BaseOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"epsilon": self._arg_.epsilon}
 
     def _hill_climb_iter(self, _cand_, _p_, X, y):
         score_new = -1000

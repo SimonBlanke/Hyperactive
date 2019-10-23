@@ -9,7 +9,6 @@ from ..local import HillClimbingOptimizer
 class RandomRestartHillClimbingOptimizer(HillClimbingOptimizer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pos_para = {"epsilon": self._arg_.epsilon}
         self.n_iter_restart = int(self._core_.n_iter / self._arg_.n_restarts)
 
     def _iterate(self, i, _cand_, _p_, X, y):
