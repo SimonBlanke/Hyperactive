@@ -32,6 +32,8 @@ class Candidate:
             self._space_, self._model_, _core_.warm_start, _core_.scatter_init
         )
 
+        self.eval_time_sum = 0
+
     def create_start_point(self, para):
         start_point = {}
 
@@ -67,5 +69,6 @@ class Candidate:
             para = self._space_.pos2para(pos)
             score, eval_time, self.model = self._model_.train_model(para, X, y)
             self._space_.memory[pos_str] = score
+            self.eval_time_sum = self.eval_time_sum + eval_time
 
             return score

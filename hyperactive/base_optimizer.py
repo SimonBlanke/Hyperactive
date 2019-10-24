@@ -120,6 +120,7 @@ class BaseOptimizer:
                     self.score_list.append(score_list_)
 
         _cand_ = finish_search_(self._core_, _cand_, X, y)
+        self.eval_time = _cand_.eval_time_sum
 
         return _cand_
 
@@ -202,6 +203,6 @@ class BaseOptimizer:
         self.results = {}
 
         if self._core_.n_jobs == 1:
-            self._run_one_job(X, y)
+            _cand_ = self._run_one_job(X, y)
         else:
             self._run_multiple_jobs(X, y)

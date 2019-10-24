@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import time
 
 from .core import Core
 from .opt_args import Arguments
@@ -96,8 +97,17 @@ class Hyperactive:
         -------
         None
         """
+        start_time = time.time()
         self._optimizer_._fit(X, y)
         self.score_best = self._optimizer_.score_best
+
+        self.total_time = time.time() - start_time
+
+    def get_total_time(self):
+        return self.total_time
+
+    def get_eval_time(self):
+        return self._optimizer_.eval_time
 
     def get_results(self):
         return self._optimizer_.results
