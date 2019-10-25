@@ -16,15 +16,43 @@ sns.set(style="whitegrid")
 
 
 def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
-    file_name = "optimizer_calc_time_" + model_name
+    file_name_1 = "eval_time_" + model_name 
+    file_name_2 = "total_time_" + model_name
 
-    data = pd.read_csv("./data/" + file_name, header=0)
+    eval_time_model = pd.read_csv(file_name_1, header=0)
+    total_time_model = pd.read_csv(file_name_2, header=0)
 
-    columns = data.columns
-    values = data.values
+    columns = eval_time_model.columns
+    eval_time = eval_time_model.values
+    total_time = total_time_model.values
 
-    no_opt = values[:, 0]
+    opt_time = np.subtract(total_time, eval_time)
 
+    opt_time_mean = opt_time.mean(axis=0)
+    opt_time_std = opt_time.std(axis=0)
+
+    eval_time_mean = eval_time.mean(axis=0)
+    eval_time_std = eval_time.std(axis=0)
+
+    ind = np.arange(opt_time_mean.shape[0])    # the x locations for the groups
+    width = 0.35       # the width of the bars: can also be len(x) sequence
+
+    plt.figure(figsize=(15, 5))
+
+    p1 = plt.bar(ind, eval_time_mean, width, yerr=eval_time_std)
+    p2 = plt.bar(ind, opt_time_mean, width, bottom=eval_time_mean, yerr=opt_time_std)
+
+    plt.ylabel('Time')
+    plt.title(title)
+    plt.xticks(ind, columns, rotation=75)
+    # plt.yticks()
+    plt.legend((p1[0], p2[0]), ('Eval time', 'Opt time'))
+
+    plt.tight_layout()
+    plt.show()
+
+
+    '''
     values_norm = values / no_opt[:, None]
 
     fig, ax = plt.subplots()
@@ -62,36 +90,6 @@ def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
     fig = ax.get_figure()
     fig.tight_layout()
     fig.savefig("optimizer_time_" + model_name + ".png")
+    '''
 
-
-plot_optimizer_time(
-    "sklearn.neighbors.KNeighborsClassifier",
-    y_min=0.50,
-    y_max=4.50001,
-    step_major=0.50,
-    title="KNeighborsClassifier - iris_data",
-)
-
-plot_optimizer_time(
-    "sklearn.ensemble.GradientBoostingClassifier",
-    y_min=0.50,
-    y_max=1.50001,
-    step_major=0.25,
-    title="GradientBoostingClassifier - cancer_data",
-)
-
-plot_optimizer_time(
-    "sklearn.tree.DecisionTreeClassifier",
-    y_min=0.50,
-    y_max=3.000001,
-    step_major=0.50,
-    title="DecisionTreeClassifier - iris_data",
-)
-
-plot_optimizer_time(
-    "lightgbm.LGBMClassifier",
-    y_min=0.50,
-    y_max=1.500001,
-    step_major=0.25,
-    title="LGBMClassifier - cancer_data",
-)
+plot_optimizer_time("model", 0, 2, 0.25, "title")
