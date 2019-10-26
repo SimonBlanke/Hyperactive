@@ -34,7 +34,6 @@ setup(
     ],
     install_requires=[
         "numpy",
-        "pandas",
         "tqdm",
         "scikit-learn>=0.18",
         "xgboost",

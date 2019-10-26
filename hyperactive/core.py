@@ -5,9 +5,7 @@
 
 import random
 from tqdm.auto import tqdm
-import scipy
 import numpy as np
-import pandas as pd
 import multiprocessing
 
 from .util import merge_dicts
@@ -102,16 +100,6 @@ class Core:
 
         random.seed(rand + thread)
         np.random.seed(rand + thread)
-        scipy.random.seed(rand + thread)
-
-    def _check_data(self, X, y):
-        """Checks if data is pandas Dataframe and converts to numpy array if necessary"""
-        if isinstance(X, pd.core.frame.DataFrame):
-            X = X.values
-        if isinstance(y, pd.core.frame.DataFrame):
-            y = y.values
-
-        return X, y
 
     def set_n_jobs(self):
         """Sets the number of jobs to run in parallel"""
