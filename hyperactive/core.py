@@ -4,7 +4,6 @@
 
 
 import random
-from tqdm.auto import tqdm
 import numpy as np
 import multiprocessing
 
@@ -18,7 +17,7 @@ class Core:
             "max_time": None,
             "optimizer": "RandomSearch",
             "n_jobs": 1,
-            "verbosity": 2,
+            "verbosity": 1,
             "warnings": True,
             "random_state": None,
             "warm_start": False,
@@ -63,33 +62,6 @@ class Core:
         self.scatter_init = kwargs_base["scatter_init"]
         self.meta_learn = kwargs_base["meta_learn"]
         self.get_search_path = kwargs_base["get_search_path"]
-
-    def init_p_bar(self, _core_, _cand_):
-        if self.verbosity == 2:
-            self.p_bar = tqdm(**_core_._tqdm_dict(_cand_))
-        else:
-            self.p_bar = None
-
-    def update_p_bar(self, n, _cand_):
-        if self.p_bar:
-            self.p_bar.update(n)
-            self.p_bar.set_postfix(best_score=str(_cand_.score_best))
-
-    def close_p_bar(self):
-        if self.p_bar:
-            self.p_bar.close()
-
-    def _tqdm_dict(self, _cand_):
-        """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
-        return {
-            "total": self.n_iter,
-            "desc": "Thread "
-            + str(_cand_.nth_process)
-            + " -> "
-            + _cand_._model_.func_.__name__,
-            "position": _cand_.nth_process,
-            "leave": True,
-        }
 
     def _set_random_seed(self, thread=0):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""

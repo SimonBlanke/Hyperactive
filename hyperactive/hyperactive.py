@@ -99,7 +99,7 @@ class Hyperactive:
         """
         start_time = time.time()
         self._optimizer_._fit(X, y)
-        self.score_best = self._optimizer_.score_best
+        # self.score_best = self._optimizer_.score_best
 
         self.total_time = time.time() - start_time
 

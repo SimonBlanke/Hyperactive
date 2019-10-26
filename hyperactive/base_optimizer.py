@@ -9,7 +9,9 @@ import multiprocessing
 from functools import partial
 
 from .base_positioner import BasePositioner
-from .util import initialize_search, finish_search_, sort_for_best
+from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2
+from .util import init_candidate, init_eval
+from .candidate import Candidate
 from meta_learn import HyperactiveWrapper
 
 
@@ -60,6 +62,9 @@ class BaseOptimizer:
         if self._core_.meta_learn:
             self._meta_ = HyperactiveWrapper(self._core_.search_config)
 
+        verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2]
+        self._verb_ = verbs[_core_.verbosity]()
+
         self.pos_list = []
         self.score_list = []
 
@@ -83,13 +88,30 @@ class BaseOptimizer:
 
         return _cand_, _p_
 
-    def search(self, nth_process, X, y):
-        self._core_, _cand_ = initialize_search(self._core_, nth_process, X, y)
+    def _initialize_search(self, _core_, nth_process, X, y):
+        _cand_ = init_candidate(_core_, nth_process, Candidate)
+        _cand_ = init_eval(_cand_, nth_process, X, y)
         _p_ = self._init_opt_positioner(_cand_, X, y)
+        self._verb_.init_p_bar(_cand_)
+
+        return _core_, _cand_, _p_
+
+    def _finish_search(self, _core_, _cand_, X, y):
+        _cand_._model_.cv = 1
+        _cand_.eval_pos(_cand_.pos_best, X, y, force_eval=True)
+        self.eval_time = _cand_.eval_time_sum
+        self._verb_.close_p_bar()
+
+        return _cand_
+
+    def search(self, nth_process, X, y):
+        self._core_, _cand_, _p_ = self._initialize_search(
+            self._core_, nth_process, X, y
+        )
 
         for i in range(self._core_.n_iter):
             _cand_ = self._iterate(i, _cand_, _p_, X, y)
-            self._core_.update_p_bar(1, _cand_)
+            self._verb_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
             if self._core_.max_time and run_time > self._core_.max_time:
@@ -119,8 +141,7 @@ class BaseOptimizer:
                     self.pos_list.append(pos_list_)
                     self.score_list.append(score_list_)
 
-        _cand_ = finish_search_(self._core_, _cand_, X, y)
-        self.eval_time = _cand_.eval_time_sum
+        _cand_ = self._finish_search(self._core_, _cand_, X, y)
 
         return _cand_
 
@@ -136,15 +157,8 @@ class BaseOptimizer:
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
 
-        self.model_best = _cand_.model_best
-        self.score_best = _cand_.score_best
-        start_point = _cand_._get_warm_start()
-
-        self.results[self.score_best] = start_point
-
-        if self._core_.verbosity:
-            print("\nbest para =", start_point)
-            print("score     =", self.score_best)
+        start_point = self._verb_.print_start_point(_cand_)
+        self.results[_cand_.score_best] = start_point
 
         if self._core_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
@@ -152,36 +166,11 @@ class BaseOptimizer:
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)
 
-        start_point_list = []
-        score_best_list = []
-        model_best_list = []
-        for _cand_ in _cand_list:
-            model_best = _cand_.model_best
-            score_best = _cand_.score_best
-            start_point = _cand_._get_warm_start()
-
-            self.results[score_best] = start_point
-
-            start_point_list.append(start_point)
-            score_best_list.append(score_best)
-            model_best_list.append(model_best)
-
-        start_point_sorted, score_best_sorted = sort_for_best(
-            start_point_list, score_best_list
+        score_best_sorted, model_best_sorted, results = self._verb_.print_start_points(
+            _cand_list, self._core_
         )
 
-        model_best_sorted, score_best_sorted = sort_for_best(
-            model_best_list, score_best_list
-        )
-
-        if self._core_.verbosity:
-            for i in range(int(self._core_.n_jobs / 2)):
-                print("\n")
-            print("\nList of start points (best first):\n")
-            for start_point, score_best in zip(start_point_sorted, score_best_sorted):
-
-                print("best para =", start_point)
-                print("score     =", score_best, "\n")
+        self.results = results
 
         self.score_best = score_best_sorted[0]
         self.model_best = model_best_sorted[0]
@@ -203,6 +192,6 @@ class BaseOptimizer:
         self.results = {}
 
         if self._core_.n_jobs == 1:
-            _cand_ = self._run_one_job(X, y)
+            self._run_one_job(X, y)
         else:
             self._run_multiple_jobs(X, y)
