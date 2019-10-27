@@ -20,7 +20,7 @@ class Verbosity(metaclass=abc.ABCMeta):
     def print_start_points(self, _cand_):
         pass
 
-    def init_p_bar(self, _cand_):
+    def init_p_bar(self, _cand_, _core_):
         pass
 
     def update_p_bar(self, n, _cand_):
