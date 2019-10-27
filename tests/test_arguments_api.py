@@ -43,6 +43,31 @@ warm_start = {
 }
 
 
+def test_func_return():
+    def model1(para, X, y):
+        model = DecisionTreeClassifier(
+            criterion=para["criterion"],
+            max_depth=para["max_depth"],
+            min_samples_split=para["min_samples_split"],
+            min_samples_leaf=para["min_samples_leaf"],
+        )
+        scores = cross_val_score(model, X, y, cv=3)
+
+        return scores.mean(), model
+
+    search_config1 = {
+        model1: {
+            "criterion": ["gini", "entropy"],
+            "max_depth": range(1, 21),
+            "min_samples_split": range(2, 21),
+            "min_samples_leaf": range(1, 21),
+        }
+    }
+
+    opt = Hyperactive(search_config1)
+    opt.search(X, y)
+
+
 def test_n_jobs_2():
     opt = Hyperactive(search_config, n_jobs=2)
     opt.search(X, y)
