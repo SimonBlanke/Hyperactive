@@ -118,8 +118,8 @@ class VerbosityLVL2(VerbosityLVL1):
     def __init__(self):
         pass
 
-    def init_p_bar(self, _cand_):
-        self.p_bar = tqdm(**self._tqdm_dict(_cand_))
+    def init_p_bar(self, _cand_, _core_):
+        self.p_bar = tqdm(**self._tqdm_dict(_cand_, _core_))
 
     def update_p_bar(self, n, _cand_):
         self.p_bar.update(n)
@@ -128,10 +128,10 @@ class VerbosityLVL2(VerbosityLVL1):
     def close_p_bar(self):
         self.p_bar.close()
 
-    def _tqdm_dict(self, _cand_):
+    def _tqdm_dict(self, _cand_, _core_):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {
-            "total": self.n_iter,
+            "total": _core_.n_iter,
             "desc": "Thread "
             + str(_cand_.nth_process)
             + " -> "
@@ -144,6 +144,9 @@ class VerbosityLVL2(VerbosityLVL1):
 class VerbosityLVL10(VerbosityLVL0):
     def __init__(self):
         pass
+
+    def start_search(self):
+        print("")
 
     def get_search_path(self):
         pass

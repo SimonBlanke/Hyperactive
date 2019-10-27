@@ -92,7 +92,7 @@ class BaseOptimizer:
         _cand_ = init_candidate(_core_, nth_process, Candidate)
         _cand_ = init_eval(_cand_, nth_process, X, y)
         _p_ = self._init_opt_positioner(_cand_, X, y)
-        self._verb_.init_p_bar(_cand_)
+        self._verb_.init_p_bar(_cand_, self._core_)
 
         return _core_, _cand_, _p_
 
