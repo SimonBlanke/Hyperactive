@@ -15,6 +15,12 @@ class SearchSpace:
 
         self.memory = {}
 
+    def load_memory(self, para, score):
+        for idx in range(para.shape[0]):
+            pos = self.para2pos(para.iloc[[idx]])
+            pos_str = pos.tostring()
+            self.memory[pos_str] = float(score.values[idx])
+
     def pos_space_limit(self):
         dim = []
 
@@ -24,25 +30,12 @@ class SearchSpace:
         self.dim = np.array(dim)
 
     def create_searchspace(self):
-        """
-        para_space = {}
-
-        for para_key in search_config_temp.keys():
-
-            for param_str in search_config_temp[para_key].keys():
-                new_param_str = para_key + "." + param_str
-
-                para_space[new_param_str] = search_config_temp[para_key][param_str]
-
-        """
-
         self.para_space = self.search_config[list(self.search_config)[self.model_nr]]
-
         self.pos_space_limit()
 
     def get_random_pos(self):
         pos_new = np.random.uniform(np.zeros(self.dim.shape), self.dim, self.dim.shape)
-        pos = np.rint(pos_new)
+        pos = np.rint(pos_new).astype(int)
 
         return pos
 
@@ -51,6 +44,17 @@ class SearchSpace:
         pos = random.randint(0, n_para_values - 1)
 
         return pos
+
+    def para2pos(self, para):
+        pos_list = []
+
+        for pos_key in self.para_space:
+            value = para[[pos_key]].values
+
+            pos = self.para_space[pos_key].index(value)
+            pos_list.append(pos)
+
+        return np.array(pos_list)
 
     def pos2para(self, pos):
         if len(self.para_space.keys()) == pos.size:

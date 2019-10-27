@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
 import time
 import numpy as np
 import multiprocessing
@@ -55,6 +56,7 @@ class BaseOptimizer:
 
         self._core_ = _core_
         self._arg_ = _arg_
+        self._meta_ = None
 
         self.search_config = self._core_.search_config
         self.n_iter = self._core_.n_iter
@@ -94,10 +96,14 @@ class BaseOptimizer:
         _p_ = self._init_opt_positioner(_cand_, X, y)
         self._verb_.init_p_bar(_cand_, self._core_)
 
+        if self._meta_:
+            meta_data = self._meta_.get_func_metadata(_cand_.func_)
+            if meta_data:
+                _cand_._space_.load_memory(*meta_data)
+
         return _core_, _cand_, _p_
 
     def _finish_search(self, _core_, _cand_, X, y):
-        _cand_._model_.cv = 1
         _cand_.eval_pos(_cand_.pos_best, X, y, force_eval=True)
         self.eval_time = _cand_.eval_time_sum
         self._verb_.close_p_bar()
