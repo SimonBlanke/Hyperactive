@@ -90,6 +90,9 @@ def test_verbosity():
     opt1 = Hyperactive(search_config, verbosity=1)
     opt1.search(X, y)
 
+    opt1 = Hyperactive(search_config, verbosity=2)
+    opt1.search(X, y)
+
 
 def test_scatter_init():
     opt = Hyperactive(search_config, scatter_init=10)
