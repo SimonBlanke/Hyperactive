@@ -17,7 +17,7 @@ class Core:
             "max_time": None,
             "optimizer": "RandomSearch",
             "n_jobs": 1,
-            "verbosity": 1,
+            "verbosity": 2,
             "warnings": True,
             "random_state": None,
             "warm_start": False,

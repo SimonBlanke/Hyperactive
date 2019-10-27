@@ -159,6 +159,7 @@ class BaseOptimizer:
 
         start_point = self._verb_.print_start_point(_cand_)
         self.results[_cand_.score_best] = start_point
+        self.score_best = _cand_.score_best
 
         if self._core_.meta_learn:
             self._meta_.collect(X, y, _cand_list=[_cand_])
