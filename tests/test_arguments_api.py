@@ -112,8 +112,14 @@ def test_verbosity():
     opt0 = Hyperactive(search_config, verbosity=0)
     opt0.search(X, y)
 
+    opt0 = Hyperactive(search_config, n_jobs=2, verbosity=0)
+    opt0.search(X, y)
+
     opt1 = Hyperactive(search_config, verbosity=1)
     opt1.search(X, y)
+
+    opt0 = Hyperactive(search_config, n_jobs=2, verbosity=1)
+    opt0.search(X, y)
 
     opt1 = Hyperactive(search_config, verbosity=2)
     opt1.search(X, y)
