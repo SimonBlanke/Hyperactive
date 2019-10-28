@@ -161,14 +161,11 @@
           <ul>
               <li>Tensorflow</li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
-              <li>Tensorlayer</li>
               <li>Pytorch</li>
-              <li>Skorch</li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/multiprocessing_example?id=multiprocessing">Multiprocessing</a></li>
-              <li>Ray</li>
           </ul>
       </td>
       <td>
