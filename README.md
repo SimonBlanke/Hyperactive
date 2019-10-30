@@ -56,7 +56,7 @@
         <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
         </a> 
         <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
-        <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=flat-square" alt="img not loaded: try F5 :)">
+        <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=flat-square&logo=codefactor" alt="img not loaded: try F5 :)">
         </a>     
       </td>
     </tr>
