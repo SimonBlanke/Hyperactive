@@ -36,16 +36,6 @@ search_config = {
 }
 
 
-def test_get_results():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
-    opt.search(X, y)
-    opt.get_results()
-
-    opt = Hyperactive(search_config, n_iter=n_iter, n_jobs=2, optimizer="HillClimbing")
-    opt.search(X, y)
-    opt.get_results()
-
-
 def test_get_total_time():
     opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
     opt.search(X, y)
