@@ -16,6 +16,8 @@ class SearchSpace:
         self.memory = {}
 
     def load_memory(self, para, score):
+        if para is None or score is None:
+            return
         for idx in range(para.shape[0]):
             pos = self.para2pos(para.iloc[[idx]])
             pos_str = pos.tostring()

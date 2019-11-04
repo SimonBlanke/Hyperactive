@@ -97,9 +97,12 @@ class BaseOptimizer:
         self._verb_.init_p_bar(_cand_, self._core_)
 
         if self._meta_:
-            meta_data = self._meta_.get_func_metadata(_cand_.func_)
-            if meta_data:
-                _cand_._space_.load_memory(*meta_data)
+            meta_data = self._meta_.get_func_metadata(_cand_)
+
+            self._meta_.retrain(_cand_)
+            para, score = self._meta_.search(X, y, _cand_)
+
+            _cand_._space_.load_memory(*meta_data)
 
         return _core_, _cand_, _p_
 
@@ -164,25 +167,28 @@ class BaseOptimizer:
         _cand_ = self.search(0, X, y)
 
         start_point = self._verb_.print_start_point(_cand_)
-        self.results[_cand_.score_best] = start_point
-        
-        self.score_best = _cand_.score_best
-        self.model_best = _cand_.model_best
+        self.results_params[_cand_.score_best] = start_point
+        self.results_models[_cand_.score_best] = _cand_.model_best
 
         if self._core_.meta_learn:
-            self._meta_.collect(X, y, _cand_list=[_cand_])
+            self._meta_.collect(X, y, _cand_)
 
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)
 
-        score_best_sorted, model_best_sorted, results = self._verb_.print_start_points(
+        for _cand_ in _cand_list:
+            if self._core_.meta_learn:
+                self._meta_.collect(X, y, _cand_)
+
+        results_params, results_models = self._verb_.print_start_points(
             _cand_list, self._core_
         )
 
-        self.results = results
+        self.results_params = results_params
+        self.results_models = results_models
 
-        self.score_best = score_best_sorted[0]
-        self.model_best = model_best_sorted[0]
+        # self.score_best = score_best_sorted[0]
+        # self.model_best = model_best_sorted[0]
 
     def _fit(self, X, y):
         """Public method for starting the search with the training data (X, y)
@@ -198,7 +204,8 @@ class BaseOptimizer:
         None
         """
         self.start_time = time.time()
-        self.results = {}
+        self.results_params = {}
+        self.results_models = {}
 
         if self._core_.n_jobs == 1:
             self._run_one_job(X, y)
