@@ -44,14 +44,18 @@ class VerbosityLVL0(Verbosity):
         start_point_list = []
         score_best_list = []
         model_best_list = []
-        results = {}
+        results_params = {}
+        results_models = {}
 
         for _cand_ in _cand_list:
+            func_name = _cand_._model_.func_.__name__
+
             model_best = _cand_.model_best
             score_best = _cand_.score_best
             start_point = _cand_._get_warm_start()
 
-            results[score_best] = start_point
+            results_params[func_name] = start_point
+            results_models[func_name] = model_best
 
             start_point_list.append(start_point)
             score_best_list.append(score_best)
@@ -65,7 +69,7 @@ class VerbosityLVL0(Verbosity):
             model_best_list, score_best_list
         )
 
-        return score_best_sorted, model_best_sorted, results
+        return results_params, results_models
 
 
 class VerbosityLVL1(VerbosityLVL0):
@@ -83,14 +87,20 @@ class VerbosityLVL1(VerbosityLVL0):
         start_point_list = []
         score_best_list = []
         model_best_list = []
-        results = {}
+        results_params = {}
+        results_models = {}
 
         for _cand_ in _cand_list:
+            func_name = _cand_._model_.func_.__name__
+
             model_best = _cand_.model_best
             score_best = _cand_.score_best
             start_point = _cand_._get_warm_start()
 
-            results[score_best] = start_point
+            print("\nmodel_best", model_best)
+
+            results_params[func_name] = start_point
+            results_models[func_name] = model_best
 
             start_point_list.append(start_point)
             score_best_list.append(score_best)
@@ -111,7 +121,7 @@ class VerbosityLVL1(VerbosityLVL0):
             print("best para =", start_point)
             print("score     =", score_best, "\n")
 
-        return score_best_sorted, model_best_sorted, results
+        return results_params, results_models
 
 
 class VerbosityLVL2(VerbosityLVL1):

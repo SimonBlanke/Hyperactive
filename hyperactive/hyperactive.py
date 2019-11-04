@@ -99,8 +99,9 @@ class Hyperactive:
         """
         start_time = time.time()
         self._optimizer_._fit(X, y)
-        self.score_best = self._optimizer_.score_best
-        self.model_best = self._optimizer_.model_best
+
+        self.results_params = self._optimizer_.results_params
+        self.results_models = self._optimizer_.results_models
 
         self.total_time = time.time() - start_time
 
@@ -109,9 +110,6 @@ class Hyperactive:
 
     def get_eval_time(self):
         return self._optimizer_.eval_time
-
-    def get_results(self):
-        return self._optimizer_.results
 
     def save_report(self):
         pass
