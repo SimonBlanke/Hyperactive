@@ -87,6 +87,8 @@ class BaseOptimizer:
 
         _p_.pos_current = _p_.pos_new
         _p_.score_current = _p_.score_new
+        
+        self._verb_.update_best_since_iter(_cand_.iter)
 
         return _cand_, _p_
 
@@ -118,8 +120,9 @@ class BaseOptimizer:
             self._core_, nth_process, X, y
         )
 
-        for i in range(self._core_.n_iter):
-            _cand_ = self._iterate(i, _cand_, _p_, X, y)
+        for iter in range(self._core_.n_iter):
+            _cand_.iter = iter
+            _cand_ = self._iterate(iter, _cand_, _p_, X, y)
             self._verb_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
