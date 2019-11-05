@@ -133,10 +133,9 @@ class VerbosityLVL2(VerbosityLVL1):
 
     def update_p_bar(self, n, _cand_):
         self.p_bar.update(n)
-        self.p_bar.set_postfix(best_score=str(_cand_.score_best), best_since_iter=self.best_since_iter)
-        
-    def update_best_since_iter(self, value):
-        self.best_since_iter = value
+        self.p_bar.set_postfix(
+            best_score=str(_cand_.score_best), best_since_iter=self.best_since_iter
+        )
 
     def close_p_bar(self):
         self.p_bar.close()

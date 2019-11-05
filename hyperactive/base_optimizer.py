@@ -87,8 +87,8 @@ class BaseOptimizer:
 
         _p_.pos_current = _p_.pos_new
         _p_.score_current = _p_.score_new
-        
-        self._verb_.update_best_since_iter(_cand_.iter)
+
+        self._verb_.best_since_iter = _cand_.iter
 
         return _cand_, _p_
 

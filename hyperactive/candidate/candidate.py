@@ -34,7 +34,7 @@ class Candidate:
         )
 
         self.eval_time_sum = 0
-        
+
     def create_start_point(self, para):
         start_point = {}
 
