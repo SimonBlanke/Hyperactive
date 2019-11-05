@@ -126,14 +126,17 @@ class VerbosityLVL1(VerbosityLVL0):
 
 class VerbosityLVL2(VerbosityLVL1):
     def __init__(self):
-        pass
+        self.best_since_iter = 0
 
     def init_p_bar(self, _cand_, _core_):
         self.p_bar = tqdm(**self._tqdm_dict(_cand_, _core_))
 
     def update_p_bar(self, n, _cand_):
         self.p_bar.update(n)
-        self.p_bar.set_postfix(best_score=str(_cand_.score_best))
+        self.p_bar.set_postfix(best_score=str(_cand_.score_best), best_since_iter=self.best_since_iter)
+        
+    def update_best_since_iter(self, value):
+        self.best_since_iter = value
 
     def close_p_bar(self):
         self.p_bar.close()
