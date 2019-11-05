@@ -9,6 +9,7 @@ from ..init_position import InitSearchPosition
 
 class Candidate:
     def __init__(self, nth_process, _core_):
+        self.iter = 0
         self.search_config = _core_.search_config
         self.memory = _core_.memory
 
@@ -33,7 +34,7 @@ class Candidate:
         )
 
         self.eval_time_sum = 0
-
+        
     def create_start_point(self, para):
         start_point = {}
 
