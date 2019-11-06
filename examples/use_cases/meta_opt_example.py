@@ -30,7 +30,11 @@ def meta_opt(para, X, y):
     opt = Hyperactive(
         search_config,
         optimizer={
-            "ParticleSwarm": {"inertia": para["inertia"], "cognitive_weight": para["cognitive_weight"], "social_weight": para["social_weight"]}
+            "ParticleSwarm": {
+                "inertia": para["inertia"],
+                "cognitive_weight": para["cognitive_weight"],
+                "social_weight": para["social_weight"],
+            }
         },
         verbosity=None,
     )
