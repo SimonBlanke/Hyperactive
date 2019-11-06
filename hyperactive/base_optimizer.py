@@ -29,12 +29,8 @@ class BaseOptimizer:
             optimization process.
         n_iter: int
             The number of iterations the optimizer performs.
-        metric: string, optional (default: "accuracy")
-            The metric the model is evaluated by.
         n_jobs: int, optional (default: 1)
             The number of searches to run in parallel.
-        cv: int, optional (default: 3)
-            The number of folds for the cross validation.
         verbosity: int, optional (default: 1)
             Verbosity level. 1 prints out warm_start points and their scores.
         random_state: int, optional (default: None)
