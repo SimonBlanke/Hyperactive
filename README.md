@@ -54,10 +54,10 @@
         </a>
         <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
         <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-        </a> 
+        </a>
         <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
         <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=flat-square&logo=codefactor" alt="img not loaded: try F5 :)">
-        </a>     
+        </a>
       </td>
     </tr>
   </tbody>
@@ -82,7 +82,6 @@
 
 ## Main features
 
-- Very simple API
 - Thoroughly tested code base
 - Compatible with <b>any python machine-learning framework</b>
 - Optimize:
@@ -129,7 +128,7 @@
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-search">Random Search</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li> 
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
          </ul>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
@@ -154,12 +153,12 @@
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/xgboost_example?id=xgboost">XGBoost</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/lightgbm_example?id=lightgbm">LightGBM</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/catboost_example?id=catboost">CatBoost</a></li>
-            <li>RGF</li>
-            <li>Mlxtend</li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/rgf_python?id=rgf">RGF</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/mlxtend_example?id=mlxtend">Mlxtend</a></li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li>Tensorflow</li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/tensorflow_example?id=tensorflow">Tensorflow</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
               <li>Pytorch</li>
           </ul>
@@ -207,12 +206,12 @@ pip install hyperactive
 
 ## Experimental algorithms
 
-The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature. 
+The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
 If any of these algorithms still exist I ask you to share it with me in an issue.
 
 #### Random Annealing
 
-A combination between simulated annealing and random search. 
+A combination between simulated annealing and random search.
 
 #### Scatter Initialization
 
@@ -223,11 +222,9 @@ Inspired by hyperband optimization.
 ## References
 
 #### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
-#### [2] [An Empirical Investigation of Catastrophic Forgetting in Gradient-Based Neural Networks](https://arxiv.org/pdf/1312.6211.pdf)
 
 <br>
 
 ## License
 
 [![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
-
