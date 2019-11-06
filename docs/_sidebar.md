@@ -60,7 +60,3 @@
     - [Scatter initialization](./extentions/README.md#scatter-initialization)
     - [Warm start](./extentions/README.md#warm-start)
     - [Memory](./extentions/README.md#memory)
-
-
-- Hyperactive API
-    - [Optimizer parameters](./reference/optimizer_args.md)
