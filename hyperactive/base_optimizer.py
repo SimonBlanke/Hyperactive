@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
 import time
 import numpy as np
 import multiprocessing
