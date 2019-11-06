@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
 import time
 import numpy as np
 import multiprocessing
@@ -153,6 +152,14 @@ class BaseOptimizer:
 
         return _cand_
 
+    def _process_results(self, X, y, _cand_):
+        start_point = self._verb_.print_start_point(_cand_)
+        self.results_params[_cand_.func_] = start_point
+        self.results_models[_cand_.func_] = _cand_.model_best
+
+        if self._core_.meta_learn:
+            self._meta_.collect(X, y, _cand_)
+
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._core_.n_jobs)
@@ -164,30 +171,16 @@ class BaseOptimizer:
 
     def _run_one_job(self, X, y):
         _cand_ = self.search(0, X, y)
-
-        start_point = self._verb_.print_start_point(_cand_)
-        self.results_params[_cand_.score_best] = start_point
-        self.results_models[_cand_.score_best] = _cand_.model_best
-
-        if self._core_.meta_learn:
-            self._meta_.collect(X, y, _cand_)
+        self._process_results(X, y, _cand_)
 
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)
 
+        for i in range(int(self._core_.n_jobs / 2)):
+            print("\n")
+
         for _cand_ in _cand_list:
-            if self._core_.meta_learn:
-                self._meta_.collect(X, y, _cand_)
-
-        results_params, results_models = self._verb_.print_start_points(
-            _cand_list, self._core_
-        )
-
-        self.results_params = results_params
-        self.results_models = results_models
-
-        # self.score_best = score_best_sorted[0]
-        # self.model_best = model_best_sorted[0]
+            self._process_results(X, y, _cand_)
 
     def _fit(self, X, y):
         """Public method for starting the search with the training data (X, y)

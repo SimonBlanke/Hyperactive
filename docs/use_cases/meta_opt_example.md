@@ -1,3 +1,6 @@
+## Meta-Optimization
+
+```python
 import numpy as np
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
@@ -53,3 +56,4 @@ search_config = {
 
 opt = Hyperactive(search_config, optimizer="Bayesian", n_iter=50)
 opt.search(X, y)
+```

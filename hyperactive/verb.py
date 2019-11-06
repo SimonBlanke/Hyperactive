@@ -5,8 +5,6 @@
 import abc
 from tqdm.auto import tqdm
 
-from .util import sort_for_best
-
 
 class Verbosity(metaclass=abc.ABCMeta):
     def __init__(self):
@@ -14,10 +12,6 @@ class Verbosity(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def print_start_point(self, _cand_):
-        pass
-
-    @abc.abstractmethod
-    def print_start_points(self, _cand_):
         pass
 
     def init_p_bar(self, _cand_, _core_):
@@ -40,37 +34,6 @@ class VerbosityLVL0(Verbosity):
     def print_start_point(self, _cand_):
         return _cand_._get_warm_start()
 
-    def print_start_points(self, _cand_list, _core_):
-        start_point_list = []
-        score_best_list = []
-        model_best_list = []
-        results_params = {}
-        results_models = {}
-
-        for _cand_ in _cand_list:
-            func_name = _cand_._model_.func_.__name__
-
-            model_best = _cand_.model_best
-            score_best = _cand_.score_best
-            start_point = _cand_._get_warm_start()
-
-            results_params[func_name] = start_point
-            results_models[func_name] = model_best
-
-            start_point_list.append(start_point)
-            score_best_list.append(score_best)
-            model_best_list.append(model_best)
-
-        start_point_sorted, score_best_sorted = sort_for_best(
-            start_point_list, score_best_list
-        )
-
-        model_best_sorted, score_best_sorted = sort_for_best(
-            model_best_list, score_best_list
-        )
-
-        return results_params, results_models
-
 
 class VerbosityLVL1(VerbosityLVL0):
     def __init__(self):
@@ -82,46 +45,6 @@ class VerbosityLVL1(VerbosityLVL0):
         print("score     =", _cand_.score_best)
 
         return start_point
-
-    def print_start_points(self, _cand_list, _core_):
-        start_point_list = []
-        score_best_list = []
-        model_best_list = []
-        results_params = {}
-        results_models = {}
-
-        for _cand_ in _cand_list:
-            func_name = _cand_._model_.func_.__name__
-
-            model_best = _cand_.model_best
-            score_best = _cand_.score_best
-            start_point = _cand_._get_warm_start()
-
-            print("\nmodel_best", model_best)
-
-            results_params[func_name] = start_point
-            results_models[func_name] = model_best
-
-            start_point_list.append(start_point)
-            score_best_list.append(score_best)
-            model_best_list.append(model_best)
-
-        start_point_sorted, score_best_sorted = sort_for_best(
-            start_point_list, score_best_list
-        )
-
-        model_best_sorted, score_best_sorted = sort_for_best(
-            model_best_list, score_best_list
-        )
-
-        for i in range(int(_core_.n_jobs / 2)):
-            print("\n")
-        print("\nList of start points (best first):\n")
-        for start_point, score_best in zip(start_point_sorted, score_best_sorted):
-            print("best para =", start_point)
-            print("score     =", score_best, "\n")
-
-        return results_params, results_models
 
 
 class VerbosityLVL2(VerbosityLVL1):
@@ -151,14 +74,3 @@ class VerbosityLVL2(VerbosityLVL1):
             "position": _cand_.nth_process,
             "leave": True,
         }
-
-
-class VerbosityLVL10(VerbosityLVL0):
-    def __init__(self):
-        pass
-
-    def start_search(self):
-        print("")
-
-    def get_search_path(self):
-        pass

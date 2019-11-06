@@ -44,7 +44,7 @@
         <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=for-the-badge&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
         </a>
         <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
-        <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=for-the-badge" alt="img not loaded: try F5 :)">
+        <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=for-the-badge&logo=codefactor" alt="img not loaded: try F5 :)">
         </a>
       </td>
     </tr>
@@ -55,7 +55,6 @@
 
 ## Main features
 
-- Very simple but versatile API
 - Thoroughly tested code base
 - Compatible with <b>any python machine-learning framework</b>
 - Optimize:
@@ -129,10 +128,14 @@
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/xgboost_example?id=xgboost">XGBoost</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/lightgbm_example?id=lightgbm">LightGBM</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/catboost_example?id=catboost">CatBoost</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/rgf_python?id=rgf">RGF</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/mlxtend_example?id=mlxtend">Mlxtend</a></li>
           </ul><br>
         <a><b>Deep Learning:</b></a>
           <ul>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/tensorflow_example?id=tensorflow">Tensorflow</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
+              <li>Pytorch</li>
           </ul><br>
         <a><b>Distribution:</b></a>
           <ul>

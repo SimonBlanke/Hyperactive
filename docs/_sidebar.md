@@ -25,18 +25,22 @@
     - [XGBoost](./examples/xgboost_example.md#xgboost)
     - [LightGBM](./examples/lightgbm_example.md#lightgbm)
     - [CatBoost](./examples/catboost_example.md#catboost)
+    - [RGF](./examples/rgf_python.md#rgf)
+    - [Mlxtend](./examples/mlxtend_example.md#mlxtend)
     - [Multiprocessing](./examples/multiprocessing_example.md#multiprocessing)
+    - [Tensorflow](./examples/tensorflow_example.md#tensorflow)
     - [Keras MLP](./examples/mlp_example.md#keras-mlp)
     - [Keras CNN](./examples/cnn_mnist.md#keras-cnn)
 
 - Advanced Examples
 
-    - [Memory](./examples/memory_example.md#memory)
-    - [Scatter-initialization](./examples/scatter_init_example.md#scatter-initialization)
-    - [Warm-start](./examples/warm_start_example.md#warm-start)
-    - [Scikit-learn pipelines](./examples/sklearn_pipeline_example.md#sklearn-pipeline)
-    - [Stacking](./examples/stacking_example.md#stacking)
-    - [Deep neural network structure](./examples/cnn_structure.md#keras-cnn-structure)
+    - [Scikit-learn pipelines](./use_cases/sklearn_pipeline_example.md#sklearn-pipeline)
+    - [Preprocessing](./use_cases/sklearn_preprocessing.md#preprocessing)
+    - [Stacking](./use_cases/stacking_example.md#stacking)
+    - [Transfer Learning](./use_cases/transfer_learning.md#transfer-learning)
+    - [Deep neural network structure](./use_cases/cnn_structure.md#keras-cnn-structure)
+    - [Efficient Neural Architecture Search](./use_cases/enas_example.md#enas)
+    - [Meta-Optimization](./use_cases/meta_opt_example.md#meta-optimization)
 
 
 - Optimization Techniques
@@ -60,7 +64,3 @@
     - [Scatter initialization](./extentions/README.md#scatter-initialization)
     - [Warm start](./extentions/README.md#warm-start)
     - [Memory](./extentions/README.md#memory)
-
-
-- Hyperactive API
-    - [Optimizer parameters](./reference/optimizer_args.md)
