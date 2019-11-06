@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 __license__ = "MIT"
 
 from .optimizers.local import HillClimbingOptimizer
