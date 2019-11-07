@@ -126,32 +126,36 @@ class BaseOptimizer:
 
             # get_search_path
             if self._core_.get_search_path:
-                pos_list = []
-                score_list = []
-                if isinstance(_p_, list):
-                    for p in _p_:
-                        pos_list.append(p.pos_new)
-                        score_list.append(p.score_new)
-
-                        pos_list_ = np.array(pos_list)
-                        score_list_ = np.array(score_list)
-
-                    self.pos_list.append(pos_list_)
-                    self.score_list.append(score_list_)
-                else:
-                    pos_list.append(_p_.pos_new)
-                    score_list.append(_p_.score_new)
-
-                    pos_list_ = np.array(pos_list)
-                    score_list_ = np.array(score_list)
-
-                    self.pos_list.append(pos_list_)
-                    self.score_list.append(score_list_)
+                self._monitor_search_path(_p_)
 
         _cand_ = self._finish_search(self._core_, _cand_, X, y)
 
         return _cand_
 
+    def _monitor_search_path(self, _p_):
+        pos_list = []
+        score_list = []
+        if isinstance(_p_, list):
+            for p in _p_:
+                pos_list.append(p.pos_new)
+                score_list.append(p.score_new)
+
+                pos_list_ = np.array(pos_list)
+                score_list_ = np.array(score_list)
+
+            self.pos_list.append(pos_list_)
+            self.score_list.append(score_list_)
+        else:
+            pos_list.append(_p_.pos_new)
+            score_list.append(_p_.score_new)
+
+            pos_list_ = np.array(pos_list)
+            score_list_ = np.array(score_list)
+
+            self.pos_list.append(pos_list_)
+            self.score_list.append(score_list_)
+    
+    
     def _process_results(self, X, y, _cand_):
         start_point = self._verb_.print_start_point(_cand_)
         self.results_params[_cand_.func_] = start_point
