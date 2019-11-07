@@ -35,9 +35,7 @@ def conv3(model):
 
 
 model_pretrained = Sequential()
-model_pretrained.add(
-    Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:])
-)
+model_pretrained.add(Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:]))
 model_pretrained.add(Activation("relu"))
 model_pretrained.add(Conv2D(32, (3, 3)))
 model_pretrained.add(Activation("relu"))
@@ -62,7 +60,7 @@ model_pretrained.fit(X_train, y_train, epochs=50, batch_size=128)
 
 n_layers = len(model_pretrained.layers)
 
-for i in range(n_layers-8):
+for i in range(n_layers - 8):
     model_pretrained.pop()
 
 for layer in model_pretrained.layers:
@@ -72,7 +70,7 @@ print(model_pretrained.summary())
 
 
 def cnn(para, X_train, y_train):
-    '''
+    """
     model = Sequential()
     model.add(
         Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:])
@@ -87,7 +85,7 @@ def cnn(para, X_train, y_train):
 
     model.add(Conv2D(32, (3, 3), padding="same"))
     model.add(Activation("relu"))
-    '''
+    """
     model = model_pretrained
 
     model = para["conv_layer.0"](model)
@@ -105,16 +103,13 @@ def cnn(para, X_train, y_train):
     )
     model.fit(X_train, y_train, epochs=25, batch_size=128)
 
-    loss, score = model.evaluate(x=X_test, y=y_test)
+    _, score = model.evaluate(x=X_test, y=y_test)
 
     return score
 
 
 search_config = {
-    cnn: {
-        "conv_layer.0": [conv1, conv2, conv3],
-        "neurons.0": range(100, 1000, 100),
-    }
+    cnn: {"conv_layer.0": [conv1, conv2, conv3], "neurons.0": range(100, 1000, 100)}
 }
 
 opt = Hyperactive(search_config, n_iter=5)

@@ -172,7 +172,7 @@ def test_keras():
         )
         model.fit(X_train, y_train, epochs=1)
 
-        loss, score = model.evaluate(x=X_test, y=y_test)
+        _, score = model.evaluate(x=X_test, y=y_test)
 
         return score
 
@@ -180,98 +180,3 @@ def test_keras():
 
     opt = Hyperactive(search_config)
     opt.search(X_train, y_train)
-    # opt.predict(X)
-    # opt.score(X, y)
-
-
-"""
-def test_pytorch():
-    import torch
-    import torchvision
-    import torchvision.transforms as transforms
-    import torch.nn as nn
-    import torch.nn.functional as F
-    import torch.optim as optim
-
-    transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
-    )
-
-    trainset = torchvision.datasets.CIFAR10(
-        root="./data", train=True, download=True, transform=transform
-    )
-
-    def cnn(para, X_train, y_train):
-        class Net(nn.Module):
-            def __init__(self):
-                super(Net, self).__init__()
-                self.conv1 = nn.Conv2d(3, 6, 5)
-                self.pool = nn.MaxPool2d(2, 2)
-                self.conv2 = nn.Conv2d(6, 16, 5)
-                self.fc1 = nn.Linear(16 * 5 * 5, 120)
-                self.fc2 = nn.Linear(120, 84)
-                self.fc3 = nn.Linear(84, 10)
-
-            def forward(self, x):
-                x = self.pool(F.relu(self.conv1(x)))
-                x = self.pool(F.relu(self.conv2(x)))
-                x = x.view(-1, 16 * 5 * 5)
-                x = F.relu(self.fc1(x))
-                x = F.relu(self.fc2(x))
-                x = self.fc3(x)
-                return x
-
-        trainloader = torch.utils.data.DataLoader(
-            trainset, batch_size=4, shuffle=True, num_workers=2
-        )
-
-        net = Net()
-
-        criterion = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-
-        for epoch in range(1):  # loop over the dataset multiple times
-
-            running_loss = 0.0
-            for i, data in enumerate(trainloader, 0):
-                # get the inputs; data is a list of [inputs, labels]
-                inputs, labels = data
-
-                # zero the parameter gradients
-                optimizer.zero_grad()
-
-                # forward + backward + optimize
-                outputs = net(inputs)
-                loss = criterion(outputs, labels)
-                loss.backward()
-                optimizer.step()
-
-                # print statistics
-                running_loss += loss.item()
-                if i % 2000 == 1999:  # print every 2000 mini-batches
-                    print(
-                        "[%d, %5d] loss: %.3f" % (epoch + 1, i + 1, running_loss / 2000)
-                    )
-                    running_loss = 0.0
-
-        return running_loss
-
-    search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
-
-    opt = Hyperactive(search_config)
-    opt.search(None, None)
-    # opt.predict(X)
-    # opt.score(X, y)
-
-
-
-def test_chainer():
-    def cnn(para, X_train, y_train):
-        pass
-
-    search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
-    opt = Hyperactive(search_config)
-    opt.search(None, None)
-    # opt.predict(X)
-    # opt.score(X, y)
-"""

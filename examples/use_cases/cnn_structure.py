@@ -56,7 +56,7 @@ def cnn(para, X_train, y_train):
     )
     model.fit(X_train, y_train, epochs=25, batch_size=128)
 
-    loss, score = model.evaluate(x=X_test, y=y_test)
+    _, score = model.evaluate(x=X_test, y=y_test)
 
     return score
 

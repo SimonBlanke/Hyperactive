@@ -83,7 +83,7 @@ class BaseOptimizer:
         _p_.pos_current = _p_.pos_new
         _p_.score_current = _p_.score_new
 
-        self._verb_.best_since_iter = _cand_.iter
+        self._verb_.best_since_iter = _cand_.i
 
         return _cand_, _p_
 
@@ -96,8 +96,8 @@ class BaseOptimizer:
         if self._meta_:
             meta_data = self._meta_.get_func_metadata(_cand_)
 
-            self._meta_.retrain(_cand_)
-            para, score = self._meta_.search(X, y, _cand_)
+            # self._meta_.retrain(_cand_)
+            # para, score = self._meta_.search(X, y, _cand_)
 
             _cand_._space_.load_memory(*meta_data)
 
@@ -115,9 +115,9 @@ class BaseOptimizer:
             self._core_, nth_process, X, y
         )
 
-        for iter in range(self._core_.n_iter):
-            _cand_.iter = iter
-            _cand_ = self._iterate(iter, _cand_, _p_, X, y)
+        for i in range(self._core_.n_iter):
+            _cand_.i = i
+            _cand_ = self._iterate(i, _cand_, _p_, X, y)
             self._verb_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
@@ -179,7 +179,7 @@ class BaseOptimizer:
     def _run_multiple_jobs(self, X, y):
         _cand_list = self._search_multiprocessing(X, y)
 
-        for i in range(int(self._core_.n_jobs / 2)):
+        for _ in range(int(self._core_.n_jobs / 2)):
             print("\n")
 
         for _cand_ in _cand_list:

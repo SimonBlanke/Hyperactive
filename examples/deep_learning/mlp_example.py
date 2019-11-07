@@ -27,7 +27,7 @@ def model(para, X, y):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
     model.fit(X_train, y_train, batch_size=128, epochs=10, verbose=1)
-    loss, score = model.evaluate(X_test, y_test, verbose=0)
+    _, score = model.evaluate(X_test, y_test, verbose=0)
 
     return score
 

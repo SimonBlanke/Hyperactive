@@ -14,7 +14,7 @@ class HillClimbingOptimizer(BaseOptimizer):
         score_new = -1000
         pos_new = None
 
-        for i in range(self._arg_.n_neighbours):
+        for _ in range(self._arg_.n_neighbours):
             _p_.pos_new = _p_.move_climb(_cand_, _p_.pos_current)
             _p_.score_new = _cand_.eval_pos(_p_.pos_new, X, y)
 
