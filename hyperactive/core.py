@@ -18,13 +18,10 @@ class Core:
             "optimizer": "RandomSearch",
             "n_jobs": 1,
             "verbosity": 2,
-            "warnings": True,
             "random_state": None,
             "warm_start": False,
-            "memory": True,
+            "memory": "short",
             "scatter_init": False,
-            "meta_learn": False,
-            "proxy_dataset": False,
             "get_search_path": False,
         }
 
@@ -55,7 +52,6 @@ class Core:
         self.optimizer = kwargs_base["optimizer"]
         self.n_jobs = kwargs_base["n_jobs"]
         self.verbosity = kwargs_base["verbosity"]
-        self.warnings = kwargs_base["warnings"]
         self.random_state = kwargs_base["random_state"]
         self.warm_start = kwargs_base["warm_start"]
         self.memory = kwargs_base["memory"]

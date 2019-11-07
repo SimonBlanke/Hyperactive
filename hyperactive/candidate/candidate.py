@@ -37,7 +37,7 @@ class Candidate:
 
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
-         
+
     @property
     def score_best(self):
         return self._score_best

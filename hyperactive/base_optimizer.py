@@ -56,7 +56,7 @@ class BaseOptimizer:
         self.search_config = self._core_.search_config
         self.n_iter = self._core_.n_iter
 
-        if self._core_.meta_learn:
+        if self._core_.memory == "long":
             self._meta_ = HyperactiveWrapper(self._core_.search_config)
 
         verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2]
