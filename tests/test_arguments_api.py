@@ -2,6 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
+import pandas as pd
+
 from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
@@ -14,7 +17,6 @@ y = data.target
 
 def model(para, X, y):
     model = DecisionTreeClassifier(
-        criterion=para["criterion"],
         max_depth=para["max_depth"],
         min_samples_split=para["min_samples_split"],
         min_samples_leaf=para["min_samples_leaf"],
@@ -26,21 +28,13 @@ def model(para, X, y):
 
 search_config = {
     model: {
-        "criterion": ["gini", "entropy"],
         "max_depth": range(1, 21),
         "min_samples_split": range(2, 21),
         "min_samples_leaf": range(1, 21),
     }
 }
 
-warm_start = {
-    model: {
-        "criterion": "gini",
-        "max_depth": 2,
-        "min_samples_split": 2,
-        "min_samples_leaf": 2,
-    }
-}
+warm_start = {model: {"max_depth": 2, "min_samples_split": 2, "min_samples_leaf": 2}}
 
 
 def test_func_return():
@@ -103,8 +97,8 @@ def test_random_state():
 def test_max_time():
     opt0 = Hyperactive(search_config, max_time=0.001)
     opt0.search(X, y)
-    
-    
+
+
 def test_memory():
     opt0 = Hyperactive(search_config, memory=True)
     opt0.search(X, y)
@@ -138,7 +132,7 @@ def test_scatter_init():
 def test_optimizer_args():
     opt = Hyperactive(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
     opt.search(X, y)
-    
+
 
 def test_scatter_init_and_warm_start():
     opt = Hyperactive(search_config, warm_start=warm_start, scatter_init=10)
@@ -164,12 +158,24 @@ def test_get_search_path():
 
     opt = Hyperactive(search_config, optimizer="ParticleSwarm", get_search_path=True)
     opt.search(X, y)
-    
-    
-def test_load_memory():
-    para = pd.DataFrame(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), columns=['a', 'b', 'c'])    
-    score = pd.DataFrame(np.array([[10, 11, 12]]), columns=['d'])    
 
-    opt = Hyperactive(search_config, get_search_path=True)
+
+def test_load_memory():
+    para = pd.DataFrame(
+        np.array([[2, 2, 2, 2, 2], [2, 2, 2, 2, 2]]),
+        columns=[
+            "N_columns",
+            "N_rows",
+            "max_depth",
+            "min_samples_leaf",
+            "min_samples_split",
+        ],
+    )
+    score = pd.DataFrame(np.array([1, 1]), columns=["mean_test_score"])
+
+    opt = Hyperactive(search_config, n_iter=3, meta_learn=True)
     opt.search(X, y)
     opt._optimizer_.search(0, X, y)._space_.load_memory(para, score)
+
+
+test_load_memory()
