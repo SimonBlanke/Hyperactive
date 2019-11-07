@@ -100,6 +100,11 @@ def test_random_state():
     opt2.search(X, y)
 
 
+def test_max_time():
+    opt0 = Hyperactive(search_config, max_time=0.001)
+    opt0.search(X, y)
+    
+    
 def test_memory():
     opt0 = Hyperactive(search_config, memory=True)
     opt0.search(X, y)
@@ -129,6 +134,11 @@ def test_scatter_init():
     opt = Hyperactive(search_config, scatter_init=10)
     opt.search(X, y)
 
+
+def test_optimizer_args():
+    opt = Hyperactive(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
+    opt.search(X, y)
+    
 
 def test_scatter_init_and_warm_start():
     opt = Hyperactive(search_config, warm_start=warm_start, scatter_init=10)
