@@ -35,23 +35,9 @@ class Candidate:
 
         self.eval_time_sum = 0
 
-    def create_start_point(self, para):
-        start_point = {}
-
-        temp_dict = {}
-        for para_key in para:
-            temp_dict[para_key] = [para[para_key]]
-
-        start_point[self.func_name] = temp_dict
-
-        return start_point
-
     def _get_warm_start(self):
-        warm_start = self._space_.pos2para(self.pos_best)
-        # warm_start = self.create_start_point(para_best)
-
-        return warm_start
-
+        return self._space_.pos2para(self.pos_best)
+         
     @property
     def score_best(self):
         return self._score_best
