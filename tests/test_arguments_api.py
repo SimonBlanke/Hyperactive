@@ -135,6 +135,11 @@ def test_scatter_init():
     opt.search(X, y)
 
 
+def test_optimizer_args():
+    opt = Hyperactive(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
+    opt.search(X, y)
+    
+
 def test_scatter_init_and_warm_start():
     opt = Hyperactive(search_config, warm_start=warm_start, scatter_init=10)
     opt.search(X, y)
