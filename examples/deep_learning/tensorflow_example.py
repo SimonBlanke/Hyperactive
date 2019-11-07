@@ -46,7 +46,7 @@ def cnn(para, X_train, y_train):
         )
 
         pred_classes = tf.argmax(logits_test, axis=1)
-        pred_probas = tf.nn.softmax(logits_test)
+        # pred_probas = tf.nn.softmax(logits_test)
 
         if mode == tf.estimator.ModeKeys.PREDICT:
             return tf.estimator.EstimatorSpec(mode, predictions=pred_classes)

@@ -2,16 +2,11 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import abc
 from tqdm.auto import tqdm
 
 
-class Verbosity(metaclass=abc.ABCMeta):
+class Verbosity:
     def __init__(self):
-        pass
-
-    @abc.abstractmethod
-    def print_start_point(self, _cand_):
         pass
 
     def init_p_bar(self, _cand_, _core_):
@@ -21,9 +16,6 @@ class Verbosity(metaclass=abc.ABCMeta):
         pass
 
     def close_p_bar(self):
-        pass
-
-    def _tqdm_dict(self, _cand_):
         pass
 
 

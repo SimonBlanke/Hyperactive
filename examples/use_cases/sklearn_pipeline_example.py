@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest, f_classif
@@ -12,7 +11,8 @@ X, y = data.data, data.target
 
 
 def pipeline1(filter_, gbc):
-    return Pipeline([('filter_', filter_), ('gbc', gbc)])
+    return Pipeline([("filter_", filter_), ("gbc", gbc)])
+
 
 def pipeline2(filter_, gbc):
     return gbc
@@ -40,7 +40,7 @@ search_config = {
         "max_depth": range(2, 12),
         "min_samples_split": range(2, 12),
         "min_samples_leaf": range(1, 11),
-        "pipeline": [pipeline1, pipeline2]
+        "pipeline": [pipeline1, pipeline2],
     }
 }
 

@@ -5,8 +5,4 @@
 from .particle_swarm_optimization import ParticleSwarmOptimizer
 from .evolution_strategy import EvolutionStrategyOptimizer
 
-__all__ = [
-    "ParticleSwarmOptimizer",
-    "ParallelTemperingOptimizer",
-    "EvolutionStrategyOptimizer",
-]
+__all__ = ["ParticleSwarmOptimizer", "EvolutionStrategyOptimizer"]
