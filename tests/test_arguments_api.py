@@ -100,6 +100,11 @@ def test_random_state():
     opt2.search(X, y)
 
 
+def test_max_time():
+    opt0 = Hyperactive(search_config, max_time=0.001)
+    opt0.search(X, y)
+    
+    
 def test_memory():
     opt0 = Hyperactive(search_config, memory=True)
     opt0.search(X, y)
