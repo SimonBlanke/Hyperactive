@@ -47,8 +47,8 @@ class Candidate:
         return start_point
 
     def _get_warm_start(self):
-        para_best = self._space_.pos2para(self.pos_best)
-        warm_start = self.create_start_point(para_best)
+        warm_start = self._space_.pos2para(self.pos_best)
+        # warm_start = self.create_start_point(para_best)
 
         return warm_start
 
