@@ -35,10 +35,10 @@ search_config = {
 
 warm_start = {
     model: {
-        "criterion": ["gini"],
-        "max_depth": [2],
-        "min_samples_split": [2],
-        "min_samples_leaf": [2],
+        "criterion": "gini",
+        "max_depth": 2,
+        "min_samples_split": 2,
+        "min_samples_leaf": 2,
     }
 }
 
