@@ -16,7 +16,6 @@ def test_meta_learn():
 
     def model(para, X_train, y_train):
         model = DecisionTreeClassifier(
-            criterion=para["criterion"],
             max_depth=para["max_depth"],
             min_samples_split=para["min_samples_split"],
             min_samples_leaf=para["min_samples_leaf"],
@@ -27,7 +26,6 @@ def test_meta_learn():
 
     search_config = {
         model: {
-            "criterion": ["gini", "entropy"],
             "max_depth": range(1, 21),
             "min_samples_split": range(2, 21),
             "min_samples_leaf": range(1, 21),
