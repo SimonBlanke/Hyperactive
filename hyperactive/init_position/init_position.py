@@ -30,7 +30,7 @@ class InitSearchPosition:
 
             else:
                 search_position = self._space_.para_space[hyperpara_name].index(
-                    *self.warm_start[start_point_key][hyperpara_name]
+                    self.warm_start[start_point_key][hyperpara_name]
                 )
 
             # what if warm start not in search_config range?
