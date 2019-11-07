@@ -154,8 +154,7 @@ class BaseOptimizer:
 
             self.pos_list.append(pos_list_)
             self.score_list.append(score_list_)
-    
-    
+
     def _process_results(self, X, y, _cand_):
         start_point = self._verb_.print_start_point(_cand_)
         self.results_params[_cand_.func_] = start_point
