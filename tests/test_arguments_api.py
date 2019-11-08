@@ -173,9 +173,7 @@ def test_load_memory():
     )
     score = pd.DataFrame(np.array([1, 1]), columns=["mean_test_score"])
 
-    opt = Hyperactive(search_config, n_iter=3, meta_learn=True)
+    opt = Hyperactive(search_config, n_iter=3, memory="long")
     opt.search(X, y)
     opt._optimizer_.search(0, X, y)._space_.load_memory(para, score)
-
-
-test_load_memory()
+    
