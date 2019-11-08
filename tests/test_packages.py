@@ -32,7 +32,7 @@ def test_meta_learn():
         }
     }
 
-    opt = Hyperactive(search_config, meta_learn=True)
+    opt = Hyperactive(search_config, memory="long")
     opt.search(X, y)
 
 
