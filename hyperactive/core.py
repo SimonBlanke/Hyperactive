@@ -56,7 +56,6 @@ class Core:
         self.warm_start = kwargs_base["warm_start"]
         self.memory = kwargs_base["memory"]
         self.scatter_init = kwargs_base["scatter_init"]
-        self.meta_learn = kwargs_base["meta_learn"]
         self.get_search_path = kwargs_base["get_search_path"]
 
     def _set_random_seed(self, thread=0):
