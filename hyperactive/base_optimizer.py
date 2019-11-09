@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import ray
 import time
 import numpy as np
 import multiprocessing
@@ -101,7 +102,7 @@ class BaseOptimizer:
 
             _cand_._space_.load_memory(*meta_data)
 
-        return _core_, _cand_, _p_
+        return _cand_, _p_
 
     def _finish_search(self, _core_, _cand_):
         _cand_.eval_pos(_cand_.pos_best, force_eval=True)
@@ -111,7 +112,7 @@ class BaseOptimizer:
         return _cand_
 
     def search(self, nth_process):
-        self._core_, _cand_, _p_ = self._initialize_search(self._core_, nth_process)
+        _cand_, _p_ = self._initialize_search(self._core_, nth_process)
 
         for i in range(self._core_.n_iter):
             _cand_.i = i
@@ -174,6 +175,9 @@ class BaseOptimizer:
         _cand_ = self.search(0)
         self._process_results(_cand_)
 
+    def _run_ray_job(self, nth_process):
+        return self.search(nth_process)
+
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
 
@@ -183,7 +187,7 @@ class BaseOptimizer:
         for _cand_ in _cand_list:
             self._process_results(_cand_)
 
-    def _fit(self):
+    def _fit(self, nth_process=None):
         """Public method for starting the search with the training data ( )
 
         Parameters
@@ -196,11 +200,14 @@ class BaseOptimizer:
         -------
         None
         """
+
         self.start_time = time.time()
         self.results_params = {}
         self.results_models = {}
 
         if self._core_.n_jobs == 1:
             self._run_one_job()
+        elif self._core_.n_jobs != 1 and ray.is_initialized():
+            return self._run_ray_job(nth_process)
         else:
             self._run_multiple_jobs()

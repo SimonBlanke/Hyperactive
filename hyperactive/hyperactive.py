@@ -3,6 +3,7 @@
 # License: MIT License
 
 import time
+import ray
 
 from .core import Core
 from .opt_args import Arguments
@@ -98,15 +99,29 @@ class Hyperactive:
         _arg_ = Arguments(**_core_.opt_para)
 
         optimizer_class = self.optimizer_dict[_core_.optimizer]
-        self._optimizer_ = optimizer_class(_core_, _arg_)
 
-        self._optimizer_._fit()
+        if ray.is_initialized():
+            optimizer_class = ray.remote(optimizer_class)
+            opts = [optimizer_class.remote(_core_, _arg_) for i in range(_core_.n_jobs)]
+            jobs = [o._fit.remote(i) for i, o in enumerate(opts)]
+            _cand_ = ray.get(jobs)
+
+            process = [o._process_results.remote(cand) for o, cand in zip(opts, _cand_)]
+            ray.get(process)
+
+        else:
+            self._optimizer_ = optimizer_class(_core_, _arg_)
+            self._optimizer_._fit()
+
+        """
 
         self.pos_list = self._optimizer_.pos_list
         self.score_list = self._optimizer_.score_list
 
         self.results_params = self._optimizer_.results_params
         self.results_models = self._optimizer_.results_models
+
+        """
 
         self.total_time = time.time() - start_time
 
