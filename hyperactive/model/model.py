@@ -10,9 +10,9 @@ class Model:
         self.func_ = func_
         self.nth_process = nth_process
 
-    def train_model(self, keras_para_dict, X, y):
+    def train_model(self, keras_para_dict):
         start_time = time.time()
-        result = self.func_(keras_para_dict, X, y)
+        result = self.func_(keras_para_dict)
         eval_time = time.time() - start_time
 
         if isinstance(result, tuple):

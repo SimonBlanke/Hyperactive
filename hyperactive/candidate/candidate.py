@@ -47,14 +47,14 @@ class Candidate:
         self.model_best = self.model
         self._score_best = value
 
-    def eval_pos(self, pos, X, y, force_eval=False):
+    def eval_pos(self, pos, force_eval=False):
         pos_str = pos.tostring()
 
         if pos_str in self._space_.memory and self.memory and not force_eval:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
-            score, eval_time, self.model = self._model_.train_model(para, X, y)
+            score, eval_time, self.model = self._model_.train_model(para)
             self._space_.memory[pos_str] = score
             self.eval_time_sum = self.eval_time_sum + eval_time
 

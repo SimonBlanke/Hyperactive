@@ -87,37 +87,35 @@ class BaseOptimizer:
 
         return _cand_, _p_
 
-    def _initialize_search(self, _core_, nth_process, X, y):
+    def _initialize_search(self, _core_, nth_process):
         _cand_ = init_candidate(_core_, nth_process, Candidate)
-        _cand_ = init_eval(_cand_, nth_process, X, y)
-        _p_ = self._init_opt_positioner(_cand_, X, y)
+        _cand_ = init_eval(_cand_, nth_process)
+        _p_ = self._init_opt_positioner(_cand_)
         self._verb_.init_p_bar(_cand_, self._core_)
 
         if self._meta_:
             meta_data = self._meta_.get_func_metadata(_cand_)
 
             # self._meta_.retrain(_cand_)
-            # para, score = self._meta_.search(X, y, _cand_)
+            # para, score = self._meta_.search( , _cand_)
 
             _cand_._space_.load_memory(*meta_data)
 
         return _core_, _cand_, _p_
 
-    def _finish_search(self, _core_, _cand_, X, y):
-        _cand_.eval_pos(_cand_.pos_best, X, y, force_eval=True)
+    def _finish_search(self, _core_, _cand_):
+        _cand_.eval_pos(_cand_.pos_best, force_eval=True)
         self.eval_time = _cand_.eval_time_sum
         self._verb_.close_p_bar()
 
         return _cand_
 
-    def search(self, nth_process, X, y):
-        self._core_, _cand_, _p_ = self._initialize_search(
-            self._core_, nth_process, X, y
-        )
+    def search(self, nth_process):
+        self._core_, _cand_, _p_ = self._initialize_search(self._core_, nth_process)
 
         for i in range(self._core_.n_iter):
             _cand_.i = i
-            _cand_ = self._iterate(i, _cand_, _p_, X, y)
+            _cand_ = self._iterate(i, _cand_, _p_)
             self._verb_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
@@ -128,7 +126,7 @@ class BaseOptimizer:
             if self._core_.get_search_path:
                 self._monitor_search_path(_p_)
 
-        _cand_ = self._finish_search(self._core_, _cand_, X, y)
+        _cand_ = self._finish_search(self._core_, _cand_)
 
         return _cand_
 
@@ -155,38 +153,38 @@ class BaseOptimizer:
             self.pos_list.append(pos_list_)
             self.score_list.append(score_list_)
 
-    def _process_results(self, X, y, _cand_):
+    def _process_results(self, _cand_):
         start_point = self._verb_.print_start_point(_cand_)
         self.results_params[_cand_.func_] = start_point
         self.results_models[_cand_.func_] = _cand_.model_best
 
         if self._core_.memory == "long":
-            self._meta_.collect(X, y, _cand_)
+            self._meta_.collect(_cand_)
 
-    def _search_multiprocessing(self, X, y):
+    def _search_multiprocessing(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._core_.n_jobs)
-        search = partial(self.search, X=X, y=y)
+        search = partial(self.search)
 
         _cand_list = pool.map(search, self._core_._n_process_range)
 
         return _cand_list
 
-    def _run_one_job(self, X, y):
-        _cand_ = self.search(0, X, y)
-        self._process_results(X, y, _cand_)
+    def _run_one_job(self):
+        _cand_ = self.search(0)
+        self._process_results(_cand_)
 
-    def _run_multiple_jobs(self, X, y):
-        _cand_list = self._search_multiprocessing(X, y)
+    def _run_multiple_jobs(self):
+        _cand_list = self._search_multiprocessing()
 
         for _ in range(int(self._core_.n_jobs / 2)):
             print("\n")
 
         for _cand_ in _cand_list:
-            self._process_results(X, y, _cand_)
+            self._process_results(_cand_)
 
-    def _fit(self, X, y):
-        """Public method for starting the search with the training data (X, y)
+    def _fit(self):
+        """Public method for starting the search with the training data ( )
 
         Parameters
         ----------
@@ -203,6 +201,6 @@ class BaseOptimizer:
         self.results_models = {}
 
         if self._core_.n_jobs == 1:
-            self._run_one_job(X, y)
+            self._run_one_job()
         else:
-            self._run_multiple_jobs(X, y)
+            self._run_multiple_jobs()

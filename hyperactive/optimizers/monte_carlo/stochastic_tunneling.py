@@ -20,5 +20,5 @@ class StochasticTunnelingOptimizer(SimulatedAnnealingOptimizer):
 
     # _iterate same as simulated_annealing
 
-    def _init_opt_positioner(self, _cand_, X, y):
+    def _init_opt_positioner(self, _cand_):
         return super()._init_base_positioner(_cand_)

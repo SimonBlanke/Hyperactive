@@ -39,23 +39,25 @@ class InitSearchPosition:
 
         return np.array(pos)
 
-    def _set_start_pos(self, nth_process, X, y):
+    def _set_start_pos(self, nth_process):
         if self.warm_start and self.scatter_init:
-            pos = self._warm_start_scatter_init(nth_process, X, y)
+            # pos = self._warm_start_scatter_init(nth_process)
+            pass
         elif self.warm_start:
             pos = self._warm_start(nth_process)
         elif self.scatter_init:
-            pos = self._scatter_init(nth_process, X, y)
+            # pos = self._scatter_init(nth_process)
+            pass
         else:
             pos = self._space_.get_random_pos()
 
         return pos
 
-    def _warm_start_scatter_init(self, nth_process, X, y):
+    def _warm_start_scatter_init(self, nth_process):
         if self.n_warm_start_keys > nth_process:
             pos = self._create_warm_start(nth_process)
         else:
-            pos = self._scatter_init(nth_process, X, y)
+            pos = self._scatter_init(nth_process)
 
         return pos
 

@@ -23,7 +23,7 @@ from . import (
 
 
 class Hyperactive:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, verbosity, random_state, memory):
 
         """
 
@@ -60,7 +60,11 @@ class Hyperactive:
 
         """
 
-        optimizer_dict = {
+        self.verbosity = verbosity
+        self.random_state = random_state
+        self.memory = memory
+
+        self.optimizer_dict = {
             "HillClimbing": HillClimbingOptimizer,
             "StochasticHillClimbing": StochasticHillClimbingOptimizer,
             "TabuSearch": TabuOptimizer,
@@ -75,16 +79,7 @@ class Hyperactive:
             "Bayesian": BayesianOptimizer,
         }
 
-        _core_ = Core(*args, **kwargs)
-        _arg_ = Arguments(**_core_.opt_para)
-
-        optimizer_class = optimizer_dict[_core_.optimizer]
-        self._optimizer_ = optimizer_class(_core_, _arg_)
-
-        self.pos_list = self._optimizer_.pos_list
-        self.score_list = self._optimizer_.score_list
-
-    def search(self, X, y):
+    def search(self, *args, **kwargs):
         """Public method for starting the search with the training data (X, y)
 
         Parameters
@@ -98,7 +93,17 @@ class Hyperactive:
         None
         """
         start_time = time.time()
-        self._optimizer_._fit(X, y)
+
+        _core_ = Core(*args, **kwargs)
+        _arg_ = Arguments(**_core_.opt_para)
+
+        optimizer_class = self.optimizer_dict[_core_.optimizer]
+        self._optimizer_ = optimizer_class(_core_, _arg_)
+
+        self._optimizer_._fit()
+
+        self.pos_list = self._optimizer_.pos_list
+        self.score_list = self._optimizer_.score_list
 
         self.results_params = self._optimizer_.results_params
         self.results_models = self._optimizer_.results_models

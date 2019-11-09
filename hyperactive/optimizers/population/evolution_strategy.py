@@ -86,11 +86,11 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
     # use _iterate from ParticleSwarmOptimizer
 
-    def _init_opt_positioner(self, _cand_, X, y):
+    def _init_opt_positioner(self, _cand_):
         _p_list_ = self._init_individuals(_cand_)
 
         for _p_ in _p_list_:
-            _p_.score_current = _cand_.eval_pos(_p_.pos_current, X, y)
+            _p_.score_current = _cand_.eval_pos(_p_.pos_current)
             _p_.score_best = _p_.score_current
 
         return _p_list_
