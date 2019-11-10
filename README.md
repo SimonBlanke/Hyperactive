@@ -165,6 +165,7 @@
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/multiprocessing_example?id=multiprocessing">Multiprocessing</a></li>
+              <li>Ray</li>
           </ul>
       </td>
       <td>
