@@ -58,6 +58,7 @@ class BaseOptimizer:
         self.n_iter = self._core_.n_iter
 
         if self._core_.memory == "long":
+            print("blaaa")
             self._meta_ = HyperactiveWrapper(self._core_.search_config)
 
         verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2]
@@ -95,10 +96,7 @@ class BaseOptimizer:
         self._verb_.init_p_bar(_cand_, self._core_)
 
         if self._meta_:
-            meta_data = self._meta_.get_func_metadata(_cand_)
-
-            # self._meta_.retrain(_cand_)
-            # para, score = self._meta_.search( , _cand_)
+            meta_data = self._meta_.get_func_metadata(_cand_.func_)
 
             _cand_._space_.load_memory(*meta_data)
 
@@ -160,7 +158,7 @@ class BaseOptimizer:
         self.results_models[_cand_.func_] = _cand_.model_best
 
         if self._core_.memory == "long":
-            self._meta_.collect(_cand_)
+            self._meta_.collect(self._core_.X, self._core_.y, _cand_)
 
     def _search_multiprocessing(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
@@ -187,7 +185,7 @@ class BaseOptimizer:
         for _cand_ in _cand_list:
             self._process_results(_cand_)
 
-    def _fit(self, nth_process=None):
+    def _search(self, nth_process=None):
         """Public method for starting the search with the training data ( )
 
         Parameters
