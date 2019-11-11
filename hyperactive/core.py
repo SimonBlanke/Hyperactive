@@ -13,6 +13,9 @@ from .util import merge_dicts
 class Core:
     def __init__(self, *args, **kwargs):
         kwargs_base = {
+            "X": None,
+            "y": None,
+            "data_type": None,
             "n_iter": 10,
             "max_time": None,
             "optimizer": "RandomSearch",
@@ -25,7 +28,7 @@ class Core:
             "get_search_path": False,
         }
 
-        self.search_config = args[0]
+        # self.search_config = args[0]
         self.opt_para = dict()
 
         if "optimizer" in kwargs and isinstance(kwargs["optimizer"], dict):
@@ -37,8 +40,8 @@ class Core:
         kwargs_base = merge_dicts(kwargs_base, kwargs)
         self._set_general_args(kwargs_base)
 
-        self.model_list = list(self.search_config.keys())
-        self.n_models = len(self.model_list)
+        # self.model_list = list(self.search_config.keys())
+        # self.n_models = len(self.model_list)
 
         self.set_n_jobs()
         self._n_process_range = range(0, int(self.n_jobs))
@@ -47,6 +50,9 @@ class Core:
             self.max_time = self.max_time * 3600
 
     def _set_general_args(self, kwargs_base):
+        self.X = kwargs_base["X"]
+        self.y = kwargs_base["y"]
+        self.data_type = kwargs_base["data_type"]
         self.n_iter = kwargs_base["n_iter"]
         self.max_time = kwargs_base["max_time"]
         self.optimizer = kwargs_base["optimizer"]
