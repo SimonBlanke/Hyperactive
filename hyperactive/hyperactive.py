@@ -24,7 +24,7 @@ from . import (
 
 
 class Hyperactive:
-    def __init__(self, verbosity, random_state, memory):
+    def __init__(self, *args, **kwargs):
 
         """
 
@@ -61,9 +61,8 @@ class Hyperactive:
 
         """
 
-        self.verbosity = verbosity
-        self.random_state = random_state
-        self.memory = memory
+        self._core_ = Core(*args, **kwargs)
+        self._arg_ = Arguments(**self._core_.opt_para)
 
         self.optimizer_dict = {
             "HillClimbing": HillClimbingOptimizer,
@@ -80,7 +79,7 @@ class Hyperactive:
             "Bayesian": BayesianOptimizer,
         }
 
-    def search(self, *args, **kwargs):
+    def search(self, search_config, n_iter=100, max_time=None, n_jobs=1):
         """Public method for starting the search with the training data (X, y)
 
         Parameters
@@ -95,23 +94,29 @@ class Hyperactive:
         """
         start_time = time.time()
 
-        _core_ = Core(*args, **kwargs)
-        _arg_ = Arguments(**_core_.opt_para)
+        self._core_.search_config = search_config
+        self._core_.n_iter = n_iter
+        self._core_.max_time = max_time
+        self._core_.n_jobs = n_jobs
+        self._core_.n_models = len(list(self._core_.search_config.keys()))
 
-        optimizer_class = self.optimizer_dict[_core_.optimizer]
+        optimizer_class = self.optimizer_dict[self._core_.optimizer]
 
         if ray.is_initialized():
             optimizer_class = ray.remote(optimizer_class)
-            opts = [optimizer_class.remote(_core_, _arg_) for i in range(_core_.n_jobs)]
-            jobs = [o._fit.remote(i) for i, o in enumerate(opts)]
+            opts = [
+                optimizer_class.remote(self._core_, self._arg_)
+                for i in range(self._core_.n_jobs)
+            ]
+            jobs = [o._search.remote(i) for i, o in enumerate(opts)]
             _cand_ = ray.get(jobs)
 
             process = [o._process_results.remote(cand) for o, cand in zip(opts, _cand_)]
             ray.get(process)
 
         else:
-            self._optimizer_ = optimizer_class(_core_, _arg_)
-            self._optimizer_._fit()
+            self._optimizer_ = optimizer_class(self._core_, self._arg_)
+            self._optimizer_._search()
 
         """
 
