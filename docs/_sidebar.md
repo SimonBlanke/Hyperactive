@@ -21,6 +21,7 @@
 
 - Basic Examples
 
+    - [Rosenbrock function](./examples/rosen_func_example.md#rosenbrock-function)
     - [Scikit-learn](./examples/sklearn_examples.md#Scikit-learn)
     - [XGBoost](./examples/xgboost_example.md#xgboost)
     - [LightGBM](./examples/lightgbm_example.md#lightgbm)
@@ -40,7 +41,7 @@
     - [Transfer Learning](./use_cases/transfer_learning.md#transfer-learning)
     - [Deep neural network structure](./use_cases/cnn_structure.md#keras-cnn-structure)
     - [Efficient Neural Architecture Search](./use_cases/enas_example.md#enas)
-    - [Meta-Optimization](./use_cases/meta_opt_example.md#meta-optimization)
+    - [Meta-Optimization](./use_cases/meta_optimization_ext.md#meta-optimization)
 
 
 - Optimization Techniques
