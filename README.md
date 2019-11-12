@@ -85,12 +85,12 @@
   - Thoroughly tested code base
   - Compatible with <b>any python machine-learning framework</b>
   - Optimize:
-    - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/sklearn_examples?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./examples/sklearn_pipeline_example?id=sklearn-pipeline)
-    - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./examples/stacking_example?id=stacking)
-    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/cnn_structure?id=keras-cnn-structure) architecture
-    - Other [optimization techniques](./docs/examples.md) (meta-optimization)
-    - Or [any function](./docs/examples.md) you can specify with this API
-  - Utilize state of the art [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=optimization-techniques) like:
+    - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/sklearn_examples?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./use_cases/sklearn_pipeline_example?id=sklearn-pipeline)
+    - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./use_cases/stacking_example?id=stacking)
+    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./use_cases/cnn_structure?id=keras-cnn-structure) architecture
+    - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./use_cases/meta_optimization_ext?id=meta-optimization) (meta-optimization)
+    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./use_cases/rosen_func_example?id=rosenbrock-function) you can specify with this API
+  - Utilize state of the art [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./optimizers/Bayesian?id=bayesian-optimization) like:
     - Simulated annealing
     - Evolution strategy
     - Bayesian optimization
