@@ -36,10 +36,6 @@ setup(
         "numpy",
         "pandas",
         "tqdm",
-        "scikit-learn>=0.18",
-        "xgboost",
-        "lightgbm",
-        "catboost",
         "meta-learn",
     ],
 )
