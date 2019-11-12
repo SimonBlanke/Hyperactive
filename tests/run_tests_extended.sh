@@ -1,3 +1,5 @@
+#!/bin/sh
+
 pytest test_classes.py -p no:warnings
 pytest test_arguments_api.py -p no:warnings
 pytest test_arguments_optimizers.py -p no:warnings

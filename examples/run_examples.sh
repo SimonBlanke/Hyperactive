@@ -1,3 +1,5 @@
+#!/bin/sh
+
 python ./machine_learning/sklearn_example.py
 python ./machine_learning/xgboost_example.py
 python ./machine_learning/lightgbm_example.py
