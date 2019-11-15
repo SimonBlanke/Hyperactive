@@ -5,11 +5,6 @@
 import time
 import warnings
 
-try:
-    import ray
-except ImportError:
-    warnings.warn("failed to import ray", ImportWarning)
-
 from .main_args import MainArgs
 from .opt_args import Arguments
 
@@ -55,14 +50,23 @@ class Hyperactive:
         self._opt_args_ = Arguments(self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
-        if ray.is_initialized():
+        try:
+            import ray
+
+            if ray.is_initialized():
+                ray_ = True
+        except ImportError:
+            warnings.warn("failed to import ray", ImportWarning)
+            ray_ = False
+
+        if ray_:
             optimizer_class = ray.remote(optimizer_class)
             opts = [
                 optimizer_class.remote(self._main_args_, self._opt_args_)
                 for job in range(kwargs["n_jobs"])
             ]
             searches = [
-                opt.search.remote(job, ray_=True) for job, opt in enumerate(opts)
+                opt.search.remote(job, ray_=ray_) for job, opt in enumerate(opts)
             ]
             ray.get(searches)
         else:
