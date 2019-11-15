@@ -33,8 +33,8 @@ class VerbosityLVL1(VerbosityLVL0):
 
     def print_start_point(self, _cand_):
         start_point = _cand_._get_warm_start()
-        print("\nbest para =", start_point)
-        print("score     =", _cand_.score_best)
+        print("best para =", start_point)
+        print("score     =", _cand_.score_best, "\n")
 
         return start_point
 

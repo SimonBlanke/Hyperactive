@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import ray
 import time
 import numpy as np
 import multiprocessing
@@ -143,23 +142,20 @@ class BaseOptimizer:
 
         return _cand_list
 
-    def _run_one_job(self):
-        _cand_ = self._search(0)
+    def _run_job(self, nth_process):
+        _cand_ = self._search(nth_process)
         self._process_results(_cand_)
-
-    def _run_ray_job(self, nth_process):
-        return self._search(nth_process)
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
 
-        for _ in range(int(self._main_args_.n_jobs / 2)):
+        for _ in range(int(self._main_args_.n_jobs / 2) + 2):
             print("\n")
 
         for _cand_ in _cand_list:
             self._process_results(_cand_)
 
-    def search(self, nth_process=0):
+    def search(self, nth_process=0, ray_=False):
         """Public method for starting the search with the training data (X, y)
 
         Parameters
@@ -177,11 +173,9 @@ class BaseOptimizer:
         self.results_params = {}
         self.results_models = {}
 
-        if self._main_args_.n_jobs == 1:
-            self._run_one_job()
-        elif self._main_args_.n_jobs != 1 and ray.is_initialized():
-            return self._run_ray_job(nth_process)
-
-            self._run_one_job()
+        if ray_:
+            self._run_job(nth_process)
+        elif self._main_args_.n_jobs == 1:
+            self._run_job(nth_process)
         else:
             self._run_multiple_jobs()

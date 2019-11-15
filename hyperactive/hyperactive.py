@@ -3,7 +3,12 @@
 # License: MIT License
 
 import time
-import ray
+import warnings
+
+try:
+    import ray
+except ImportError:
+    warnings.warn("failed to import ray", ImportWarning)
 
 from .main_args import MainArgs
 from .opt_args import Arguments
@@ -56,15 +61,10 @@ class Hyperactive:
                 optimizer_class.remote(self._main_args_, self._opt_args_)
                 for job in range(kwargs["n_jobs"])
             ]
-            searches = [opt.search.remote(job) for job, opt in enumerate(opts)]
-            _cand_list = ray.get(searches)
-
-            results = [
-                opt._process_results.remote(_cand_)
-                for opt, _cand_ in zip(opts, _cand_list)
+            searches = [
+                opt.search.remote(job, ray_=True) for job, opt in enumerate(opts)
             ]
-            ray.get(results)
-
+            ray.get(searches)
         else:
             self._optimizer_ = optimizer_class(self._main_args_, self._opt_args_)
             self._optimizer_.search()
