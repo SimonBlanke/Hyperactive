@@ -8,10 +8,9 @@ from ..init_position import InitSearchPosition
 
 
 class Candidate:
-    def __init__(self, nth_process, _core_):
+    def __init__(self, nth_process, _main_args_):
         self.i = 0
-        self.search_config = _core_.search_config
-        self.memory = _core_.memory
+        self.memory = _main_args_.memory
 
         self._score_best = -1000
         self.pos_best = None
@@ -20,18 +19,16 @@ class Candidate:
 
         self.nth_process = nth_process
 
-        model_nr = nth_process % _core_.n_models
-        self.func_ = list(_core_.search_config.keys())[model_nr]
-        self._space_ = SearchSpace(_core_, model_nr)
+        model_nr = nth_process % _main_args_.n_models
+        self.func_ = list(_main_args_.search_config.keys())[model_nr]
+        self._space_ = SearchSpace(_main_args_, model_nr)
 
         self.func_name = str(self.func_).split(" ")[1]
 
         self._space_.create_searchspace()
-        self._model_ = Model(self.func_, nth_process)
+        self._model_ = Model(self.func_, nth_process, _main_args_)
 
-        self._init_ = InitSearchPosition(
-            self._space_, self._model_, _core_.warm_start, _core_.scatter_init
-        )
+        self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
 
         self.eval_time_sum = 0
 

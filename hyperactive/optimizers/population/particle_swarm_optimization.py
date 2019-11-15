@@ -12,11 +12,11 @@ from ...base_positioner import BasePositioner
 
 
 class ParticleSwarmOptimizer(BaseOptimizer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _main_args_, _opt_args_):
+        super().__init__(_main_args_, _opt_args_)
 
     def _init_particles(self, _cand_):
-        _p_list_ = [Particle() for _ in range(self._arg_.n_particles)]
+        _p_list_ = [Particle() for _ in range(self._opt_args_.n_particles)]
         for i, _p_ in enumerate(_p_list_):
             _p_.nr = i
             _p_.pos_current = _cand_._space_.get_random_pos()
@@ -29,14 +29,14 @@ class ParticleSwarmOptimizer(BaseOptimizer):
         for _p_ in _p_list_:
             r1, r2 = random.random(), random.random()
 
-            A = self._arg_.inertia * _p_.velo
+            A = self._opt_args_.inertia * _p_.velo
             B = (
-                self._arg_.cognitive_weight
+                self._opt_args_.cognitive_weight
                 * r1
                 * np.subtract(_p_.pos_best, _p_.pos_current)
             )
             C = (
-                self._arg_.social_weight
+                self._opt_args_.social_weight
                 * r2
                 * np.subtract(_cand_.pos_best, _p_.pos_current)
             )

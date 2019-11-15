@@ -12,14 +12,14 @@ from ...base_positioner import BasePositioner
 
 
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.n_iter_swap = int(self._core_.n_iter / self._arg_.n_swaps)
+    def __init__(self, _main_args_, _opt_args_):
+        super().__init__(_main_args_, _opt_args_)
+        self.n_iter_swap = int(self._main_args_.n_iter / self._opt_args_.n_swaps)
 
     def _init_annealers(self, _cand_):
         _p_list_ = [
-            System(**self._arg_.kwargs_opt, temp=temp)
-            for temp in self._arg_.system_temperatures
+            System(**self._opt_args_.kwargs_opt, temp=temp)
+            for temp in self._opt_args_.system_temperatures
         ]
 
         for _p_ in _p_list_:

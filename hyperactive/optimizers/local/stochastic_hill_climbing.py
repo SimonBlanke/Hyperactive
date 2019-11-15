@@ -9,11 +9,11 @@ from . import HillClimbingOptimizer
 
 
 class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _main_args_, _opt_args_):
+        super().__init__(_main_args_, _opt_args_)
 
     def _consider(self, _p_, p_accept):
-        rand = random.uniform(0, self._arg_.p_down)
+        rand = random.uniform(0, self._opt_args_.p_down)
 
         if p_accept > rand:
             _p_.score_current = _p_.score_new

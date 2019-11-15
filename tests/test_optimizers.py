@@ -37,62 +37,60 @@ search_config = {
 
 
 def test_HillClimbingOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="HillClimbing")
+    opt.search(search_config)
 
 
 def test_StochasticHillClimbingOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="StochasticHillClimbing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="StochasticHillClimbing")
+    opt.search(search_config)
 
 
 def test_TabuOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="TabuSearch")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="TabuSearch")
+    opt.search(search_config)
 
 
 def test_RandomSearchOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="RandomSearch")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="RandomSearch")
+    opt.search(search_config)
 
 
 def test_RandomRestartHillClimbingOptimizer():
-    opt = Hyperactive(
-        search_config, n_iter=n_iter, optimizer="RandomRestartHillClimbing"
-    )
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="RandomRestartHillClimbing")
+    opt.search(search_config)
 
 
 def test_RandomAnnealingOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="RandomAnnealing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="RandomAnnealing")
+    opt.search(search_config)
 
 
 def test_SimulatedAnnealingOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="SimulatedAnnealing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="SimulatedAnnealing")
+    opt.search(search_config)
 
 
 def test_StochasticTunnelingOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="StochasticTunneling")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="StochasticTunneling")
+    opt.search(search_config)
 
 
 def test_ParallelTemperingOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="ParallelTempering")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="ParallelTempering")
+    opt.search(search_config)
 
 
 def test_ParticleSwarmOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="ParticleSwarm")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="ParticleSwarm")
+    opt.search(search_config)
 
 
 def test_EvolutionStrategyOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="EvolutionStrategy")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="EvolutionStrategy")
+    opt.search(search_config)
 
 
 def test_BayesianOptimizer():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="Bayesian")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, n_iter=n_iter, optimizer="Bayesian")
+    opt.search(search_config)

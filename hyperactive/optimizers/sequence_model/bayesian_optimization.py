@@ -12,15 +12,15 @@ from ...base_optimizer import BaseOptimizer
 
 
 class BayesianOptimizer(BaseOptimizer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _main_args_, _opt_args_):
+        super().__init__(_main_args_, _opt_args_)
         self.xi = 0.01
         # Gaussian process with Mat??rn kernel as surrogate model
         # m52 = ConstantKernel(1.0) * Matern(length_scale=1.0, nu=2.5)
         # kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
         # self.gpr1 = GaussianProcessRegressor(kernel=kernel, alpha=0.02)
         self.gpr = GaussianProcessRegressor(
-            kernel=self._arg_.kernel,
+            kernel=self._opt_args_.kernel,
             alpha=1e-6,
             normalize_y=True,
             n_restarts_optimizer=25,

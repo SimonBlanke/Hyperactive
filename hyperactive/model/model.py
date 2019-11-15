@@ -6,20 +6,22 @@ import time
 
 
 class Model:
-    def __init__(self, func_, nth_process):
+    def __init__(self, func_, nth_process, _main_args_):
         self.func_ = func_
         self.nth_process = nth_process
+        self.X = _main_args_.X
+        self.y = _main_args_.y
 
-    def train_model(self, keras_para_dict):
+    def train_model(self, para_dict):
         start_time = time.time()
-        result = self.func_(keras_para_dict)
+        results = self.func_(para_dict, self.X, self.y)
         eval_time = time.time() - start_time
 
-        if isinstance(result, tuple):
-            score = result[0]
-            model = result[1]
-        elif isinstance(result, float):
-            score = result
+        if isinstance(results, tuple):
+            score = results[0]
+            model = results[1]
+        elif isinstance(results, float):
+            score = results
             model = None
         else:
             print("Error: model function must return float or tuple")

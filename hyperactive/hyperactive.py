@@ -5,8 +5,9 @@
 import time
 import ray
 
-from .core import Core
+from .main_args import MainArgs
 from .opt_args import Arguments
+
 from . import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
@@ -25,44 +26,7 @@ from . import (
 
 class Hyperactive:
     def __init__(self, *args, **kwargs):
-
-        """
-
-        Parameters
-        ----------
-
-        search_config: dict
-            A dictionary providing the model and hyperparameter search space for the
-            optimization process.
-        n_iter: int
-            The number of iterations the optimizer performs.
-        metric: string, optional (default: "accuracy")
-            The metric the model is evaluated by.
-        n_jobs: int, optional (default: 1)
-            The number of searches to run in parallel.
-        cv: int, optional (default: 3)
-            The number of folds for the cross validation.
-        verbosity: int, optional (default: 1)
-            Verbosity level. 1 prints out warm_start points and their scores.
-        random_state: int, optional (default: None)
-            Sets the random seed.
-        warm_start: dict, optional (default: False)
-            Dictionary that definies a start point for the optimizer.
-        memory: bool, optional (default: True)
-            A memory, that saves the evaluation during the optimization to save time when
-            optimizer returns to position.
-        scatter_init: int, optional (default: False)
-            Defines the number n of random positions that should be evaluated with 1/n the
-            training data, to find a better initial position.
-
-        Returns
-        -------
-        None
-
-        """
-
-        self._core_ = Core(*args, **kwargs)
-        self._arg_ = Arguments(**self._core_.opt_para)
+        self._main_args_ = MainArgs(*args, **kwargs)
 
         self.optimizer_dict = {
             "HillClimbing": HillClimbingOptimizer,
@@ -79,49 +43,37 @@ class Hyperactive:
             "Bayesian": BayesianOptimizer,
         }
 
-    def search(self, search_config, n_iter=100, max_time=None, n_jobs=1):
-        """Public method for starting the search with the training data (X, y)
-
-        Parameters
-        ----------
-        X : array-like or sparse matrix of shape = [n_samples, n_features]
-
-        y : array-like, shape = [n_samples] or [n_samples, n_outputs]
-
-        Returns
-        -------
-        None
-        """
+    def search(self, *args, **kwargs):
         start_time = time.time()
 
-        self._core_.search_config = search_config
-        self._core_.n_iter = n_iter
-        self._core_.max_time = max_time
-        self._core_.n_jobs = n_jobs
-        self._core_.n_models = len(list(self._core_.search_config.keys()))
-
-        optimizer_class = self.optimizer_dict[self._core_.optimizer]
+        self._main_args_.search_args(*args, **kwargs)
+        self._opt_args_ = Arguments(self._main_args_.opt_para)
+        optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
         if ray.is_initialized():
             optimizer_class = ray.remote(optimizer_class)
             opts = [
-                optimizer_class.remote(self._core_, self._arg_)
-                for i in range(self._core_.n_jobs)
+                optimizer_class.remote(self._main_args_, self._opt_args_)
+                for job in range(kwargs["n_jobs"])
             ]
-            jobs = [o._search.remote(i) for i, o in enumerate(opts)]
-            _cand_ = ray.get(jobs)
+            searches = [opt.search.remote(job) for job, opt in enumerate(opts)]
+            _cand_list = ray.get(searches)
 
-            process = [o._process_results.remote(cand) for o, cand in zip(opts, _cand_)]
-            ray.get(process)
+            results = [
+                opt._process_results.remote(_cand_)
+                for opt, _cand_ in zip(opts, _cand_list)
+            ]
+            ray.get(results)
 
         else:
-            self._optimizer_ = optimizer_class(self._core_, self._arg_)
-            self._optimizer_._search()
+            self._optimizer_ = optimizer_class(self._main_args_, self._opt_args_)
+            self._optimizer_.search()
 
         """
 
         self.pos_list = self._optimizer_.pos_list
         self.score_list = self._optimizer_.score_list
+        self._optimizer_._fit(X, y)
 
         self.results_params = self._optimizer_.results_params
         self.results_models = self._optimizer_.results_models

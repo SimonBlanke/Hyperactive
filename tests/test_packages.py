@@ -32,8 +32,8 @@ def test_meta_learn():
         }
     }
 
-    opt = Hyperactive(search_config, memory="long")
-    opt.search(X, y)
+    opt = Hyperactive(X, y, memory="long")
+    opt.search(search_config)
 
 
 def test_sklearn():
@@ -59,8 +59,8 @@ def test_sklearn():
         }
     }
 
-    opt = Hyperactive(search_config)
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -78,8 +78,8 @@ def test_xgboost():
 
     search_config = {model: {"n_estimators": range(2, 20), "max_depth": range(1, 11)}}
 
-    opt = Hyperactive(search_config)
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -102,8 +102,8 @@ def test_lightgbm():
         }
     }
 
-    opt = Hyperactive(search_config)
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -129,8 +129,8 @@ def test_catboost():
         }
     }
 
-    opt = Hyperactive(search_config)
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
 
@@ -178,5 +178,5 @@ def test_keras():
 
     search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
 
-    opt = Hyperactive(search_config)
-    opt.search(X_train, y_train)
+    opt = Hyperactive(X_train, y_train)
+    opt.search(search_config)

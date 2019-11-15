@@ -37,18 +37,18 @@ search_config = {
 
 
 def test_get_total_time():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config, n_iter=n_iter, optimizer="HillClimbing")
     opt.get_total_time()
 
 
 def test_get_eval_time():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config, n_iter=n_iter, optimizer="HillClimbing")
     opt.get_eval_time()
 
 
 def test_save_report():
-    opt = Hyperactive(search_config, n_iter=n_iter, optimizer="HillClimbing")
-    opt.search(X, y)
+    opt = Hyperactive(X, y)
+    opt.search(search_config, n_iter=n_iter, optimizer="HillClimbing")
     opt.save_report()

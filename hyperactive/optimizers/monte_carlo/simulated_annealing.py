@@ -9,8 +9,8 @@ from ..local import StochasticHillClimbingOptimizer
 
 
 class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _main_args_, _opt_args_):
+        super().__init__(_main_args_, _opt_args_)
         self.temp = 1
 
     # use _consider from StochasticHillClimbingOptimizer
@@ -21,7 +21,7 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
     def _iterate(self, i, _cand_, _p_):
         _cand_ = self._stochastic_hill_climb_iter(_cand_, _p_)
 
-        self.temp = self.temp * self._arg_.annealing_rate
+        self.temp = self.temp * self._opt_args_.annealing_rate
 
         return _cand_
 

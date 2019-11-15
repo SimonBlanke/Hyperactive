@@ -7,11 +7,13 @@ import numpy as np
 
 
 class InitSearchPosition:
-    def __init__(self, space, model, warm_start, scatter_init):
+    def __init__(self, space, model, _main_args_):
         self._space_ = space
         self._model_ = model
-        self.warm_start = warm_start
-        self.scatter_init = scatter_init
+        self.warm_start = _main_args_.warm_start
+        self.scatter_init = _main_args_.scatter_init
+        self.X = _main_args_.X
+        self.y = _main_args_.y
 
         if self.warm_start:
             self.n_warm_start_keys = len(list(self.warm_start.keys()))
@@ -41,13 +43,11 @@ class InitSearchPosition:
 
     def _set_start_pos(self, nth_process):
         if self.warm_start and self.scatter_init:
-            # pos = self._warm_start_scatter_init(nth_process)
-            pass
+            pos = self._warm_start_scatter_init(nth_process)
         elif self.warm_start:
             pos = self._warm_start(nth_process)
         elif self.scatter_init:
-            # pos = self._scatter_init(nth_process)
-            pass
+            pos = self._scatter_init(nth_process)
         else:
             pos = self._space_.get_random_pos()
 
@@ -69,13 +69,13 @@ class InitSearchPosition:
 
         return pos
 
-    def _scatter_init(self, nth_process, X, y):
+    def _scatter_init(self, nth_process):
         pos_list = []
         for _ in range(self.scatter_init):
             pos = self._space_.get_random_pos()
             pos_list.append(pos)
 
-        pos_best_list, score_best_list = self._scatter_train(X, y, pos_list)
+        pos_best_list, score_best_list = self._scatter_train(pos_list)
 
         pos_best_sorted, _ = sort_for_best(pos_best_list, score_best_list)
 
@@ -83,11 +83,11 @@ class InitSearchPosition:
 
         return pos_best_sorted[nth_best_pos]
 
-    def _scatter_train(self, X, y, pos_list):
+    def _scatter_train(self, pos_list):
         pos_best_list = []
         score_best_list = []
 
-        X, y = self._get_random_sample(X, y)
+        X, y = self._get_random_sample(self.X, self.y)
 
         for pos in pos_list:
             para = self._space_.pos2para(pos)

@@ -6,9 +6,9 @@
 import numpy as np
 
 
-def init_candidate(_core_, nth_process, Candidate):
-    _core_._set_random_seed(nth_process)
-    _cand_ = Candidate(nth_process, _core_)
+def init_candidate(_main_args_, nth_process, Candidate):
+    _main_args_._set_random_seed(nth_process)
+    _cand_ = Candidate(nth_process, _main_args_)
 
     return _cand_
 
