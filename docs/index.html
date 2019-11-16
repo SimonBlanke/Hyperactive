@@ -12,6 +12,10 @@
       --theme-color   : purple;
       --zoomimage-overlay-background: rgba(0, 0, 0, 0.875);
       --sidebar-width                               : 20rem;
+      --heading-h3-font-size              : var(--font-size-xl);
+      --heading-h2-border-color           : purple;
+      --heading-h3-border-bottom          : 3px;
+      --heading-h4-font-size              : var(--font-size-l);
   }
     body {
       font-size: 18px;
@@ -55,6 +59,15 @@
       height: 30px;
       content:"";
     }
+    h3:before {
+      background-image: url('_media/icon_hex.png');
+      background-size: 26px 30px;
+      display: inline-block;
+      width: 26px;
+      height: 30px;
+      content:"";
+
+    }
     a:link {
       color: darkblue;
     }
@@ -74,10 +87,11 @@
       name: 'Hyperactive',
       repo: 'https://github.com/SimonBlanke/Hyperactive',
       homepage: 'README.md',
+      maxLevel: 1,
       coverpage: true,
       loadSidebar: true,
       search: 'auto',
-      subMaxLevel: 1,
+      subMaxLevel: 2,
       auto2top: true,
       logo: './_media/icon.png',
       themeColor: '#110c6e',
