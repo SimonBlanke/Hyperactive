@@ -55,7 +55,7 @@ opt_list = [
             "crossover_rate": 0.1,
         }
     },
-    # "Bayesian",
+    "Bayesian",
 ]
 
 
