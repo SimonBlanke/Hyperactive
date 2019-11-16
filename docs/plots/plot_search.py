@@ -21,7 +21,8 @@ opt_list = [
     {"HillClimbing": {"epsilon": 0.1}},
     {"StochasticHillClimbing": {"p_down": 0.5}},
     {"StochasticHillClimbing": {"p_down": 0.8}},
-    "TabuSearch",
+    {"TabuSearch": {"tabu_memory": 3}},
+    {"TabuSearch": {"tabu_memory": 10}},
     "RandomSearch",
     {"RandomRestartHillClimbing": {"n_restarts": 10}},
     {"RandomRestartHillClimbing": {"n_restarts": 5}},
@@ -33,12 +34,9 @@ opt_list = [
     {"SimulatedAnnealing": {"annealing_rate": 0.9}},
     {"StochasticTunneling": {"gamma": 0.1}},
     {"StochasticTunneling": {"gamma": 3}},
-    {"ParallelTempering": {"system_temperatures": [0.1, 0.5, 1, 5, 10]}},
-    {
-        "ParallelTempering": {
-            "system_temperatures": [0.001, 0.01, 0.1, 0.5, 1, 5, 10, 100, 1000]
-        }
-    },
+    {"ParallelTempering": {"system_temperatures": [0.1, 0.5, 1, 3]}},
+    {"ParallelTempering": {"system_temperatures": [0.05, 0.3, 0.5, 1, 3, 5, 9]}},
+    {"ParallelTempering": {"system_temperatures": [0.01, 1, 100]}},
     {"ParticleSwarm": {"n_particles": 10}},
     {"ParticleSwarm": {"n_particles": 20}},
     {"EvolutionStrategy": {"individuals": 10}},
@@ -144,7 +142,7 @@ for opt in opt_list:
     pos_list = np.array(pos_list)
     score_list = np.array(score_list)
 
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(5.5, 4.7))
     plt.set_cmap("jet")
 
     pos_list = np.swapaxes(pos_list, 0, 1)
@@ -161,9 +159,13 @@ for opt in opt_list:
 
     if isinstance(opt, dict):
         opt_key = list(opt.keys())[0]
-        opt = str(opt_key) + " " + str(opt[opt_key].items())
+        opt_title = str(opt_key) + "\n" + str(list(opt[opt_key].items()))
+        opt_file_name = str(opt_key) + " " + str(list(opt[opt_key].items()))
+    else:
+        opt_title = opt
+        opt_file_name = opt
 
-    plt.title(opt)
+    plt.title(opt_title)
     plt.xlabel("n_neighbors")
     plt.ylabel("leaf_size")
 
@@ -172,4 +174,4 @@ for opt in opt_list:
     plt.colorbar()
 
     plt.tight_layout()
-    plt.savefig("./search_paths/" + opt + ".svg")
+    plt.savefig("./search_paths/" + opt_file_name + ".svg")
