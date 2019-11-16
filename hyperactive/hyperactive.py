@@ -81,9 +81,6 @@ class Hyperactive:
         optimizer_class = optimizer_dict[_core_.optimizer]
         self._optimizer_ = optimizer_class(_core_, _arg_)
 
-        self.pos_list = self._optimizer_.pos_list
-        self.score_list = self._optimizer_.score_list
-
     def search(self, X, y):
         """Public method for starting the search with the training data (X, y)
 
@@ -102,6 +99,9 @@ class Hyperactive:
 
         self.results_params = self._optimizer_.results_params
         self.results_models = self._optimizer_.results_models
+
+        self.pos_list = self._optimizer_.pos_list
+        self.score_list = self._optimizer_.score_list
 
         self.total_time = time.time() - start_time
 
