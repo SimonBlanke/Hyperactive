@@ -62,8 +62,8 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         idx_sorted_ind = self._rank_individuals(_p_list_)
         mutate_idx, cross_idx, replace_idx = self._select_individuals(idx_sorted_ind)
 
-        self._mutate_individuals(_cand_, _p_list_, mutate_idx)
         self._crossover(_cand_, _p_list_, cross_idx, replace_idx)
+        self._mutate_individuals(_cand_, _p_list_, mutate_idx)
 
     def _rank_individuals(self, _p_list_):
         scores_list = []
@@ -79,7 +79,7 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         mutate_idx = index_best[: self.n_mutations]
         cross_idx = index_best[: self.n_crossovers]
 
-        n = self._arg_.individuals - max(self.n_mutations, self.n_crossovers)
+        n = self.n_crossovers
         replace_idx = index_best[-n:]
 
         return mutate_idx, cross_idx, replace_idx
