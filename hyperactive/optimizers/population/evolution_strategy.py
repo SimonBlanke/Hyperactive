@@ -13,14 +13,17 @@ from ...base_positioner import BasePositioner
 class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
-        self.n_mutations = int(round(self._opt_args_.individuals * self._opt_args_.mutation_rate))
+        self.n_mutations = int(
+            round(self._opt_args_.individuals * self._opt_args_.mutation_rate)
+        )
         self.n_crossovers = int(
             round(self._opt_args_.individuals * self._opt_args_.crossover_rate)
         )
 
     def _init_individuals(self, _cand_):
         _p_list_ = [
-            Individual(**self._opt_args_.kwargs_opt) for _ in range(self._opt_args_.individuals)
+            Individual(**self._opt_args_.kwargs_opt)
+            for _ in range(self._opt_args_.individuals)
         ]
         for _p_ in _p_list_:
             _p_.pos_current = _p_.move_random(_cand_)
@@ -62,8 +65,8 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         idx_sorted_ind = self._rank_individuals(_p_list_)
         mutate_idx, cross_idx, replace_idx = self._select_individuals(idx_sorted_ind)
 
-        self._mutate_individuals(_cand_, _p_list_, mutate_idx)
         self._crossover(_cand_, _p_list_, cross_idx, replace_idx)
+        self._mutate_individuals(_cand_, _p_list_, mutate_idx)
 
     def _rank_individuals(self, _p_list_):
         scores_list = []
@@ -79,7 +82,7 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         mutate_idx = index_best[: self.n_mutations]
         cross_idx = index_best[: self.n_crossovers]
 
-        n = self._opt_args_.individuals - max(self.n_mutations, self.n_crossovers)
+        n = self.n_crossovers
         replace_idx = index_best[-n:]
 
         return mutate_idx, cross_idx, replace_idx

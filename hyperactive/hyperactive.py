@@ -73,16 +73,11 @@ class Hyperactive:
             self._optimizer_ = optimizer_class(self._main_args_, self._opt_args_)
             self._optimizer_.search()
 
-        """
-
-        self.pos_list = self._optimizer_.pos_list
-        self.score_list = self._optimizer_.score_list
-        self._optimizer_._fit(X, y)
-
         self.results_params = self._optimizer_.results_params
         self.results_models = self._optimizer_.results_models
 
-        """
+        self.pos_list = self._optimizer_.pos_list
+        self.score_list = self._optimizer_.score_list
 
         self.total_time = time.time() - start_time
 

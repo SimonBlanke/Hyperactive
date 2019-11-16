@@ -17,17 +17,44 @@ X = data.data
 y = data.target
 
 opt_list = [
-    "HillClimbing",
-    "StochasticHillClimbing",
-    "TabuSearch",
+    {"HillClimbing": {"epsilon": 0.03}},
+    {"HillClimbing": {"epsilon": 0.1}},
+    {"StochasticHillClimbing": {"p_down": 0.5}},
+    {"StochasticHillClimbing": {"p_down": 0.8}},
+    {"TabuSearch": {"tabu_memory": 3}},
+    {"TabuSearch": {"tabu_memory": 10}},
     "RandomSearch",
-    "RandomRestartHillClimbing",
-    "RandomAnnealing",
-    "SimulatedAnnealing",
-    "StochasticTunneling",
-    "ParallelTempering",
-    "ParticleSwarm",
-    "EvolutionStrategy",
+    {"RandomRestartHillClimbing": {"n_restarts": 10}},
+    {"RandomRestartHillClimbing": {"n_restarts": 5}},
+    {"RandomAnnealing": {"epsilon": 1}},
+    {"RandomAnnealing": {"epsilon": 0.5}},
+    {"RandomAnnealing": {"epsilon": 0.3}},
+    {"RandomAnnealing": {"epsilon": 0.1}},
+    {"SimulatedAnnealing": {"annealing_rate": 0.99}},
+    {"SimulatedAnnealing": {"annealing_rate": 0.9}},
+    {"StochasticTunneling": {"gamma": 0.1}},
+    {"StochasticTunneling": {"gamma": 3}},
+    {"ParallelTempering": {"system_temperatures": [0.1, 0.5, 1, 3]}},
+    {"ParallelTempering": {"system_temperatures": [0.05, 0.3, 0.5, 1, 3, 5, 9]}},
+    {"ParallelTempering": {"system_temperatures": [0.01, 1, 100]}},
+    {"ParticleSwarm": {"n_particles": 10}},
+    {"ParticleSwarm": {"n_particles": 20}},
+    {"EvolutionStrategy": {"individuals": 10}},
+    {"EvolutionStrategy": {"individuals": 4}},
+    {
+        "EvolutionStrategy": {
+            "individuals": 10,
+            "mutation_rate": 0.1,
+            "crossover_rate": 0.9,
+        }
+    },
+    {
+        "EvolutionStrategy": {
+            "individuals": 10,
+            "mutation_rate": 0.9,
+            "crossover_rate": 0.1,
+        }
+    },
     "Bayesian",
 ]
 
@@ -80,21 +107,32 @@ for opt in opt_list:
     n_iter_temp = n_iter
     opt_dict_temp = opt_dict
 
-    if opt == "ParallelTempering":
-        n_iter_temp = int(n_iter / 10)
+    if isinstance(opt, dict):
 
-    if opt == "ParticleSwarm":
-        n_iter_temp = int(n_iter / 10)
+        print(str(list(opt.keys())[0]))
 
-    if opt == "EvolutionStrategy":
-        n_iter_temp = int(n_iter / 10)
+        if str(list(opt.keys())[0]) == "ParallelTempering":
+            systems = len(list(opt[list(opt.keys())[0]].values())[0])
+            print("systems", systems)
+            n_iter_temp = int(n_iter / systems)
+
+        if str(list(opt.keys())[0]) == "ParticleSwarm":
+            n_part = list(opt[list(opt.keys())[0]].values())[0]
+            n_iter_temp = int(n_iter / n_part)
+
+        if str(list(opt.keys())[0]) == "EvolutionStrategy":
+            n_pop = list(opt[list(opt.keys())[0]].values())[0]
+            n_iter_temp = int(n_iter / n_pop)
+
+    else:
+        print(opt)
 
     opt_ = Hyperactive(
         search_config,
         optimizer=opt,
         n_iter=n_iter_temp,
         get_search_path=True,
-        # **opt_dict_temp
+        **opt_dict_temp
     )
     opt_.search(X, y)
 
@@ -104,7 +142,7 @@ for opt in opt_list:
     pos_list = np.array(pos_list)
     score_list = np.array(score_list)
 
-    plt.figure(figsize=(15, 5))
+    plt.figure(figsize=(5.5, 4.7))
     plt.set_cmap("jet")
 
     pos_list = np.swapaxes(pos_list, 0, 1)
@@ -119,7 +157,15 @@ for opt in opt_list:
         # print(score, "\n")
         plt = _plot(plt, pos, score)
 
-    plt.title(opt)
+    if isinstance(opt, dict):
+        opt_key = list(opt.keys())[0]
+        opt_title = str(opt_key) + "\n" + str(list(opt[opt_key].items()))
+        opt_file_name = str(opt_key) + " " + str(list(opt[opt_key].items()))
+    else:
+        opt_title = opt
+        opt_file_name = opt
+
+    plt.title(opt_title)
     plt.xlabel("n_neighbors")
     plt.ylabel("leaf_size")
 
@@ -128,4 +174,4 @@ for opt in opt_list:
     plt.colorbar()
 
     plt.tight_layout()
-    plt.savefig("search_path_" + opt + ".svg")
+    plt.savefig("./search_paths/" + opt_file_name + ".svg")

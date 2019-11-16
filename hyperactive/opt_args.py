@@ -18,11 +18,11 @@ class Arguments:
             # StochasticHillClimbingOptimizer
             "p_down": 0.5,
             # TabuOptimizer
-            "tabu_memory": [3, 6, 9],  # TODO
+            "tabu_memory": 10,
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
-            "epsilon_start": 1,
+            "epsilon_mod": 33,
             "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
             "start_temp": 1,  # TODO
@@ -55,7 +55,7 @@ class Arguments:
         self.p_down = kwargs_opt["p_down"]
         self.tabu_memory = kwargs_opt["tabu_memory"]
         self.n_restarts = kwargs_opt["n_restarts"]
-        self.epsilon_start = kwargs_opt["epsilon_start"]
+        self.epsilon_mod = kwargs_opt["epsilon_mod"]
         self.annealing_rate = kwargs_opt["annealing_rate"]
         self.gamma = kwargs_opt["gamma"]
         self.system_temperatures = kwargs_opt["system_temperatures"]

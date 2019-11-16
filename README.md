@@ -160,7 +160,6 @@
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/tensorflow_example?id=tensorflow">Tensorflow</a></li>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
-              <li>Pytorch</li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
