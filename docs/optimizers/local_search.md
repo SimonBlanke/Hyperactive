@@ -10,8 +10,8 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - If the search space is very simple and has few local optima or saddle points
 
 <p align="center">
-<img src="./plots/search_path_HillClimbing.svg" width="680"/>
-<img src="./plots/search_path_HillClimbing({'epsilon': 0.1}).svg" width="680"/>
+<img src="./plots/search_paths/HillClimbing [('epsilon', 0.1)].svg" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('epsilon', 0.03)].svg" width= 49%/>
 </p>
 
 
@@ -25,7 +25,8 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 - When you have a very good initial point to start from
 
 <p align="center">
-<img src="./plots/search_path_StochasticHillClimbing.svg" width="800"/>
+<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.5)].svg" width= 49%/>
+<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.8)].svg" width= 49%/>
 </p>
 
 
@@ -39,5 +40,6 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 - When you have a good initial point to start from
 
 <p align="center">
-<img src="./plots/search_path_TabuSearch.svg" width="800"/>
+<img src="./plots/search_paths/TabuSearch [('tabu_memory', 3)].svg" width= 49%/>
+<img src="./plots/search_paths/TabuSearch [('tabu_memory', 10)].svg" width= 49%/>
 </p>

@@ -12,7 +12,7 @@
     - [Deep Learning](./examples/deep_learning)
     - [Distribution](./examples/distribution)
     - [Optimization Extensions](./examples/extensions)
-    - [Mathematical Functions](./examples/)
+    - [Mathematical Functions](./examples/math_functions)
     - [Advanced use Cases](./examples/use_cases)
 
 
