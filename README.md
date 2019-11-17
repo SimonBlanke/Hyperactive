@@ -85,17 +85,17 @@
   - Thoroughly tested code base
   - Compatible with <b>any python machine-learning framework</b>
   - Optimize:
-    - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/sklearn_examples?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./use_cases/sklearn_pipeline_example?id=sklearn-pipeline)
-    - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./use_cases/stacking_example?id=stacking)
-    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./use_cases/cnn_structure?id=keras-cnn-structure) architecture
-    - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./use_cases/meta_optimization_ext?id=meta-optimization) (meta-optimization)
-    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./use_cases/rosen_func_example?id=rosenbrock-function) you can specify with this API
-  - Utilize state of the art [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./optimizers/Bayesian?id=bayesian-optimization) like:
+    - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=sklearn-pipeline)
+    - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=stacking)
+    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=keras-cnn-structure) architecture
+    - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=meta-optimization) (meta-optimization)
+    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/math_functions?id=rosenbrock-function) you can specify with this API
+  - Utilize state of the art optimization techniques like:
     - Simulated annealing
     - Evolution strategy
     - Bayesian optimization
-  - [High performance](https://simonblanke.github.io/Hyperactive/#/./performance/README?id=performance): Optimizer time is neglectable for most models
-  - Choose from a variety of different [optimization extensions](https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=optimization-extensions) to improve the optimization
+  - [High performance](https://simonblanke.github.io/Hyperactive/#/./performance?id=performance): Optimizer time is neglectable for most models
+  - Choose from a variety of different [optimization extensions](https://simonblanke.github.io/Hyperactive/#/./examples/extensions) to improve the optimization
 
 <br>
 
@@ -120,63 +120,63 @@
       <td>
         <a><b>Local Search:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=hill-climbing">Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=tabu-search">Tabu Search</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/local_search?id=hill-climbing">Hill Climbing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/local_search?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/local_search?id=tabu-search">Tabu Search</a></li>
          </ul>
         <a><b>Random Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-search">Random Search</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/random_methods?id=random-search">Random Search</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/random_methods?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/random_methods?id=random-annealing">Random Annealing</a> [<a href="https://github.com/SimonBlanke/Hyperactive#random-annealing">*</a>] </li>
          </ul>
         <a><b>Markov Chain Monte Carlo:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=simulated-annealing">Simulated Annealing</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=stochastic-tunneling">Stochastic Tunneling</li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=parallel-tempering">Parallel Tempering</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/mcmc?id=simulated-annealing">Simulated Annealing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/mcmc?id=stochastic-tunneling">Stochastic Tunneling</li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/mcmc?id=parallel-tempering">Parallel Tempering</a></li>
           </ul>
         <a><b>Population Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=evolution-strategy">Evolution Strategy</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/population_methods?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/population_methods?id=evolution-strategy">Evolution Strategy</a></li>
           </ul>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=bayesian-optimization">Bayesian Optimization</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_methods?id=bayesian-optimization">Bayesian Optimization</a></li>
           </ul>
       </td>
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/sklearn_examples?id=sklearn">Scikit-learn</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/xgboost_example?id=xgboost">XGBoost</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/lightgbm_example?id=lightgbm">LightGBM</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/catboost_example?id=catboost">CatBoost</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/rgf_python?id=rgf">RGF</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/mlxtend_example?id=mlxtend">Mlxtend</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=sklearn">Scikit-learn</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=xgboost">XGBoost</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=lightgbm">LightGBM</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=catboost">CatBoost</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=rgf">RGF</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=mlxtend">Mlxtend</a></li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/tensorflow_example?id=tensorflow">Tensorflow</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/cnn_mnist?id=keras-cnn">Keras</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/deep_learning?id=tensorflow">Tensorflow</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/deep_learning?id=keras-cnn">Keras</a></li>
           </ul>
         <a><b>Distribution:</b></a>
           <ul>
-              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/multiprocessing_example?id=multiprocessing">Multiprocessing</a></li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/distribution?id=multiprocessing">Multiprocessing</a></li>
               <li>Ray</li>
           </ul>
       </td>
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=warm-start">Warm-start</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=warm-start">Warm-start</a></li>
             <li>Meta-Learn (coming soon)</li>
           </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/README?id=memory">Memory</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=memory">Memory</a></li>
             <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#1-proxy-datasets-for-training-convolutional-neural-networks">1</a>]
  (coming soon)</li>
           </ul>
