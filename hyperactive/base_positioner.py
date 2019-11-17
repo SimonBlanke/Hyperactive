@@ -11,13 +11,13 @@ class BasePositioner:
         self.climb_dist = kwargs["climb_dist"]
 
         self.pos_new = None
-        self.score_new = -1000
+        self.score_new = -np.inf
 
         self.pos_current = None
-        self.score_current = -1000
+        self.score_current = -np.inf
 
         self.pos_best = None
-        self.score_best = -1000
+        self.score_best = -np.inf
 
     def move_climb(self, _cand_, pos, epsilon_mod=1):
         sigma = 3 + _cand_._space_.dim * self.epsilon * epsilon_mod

@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
 
 from ...base_optimizer import BaseOptimizer
 
@@ -11,7 +12,7 @@ class HillClimbingOptimizer(BaseOptimizer):
         super().__init__(_main_args_, _opt_args_)
 
     def _hill_climb_iter(self, _cand_, _p_):
-        score_new = -1000
+        score_new = -np.inf
         pos_new = None
 
         for _ in range(self._opt_args_.n_neighbours):
