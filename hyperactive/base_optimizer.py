@@ -92,8 +92,7 @@ class BaseOptimizer:
             if self._main_args_.max_time and run_time > self._main_args_.max_time:
                 break
 
-            # get_search_path
-            if self._main_args_.get_search_path:
+            if self._main_args_.verbosity > 9:
                 self._monitor_search_path(_p_)
 
         _cand_ = self._finish_search(self._main_args_, _cand_)

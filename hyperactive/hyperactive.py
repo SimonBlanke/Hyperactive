@@ -24,9 +24,25 @@ from . import (
 )
 
 
+def stop_warnings():
+    # because sklearn warnings are annoying when they appear 100 times
+    def warn(*args, **kwargs):
+        pass
+
+    import warnings
+
+    warnings.warn = warn
+
+
 class Hyperactive:
-    def __init__(self, *args, **kwargs):
-        self._main_args_ = MainArgs(*args, **kwargs)
+    """
+    """
+
+    def __init__(self, X, y, verbosity=2, warnings=False, random_state=1, memory=True):
+        self._main_args_ = MainArgs(X, y, verbosity, random_state, memory)
+
+        if not warnings:
+            stop_warnings()
 
         self.optimizer_dict = {
             "HillClimbing": HillClimbingOptimizer,
@@ -43,10 +59,21 @@ class Hyperactive:
             "Bayesian": BayesianOptimizer,
         }
 
-    def search(self, *args, **kwargs):
+    def search(
+        self,
+        search_config,
+        max_time=None,
+        n_iter=10,
+        optimizer="RandomSearch",
+        n_jobs=1,
+        warm_start=False,
+        scatter_init=False,
+    ):
         start_time = time.time()
 
-        self._main_args_.search_args(*args, **kwargs)
+        self._main_args_.search_args(
+            search_config, max_time, n_iter, optimizer, n_jobs, warm_start, scatter_init
+        )
         self._opt_args_ = Arguments(self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
@@ -63,7 +90,7 @@ class Hyperactive:
             optimizer_class = ray.remote(optimizer_class)
             opts = [
                 optimizer_class.remote(self._main_args_, self._opt_args_)
-                for job in range(kwargs["n_jobs"])
+                for job in range(self._main_args_.n_jobs)
             ]
             searches = [
                 opt.search.remote(job, ray_=ray_) for job, opt in enumerate(opts)
