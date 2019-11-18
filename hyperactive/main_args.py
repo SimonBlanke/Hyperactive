@@ -15,6 +15,13 @@ class MainArgs:
         self.verbosity = verbosity
         self.random_state = random_state
         self.memory = memory
+        self.get_search_path = False
+
+        if verbosity > 9:
+            self.get_search_path = True
+
+        if self.verbosity > 2:
+            self.verbosity = 2
 
         self.opt_para = dict()
 
