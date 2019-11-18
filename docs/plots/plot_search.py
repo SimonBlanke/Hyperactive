@@ -59,20 +59,22 @@ opt_list = [
 ]
 
 
-def model(para, X, y):
-    model = KNeighborsClassifier(
-        n_neighbors=para["n_neighbors"], leaf_size=para["leaf_size"]
+def himmelblau(para, X, y):
+    """Himmelblau's function"""
+
+    score = -(
+        (para["x_"] ** 2 + para["y_"] - 11) ** 2
+        + (para["x_"] + para["y_"] ** 2 - 7) ** 2
     )
-    scores = cross_val_score(model, X, y, cv=3)
 
-    return scores.mean()
+    return score
 
 
-search_config = {model: {"n_neighbors": range(1, 100), "leaf_size": range(1, 100)}}
+x_range = np.arange(0, 10, 0.1)
+
+search_config = {himmelblau: {"x_": x_range, "y_": x_range}}
 
 n_iter = 100
-
-opt_dict = {"memory": False, "verbosity": 0}
 
 
 def _plot(plt, pos, score):
@@ -105,7 +107,6 @@ def _plot(plt, pos, score):
 
 for opt in opt_list:
     n_iter_temp = n_iter
-    opt_dict_temp = opt_dict
 
     if isinstance(opt, dict):
 
@@ -127,14 +128,8 @@ for opt in opt_list:
     else:
         print(opt)
 
-    opt_ = Hyperactive(
-        search_config,
-        optimizer=opt,
-        n_iter=n_iter_temp,
-        get_search_path=True,
-        **opt_dict_temp
-    )
-    opt_.search(X, y)
+    opt_ = Hyperactive(0, 0, verbosity=10)
+    opt_.search(search_config, optimizer=opt, n_iter=n_iter_temp)
 
     pos_list = opt_.pos_list
     score_list = opt_.score_list
@@ -174,4 +169,4 @@ for opt in opt_list:
     plt.colorbar()
 
     plt.tight_layout()
-    plt.savefig("./search_paths/" + opt_file_name + ".svg")
+    plt.savefig("./search_paths/temp/" + opt_file_name + ".svg")
