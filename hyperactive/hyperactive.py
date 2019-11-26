@@ -36,10 +36,11 @@ def stop_warnings():
 
 class Hyperactive:
     """
+    Hyperactive mein class
     """
 
-    def __init__(self, X, y, verbosity=2, warnings=False, random_state=1, memory=True):
-        self._main_args_ = MainArgs(X, y, verbosity, random_state, memory)
+    def __init__(self, X, y, memory=True, random_state=1, verbosity=2, warnings=False):
+        self._main_args_ = MainArgs(X, y, memory, random_state, verbosity)
 
         if not warnings:
             stop_warnings()
@@ -69,6 +70,10 @@ class Hyperactive:
         warm_start=False,
         scatter_init=False,
     ):
+        """
+        run search
+        """
+
         start_time = time.time()
 
         self._main_args_.search_args(
