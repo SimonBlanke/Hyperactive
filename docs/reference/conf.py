@@ -6,7 +6,7 @@ import os
 
 sys.path.insert(0, os.path.abspath("../../"))
 
-extensions = ["sphinx.ext.autodoc", "sphinx_rtd_theme"]
+extensions = ["sphinx.ext.autodoc", "sphinx_rtd_theme", "sphinx.ext.doctest"]
 source_suffix = ".rst"
 master_doc = "index"
 project = u"Hyperactive"
@@ -16,4 +16,4 @@ pygments_style = "sphinx"
 html_theme = "default"
 autoclass_content = "both"
 html_theme = "sphinx_rtd_theme"
-html_static_path = ["_static"]
+html_sidebars = {}
