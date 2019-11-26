@@ -36,7 +36,7 @@ def stop_warnings():
 
 class Hyperactive:
     """
-    Hyperactive mein class
+    Hyperactive main class
     """
 
     def __init__(self, X, y, memory=True, random_state=1, verbosity=2, warnings=False):
