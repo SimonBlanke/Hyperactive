@@ -2,9 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
-import pandas as pd
-
 from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
@@ -158,22 +155,3 @@ def test_get_search_path():
 
     opt = Hyperactive(search_config, optimizer="ParticleSwarm", get_search_path=True)
     opt.search(X, y)
-
-
-def test_load_memory():
-    para = pd.DataFrame(
-        np.array([[2, 2, 2, 2, 2], [2, 2, 2, 2, 2]]),
-        columns=[
-            "N_columns",
-            "N_rows",
-            "max_depth",
-            "min_samples_leaf",
-            "min_samples_split",
-        ],
-    )
-    score = pd.DataFrame(np.array([1, 1]), columns=["mean_test_score"])
-
-    opt = Hyperactive(search_config, n_iter=3, memory="long")
-    opt.search(X, y)
-    opt._optimizer_.search(0, X, y)._space_.load_memory(para, score)
-    
