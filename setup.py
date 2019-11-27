@@ -32,10 +32,5 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=[
-        "numpy",
-        "pandas",
-        "tqdm",
-        "meta-learn",
-    ],
+    install_requires=["numpy", "pandas", "tqdm"],
 )
