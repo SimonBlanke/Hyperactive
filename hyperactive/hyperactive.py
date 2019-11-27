@@ -87,6 +87,8 @@ class Hyperactive:
 
             if ray.is_initialized():
                 ray_ = True
+            else:
+                ray_ = False
         except ImportError:
             warnings.warn("failed to import ray", ImportWarning)
             ray_ = False
