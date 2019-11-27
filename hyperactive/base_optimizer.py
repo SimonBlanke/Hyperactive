@@ -12,7 +12,6 @@ from .base_positioner import BasePositioner
 from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2
 from .util import init_candidate, init_eval
 from .candidate import Candidate
-from meta_learn import HyperactiveWrapper
 
 
 class BaseOptimizer:
@@ -51,13 +50,9 @@ class BaseOptimizer:
 
         self._core_ = _core_
         self._arg_ = _arg_
-        self._meta_ = None
 
         self.search_config = self._core_.search_config
         self.n_iter = self._core_.n_iter
-
-        if self._core_.memory == "long":
-            self._meta_ = HyperactiveWrapper(self._core_.search_config)
 
         verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2]
         self._verb_ = verbs[_core_.verbosity]()
@@ -92,14 +87,6 @@ class BaseOptimizer:
         _cand_ = init_eval(_cand_, nth_process, X, y)
         _p_ = self._init_opt_positioner(_cand_, X, y)
         self._verb_.init_p_bar(_cand_, self._core_)
-
-        if self._meta_:
-            meta_data = self._meta_.get_func_metadata(_cand_)
-
-            # self._meta_.retrain(_cand_)
-            # para, score = self._meta_.search(X, y, _cand_)
-
-            _cand_._space_.load_memory(*meta_data)
 
         return _core_, _cand_, _p_
 
@@ -159,9 +146,6 @@ class BaseOptimizer:
         start_point = self._verb_.print_start_point(_cand_)
         self.results_params[_cand_.func_] = start_point
         self.results_models[_cand_.func_] = _cand_.model_best
-
-        if self._core_.memory == "long":
-            self._meta_.collect(X, y, _cand_)
 
     def _search_multiprocessing(self, X, y):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
