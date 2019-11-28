@@ -36,10 +36,38 @@ def stop_warnings():
 
 class Hyperactive:
     """
-    Hyperactive main class
+    Optimization main class.
     """
 
     def __init__(self, X, y, memory=True, random_state=1, verbosity=2, warnings=False):
+        """
+        
+        Parameters
+        ----------
+        X: array-like or None
+            Training input samples used during the optimization process.
+            The training data is passed to the "X" argument in the objective function during the optimization process.
+            You can also pass "None" if you want to optimize an objective function that does not contain a machine learning model.
+        
+        y: array-like or None
+            Training target values used during the optimization process.
+            The target values are passed to the "y" argument in the objective function during the optimization process.
+            You can also pass "None" if you want to optimize an objective function that does not contain a machine learning model.
+
+        memory: bool, optional (default: True)
+
+        random_state: int, optional (default: 1)
+
+        verbosity: int, optional (default: 2)
+
+        warnings: bool, optional (default: False)
+
+        
+        Returns
+        -------
+        None
+        
+        """
         self._main_args_ = MainArgs(X, y, memory, random_state, verbosity)
 
         if not warnings:
@@ -72,6 +100,51 @@ class Hyperactive:
     ):
         """
         run search
+        
+        Parameters
+        ----------
+        search_config: dictionary
+            Defines the search space and links it to the objective function. 
+            The objective function is the key of the dictionary, while the search space (which is also a dictionary) is the value.
+            You can define multiple modeles/search-spaces in the search_config.
+            The values within the search space (not search_config) must be lists or numpy arrays.
+            
+            Example:
+            def model_function(para, X, y):
+                model = GradientBoostingClassifier(
+                    n_estimators=para["n_estimators"],
+                    max_depth=para["max_depth"],
+                )
+                scores = cross_val_score(model, X, y, cv=3)
+
+                return scores.mean()
+
+
+            search_config = {
+                model_function: {
+                    "n_estimators": range(10, 200, 10),
+                    "max_depth": range(2, 12),
+                }
+            }
+            
+        
+        max_time: float, optional (default: None)
+        
+        n_iter: int, optional (default: 10)
+        
+        optimizer: string or dict, optional (default: "RandomSearch")
+        
+        n_jobs: int, optional (default: 1)
+        
+        warm_start: dict, optional (default: False)
+        
+        scatter_init: int, optional (default: False)
+        
+        
+        Returns
+        -------
+        None
+        
         """
 
         start_time = time.time()
