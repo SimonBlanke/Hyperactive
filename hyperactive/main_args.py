@@ -9,7 +9,7 @@ import multiprocessing
 
 
 class MainArgs:
-    def __init__(self, X, y, verbosity, random_state, memory):
+    def __init__(self, X, y, memory, random_state, verbosity):
         self.X = X
         self.y = y
         self.verbosity = verbosity
