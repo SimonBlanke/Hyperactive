@@ -82,9 +82,10 @@
 
 <div align="center"><a name="menu"></a>
   <h3>
-    <a href="https://simonblanke.github.io/Hyperactive/">Documentation</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
+    <a href="https://simonblanke.github.io/Hyperactive/">Documentation</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
   </h3>
 </div>
