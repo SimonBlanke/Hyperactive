@@ -204,6 +204,28 @@ pip install hyperactive
 
 <br>
 
+## Roadmap
+
+### v2.0.0
+
+- [x] Changed API
+- [ ] API doc via sphinx
+- [x] Ray integration
+
+### v2.1.0
+
+- [ ] Save memory of evals for later runs 
+- [ ] Warm start sequence based optimizers with memory from previous runs
+
+### v2.2.0
+
+- [ ] Tree-structured Parzen Estimator
+- [ ] Spiral optimization
+- [ ] Downhill-Simplex-Method
+
+
+<br>
+
 ## Experimental algorithms
 
 The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
