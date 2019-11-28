@@ -60,6 +60,19 @@
         </a>
       </td>
     </tr>
+    <tr/>    <tr align="left" valign="center">
+      <td>
+        <strong>Latest versions:</strong>
+      </td>
+      <td>
+        <a href="https://github.com/SimonBlanke/Hyperactive/releases">
+          <img src="https://img.shields.io/github/v/release/SimonBlanke/Hyperactive?style=flat-square&logo=github" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://pypi.org/project/hyperactive/">
+          <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
   </tbody>
 </table>
 
