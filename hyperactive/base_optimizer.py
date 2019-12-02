@@ -9,7 +9,7 @@ import multiprocessing
 from functools import partial
 
 from .base_positioner import BasePositioner
-from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2
+from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3
 from .util import init_candidate, init_eval
 from .candidate import Candidate
 
@@ -30,7 +30,7 @@ class BaseOptimizer:
             self._meta_ = HyperactiveWrapper(self._main_args_.search_config)
         """
 
-        verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2]
+        verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3]
         self._verb_ = verbs[_main_args_.verbosity]()
 
         self.pos_list = []

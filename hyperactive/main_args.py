@@ -20,8 +20,8 @@ class MainArgs:
         if verbosity > 9:
             self.get_search_path = True
 
-        if self.verbosity > 2:
-            self.verbosity = 2
+        if self.verbosity > 3:
+            self.verbosity = 3
 
         self.opt_para = dict()
 
