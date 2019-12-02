@@ -4,8 +4,6 @@ Hyperactive is primarily designed to optimize hyperparameters of machine learnin
 In general hyperactive works by searching through a set of parameters of an objective function. The objective function returns a fitness value that gets maximized during the optimization process. The search space defines the range of parameters that will be searched during the optimization process. <br>
 The following chapters provide a step by step explanation of how to start your first optimization run. Alternatively there are plenty of examples to learn how to use hyperactive.
 
-
-
 ## Create the search space
 
 Since v1.0.0 the search space is created by defining:

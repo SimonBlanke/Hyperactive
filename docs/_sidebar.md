@@ -4,6 +4,7 @@
     - [Project Overview](overview)
     - [Performance](./performance)
     - [How to use Hyperactive](./tutorial)
+    - [API Documentation](./reference)
 
 
 - Examples
