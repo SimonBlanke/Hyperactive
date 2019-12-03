@@ -64,7 +64,47 @@ Starts the optimization run.
 
  - ``optimizer``**:** string or dict, optional (default: "RandomSearch")
 
-    Optimization strategy used during the run.
+    Optimization strategy used during the run:
+
+        - "HillClimbing"
+        - "StochasticHillClimbing"
+        - "TabuSearch"
+        - "RandomSearch"
+        - "RandomRestartHillClimbing"
+        - "RandomAnnealing"
+        - "SimulatedAnnealing",
+        - "StochasticTunneling"
+        - "ParallelTempering"
+        - "ParticleSwarm"
+        - "EvolutionStrategy"
+        - "Bayesian"
+
+    Optimization arguments:
+
+| Argument | type | default |
+|---|---|---|
+| epsilon | float | 0.03 |
+| climb_dist | object | numpy.random.normal |
+| n_neighbours | int | 1 |
+| p_down | float | 1 |
+| tabu_memory | int | 10 |
+| n_restarts | int | 10 |
+| epsilon_mod | float | 33 |
+| annealing_rate | float | 0.99 |
+| start_temp | float | 1 |
+| gamma | float | 0.5 |
+| system_temperatures | list | [0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10] |
+| n_swaps | int | 10 |
+| n_particles | int | 10 |
+| inertia | float | 0.5 |
+| cognitive_weight | float | 0.5 |
+| social_weight | float | 0.5 |
+| individuals | int | 10 |
+| mutation_rate | float | 0.7 |
+| crossover_rate | float | 0.3 |
+| kernel | object | sklearn.gaussian_process.kernels.Matern(nu=2.5) |
+
+
 
  - ``n_jobs``**:** int, optional (default: 1)
 
