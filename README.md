@@ -186,13 +186,14 @@
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=warm-start">Warm-start</a></li>
-            <li>Meta-Learn (coming soon)</li>
           </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=memory">Memory</a></li>
-            <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#1-proxy-datasets-for-training-convolutional-neural-networks">1</a>]
- (coming soon)</li>
+               <ul>
+                 <li>Short term</li>
+                 <li>Long term</li>
+               </ul>
           </ul>
       </td>
     </tr>
@@ -223,8 +224,7 @@ pip install hyperactive
 <details open>
 <summary><b>v2.0.0</b></summary> 
   
-  - [x] Changed API
-  - [ ] API doc via sphinx
+  - [x] Change API
   - [x] Ray integration 
 </details>
 
