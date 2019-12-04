@@ -231,8 +231,8 @@ pip install hyperactive
 <details>
 <summary><b>v2.1.0</b></summary>
   
-  - [ ] Save memory of evals for later runs 
-  - [ ] Warm start sequence based optimizers with memory from previous runs
+  - [ ] Save memory of evaluations for later runs (long term memory)
+  - [ ] Warm start sequence based optimizers with long term memory
 </details>
 
 <details>
