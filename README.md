@@ -101,7 +101,7 @@
   - Optimize:
     - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=sklearn-pipeline)
     - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=stacking)
-    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=keras-cnn-structure) architecture
+    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=neural-architecture-search) architecture
     - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=meta-optimization) (meta-optimization)
     - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/math_functions?id=rosenbrock-function) you can specify with this API
   - Utilize state of the art optimization techniques like:
@@ -184,12 +184,12 @@
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=warm-start">Warm-start</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/extensions?id=warm-start">Warm-start</a></li>
           </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=memory">Memory</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/extensions?id=memory">Memory</a></li>
                <ul>
                  <li>Short term</li>
                  <li>Long term</li>
