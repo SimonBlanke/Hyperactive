@@ -65,29 +65,13 @@ Your decision to use a specific optimizer should be based on the time it takes t
 - random optimizers are a good way to <b>start exploring</b> the search space
 - the majority of the <b>iteration-time</b> should be the <b>evaluation-time</b> of the model
 
-All optimization techniques are explained in more detail [here](https://simonblanke.github.io/Hyperactive/#/./optimizers/README?id=optimization-techniques). A comparison between the iteration- and evaluation-time for different models can be seen [here](https://simonblanke.github.io/Hyperactive/#/./performance/README?id=performance).
-You can choose the optimizer by passing one of the following strings to the 'optimizer' keyword in the Hyperactive-class:
-
-- "HillClimbing"
-- "StochasticHillClimbing"
-- "TabuSearch"
-- "RandomSearch"
-- "RandomRestartHillClimbing"
-- "RandomAnnealing"
-- "SimulatedAnnealing",
-- "StochasticTunneling"
-- "ParallelTempering"
-- "ParticleSwarm"
-- "EvolutionStrategy"
-- "Bayesian"
-
+?>  If you want to learn more about the different optimization strategies, check out the corresponding chapters for [local](./optimizers/local_search)-, [random](./optimizers/random_methods)-, [markov-chain-monte-carlo](./optimizers/mcmc)-, [population](./optimizers/population_methods)- and [sequential](./optimizers/sequential_methods)-optimization.
 
 ## How many iterations?
 
 The number of iterations should be low for your first optimization to get to know the iteration-time.
 For the <b>iteration-time</b> you should take the following effects into account:
 - A <b>k-fold-crossvalidation</b> increases evaluation-time like training on k-1 times on the training data
-- If you lower <b>cv below 1</b> the evaluation will deal with it like a training/validation-split, where cv marks the training data fraction. Therefore lower cv means faster evaluation.
 - Some optimizers will do (and need) <b>multiple evaluations</b> per iteration:
   - Particle-swarm-optimization
   - Evoluion strategy
@@ -97,20 +81,26 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 ## Distribution
 
-You can start multiple optimizations in <b>parallel</b> by increasing the number of jobs. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time.
+If the model training does not use all CPU cores, you can start multiple optimizations in <b>parallel</b> by increasing the number of jobs 'n_jobs'. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time. The parallelization is done by the Multiprocessing-package.
 
-## Position initialization
+It is also possible to distribute the model training by using the [Ray-package](https://github.com/ray-project/ray). Ray is a powerful framework for building and running distributed applications. Ray can be used with Hyperactive by just importing and initializing Ray. Hyperactive automatically detects this initialization and will use Ray instead of Multiprocessing. You can set the number of jobs 'n_jobs' like before, while passing the ray-specific parameters (like num_cpus, num_gpus, ...) to ray.init(). 
 
-#### Scatter-Initialization
+?>  If you want to learn more about it check out the [distribution-examples](./examples/distribution) and give it a try.
+
+## Optimization extensions
+
+#### Position initialization
+
+**Scatter-Initialization**
 
 This technique was inspired by the 'Hyperband Optimization' and aims to find a good initial position for the optimization. It does so by evaluating n random positions with a training subset of 1/n the size of the original dataset. The position that achieves the best score is used as the starting position for the optimization.
 
-
-#### Warm-Start
+**Warm-Start**
 
 When a search is finished the warm-start-dictionary for the best position in the hyperparameter search space (and its metric) is printed in the command line (at verbosity=1). If multiple searches ran in parallel the warm-start-dictionaries are sorted by the best metric in decreasing order. If the start position in the warm-start-dictionary is not within the search space defined in the search_config an error will occure.
 
-## Resources allocation
+#### Resources allocation
 
-#### Memory
+**Memory**
+
 After the evaluation of a model the position (in the hyperparameter search dictionary) and the cross-validation score are written to a dictionary. If the optimizer tries to evaluate this position again it can quickly lookup if a score for this position is present and use it instead of going through the extensive training and prediction process.
