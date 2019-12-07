@@ -60,9 +60,11 @@ class BaseOptimizer:
 
     def _initialize_search(self, _main_args_, nth_process):
         _cand_ = init_candidate(_main_args_, nth_process, Candidate)
-        _cand_ = init_eval(_cand_, nth_process)
-        _p_ = self._init_opt_positioner(_cand_)
         self._verb_.init_p_bar(_cand_, self._main_args_)
+
+        _cand_ = init_eval(_cand_, nth_process)
+        self._verb_.update_p_bar(1, _cand_)
+        _p_ = self._init_opt_positioner(_cand_)
 
         if self._meta_:
             meta_data = self._meta_.get_func_metadata(_cand_.func_)
@@ -83,7 +85,7 @@ class BaseOptimizer:
     def _search(self, nth_process):
         _cand_, _p_ = self._initialize_search(self._main_args_, nth_process)
 
-        for i in range(self._main_args_.n_iter):
+        for i in range(self._main_args_.n_iter - 1):
             _cand_.i = i
             _cand_ = self._iterate(i, _cand_, _p_)
             self._verb_.update_p_bar(1, _cand_)
