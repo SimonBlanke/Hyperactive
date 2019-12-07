@@ -64,14 +64,13 @@ class Hyperactive:
         max_time=None,
         optimizer="RandomSearch",
         n_jobs=1,
-        warm_start=False,
-        scatter_init=False,
+        init_config=None,
     ):
 
         start_time = time.time()
 
         self._main_args_.search_args(
-            search_config, max_time, n_iter, optimizer, n_jobs, warm_start, scatter_init
+            search_config, max_time, n_iter, optimizer, n_jobs, init_config
         )
         self._opt_args_ = Arguments(self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]

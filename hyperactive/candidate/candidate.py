@@ -25,7 +25,6 @@ class Candidate:
 
         self.func_name = str(self.func_).split(" ")[1]
 
-        self._space_.create_searchspace()
         self._model_ = Model(self.func_, nth_process, _main_args_)
 
         self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)

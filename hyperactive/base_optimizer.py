@@ -62,15 +62,13 @@ class BaseOptimizer:
         _cand_ = init_candidate(_main_args_, nth_process, Candidate)
         self._verb_.init_p_bar(_cand_, self._main_args_)
 
-        _cand_ = init_eval(_cand_, nth_process)
+        _cand_ = init_eval(_cand_)
         self._verb_.update_p_bar(1, _cand_)
         _p_ = self._init_opt_positioner(_cand_)
 
         if self._meta_:
             meta_data = self._meta_.get_func_metadata(_cand_.func_)
 
-            # self._meta_.retrain(_cand_)
-            # para, score = self._meta_.search(X, y, _cand_)
             _cand_._space_.load_memory(*meta_data)
 
         return _cand_, _p_

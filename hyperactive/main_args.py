@@ -26,22 +26,14 @@ class MainArgs:
         self.opt_para = dict()
 
     def search_args(
-        self,
-        search_config,
-        max_time,
-        n_iter,
-        optimizer,
-        n_jobs,
-        warm_start,
-        scatter_init,
+        self, search_config, max_time, n_iter, optimizer, n_jobs, init_config
     ):
         self.search_config = search_config
         self.max_time = max_time
         self.n_iter = n_iter
         self.optimizer = optimizer
         self.n_jobs = n_jobs
-        self.warm_start = warm_start
-        self.scatter_init = scatter_init
+        self.init_config = init_config
 
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)
