@@ -33,8 +33,6 @@ search_config = {
     }
 }
 
-warm_start = {model: {"max_depth": 2, "min_samples_split": 2, "min_samples_leaf": 2}}
-
 
 def test_func_return():
     def model1(para, X, y):
@@ -124,31 +122,20 @@ def test_verbosity():
 
 
 def test_scatter_init():
+    init_config = {model: {"scatter_init": 10}}
     opt = Hyperactive(X, y)
-    opt.search(search_config, scatter_init=10)
+    opt.search(search_config, init_config=init_config)
+
+
+def test_warm_start():
+    init_config = {model: {"n_estimators": 10, "max_depth": 2, "min_samples_split": 5}}
+    opt = Hyperactive(X, y)
+    opt.search(search_config, n_jobs=1, init_config=init_config)
 
 
 def test_optimizer_args():
     opt = Hyperactive(X, y)
     opt.search(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
-
-
-def test_scatter_init_and_warm_start():
-    opt = Hyperactive(X, y)
-    opt.search(search_config, warm_start=warm_start, scatter_init=10)
-
-    opt = Hyperactive(X, y)
-    opt.search(search_config, warm_start=warm_start, scatter_init=10)
-
-
-def test_warm_start_multiple_jobs():
-    opt = Hyperactive(X, y)
-    opt.search(search_config, n_jobs=4, warm_start=warm_start)
-
-
-def test_warm_start():
-    opt = Hyperactive(X, y)
-    opt.search(search_config, n_jobs=1, warm_start=warm_start)
 
 
 def test_get_search_path():
