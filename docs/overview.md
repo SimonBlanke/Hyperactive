@@ -189,12 +189,38 @@ git clone https://github.com/SimonBlanke/Hyperactive/tree/dev.git
 pip install Hyperactive/
 ```
 
+<br>
+
+## Roadmap
+
+<details open>
+<summary><b>v2.0.0</b></summary>
+
+  - [x] Change API
+  - [x] Ray integration
+</details>
+
+<details>
+<summary><b>v2.1.0</b></summary>
+
+  - [ ] Save memory of evaluations for later runs (long term memory)
+  - [ ] Warm start sequence based optimizers with long term memory
+</details>
+
+<details>
+<summary><b>v2.2.0</b></summary>
+
+  - [ ] Tree-structured Parzen Estimator
+  - [ ] Spiral optimization
+  - [ ] Downhill-Simplex-Method
+</details>
+
 <br><br>
 
 #### Experimental Algorithms
 
 ?> **Disclaimer:** The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
-If any of these algorithms already exist I would like to ask you to share it with me in an issue.
+If any of these algorithms already exist I would like you to share it with me in an issue.
 
 **Random Annealing**
 

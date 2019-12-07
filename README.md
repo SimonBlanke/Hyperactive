@@ -222,22 +222,22 @@ pip install hyperactive
 ## Roadmap
 
 <details open>
-<summary><b>v2.0.0</b></summary> 
-  
+<summary><b>v2.0.0</b></summary>
+
   - [x] Change API
-  - [x] Ray integration 
+  - [x] Ray integration
 </details>
 
 <details>
 <summary><b>v2.1.0</b></summary>
-  
+
   - [ ] Save memory of evaluations for later runs (long term memory)
   - [ ] Warm start sequence based optimizers with long term memory
 </details>
 
 <details>
 <summary><b>v2.2.0</b></summary>
-  
+
   - [ ] Tree-structured Parzen Estimator
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
@@ -248,7 +248,7 @@ pip install hyperactive
 ## Experimental algorithms
 
 The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
-If any of these algorithms still exist I ask you to share it with me in an issue.
+If any of these algorithms already exist I would like you to share it with me in an issue.
 
 #### Random Annealing
 
