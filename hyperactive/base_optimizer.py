@@ -74,7 +74,7 @@ class BaseOptimizer:
         return _cand_, _p_
 
     def _finish_search(self, _main_args_, _cand_):
-        _cand_.eval_pos(_cand_.pos_best, force_eval=True)
+        # _cand_.eval_pos(_cand_.pos_best, force_eval=True)
         self.eval_time = _cand_.eval_time_sum
         self._verb_.close_p_bar()
 
