@@ -193,14 +193,14 @@ pip install Hyperactive/
 
 ## Roadmap
 
-<details open>
-<summary><b>v2.0.0</b></summary>
+<details>
+<summary><b>v2.0.0</b>:heavy_check_mark:</summary>
 
   - [x] Change API
   - [x] Ray integration
 </details>
 
-<details>
+<details open>
 <summary><b>v2.1.0</b></summary>
 
   - [ ] Save memory of evaluations for later runs (long term memory)
@@ -213,6 +213,13 @@ pip install Hyperactive/
   - [ ] Tree-structured Parzen Estimator
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
+</details>
+
+<details>
+<summary><b>v2.3.0</b></summary>
+
+  - [ ] Helper-classes for model pruning
+  - [ ] Helper-classes for dataset approximation
 </details>
 
 <br><br>
