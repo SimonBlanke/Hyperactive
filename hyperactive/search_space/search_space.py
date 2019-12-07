@@ -10,16 +10,17 @@ class SearchSpace:
     def __init__(self, _core_, model_nr):
         self.search_space = _core_.search_config[list(_core_.search_config)[model_nr]]
         self.pos_space_limit()
+        self.init_type = None
 
-        self.init_para = _core_.init_config[list(_core_.init_config)[model_nr]]
+        if _core_.init_config:
+            self.init_para = _core_.init_config[list(_core_.init_config)[model_nr]]
+
+            if list(self.init_para.keys())[0] == list(self.search_space.keys())[0]:
+                self.init_type = "warm_start"
+            elif list(self.init_para.keys())[0] == "scatter_init":
+                self.init_type = "scatter_init"
+
         self.memory = {}
-
-        if list(self.init_para.keys())[0] == list(self.search_space.keys())[0]:
-            self.init_type = "warm_start"
-        elif list(self.init_para.keys())[0] == "scatter_init":
-            self.init_type = "scatter_init"
-        else:
-            self.init_type = None
 
     def load_memory(self, para, score):
         if para is None or score is None:
