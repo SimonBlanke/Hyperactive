@@ -221,14 +221,14 @@ pip install hyperactive
 
 ## Roadmap
 
-<details open>
-<summary><b>v2.0.0</b></summary> 
+<details>
+<summary><b>v2.0.0</b>:heavy_check_mark:</summary> 
   
   - [x] Change API
   - [x] Ray integration 
 </details>
 
-<details>
+<details open>
 <summary><b>v2.1.0</b></summary>
   
   - [ ] Save memory of evaluations for later runs (long term memory)
