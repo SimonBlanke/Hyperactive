@@ -78,11 +78,18 @@
 
 <br>
 
+
+<div align="center">
+  <h3>
+    For more information, visualization and details about the API check out the <br/>
+    <a href="https://simonblanke.github.io/Hyperactive/">website</a>
+  </h3>
+</div>
+
 ---
 
 <div align="center"><a name="menu"></a>
   <h3>
-    <a href="https://simonblanke.github.io/Hyperactive/">Documentation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
@@ -199,13 +206,6 @@
     </tr>
   </tbody>
 </table>
-
-<div align="center">
-  <h3>
-    This readme provides only a short introduction. For more information check out the <br/>
-    <a href="https://simonblanke.github.io/Hyperactive/">full documentation</a>
-  </h3>
-</div>
 
 <br>
 
