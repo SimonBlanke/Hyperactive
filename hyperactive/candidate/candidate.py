@@ -51,6 +51,7 @@ class Candidate:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
+            para["iteration"] = self.i
             score, eval_time, self.model = self._model_.train_model(para)
             self._space_.memory[pos_str] = score
             self.eval_time_sum = self.eval_time_sum + eval_time
