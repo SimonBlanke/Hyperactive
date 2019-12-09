@@ -1,112 +1,3 @@
-## Keras MLP
-
-```python
-import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-from keras.optimizers import RMSprop
-from keras.utils import to_categorical
-
-from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_breast_cancer
-from hyperactive import Hyperactive
-
-data = load_breast_cancer()
-X, y = data.data, data.target
-y = to_categorical(y)
-
-
-def model(para, X, y):
-    model = Sequential()
-    model.add(Dense(para["layer0"], activation="relu"))
-    model.add(Dropout(para["dropout0"]))
-    model.add(Dense(para["layer1"], activation="relu"))
-    model.add(Dropout(para["dropout1"]))
-    model.add(Dense(2, activation="softmax"))
-
-    model.compile(
-        loss="categorical_crossentropy", optimizer=RMSprop(), metrics=["accuracy"]
-    )
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-    model.fit(X_train, y_train, batch_size=128, epochs=10, verbose=1)
-    loss, score = model.evaluate(X_test, y_test, verbose=0)
-
-    return score
-
-
-search_config = {
-    model: {
-        "layer0": range(10, 301, 5),
-        "layer1": range(10, 301, 5),
-        "dropout0": np.arange(0.1, 1, 0.1),
-        "dropout1": np.arange(0.1, 1, 0.1),
-    }
-}
-
-
-opt = Hyperactive(search_config, n_iter=10)
-opt.search(X, y)
-```
-
-## Keras CNN
-
-```python
-from keras.models import Sequential
-from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout, Activation
-from keras.datasets import cifar10
-from keras.utils import to_categorical
-
-from hyperactive import Hyperactive
-
-(X_train, y_train), (X_test, y_test) = cifar10.load_data()
-
-y_train = to_categorical(y_train, 10)
-y_test = to_categorical(y_test, 10)
-
-
-def cnn(para, X_train, y_train):
-    model = Sequential()
-    model.add(
-        Conv2D(para["filter.0"], (3, 3), padding="same", input_shape=X_train.shape[1:])
-    )
-    model.add(Activation("relu"))
-    model.add(Conv2D(para["filter.0"], (3, 3)))
-    model.add(Activation("relu"))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-
-    model.add(Conv2D(para["filter.0"], (3, 3), padding="same"))
-    model.add(Activation("relu"))
-    model.add(Conv2D(para["filter.0"], (3, 3)))
-    model.add(Activation("relu"))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-
-    model.add(Flatten())
-    model.add(Dense(para["layer.0"]))
-    model.add(Activation("relu"))
-    model.add(Dropout(0.5))
-    model.add(Dense(10))
-    model.add(Activation("softmax"))
-
-    model.compile(
-        optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
-    )
-    model.fit(X_train, y_train, epochs=25, batch_size=128)
-
-    loss, score = model.evaluate(x=X_test, y=y_test)
-
-    return score
-
-
-search_config = {cnn: {"filter.0": [16, 32, 64, 128], "layer.0": range(100, 1000, 100)}}
-
-opt = Hyperactive(search_config, n_iter=5)
-opt.search(X_train, y_train)
-
-```
-
 ## Tensorflow
 
 ```python
@@ -158,7 +49,7 @@ def cnn(para, X_train, y_train):
         )
 
         pred_classes = tf.argmax(logits_test, axis=1)
-        pred_probas = tf.nn.softmax(logits_test)
+        # pred_probas = tf.nn.softmax(logits_test)
 
         if mode == tf.estimator.ModeKeys.PREDICT:
             return tf.estimator.EstimatorSpec(mode, predictions=pred_classes)
@@ -210,6 +101,62 @@ search_config = {
     }
 }
 
-opt = Hyperactive(search_config, n_iter=20)
-opt.search(X_train, y_train)
+opt = Hyperactive(X_train, y_train)
+opt.search(search_config, n_iter=20)
 ```
+
+## Keras
+
+```python
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout, Activation
+from keras.datasets import cifar10
+from keras.utils import to_categorical
+
+from hyperactive import Hyperactive
+
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+
+def cnn(para, X_train, y_train):
+    nn = Sequential()
+    nn.add(
+        Conv2D(para["filter.0"], (3, 3), padding="same", input_shape=X_train.shape[1:])
+    )
+    nn.add(Activation("relu"))
+    nn.add(Conv2D(para["filter.0"], (3, 3)))
+    nn.add(Activation("relu"))
+    nn.add(MaxPooling2D(pool_size=(2, 2)))
+    nn.add(Dropout(0.25))
+
+    nn.add(Conv2D(para["filter.0"], (3, 3), padding="same"))
+    nn.add(Activation("relu"))
+    nn.add(Conv2D(para["filter.0"], (3, 3)))
+    nn.add(Activation("relu"))
+    nn.add(MaxPooling2D(pool_size=(2, 2)))
+    nn.add(Dropout(0.25))
+
+    nn.add(Flatten())
+    nn.add(Dense(para["layer.0"]))
+    nn.add(Activation("relu"))
+    nn.add(Dropout(0.5))
+    nn.add(Dense(10))
+    nn.add(Activation("softmax"))
+
+    nn.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    nn.fit(X_train, y_train, epochs=25, batch_size=128)
+
+    _, score = nn.evaluate(x=X_test, y=y_test)
+
+    return score
+
+
+search_config = {cnn: {"filter.0": [16, 32, 64, 128], "layer.0": range(100, 1000, 100)}}
+
+opt = Hyperactive(X_train, y_train)
+opt.search(search_config, n_iter=5)
+```
+
