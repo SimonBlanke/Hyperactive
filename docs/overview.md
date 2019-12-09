@@ -55,20 +55,20 @@
 
 ## Main Features
 
-  - Thoroughly tested code base
-  - Compatible with <b>any python machine-learning framework</b>
-  - Optimize:
-    - Anything from [simple models](#/./examples/sklearn_examples?id=sklearn) <br/> to complex [machine-learning-pipelines](#/./examples/sklearn_pipeline_example?id=sklearn-pipeline)
-    - Multi-level [ensembles](#/./examples/stacking_example?id=stacking)
-    - [Deep neural network](#/./examples/cnn_structure?id=keras-cnn-structure) architecture
-    - Other [optimization techniques](./docs/examples.md) (meta-optimization)
-    - Or [any function](./docs/examples.md) you can specify with this API
-  - Utilize state of the art [optimization techniques](#/./optimizers/README?id=optimization-techniques) like:
-    - Simulated annealing
-    - Evolution strategy
-    - Bayesian optimization
-  - [High performance](#/./performance/README?id=performance): Optimizer time is neglectable for most models
-  - Choose from a variety of different [optimization extensions](#/./extentions/README?id=optimization-extensions) to improve the optimization
+- Thoroughly tested code base
+- Compatible with <b>any python machine-learning framework</b>
+- Optimize:
+  - Anything from [simple models](#/./examples/machine_learning?id=sklearn) <br/> to complex [machine-learning-pipelines](#/./examples/use_cases?id=sklearn-pipeline)
+  - Multi-level [ensembles](#/./examples/use_cases?id=stacking)
+  - [Deep neural network](#/./examples/use_cases?id=neural-architecture-search) architecture
+  - Other [optimization techniques](#/./examples/use_cases?id=meta-optimization) (meta-optimization)
+  - Or [any function](#/./examples/test_functions?id=rosenbrock-function) you can specify with this API
+- Utilize state of the art optimization techniques like:
+  - Simulated annealing
+  - Evolution strategy
+  - Bayesian optimization
+- [High performance](#/./performance?id=performance): Optimizer time is neglectable for most models
+- Choose from a variety of different [optimization extensions](#/./examples/extensions) to improve the optimization
 
 <br>
 
@@ -189,12 +189,45 @@ git clone https://github.com/SimonBlanke/Hyperactive/tree/dev.git
 pip install Hyperactive/
 ```
 
+<br>
+
+## Roadmap
+
+<details>
+<summary><b>v2.0.0</b>:heavy_check_mark:</summary>
+
+  - [x] Change API
+  - [x] Ray integration
+</details>
+
+<details open>
+<summary><b>v2.1.0</b></summary>
+
+  - [ ] Save memory of evaluations for later runs (long term memory)
+  - [ ] Warm start sequence based optimizers with long term memory
+</details>
+
+<details>
+<summary><b>v2.2.0</b></summary>
+
+  - [ ] Tree-structured Parzen Estimator
+  - [ ] Spiral optimization
+  - [ ] Downhill-Simplex-Method
+</details>
+
+<details>
+<summary><b>v2.3.0</b></summary>
+
+  - [ ] Helper-classes for model pruning
+  - [ ] Helper-classes for dataset approximation
+</details>
+
 <br><br>
 
 #### Experimental Algorithms
 
 ?> **Disclaimer:** The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
-If any of these algorithms already exist I would like to ask you to share it with me in an issue.
+If any of these algorithms already exist I would like you to share it with me in an issue.
 
 **Random Annealing**
 

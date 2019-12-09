@@ -9,7 +9,7 @@ import multiprocessing
 from functools import partial
 
 from .base_positioner import BasePositioner
-from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2
+from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3
 from .util import init_candidate, init_eval
 from .candidate import Candidate
 
@@ -30,7 +30,7 @@ class BaseOptimizer:
             self._meta_ = HyperactiveWrapper(self._main_args_.search_config)
         """
 
-        verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2]
+        verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3]
         self._verb_ = verbs[_main_args_.verbosity]()
 
         self.pos_list = []
@@ -60,21 +60,21 @@ class BaseOptimizer:
 
     def _initialize_search(self, _main_args_, nth_process):
         _cand_ = init_candidate(_main_args_, nth_process, Candidate)
-        _cand_ = init_eval(_cand_, nth_process)
-        _p_ = self._init_opt_positioner(_cand_)
         self._verb_.init_p_bar(_cand_, self._main_args_)
+
+        _cand_ = init_eval(_cand_)
+        self._verb_.update_p_bar(1, _cand_)
+        _p_ = self._init_opt_positioner(_cand_)
 
         if self._meta_:
             meta_data = self._meta_.get_func_metadata(_cand_.func_)
 
-            # self._meta_.retrain(_cand_)
-            # para, score = self._meta_.search(X, y, _cand_)
             _cand_._space_.load_memory(*meta_data)
 
         return _cand_, _p_
 
     def _finish_search(self, _main_args_, _cand_):
-        _cand_.eval_pos(_cand_.pos_best, force_eval=True)
+        # _cand_.eval_pos(_cand_.pos_best, force_eval=True)
         self.eval_time = _cand_.eval_time_sum
         self._verb_.close_p_bar()
 
@@ -83,7 +83,7 @@ class BaseOptimizer:
     def _search(self, nth_process):
         _cand_, _p_ = self._initialize_search(self._main_args_, nth_process)
 
-        for i in range(self._main_args_.n_iter):
+        for i in range(self._main_args_.n_iter - 1):
             _cand_.i = i
             _cand_ = self._iterate(i, _cand_, _p_)
             self._verb_.update_p_bar(1, _cand_)

@@ -13,8 +13,8 @@ def init_candidate(_main_args_, nth_process, Candidate):
     return _cand_
 
 
-def init_eval(_cand_, nth_process):
-    pos = _cand_._init_._set_start_pos(nth_process)
+def init_eval(_cand_):
+    pos = _cand_._init_._set_start_pos()
     score = _cand_.eval_pos(pos)
     _cand_.score_best = score
     _cand_.pos_best = pos

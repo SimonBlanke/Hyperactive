@@ -1,39 +1,6 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+## Hyperactive
 
-import time
-import warnings
-
-from .main_args import MainArgs
-from .opt_args import Arguments
-
-from . import (
-    HillClimbingOptimizer,
-    StochasticHillClimbingOptimizer,
-    TabuOptimizer,
-    RandomSearchOptimizer,
-    RandomRestartHillClimbingOptimizer,
-    RandomAnnealingOptimizer,
-    SimulatedAnnealingOptimizer,
-    StochasticTunnelingOptimizer,
-    ParallelTemperingOptimizer,
-    ParticleSwarmOptimizer,
-    EvolutionStrategyOptimizer,
-    BayesianOptimizer,
-)
-
-
-def stop_warnings():
-    # because sklearn warnings are annoying when they appear 100 times
-    def warn(*args, **kwargs):
-        pass
-
-    import warnings
-
-    warnings.warn = warn
-
-
+```python
 class Hyperactive:
     def __init__(self, X, y, memory=True, random_state=1, verbosity=3, warnings=False):
         self.X = X
@@ -64,13 +31,14 @@ class Hyperactive:
         max_time=None,
         optimizer="RandomSearch",
         n_jobs=1,
-        init_config=None,
+        warm_start=False,
+        scatter_init=False,
     ):
 
         start_time = time.time()
 
         self._main_args_.search_args(
-            search_config, max_time, n_iter, optimizer, n_jobs, init_config
+            search_config, max_time, n_iter, optimizer, n_jobs, warm_start, scatter_init
         )
         self._opt_args_ = Arguments(self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
@@ -116,3 +84,4 @@ class Hyperactive:
 
     def save_report(self):
         pass
+```

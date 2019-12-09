@@ -9,7 +9,7 @@ import multiprocessing
 
 
 class MainArgs:
-    def __init__(self, X, y, verbosity, random_state, memory):
+    def __init__(self, X, y, memory, random_state, verbosity):
         self.X = X
         self.y = y
         self.verbosity = verbosity
@@ -20,28 +20,20 @@ class MainArgs:
         if verbosity > 9:
             self.get_search_path = True
 
-        if self.verbosity > 2:
-            self.verbosity = 2
+        if self.verbosity > 3:
+            self.verbosity = 3
 
         self.opt_para = dict()
 
     def search_args(
-        self,
-        search_config,
-        max_time,
-        n_iter,
-        optimizer,
-        n_jobs,
-        warm_start,
-        scatter_init,
+        self, search_config, max_time, n_iter, optimizer, n_jobs, init_config
     ):
         self.search_config = search_config
         self.max_time = max_time
         self.n_iter = n_iter
         self.optimizer = optimizer
         self.n_jobs = n_jobs
-        self.warm_start = warm_start
-        self.scatter_init = scatter_init
+        self.init_config = init_config
 
         self.model_list = list(self.search_config.keys())
         self.n_models = len(self.model_list)

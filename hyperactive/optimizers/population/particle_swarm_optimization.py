@@ -21,7 +21,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
             _p_.nr = i
             _p_.pos_current = _cand_._space_.get_random_pos()
             _p_.pos_best = _p_.pos_current
-            _p_.velo = np.zeros(len(_cand_._space_.para_space))
+            _p_.velo = np.zeros(len(_cand_._space_.search_space))
 
         return _p_list_
 

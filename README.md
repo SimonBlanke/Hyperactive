@@ -60,18 +60,39 @@
         </a>
       </td>
     </tr>
+    <tr/>    <tr align="left" valign="center">
+      <td>
+        <strong>Latest versions:</strong>
+      </td>
+      <td>
+        <a href="https://github.com/SimonBlanke/Hyperactive/releases">
+          <img src="https://img.shields.io/github/v/release/SimonBlanke/Hyperactive?style=flat-square&logo=github" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://pypi.org/project/hyperactive/">
+          <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
   </tbody>
 </table>
 
 <br>
 
+
+<div align="center">
+  <h3>
+    For more information, visualization and details about the API check out the <br/>
+    <a href="https://simonblanke.github.io/Hyperactive/">website</a>
+  </h3>
+</div>
+
 ---
 
 <div align="center"><a name="menu"></a>
   <h3>
-    <a href="https://simonblanke.github.io/Hyperactive/">Documentation</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> |
-    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> |
+    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
   </h3>
 </div>
@@ -87,9 +108,9 @@
   - Optimize:
     - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=sklearn-pipeline)
     - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=stacking)
-    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=keras-cnn-structure) architecture
+    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=neural-architecture-search) architecture
     - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=meta-optimization) (meta-optimization)
-    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/math_functions?id=rosenbrock-function) you can specify with this API
+    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/test_functions?id=rosenbrock-function) you can specify with this API
   - Utilize state of the art optimization techniques like:
     - Simulated annealing
     - Evolution strategy
@@ -170,27 +191,21 @@
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=warm-start">Warm-start</a></li>
-            <li>Meta-Learn (coming soon)</li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="https://github.com/SimonBlanke/Hyperactive#scatter-initialization">*</a>] </li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/extensions?id=warm-start">Warm-start</a></li>
           </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./extentions/extensions?id=memory">Memory</a></li>
-            <li>Proxy Datasets [<a href="https://github.com/SimonBlanke/Hyperactive#1-proxy-datasets-for-training-convolutional-neural-networks">1</a>]
- (coming soon)</li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/extensions?id=memory">Memory</a></li>
+               <ul>
+                 <li>Short term</li>
+                 <li>Long term</li>
+               </ul>
           </ul>
       </td>
     </tr>
   </tbody>
 </table>
-
-<div align="center">
-  <h3>
-    This readme provides only a short introduction. For more information check out the <br/>
-    <a href="https://simonblanke.github.io/Hyperactive/">full documentation</a>
-  </h3>
-</div>
 
 <br>
 
@@ -204,10 +219,43 @@ pip install hyperactive
 
 <br>
 
+## Roadmap
+
+<details>
+<summary><b>v2.0.0</b>:heavy_check_mark:</summary>
+
+  - [x] Change API
+  - [x] Ray integration
+</details>
+
+<details open>
+<summary><b>v2.1.0</b></summary>
+
+  - [ ] Save memory of evaluations for later runs (long term memory)
+  - [ ] Warm start sequence based optimizers with long term memory
+</details>
+
+<details>
+<summary><b>v2.2.0</b></summary>
+
+  - [ ] Tree-structured Parzen Estimator
+  - [ ] Spiral optimization
+  - [ ] Downhill-Simplex-Method
+</details>
+
+<details>
+<summary><b>v2.3.0</b></summary>
+
+  - [ ] Helper-classes for model pruning
+  - [ ] Helper-classes for dataset approximation
+</details>
+
+<br>
+
 ## Experimental algorithms
 
 The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
-If any of these algorithms still exist I ask you to share it with me in an issue.
+If any of these algorithms already exist I would like you to share it with me in an issue.
 
 #### Random Annealing
 

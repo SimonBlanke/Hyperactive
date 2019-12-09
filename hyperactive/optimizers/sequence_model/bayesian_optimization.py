@@ -15,19 +15,14 @@ class BayesianOptimizer(BaseOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
         self.xi = 0.01
-        # Gaussian process with Mat??rn kernel as surrogate model
-        # m52 = ConstantKernel(1.0) * Matern(length_scale=1.0, nu=2.5)
-        # kernel = C(1.0, (1e-3, 1e3)) * RBF(10, (1e-2, 1e2))
-        # self.gpr1 = GaussianProcessRegressor(kernel=kernel, alpha=0.02)
         self.gpr = GaussianProcessRegressor(
             kernel=self._opt_args_.kernel,
             alpha=1e-6,
             normalize_y=True,
             n_restarts_optimizer=25,
-            # random_state=self._random_state,
         )
 
-    def expected_improvement(self, xi=0.01):
+    def expected_improvement(self):
         mu, sigma = self.gpr.predict(self.all_pos_comb, return_std=True)
         mu_sample = self.gpr.predict(self.X_sample)
 
@@ -35,12 +30,12 @@ class BayesianOptimizer(BaseOptimizer):
         mu_sample_opt = np.max(mu_sample)
 
         with np.errstate(divide="warn"):
-            imp = mu - mu_sample_opt - xi
+            imp = mu - mu_sample_opt - self.xi
             Z = imp / sigma
-            ei = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
-            ei[sigma == 0.0] = 0.0
+            exp_imp = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
+            exp_imp[sigma == 0.0] = 0.0
 
-        return ei
+        return exp_imp
 
     def _all_possible_pos(self, cand):
         pos_space = []
@@ -52,10 +47,10 @@ class BayesianOptimizer(BaseOptimizer):
 
     def propose_location(self, cand):
         self.gpr.fit(self.X_sample, self.Y_sample)
-        ei = self.expected_improvement()
-        ei = ei[:, 0]
+        exp_imp = self.expected_improvement()
+        exp_imp = exp_imp[:, 0]
 
-        index_best = list(ei.argsort()[::-1])
+        index_best = list(exp_imp.argsort()[::-1])
 
         all_pos_comb_sorted = self.all_pos_comb[index_best]
         pos_best = all_pos_comb_sorted[0]

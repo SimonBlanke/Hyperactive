@@ -4,6 +4,7 @@
     - [Project Overview](overview)
     - [Performance](./performance)
     - [How to use Hyperactive](./tutorial)
+    - [API Documentation](./reference)
 
 
 - Examples
@@ -12,7 +13,7 @@
     - [Deep Learning](./examples/deep_learning)
     - [Distribution](./examples/distribution)
     - [Optimization Extensions](./examples/extensions)
-    - [Mathematical Functions](./examples/math_functions)
+    - [Mathematical Functions](./examples/test_functions)
     - [Advanced use Cases](./examples/use_cases)
 
 

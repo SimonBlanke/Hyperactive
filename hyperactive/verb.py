@@ -48,9 +48,6 @@ class VerbosityLVL2(VerbosityLVL1):
 
     def update_p_bar(self, n, _cand_):
         self.p_bar.update(n)
-        self.p_bar.set_postfix(
-            best_score=str(_cand_.score_best), best_since_iter=self.best_since_iter
-        )
 
     def close_p_bar(self):
         self.p_bar.close()
@@ -66,3 +63,14 @@ class VerbosityLVL2(VerbosityLVL1):
             "position": _cand_.nth_process,
             "leave": True,
         }
+
+
+class VerbosityLVL3(VerbosityLVL2):
+    def __init__(self):
+        self.best_since_iter = 0
+
+    def update_p_bar(self, n, _cand_):
+        self.p_bar.update(n)
+        self.p_bar.set_postfix(
+            best_score=str(_cand_.score_best), best_since_iter=self.best_since_iter
+        )

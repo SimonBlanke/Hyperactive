@@ -25,7 +25,6 @@ class Candidate:
 
         self.func_name = str(self.func_).split(" ")[1]
 
-        self._space_.create_searchspace()
         self._model_ = Model(self.func_, nth_process, _main_args_)
 
         self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
@@ -51,6 +50,7 @@ class Candidate:
             return self._space_.memory[pos_str]
         else:
             para = self._space_.pos2para(pos)
+            para["iteration"] = self.i
             score, eval_time, self.model = self._model_.train_model(para)
             self._space_.memory[pos_str] = score
             self.eval_time_sum = self.eval_time_sum + eval_time
