@@ -1,3 +1,0 @@
-numpy
-pandas
-meta-learn
