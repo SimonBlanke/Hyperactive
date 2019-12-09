@@ -55,20 +55,20 @@
 
 ## Main Features
 
-  - Thoroughly tested code base
-  - Compatible with <b>any python machine-learning framework</b>
-  - Optimize:
-    - Anything from [simple models](#/./examples/sklearn_examples?id=sklearn) <br/> to complex [machine-learning-pipelines](#/./examples/sklearn_pipeline_example?id=sklearn-pipeline)
-    - Multi-level [ensembles](#/./examples/stacking_example?id=stacking)
-    - [Deep neural network](#/./examples/cnn_structure?id=keras-cnn-structure) architecture
-    - Other [optimization techniques](./docs/examples.md) (meta-optimization)
-    - Or [any function](./docs/examples.md) you can specify with this API
-  - Utilize state of the art [optimization techniques](#/./optimizers/README?id=optimization-techniques) like:
-    - Simulated annealing
-    - Evolution strategy
-    - Bayesian optimization
-  - [High performance](#/./performance/README?id=performance): Optimizer time is neglectable for most models
-  - Choose from a variety of different [optimization extensions](#/./extentions/README?id=optimization-extensions) to improve the optimization
+- Thoroughly tested code base
+- Compatible with <b>any python machine-learning framework</b>
+- Optimize:
+  - Anything from [simple models](#/./examples/machine_learning?id=sklearn) <br/> to complex [machine-learning-pipelines](#/./examples/use_cases?id=sklearn-pipeline)
+  - Multi-level [ensembles](#/./examples/use_cases?id=stacking)
+  - [Deep neural network](#/./examples/use_cases?id=neural-architecture-search) architecture
+  - Other [optimization techniques](#/./examples/use_cases?id=meta-optimization) (meta-optimization)
+  - Or [any function](#/./examples/test_functions?id=rosenbrock-function) you can specify with this API
+- Utilize state of the art optimization techniques like:
+  - Simulated annealing
+  - Evolution strategy
+  - Bayesian optimization
+- [High performance](#/./performance?id=performance): Optimizer time is neglectable for most models
+- Choose from a variety of different [optimization extensions](#/./examples/extensions) to improve the optimization
 
 <br>
 

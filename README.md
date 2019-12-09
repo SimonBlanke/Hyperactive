@@ -110,7 +110,7 @@
     - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=stacking)
     - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=neural-architecture-search) architecture
     - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=meta-optimization) (meta-optimization)
-    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/math_functions?id=rosenbrock-function) you can specify with this API
+    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/test_functions?id=rosenbrock-function) you can specify with this API
   - Utilize state of the art optimization techniques like:
     - Simulated annealing
     - Evolution strategy
