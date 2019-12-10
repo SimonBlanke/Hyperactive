@@ -47,7 +47,7 @@ Starts the optimization run.
 
 #### Parameters
 
- - ``search_config``**:** dictionary
+ - ``search_config``**:** string or dictionary
 
     Defines the search space and links it to the objective function.
     The objective function is the key of the dictionary, while the search space (which is also a dictionary) is the value.
@@ -109,3 +109,21 @@ Starts the optimization run.
  - ``n_jobs``**:** int, optional (default: 1)
 
     Number of jobs to run.
+    
+    
+  - ``init_config``**:** dictionary, optional (default: None)
+  
+     Initialization for the optimization run. 
+     Similar to the 'search_config'-parameter the objective function is the key of the dictionary. The value is an additional dictionary that defines what kind of position initialization should be done.
+     
+     ```python
+     init_config = {
+         model: {"n_estimators": [90], "max_depth": [2], "min_samples_split": [5]}
+     }
+     ```
+     
+     ```python
+     init_config = {
+         model: {"scatter_init": 10}
+     }
+     ```
