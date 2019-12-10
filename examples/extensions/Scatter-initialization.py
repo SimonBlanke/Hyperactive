@@ -36,7 +36,9 @@ opt.search(
     init_config=False,
 )
 
-init_config = {"scatter_init": 10}
+init_config = {
+    model: {"scatter_init": 10}
+}
 
 # With scatter initialization
 opt = Hyperactive(X, y)
