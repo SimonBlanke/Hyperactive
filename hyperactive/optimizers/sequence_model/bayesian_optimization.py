@@ -9,6 +9,7 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 
 
 from ...base_optimizer import BaseOptimizer
+from ...base_positioner import BasePositioner
 
 
 class BayesianOptimizer(BaseOptimizer):
@@ -73,8 +74,12 @@ class BayesianOptimizer(BaseOptimizer):
         _p_ = Bayesian()
 
         self._all_possible_pos(_cand_)
-        self.X_sample = _cand_.pos_best.reshape(1, -1)
-        self.Y_sample = _cand_.score_best.reshape(1, -1)
+        #self.X_sample = _cand_.pos_best.reshape(1, -1)
+        #self.Y_sample = np.array(_cand_.score_best).reshape(1, -1)
+
+        self.X_sample = _cand_.mem._get_para()
+        self.Y_sample = _cand_.mem._get_score()
+
 
         _p_.pos_current = _cand_.pos_best
         _p_.score_current = _cand_.score_best
@@ -82,6 +87,6 @@ class BayesianOptimizer(BaseOptimizer):
         return _p_
 
 
-class Bayesian:
-    def __init__(self):
-        pass
+class Bayesian(BasePositioner):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
