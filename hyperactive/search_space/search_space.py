@@ -20,16 +20,6 @@ class SearchSpace:
             elif list(self.init_para.keys())[0] == "scatter_init":
                 self.init_type = "scatter_init"
 
-        self.memory = {}
-
-    def load_memory(self, para, score):
-        if para is None or score is None:
-            return
-        for idx in range(para.shape[0]):
-            pos = self.para2pos(para.iloc[[idx]])
-            pos_str = pos.tostring()
-            self.memory[pos_str] = float(score.values[idx])
-
     def pos_space_limit(self):
         dim = []
 
