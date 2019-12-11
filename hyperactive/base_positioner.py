@@ -7,9 +7,6 @@ import numpy as np
 
 class BasePositioner:
     def __init__(self, *args, **kwargs):
-        self.epsilon = kwargs["epsilon"]
-        self.climb_dist = kwargs["climb_dist"]
-
         self.pos_new = None
         self.score_new = -np.inf
 
