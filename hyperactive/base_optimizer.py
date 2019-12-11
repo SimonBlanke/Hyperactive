@@ -10,10 +10,8 @@ from functools import partial
 
 from .base_positioner import BasePositioner
 from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3
-from .util import init_candidate, init_eval
+from .util import init_candidate
 from .candidate import Candidate
-
-# from meta_learn import HyperactiveWrapper
 
 
 class BaseOptimizer:
@@ -22,13 +20,6 @@ class BaseOptimizer:
         self._opt_args_ = _opt_args_
 
         self._meta_ = None
-        """
-        self.search_config = self._main_args_.search_config
-        self.n_iter = self._main_args_.n_iter
-
-        if self._main_args_.memory == "long":
-            self._meta_ = HyperactiveWrapper(self._main_args_.search_config)
-        """
 
         verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3]
         self._verb_ = verbs[_main_args_.verbosity]()
@@ -62,20 +53,12 @@ class BaseOptimizer:
         _cand_ = init_candidate(_main_args_, nth_process, Candidate)
         self._verb_.init_p_bar(_cand_, self._main_args_)
 
-        _cand_ = init_eval(_cand_)
-        self._verb_.update_p_bar(1, _cand_)
         _p_ = self._init_opt_positioner(_cand_)
-
-        if self._meta_:
-            meta_data = self._meta_.get_func_metadata(_cand_.func_)
-
-            _cand_._space_.load_memory(*meta_data)
+        self._verb_.update_p_bar(1, _cand_)
 
         return _cand_, _p_
 
     def _finish_search(self, _main_args_, _cand_):
-        # _cand_.eval_pos(_cand_.pos_best, force_eval=True)
-        self.eval_time = _cand_.eval_time_sum
         self._verb_.close_p_bar()
 
         return _cand_
@@ -124,27 +107,25 @@ class BaseOptimizer:
 
     def _process_results(self, _cand_):
         start_point = self._verb_.print_start_point(_cand_)
-        self.results_params[_cand_.func_] = start_point
-        self.results_models[_cand_.func_] = _cand_.model_best
 
-        """
-        if self._main_args_.memory == "long":
-            self._meta_.collect(X, y, _cand_)
-        """
+        self.eval_time = _cand_.eval_time_sum
+        self.results_params[_cand_.func_] = start_point
+        # self.results_models[_cand_.func_] = _cand_.model_best
+
+        if _cand_.mem:
+            _cand_.mem.save_memory(self._main_args_, _cand_)
 
     def _search_multiprocessing(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._main_args_.n_jobs)
-        _search = partial(self._search)
-
-        _cand_list = pool.map(_search, self._main_args_._n_process_range)
+        _cand_list = pool.map(self._search, self._main_args_._n_process_range)
 
         return _cand_list
 
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
         self._process_results(_cand_)
-
+        
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
 
@@ -155,19 +136,6 @@ class BaseOptimizer:
             self._process_results(_cand_)
 
     def search(self, nth_process=0, ray_=False):
-        """Public method for starting the search with the training data (X, y)
-
-        Parameters
-        ----------
-        X : array-like or sparse matrix of shape = [n_samples, n_features]
-
-        y : array-like, shape = [n_samples] or [n_samples, n_outputs]
-
-        Returns
-        -------
-        None
-        """
-
         self.start_time = time.time()
         self.results_params = {}
         self.results_models = {}
