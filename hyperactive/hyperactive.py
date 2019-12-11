@@ -35,7 +35,7 @@ def stop_warnings():
 
 
 class Hyperactive:
-    def __init__(self, X, y, memory=True, random_state=1, verbosity=3, warnings=False):
+    def __init__(self, X, y, memory="long", random_state=1, verbosity=3, warnings=False):
         self.X = X
         self._main_args_ = MainArgs(X, y, memory, random_state, verbosity)
 
@@ -106,13 +106,5 @@ class Hyperactive:
         self.pos_list = self._optimizer_.pos_list
         self.score_list = self._optimizer_.score_list
 
+        self.eval_time = self._optimizer_.eval_time
         self.total_time = time.time() - start_time
-
-    def get_total_time(self):
-        return self.total_time
-
-    def get_eval_time(self):
-        return self._optimizer_.eval_time
-
-    def save_report(self):
-        pass
