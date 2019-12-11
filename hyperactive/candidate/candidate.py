@@ -28,19 +28,21 @@ class Candidate:
         self._model_ = Model(self.func_, nth_process, _main_args_)
         self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
 
+        self.eval_time_sum = 0
+
         if not self.memory:
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
-            self.pos_best = _cand_._init_._set_start_pos()
-            self.score_best = _cand_.eval_pos(pos)
+            self.pos_best = self._init_._set_start_pos()
+            self.score_best = self.eval_pos(self.pos_best)
             
         elif self.memory == 'short':
             self.mem = ShortTermMemory(self._space_, _main_args_)
             self.eval_pos = self.eval_pos_Mem
 
-            self.pos_best = _cand_._init_._set_start_pos()
-            self.score_best = _cand_.eval_pos(pos)
+            self.pos_best = self._init_._set_start_pos()
+            self.score_best = self.eval_pos(self.pos_best)
 
         elif self.memory == 'long':
             self.mem = LongTermMemory(self._space_, _main_args_)
@@ -55,10 +57,10 @@ class Candidate:
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
-            self.pos_best = _cand_._init_._set_start_pos()
-            self.score_best = _cand_.eval_pos(pos)
+            self.pos_best = self._init_._set_start_pos()
+            self.score_best = self.eval_pos(self.pos_best)
 
-        self.eval_time_sum = 0
+        
 
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
