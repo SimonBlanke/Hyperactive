@@ -16,6 +16,9 @@ class Memory:
         self._space_ = _space_
         self._main_args_ = _main_args_
 
+        self.pos_best = None
+        self.score_best = -np.inf
+
         self.memory_type = _main_args_.memory
         self.memory_dict = {}
 
@@ -25,9 +28,11 @@ class Memory:
     def save_memory(self, _main_args_, _cand_):
         pass
 
+
 class ShortTermMemory(Memory):
     def __init__(self, _space_, _main_args_):
         super().__init__(_space_, _main_args_)
+
 
 class LongTermMemory(Memory):
     def __init__(self, _space_, _main_args_):
@@ -62,7 +67,6 @@ class LongTermMemory(Memory):
             meta_data = meta_data_new
 
         meta_data.to_csv(path, index=False)
-
 
     def _read_func_metadata(self, model_func):
         paths = glob.glob(self._get_func_file_paths(model_func))
@@ -138,8 +142,6 @@ class LongTermMemory(Memory):
         )
 
     def _collect(self):
-        results_dict = self._get_opt_meta_data()
-
         para_pd = self._get_para()
         md_model = para_pd.reindex(sorted(para_pd.columns), axis=1)
         metric_pd = self._get_score()
@@ -147,13 +149,13 @@ class LongTermMemory(Memory):
         md_model = pd.concat([para_pd, metric_pd], axis=1, ignore_index=False)
 
         return md_model
-        
+
     def _get_hash(self, object):
         return hashlib.sha1(object).hexdigest()
 
     def _get_func_str(self, func):
         return inspect.getsource(func)
-        
+
     def _get_func_file_paths(self, model_func):
         func_str = self._get_func_str(model_func)
         self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"

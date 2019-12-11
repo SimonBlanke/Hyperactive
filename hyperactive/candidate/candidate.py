@@ -11,7 +11,6 @@ from ..extentions import ShortTermMemory, LongTermMemory
 
 
 class Candidate:
-
     def __init__(self, nth_process, _main_args_):
         self.i = 0
         self.memory = _main_args_.memory
@@ -36,15 +35,15 @@ class Candidate:
 
             self.pos_best = self._init_._set_start_pos()
             self.score_best = self.eval_pos(self.pos_best)
-            
-        elif self.memory == 'short':
+
+        elif self.memory == "short":
             self.mem = ShortTermMemory(self._space_, _main_args_)
             self.eval_pos = self.eval_pos_Mem
 
             self.pos_best = self._init_._set_start_pos()
             self.score_best = self.eval_pos(self.pos_best)
 
-        elif self.memory == 'long':
+        elif self.memory == "long":
             self.mem = LongTermMemory(self._space_, _main_args_)
             self.eval_pos = self.eval_pos_Mem
 
@@ -60,8 +59,6 @@ class Candidate:
             self.pos_best = self._init_._set_start_pos()
             self.score_best = self.eval_pos(self.pos_best)
 
-        
-
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
 
@@ -74,9 +71,7 @@ class Candidate:
         self.model_best = self.model
         self._score_best = value
 
-
     def eval_pos_noMem(self, pos):
-        pos_str = pos.tostring()
         para = self._space_.pos2para(pos)
         para["iteration"] = self.i
         score, eval_time, self.model = self._model_.train_model(para)
