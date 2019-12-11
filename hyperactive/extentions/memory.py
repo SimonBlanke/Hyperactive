@@ -2,22 +2,100 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
+import glob
+import hashlib
+import inspect
+
+import numpy as np
+import pandas as pd
+
+
 class Memory:
-    def __init__(self):
+    def __init__(self, _space_, _main_args_):
+        self._space_ = _space_
+        self._main_args_ = _main_args_
+
+        self.memory_type = _main_args_.memory
+        self.memory_dict = {}
+
+    def load_memory(self, model_func):
+        pass
+
+    def save_memory(self, _main_args_, _cand_):
+        pass
+
+class ShortTermMemory(Memory):
+    def __init__(self, _space_, _main_args_):
+        super().__init__(_space_, _main_args_)
+
+class LongTermMemory(Memory):
+    def __init__(self, _space_, _main_args_):
+        super().__init__(_space_, _main_args_)
+
+        self.score_col_name = "mean_test_score"
+
         current_path = os.path.realpath(__file__)
         meta_learn_path, _ = current_path.rsplit("/", 1)
-
         self.meta_data_path = meta_learn_path + "/meta_data/"
 
-    def _get_opt_meta_data(self, _cand_, X, y):
+    def load_memory(self, model_func):
+        para, score = self._read_func_metadata(model_func)
+        self._load_data_into_memory(para, score)
+
+    def save_memory(self, _main_args_, _cand_):
+        meta_data = self._collect()
+        path = self._get_file_path(_cand_.func_)
+        self._save_toCSV(meta_data, path)
+
+    def _save_toCSV(self, meta_data_new, path):
+        if os.path.exists(path):
+            meta_data_old = pd.read_csv(path)
+            meta_data = meta_data_old.append(meta_data_new)
+
+            columns = list(meta_data.columns)
+            noScore = ["mean_test_score", "cv_default_score"]
+            columns_noScore = [c for c in columns if c not in noScore]
+
+            meta_data = meta_data.drop_duplicates(subset=columns_noScore)
+        else:
+            meta_data = meta_data_new
+
+        meta_data.to_csv(path, index=False)
+
+
+    def _read_func_metadata(self, model_func):
+        paths = glob.glob(self._get_func_file_paths(model_func))
+
+        meta_data_list = []
+        for path in paths:
+            meta_data = pd.read_csv(path)
+            meta_data_list.append(meta_data)
+
+        if len(meta_data_list) > 0:
+            meta_data = pd.concat(meta_data_list, ignore_index=True)
+
+            column_names = meta_data.columns
+            score_name = [name for name in column_names if self.score_col_name in name]
+
+            para = meta_data.drop(score_name, axis=1)
+            score = meta_data[score_name]
+
+            return para, score
+
+        else:
+            print("Warning: No meta data found for following function:", model_func)
+            return None, None
+
+    def _get_opt_meta_data(self):
         results_dict = {}
         para_list = []
         score_list = []
 
-        for key in _cand_._space_.memory.keys():
+        for key in self.memory_dict.keys():
             pos = np.fromstring(key, dtype=int)
-            para = _cand_._space_.pos2para(pos)
-            score = _cand_._space_.memory[key]
+            para = self._space_.pos2para(pos)
+            score = self.memory_dict[key]
 
             if score != 0:
                 para_list.append(para)
@@ -28,15 +106,43 @@ class Memory:
 
         return results_dict
 
-    def collect(self, X, y, _cand_):
-        results_dict = self._get_opt_meta_data(_cand_, X, y)
+    def _load_data_into_memory(self, paras, scores):
+        if paras is None or scores is None:
+            return
 
-        para_pd = pd.DataFrame(results_dict["params"])
-        md_model = para_pd.reindex(sorted(para_pd.columns), axis=1)
+        pos_best = None
+        score_best = -np.inf
+        for idx in range(paras.shape[0]):
+            pos = self._space_.para2pos(paras.iloc[[idx]])
+            pos_str = pos.tostring()
 
-        metric_pd = pd.DataFrame(
+            score = float(scores.values[idx])
+            self.memory_dict[pos_str] = score
+
+            if score > score_best:
+                score_best = score
+                pos_best = pos
+
+        self.pos_best = pos_best
+        self.score_best = score_best
+
+    def _get_para(self):
+        results_dict = self._get_opt_meta_data()
+
+        return pd.DataFrame(results_dict["params"])
+
+    def _get_score(self):
+        results_dict = self._get_opt_meta_data()
+        return pd.DataFrame(
             results_dict["mean_test_score"], columns=["mean_test_score"]
         )
+
+    def _collect(self):
+        results_dict = self._get_opt_meta_data()
+
+        para_pd = self._get_para()
+        md_model = para_pd.reindex(sorted(para_pd.columns), axis=1)
+        metric_pd = self._get_score()
 
         md_model = pd.concat([para_pd, metric_pd], axis=1, ignore_index=False)
 
@@ -48,10 +154,20 @@ class Memory:
     def _get_func_str(self, func):
         return inspect.getsource(func)
         
-    def _get_file_path(self, X_train, y_train, model_func):
+    def _get_func_file_paths(self, model_func):
         func_str = self._get_func_str(model_func)
-        feature_hash = self._get_hash(X_train)
-        label_hash = self._get_hash(y_train)
+        self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"
+
+        directory = self.meta_data_path + self.func_path
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        return directory + ("metadata" + "*" + "__.csv")
+
+    def _get_file_path(self, model_func):
+        func_str = self._get_func_str(model_func)
+        feature_hash = self._get_hash(self._main_args_.X)
+        label_hash = self._get_hash(self._main_args_.y)
 
         self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"
 
