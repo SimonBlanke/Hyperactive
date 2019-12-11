@@ -11,6 +11,9 @@ class HillClimbingOptimizer(BaseOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
 
+        self.epsilon = kwargs["epsilon"]
+        self.climb_dist = kwargs["climb_dist"]
+
     def _hill_climb_iter(self, _cand_, _p_):
         score_new = -np.inf
         pos_new = None
