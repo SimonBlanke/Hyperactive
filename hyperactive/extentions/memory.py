@@ -97,7 +97,7 @@ class LongTermMemory(Memory):
         score_list = []
 
         for key in self.memory_dict.keys():
-            pos = np.fromstring(key, dtype=int)
+            pos = np.fromstring(key, dtype=float)
             para = self._space_.pos2para(pos)
             score = self.memory_dict[key]
 
