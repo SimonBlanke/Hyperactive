@@ -6,8 +6,6 @@ import time
 import numpy as np
 import multiprocessing
 
-from functools import partial
-
 from .base_positioner import BasePositioner
 from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3
 from .util import init_candidate
@@ -125,7 +123,7 @@ class BaseOptimizer:
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
         self._process_results(_cand_)
-        
+
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
 
