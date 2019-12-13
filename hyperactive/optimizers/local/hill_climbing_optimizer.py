@@ -5,14 +5,12 @@
 import numpy as np
 
 from ...base_optimizer import BaseOptimizer
+from ...base_positioner import BasePositioner
 
 
 class HillClimbingOptimizer(BaseOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
-
-        self.epsilon = kwargs["epsilon"]
-        self.climb_dist = kwargs["climb_dist"]
 
     def _hill_climb_iter(self, _cand_, _p_):
         score_new = -np.inf
@@ -40,4 +38,12 @@ class HillClimbingOptimizer(BaseOptimizer):
         return _cand_
 
     def _init_opt_positioner(self, _cand_):
-        return super()._init_base_positioner(_cand_)
+        return super()._init_base_positioner(_cand_, positioner=HillClimbingPositioner)
+
+
+class HillClimbingPositioner(BasePositioner):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.epsilon = kwargs["epsilon"]
+        self.climb_dist = kwargs["climb_dist"]
