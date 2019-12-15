@@ -6,9 +6,6 @@ from tqdm.auto import tqdm
 
 
 class Verbosity:
-    def __init__(self):
-        pass
-
     def init_p_bar(self, _cand_, _core_):
         pass
 
