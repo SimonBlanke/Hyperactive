@@ -33,29 +33,26 @@ class Candidate:
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
-            self.pos_best = self._init_._set_start_pos()
-            self.score_best = self.eval_pos(self.pos_best)
-
         elif self.memory == "short":
             self.mem = ShortTermMemory(self._space_, _main_args_)
             self.eval_pos = self.eval_pos_Mem
-
-            self.pos_best = self._init_._set_start_pos()
-            self.score_best = self.eval_pos(self.pos_best)
 
         elif self.memory == "long":
             self.mem = LongTermMemory(self._space_, _main_args_)
             self.eval_pos = self.eval_pos_Mem
 
             self.mem.load_memory(self.func_)
-            self.pos_best = self.mem.pos_best
-            self.score_best = self.mem.score_best
 
         else:
             print("Warning: Memory not defined")
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
+        if self.mem.meta_data_found:
+            self.pos_best = self.mem.pos_best
+            self.score_best = self.mem.score_best
+
+        else:
             self.pos_best = self._init_._set_start_pos()
             self.score_best = self.eval_pos(self.pos_best)
 

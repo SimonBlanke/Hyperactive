@@ -22,6 +22,8 @@ class Memory:
         self.memory_type = _main_args_.memory
         self.memory_dict = {}
 
+        self.meta_data_found = False
+
     def load_memory(self, model_func):
         pass
 
@@ -78,6 +80,7 @@ class LongTermMemory(Memory):
         for path in paths:
             meta_data = pd.read_csv(path)
             meta_data_list.append(meta_data)
+            self.meta_data_found = True
 
         if len(meta_data_list) > 0:
             meta_data = pd.concat(meta_data_list, ignore_index=True)
@@ -92,6 +95,7 @@ class LongTermMemory(Memory):
 
         else:
             print("Warning: No meta data found for following function:", model_func)
+            return None, None
 
     def _get_opt_meta_data(self):
         results_dict = {}
