@@ -160,7 +160,7 @@ class LongTermMemory(Memory):
 
         directory = self.meta_data_path + self.func_path
         if not os.path.exists(directory):
-            os.makedirs(directory)
+            os.makedirs(directory, exist_ok=True)
 
         return directory + ("metadata" + "*" + "__.csv")
 
