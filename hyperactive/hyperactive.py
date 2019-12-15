@@ -34,8 +34,25 @@ def stop_warnings():
     warnings.warn = warn
 
 
+def try_ray_import():
+    try:
+        import ray
+
+        if ray.is_initialized():
+            rayInit = True
+        else:
+            rayInit = False
+    except ImportError:
+        warnings.warn("failed to import ray", ImportWarning)
+        rayInit = False
+
+    return ray, rayInit
+
+
 class Hyperactive:
-    def __init__(self, X, y, memory="long", random_state=1, verbosity=3, warnings=False):
+    def __init__(
+        self, X, y, memory="long", random_state=1, verbosity=3, warnings=False
+    ):
         self.X = X
         self._main_args_ = MainArgs(X, y, memory, random_state, verbosity)
 
@@ -75,36 +92,28 @@ class Hyperactive:
         self._opt_args_ = Arguments(self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
-        try:
-            import ray
+        ray, rayInit = try_ray_import()
 
-            if ray.is_initialized():
-                ray_ = True
-            else:
-                ray_ = False
-        except ImportError:
-            warnings.warn("failed to import ray", ImportWarning)
-            ray_ = False
-
-        if ray_:
+        if rayInit:
             optimizer_class = ray.remote(optimizer_class)
             opts = [
                 optimizer_class.remote(self._main_args_, self._opt_args_)
                 for job in range(self._main_args_.n_jobs)
             ]
             searches = [
-                opt.search.remote(job, ray_=ray_) for job, opt in enumerate(opts)
+                opt.search.remote(job, rayInit=rayInit) for job, opt in enumerate(opts)
             ]
-            ray.get(searches)
+            self.results_params, self.results_models, self.pos_list, self.score_list, self.eval_time = ray.get(
+                searches
+            )[
+                0
+            ]
+
+            ray.shutdown()
         else:
             self._optimizer_ = optimizer_class(self._main_args_, self._opt_args_)
-            self._optimizer_.search()
+            self.results_params, self.results_models, self.pos_list, self.score_list, self.eval_time = (
+                self._optimizer_.search()
+            )
 
-        self.results_params = self._optimizer_.results_params
-        self.results_models = self._optimizer_.results_models
-
-        self.pos_list = self._optimizer_.pos_list
-        self.score_list = self._optimizer_.score_list
-
-        self.eval_time = self._optimizer_.eval_time
         self.total_time = time.time() - start_time

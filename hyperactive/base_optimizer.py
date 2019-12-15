@@ -133,14 +133,22 @@ class BaseOptimizer:
         for _cand_ in _cand_list:
             self._process_results(_cand_)
 
-    def search(self, nth_process=0, ray_=False):
+    def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
         self.results_params = {}
         self.results_models = {}
 
-        if ray_:
+        if rayInit:
             self._run_job(nth_process)
         elif self._main_args_.n_jobs == 1:
             self._run_job(nth_process)
         else:
             self._run_multiple_jobs()
+
+        return (
+            self.results_params,
+            self.results_models,
+            self.pos_list,
+            self.score_list,
+            self.eval_time,
+        )
