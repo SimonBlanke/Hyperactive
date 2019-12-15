@@ -77,9 +77,8 @@ class BayesianOptimizer(BaseOptimizer):
         self.X_sample = _cand_.pos_best.reshape(1, -1)
         self.Y_sample = np.array(_cand_.score_best).reshape(1, -1)
 
-        #self.X_sample = _cand_.mem._get_para()
-        #self.Y_sample = _cand_.mem._get_score()
-
+        # self.X_sample = _cand_.mem._get_para()
+        # self.Y_sample = _cand_.mem._get_score()
 
         _p_.pos_current = _cand_.pos_best
         _p_.score_current = _cand_.score_best

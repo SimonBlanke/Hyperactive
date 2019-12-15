@@ -7,7 +7,7 @@ import numpy as np
 import random
 
 from .particle_swarm_optimization import ParticleSwarmOptimizer
-from ...base_positioner import BasePositioner
+from ..local import HillClimbingPositioner
 
 
 class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
@@ -99,6 +99,6 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         return _p_list_
 
 
-class Individual(BasePositioner):
+class Individual(HillClimbingPositioner):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

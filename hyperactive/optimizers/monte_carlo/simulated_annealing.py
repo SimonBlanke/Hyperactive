@@ -24,6 +24,3 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
         self.temp = self.temp * self._opt_args_.annealing_rate
 
         return _cand_
-
-    def _init_opt_positioner(self, _cand_):
-        return super()._init_base_positioner(_cand_)

@@ -6,8 +6,7 @@ import random
 import numpy as np
 
 
-from . import HillClimbingOptimizer
-from ...base_positioner import BasePositioner
+from . import HillClimbingOptimizer, HillClimbingPositioner
 from scipy.spatial.distance import euclidean
 
 
@@ -40,7 +39,7 @@ class TabuOptimizer(HillClimbingOptimizer):
         return super()._init_base_positioner(_cand_, positioner=TabuPositioner)
 
 
-class TabuPositioner(BasePositioner):
+class TabuPositioner(HillClimbingPositioner):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tabus = []

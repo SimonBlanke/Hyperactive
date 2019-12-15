@@ -18,6 +18,3 @@ class RandomRestartHillClimbingOptimizer(HillClimbingOptimizer):
             _p_.pos_current = _p_.move_random(_cand_)
 
         return _cand_
-
-    def _init_opt_positioner(self, _cand_):
-        return super()._init_base_positioner(_cand_)

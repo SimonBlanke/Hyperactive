@@ -3,10 +3,10 @@
 # License: MIT License
 
 
-from ...base_optimizer import BaseOptimizer
+from ..local import HillClimbingOptimizer
 
 
-class RandomAnnealingOptimizer(BaseOptimizer):
+class RandomAnnealingOptimizer(HillClimbingOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
         self.temp = 1
@@ -23,6 +23,3 @@ class RandomAnnealingOptimizer(BaseOptimizer):
         self.temp = self.temp * self._opt_args_.annealing_rate
 
         return _cand_
-
-    def _init_opt_positioner(self, _cand_):
-        return super()._init_base_positioner(_cand_)

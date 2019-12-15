@@ -8,7 +8,7 @@ import random
 import numpy as np
 
 from .simulated_annealing import SimulatedAnnealingOptimizer
-from ...base_positioner import BasePositioner
+from ..local import HillClimbingPositioner
 
 
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
@@ -68,7 +68,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         return _p_list_
 
 
-class System(BasePositioner):
+class System(HillClimbingPositioner):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.temp = kwargs["temp"]
