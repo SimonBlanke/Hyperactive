@@ -3,6 +3,7 @@
 # License: MIT License
 
 import time
+import numpy as np
 
 
 class Model:
@@ -20,7 +21,11 @@ class Model:
         if isinstance(results, tuple):
             score = results[0]
             model = results[1]
-        elif isinstance(results, float):
+        elif (
+            isinstance(results, float)
+            or isinstance(results, np.float64)
+            or isinstance(results, np.float32)
+        ):
             score = results
             model = None
         else:
