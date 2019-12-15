@@ -19,7 +19,7 @@ install:
   - pip install catboost
   - pip install tensorflow
   - pip install keras
-  - pip install meta-learn
+  - pip install ray
   - pip install pytest
   - pip install pytest-cov
   - pip install coveralls

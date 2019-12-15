@@ -140,6 +140,12 @@ def test_warm_start():
     assert opt.results_params[model] == init_config[model]
 
 
+def test_partial_warm_start():
+    init_config = {model: {"min_samples_split": 2, "min_samples_leaf": 5}}
+    opt = Hyperactive(X, y, memory=False)
+    opt.search(search_config, n_iter=0, init_config=init_config)
+
+
 def test_optimizer_args():
     opt = Hyperactive(X, y)
     opt.search(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
@@ -151,3 +157,19 @@ def test_get_search_path():
 
     opt = Hyperactive(X, y, verbosity=10)
     opt.search(search_config, optimizer="ParticleSwarm")
+
+
+def test_ray_1():
+    import ray
+
+    ray.init()
+    opt = Hyperactive(X, y)
+    opt.search(search_config, n_jobs=1)
+
+
+def test_ray_2():
+    import ray
+
+    ray.init()
+    opt = Hyperactive(X, y)
+    opt.search(search_config, n_jobs=2)
