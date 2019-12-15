@@ -46,6 +46,9 @@ class LongTermMemory(Memory):
 
     def load_memory(self, model_func):
         para, score = self._read_func_metadata(model_func)
+        if para is None or score is None:
+            return
+
         self._load_data_into_memory(para, score)
 
     def save_memory(self, _main_args_, _cand_):
@@ -89,7 +92,6 @@ class LongTermMemory(Memory):
 
         else:
             print("Warning: No meta data found for following function:", model_func)
-            return None, None
 
     def _get_opt_meta_data(self):
         results_dict = {}
@@ -111,11 +113,6 @@ class LongTermMemory(Memory):
         return results_dict
 
     def _load_data_into_memory(self, paras, scores):
-        if paras is None or scores is None:
-            return
-
-        pos_best = None
-        score_best = -np.inf
         for idx in range(paras.shape[0]):
             pos = self._space_.para2pos(paras.iloc[[idx]])
             pos_str = pos.tostring()
@@ -123,12 +120,9 @@ class LongTermMemory(Memory):
             score = float(scores.values[idx])
             self.memory_dict[pos_str] = score
 
-            if score > score_best:
-                score_best = score
-                pos_best = pos
-
-        self.pos_best = pos_best
-        self.score_best = score_best
+            if score > self.score_best:
+                self.score_best = score
+                self.pos_best = pos
 
     def _get_para(self):
         results_dict = self._get_opt_meta_data()
