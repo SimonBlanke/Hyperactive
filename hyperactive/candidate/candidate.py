@@ -52,13 +52,9 @@ class Candidate:
             if self.mem.meta_data_found:
                 self.pos_best = self.mem.pos_best
                 self.score_best = self.mem.score_best
-            else:
-                self.pos_best = self._init_._set_start_pos()
-                self.score_best = self.eval_pos(self.pos_best)
 
-        else:
-            self.pos_best = self._init_._set_start_pos()
-            self.score_best = self.eval_pos(self.pos_best)
+        self.pos_best = self._init_._set_start_pos()
+        self.score_best = self.eval_pos(self.pos_best)
 
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
