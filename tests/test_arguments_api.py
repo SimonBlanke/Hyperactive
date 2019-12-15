@@ -93,7 +93,7 @@ def test_random_state():
 
 def test_max_time():
     opt0 = Hyperactive(X, y)
-    opt0.search(search_config, max_time=0.001)
+    opt0.search(search_config, max_time=0.00001)
 
 
 def test_memory():
@@ -118,6 +118,9 @@ def test_verbosity():
     opt0.search(search_config)
 
     opt1 = Hyperactive(X, y, verbosity=2)
+    opt1.search(search_config)
+
+    opt1 = Hyperactive(X, y, verbosity=2)
     opt1.search(search_config, n_jobs=2)
 
 
@@ -128,9 +131,13 @@ def test_scatter_init():
 
 
 def test_warm_start():
-    init_config = {model: {"n_estimators": 10, "max_depth": 2, "min_samples_split": 5}}
-    opt = Hyperactive(X, y)
-    opt.search(search_config, n_jobs=1, init_config=init_config)
+    init_config = {
+        model: {"max_depth": 10, "min_samples_split": 2, "min_samples_leaf": 5}
+    }
+    opt = Hyperactive(X, y, memory=False)
+    opt.search(search_config, n_iter=0, init_config=init_config)
+
+    assert opt.results_params[model] == init_config[model]
 
 
 def test_optimizer_args():
