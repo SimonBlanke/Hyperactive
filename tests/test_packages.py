@@ -110,11 +110,48 @@ def test_catboost():
     # opt.score(X, y)
 
 
+def test_tensorflow():
+    import tensorflow as tf
+
+    mnist = tf.keras.datasets.mnist
+
+    (X_train, y_train), (X_test, y_test) = mnist.load_data()
+    X_train, X_test = X_train / 255.0, X_test / 255.0
+
+    def cnn(para, X_train, y_train):
+
+        model = tf.keras.models.Sequential(
+            [
+                tf.keras.layers.Flatten(input_shape=(28, 28)),
+                tf.keras.layers.Dense(128, activation="relu"),
+                tf.keras.layers.Dropout(0.2),
+                tf.keras.layers.Dense(10, activation="softmax"),
+            ]
+        )
+
+        model.compile(
+            optimizer="adam",
+            loss="sparse_categorical_crossentropy",
+            metrics=["accuracy"],
+        )
+        model.fit(X_train, y_train, epochs=1)
+
+        _, score = model.evaluate(X_test, y_test, verbose=2)
+        print("score", score, type(score))
+        return score
+
+    search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
+
+    opt = Hyperactive(X_train, y_train)
+    opt.search(search_config)
+
+
+"""
 def test_keras():
-    from keras.models import Sequential
-    from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
-    from keras.datasets import cifar10
-    from keras.utils import to_categorical
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
+    from tensorflow.keras.datasets import cifar10
+    from tensorflow.keras.utils import to_categorical
 
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -155,3 +192,4 @@ def test_keras():
 
     opt = Hyperactive(X_train, y_train)
     opt.search(search_config)
+"""
