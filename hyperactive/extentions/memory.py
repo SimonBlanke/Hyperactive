@@ -24,12 +24,6 @@ class Memory:
 
         self.meta_data_found = False
 
-    def load_memory(self, model_func):
-        pass
-
-    def save_memory(self, _main_args_, _cand_):
-        pass
-
 
 class ShortTermMemory(Memory):
     def __init__(self, _space_, _main_args_):

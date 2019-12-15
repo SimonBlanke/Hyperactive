@@ -19,7 +19,6 @@ class InitSearchPosition:
 
         for hyperpara_name in self._space_.search_space.keys():
             if hyperpara_name not in list(self._space_.init_para.keys()):
-                # print(hyperpara_name, "not in warm_start selecting random scalar")
                 search_position = self._space_.get_random_pos_scalar(hyperpara_name)
 
             else:
@@ -40,14 +39,6 @@ class InitSearchPosition:
         else:
             print("Set random start position")
             pos = self._space_.get_random_pos()
-
-        return pos
-
-    def _warm_start_scatter_init(self, nth_process):
-        if self.n_warm_start_keys > nth_process:
-            pos = self._create_warm_start()
-        else:
-            pos = self._scatter_init()
 
         return pos
 
