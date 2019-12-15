@@ -32,10 +32,13 @@ class InitSearchPosition:
 
     def _set_start_pos(self):
         if self._space_.init_type == "warm_start":
+            print("Set warm start")
             pos = self._warm_start()
         elif self._space_.init_type == "scatter_init":
+            print("Set scatter init")
             pos = self._scatter_init()
         else:
+            print("Set random start position")
             pos = self._space_.get_random_pos()
 
         return pos

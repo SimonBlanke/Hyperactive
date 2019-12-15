@@ -91,6 +91,7 @@ class LongTermMemory(Memory):
             para = meta_data.drop(score_name, axis=1)
             score = meta_data[score_name]
 
+            print("Loading meta data successful")
             return para, score
 
         else:
