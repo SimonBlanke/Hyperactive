@@ -103,6 +103,12 @@ def test_memory():
     opt1 = Hyperactive(X, y, memory=False)
     opt1.search(search_config)
 
+    opt2 = Hyperactive(X, y, memory="short")
+    opt2.search(search_config)
+
+    opt3 = Hyperactive(X, y, memory="long")
+    opt3.search(search_config)
+
 
 def test_verbosity():
     opt0 = Hyperactive(X, y, verbosity=0)

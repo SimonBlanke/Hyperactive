@@ -110,7 +110,7 @@ class BaseOptimizer:
         self.results_params[_cand_.func_] = start_point
         # self.results_models[_cand_.func_] = _cand_.model_best
 
-        if _cand_.mem:
+        if self._main_args_.memory == "long":
             _cand_.mem.save_memory(self._main_args_, _cand_)
 
     def _search_multiprocessing(self):
