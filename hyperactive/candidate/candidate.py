@@ -48,9 +48,10 @@ class Candidate:
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
-        if self.mem.meta_data_found:
-            self.pos_best = self.mem.pos_best
-            self.score_best = self.mem.score_best
+        if self.mem:
+            if self.mem.meta_data_found:
+                self.pos_best = self.mem.pos_best
+                self.score_best = self.mem.score_best
 
         else:
             self.pos_best = self._init_._set_start_pos()
