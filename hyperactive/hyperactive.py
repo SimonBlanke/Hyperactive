@@ -8,7 +8,7 @@ import warnings
 from .main_args import MainArgs
 from .opt_args import Arguments
 
-from . import (
+from .optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
     TabuOptimizer,
