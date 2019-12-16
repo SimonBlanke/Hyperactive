@@ -72,5 +72,6 @@ class Arguments:
         self.individuals = kwargs_opt["individuals"]
         self.mutation_rate = kwargs_opt["mutation_rate"]
         self.crossover_rate = kwargs_opt["crossover_rate"]
+        self.warm_start_smbo = kwargs_opt["warm_start_smbo"]
         self.xi = kwargs_opt["xi"]
         self.gpr = kwargs_opt["gpr"]
