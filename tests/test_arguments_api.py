@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import ray
 import numpy as np
 
 from sklearn.datasets import load_iris
@@ -166,16 +167,12 @@ def test_get_search_path():
 
 
 def test_ray_1():
-    import ray
-
     ray.init()
     opt = Hyperactive(X, y)
     opt.search(search_config, n_jobs=1)
 
 
 def test_ray_2():
-    import ray
-
     ray.init()
     opt = Hyperactive(X, y)
     opt.search(search_config, n_jobs=2)
