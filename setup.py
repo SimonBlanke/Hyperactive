@@ -1,10 +1,11 @@
 from setuptools import setup
 from setuptools import find_packages
 
-
 with open("README.md", "r") as fh:
     long_description = fh.read()
-
+    
+requires = ["numpy", "pandas", "tqdm"]
+    
 setup(
     name="hyperactive",
     version="2.0.0",
@@ -32,5 +33,5 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=["numpy", "pandas", "tqdm"],
+    install_requires=requires,
 )
