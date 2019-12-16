@@ -185,7 +185,7 @@
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/distribution?id=multiprocessing">Multiprocessing</a></li>
-              <li>Ray</li>
+              <li><a href="https://simonblanke.github.io/Hyperactive/#/./examples/distribution?id=ray">Ray</a></li>
           </ul>
       </td>
       <td>
@@ -231,8 +231,9 @@ pip install hyperactive
 <details open>
 <summary><b>v2.1.0</b></summary>
 
-  - [ ] Save memory of evaluations for later runs (long term memory)
-  - [ ] Warm start sequence based optimizers with long term memory
+  - [x] Save memory of evaluations for later runs (long term memory)
+  - [x] Warm start sequence based optimizers with long term memory
+  - [ ] Gaussian process regressors from various packages (gpy, sklearn, GPflow, ...) via wrapper
 </details>
 
 <details>
