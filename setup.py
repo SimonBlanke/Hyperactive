@@ -1,14 +1,29 @@
+import os
+import re
+
 from setuptools import setup
 from setuptools import find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-    
+
 requires = ["numpy", "pandas", "tqdm"]
-    
+
+
+def find_version(*filepath):
+    here = os.path.abspath(os.path.dirname(__file__))
+    with open(os.path.join(here, *filepath)) as fp:
+        version_match = re.search(
+            r"^__version__ = ['\"]([^'\"]*)['\"]", fp.read(), re.M
+        )
+        if version_match:
+            return version_match.group(1)
+        raise RuntimeError("Unable to find version string.")
+
+
 setup(
     name="hyperactive",
-    version="2.0.0",
+    version=find_version("hyperactive/__init__.py"),
     author="Simon Blanke",
     author_email="simon.blanke@yahoo.com",
     license="MIT",
