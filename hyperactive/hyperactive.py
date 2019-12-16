@@ -44,6 +44,7 @@ def try_ray_import():
             rayInit = False
     except ImportError:
         warnings.warn("failed to import ray", ImportWarning)
+        ray = None
         rayInit = False
 
     return ray, rayInit
