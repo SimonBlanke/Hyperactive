@@ -23,11 +23,11 @@ from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
 
 def model(para, X, y):
-    model = GradientBoostingClassifier(
+    gbc = GradientBoostingClassifier(
         n_estimators=para["n_estimators"],
         max_depth=para["max_depth"],
     )
-    scores = cross_val_score(model, X, y, cv=3)
+    scores = cross_val_score(gbc, X, y, cv=3)
 
     return scores.mean()
 ```
@@ -39,7 +39,6 @@ search_config = {
     model: {
         "n_estimators": range(10, 200, 10),
         "max_depth": range(2, 12),
-        "min_samples_split": range(2, 12),
     }
 }
 ```

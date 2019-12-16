@@ -48,6 +48,19 @@
         </a>
       </td>
     </tr>
+    <tr/>    <tr align="left" valign="center">
+      <td>
+        <strong>Latest versions:</strong>
+      </td>
+      <td>
+        <a href="https://github.com/SimonBlanke/Hyperactive/releases">
+          <img src="https://img.shields.io/github/v/release/SimonBlanke/Hyperactive?style=for-the-badge&logo=github" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://pypi.org/project/hyperactive/">
+          <img src="https://img.shields.io/pypi/v/Hyperactive?style=for-the-badge&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -140,7 +153,7 @@
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="#/./examples/distribution?id=multiprocessing">Multiprocessing</a></li>
-              <li>Ray</li>
+              <li><a href="#/./examples/distribution?id=ray">Ray</a></li>
           </ul>
       </td>
       <td>
@@ -148,13 +161,14 @@
           <ul>
             <li><a href="#/./examples/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
             <li><a href="#/./examples/extensions?id=warm-start">Warm-start</a></li>
-            <li>Meta-Learn (coming soon)</li>
-          </ul><br>
+          </ul>
         <a><b>Resource Allocation:</b></a>
           <ul>
             <li><a href="#/./examples/extensions?id=memory">Memory</a></li>
-            <li>Proxy Datasets [<a href="#/./overview#references">1</a>]
- (coming soon)</li>
+               <ul>
+                 <li>Short term</li>
+                 <li>Long term</li>
+               </ul>
           </ul>
       </td>
     </tr>
