@@ -5,7 +5,6 @@
 
 import numpy as np
 from scipy.stats import norm
-from sklearn.gaussian_process import GaussianProcessRegressor
 
 
 from ...base_optimizer import BaseOptimizer
@@ -15,13 +14,7 @@ from ...base_positioner import BasePositioner
 class BayesianOptimizer(BaseOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
-        self.xi = 0.01
-        self.gpr = GaussianProcessRegressor(
-            kernel=self._opt_args_.kernel,
-            alpha=1e-6,
-            normalize_y=True,
-            n_restarts_optimizer=25,
-        )
+        self.gpr = self._opt_args_.gpr
 
     def expected_improvement(self):
         mu, sigma = self.gpr.predict(self.all_pos_comb, return_std=True)
@@ -31,7 +24,7 @@ class BayesianOptimizer(BaseOptimizer):
         mu_sample_opt = np.max(mu_sample)
 
         with np.errstate(divide="warn"):
-            imp = mu - mu_sample_opt - self.xi
+            imp = mu - mu_sample_opt - self._opt_args_.xi
             Z = imp / sigma
             exp_imp = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
             exp_imp[sigma == 0.0] = 0.0
@@ -74,11 +67,13 @@ class BayesianOptimizer(BaseOptimizer):
         _p_ = Bayesian()
 
         self._all_possible_pos(_cand_)
-        self.X_sample = _cand_.pos_best.reshape(1, -1)
-        self.Y_sample = np.array(_cand_.score_best).reshape(1, -1)
 
-        # self.X_sample = _cand_.mem._get_para()
-        # self.Y_sample = _cand_.mem._get_score()
+        if self._opt_args_.warm_start_smbo:
+            self.X_sample = _cand_.mem._get_para()
+            self.Y_sample = _cand_.mem._get_score()
+        else:
+            self.X_sample = _cand_.pos_best.reshape(1, -1)
+            self.Y_sample = np.array(_cand_.score_best).reshape(1, -1)
 
         _p_.pos_current = _cand_.pos_best
         _p_.score_current = _cand_.score_best

@@ -4,6 +4,7 @@
 
 from .util import merge_dicts
 
+from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern
 from numpy.random import normal
 
@@ -41,7 +42,11 @@ class Arguments:
             "mutation_rate": 0.7,
             "crossover_rate": 0.3,
             # BayesianOptimizer
-            "kernel": Matern(nu=2.5),
+            "warm_start_smbo": False,
+            "xi": 0.01,
+            "gpr": GaussianProcessRegressor(
+                kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
+            ),
         }
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
@@ -67,4 +72,5 @@ class Arguments:
         self.individuals = kwargs_opt["individuals"]
         self.mutation_rate = kwargs_opt["mutation_rate"]
         self.crossover_rate = kwargs_opt["crossover_rate"]
-        self.kernel = kwargs_opt["kernel"]
+        self.xi = kwargs_opt["xi "]
+        self.gpr = kwargs_opt["gpr"]
