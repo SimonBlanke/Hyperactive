@@ -24,7 +24,7 @@ class BasePositioner:
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
 
-        return pos
+        return pos.astype(int)
 
     def move_random(self, _cand_):
         return _cand_._space_.get_random_pos()
