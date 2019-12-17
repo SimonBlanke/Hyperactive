@@ -90,7 +90,7 @@ class Hyperactive:
         self._main_args_.search_args(
             search_config, max_time, n_iter, optimizer, n_jobs, init_config
         )
-        self._opt_args_ = Arguments(self._main_args_.opt_para)
+        self._opt_args_ = Arguments(**self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
         ray, rayInit = try_ray_import()

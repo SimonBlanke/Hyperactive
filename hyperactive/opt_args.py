@@ -9,6 +9,19 @@ from sklearn.gaussian_process.kernels import Matern
 from numpy.random import normal
 
 
+class GPR:
+    def __init__(self):
+        self.gpr = GaussianProcessRegressor(
+                kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
+            )
+        
+    def fit(self, X, y):
+        self.gpr.fit(X, y)
+
+    def predict(self, X):
+        return self.gpr.predict(X, return_std=True)
+
+
 class Arguments:
     def __init__(self, *args, **kwargs):
         kwargs_opt = {
@@ -44,9 +57,7 @@ class Arguments:
             # BayesianOptimizer
             "warm_start_smbo": False,
             "xi": 0.01,
-            "gpr": GaussianProcessRegressor(
-                kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
-            ),
+            "gpr": GPR(),
         }
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
