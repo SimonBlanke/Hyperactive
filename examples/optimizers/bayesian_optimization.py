@@ -1,4 +1,7 @@
 import GPy
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import Matern
+
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.datasets import load_breast_cancer
@@ -27,18 +30,39 @@ search_config = {
     }
 }
 
-class GPR:
+class GPR0:
     def __init__(self):
-        kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
+        self.kernel = GPy.kern.RBF(input_dim=1, variance=1., lengthscale=1.)
         
     def fit(self, X, y):
-        m = GPy.models.GPRegression(X, y, kernel)
-        m.optimize(messages=True)
+        self.m = GPy.models.GPRegression(X, y, self.kernel)
+        self.m.optimize(messages=True)
 
     def predict(self, X):
-        return m.predict(X)
+        return self.m.predict(X)
 
-bayes_opt = {"Bayesian": {"gpr": GPR()}}
+class GPR1:
+    def __init__(self):
+        self.gpr = GaussianProcessRegressor(
+                kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
+            )
+        
+    def fit(self, X, y):
+        self.gpr.fit(X, y)
 
+    def predict(self, X):
+        return self.gpr.predict(X, return_std=True)
+
+
+opt = Hyperactive(X, y)
+opt.search(search_config, n_iter=30, optimizer="Bayesian")
+
+
+bayes_opt = {"Bayesian": {"gpr": GPR0()}}
+opt = Hyperactive(X, y)
+opt.search(search_config, n_iter=30, optimizer=bayes_opt)
+
+
+bayes_opt = {"Bayesian": {"gpr": GPR1()}}
 opt = Hyperactive(X, y)
 opt.search(search_config, n_iter=30, optimizer=bayes_opt)
