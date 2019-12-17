@@ -98,7 +98,7 @@ class LongTermMemory(Memory):
         score_list = []
 
         for key in self.memory_dict.keys():
-            pos = np.fromstring(key, dtype=float)
+            pos = np.fromstring(key, dtype=int)
             para = self._space_.pos2para(pos)
             score = self.memory_dict[key]
 
@@ -136,7 +136,7 @@ class LongTermMemory(Memory):
 
     def _collect(self):
         para_pd = self._get_para()
-        md_model = para_pd.reindex(sorted(para_pd.columns), axis=1)
+        # md_model = para_pd.reindex(sorted(para_pd.columns), axis=1)
         metric_pd = self._get_score()
 
         md_model = pd.concat([para_pd, metric_pd], axis=1, ignore_index=False)
