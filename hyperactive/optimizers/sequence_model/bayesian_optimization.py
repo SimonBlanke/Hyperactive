@@ -17,8 +17,8 @@ class BayesianOptimizer(BaseOptimizer):
         self.gpr = self._opt_args_.gpr
 
     def expected_improvement(self):
-        mu, sigma = self.gpr.predict(self.all_pos_comb, return_std=True)
-        mu_sample = self.gpr.predict(self.X_sample)
+        mu, sigma = self.gpr.predict(self.all_pos_comb)
+        mu_sample, _ = self.gpr.predict(self.X_sample)
 
         sigma = sigma.reshape(-1, 1)
         mu_sample_opt = np.max(mu_sample)
