@@ -77,6 +77,7 @@ class Candidate:
         return score
 
     def eval_pos_Mem(self, pos, force_eval=False):
+        pos.astype(int)
         pos_str = pos.tostring()
 
         if pos_str in self.mem.memory_dict and not force_eval:
