@@ -99,7 +99,7 @@
         <img src="./_media/blue.jpg"/>
       </td>
       <td>
-        <strong>Optimization Extentions</strong>
+        <strong>Optimization Extensions</strong>
         <img src="./_media/blue.jpg"/>
       </td>
     </tr>
@@ -217,8 +217,9 @@ pip install Hyperactive/
 <details open>
 <summary><b>v2.1.0</b></summary>
 
-  - [ ] Save memory of evaluations for later runs (long term memory)
-  - [ ] Warm start sequence based optimizers with long term memory
+  - [x] Save memory of evaluations for later runs (long term memory)
+  - [x] Warm start sequence based optimizers with long term memory
+  - [x] Gaussian process regressors from various packages (gpy, sklearn, GPflow, ...) via wrapper
 </details>
 
 <details>
