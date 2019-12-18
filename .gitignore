@@ -11,5 +11,5 @@
 **/hyperactive.egg-info/
 **/_build/
 **/catboost_info/
-/hyperactive/extentions/meta_data
+/hyperactive/extensions/meta_data
 /docs/plots/search_paths/temp/

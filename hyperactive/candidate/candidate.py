@@ -7,7 +7,7 @@ import numpy as np
 from ..search_space import SearchSpace
 from ..model import Model
 from ..init_position import InitSearchPosition
-from ..extentions import ShortTermMemory, LongTermMemory
+from ..extensions import ShortTermMemory, LongTermMemory
 
 
 class Candidate:
