@@ -4,6 +4,7 @@
 
 import os
 import glob
+import datetime
 import hashlib
 import inspect
 
@@ -23,6 +24,8 @@ class Memory:
         self.memory_dict = {}
 
         self.meta_data_found = False
+
+        self.datetime = datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S") + "/"
 
 
 class ShortTermMemory(Memory):
@@ -68,7 +71,7 @@ class LongTermMemory(Memory):
         meta_data.to_csv(path, index=False)
 
     def _read_func_metadata(self, model_func):
-        paths = glob.glob(self._get_func_file_paths(model_func))
+        paths = self._get_func_data_names(model_func)
 
         meta_data_list = []
         for path in paths:
@@ -136,9 +139,7 @@ class LongTermMemory(Memory):
 
     def _collect(self):
         para_pd = self._get_para()
-        # md_model = para_pd.reindex(sorted(para_pd.columns), axis=1)
         metric_pd = self._get_score()
-
         md_model = pd.concat([para_pd, metric_pd], axis=1, ignore_index=False)
 
         return md_model
@@ -149,7 +150,7 @@ class LongTermMemory(Memory):
     def _get_func_str(self, func):
         return inspect.getsource(func)
 
-    def _get_func_file_paths(self, model_func):
+    def _get_subdirs(self, model_func):
         func_str = self._get_func_str(model_func)
         self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"
 
@@ -157,7 +158,19 @@ class LongTermMemory(Memory):
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
 
-        return directory + ("metadata" + "*" + "__.csv")
+        subdirs = glob.glob(directory+'*/')
+
+        return subdirs
+
+    def _get_func_data_names(self, model_func):
+        subdirs = self._get_subdirs(model_func)
+
+        path_list = []
+        for subdir in subdirs:
+            paths = glob.glob(subdir + "*.csv")
+            path_list = path_list + paths
+
+        return path_list
 
     def _get_file_path(self, model_func):
         func_str = self._get_func_str(model_func)
@@ -166,15 +179,13 @@ class LongTermMemory(Memory):
 
         self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"
 
-        directory = self.meta_data_path + self.func_path
+        directory = self.meta_data_path + self.func_path + self.datetime
         if not os.path.exists(directory):
             os.makedirs(directory)
 
         return directory + (
-            "metadata"
-            + "__feature_hash="
-            + feature_hash
-            + "__label_hash="
+            feature_hash
+            + "_"
             + label_hash
-            + "__.csv"
+            + ".csv"
         )
