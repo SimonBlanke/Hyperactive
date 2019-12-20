@@ -10,6 +10,12 @@ import multiprocessing
 
 class MainArgs:
     def __init__(self, X, y, memory, random_state, verbosity):
+        self.hyperactive_para = {
+            "memory" : memory,
+            "random_state" : random_state,
+            "verbosity" : verbosity,
+        }
+
         self.X = X
         self.y = y
         self.verbosity = verbosity
@@ -28,6 +34,15 @@ class MainArgs:
     def search_args(
         self, search_config, max_time, n_iter, optimizer, n_jobs, init_config
     ):
+        self.search_para = {
+            "search_config" : search_config,
+            "max_time" : max_time,
+            "n_iter" : n_iter,
+            "optimizer" : optimizer,
+            "n_jobs" : n_jobs,
+            "init_config" : init_config,
+        }
+
         self.search_config = search_config
         self.max_time = max_time
         self.n_iter = n_iter
