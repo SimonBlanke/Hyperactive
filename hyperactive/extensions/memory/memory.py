@@ -51,23 +51,48 @@ class LongTermMemory(Memory):
         self._load_data_into_memory(para, score)
 
     def save_memory(self, _main_args_, _cand_):
-        meta_data = self._collect()
+        meta_data = self._collect(_cand_)
         path = self._get_file_path(_cand_.func_)
         self._save_toCSV(meta_data, path)
 
-        obj_func_path = self.meta_data_path + self.func_path + 'objective_function.py'
+        obj_func_path = self.meta_data_path + self.func_path + "objective_function.py"
         if not os.path.exists(obj_func_path):
-            file = open(obj_func_path, 'w')
+            file = open(obj_func_path, "w")
             file.write(self._get_func_str(_cand_.func_))
             file.close()
 
+        search_config_path = (
+            self.meta_data_path + self.func_path + self.datetime + "search_config.py"
+        )
 
-        search_config_path = self.meta_data_path + self.func_path + self.datetime + 'search_config.py'
+        search_config_temp = dict(self._main_args_.search_config)
+
+        for key in search_config_temp.keys():
+            if isinstance(key, str):
+                continue
+            search_config_temp[key.__name__] = search_config_temp[key]
+            del search_config_temp[key]
+
+        search_config_str = "search_config = " + str(search_config_temp)
+
         if not os.path.exists(search_config_path):
-            file = open(search_config_path, 'w')
-            file.write(str(self._main_args_.search_config))
+            file = open(search_config_path, "w")
+            file.write(search_config_str)
             file.close()
 
+        os.chdir(self.meta_data_path + self.func_path + self.datetime)
+        os.system("black search_config.py")
+        os.getcwd()
+
+        run_data = pd.DataFrame(
+            [[np.array(_cand_.eval_time).sum(), _cand_.total_time]],
+            columns=["eval_time", "total_time"],
+        )
+
+        run_data.to_csv(
+            self.meta_data_path + self.func_path + self.datetime + "run_data",
+            index=False,
+        )
 
     def _save_toCSV(self, meta_data_new, path):
         if os.path.exists(path):
@@ -151,10 +176,14 @@ class LongTermMemory(Memory):
             results_dict["mean_test_score"], columns=["mean_test_score"]
         )
 
-    def _collect(self):
+    def _collect(self, _cand_):
         para_pd = self._get_para()
         metric_pd = self._get_score()
-        md_model = pd.concat([para_pd, metric_pd], axis=1, ignore_index=False)
+
+        eval_time = pd.DataFrame(_cand_.eval_time, columns=["eval_time"])
+        md_model = pd.concat(
+            [para_pd, metric_pd, eval_time], axis=1, ignore_index=False
+        )
 
         return md_model
 
@@ -172,7 +201,7 @@ class LongTermMemory(Memory):
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
 
-        subdirs = glob.glob(directory+'*/')
+        subdirs = glob.glob(directory + "*/")
 
         return subdirs
 
@@ -197,9 +226,4 @@ class LongTermMemory(Memory):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        return directory + (
-            feature_hash
-            + "_"
-            + label_hash
-            + ".csv"
-        )
+        return directory + (feature_hash + "_" + label_hash + ".csv")

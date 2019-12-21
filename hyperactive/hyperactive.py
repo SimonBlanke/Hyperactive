@@ -85,8 +85,6 @@ class Hyperactive:
         init_config=None,
     ):
 
-        start_time = time.time()
-
         self._main_args_.search_args(
             search_config, max_time, n_iter, optimizer, n_jobs, init_config
         )
@@ -104,17 +102,11 @@ class Hyperactive:
             searches = [
                 opt.search.remote(job, rayInit=rayInit) for job, opt in enumerate(opts)
             ]
-            self.results_params, self.results_models, self.pos_list, self.score_list, self.eval_time = ray.get(
-                searches
-            )[
-                0
-            ]
+            self.results_params, self.pos_list, self.score_list = ray.get(searches)[0]
 
             ray.shutdown()
         else:
             self._optimizer_ = optimizer_class(self._main_args_, self._opt_args_)
-            self.results_params, self.results_models, self.pos_list, self.score_list, self.eval_time = (
+            self.results_params, self.pos_list, self.score_list = (
                 self._optimizer_.search()
             )
-
-        self.total_time = time.time() - start_time

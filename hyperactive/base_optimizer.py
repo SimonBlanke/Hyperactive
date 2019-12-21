@@ -103,16 +103,6 @@ class BaseOptimizer:
             self.pos_list.append(pos_list_)
             self.score_list.append(score_list_)
 
-    def _process_results(self, _cand_):
-        start_point = self._verb_.print_start_point(_cand_)
-
-        self.eval_time = _cand_.eval_time_sum
-        self.results_params[_cand_.func_] = start_point
-        # self.results_models[_cand_.func_] = _cand_.model_best
-
-        if self._main_args_.memory == "long":
-            _cand_.mem.save_memory(self._main_args_, _cand_)
-
     def _search_multiprocessing(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._main_args_.n_jobs)
@@ -122,7 +112,7 @@ class BaseOptimizer:
 
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
-        self._process_results(_cand_)
+        self.results_params[_cand_.func_] = _cand_._process_results(self._verb_)
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
@@ -131,12 +121,11 @@ class BaseOptimizer:
             print("\n")
 
         for _cand_ in _cand_list:
-            self._process_results(_cand_)
+            self.results_params[_cand_.func_] = _cand_._process_results(self._verb_)
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
         self.results_params = {}
-        self.results_models = {}
 
         if rayInit:
             self._run_job(nth_process)
@@ -145,10 +134,4 @@ class BaseOptimizer:
         else:
             self._run_multiple_jobs()
 
-        return (
-            self.results_params,
-            self.results_models,
-            self.pos_list,
-            self.score_list,
-            self.eval_time,
-        )
+        return (self.results_params, self.pos_list, self.score_list)

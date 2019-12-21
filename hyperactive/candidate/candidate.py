@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import time
 import numpy as np
 
 from ..search_space import SearchSpace
@@ -12,7 +13,9 @@ from ..extensions.memory import ShortTermMemory, LongTermMemory
 
 class Candidate:
     def __init__(self, nth_process, _main_args_):
+        self.start_time = time.time()
         self.i = 0
+        self._main_args_ = _main_args_
         self.memory = _main_args_.memory
 
         self._score_best = -np.inf
@@ -27,7 +30,7 @@ class Candidate:
         self._model_ = Model(self.func_, nth_process, _main_args_)
         self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
 
-        self.eval_time_sum = 0
+        self.eval_time = []
 
         if not self.memory:
             self.mem = None
@@ -59,6 +62,15 @@ class Candidate:
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
 
+    def _process_results(self, _verb_):
+        self.total_time = time.time() - self.start_time
+        start_point = _verb_.print_start_point(self)
+
+        if self._main_args_.memory == "long":
+            self.mem.save_memory(self._main_args_, self)
+
+        return start_point
+
     @property
     def score_best(self):
         return self._score_best
@@ -68,13 +80,16 @@ class Candidate:
         self.model_best = self.model
         self._score_best = value
 
-    def eval_pos_noMem(self, pos):
+    def base_eval(self, pos):
         para = self._space_.pos2para(pos)
         para["iteration"] = self.i
         score, eval_time, self.model = self._model_.train_model(para)
-        self.eval_time_sum = self.eval_time_sum + eval_time
+        self.eval_time.append(eval_time)
 
         return score
+
+    def eval_pos_noMem(self, pos):
+        return self.base_eval(pos)
 
     def eval_pos_Mem(self, pos, force_eval=False):
         pos.astype(int)
@@ -83,10 +98,7 @@ class Candidate:
         if pos_str in self.mem.memory_dict and not force_eval:
             return self.mem.memory_dict[pos_str]
         else:
-            para = self._space_.pos2para(pos)
-            para["iteration"] = self.i
-            score, eval_time, self.model = self._model_.train_model(para)
+            score = self.base_eval(pos)
             self.mem.memory_dict[pos_str] = score
-            self.eval_time_sum = self.eval_time_sum + eval_time
 
             return score
