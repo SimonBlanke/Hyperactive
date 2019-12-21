@@ -43,6 +43,8 @@ class MainArgs:
             "init_config": init_config,
         }
 
+        print("self.search_para", self.search_para)
+
         self.search_config = search_config
         self.max_time = max_time
         self.n_iter = n_iter

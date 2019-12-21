@@ -4,6 +4,7 @@
 
 import os
 import glob
+import json
 import datetime
 import hashlib
 import inspect
@@ -84,15 +85,18 @@ class LongTermMemory(Memory):
         os.system("black search_config.py")
         os.getcwd()
 
-        run_data = pd.DataFrame(
-            [[np.array(_cand_.eval_time).sum(), _cand_.total_time]],
-            columns=["eval_time", "total_time"],
-        )
+        run_data = {
+            "random_state": self._main_args_.random_state,
+            "max_time": self._main_args_.random_state,
+            "n_iter": self._main_args_.n_iter,
+            "optimizer": self._main_args_.optimizer,
+            "n_jobs": self._main_args_.n_jobs,
+            "eval_time": np.array(_cand_.eval_time).sum(),
+            "total_time": _cand_.total_time,
+        }
 
-        run_data.to_csv(
-            self.meta_data_path + self.func_path + self.datetime + "run_data",
-            index=False,
-        )
+        with open("run_data.json", "w") as f:
+            json.dump(run_data, f, indent=4)
 
     def _save_toCSV(self, meta_data_new, path):
         if os.path.exists(path):
