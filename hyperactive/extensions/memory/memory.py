@@ -51,7 +51,7 @@ class LongTermMemory(Memory):
 
         self._load_data_into_memory(para, score)
 
-    def save_memory(self, _main_args_, _cand_):
+    def save_memory(self, _main_args_, _opt_args_, _cand_):
         meta_data = self._collect(_cand_)
         path = self._get_file_path(_cand_.func_)
         self._save_toCSV(meta_data, path)
@@ -97,6 +97,18 @@ class LongTermMemory(Memory):
 
         with open("run_data.json", "w") as f:
             json.dump(run_data, f, indent=4)
+
+        """
+
+        print("_opt_args_.kwargs_opt", _opt_args_.kwargs_opt)
+
+        opt_para = pd.DataFrame.from_dict(_opt_args_.kwargs_opt, dtype=object)
+        print("opt_para", opt_para)
+        opt_para.to_csv(
+            self.meta_data_path + self.func_path + self.datetime + "opt_para",
+            index=False,
+        )
+        """
 
     def _save_toCSV(self, meta_data_new, path):
         if os.path.exists(path):

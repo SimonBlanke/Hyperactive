@@ -112,7 +112,9 @@ class BaseOptimizer:
 
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
-        self.results_params[_cand_.func_] = _cand_._process_results(self._verb_)
+        self.results_params[_cand_.func_] = _cand_._process_results(
+            self._verb_, self._opt_args_
+        )
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
@@ -121,7 +123,9 @@ class BaseOptimizer:
             print("\n")
 
         for _cand_ in _cand_list:
-            self.results_params[_cand_.func_] = _cand_._process_results(self._verb_)
+            self.results_params[_cand_.func_] = _cand_._process_results(
+                self._verb_, self._opt_args_
+            )
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()

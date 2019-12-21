@@ -62,12 +62,12 @@ class Candidate:
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
 
-    def _process_results(self, _verb_):
+    def _process_results(self, _verb_, _opt_args_):
         self.total_time = time.time() - self.start_time
         start_point = _verb_.print_start_point(self)
 
         if self._main_args_.memory == "long":
-            self.mem.save_memory(self._main_args_, self)
+            self.mem.save_memory(self._main_args_, _opt_args_, self)
 
         return start_point
 

@@ -12,9 +12,9 @@ from numpy.random import normal
 class GPR:
     def __init__(self):
         self.gpr = GaussianProcessRegressor(
-                kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
-            )
-        
+            kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
+        )
+
     def fit(self, X, y):
         self.gpr.fit(X, y)
 
