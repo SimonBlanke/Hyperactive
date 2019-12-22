@@ -176,8 +176,6 @@ class LongTermMemory(Memory):
                     and not isinstance(para[key], str)
                 ):
 
-                    print("para", para[key])
-
                     para_dill = dill.dumps(para[key])
                     para_hash = self._get_hash(para_dill)
 
@@ -187,8 +185,6 @@ class LongTermMemory(Memory):
                         dill.dump(para_dill, pickle_file)
 
                     para[key] = para_hash
-
-            print("para", para["kernel"], type(para["kernel"]))
 
             if score != 0:
                 para_list.append(para)
@@ -200,12 +196,9 @@ class LongTermMemory(Memory):
         return results_dict
 
     def _load_data_into_memory(self, paras, scores):
-        print("\nparas", paras)
 
         for idx in range(paras.shape[0]):
             para = paras.iloc[[idx]]
-
-            print("\npara", para)
 
             pos = self._space_.para2pos(paras.iloc[[idx]], self._get_pkl_hash)
             pos_str = pos.tostring()

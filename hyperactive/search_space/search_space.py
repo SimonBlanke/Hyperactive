@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
 import dill
 import random
 import numpy as np
@@ -47,33 +46,23 @@ class SearchSpace:
             value = dill.load(fp)
             value = dill.loads(value)
 
-            print("\n_read_dill", value)
-
         return value
 
     def para2pos(self, para, _get_pkl_hash):
         pos_list = []
 
-        print("para2pos", para)
-
         for pos_key in self.search_space:
             value = para[[pos_key]].values[0][0]
 
-            print("\nvalue", type(value))
-
             if isinstance(value, str):
-                print("\nvalue", len(value))
 
                 if len(value) == 40:
                     paths = _get_pkl_hash(value)
-                    print("paths", paths)
                     for path in paths:
                         value = self._read_dill(value, path)
 
                         if not isinstance(value, str):
                             break
-
-                    print("\nvalue", value)
 
             pos = self.search_space[pos_key].index(value)
             pos_list.append(pos)
