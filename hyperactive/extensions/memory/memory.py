@@ -3,6 +3,7 @@
 # License: MIT License
 
 import os
+import sys
 import glob
 import json
 import dill
@@ -43,13 +44,13 @@ class LongTermMemory(Memory):
         current_path = os.path.realpath(__file__)
         meta_learn_path, _ = current_path.rsplit("/", 1)
 
-        self.datetime = datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S") + "/"
+        self.datetime = datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S")
         func_str = self._get_func_str(_cand_.func_)
         self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
 
         self.meta_path = meta_learn_path + "/meta_data/"
         self.func_path = self.meta_path + self.func_path_
-        self.date_path = self.meta_path + self.func_path_ + self.datetime
+        self.date_path = self.meta_path + self.func_path_ + self.datetime + "/"
 
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path, exist_ok=True)
@@ -62,9 +63,10 @@ class LongTermMemory(Memory):
         self._load_data_into_memory(para, score)
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
-
         path = self._get_file_path(_cand_.func_)
         meta_data = self._collect(_cand_)
+
+        meta_data["run"] = self.datetime
 
         self._save_toCSV(meta_data, path)
 
@@ -125,7 +127,7 @@ class LongTermMemory(Memory):
             meta_data = meta_data_old.append(meta_data_new)
 
             columns = list(meta_data.columns)
-            noScore = ["mean_test_score", "cv_default_score"]
+            noScore = ["mean_test_score", "cv_default_score", "eval_time", "run"]
             columns_noScore = [c for c in columns if c not in noScore]
 
             meta_data = meta_data.drop_duplicates(subset=columns_noScore)
@@ -152,7 +154,7 @@ class LongTermMemory(Memory):
             para = meta_data.drop(score_name, axis=1)
             score = meta_data[score_name]
 
-            print("Loading meta data successful")
+            print("\rLoading meta data successful ")
             return para, score
 
         else:
@@ -180,7 +182,7 @@ class LongTermMemory(Memory):
                     para_hash = self._get_hash(para_dill)
 
                     with open(
-                        self.date_path + str(para_hash) + ".pkl", "wb"
+                        self.func_path + str(para_hash) + ".pkl", "wb"
                     ) as pickle_file:
                         dill.dump(para_dill, pickle_file)
 
@@ -210,20 +212,13 @@ class LongTermMemory(Memory):
                 self.score_best = score
                 self.pos_best = pos
 
-    def _get_para(self):
+    def _collect(self, _cand_):
         results_dict = self._get_opt_meta_data()
 
-        return pd.DataFrame(results_dict["params"])
-
-    def _get_score(self):
-        results_dict = self._get_opt_meta_data()
-        return pd.DataFrame(
+        para_pd = pd.DataFrame(results_dict["params"])
+        metric_pd = pd.DataFrame(
             results_dict["mean_test_score"], columns=["mean_test_score"]
         )
-
-    def _collect(self, _cand_):
-        para_pd = self._get_para()
-        metric_pd = self._get_score()
 
         eval_time = pd.DataFrame(_cand_.eval_time, columns=["eval_time"])
         md_model = pd.concat(
@@ -243,7 +238,7 @@ class LongTermMemory(Memory):
 
         return subdirs
 
-    def _get_func_data_names(self):
+    def _get_func_data_names1(self):
         subdirs = self._get_subdirs()
 
         path_list = []
@@ -253,15 +248,15 @@ class LongTermMemory(Memory):
 
         return path_list
 
+    def _get_func_data_names(self):
+        paths = glob.glob(self.func_path + "*_.csv")
+
+        return paths
+
     def _get_pkl_hash(self, hash):
-        subdirs = self._get_subdirs()
+        paths = glob.glob(self.func_path + hash + "*.pkl")
 
-        path_list = []
-        for subdir in subdirs:
-            paths = glob.glob(subdir + hash + "*.pkl")
-            path_list = path_list + paths
-
-        return path_list
+        return paths
 
     def _get_file_path(self, model_func):
         feature_hash = self._get_hash(self._main_args_.X)
@@ -270,4 +265,4 @@ class LongTermMemory(Memory):
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path)
 
-        return self.date_path + (feature_hash + "_" + label_hash + ".csv")
+        return self.func_path + (feature_hash + "_" + label_hash + "_.csv")
