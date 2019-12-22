@@ -5,6 +5,8 @@
 import os
 import glob
 import json
+import dill
+import pickle
 import datetime
 import hashlib
 import inspect
@@ -14,7 +16,7 @@ import pandas as pd
 
 
 class Memory:
-    def __init__(self, _space_, _main_args_):
+    def __init__(self, _space_, _main_args_, _cand_):
         self._space_ = _space_
         self._main_args_ = _main_args_
 
@@ -26,23 +28,31 @@ class Memory:
 
         self.meta_data_found = False
 
-        self.datetime = datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S") + "/"
-
 
 class ShortTermMemory(Memory):
-    def __init__(self, _space_, _main_args_):
-        super().__init__(_space_, _main_args_)
+    def __init__(self, _space_, _main_args_, _cand_):
+        super().__init__(_space_, _main_args_, _cand_)
 
 
 class LongTermMemory(Memory):
-    def __init__(self, _space_, _main_args_):
-        super().__init__(_space_, _main_args_)
+    def __init__(self, _space_, _main_args_, _cand_):
+        super().__init__(_space_, _main_args_, _cand_)
 
         self.score_col_name = "mean_test_score"
 
         current_path = os.path.realpath(__file__)
         meta_learn_path, _ = current_path.rsplit("/", 1)
-        self.meta_data_path = meta_learn_path + "/meta_data/"
+
+        self.datetime = datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S") + "/"
+        func_str = self._get_func_str(_cand_.func_)
+        self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
+
+        self.meta_path = meta_learn_path + "/meta_data/"
+        self.func_path = self.meta_path + self.func_path_
+        self.date_path = self.meta_path + self.func_path_ + self.datetime
+
+        if not os.path.exists(self.date_path):
+            os.makedirs(self.date_path, exist_ok=True)
 
     def load_memory(self, model_func):
         para, score = self._read_func_metadata(model_func)
@@ -52,20 +62,19 @@ class LongTermMemory(Memory):
         self._load_data_into_memory(para, score)
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
-        meta_data = self._collect(_cand_)
+
         path = self._get_file_path(_cand_.func_)
+        meta_data = self._collect(_cand_)
+
         self._save_toCSV(meta_data, path)
 
-        obj_func_path = self.meta_data_path + self.func_path + "objective_function.py"
+        obj_func_path = self.func_path + "objective_function.py"
         if not os.path.exists(obj_func_path):
             file = open(obj_func_path, "w")
             file.write(self._get_func_str(_cand_.func_))
             file.close()
 
-        search_config_path = (
-            self.meta_data_path + self.func_path + self.datetime + "search_config.py"
-        )
-
+        search_config_path = self.date_path + "search_config.py"
         search_config_temp = dict(self._main_args_.search_config)
 
         for key in search_config_temp.keys():
@@ -81,7 +90,7 @@ class LongTermMemory(Memory):
             file.write(search_config_str)
             file.close()
 
-        os.chdir(self.meta_data_path + self.func_path + self.datetime)
+        os.chdir(self.date_path)
         os.system("black search_config.py")
         os.getcwd()
 
@@ -126,7 +135,7 @@ class LongTermMemory(Memory):
         meta_data.to_csv(path, index=False)
 
     def _read_func_metadata(self, model_func):
-        paths = self._get_func_data_names(model_func)
+        paths = self._get_func_data_names()
 
         meta_data_list = []
         for path in paths:
@@ -160,6 +169,27 @@ class LongTermMemory(Memory):
             para = self._space_.pos2para(pos)
             score = self.memory_dict[key]
 
+            for key in para.keys():
+                if (
+                    not isinstance(para[key], int)
+                    and not isinstance(para[key], float)
+                    and not isinstance(para[key], str)
+                ):
+
+                    print("para", para[key])
+
+                    para_dill = dill.dumps(para[key])
+                    para_hash = self._get_hash(para_dill)
+
+                    with open(
+                        self.date_path + str(para_hash) + ".pkl", "wb"
+                    ) as pickle_file:
+                        dill.dump(para_dill, pickle_file)
+
+                    para[key] = para_hash
+
+            print("para", para["kernel"], type(para["kernel"]))
+
             if score != 0:
                 para_list.append(para)
                 score_list.append(score)
@@ -170,8 +200,14 @@ class LongTermMemory(Memory):
         return results_dict
 
     def _load_data_into_memory(self, paras, scores):
+        print("\nparas", paras)
+
         for idx in range(paras.shape[0]):
-            pos = self._space_.para2pos(paras.iloc[[idx]])
+            para = paras.iloc[[idx]]
+
+            print("\npara", para)
+
+            pos = self._space_.para2pos(paras.iloc[[idx]], self._get_pkl_hash)
             pos_str = pos.tostring()
 
             score = float(scores.values[idx])
@@ -209,20 +245,13 @@ class LongTermMemory(Memory):
     def _get_func_str(self, func):
         return inspect.getsource(func)
 
-    def _get_subdirs(self, model_func):
-        func_str = self._get_func_str(model_func)
-        self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"
-
-        directory = self.meta_data_path + self.func_path
-        if not os.path.exists(directory):
-            os.makedirs(directory, exist_ok=True)
-
-        subdirs = glob.glob(directory + "*/")
+    def _get_subdirs(self):
+        subdirs = glob.glob(self.func_path + "*/")
 
         return subdirs
 
-    def _get_func_data_names(self, model_func):
-        subdirs = self._get_subdirs(model_func)
+    def _get_func_data_names(self):
+        subdirs = self._get_subdirs()
 
         path_list = []
         for subdir in subdirs:
@@ -231,15 +260,21 @@ class LongTermMemory(Memory):
 
         return path_list
 
+    def _get_pkl_hash(self, hash):
+        subdirs = self._get_subdirs()
+
+        path_list = []
+        for subdir in subdirs:
+            paths = glob.glob(subdir + hash + "*.pkl")
+            path_list = path_list + paths
+
+        return path_list
+
     def _get_file_path(self, model_func):
-        func_str = self._get_func_str(model_func)
         feature_hash = self._get_hash(self._main_args_.X)
         label_hash = self._get_hash(self._main_args_.y)
 
-        self.func_path = self._get_hash(func_str.encode("utf-8")) + "/"
+        if not os.path.exists(self.date_path):
+            os.makedirs(self.date_path)
 
-        directory = self.meta_data_path + self.func_path + self.datetime
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-
-        return directory + (feature_hash + "_" + label_hash + ".csv")
+        return self.date_path + (feature_hash + "_" + label_hash + ".csv")

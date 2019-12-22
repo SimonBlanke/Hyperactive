@@ -37,11 +37,11 @@ class Candidate:
             self.eval_pos = self.eval_pos_noMem
 
         elif self.memory == "short":
-            self.mem = ShortTermMemory(self._space_, _main_args_)
+            self.mem = ShortTermMemory(self._space_, _main_args_, self)
             self.eval_pos = self.eval_pos_Mem
 
         elif self.memory == "long":
-            self.mem = LongTermMemory(self._space_, _main_args_)
+            self.mem = LongTermMemory(self._space_, _main_args_, self)
             self.eval_pos = self.eval_pos_Mem
 
             self.mem.load_memory(self.func_)
