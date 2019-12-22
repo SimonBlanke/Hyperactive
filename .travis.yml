@@ -20,6 +20,7 @@ install:
   - pip install tensorflow
   - pip install keras
   - pip install ray
+  - pip install dill
   - pip install packaging
   - pip install pytest
   - pip install pytest-cov
