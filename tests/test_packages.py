@@ -9,6 +9,7 @@ from hyperactive import Hyperactive
 
 data = load_breast_cancer()
 X, y = data.data, data.target
+memory = False
 
 
 def test_sklearn():
@@ -53,7 +54,7 @@ def test_xgboost():
 
     search_config = {model: {"n_estimators": range(2, 20), "max_depth": range(1, 11)}}
 
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
@@ -77,7 +78,7 @@ def test_lightgbm():
         }
     }
 
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
@@ -104,7 +105,7 @@ def test_catboost():
         }
     }
 
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config)
     # opt.predict(X)
     # opt.score(X, y)
@@ -142,7 +143,7 @@ def test_tensorflow():
 
     search_config = {cnn: {"filters.0": [32, 64], "kernel_size.0": [3, 4]}}
 
-    opt = Hyperactive(X_train, y_train)
+    opt = Hyperactive(X_train, y_train, memory=memory)
     opt.search(search_config)
 
 

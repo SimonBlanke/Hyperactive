@@ -13,6 +13,7 @@ from hyperactive import Hyperactive
 data = load_iris()
 X = data.data
 y = data.target
+memory = False
 
 
 def model(para, X, y):
@@ -56,44 +57,44 @@ def test_func_return():
         }
     }
 
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config1)
 
 
 def test_n_jobs_2():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=2)
 
 
 def test_n_jobs_4():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=4)
 
 
 def test_positional_args():
-    opt0 = Hyperactive(X, y, random_state=False)
+    opt0 = Hyperactive(X, y, random_state=False, memory=memory)
     opt0.search(search_config)
 
-    opt1 = Hyperactive(X, y, random_state=1)
+    opt1 = Hyperactive(X, y, random_state=1, memory=memory)
     opt1.search(search_config)
 
-    opt2 = Hyperactive(X, y, random_state=1)
+    opt2 = Hyperactive(X, y, random_state=1, memory=memory)
     opt2.search(search_config)
 
 
 def test_random_state():
-    opt0 = Hyperactive(X, y, random_state=False)
+    opt0 = Hyperactive(X, y, random_state=False, memory=memory)
     opt0.search(search_config)
 
-    opt1 = Hyperactive(X, y, random_state=0)
+    opt1 = Hyperactive(X, y, random_state=0, memory=memory)
     opt1.search(search_config)
 
-    opt2 = Hyperactive(X, y, random_state=1)
+    opt2 = Hyperactive(X, y, random_state=1, memory=memory)
     opt2.search(search_config)
 
 
 def test_max_time():
-    opt0 = Hyperactive(X, y)
+    opt0 = Hyperactive(X, y, memory=memory)
     opt0.search(search_config, max_time=0.00001)
 
 
@@ -112,28 +113,28 @@ def test_memory():
 
 
 def test_verbosity():
-    opt0 = Hyperactive(X, y, verbosity=0)
+    opt0 = Hyperactive(X, y, verbosity=0, memory=memory)
     opt0.search(search_config)
 
-    opt0 = Hyperactive(X, y, verbosity=0)
+    opt0 = Hyperactive(X, y, verbosity=0, memory=memory)
     opt0.search(search_config, n_jobs=2)
 
-    opt1 = Hyperactive(X, y, verbosity=1)
+    opt1 = Hyperactive(X, y, verbosity=1, memory=memory)
     opt1.search(search_config)
 
-    opt0 = Hyperactive(X, y, verbosity=1)
+    opt0 = Hyperactive(X, y, verbosity=1, memory=memory)
     opt0.search(search_config)
 
-    opt1 = Hyperactive(X, y, verbosity=2)
+    opt1 = Hyperactive(X, y, verbosity=2, memory=memory)
     opt1.search(search_config)
 
-    opt1 = Hyperactive(X, y, verbosity=2)
+    opt1 = Hyperactive(X, y, verbosity=2, memory=memory)
     opt1.search(search_config, n_jobs=2)
 
 
 def test_scatter_init():
     init_config = {model: {"scatter_init": 10}}
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, init_config=init_config)
 
 
@@ -141,7 +142,7 @@ def test_warm_start():
     init_config = {
         model: {"max_depth": 10, "min_samples_split": 2, "min_samples_leaf": 5}
     }
-    opt = Hyperactive(X, y, memory=False)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=0, init_config=init_config)
 
     assert opt.results_params[model] == init_config[model]
@@ -149,30 +150,30 @@ def test_warm_start():
 
 def test_partial_warm_start():
     init_config = {model: {"min_samples_split": 2, "min_samples_leaf": 5}}
-    opt = Hyperactive(X, y, memory=False)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=0, init_config=init_config)
 
 
 def test_optimizer_args():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
 
 
 def test_get_search_path():
-    opt = Hyperactive(X, y, verbosity=10)
+    opt = Hyperactive(X, y, verbosity=10, memory=memory)
     opt.search(search_config)
 
-    opt = Hyperactive(X, y, verbosity=10)
+    opt = Hyperactive(X, y, verbosity=10, memory=memory)
     opt.search(search_config, optimizer="ParticleSwarm")
 
 
 def test_ray_1():
     ray.init()
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=1)
 
 
 def test_ray_2():
     ray.init()
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=2)

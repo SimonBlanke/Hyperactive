@@ -11,6 +11,8 @@ data = load_iris()
 X = data.data
 y = data.target
 
+memory = False
+
 n_iter = 30
 
 
@@ -37,60 +39,60 @@ search_config = {
 
 
 def test_HillClimbingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="HillClimbing")
 
 
 def test_StochasticHillClimbingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="StochasticHillClimbing")
 
 
 def test_TabuOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="TabuSearch")
 
 
 def test_RandomSearchOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="RandomSearch")
 
 
 def test_RandomRestartHillClimbingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="RandomRestartHillClimbing")
 
 
 def test_RandomAnnealingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="RandomAnnealing")
 
 
 def test_SimulatedAnnealingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="SimulatedAnnealing")
 
 
 def test_StochasticTunnelingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="StochasticTunneling")
 
 
 def test_ParallelTemperingOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="ParallelTempering")
 
 
 def test_ParticleSwarmOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="ParticleSwarm")
 
 
 def test_EvolutionStrategyOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="EvolutionStrategy")
 
 
 def test_BayesianOptimizer():
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="Bayesian")
