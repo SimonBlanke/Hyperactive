@@ -12,7 +12,7 @@ from ..extensions.memory import ShortTermMemory, LongTermMemory
 
 
 class Candidate:
-    def __init__(self, nth_process, _main_args_):
+    def __init__(self, nth_process, _main_args_, _verb_):
         self.start_time = time.time()
         self.i = 0
         self._main_args_ = _main_args_
@@ -37,11 +37,11 @@ class Candidate:
             self.eval_pos = self.eval_pos_noMem
 
         elif self.memory == "short":
-            self.mem = ShortTermMemory(self._space_, _main_args_, self)
+            self.mem = ShortTermMemory(self._space_, _main_args_, self, _verb_)
             self.eval_pos = self.eval_pos_Mem
 
         elif self.memory == "long":
-            self.mem = LongTermMemory(self._space_, _main_args_, self)
+            self.mem = LongTermMemory(self._space_, _main_args_, self, _verb_)
             self.eval_pos = self.eval_pos_Mem
 
             self.mem.load_memory(self.func_)
@@ -56,7 +56,7 @@ class Candidate:
                 self.pos_best = self.mem.pos_best
                 self.score_best = self.mem.score_best
 
-        self.pos_best = self._init_._set_start_pos()
+        self.pos_best = self._init_._set_start_pos(_verb_)
         self.score_best = self.eval_pos(self.pos_best)
 
     def _get_warm_start(self):

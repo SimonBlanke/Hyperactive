@@ -3,11 +3,9 @@
 # License: MIT License
 
 import os
-import sys
 import glob
 import json
 import dill
-import pickle
 import datetime
 import hashlib
 import inspect
@@ -17,7 +15,7 @@ import pandas as pd
 
 
 class Memory:
-    def __init__(self, _space_, _main_args_, _cand_):
+    def __init__(self, _space_, _main_args_, _cand_, _verb_):
         self._space_ = _space_
         self._main_args_ = _main_args_
 
@@ -31,13 +29,13 @@ class Memory:
 
 
 class ShortTermMemory(Memory):
-    def __init__(self, _space_, _main_args_, _cand_):
-        super().__init__(_space_, _main_args_, _cand_)
+    def __init__(self, _space_, _main_args_, _cand_, _verb_):
+        super().__init__(_space_, _main_args_, _cand_, _verb_)
 
 
 class LongTermMemory(Memory):
-    def __init__(self, _space_, _main_args_, _cand_):
-        super().__init__(_space_, _main_args_, _cand_)
+    def __init__(self, _space_, _main_args_, _cand_, _verb_):
+        super().__init__(_space_, _main_args_, _cand_, _verb_)
 
         self.score_col_name = "mean_test_score"
 

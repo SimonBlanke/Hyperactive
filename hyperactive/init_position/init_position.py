@@ -29,15 +29,15 @@ class InitSearchPosition:
 
         return np.array(pos)
 
-    def _set_start_pos(self):
+    def _set_start_pos(self, _verb_):
         if self._space_.init_type == "warm_start":
-            print("Set warm start")
+            _verb_.warm_start()
             pos = self._warm_start()
         elif self._space_.init_type == "scatter_init":
-            print("Set scatter init")
+            _verb_.scatter_start()
             pos = self._scatter_init()
         else:
-            print("Set random start position")
+            _verb_.random_start()
             pos = self._space_.get_random_pos()
 
         return pos

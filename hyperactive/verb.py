@@ -15,6 +15,15 @@ class Verbosity:
     def close_p_bar(self):
         pass
 
+    def warm_start(self):
+        pass
+
+    def scatter_start(self):
+        pass
+
+    def random_start(self):
+        pass
+
 
 class VerbosityLVL0(Verbosity):
     def __init__(self):
@@ -34,6 +43,15 @@ class VerbosityLVL1(VerbosityLVL0):
         print("score     =", _cand_.score_best, "\n")
 
         return start_point
+
+    def warm_start(self):
+        print("Set warm start")
+
+    def scatter_start(self):
+        print("Set scatter init")
+
+    def random_start(self):
+        print("Set random start position")
 
 
 class VerbosityLVL2(VerbosityLVL1):
