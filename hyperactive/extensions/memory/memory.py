@@ -92,9 +92,11 @@ class LongTermMemory(Memory):
             file.write(search_config_str)
             file.close()
 
+        """
         os.chdir(self.date_path)
         os.system("black search_config.py")
         os.getcwd()
+        """
 
         run_data = {
             "random_state": self._main_args_.random_state,
@@ -110,7 +112,6 @@ class LongTermMemory(Memory):
             json.dump(run_data, f, indent=4)
 
         """
-
         print("_opt_args_.kwargs_opt", _opt_args_.kwargs_opt)
 
         opt_para = pd.DataFrame.from_dict(_opt_args_.kwargs_opt, dtype=object)

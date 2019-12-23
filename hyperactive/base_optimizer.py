@@ -17,8 +17,6 @@ class BaseOptimizer:
         self._main_args_ = _main_args_
         self._opt_args_ = _opt_args_
 
-        self._meta_ = None
-
         verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3]
         self._verb_ = verbs[_main_args_.verbosity]()
 
@@ -56,11 +54,6 @@ class BaseOptimizer:
 
         return _cand_, _p_
 
-    def _finish_search(self, _main_args_, _cand_):
-        self._verb_.close_p_bar()
-
-        return _cand_
-
     def _search(self, nth_process):
         _cand_, _p_ = self._initialize_search(self._main_args_, nth_process)
 
@@ -76,7 +69,7 @@ class BaseOptimizer:
             if self._main_args_.get_search_path:
                 self._monitor_search_path(_p_)
 
-        _cand_ = self._finish_search(self._main_args_, _cand_)
+        self._verb_.close_p_bar()
 
         return _cand_
 
@@ -123,6 +116,7 @@ class BaseOptimizer:
             print("\n")
 
         for _cand_ in _cand_list:
+            pass
             self.results_params[_cand_.func_] = _cand_._process_results(
                 self._verb_, self._opt_args_
             )

@@ -10,6 +10,7 @@ import multiprocessing
 
 class MainArgs:
     def __init__(self, X, y, memory, random_state, verbosity):
+        self._verb_ = None
         self.hyperactive_para = {
             "memory": memory,
             "random_state": random_state,
