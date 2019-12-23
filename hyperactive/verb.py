@@ -24,6 +24,15 @@ class Verbosity:
     def random_start(self):
         pass
 
+    def load_meta_data(self):
+        pass
+
+    def no_meta_data(self):
+        pass
+
+    def load_samples(self, para):
+        pass
+
 
 class VerbosityLVL0(Verbosity):
     def __init__(self):
@@ -52,6 +61,15 @@ class VerbosityLVL1(VerbosityLVL0):
 
     def random_start(self):
         print("Set random start position")
+
+    def load_meta_data(self):
+        print("Loading meta data successful", end="\r")
+
+    def no_meta_data(self, model_func):
+        print("No meta data found for", model_func.__name__, "function")
+
+    def load_samples(self, para):
+        print("Loading meta data successful:", len(para), "samples found")
 
 
 class VerbosityLVL2(VerbosityLVL1):

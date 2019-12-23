@@ -15,7 +15,7 @@ import pandas as pd
 
 
 class Memory:
-    def __init__(self, _space_, _main_args_, _cand_, _verb_):
+    def __init__(self, _space_, _main_args_, _cand_):
         self._space_ = _space_
         self._main_args_ = _main_args_
 
@@ -29,13 +29,13 @@ class Memory:
 
 
 class ShortTermMemory(Memory):
-    def __init__(self, _space_, _main_args_, _cand_, _verb_):
-        super().__init__(_space_, _main_args_, _cand_, _verb_)
+    def __init__(self, _space_, _main_args_, _cand_):
+        super().__init__(_space_, _main_args_, _cand_)
 
 
 class LongTermMemory(Memory):
-    def __init__(self, _space_, _main_args_, _cand_, _verb_):
-        super().__init__(_space_, _main_args_, _cand_, _verb_)
+    def __init__(self, _space_, _main_args_, _cand_):
+        super().__init__(_space_, _main_args_, _cand_)
 
         self.score_col_name = "mean_test_score"
 
@@ -53,10 +53,12 @@ class LongTermMemory(Memory):
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path, exist_ok=True)
 
-    def load_memory(self, model_func):
-        para, score = self._read_func_metadata(model_func)
+    def load_memory(self, model_func, _verb_):
+        para, score = self._read_func_metadata(model_func, _verb_)
         if para is None or score is None:
             return
+
+        _verb_.load_samples(para)
 
         self._load_data_into_memory(para, score)
 
@@ -135,7 +137,7 @@ class LongTermMemory(Memory):
 
         meta_data.to_csv(path, index=False)
 
-    def _read_func_metadata(self, model_func):
+    def _read_func_metadata(self, model_func, _verb_):
         paths = self._get_func_data_names()
 
         meta_data_list = []
@@ -153,11 +155,11 @@ class LongTermMemory(Memory):
             para = meta_data.drop(score_name, axis=1)
             score = meta_data[score_name]
 
-            print("\rLoading meta data successful ")
+            _verb_.load_meta_data()
             return para, score
 
         else:
-            print("Warning: No meta data found for following function:", model_func)
+            _verb_.no_meta_data(model_func)
             return None, None
 
     def _get_opt_meta_data(self):
