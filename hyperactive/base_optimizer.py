@@ -8,7 +8,6 @@ import multiprocessing
 
 from .base_positioner import BasePositioner
 from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3
-from .util import init_candidate
 from .candidate import Candidate
 
 
@@ -46,7 +45,8 @@ class BaseOptimizer:
         return _cand_, _p_
 
     def _initialize_search(self, _main_args_, nth_process):
-        _cand_ = init_candidate(_main_args_, nth_process, Candidate)
+        _main_args_._set_random_seed(nth_process)
+        _cand_ = Candidate(nth_process, _main_args_, self._verb_)
         self._verb_.init_p_bar(_cand_, self._main_args_)
 
         _p_ = self._init_opt_positioner(_cand_)

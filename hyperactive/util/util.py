@@ -6,13 +6,6 @@
 import numpy as np
 
 
-def init_candidate(_main_args_, nth_process, Candidate):
-    _main_args_._set_random_seed(nth_process)
-    _cand_ = Candidate(nth_process, _main_args_)
-
-    return _cand_
-
-
 def merge_dicts(base_dict, added_dict):
     # overwrite default values
     for key in base_dict.keys():
