@@ -56,20 +56,20 @@ class LongTermMemory(Memory):
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path, exist_ok=True)
 
-    def load_memory(self, model_func, _verb_):
-        para, score = self._read_func_metadata(model_func, _verb_)
+    def load_memory(self, _cand_, _verb_):
+        para, score = self._read_func_metadata(_cand_.func_, _verb_)
         if para is None or score is None:
             return
 
         _verb_.load_samples(para)
+
+        _cand_.eval_time = list(para["eval_time"])
 
         self._load_data_into_memory(para, score)
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
         path = self._get_file_path(_cand_.func_)
         meta_data = self._collect(_cand_)
-
-        print("meta_data", meta_data)
 
         meta_data["run"] = self.datetime
 

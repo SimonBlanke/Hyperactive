@@ -44,7 +44,7 @@ class Candidate:
             self.mem = LongTermMemory(self._space_, _main_args_, self)
             self.eval_pos = self.eval_pos_Mem
 
-            self.mem.load_memory(self.func_, _verb_)
+            self.mem.load_memory(self, _verb_)
 
         else:
             print("Warning: Memory not defined")
