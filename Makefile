@@ -25,16 +25,15 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-	pytest tests/test_optimizers.py -p no:warnings
-	pytest tests/test_arguments_api.py -p no:warnings
-	pytest tests/test_packages.py -p no:warnings
+	pytest tests/example_testing/test_optimizers.py -p no:warnings
+	pytest tests/example_testing/test_hyperactive_api.py -p no:warnings
+	pytest tests/example_testing/test_packages.py -p no:warnings
 
 push: test
 	git push
 
-release:
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+release: reinstall
+	python -m twine upload dist/*
 
 dist:
 	python setup.py sdist
