@@ -25,12 +25,12 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-	cd tests/; \
-		pytest
+	pytest tests/test_optimizers.py -p no:warnings
+	pytest tests/test_arguments_api.py -p no:warnings
+	pytest tests/test_packages.py -p no:warnings
 
-coverage:
-
-docs:
+push: test
+	git push
 
 release:
 	python setup.py sdist upload
