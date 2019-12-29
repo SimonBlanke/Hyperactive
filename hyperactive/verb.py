@@ -27,7 +27,7 @@ class Verbosity:
     def load_meta_data(self):
         pass
 
-    def no_meta_data(self):
+    def no_meta_data(self, model_func):
         pass
 
     def load_samples(self, para):
