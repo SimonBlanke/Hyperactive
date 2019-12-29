@@ -39,6 +39,9 @@ class LongTermMemory(Memory):
 
         self.score_col_name = "mean_test_score"
 
+        self.feature_hash = self._get_hash(_main_args_.X)
+        self.label_hash = self._get_hash(_main_args_.y)
+
         current_path = os.path.realpath(__file__)
         meta_learn_path, _ = current_path.rsplit("/", 1)
 
@@ -108,19 +111,14 @@ class LongTermMemory(Memory):
             "total_time": _cand_.total_time,
         }
 
-        with open("run_data.json", "w") as f:
+        with open(self.date_path + "run_data.json", "w") as f:
             json.dump(run_data, f, indent=4)
 
-        """
         print("_opt_args_.kwargs_opt", _opt_args_.kwargs_opt)
 
         opt_para = pd.DataFrame.from_dict(_opt_args_.kwargs_opt, dtype=object)
         print("opt_para", opt_para)
-        opt_para.to_csv(
-            self.meta_data_path + self.func_path + self.datetime + "opt_para",
-            index=False,
-        )
-        """
+        opt_para.to_csv(self.date_path + "opt_para", index=False)
 
     def _save_toCSV(self, meta_data_new, path):
         if os.path.exists(path):
@@ -199,10 +197,7 @@ class LongTermMemory(Memory):
         return results_dict
 
     def _load_data_into_memory(self, paras, scores):
-
         for idx in range(paras.shape[0]):
-            para = paras.iloc[[idx]]
-
             pos = self._space_.para2pos(paras.iloc[[idx]], self._get_pkl_hash)
             pos_str = pos.tostring()
 
@@ -250,7 +245,9 @@ class LongTermMemory(Memory):
         return path_list
 
     def _get_func_data_names(self):
-        paths = glob.glob(self.func_path + "*_.csv")
+        paths = glob.glob(
+            self.func_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
+        )
 
         return paths
 
@@ -260,10 +257,7 @@ class LongTermMemory(Memory):
         return paths
 
     def _get_file_path(self, model_func):
-        feature_hash = self._get_hash(self._main_args_.X)
-        label_hash = self._get_hash(self._main_args_.y)
-
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path)
 
-        return self.func_path + (feature_hash + "_" + label_hash + "_.csv")
+        return self.func_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
