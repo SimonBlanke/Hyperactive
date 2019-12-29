@@ -69,6 +69,8 @@ class LongTermMemory(Memory):
         path = self._get_file_path(_cand_.func_)
         meta_data = self._collect(_cand_)
 
+        print("meta_data", meta_data)
+
         meta_data["run"] = self.datetime
 
         self._save_toCSV(meta_data, path)
@@ -114,11 +116,13 @@ class LongTermMemory(Memory):
         with open(self.date_path + "run_data.json", "w") as f:
             json.dump(run_data, f, indent=4)
 
+        """
         print("_opt_args_.kwargs_opt", _opt_args_.kwargs_opt)
 
         opt_para = pd.DataFrame.from_dict(_opt_args_.kwargs_opt, dtype=object)
         print("opt_para", opt_para)
         opt_para.to_csv(self.date_path + "opt_para", index=False)
+        """
 
     def _save_toCSV(self, meta_data_new, path):
         if os.path.exists(path):
