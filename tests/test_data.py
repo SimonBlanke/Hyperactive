@@ -37,7 +37,7 @@ search_config = {
     }
 }
 
-
+"""
 def test_data():
     from hyperactive import Hyperactive
 
@@ -46,3 +46,4 @@ def test_data():
 
     opt1 = Hyperactive(search_config)
     opt1.search(X_pd, y_pd)
+"""

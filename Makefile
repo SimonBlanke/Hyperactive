@@ -25,7 +25,7 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-	cd tests/example_testing/; \
+	cd tests/; \
 		pytest test_hyperactive_api.py -p no:warnings; \
 		pytest test_optimizers.py -p no:warnings; \
 		pytest test_packages.py -p no:warnings
