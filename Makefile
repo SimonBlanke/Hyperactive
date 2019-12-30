@@ -25,9 +25,10 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-	pytest tests/example_testing/test_optimizers.py -p no:warnings
-	pytest tests/example_testing/test_hyperactive_api.py -p no:warnings
-	pytest tests/example_testing/test_packages.py -p no:warnings
+	cd tests/example_testing/; \
+		pytest test_hyperactive_api.py -p no:warnings; \
+		pytest test_optimizers.py -p no:warnings; \
+		pytest test_packages.py -p no:warnings
 
 push: test
 	git push
