@@ -167,6 +167,7 @@ def test_get_search_path():
     opt.search(search_config, optimizer="ParticleSwarm")
 
 
+"""
 def test_ray_1():
     ray.init()
     opt = Hyperactive(X, y, memory=memory)
@@ -177,3 +178,4 @@ def test_ray_2():
     ray.init()
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=2)
+"""
