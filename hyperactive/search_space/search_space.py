@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import dill
 import random
 import numpy as np
 
