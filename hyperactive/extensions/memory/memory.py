@@ -201,8 +201,13 @@ class LongTermMemory(Memory):
         return results_dict
 
     def _load_data_into_memory(self, paras, scores):
-        for idx in range(paras.shape[0]):
-            pos = self._space_.para2pos(paras.iloc[[idx]], self._get_pkl_hash)
+        import time
+        import tqdm
+
+        paras = self._space_.para2pos(paras)
+
+        for idx in tqdm.tqdm(range(paras.shape[0])):
+            pos = paras.iloc[[idx]].values
             pos_str = pos.tostring()
 
             score = float(scores.values[idx])

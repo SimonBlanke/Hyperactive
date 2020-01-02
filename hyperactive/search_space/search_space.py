@@ -13,6 +13,8 @@ class SearchSpace:
         self.pos_space_limit()
         self.init_type = None
 
+        self.para_names = list(self.search_space.keys())
+
         if _core_.init_config:
             self.init_para = _core_.init_config[list(_core_.init_config)[model_nr]]
 
@@ -48,12 +50,20 @@ class SearchSpace:
 
         return value
 
-    def para2pos(self, para, _get_pkl_hash):
+    def para2pos(self, paras):
+        paras = paras[self.para_names]
+        for pos_key in self.search_space:
+            paras[pos_key] = paras[pos_key].apply(self.search_space[pos_key].index)
+
+        return paras
+
+    def para2pos1(self, para, _get_pkl_hash):
         pos_list = []
 
         for pos_key in self.search_space:
             value = para[[pos_key]].values[0][0]
 
+            """
             if isinstance(value, str):
 
                 if len(value) == 40:
@@ -63,6 +73,7 @@ class SearchSpace:
 
                         if not isinstance(value, str):
                             break
+            """
 
             pos = self.search_space[pos_key].index(value)
             pos_list.append(pos)
