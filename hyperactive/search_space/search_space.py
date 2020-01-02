@@ -43,43 +43,6 @@ class SearchSpace:
 
         return pos
 
-    def _read_dill(self, value, path):
-        with open(path, "rb") as fp:
-            value = dill.load(fp)
-            value = dill.loads(value)
-
-        return value
-
-    def para2pos(self, paras):
-        paras = paras[self.para_names]
-        for pos_key in self.search_space:
-            paras[pos_key] = paras[pos_key].apply(self.search_space[pos_key].index)
-
-        return paras
-
-    def para2pos1(self, para, _get_pkl_hash):
-        pos_list = []
-
-        for pos_key in self.search_space:
-            value = para[[pos_key]].values[0][0]
-
-            """
-            if isinstance(value, str):
-
-                if len(value) == 40:
-                    paths = _get_pkl_hash(value)
-                    for path in paths:
-                        value = self._read_dill(value, path)
-
-                        if not isinstance(value, str):
-                            break
-            """
-
-            pos = self.search_space[pos_key].index(value)
-            pos_list.append(pos)
-
-        return np.array(pos_list)
-
     def pos2para(self, pos):
         if len(self.search_space.keys()) == pos.size:
             values_dict = {}
