@@ -52,7 +52,7 @@ def try_ray_import():
 
 class Hyperactive:
     def __init__(
-        self, X, y, memory="long", random_state=1, verbosity=3, warnings=False
+        self, X, y, memory="long", random_state=False, verbosity=3, warnings=False
     ):
         self.X = X
         self._main_args_ = MainArgs(X, y, memory, random_state, verbosity)
