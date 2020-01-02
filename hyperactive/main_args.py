@@ -67,13 +67,16 @@ class MainArgs:
 
     def _set_random_seed(self, thread=0):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
-        if self.random_state:
-            rand = int(self.random_state)
-        else:
-            rand = 0
+        if self.n_jobs > 1 and not self.random_state:
+            rand = np.random.randint(0, high=2 ** 32 - 2)
+            random.seed(rand + thread)
+            np.random.seed(rand + thread)
 
-        random.seed(rand + thread)
-        np.random.seed(rand + thread)
+        elif self.random_state:
+            rand = int(self.random_state)
+
+            random.seed(rand + thread)
+            np.random.seed(rand + thread)
 
     def set_n_jobs(self):
         """Sets the number of jobs to run in parallel"""
