@@ -5,18 +5,20 @@
 import time
 import numpy as np
 
-from ..search_space import SearchSpace
-from ..model import Model
-from ..init_position import InitSearchPosition
-from ..extensions.memory import ShortTermMemory, LongTermMemory
+from .search_space import SearchSpace
+from .model import Model
+from .init_position import InitSearchPosition
+from .extensions.memory import ShortTermMemory, LongTermMemory
 
 
 class Candidate:
-    def __init__(self, nth_process, _main_args_, _verb_):
+    def __init__(self, nth_process, _main_args_, _info_):
         self.start_time = time.time()
         self.i = 0
         self._main_args_ = _main_args_
         self.memory = _main_args_.memory
+
+        self._info_ = _info_()
 
         self._score_best = -np.inf
         self.pos_best = None
@@ -44,7 +46,7 @@ class Candidate:
             self.mem = LongTermMemory(self._space_, _main_args_, self)
             self.eval_pos = self.eval_pos_Mem
 
-            self.mem.load_memory(self, _verb_)
+            self.mem.load_memory(self, self._info_)
 
         else:
             print("Warning: Memory not defined")
@@ -56,15 +58,16 @@ class Candidate:
                 self.pos_best = self.mem.pos_best
                 self.score_best = self.mem.score_best
 
-        self.pos_best = self._init_._set_start_pos(_verb_)
+        self.pos_best = self._init_._set_start_pos(self._info_)
         self.score_best = self.eval_pos(self.pos_best)
 
     def _get_warm_start(self):
         return self._space_.pos2para(self.pos_best)
 
-    def _process_results(self, _verb_, _opt_args_):
+    def _process_results(self, _opt_args_):
+
         self.total_time = time.time() - self.start_time
-        start_point = _verb_.print_start_point(self)
+        start_point = self._info_.print_start_point(self)
 
         if self._main_args_.memory == "long":
             self.mem.save_memory(self._main_args_, _opt_args_, self)
@@ -89,7 +92,8 @@ class Candidate:
         return score
 
     def eval_pos_noMem(self, pos):
-        return self.base_eval(pos)
+        score = self.base_eval(pos)
+        return score
 
     def eval_pos_Mem(self, pos, force_eval=False):
         pos.astype(int)
@@ -100,5 +104,4 @@ class Candidate:
         else:
             score = self.base_eval(pos)
             self.mem.memory_dict[pos_str] = score
-
             return score

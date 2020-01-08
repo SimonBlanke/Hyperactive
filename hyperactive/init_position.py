@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from ..util import sort_for_best
+from .util import sort_for_best
 import numpy as np
 
 
@@ -29,15 +29,15 @@ class InitSearchPosition:
 
         return np.array(pos)
 
-    def _set_start_pos(self, _verb_):
+    def _set_start_pos(self, _info_):
         if self._space_.init_type == "warm_start":
-            _verb_.warm_start()
+            _info_.warm_start()
             pos = self._warm_start()
         elif self._space_.init_type == "scatter_init":
-            _verb_.scatter_start()
+            _info_.scatter_start()
             pos = self._scatter_init()
         else:
-            _verb_.random_start()
+            _info_.random_start()
             pos = self._space_.get_random_pos()
 
         return pos
