@@ -7,7 +7,7 @@ import numpy as np
 import multiprocessing
 
 from .base_positioner import BasePositioner
-from .verb import VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3
+from .verbosity import set_verbosity
 from .candidate import Candidate
 
 
@@ -16,8 +16,8 @@ class BaseOptimizer:
         self._main_args_ = _main_args_
         self._opt_args_ = _opt_args_
 
-        verbs = [VerbosityLVL0, VerbosityLVL1, VerbosityLVL2, VerbosityLVL3]
-        self._verb_ = verbs[_main_args_.verbosity]()
+        self._info_, _pbar_ = set_verbosity(_main_args_.verbosity)
+        self._pbar_ = _pbar_()
 
         self.pos_list = []
         self.score_list = []
@@ -40,17 +40,17 @@ class BaseOptimizer:
         _p_.pos_current = _p_.pos_new
         _p_.score_current = _p_.score_new
 
-        self._verb_.best_since_iter = _cand_.i
+        self._pbar_.best_since_iter = _cand_.i
 
         return _cand_, _p_
 
     def _initialize_search(self, _main_args_, nth_process):
         _main_args_._set_random_seed(nth_process)
-        _cand_ = Candidate(nth_process, _main_args_, self._verb_)
-        self._verb_.init_p_bar(_cand_, self._main_args_)
+        _cand_ = Candidate(nth_process, _main_args_, self._info_)
+        self._pbar_.init_p_bar(_cand_, self._main_args_)
 
         _p_ = self._init_opt_positioner(_cand_)
-        self._verb_.update_p_bar(1, _cand_)
+        self._pbar_.update_p_bar(1, _cand_)
 
         return _cand_, _p_
 
@@ -60,7 +60,7 @@ class BaseOptimizer:
         for i in range(self._main_args_.n_iter - 1):
             _cand_.i = i
             _cand_ = self._iterate(i, _cand_, _p_)
-            self._verb_.update_p_bar(1, _cand_)
+            self._pbar_.update_p_bar(1, _cand_)
 
             run_time = time.time() - self.start_time
             if self._main_args_.max_time and run_time > self._main_args_.max_time:
@@ -69,8 +69,7 @@ class BaseOptimizer:
             if self._main_args_.get_search_path:
                 self._monitor_search_path(_p_)
 
-        self._verb_.close_p_bar()
-
+        self._pbar_.close_p_bar()
         return _cand_
 
     def _monitor_search_path(self, _p_):
@@ -105,9 +104,7 @@ class BaseOptimizer:
 
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
-        self.results_params[_cand_.func_] = _cand_._process_results(
-            self._verb_, self._opt_args_
-        )
+        self.results_params[_cand_.func_] = _cand_._process_results(self._opt_args_)
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
@@ -117,9 +114,7 @@ class BaseOptimizer:
 
         for _cand_ in _cand_list:
             pass
-            self.results_params[_cand_.func_] = _cand_._process_results(
-                self._verb_, self._opt_args_
-            )
+            self.results_params[_cand_.func_] = _cand_._process_results(self._opt_args_)
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()

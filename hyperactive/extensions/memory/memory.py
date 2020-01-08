@@ -37,6 +37,8 @@ class LongTermMemory(Memory):
     def __init__(self, _space_, _main_args_, _cand_):
         super().__init__(_space_, _main_args_, _cand_)
 
+        self.nth_process = _cand_.nth_process
+
         self.score_col_name = "mean_test_score"
 
         self.feature_hash = self._get_hash(_main_args_.X)
@@ -201,12 +203,11 @@ class LongTermMemory(Memory):
         return results_dict
 
     def _load_data_into_memory(self, paras, scores):
-        import tqdm
 
         paras = paras.replace(self._hash2obj())
         paras = self.para2pos(paras)
 
-        for idx in tqdm.tqdm(range(paras.shape[0])):
+        for idx in range(paras.shape[0]):
             pos = paras.iloc[[idx]].values
             pos_str = pos.tostring()
 
