@@ -1,3 +1,5 @@
+#!/bin/sh
+
 python conv_py2md.py machine_learning ../docs/examples/
 python conv_py2md.py deep_learning ../docs/examples/
 python conv_py2md.py distribution ../docs/examples/
