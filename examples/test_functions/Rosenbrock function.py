@@ -16,5 +16,5 @@ search_config = {
     rosen: {"x0": x_range, "x1": x_range, "x2": x_range, "x3": x_range, "x4": x_range}
 }
 
-opt = Hyperactive(0, 0)
+opt = Hyperactive(0, 0, memory=None)
 opt.search(search_config, n_iter=1000000)
