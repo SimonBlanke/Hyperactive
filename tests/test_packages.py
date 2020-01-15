@@ -111,6 +111,7 @@ def test_catboost():
     # opt.score(X, y)
 
 
+"""
 def test_tensorflow():
     import tensorflow as tf
 
@@ -145,7 +146,7 @@ def test_tensorflow():
 
     opt = Hyperactive(X_train, y_train, memory=memory)
     opt.search(search_config)
-
+"""
 
 """
 def test_keras():

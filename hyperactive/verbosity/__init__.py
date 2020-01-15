@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .init_position import InitSearchPosition
+from .verbosity import set_verbosity
 
 
-__all__ = ["InitSearchPosition"]
+__all__ = ["set_verbosity"]
