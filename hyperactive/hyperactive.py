@@ -7,6 +7,7 @@ import warnings
 
 from .main_args import MainArgs
 from .opt_args import Arguments
+from .distribution import dist
 
 from .optimizers import (
     HillClimbingOptimizer,
@@ -33,21 +34,6 @@ def stop_warnings():
 
     warnings.warn = warn
 
-
-def try_ray_import():
-    try:
-        import ray
-
-        if ray.is_initialized():
-            rayInit = True
-        else:
-            rayInit = False
-    except ImportError:
-        warnings.warn("failed to import ray", ImportWarning)
-        ray = None
-        rayInit = False
-
-    return ray, rayInit
 
 
 class Hyperactive:
@@ -91,22 +77,6 @@ class Hyperactive:
         self._opt_args_ = Arguments(**self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
-        ray, rayInit = try_ray_import()
+        dist(optimizer_class, self._main_args_, self._opt_args_)
 
-        if rayInit:
-            optimizer_class = ray.remote(optimizer_class)
-            opts = [
-                optimizer_class.remote(self._main_args_, self._opt_args_)
-                for job in range(self._main_args_.n_jobs)
-            ]
-            searches = [
-                opt.search.remote(job, rayInit=rayInit) for job, opt in enumerate(opts)
-            ]
-            self.results_params, self.pos_list, self.score_list = ray.get(searches)[0]
 
-            ray.shutdown()
-        else:
-            self._optimizer_ = optimizer_class(self._main_args_, self._opt_args_)
-            self.results_params, self.pos_list, self.score_list = (
-                self._optimizer_.search()
-            )
