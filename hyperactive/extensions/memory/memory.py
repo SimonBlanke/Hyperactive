@@ -6,12 +6,16 @@ import os
 import glob
 import json
 import dill
+import time
 import datetime
 import hashlib
 import inspect
 
 import numpy as np
 import pandas as pd
+
+def apply_tobytes(df):
+    return df.values.tobytes()
 
 
 class Memory:
@@ -47,7 +51,7 @@ class LongTermMemory(Memory):
         current_path = os.path.realpath(__file__)
         meta_learn_path, _ = current_path.rsplit("/", 1)
 
-        self.datetime = datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S")
+        self.datetime = "run_data/" + datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S")
         func_str = self._get_func_str(_cand_.func_)
         self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
 
@@ -59,15 +63,19 @@ class LongTermMemory(Memory):
             os.makedirs(self.date_path, exist_ok=True)
 
     def load_memory(self, _cand_, _verb_):
+        c_time = time.time()
         para, score = self._read_func_metadata(_cand_.func_, _verb_)
         if para is None or score is None:
             return
+        print("Time _read_func_metadata:", round(time.time()- c_time, 2))
 
         _verb_.load_samples(para)
 
+        c_time = time.time()
         _cand_.eval_time = list(para["eval_time"])
 
         self._load_data_into_memory(para, score)
+        print("Time _load_data_into_memory:", round(time.time()- c_time, 2))
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
         path = self._get_file_path(_cand_.func_)
@@ -207,16 +215,18 @@ class LongTermMemory(Memory):
         paras = paras.replace(self._hash2obj())
         paras = self.para2pos(paras)
 
-        for idx in range(paras.shape[0]):
-            pos = paras.iloc[[idx]].values
-            pos_str = pos.tostring()
+        df_temp = pd.DataFrame()
+        df_temp["pos_str"] = paras.apply(apply_tobytes, axis=1)
+        df_temp["score"] = scores
 
-            score = float(scores.values[idx])
-            self.memory_dict[pos_str] = score
+        self.memory_dict = df_temp.set_index('pos_str').to_dict()['score']
 
-            if score > self.score_best:
-                self.score_best = score
-                self.pos_best = pos
+        scores = np.array(scores)
+        paras = np.array(paras)
+
+        idx = np.argmax(scores)
+        self.score_best = scores[idx]
+        self.pos_best = paras[idx]
 
     def para2pos(self, paras):
         paras = paras[self._space_.para_names]
