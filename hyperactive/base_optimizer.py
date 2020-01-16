@@ -104,7 +104,9 @@ class BaseOptimizer:
 
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
-        self.results_params[_cand_.func_] = _cand_._process_results(self._opt_args_)
+        self.params_results[_cand_.func_] = _cand_._process_results(self._opt_args_)
+        self.eval_times_list[_cand_.func_] = _cand_.eval_time
+        self.eval_times_total[_cand_.func_] = np.array(_cand_.eval_time).mean()
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
@@ -113,12 +115,15 @@ class BaseOptimizer:
             print("\n")
 
         for _cand_ in _cand_list:
-            pass
-            self.results_params[_cand_.func_] = _cand_._process_results(self._opt_args_)
+            self.params_results[_cand_.func_] = _cand_._process_results(self._opt_args_)
+            self.eval_times_list[_cand_.func_] = _cand_.eval_time
+            self.eval_times_total[_cand_.func_] = np.array(_cand_.eval_time).mean()
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
-        self.results_params = {}
+        self.params_results = {}
+        self.eval_times_list = {}
+        self.eval_times_total = {}
 
         if rayInit:
             self._run_job(nth_process)
@@ -127,4 +132,4 @@ class BaseOptimizer:
         else:
             self._run_multiple_jobs()
 
-        return (self.results_params, self.pos_list, self.score_list)
+        return (self.params_results, self.eval_times_list, self.eval_times_total)
