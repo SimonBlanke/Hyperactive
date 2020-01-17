@@ -31,6 +31,8 @@ class Memory:
 
         self.meta_data_found = False
 
+        self.n_dims = None
+
 
 class ShortTermMemory(Memory):
     def __init__(self, _space_, _main_args_, _cand_):
@@ -63,26 +65,21 @@ class LongTermMemory(Memory):
             os.makedirs(self.date_path, exist_ok=True)
 
     def load_memory(self, _cand_, _verb_):
-        c_time = time.time()
         para, score = self._read_func_metadata(_cand_.func_, _verb_)
         if para is None or score is None:
             return
-        print("Time _read_func_metadata:", round(time.time()- c_time, 2))
 
         _verb_.load_samples(para)
-
-        c_time = time.time()
         _cand_.eval_time = list(para["eval_time"])
 
         self._load_data_into_memory(para, score)
-        print("Time _load_data_into_memory:", round(time.time()- c_time, 2))
+        self.n_dims = len(para.columns)
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
         path = self._get_file_path(_cand_.func_)
         meta_data = self._collect(_cand_)
 
         meta_data["run"] = self.datetime
-
         self._save_toCSV(meta_data, path)
 
         obj_func_path = self.func_path + "objective_function.py"
@@ -137,6 +134,12 @@ class LongTermMemory(Memory):
     def _save_toCSV(self, meta_data_new, path):
         if os.path.exists(path):
             meta_data_old = pd.read_csv(path)
+
+            if len(meta_data_old.columns) != len(meta_data_new.columns):
+                print("Warning meta data dimensionality does not match")
+                print("Meta data will not be saved")
+                return
+
             meta_data = meta_data_old.append(meta_data_new)
 
             columns = list(meta_data.columns)
