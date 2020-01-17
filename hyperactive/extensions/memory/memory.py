@@ -18,6 +18,8 @@ def apply_tobytes(df):
     return df.values.tobytes()
 
 
+
+
 class Memory:
     def __init__(self, _space_, _main_args_, _cand_):
         self._space_ = _space_
@@ -216,10 +218,13 @@ class LongTermMemory(Memory):
     def _load_data_into_memory(self, paras, scores):
 
         paras = paras.replace(self._hash2obj())
-        paras = self.para2pos(paras)
+        pos = self.para2pos(paras)
+
+        if len(pos) == 0:
+            return 
 
         df_temp = pd.DataFrame()
-        df_temp["pos_str"] = paras.apply(apply_tobytes, axis=1)
+        df_temp["pos_str"] = pos.apply(apply_tobytes, axis=1)
         df_temp["score"] = scores
 
         self.memory_dict = df_temp.set_index('pos_str').to_dict()['score']
@@ -231,14 +236,25 @@ class LongTermMemory(Memory):
         self.score_best = scores[idx]
         self.pos_best = paras[idx]
 
+    def apply_index(self, pos_key, df):
+        return self._space_.search_space[pos_key].index(df) if df in self._space_.search_space[pos_key] else None
+
     def para2pos(self, paras):
+        from functools import partial
+
         paras = paras[self._space_.para_names]
+        pos = paras.copy()
+
         for pos_key in self._space_.search_space:
-            paras[pos_key] = paras[pos_key].apply(
-                self._space_.search_space[pos_key].index
+            apply_index = partial(self.apply_index, pos_key)
+            pos[pos_key] = paras[pos_key].apply(
+                apply_index
             )
 
-        return paras
+        pos.dropna(how='any', inplace=True) 
+        pos = pos.astype('int64')
+
+        return pos
 
     def _collect(self, _cand_):
         results_dict = self._get_opt_meta_data()
@@ -248,7 +264,7 @@ class LongTermMemory(Memory):
             results_dict["mean_test_score"], columns=["mean_test_score"]
         )
 
-        eval_time = pd.DataFrame(_cand_.eval_time, columns=["eval_time"])
+        eval_time = pd.DataFrame(_cand_.eval_time[-len(para_pd):], columns=["eval_time"])
         md_model = pd.concat(
             [para_pd, metric_pd, eval_time], axis=1, ignore_index=False
         )
