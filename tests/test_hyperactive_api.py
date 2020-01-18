@@ -2,8 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import ray
-import numpy as np
 
 from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
@@ -112,24 +110,34 @@ def test_memory():
     opt3.search(search_config)
 
 
-def test_verbosity():
-    opt0 = Hyperactive(X, y, verbosity=0, memory=memory)
-    opt0.search(search_config)
+def test_verbosity0():
+    opt = Hyperactive(X, y, verbosity=0, memory=memory)
+    opt.search(search_config)
 
-    opt0 = Hyperactive(X, y, verbosity=0, memory=memory)
-    opt0.search(search_config, n_jobs=2)
 
-    opt1 = Hyperactive(X, y, verbosity=1, memory=memory)
-    opt1.search(search_config)
+def test_verbosity1():
+    opt = Hyperactive(X, y, verbosity=0, memory=memory)
+    opt.search(search_config, n_jobs=2)
 
-    opt0 = Hyperactive(X, y, verbosity=1, memory=memory)
-    opt0.search(search_config)
 
-    opt1 = Hyperactive(X, y, verbosity=2, memory=memory)
-    opt1.search(search_config)
+def test_verbosity2():
+    opt = Hyperactive(X, y, verbosity=1, memory=memory)
+    opt.search(search_config, n_jobs=2)
 
-    opt1 = Hyperactive(X, y, verbosity=2, memory=memory)
-    opt1.search(search_config, n_jobs=2)
+
+def test_verbosity3():
+    opt = Hyperactive(X, y, verbosity=1, memory=memory)
+    opt.search(search_config)
+
+
+def test_verbosity4():
+    opt = Hyperactive(X, y, verbosity=2, memory=memory)
+    opt.search(search_config)
+
+
+def test_verbosity5():
+    opt = Hyperactive(X, y, verbosity=2, memory=memory)
+    opt.search(search_config, n_jobs=2)
 
 
 def test_scatter_init():
@@ -145,7 +153,7 @@ def test_warm_start():
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=0, init_config=init_config)
 
-    assert opt.results_params[model] == init_config[model]
+    assert opt.results[model] == init_config[model]
 
 
 def test_partial_warm_start():
