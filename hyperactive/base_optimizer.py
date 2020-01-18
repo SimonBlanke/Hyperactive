@@ -58,6 +58,8 @@ class BaseOptimizer:
         _cand_, _p_ = self._initialize_search(self._main_args_, nth_process)
 
         for i in range(self._main_args_.n_iter - 1):
+            c_time = time.time()
+
             _cand_.i = i
             _cand_ = self._iterate(i, _cand_, _p_)
             self._pbar_.update_p_bar(1, _cand_)
@@ -68,6 +70,8 @@ class BaseOptimizer:
 
             if self._main_args_.get_search_path:
                 self._monitor_search_path(_p_)
+
+            _cand_.opt_times.append(time.time() - c_time)
 
         self._pbar_.close_p_bar()
         return _cand_
@@ -104,9 +108,9 @@ class BaseOptimizer:
 
     def _run_job(self, nth_process):
         _cand_ = self._search(nth_process)
-        self.params_results[_cand_.func_] = _cand_._process_results(self._opt_args_)
-        self.eval_times_list[_cand_.func_] = _cand_.eval_time
-        self.eval_times_total[_cand_.func_] = np.array(_cand_.eval_time).mean()
+        self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
+        self.eval_times[_cand_.func_] = _cand_.eval_time
+        self.opt_times[_cand_.func_] = _cand_.opt_times
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
@@ -115,15 +119,15 @@ class BaseOptimizer:
             print("\n")
 
         for _cand_ in _cand_list:
-            self.params_results[_cand_.func_] = _cand_._process_results(self._opt_args_)
-            self.eval_times_list[_cand_.func_] = _cand_.eval_time
-            self.eval_times_total[_cand_.func_] = np.array(_cand_.eval_time).mean()
+            self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
+            self.eval_times[_cand_.func_] = _cand_.eval_time
+            self.opt_times[_cand_.func_] = _cand_.opt_times
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
-        self.params_results = {}
-        self.eval_times_list = {}
-        self.eval_times_total = {}
+        self.results = {}
+        self.eval_times = {}
+        self.opt_times = {}
 
         if rayInit:
             self._run_job(nth_process)
@@ -132,4 +136,10 @@ class BaseOptimizer:
         else:
             self._run_multiple_jobs()
 
-        return (self.params_results, self.eval_times_list, self.eval_times_total)
+        return (
+            self.results,
+            self.pos_list,
+            self.score_list,
+            self.eval_times,
+            self.opt_times,
+        )

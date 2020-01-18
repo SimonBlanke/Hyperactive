@@ -3,11 +3,10 @@
 # License: MIT License
 
 import time
-import warnings
 
 from .main_args import MainArgs
 from .opt_args import Arguments
-from .distribution import dist
+from .distribution import Distribution
 
 from .optimizers import (
     HillClimbingOptimizer,
@@ -33,7 +32,6 @@ def stop_warnings():
     import warnings
 
     warnings.warn = warn
-
 
 
 class Hyperactive:
@@ -70,13 +68,19 @@ class Hyperactive:
         n_jobs=1,
         init_config=None,
     ):
-
         self._main_args_.search_args(
             search_config, max_time, n_iter, optimizer, n_jobs, init_config
         )
         self._opt_args_ = Arguments(**self._main_args_.opt_para)
         optimizer_class = self.optimizer_dict[self._main_args_.optimizer]
 
-        dist(optimizer_class, self._main_args_, self._opt_args_)
+        dist = Distribution()
+        dist.dist(optimizer_class, self._main_args_, self._opt_args_)
 
+        self.results = dist.results
+        self.pos = dist.pos
+        self.para_list = None
+        self.scores = dist.scores
 
+        self.eval_times = dist.eval_times
+        self.opt_times = dist.opt_times

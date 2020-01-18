@@ -33,6 +33,7 @@ class Candidate:
         self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
 
         self.eval_time = []
+        self.opt_times = []
 
         if not self.memory:
             self.mem = None
