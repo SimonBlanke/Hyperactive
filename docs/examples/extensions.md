@@ -1,4 +1,37 @@
-## Scatter-initialization
+## Memory
+
+```python
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.datasets import load_iris
+from hyperactive import Hyperactive
+
+iris_data = load_iris()
+X = iris_data.data
+y = iris_data.target
+
+
+def model(para, X, y):
+    gbc = GradientBoostingClassifier(
+        n_estimators=para["n_estimators"], max_depth=para["max_depth"]
+    )
+    scores = cross_val_score(gbc, X, y, cv=3)
+
+    return scores.mean()
+
+
+search_config = {model: {"n_estimators": range(10, 200, 10), "max_depth": range(2, 15)}}
+
+"""
+The memory will remember previous evaluations done during the optimization process.
+Instead of retraining the model, it accesses the memory and uses the saved score/loss.
+This shows as a speed up during the optimization process, since the whole search space has been explored.
+"""
+opt = Hyperactive(X, y)
+opt.search(search_config, n_iter=1000, memory=True)
+```
+
+## Scatter initialization
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -39,7 +72,9 @@ opt.search(
     init_config=False,
 )
 
-init_config = {"scatter_init": 10}
+init_config = {
+    model: {"scatter_init": 10}
+}
 
 # With scatter initialization
 opt = Hyperactive(X, y)
@@ -52,40 +87,7 @@ opt.search(
 )
 ```
 
-## Memory
-
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.datasets import load_iris
-from hyperactive import Hyperactive
-
-iris_data = load_iris()
-X = iris_data.data
-y = iris_data.target
-
-
-def model(para, X, y):
-    gbc = GradientBoostingClassifier(
-        n_estimators=para["n_estimators"], max_depth=para["max_depth"]
-    )
-    scores = cross_val_score(gbc, X, y, cv=3)
-
-    return scores.mean()
-
-
-search_config = {model: {"n_estimators": range(10, 200, 10), "max_depth": range(2, 15)}}
-
-"""
-The memory will remember previous evaluations done during the optimization process.
-Instead of retraining the model, it accesses the memory and uses the saved score/loss.
-This shows as a speed up during the optimization process, since the whole search space has been explored.
-"""
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=1000, memory=True)
-```
-
-## Warm-start
+## Warm start
 
 ```python
 from sklearn.model_selection import cross_val_score

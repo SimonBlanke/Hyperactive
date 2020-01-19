@@ -1,4 +1,4 @@
-## Himmelblau's function
+## Himmelblau’s function
 
 ```python
 import numpy as np
@@ -17,7 +17,7 @@ x_range = np.arange(0, 10, 0.1)
 
 search_config = {himmelblau: {"x": x_range, "y": x_range}}
 
-opt = Hyperactive(0, 0)
+opt = Hyperactive(0, 0, memory=None)
 opt.search(search_config, n_iter=1000000)
 ```
 
@@ -42,7 +42,7 @@ search_config = {
     rosen: {"x0": x_range, "x1": x_range, "x2": x_range, "x3": x_range, "x4": x_range}
 }
 
-opt = Hyperactive(0, 0)
+opt = Hyperactive(0, 0, memory=None)
 opt.search(search_config, n_iter=1000000)
 ```
 
