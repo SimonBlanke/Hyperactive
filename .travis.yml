@@ -18,9 +18,6 @@ install:
   - pip install xgboost
   - pip install lightgbm
   - pip install catboost
-  - pip install tensorflow
-  - pip install keras
-  - pip install ray
   - pip install dill
   - pip install packaging
   - pip install pytest
