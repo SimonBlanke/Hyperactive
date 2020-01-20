@@ -4,12 +4,19 @@ Hyperactive is primarily designed to optimize hyperparameters of machine learnin
 In general hyperactive works by searching through a set of parameters of an objective function. The objective function returns a fitness value that gets maximized during the optimization process. The search space defines the range of parameters that will be searched during the optimization process. <br>
 The following chapters provide a step by step explanation of how to start your first optimization run. Alternatively there are plenty of examples to learn how to use hyperactive.
 
-## Create the search space
+## Create the search-config
 
 Since v1.0.0 the search space is created by defining:
   - a <b>function</b> for the model
   - a parameter <b>dictionary</b>
+  
+```python
+search_config = {
+    model: search_space
+}
+```
 
+#### Create the objective function
 
 The function receives 3 arguments:
   - <b>para</b> : This defines what part of the model-function should be optimized
@@ -32,16 +39,18 @@ def model(para, X, y):
     return scores.mean()
 ```
 
+#### Create the search space
+
 The search_config is a dictionary, that has the <b>model-function as a key</b> and its <b>values defines the search space</b> for this model. The search space is an additional dictionary that will be used in 'para' within the model-function.
 
 ```python
-search_config = {
-    model: {
-        "n_estimators": range(10, 200, 10),
-        "max_depth": range(2, 12),
-    }
+search_space = {
+    "n_estimators": range(10, 200, 10),
+    "max_depth": range(2, 12),
 }
 ```
+
+---
 
 This way of creating the search space has <b>multiple advantages</b>:
   - No new syntax to learn. You can create the model as you are used to.
