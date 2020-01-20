@@ -1,6 +1,6 @@
 ## Hyperactive
 
-> **class:** hyperactive.Hyperactive(X, y, memory=True, random_state=1, verbosity=3, warnings=False) <br> [[source]](./source/hyperactive_source)
+> **Class:** hyperactive.Hyperactive(X, y, memory=True, random_state=1, verbosity=3, warnings=False) <br> [[source]](./source/hyperactive_source)
 
 Optimization main class.
 
@@ -44,6 +44,9 @@ Optimization main class.
     Disables warnings (like deprecation warnings) during optimization:
     Warnings can be very intrusive, since they are often printed during each model evaluation.
 
+<br>
+
+---
 
 > **Method:** search(search_config, n_iter=10, max_time=None, optimizer='RandomSearch', n_jobs=1) <br> [[source]](./source/search_source)
 
