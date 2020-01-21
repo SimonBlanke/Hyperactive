@@ -6,7 +6,6 @@ import os
 import glob
 import json
 import dill
-import time
 import datetime
 import hashlib
 import inspect
@@ -14,10 +13,11 @@ import inspect
 import numpy as np
 import pandas as pd
 
+from functools import partial
+
+
 def apply_tobytes(df):
     return df.values.tobytes()
-
-
 
 
 class Memory:
@@ -55,7 +55,9 @@ class LongTermMemory(Memory):
         current_path = os.path.realpath(__file__)
         meta_learn_path, _ = current_path.rsplit("/", 1)
 
-        self.datetime = "run_data/" + datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S")
+        self.datetime = "run_data/" + datetime.datetime.now().strftime(
+            "%d.%m.%Y - %H:%M:%S"
+        )
         func_str = self._get_func_str(_cand_.func_)
         self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
 
@@ -221,13 +223,13 @@ class LongTermMemory(Memory):
         pos = self.para2pos(paras)
 
         if len(pos) == 0:
-            return 
+            return
 
         df_temp = pd.DataFrame()
         df_temp["pos_str"] = pos.apply(apply_tobytes, axis=1)
         df_temp["score"] = scores
 
-        self.memory_dict = df_temp.set_index('pos_str').to_dict()['score']
+        self.memory_dict = df_temp.set_index("pos_str").to_dict()["score"]
 
         scores = np.array(scores)
         paras = np.array(paras)
@@ -237,22 +239,22 @@ class LongTermMemory(Memory):
         self.pos_best = paras[idx]
 
     def apply_index(self, pos_key, df):
-        return self._space_.search_space[pos_key].index(df) if df in self._space_.search_space[pos_key] else None
+        return (
+            self._space_.search_space[pos_key].index(df)
+            if df in self._space_.search_space[pos_key]
+            else None
+        )
 
     def para2pos(self, paras):
-        from functools import partial
-
         paras = paras[self._space_.para_names]
         pos = paras.copy()
 
         for pos_key in self._space_.search_space:
             apply_index = partial(self.apply_index, pos_key)
-            pos[pos_key] = paras[pos_key].apply(
-                apply_index
-            )
+            pos[pos_key] = paras[pos_key].apply(apply_index)
 
-        pos.dropna(how='any', inplace=True) 
-        pos = pos.astype('int64')
+        pos.dropna(how="any", inplace=True)
+        pos = pos.astype("int64")
 
         return pos
 
@@ -263,8 +265,8 @@ class LongTermMemory(Memory):
         metric_pd = pd.DataFrame(
             results_dict["mean_test_score"], columns=["mean_test_score"]
         )
-
-        eval_time = pd.DataFrame(_cand_.eval_time[-len(para_pd):], columns=["eval_time"])
+        n_rows = len(para_pd)
+        eval_time = pd.DataFrame(_cand_.eval_time[-n_rows:], columns=["eval_time"])
         md_model = pd.concat(
             [para_pd, metric_pd, eval_time], axis=1, ignore_index=False
         )

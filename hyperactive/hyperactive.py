@@ -2,8 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import time
-
 from .main_args import MainArgs
 from .opt_args import Arguments
 from .distribution import Distribution
