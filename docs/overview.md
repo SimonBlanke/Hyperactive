@@ -64,6 +64,11 @@
   </tbody>
 </table>
 
+Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
+
+  - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
+  - The search space accepts not just int, float or str as data types but even functions, classes or any python objects.
+
 <br>
 
 ## Main Features
@@ -225,15 +230,22 @@ pip install Hyperactive/
 <details>
 <summary><b>v2.2.0</b></summary>
 
+  - [ ] Add basic dataset meta-features to long term memory
+  - [ ] Enable model specific meta-learning
+</details>
+
+<details>
+<summary><b>v2.3.0</b></summary>
+
   - [ ] Tree-structured Parzen Estimator
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
 </details>
 
 <details>
-<summary><b>v2.3.0</b></summary>
+<summary><b>v2.4.0</b></summary>
 
-  - [ ] Helper-classes for model pruning
+  - [ ] Helper-classes for early stopping
   - [ ] Helper-classes for dataset approximation
 </details>
 
