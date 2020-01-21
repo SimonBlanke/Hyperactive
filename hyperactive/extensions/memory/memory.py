@@ -279,21 +279,6 @@ class LongTermMemory(Memory):
     def _get_func_str(self, func):
         return inspect.getsource(func)
 
-    def _get_subdirs(self):
-        subdirs = glob.glob(self.func_path + "*/")
-
-        return subdirs
-
-    def _get_func_data_names1(self):
-        subdirs = self._get_subdirs()
-
-        path_list = []
-        for subdir in subdirs:
-            paths = glob.glob(subdir + "*.csv")
-            path_list = path_list + paths
-
-        return path_list
-
     def _get_func_data_names(self):
         paths = glob.glob(
             self.func_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
