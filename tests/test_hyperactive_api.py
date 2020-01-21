@@ -113,6 +113,25 @@ def test_memory():
     opt4.search(search_config)
 
 
+def test_dill():
+    from sklearn.gaussian_process import GaussianProcessClassifier
+    from sklearn.gaussian_process.kernels import RBF, Matern
+
+    def model(para, X, y):
+        gpc = GaussianProcessClassifier(kernel=para["kernel"])
+        scores = cross_val_score(gpc, X, y, cv=2)
+
+        return scores.mean()
+
+    search_config = {model: {"kernel": [RBF(), Matern()]}}
+
+    opt0 = Hyperactive(X, y, memory="long")
+    opt0.search(search_config)
+
+    opt1 = Hyperactive(X, y, memory="long")
+    opt1.search(search_config)
+
+
 def test_verbosity0():
     opt = Hyperactive(X, y, verbosity=0, memory=memory)
     opt.search(search_config)
