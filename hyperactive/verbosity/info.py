@@ -4,15 +4,6 @@
 
 
 class Info:
-    def init_p_bar(self, _cand_, _core_):
-        pass
-
-    def update_p_bar(self, n, _cand_):
-        pass
-
-    def close_p_bar(self):
-        pass
-
     def warm_start(self):
         pass
 
