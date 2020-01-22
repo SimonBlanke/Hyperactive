@@ -7,9 +7,12 @@ import random
 import numpy as np
 import multiprocessing
 
+from .checks import check_hyperactive_para, check_search_para
 
 class MainArgs:
     def __init__(self, X, y, memory, random_state, verbosity):
+        check_hyperactive_para(X, y, memory, random_state, verbosity)
+
         self._verb_ = None
         self.hyperactive_para = {
             "memory": memory,
@@ -35,6 +38,8 @@ class MainArgs:
     def search_args(
         self, search_config, max_time, n_iter, optimizer, n_jobs, init_config
     ):
+        check_search_para(search_config, max_time, n_iter, optimizer, n_jobs, init_config)
+        
         self.search_para = {
             "search_config": search_config,
             "max_time": max_time,
