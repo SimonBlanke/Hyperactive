@@ -36,9 +36,9 @@ class MainArgs:
         self.opt_para = dict()
 
     def search_args(
-        self, search_config, max_time, n_iter, optimizer, n_jobs, init_config
+        self, search_config, max_time, n_iter, optimizer, n_jobs, scheduler, init_config
     ):
-        check_search_para(search_config, max_time, n_iter, optimizer, n_jobs, init_config)
+        check_search_para(search_config, max_time, n_iter, optimizer, n_jobs, scheduler, init_config)
         
         self.search_para = {
             "search_config": search_config,
@@ -46,6 +46,7 @@ class MainArgs:
             "n_iter": n_iter,
             "optimizer": optimizer,
             "n_jobs": n_jobs,
+            "scheduler": scheduler,
             "init_config": init_config,
         }
 
@@ -54,6 +55,7 @@ class MainArgs:
         self.n_iter = n_iter
         self.optimizer = optimizer
         self.n_jobs = n_jobs
+        self.scheduler = scheduler
         self.init_config = init_config
 
         self.model_list = list(self.search_config.keys())

@@ -26,7 +26,8 @@ def check_hyperactive_para(X, y, memory, random_state, verbosity):
         raise ValueError(r'Keyword argument verbosity must be of type int')
 
 
-def check_search_para(search_config, max_time, n_iter, optimizer, n_jobs, init_config):
+def check_search_para(search_config, max_time, n_iter, optimizer, n_jobs, scheduler, init_config):
+    scheduler_list = [None, "default", "smart"]
 
     if not isinstance(search_config, dict):
         raise ValueError(r'Positional argument search_config must be of type dict')
@@ -44,6 +45,9 @@ def check_search_para(search_config, max_time, n_iter, optimizer, n_jobs, init_c
 
     if not isinstance(n_jobs, int):
         raise ValueError(r'Keyword argument n_jobs must be of type int')
+
+    if not scheduler in scheduler_list:
+        raise ValueError(r'Keyword argument scheduler must be None, "default" or "smart"')
 
     if not isinstance(init_config, dict) and not init_config == None:
         raise ValueError(r'Keyword argument init_config must be of type dict or None')
