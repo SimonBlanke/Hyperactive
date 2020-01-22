@@ -8,6 +8,5 @@ __license__ = "MIT"
 
 from .hyperactive import Hyperactive
 from .extensions.memory import Memory
-from .extensions.insight import Insight
 
-__all__ = ["Hyperactive", "Memory", "Insight"]
+__all__ = ["Hyperactive", "Memory"]
