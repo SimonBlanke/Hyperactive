@@ -20,7 +20,7 @@ def model(para, X, y):
         min_samples_split=para["min_samples_split"],
         min_samples_leaf=para["min_samples_leaf"],
     )
-    scores = cross_val_score(model, X, y, cv=3)
+    scores = cross_val_score(model, X, y, cv=2)
 
     return scores.mean()
 
@@ -112,6 +112,9 @@ def test_memory():
     opt4 = Hyperactive(X, y, memory="long")
     opt4.search(search_config)
 
+    opt = Hyperactive(X, y, memory=memory, verbosity=0)
+    opt.search(search_config)
+
 
 def test_dill():
     from sklearn.gaussian_process import GaussianProcessClassifier
@@ -167,6 +170,9 @@ def test_scatter_init():
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, init_config=init_config)
 
+    opt = Hyperactive(X, y, memory=memory, verbosity=0)
+    opt.search(search_config, init_config=init_config)
+
 
 def test_warm_start():
     init_config = {
@@ -181,6 +187,9 @@ def test_warm_start():
 def test_partial_warm_start():
     init_config = {model: {"min_samples_split": 2, "min_samples_leaf": 5}}
     opt = Hyperactive(X, y, memory=memory)
+    opt.search(search_config, n_iter=0, init_config=init_config)
+
+    opt = Hyperactive(X, y, memory=memory, verbosity=0)
     opt.search(search_config, n_iter=0, init_config=init_config)
 
 
