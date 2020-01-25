@@ -101,19 +101,12 @@ def test_long_term_memory_obj_storage():
     from sklearn.gaussian_process.kernels import RBF, Matern, ConstantKernel
 
     def model(para, X_train, y_train):
-        gpc = GaussianProcessClassifier(
-            kernel=para["kernel"], max_iter_predict=para["max_iter_predict"]
-        )
+        gpc = GaussianProcessClassifier(kernel=para["kernel"])
         scores = cross_val_score(gpc, X_train, y_train, cv=2)
 
         return scores.mean()
 
-    search_config = {
-        model: {
-            "kernel": [RBF(), Matern(), ConstantKernel()],
-            "max_iter_predict": range(90, 100),
-        }
-    }
+    search_config = {model: {"kernel": [RBF(), Matern(), ConstantKernel()]}}
 
     opt1 = Hyperactive(X, y, memory="long")
     opt1.search(search_config)
