@@ -111,6 +111,7 @@ class BaseOptimizer:
         self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
         self.eval_times[_cand_.func_] = _cand_.eval_time
         self.opt_times[_cand_.func_] = _cand_.opt_times
+        self.best_scores[_cand_.func_] = _cand_.score_best
 
     def _run_multiple_jobs(self):
         _cand_list = self._search_multiprocessing()
@@ -122,12 +123,14 @@ class BaseOptimizer:
             self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
             self.eval_times[_cand_.func_] = _cand_.eval_time
             self.opt_times[_cand_.func_] = _cand_.opt_times
+            self.best_scores[_cand_.func_] = _cand_.score_best
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
         self.results = {}
         self.eval_times = {}
         self.opt_times = {}
+        self.best_scores = {}
 
         if rayInit:
             self._run_job(nth_process)
@@ -142,4 +145,5 @@ class BaseOptimizer:
             self.score_list,
             self.eval_times,
             self.opt_times,
+            self.best_scores,
         )
