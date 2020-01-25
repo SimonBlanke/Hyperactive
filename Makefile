@@ -29,10 +29,12 @@ test:
 		pytest test_hyperactive_api.py -p no:warnings; \
 		pytest test_optimizers.py -p no:warnings; \
 		pytest test_checks.py -p no:warnings; \
-		pytest test_memory.py -p no:warnings; \
-		pytest test_packages.py -p no:warnings
+		pytest test_memory.py -p no:warnings
 
 test-local:
+	cd tests/local; \
+		pytest _test_packages.py -p no:warnings; \
+		pytest _test_performance.py -p no:warnings
 
 test-examples:
 	cd examples/machine_learning; \
@@ -64,7 +66,7 @@ test-examples:
 		python TransferLearning.py; \
 		python MetaOptimization.py
 
-test-extensive: test test-examples
+test-extensive: test test-local test-examples
 
 push: test
 	git push
