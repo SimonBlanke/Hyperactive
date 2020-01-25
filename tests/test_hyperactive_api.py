@@ -2,10 +2,13 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
 
 from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+
 from hyperactive import Hyperactive
 
 data = load_iris()
@@ -15,12 +18,12 @@ memory = False
 
 
 def model(para, X, y):
-    model = DecisionTreeClassifier(
+    dtc = DecisionTreeClassifier(
         max_depth=para["max_depth"],
         min_samples_split=para["min_samples_split"],
         min_samples_leaf=para["min_samples_leaf"],
     )
-    scores = cross_val_score(model, X, y, cv=2)
+    scores = cross_val_score(dtc, X, y, cv=2)
 
     return scores.mean()
 
@@ -34,15 +37,35 @@ search_config = {
 }
 
 
+def model0(para, X_train, y_train):
+    model = DecisionTreeClassifier(criterion=para["criterion"])
+    scores = cross_val_score(model, X_train, y_train, cv=2)
+
+    return scores.mean()
+
+
+def model1(para, X_train, y_train):
+    model = GradientBoostingClassifier(n_estimators=para["n_estimators"])
+    scores = cross_val_score(model, X_train, y_train, cv=2)
+
+    return scores.mean()
+
+
+search_config_2 = {
+    model0: {"criterion": ["gini"]},
+    model1: {"n_estimators": range(10, 100)},
+}
+
+
 def test_func_return():
     def model1(para, X, y):
-        model = DecisionTreeClassifier(
+        dtc = DecisionTreeClassifier(
             criterion=para["criterion"],
             max_depth=para["max_depth"],
             min_samples_split=para["min_samples_split"],
             min_samples_leaf=para["min_samples_leaf"],
         )
-        scores = cross_val_score(model, X, y, cv=3)
+        scores = cross_val_score(dtc, X, y, cv=3)
 
         return scores.mean(), model
 
@@ -57,6 +80,20 @@ def test_func_return():
 
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config1)
+
+
+def test_opt_times():
+    opt = Hyperactive(X, y, memory=memory)
+    opt.search(search_config)
+
+    assert np.array(opt.opt_times[model]).mean() > 0
+
+
+def test_eval_times():
+    opt = Hyperactive(X, y, memory=memory)
+    opt.search(search_config)
+
+    assert np.array(opt.eval_times[model]).mean() > 0
 
 
 def test_n_jobs_2():
@@ -182,6 +219,12 @@ def test_warm_start():
     opt.search(search_config, n_iter=0, init_config=init_config)
 
     assert opt.results[model] == init_config[model]
+
+
+def test_warm_start_multiple():
+
+    opt = Hyperactive(X, y, memory="short")
+    opt.search(search_config, n_iter=10, n_jobs=2)
 
 
 def test_partial_warm_start():
