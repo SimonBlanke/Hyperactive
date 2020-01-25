@@ -28,42 +28,47 @@ test:
 	cd tests/; \
 		pytest test_hyperactive_api.py -p no:warnings; \
 		pytest test_optimizers.py -p no:warnings; \
+		pytest test_checks.py -p no:warnings; \
 		pytest test_packages.py -p no:warnings
+
+test-local:
 
 test-examples:
 	cd examples/machine_learning; \
-		pytest sklearn_example.py -p no:warnings; \
-		pytest xgboost_example.py -p no:warnings; \
-		pytest lightgbm_example.py -p no:warnings; \
-		pytest catboost_example.py -p no:warnings; \
-		pytest rgf_example.py -p no:warnings; \
-		pytest mlxtend_example.py -p no:warnings
+		python sklearn_example.py; \
+		python xgboost_example.py; \
+		python lightgbm_example.py; \
+		python catboost_example.py; \
+		python rgf_example.py; \
+		python mlxtend_example.py
 	cd examples/deep_learning; \
-		pytest tensorflow_example.py -p no:warnings; \
-		pytest keras_example.py -p no:warnings
+		python tensorflow_example.py; \
+		python keras_example.py
 	cd examples/distribution; \
-		pytest multiprocessing_example.py -p no:warnings; \
-		pytest ray_example.py -p no:warnings
+		python multiprocessing_example.py; \
+		python ray_example.py
 	cd examples/memory_example; \
-		pytest memory_example.py -p no:warnings; \
-		pytest scatter_init_example.py -p no:warnings; \
-		pytest warm_start_example.py -p no:warnings
+		python memory_example.py; \
+		python scatter_init_example.py; \
+		python warm_start_example.py
 	cd examples/test_functions; \
-		pytest himmelblau_function_example.py -p no:warnings; \
-		pytest rosenbrock_function_example.py -p no:warnings
+		python himmelblau_function_example.py; \
+		python rosenbrock_function_example.py
 	cd examples/use_cases; \
-		pytest SklearnPreprocessing.py -p no:warnings; \
-		pytest SklearnPipeline.py -p no:warnings; \
-		pytest Stacking.py -p no:warnings; \
-		pytest NeuralArchitectureSearch.py -p no:warnings; \
-		pytest ENAS.py -p no:warnings; \
-		pytest TransferLearning.py -p no:warnings; \
-		pytest MetaOptimization.py -p no:warnings
+		python SklearnPreprocessing.py; \
+		python SklearnPipeline.py; \
+		python Stacking.py; \
+		python NeuralArchitectureSearch.py; \
+		python ENAS.py; \
+		python TransferLearning.py; \
+		python MetaOptimization.py
+
+test-extensive: test test-examples
 
 push: test
 	git push
 
-release: reinstall
+release: reinstall test-extensive
 	python -m twine upload dist/*
 
 dist:
