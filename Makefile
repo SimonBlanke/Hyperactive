@@ -29,6 +29,7 @@ test:
 		pytest test_hyperactive_api.py -p no:warnings; \
 		pytest test_optimizers.py -p no:warnings; \
 		pytest test_checks.py -p no:warnings; \
+		pytest test_memory.py -p no:warnings; \
 		pytest test_packages.py -p no:warnings
 
 test-local:
