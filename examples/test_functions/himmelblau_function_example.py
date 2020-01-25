@@ -14,5 +14,6 @@ x_range = np.arange(0, 10, 0.1)
 
 search_config = {himmelblau: {"x": x_range, "y": x_range}}
 
-opt = Hyperactive(0, 0, memory=None)
-opt.search(search_config, n_iter=1000000)
+
+opt = Hyperactive(np.array([0]), np.array([0]))
+opt.search(search_config, n_iter=100000)
