@@ -2,18 +2,10 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
-import glob
-import json
-import dill
-import datetime
 import hashlib
 import inspect
 
 import numpy as np
-import pandas as pd
-
-from functools import partial
 
 from .memory_load import MemoryLoad
 from .memory_dump import MemoryDump
@@ -60,11 +52,11 @@ class LongTermMemory(Memory):
         return inspect.getsource(func)
 
     def _obj2hash(self):
-        hash2obj_dict = {}
+        obj2hash_dict = {}
         para_hash_list = self._get_para_hash_list()
 
         for para_hash in para_hash_list:
             obj = self._read_dill(para_hash)
-            hash2obj_dict[para_hash] = obj
+            obj2hash_dict[para_hash] = obj
 
         return obj2hash_dict

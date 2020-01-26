@@ -5,48 +5,20 @@
 import os
 import json
 import dill
-import datetime
-import hashlib
 import inspect
 
 import numpy as np
 import pandas as pd
 
+from .memory_io import MemoryIO
 
-class MemoryDump:
+
+class MemoryDump(MemoryIO):
     def __init__(self, _space_, _main_args_, _cand_, memory_dict):
-        self._space_ = _space_
-        self._main_args_ = _main_args_
-
-        self.pos_best = None
-        self.score_best = -np.inf
+        super().__init__(_space_, _main_args_, _cand_, memory_dict)
 
         self.memory_type = _main_args_.memory
         self.memory_dict = memory_dict
-
-        self.score_col_name = "mean_test_score"
-
-        self.meta_data_found = False
-
-        self.feature_hash = self._get_hash(_main_args_.X)
-        self.label_hash = self._get_hash(_main_args_.y)
-
-        current_path = os.path.realpath(__file__)
-        meta_learn_path, _ = current_path.rsplit("/", 1)
-
-        func_str = self._get_func_str(_cand_.func_)
-        self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
-
-        self.datetime = "run_data/" + datetime.datetime.now().strftime(
-            "%d.%m.%Y - %H:%M:%S"
-        )
-
-        self.meta_path = meta_learn_path + "/meta_data/"
-        self.func_path = self.meta_path + self.func_path_
-        self.date_path = self.meta_path + self.func_path_ + self.datetime + "/"
-
-        if not os.path.exists(self.date_path):
-            os.makedirs(self.date_path, exist_ok=True)
 
     def _save_memory(self, _main_args_, _opt_args_, _cand_):
         path = self._get_file_path(_cand_.func_)
@@ -127,9 +99,6 @@ class MemoryDump:
         )
 
         return md_model
-
-    def _get_hash(self, object):
-        return hashlib.sha1(object).hexdigest()
 
     def _get_opt_meta_data(self):
         results_dict = {}

@@ -2,26 +2,24 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
 import glob
-import dill
 import hashlib
-import inspect
 
 import numpy as np
 import pandas as pd
 
 from functools import partial
 
+from .memory_io import MemoryIO
+
 
 def apply_tobytes(df):
     return df.values.tobytes()
 
 
-class MemoryLoad:
+class MemoryLoad(MemoryIO):
     def __init__(self, _space_, _main_args_, _cand_, memory_dict):
-        self._space_ = _space_
-        self._main_args_ = _main_args_
+        super().__init__(_space_, _main_args_, _cand_, memory_dict)
 
         self.pos_best = None
         self.score_best = -np.inf
@@ -29,21 +27,7 @@ class MemoryLoad:
         self.memory_type = _main_args_.memory
         self.memory_dict = memory_dict
 
-        self.score_col_name = "mean_test_score"
-
         self.meta_data_found = False
-
-        self.feature_hash = self._get_hash(_main_args_.X)
-        self.label_hash = self._get_hash(_main_args_.y)
-
-        current_path = os.path.realpath(__file__)
-        meta_learn_path, _ = current_path.rsplit("/", 1)
-
-        func_str = self._get_func_str(_cand_.func_)
-        self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
-
-        self.meta_path = meta_learn_path + "/meta_data/"
-        self.func_path = self.meta_path + self.func_path_
 
     def _load_memory(self, _cand_, _verb_):
         para, score = self._read_func_metadata(_cand_.func_, _verb_)
@@ -62,9 +46,6 @@ class MemoryLoad:
             if df in self._space_.search_space[pos_key]
             else None
         )
-
-    def _get_func_str(self, func):
-        return inspect.getsource(func)
 
     def _read_func_metadata(self, model_func, _verb_):
         paths = self._get_func_data_names()
@@ -98,49 +79,6 @@ class MemoryLoad:
 
         return paths
 
-    def _read_dill(self, value):
-        paths = self._get_pkl_hash(value)
-        for path in paths:
-            with open(path, "rb") as fp:
-                value = dill.load(fp)
-                value = dill.loads(value)
-                break
-
-        return value
-
-    def _get_pkl_hash(self, hash):
-        paths = glob.glob(self.func_path + hash + "*.pkl")
-
-        return paths
-
-    def _get_para_hash_list(self):
-        para_hash_list = []
-        for key in self._space_.search_space.keys():
-            values = self._space_.search_space[key]
-
-            for value in values:
-                if (
-                    not isinstance(value, int)
-                    and not isinstance(value, float)
-                    and not isinstance(value, str)
-                ):
-
-                    para_dill = dill.dumps(value)
-                    para_hash = self._get_hash(para_dill)
-                    para_hash_list.append(para_hash)
-
-        return para_hash_list
-
-    def _hash2obj(self):
-        hash2obj_dict = {}
-        para_hash_list = self._get_para_hash_list()
-
-        for para_hash in para_hash_list:
-            obj = self._read_dill(para_hash)
-            hash2obj_dict[para_hash] = obj
-
-        return hash2obj_dict
-
     def _get_hash(self, object):
         return hashlib.sha1(object).hexdigest()
 
@@ -158,8 +96,7 @@ class MemoryLoad:
         return pos
 
     def _load_data_into_memory(self, paras, scores):
-
-        paras = paras.replace(self._hash2obj())
+        paras = paras.replace(self.hash2obj)
         pos = self.para2pos(paras)
 
         if len(pos) == 0:
