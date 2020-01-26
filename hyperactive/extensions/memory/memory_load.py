@@ -4,9 +4,7 @@
 
 import os
 import glob
-import json
 import dill
-import datetime
 import hashlib
 import inspect
 
@@ -31,13 +29,9 @@ class MemoryLoad:
         self.memory_type = _main_args_.memory
         self.memory_dict = memory_dict
 
-        self.nth_process = _cand_.nth_process
-
         self.score_col_name = "mean_test_score"
 
         self.meta_data_found = False
-
-        self.n_dims = None
 
         self.feature_hash = self._get_hash(_main_args_.X)
         self.label_hash = self._get_hash(_main_args_.y)
@@ -48,13 +42,8 @@ class MemoryLoad:
         func_str = self._get_func_str(_cand_.func_)
         self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
 
-        self.datetime = "run_data/" + datetime.datetime.now().strftime(
-            "%d.%m.%Y - %H:%M:%S"
-        )
-
         self.meta_path = meta_learn_path + "/meta_data/"
         self.func_path = self.meta_path + self.func_path_
-        self.date_path = self.meta_path + self.func_path_ + self.datetime + "/"
 
     def _load_memory(self, _cand_, _verb_):
         para, score = self._read_func_metadata(_cand_.func_, _verb_)

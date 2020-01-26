@@ -3,7 +3,6 @@
 # License: MIT License
 
 import os
-import glob
 import json
 import dill
 import datetime
@@ -12,8 +11,6 @@ import inspect
 
 import numpy as np
 import pandas as pd
-
-from functools import partial
 
 
 class MemoryDump:
@@ -27,13 +24,9 @@ class MemoryDump:
         self.memory_type = _main_args_.memory
         self.memory_dict = memory_dict
 
-        self.nth_process = _cand_.nth_process
-
         self.score_col_name = "mean_test_score"
 
         self.meta_data_found = False
-
-        self.n_dims = None
 
         self.feature_hash = self._get_hash(_main_args_.X)
         self.label_hash = self._get_hash(_main_args_.y)
@@ -51,6 +44,9 @@ class MemoryDump:
         self.meta_path = meta_learn_path + "/meta_data/"
         self.func_path = self.meta_path + self.func_path_
         self.date_path = self.meta_path + self.func_path_ + self.datetime + "/"
+
+        if not os.path.exists(self.date_path):
+            os.makedirs(self.date_path, exist_ok=True)
 
     def _save_memory(self, _main_args_, _opt_args_, _cand_):
         path = self._get_file_path(_cand_.func_)
