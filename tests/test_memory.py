@@ -44,7 +44,7 @@ def test_long_term_memory_times():
     opt = Hyperactive(X, y, memory="long")
     opt.search(search_config, n_iter=1000)
 
-    assert np.array(opt.eval_times[model1]).mean() > 1
+    assert np.array(opt.eval_times[_model_]).mean() > 1
 
     def _model_(para, X_train, y_train):
         model = DecisionTreeClassifier(min_samples_split=para["min_samples_split"])
@@ -57,7 +57,7 @@ def test_long_term_memory_times():
     opt = Hyperactive(X, y, memory="long")
     opt.search(search_config, n_iter=1000)
 
-    assert np.array(opt.eval_times[model1]).mean() < 1
+    assert np.array(opt.eval_times[_model_]).mean() < 1
     
     
     
