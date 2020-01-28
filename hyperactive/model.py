@@ -3,8 +3,11 @@
 # License: MIT License
 
 import time
+import numbers
 import numpy as np
 
+def is_numeric(variable):
+    return isinstance(variable, numbers.Number)
 
 class Model:
     def __init__(self, func_, nth_process, _main_args_):
@@ -19,16 +22,16 @@ class Model:
         eval_time = time.time() - start_time
 
         if isinstance(results, tuple):
-            score = results[0]
-            model = results[1]
-        elif (
-            isinstance(results, float)
-            or isinstance(results, np.float64)
-            or isinstance(results, np.float32)
-        ):
-            score = results
-            model = None
-        else:
-            print("Error: model function must return float or tuple")
+            self.n_results = len(results)
 
-        return score, eval_time, model
+            score = results[0]
+            self.rest = results[1]
+        else:
+            self.n_results = 1
+            score = results
+            self.rest = None
+
+        if is_numeric(score):
+            return score, eval_time
+        else:
+            print("Error: model function must return numeric variable")

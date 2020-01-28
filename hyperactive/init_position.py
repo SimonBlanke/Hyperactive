@@ -61,7 +61,7 @@ class InitSearchPosition:
 
         for pos in pos_list:
             para = self._space_.pos2para(pos)
-            score, eval_time, model = self._model_.train_model(para)
+            score, eval_time = self._model_.train_model(para)
 
             pos_best_list.append(pos)
             score_best_list.append(score)

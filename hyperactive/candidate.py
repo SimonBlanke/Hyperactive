@@ -87,7 +87,7 @@ class Candidate:
     def base_eval(self, pos):
         para = self._space_.pos2para(pos)
         para["iteration"] = self.i
-        score, eval_time, self.model = self._model_.train_model(para)
+        score, eval_time = self._model_.train_model(para)
         self.eval_time.append(eval_time)
 
         return score
