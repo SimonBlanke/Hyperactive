@@ -34,12 +34,19 @@ def stop_warnings():
 
 class Hyperactive:
     def __init__(
-        self, X, y, memory="long", random_state=False, verbosity=3, warnings=False
+        self,
+        X,
+        y,
+        memory="long",
+        random_state=False,
+        verbosity=3,
+        warnings=False,
+        ext_warnings=False,
     ):
         self.X = X
         self._main_args_ = MainArgs(X, y, memory, random_state, verbosity)
 
-        if not warnings:
+        if not ext_warnings:
             stop_warnings()
 
         self.optimizer_dict = {
