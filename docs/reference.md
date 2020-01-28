@@ -168,3 +168,23 @@ Starts the optimization run.
             model: {"scatter_init": 10}
         }
         ```
+
+---
+
+> **Attributes:**
+  - ``results``**:** dict
+    - keys: model-functions
+    - values: best parameters
+    
+  - ``best_scores``**:** dict
+    - keys: model-functions
+    - values: best scores
+    
+  - ``eval_times``**:** dict
+    - keys: model-functions
+    - values: evaluation times of the model
+    
+  - ``opt_times``**:** dict
+    - keys: model-functions
+    - values: optimization times of each iteration
+    
