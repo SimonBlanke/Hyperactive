@@ -8,22 +8,39 @@ The following chapters provide a step by step explanation of how to start your f
 
 Since v1.0.0 the search space is created by defining:
   - a <b>function</b> for the model
-  - a parameter <b>dictionary</b>
+  - a parameter <b>dictionary</b> for the search space
   
+The model function is the objective function for the optimization. It returns a score that will be maximized during the optimization run. The search space is a dictionary that contains the names of the parameters as dict-keys and the list of values that can be searched during the optimization as dict-values. 
+
+Together the model and the search space create the search_config. The search_config contains the model as a key and the search space as a value in the search_config-dictionary.
+
 ```python
 search_config = {
     model: search_space
 }
 ```
 
+You can also create a search_config with multiple models and search spaces to optimize them in parallel:
+
+```python
+search_config = {
+    model0: search_space0,
+    model1: search_space1,
+    model2: search_space2,
+}
+```
+
 #### Create the objective function
 
-The function receives 3 arguments:
-  - <b>para</b> : This defines what part of the model-function should be optimized
-  - <b>X</b> : Training features
-  - <b>y</b> : Training target
+The objective function contains the enire model and its evaluation.
+The function receives 3 positional arguments:
+  - <b>para</b> : (dictionary) This defines what part of the model-function should be optimized
+  - <b>X</b> : (numpy array) Training features
+  - <b>y</b> : (numpy array) Training target
 
- The function should return some kind of metric that will be <b>maximized</b> during the search.
+Via the para-argument you can access the parameters in the search space.
+The function should return some kind of metric that will be <b>maximized</b> during the search.
+The finished model should like similar to this:
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -31,22 +48,32 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 def model(para, X, y):
     gbc = GradientBoostingClassifier(
-        n_estimators=para["n_estimators"],
-        max_depth=para["max_depth"],
+        n_estimators=para["n_estimators"], # instead of n_estimators=100
     )
     scores = cross_val_score(gbc, X, y, cv=3)
 
     return scores.mean()
 ```
 
+Here you want to optimize the number of estimators of the boosted decition tree to get the maximum score.
+The line "n_estimators=para["n_estimators"]" ensures that the parameter "n_estimators" will be optimized.
+
 #### Create the search space
 
-The search_config is a dictionary, that has the <b>model-function as a key</b> and its <b>values defines the search space</b> for this model. The search space is an additional dictionary that will be used in 'para' within the model-function.
+The search space is a dictionary that will defines the parameters and values that will be searched during the optimization run. The keys in the search space must be the same as the keys in "para" in the objective function. The values of the search space dictionary are the lists of values you want to search through. The search space for the model example above could look like this:
 
 ```python
 search_space = {
-    "n_estimators": range(10, 200, 10),
-    "max_depth": range(2, 12),
+    "n_estimators": [50, 100, 150, 200],
+}
+```
+
+This will search through these four values to find the best one.
+You can make the list as long or short as you want:
+
+```python
+search_space = {
+    "n_estimators": [100, 200],
 }
 ```
 
