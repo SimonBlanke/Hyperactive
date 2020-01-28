@@ -4,10 +4,11 @@
 
 import time
 import numbers
-import numpy as np
+
 
 def is_numeric(variable):
     return isinstance(variable, numbers.Number)
+
 
 class Model:
     def __init__(self, func_, nth_process, _main_args_):

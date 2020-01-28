@@ -18,7 +18,7 @@ class MemoryIO:
         self.feature_hash = self._get_hash(_main_args_.X)
         self.label_hash = self._get_hash(_main_args_.y)
 
-        self.score_col_name = "score"
+        self.score_col_name = "mean_test_score"
 
         current_path = os.path.realpath(__file__)
         self.meta_learn_path, _ = current_path.rsplit("/", 1)
