@@ -41,11 +41,11 @@ class Candidate:
 
         elif self.memory == "short":
             self.mem = ShortTermMemory(self._space_, _main_args_, self)
-            self.eval_pos = self.eval_pos_Mem
+            self.eval_pos = self.eval_pos_shortMem
 
         elif self.memory == "long":
             self.mem = LongTermMemory(self._space_, _main_args_, self)
-            self.eval_pos = self.eval_pos_Mem
+            self.eval_pos = self.eval_pos_longMem
 
             self.mem.load_memory(self, self._info_)
 
@@ -90,19 +90,35 @@ class Candidate:
         score, eval_time = self._model_.train_model(para)
         self.eval_time.append(eval_time)
 
-        return score
+        return score, eval_time
 
     def eval_pos_noMem(self, pos):
-        score = self.base_eval(pos)
+        score, eval_time = self.base_eval(pos)
         return score
 
-    def eval_pos_Mem(self, pos, force_eval=False):
+    def eval_pos_shortMem(self, pos, force_eval=False):
         pos.astype(int)
         pos_str = pos.tostring()
 
         if pos_str in self.mem.memory_dict and not force_eval:
-            return self.mem.memory_dict[pos_str]
+            return self.mem.memory_dict[pos_str][0]
         else:
-            score = self.base_eval(pos)
-            self.mem.memory_dict[pos_str] = score
+            score, eval_time = self.base_eval(pos)
+            self.mem.memory_dict[pos_str] = [score]
+            return score
+
+    def eval_pos_longMem(self, pos, force_eval=False):
+        pos.astype(int)
+        pos_str = pos.tostring()
+
+        if pos_str in self.mem.memory_dict and not force_eval:
+            return self.mem.memory_dict[pos_str][0]
+        else:
+            score, eval_time = self.base_eval(pos)
+            if self._model_.rest:
+                values = [score, eval_time] + self._model_.rest
+            else:
+                values = [score, eval_time]
+
+            self.mem.memory_dict[pos_str] = values
             return score

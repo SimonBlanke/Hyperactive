@@ -90,12 +90,12 @@ class MemoryDump(MemoryIO):
 
         para_pd = pd.DataFrame(results_dict["params"])
         metric_pd = pd.DataFrame(
-            results_dict["mean_test_score"], columns=["mean_test_score"]
+            results_dict["score"], columns=["score", "eval_time"]
         )
-        n_rows = len(para_pd)
-        eval_time = pd.DataFrame(_cand_.eval_time[-n_rows:], columns=["eval_time"])
+        # n_rows = len(para_pd)
+        # eval_time = pd.DataFrame(_cand_.eval_time[-n_rows:], columns=["eval_time"])
         md_model = pd.concat(
-            [para_pd, metric_pd, eval_time], axis=1, ignore_index=False
+            [para_pd, metric_pd], axis=1, ignore_index=False
         )
 
         return md_model
@@ -132,7 +132,7 @@ class MemoryDump(MemoryIO):
                 score_list.append(score)
 
         results_dict["params"] = para_list
-        results_dict["mean_test_score"] = score_list
+        results_dict["score"] = np.array(score_list)
 
         return results_dict
 
@@ -148,7 +148,7 @@ class MemoryDump(MemoryIO):
             meta_data = meta_data_old.append(meta_data_new)
 
             columns = list(meta_data.columns)
-            noScore = ["mean_test_score", "cv_default_score", "eval_time", "run"]
+            noScore = ["score", "cv_default_score", "eval_time", "run"]
             columns_noScore = [c for c in columns if c not in noScore]
 
             meta_data = meta_data.drop_duplicates(subset=columns_noScore)
