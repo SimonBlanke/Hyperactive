@@ -14,9 +14,6 @@ python:
 install:
   - pip install numpy
   - pip install scikit-learn
-  - pip install xgboost
-  - pip install lightgbm
-  - pip install catboost
   - pip install dill
   - pip install packaging
   - pip install pytest
