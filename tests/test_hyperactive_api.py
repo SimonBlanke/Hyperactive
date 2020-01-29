@@ -82,20 +82,6 @@ def test_func_return():
     opt.search(search_config1)
 
 
-def test_opt_times():
-    opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config)
-
-    assert np.array(opt.opt_times[model]).mean() > 0
-
-
-def test_eval_times():
-    opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config)
-
-    assert np.array(opt.eval_times[model]).mean() > 0
-
-
 def test_n_jobs_2():
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=2)
