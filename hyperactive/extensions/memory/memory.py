@@ -36,14 +36,14 @@ class LongTermMemory(Memory):
     def __init__(self, _space_, _main_args_, _cand_):
         super().__init__(_space_, _main_args_, _cand_)
 
-        self._load_ = MemoryLoad(_space_, _main_args_, _cand_, self.memory_dict)
-        self._dump_ = MemoryDump(_space_, _main_args_, _cand_, self.memory_dict)
+        self._load_ = MemoryLoad(_space_, _main_args_, _cand_)
+        self._dump_ = MemoryDump(_space_, _main_args_, _cand_)
 
     def load_memory(self, _cand_, _verb_):
-        self._load_._load_memory(_cand_, _verb_)
+        self.memory_dict = self._load_._load_memory(_cand_, _verb_, self.memory_dict)
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
-        self._dump_._save_memory(_main_args_, _opt_args_, _cand_)
+        self._dump_._save_memory(_main_args_, _opt_args_, _cand_, self.memory_dict)
 
     def _get_hash(self, object):
         return hashlib.sha1(object).hexdigest()

@@ -14,13 +14,14 @@ from .memory_io import MemoryIO
 
 
 class MemoryDump(MemoryIO):
-    def __init__(self, _space_, _main_args_, _cand_, memory_dict):
-        super().__init__(_space_, _main_args_, _cand_, memory_dict)
+    def __init__(self, _space_, _main_args_, _cand_):
+        super().__init__(_space_, _main_args_, _cand_)
 
         self.memory_type = _main_args_.memory
+
+    def _save_memory(self, _main_args_, _opt_args_, _cand_, memory_dict):
         self.memory_dict = memory_dict
 
-    def _save_memory(self, _main_args_, _opt_args_, _cand_):
         path = self._get_file_path(_cand_.func_)
         meta_data = self._collect(_cand_)
 

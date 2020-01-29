@@ -18,27 +18,30 @@ def apply_tobytes(df):
 
 
 class MemoryLoad(MemoryIO):
-    def __init__(self, _space_, _main_args_, _cand_, memory_dict):
-        super().__init__(_space_, _main_args_, _cand_, memory_dict)
+    def __init__(self, _space_, _main_args_, _cand_):
+        super().__init__(_space_, _main_args_, _cand_)
 
         self.pos_best = None
         self.score_best = -np.inf
 
         self.memory_type = _main_args_.memory
-        self.memory_dict = memory_dict
 
         self.meta_data_found = False
 
-    def _load_memory(self, _cand_, _verb_):
+    def _load_memory(self, _cand_, _verb_, memory_dict):
+        self.memory_dict = memory_dict
+
         para, score = self._read_func_metadata(_cand_.func_, _verb_)
         if para is None or score is None:
-            return
+            return {}
 
         _verb_.load_samples(para)
         _cand_.eval_time = list(para["eval_time"])
 
         self._load_data_into_memory(para, score)
         self.n_dims = len(para.columns)
+
+        return self.memory_dict
 
     def apply_index(self, pos_key, df):
         return (

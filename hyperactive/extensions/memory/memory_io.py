@@ -11,7 +11,7 @@ import hashlib
 
 
 class MemoryIO:
-    def __init__(self, _space_, _main_args_, _cand_, memory_dict):
+    def __init__(self, _space_, _main_args_, _cand_):
         self._space_ = _space_
         self._main_args_ = _main_args_
 
