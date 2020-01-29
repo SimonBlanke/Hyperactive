@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import time
 import numpy as np
 
 from sklearn.datasets import load_iris
@@ -25,13 +26,14 @@ def test_short_term_memory():
 
     search_config = {model1: {"criterion": ["gini"]}}
 
+    c_time = time.time()
     opt = Hyperactive(X, y, memory="short")
     opt.search(search_config, n_iter=1000)
+    diff_time = time.time() - c_time
 
-    assert np.array(opt.eval_times[model1]).sum() < 1
+    assert diff_time < 0.5
 
 
-"""
 def test_long_term_memory_times():
     def _model_(para, X_train, y_train):
         model = DecisionTreeClassifier(max_depth=para["max_depth"])
@@ -39,17 +41,12 @@ def test_long_term_memory_times():
 
         return scores.mean()
 
-    search_config = {_model_: {"max_depth": range(2, 1003)}}
+    search_config = {_model_: {"max_depth": range(2, 500)}}
 
+    c_time = time.time()
     opt = Hyperactive(X, y, memory="long")
     opt.search(search_config, n_iter=1000)
-
-    print(
-        "np.array(opt.eval_times[_model_]).sum()",
-        np.array(opt.eval_times[_model_]).sum(),
-    )
-
-    assert np.array(opt.eval_times[_model_]).sum() > 1
+    diff_time_0 = time.time() - c_time
 
     def _model_(para, X_train, y_train):
         model = DecisionTreeClassifier(max_depth=para["max_depth"])
@@ -57,13 +54,14 @@ def test_long_term_memory_times():
 
         return scores.mean()
 
-    search_config = {_model_: {"max_depth": range(2, 1003)}}
+    search_config = {_model_: {"max_depth": range(2, 500)}}
 
+    c_time = time.time()
     opt = Hyperactive(X, y, memory="long")
     opt.search(search_config, n_iter=1000)
+    diff_time_1 = time.time() - c_time
 
-    assert np.array(opt.eval_times[_model_]).sum() < 1
-"""
+    assert diff_time_0 / 2 > diff_time_1
 
 
 def test_long_term_memory_with_data():
