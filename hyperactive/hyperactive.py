@@ -84,9 +84,9 @@ class Hyperactive:
         dist.dist(optimizer_class, self._main_args_, self._opt_args_)
 
         self.results = dist.results
-        # self.pos = dist.pos
+        self.pos_list = dist.pos
         # self.para_list = None
-        # self.scores = dist.scores
+        self.score_list = dist.scores
 
         # self.eval_times = dist.eval_times
         # self.opt_times = dist.opt_times
