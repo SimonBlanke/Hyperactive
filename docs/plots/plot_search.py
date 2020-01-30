@@ -26,10 +26,10 @@ opt_list = [
     "RandomSearch",
     {"RandomRestartHillClimbing": {"n_restarts": 10}},
     {"RandomRestartHillClimbing": {"n_restarts": 5}},
-    {"RandomAnnealing": {"epsilon": 1}},
-    {"RandomAnnealing": {"epsilon": 0.5}},
-    {"RandomAnnealing": {"epsilon": 0.3}},
-    {"RandomAnnealing": {"epsilon": 0.1}},
+    {"RandomAnnealing": {"epsilon_mod": 10}},
+    {"RandomAnnealing": {"epsilon_mod": 33}},
+    {"RandomAnnealing": {"epsilon_mod": 100}},
+    {"RandomAnnealing": {"epsilon_mod": 100, "annealing_rate": 0.9}},
     {"SimulatedAnnealing": {"annealing_rate": 0.99}},
     {"SimulatedAnnealing": {"annealing_rate": 0.9}},
     {"StochasticTunneling": {"gamma": 0.1}},
@@ -59,48 +59,39 @@ opt_list = [
 ]
 
 
-def himmelblau(para, X, y):
-    """Himmelblau's function"""
+def test_func(para, X, y):
+    x1 = para["x"]
+    x2 = para["y"]
 
-    score = -(
-        (para["x_"] ** 2 + para["y_"] - 11) ** 2
-        + (para["x_"] + para["y_"] ** 2 - 7) ** 2
-    )
+    a = 20
+    b = 0.2
+    c = 2 * np.pi
 
-    return score
+    x1 = x1 / 10
+    x2 = x2 / 10
+
+    sum1 = x1 ** 2 + x2 ** 2
+    sum2 = np.cos(c * x1) + np.cos(c * x2)
+
+    term1 = -a * np.exp(-b * ((1 / 2.0) * sum1 ** (0.5)))
+    term2 = -np.exp((1 / 2.0) * sum2)
+
+    return 1 - (term1 + term2 + a + np.exp(1)) / 10
 
 
-x_range = np.arange(0, 10, 0.1)
+x_range = range(-50, 50)
 
-search_config = {himmelblau: {"x_": x_range, "y_": x_range}}
+search_config = {test_func: {"x": x_range, "y": x_range}}
 
 n_iter = 100
 
 
 def _plot(plt, pos, score):
-    df = pd.DataFrame(
-        {"n_neighbors": pos[:, 0], "leaf_size": pos[:, 1], "score": score}
-    )
+    df = pd.DataFrame({"X": pos[:, 0], "Y": pos[:, 1], "score": score})
 
     # plot
-    plt.plot(
-        "n_neighbors",
-        "leaf_size",
-        data=df,
-        linestyle="-",
-        marker=",",
-        color="gray",
-        alpha=0.33,
-    )
-    plt.scatter(
-        df["n_neighbors"],
-        df["leaf_size"],
-        c=df["score"],
-        marker="H",
-        s=30,
-        vmin=0.89,
-        vmax=0.99,
-    )
+    plt.plot("X", "Y", data=df, linestyle="-", marker=",", color="gray", alpha=0.33)
+    plt.scatter(df["X"], df["Y"], c=df["score"], marker="H", s=30, vmin=0, vmax=1)
 
     return plt
 
@@ -130,7 +121,7 @@ for opt in opt_list:
 
     Xy = np.array([0])
 
-    opt_ = Hyperactive(Xy, Xy, verbosity=10, memory=False)
+    opt_ = Hyperactive(Xy, Xy, verbosity=10, memory=False, random_state=5)
     opt_.search(search_config, optimizer=opt, n_iter=n_iter_temp)
 
     pos_list = opt_.pos_list
@@ -149,9 +140,6 @@ for opt in opt_list:
     # print("score_list\n", score_list, score_list.shape)
 
     for pos, score in zip(pos_list, score_list):
-        # print(pos[:, 0])
-        # print(pos[:, 1])
-        # print(score, "\n")
         plt = _plot(plt, pos, score)
 
     if isinstance(opt, dict):
@@ -163,8 +151,8 @@ for opt in opt_list:
         opt_file_name = opt
 
     plt.title(opt_title)
-    plt.xlabel("n_neighbors")
-    plt.ylabel("leaf_size")
+    plt.xlabel("X")
+    plt.ylabel("Y")
 
     plt.xlim((0, 100))
     plt.ylim((0, 100))
