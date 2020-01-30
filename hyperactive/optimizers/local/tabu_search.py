@@ -76,7 +76,7 @@ class TabuPositioner(HillClimbingPositioner):
             if p_discard < rand:
                 run = False
 
-            # sigma_mod = sigma_mod * 1.01
+            sigma_mod = sigma_mod * 1.01
 
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
