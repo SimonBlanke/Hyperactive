@@ -43,7 +43,7 @@ class Arguments:
             # StochasticTunnelingOptimizer
             "gamma": 0.5,
             # ParallelTemperingOptimizer
-            "system_temperatures": [0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10],
+            "system_temperatures": [0.1, 1, 10, 100],
             "n_swaps": 10,
             # ParticleSwarmOptimizer
             "n_particles": 10,
