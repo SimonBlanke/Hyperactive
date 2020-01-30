@@ -128,7 +128,9 @@ for opt in opt_list:
     else:
         print(opt)
 
-    opt_ = Hyperactive(0, 0, verbosity=10)
+    Xy = np.array([0])
+
+    opt_ = Hyperactive(Xy, Xy, verbosity=10, memory=False)
     opt_.search(search_config, optimizer=opt, n_iter=n_iter_temp)
 
     pos_list = opt_.pos_list
@@ -169,4 +171,4 @@ for opt in opt_list:
     plt.colorbar()
 
     plt.tight_layout()
-    plt.savefig("./search_paths/temp/" + opt_file_name + ".svg")
+    plt.savefig("./search_paths/temp/" + opt_file_name + ".pdf")
