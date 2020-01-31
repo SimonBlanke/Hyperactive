@@ -15,7 +15,10 @@ Hill climbing is a very basic optimization technique, that explores the search s
 <embed src="./plots/search_paths/Bayesian.pdf" height="200"/>
 </p>
 
-
+<p align="center">
+<img src="./plots/search_paths/Bayesian.pdf" width= 49%/>
+<img src="./plots/search_paths/Bayesian.pdf" width= 49%/>
+</p>
 
 <p align="center">
 <img src="./plots/search_paths/HillClimbing [('epsilon', 0.1)].svg" width= 49%/>
