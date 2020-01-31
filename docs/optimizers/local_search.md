@@ -9,6 +9,14 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - When you have a very good initial point to start from
 - If the search space is very simple and has few local optima or saddle points
 
+
+<p align="center">
+<embed src="./plots/search_paths/Bayesian.pdf" height="200"/>
+<embed src="./plots/search_paths/Bayesian.pdf" height="200"/>
+</p>
+
+
+
 <p align="center">
 <img src="./plots/search_paths/HillClimbing [('epsilon', 0.1)].svg" width= 49%/>
 <img src="./plots/search_paths/HillClimbing [('epsilon', 0.03)].svg" width= 49%/>
@@ -23,11 +31,6 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 **Use case/properties:**
 - Never as a first method of optimization
 - When you have a very good initial point to start from
-
-<p align="center">
-<iframe src="./plots/search_paths/Bayesian.pdf" style="width: 100%;height: 100%;border: none;"></iframe>
-<iframe src="./plots/search_paths/Bayesian.pdf" style="width: 100%;height: 100%;border: none;"></iframe>
-</p>
 
 <p align="center">
 <img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.5)].svg" width= 49%/>
