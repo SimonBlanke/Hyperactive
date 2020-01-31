@@ -60,8 +60,8 @@ opt_list = [
 
 
 def test_func(para, X, y):
-    x1 = para["x"]
-    x2 = para["y"]
+    x1 = para["x"] - 50
+    x2 = para["y"] - 50
 
     a = 20
     b = 0.2
@@ -79,7 +79,7 @@ def test_func(para, X, y):
     return 1 - (term1 + term2 + a + np.exp(1)) / 10
 
 
-x_range = range(-50, 50)
+x_range = range(0, 100)
 
 search_config = {test_func: {"x": x_range, "y": x_range}}
 
@@ -136,15 +136,16 @@ for opt in opt_list:
     pos_list = np.swapaxes(pos_list, 0, 1)
     score_list = np.swapaxes(score_list, 0, 1)
 
-    # print("\npos_list\n", pos_list, pos_list.shape)
-    # print("score_list\n", score_list, score_list.shape)
-
     for pos, score in zip(pos_list, score_list):
         plt = _plot(plt, pos, score)
 
     if isinstance(opt, dict):
         opt_key = list(opt.keys())[0]
-        opt_title = str(opt_key) + "\n" + str(list(opt[opt_key].items()))
+        opt_title = r'$\bf{' + str(opt_key) + '}$'
+
+        for key in opt[opt_key].keys():
+            opt_title = opt_title + "\n" + key + ": " + str(opt[opt_key][key])
+
         opt_file_name = str(opt_key) + " " + str(list(opt[opt_key].items()))
     else:
         opt_title = opt
