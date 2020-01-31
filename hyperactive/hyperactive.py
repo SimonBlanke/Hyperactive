@@ -88,6 +88,6 @@ class Hyperactive:
         # self.para_list = None
         self.score_list = dist.scores
 
-        # self.eval_times = dist.eval_times
-        # self.opt_times = dist.opt_times
+        self.eval_times = dist.eval_times
+        self.opt_times = dist.opt_times
         self.best_scores = dist.best_scores
