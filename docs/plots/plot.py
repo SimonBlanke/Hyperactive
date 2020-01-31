@@ -16,17 +16,15 @@ sns.set(style="whitegrid")
 
 
 def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
-    file_name_1 = "eval_time_" + model_name 
-    file_name_2 = "total_time_" + model_name
+    file_name_1 = "./data/eval_time_" + model_name 
+    file_name_2 = "./data/opt_time_" + model_name
 
     eval_time_model = pd.read_csv(file_name_1, header=0)
-    total_time_model = pd.read_csv(file_name_2, header=0)
+    opt_time_model = pd.read_csv(file_name_2, header=0)
 
     columns = eval_time_model.columns
     eval_time = eval_time_model.values
-    total_time = total_time_model.values
-
-    opt_time = np.subtract(total_time, eval_time)
+    opt_time = opt_time_model.values
 
     opt_time_mean = opt_time.mean(axis=0)
     opt_time_std = opt_time.std(axis=0)
