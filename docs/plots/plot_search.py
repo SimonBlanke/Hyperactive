@@ -17,6 +17,7 @@ X = data.data
 y = data.target
 
 opt_list = [
+    {"HillClimbing": {"climb_dist": np.random.laplace}},
     {"HillClimbing": {"epsilon": 0.03}},
     {"HillClimbing": {"epsilon": 0.1}},
     {"StochasticHillClimbing": {"p_down": 0.5}},
@@ -58,6 +59,52 @@ opt_list = [
     "Bayesian",
 ]
 
+opt_para_names = [
+    {"HillClimbing": {"climb_dist": "laplace"}},
+    {"HillClimbing": {"epsilon": 0.03}},
+    {"HillClimbing": {"epsilon": 0.1}},
+    {"StochasticHillClimbing": {"p_down": 0.5}},
+    {"StochasticHillClimbing": {"p_down": 0.8}},
+    {"TabuSearch": {"tabu_memory": 3}},
+    {"TabuSearch": {"tabu_memory": 10}},
+    "RandomSearch",
+    {"RandomRestartHillClimbing": {"n_restarts": 10}},
+    {"RandomRestartHillClimbing": {"n_restarts": 5}},
+    {"RandomAnnealing": {"epsilon_mod": 10}},
+    {"RandomAnnealing": {"epsilon_mod": 33}},
+    {"RandomAnnealing": {"epsilon_mod": 100}},
+    {"RandomAnnealing": {"epsilon_mod": 100, "annealing_rate": 0.9}},
+    {"SimulatedAnnealing": {"annealing_rate": 0.99}},
+    {"SimulatedAnnealing": {"annealing_rate": 0.9}},
+    {"StochasticTunneling": {"gamma": 0.1}},
+    {"StochasticTunneling": {"gamma": 3}},
+    {"ParallelTempering": {"system_temperatures": [0.1, 0.5, 1, 3]}},
+    {"ParallelTempering": {"system_temperatures": [0.05, 0.3, 0.5, 1, 3, 5, 9]}},
+    {"ParallelTempering": {"system_temperatures": [0.01, 1, 100]}},
+    {"ParticleSwarm": {"n_particles": 10}},
+    {"ParticleSwarm": {"n_particles": 20}},
+    {"EvolutionStrategy": {"individuals": 10}},
+    {"EvolutionStrategy": {"individuals": 4}},
+    {
+        "EvolutionStrategy": {
+            "individuals": 10,
+            "mutation_rate": 0.1,
+            "crossover_rate": 0.9,
+        }
+    },
+    {
+        "EvolutionStrategy": {
+            "individuals": 10,
+            "mutation_rate": 0.9,
+            "crossover_rate": 0.1,
+        }
+    },
+    "Bayesian",
+]
+
+if len(opt_list) != len(opt_para_names):
+    print("\n--------->   Warning! List lengths do not match!\n")
+
 
 def test_func(para, X, y):
     x1 = para["x"] - 50
@@ -96,7 +143,7 @@ def _plot(plt, pos, score):
     return plt
 
 
-for opt in opt_list:
+for opt, opt_para in zip(opt_list, opt_para_names):
     n_iter_temp = n_iter
 
     if isinstance(opt, dict):
@@ -144,9 +191,9 @@ for opt in opt_list:
         opt_title = r'$\bf{' + str(opt_key) + '}$'
 
         for key in opt[opt_key].keys():
-            opt_title = opt_title + "\n" + key + ": " + str(opt[opt_key][key])
+            opt_title = opt_title + "\n" + key + ": " + str(opt_para[opt_key][key])
 
-        opt_file_name = str(opt_key) + " " + str(list(opt[opt_key].items()))
+        opt_file_name = str(opt_key) + " " + str(list(opt_para[opt_key].items()))
     else:
         opt_title = opt
         opt_file_name = opt
@@ -160,4 +207,4 @@ for opt in opt_list:
     plt.colorbar()
 
     plt.tight_layout()
-    plt.savefig("./search_paths/temp/" + opt_file_name + ".pdf")
+    plt.savefig("./search_paths/temp/" + opt_file_name + ".png")
