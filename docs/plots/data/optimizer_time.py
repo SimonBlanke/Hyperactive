@@ -14,14 +14,12 @@ from sklearn.model_selection import cross_val_score
 #################################################################################################
 
 runs = 3
-n_iter = 5
-
-opt_dict = {"n_jobs": 1, "memory": False, "verbosity": 0}
+n_iter = 100
 
 opt_list = [
     "HillClimbing",
     "StochasticHillClimbing",
-    "TabuSearch",
+    # "TabuSearch",
     "RandomSearch",
     "RandomRestartHillClimbing",
     "RandomAnnealing",
@@ -30,30 +28,29 @@ opt_list = [
     "ParallelTempering",
     "ParticleSwarm",
     "EvolutionStrategy",
-    "Bayesian",
+    # "Bayesian",
 ]
 
 #################################################################################################
 
 
-def collect_data(runs, X, y, opt_list, search_config, n_iter, opt_dict):
+def collect_data(runs, X, y, opt_list, search_config, n_iter):
     time_c = time.time()
 
     data_runs_1 = []
     data_runs_2 = []
     for run in tqdm.tqdm(range(runs)):
         print("\nRun nr.", run, "\n")
-        total_time_list = []
         eval_time_list = []
+        opt_time_list = []
 
         for key in opt_list:
             print("optimizer:", key)
 
             n_iter_temp = n_iter
-            opt_dict_temp = opt_dict
 
             if key == "ParallelTempering":
-                n_iter_temp = int(n_iter / 10)
+                n_iter_temp = int(n_iter / 4)
 
             if key == "ParticleSwarm":
                 n_iter_temp = int(n_iter / 10)
@@ -61,21 +58,25 @@ def collect_data(runs, X, y, opt_list, search_config, n_iter, opt_dict):
             if key == "EvolutionStrategy":
                 n_iter_temp = int(n_iter / 10)
 
-            opt_obj = Hyperactive(
-                search_config, optimizer=key, n_iter=n_iter_temp, **opt_dict_temp
-            )
-            opt_obj.search(X, y)
-            total_time = opt_obj.get_total_time()
-            eval_time = opt_obj.get_eval_time()
+            opt_obj = Hyperactive(X, y, memory=False)
+            opt_obj.search(search_config, optimizer=key, n_iter=n_iter_temp)
 
-            total_time_list.append(total_time)
+            model = list(search_config.keys())[0]
+
+            eval_times = opt_obj.eval_times[model]
+            opt_times = opt_obj.opt_times[model]
+
+            eval_time = np.array(eval_times).sum()
+            opt_time = np.array(opt_times).sum()
+
             eval_time_list.append(eval_time)
+            opt_time_list.append(opt_time)
 
-        total_time_list = np.array(total_time_list)
         eval_time_list = np.array(eval_time_list)
+        opt_time_list = np.array(opt_time_list)
 
-        data_runs_1.append(total_time_list)
-        data_runs_2.append(eval_time_list)
+        data_runs_1.append(eval_time_list)
+        data_runs_2.append(opt_time_list)
 
     data_runs_1 = np.array(data_runs_1)
     data_runs_2 = np.array(data_runs_2)
@@ -88,14 +89,14 @@ def collect_data(runs, X, y, opt_list, search_config, n_iter, opt_dict):
 
     model_name = list(search_config.keys())[0]
 
-    calc_optimizer_time_name = "total_time_" + model_name.__name__
+    calc_optimizer_time_name = "eval_time_" + model_name.__name__
 
     file_name = str(calc_optimizer_time_name)
     data.to_csv(file_name, index=False)
 
     data = pd.DataFrame(data_runs_2, columns=opt_list)
 
-    calc_optimizer_time_name = "eval_time_" + model_name.__name__
+    calc_optimizer_time_name = "opt_time_" + model_name.__name__
 
     file_name = str(calc_optimizer_time_name)
     data.to_csv(file_name, index=False)
@@ -106,19 +107,20 @@ def collect_data(runs, X, y, opt_list, search_config, n_iter, opt_dict):
 #################################################################################################
 from sklearn.datasets import load_iris
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 iris_data = load_iris()
 iris_X, iris_y = iris_data.data, iris_data.target
 
 
 def model(para, X, y):
-    model = GradientBoostingClassifier(n_estimators=para["n_estimators"])
-    scores = cross_val_score(model, X, y, cv=3)
+    dtc = GradientBoostingClassifier(max_depth=para["max_depth"])
+    scores = cross_val_score(dtc, X, y, cv=2)
 
     return scores.mean()
 
 
-search_config = {model: {"n_estimators": range(2, 20)}}
+search_config = {model: {"max_depth": range(2, 20)}}
 
 
 data_runs_dict_KNN = {
@@ -128,7 +130,6 @@ data_runs_dict_KNN = {
     "opt_list": opt_list,
     "search_config": search_config,
     "n_iter": n_iter,
-    "opt_dict": opt_dict,
 }
 
 data_runs = collect_data(**data_runs_dict_KNN)
