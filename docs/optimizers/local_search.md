@@ -25,6 +25,11 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 - When you have a very good initial point to start from
 
 <p align="center">
+<iframe src="./plots/search_paths/Bayesian.pdf" style="width: 100%;height: 100%;border: none;"></iframe>
+<iframe src="./plots/search_paths/Bayesian.pdf" style="width: 100%;height: 100%;border: none;"></iframe>
+</p>
+
+<p align="center">
 <img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.5)].svg" width= 49%/>
 <img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.8)].svg" width= 49%/>
 </p>
