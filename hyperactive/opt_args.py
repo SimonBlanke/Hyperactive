@@ -30,7 +30,7 @@ class Arguments:
             # StochasticHillClimbingOptimizer
             "p_down": 0.3,
             # TabuOptimizer
-            "tabu_memory": 10,
+            "tabu_memory": 3,
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
