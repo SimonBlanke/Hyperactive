@@ -16,7 +16,7 @@ sns.set(style="whitegrid")
 
 
 def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
-    file_name_1 = "./data/eval_time_" + model_name 
+    file_name_1 = "./data/eval_time_" + model_name
     file_name_2 = "./data/opt_time_" + model_name
 
     eval_time_model = pd.read_csv(file_name_1, header=0)
@@ -32,25 +32,24 @@ def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
     eval_time_mean = eval_time.mean(axis=0)
     eval_time_std = eval_time.std(axis=0)
 
-    ind = np.arange(opt_time_mean.shape[0])    # the x locations for the groups
-    width = 0.35       # the width of the bars: can also be len(x) sequence
+    ind = np.arange(opt_time_mean.shape[0])  # the x locations for the groups
+    width = 0.35  # the width of the bars: can also be len(x) sequence
 
     plt.figure(figsize=(15, 5))
 
     p1 = plt.bar(ind, eval_time_mean, width, yerr=eval_time_std)
     p2 = plt.bar(ind, opt_time_mean, width, bottom=eval_time_mean, yerr=opt_time_std)
 
-    plt.ylabel('Time')
+    plt.ylabel("Time")
     plt.title(title)
     plt.xticks(ind, columns, rotation=75)
     # plt.yticks()
-    plt.legend((p1[0], p2[0]), ('Eval time', 'Opt time'))
+    plt.legend((p1[0], p2[0]), ("Eval time", "Opt time"))
 
     plt.tight_layout()
     plt.show()
 
-
-    '''
+    """
     values_norm = values / no_opt[:, None]
 
     fig, ax = plt.subplots()
@@ -88,6 +87,7 @@ def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
     fig = ax.get_figure()
     fig.tight_layout()
     fig.savefig("optimizer_time_" + model_name + ".png")
-    '''
+    """
+
 
 plot_optimizer_time("model", 0, 2, 0.25, "title")
