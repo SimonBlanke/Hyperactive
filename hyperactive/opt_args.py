@@ -34,7 +34,7 @@ class Arguments:
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
-            "epsilon_mod": 33,
+            "epsilon_mod": 10,
             "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
             "start_temp": 1,  # TODO
