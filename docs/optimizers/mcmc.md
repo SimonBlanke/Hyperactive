@@ -23,8 +23,8 @@ It simulates a temperature that decreases with each iteration, similar to a mate
 - Good as a second method of optimization
 
 <p align="center">
-<img src="./plots/search_paths/SimulatedAnnealing [('annealing_rate', 0.9)].svg" width= 49%/>
-<img src="./plots/search_paths/SimulatedAnnealing [('annealing_rate', 0.99)].svg" width= 49%/>
+<img src="./plots/search_paths/SimulatedAnnealing [('annealing_rate', 0.8)].png" width= 49%/>
+<img src="./plots/search_paths/SimulatedAnnealing [('annealing_rate', 0.9)].png" width= 49%/>
 </p>
 
 
@@ -53,8 +53,8 @@ This new acceptance factor is used instead of the delta f in the original equati
 - Good as a second method of optimization
 
 <p align="center">
-<img src="./plots/search_paths/StochasticTunneling [('gamma', 0.1)].svg" width= 49%/>
-<img src="./plots/search_paths/StochasticTunneling [('gamma', 3)].svg" width= 49%/>
+<img src="./plots/search_paths/StochasticTunneling [('gamma', 0.1)].png" width= 49%/>
+<img src="./plots/search_paths/StochasticTunneling [('gamma', 3)].png" width= 49%/>
 </p>
 
 
@@ -75,7 +75,6 @@ Parallel Tempering initializes multiple simulated annealing searches with differ
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_paths/ParallelTempering [('system_temperatures', [0.1, 0.5, 1, 3])].svg" width= 49%/>
-<img src="./plots/search_paths/ParallelTempering [('system_temperatures', [0.01, 1, 100])].svg" width= 49%/>
-<img src="./plots/search_paths/ParallelTempering [('system_temperatures', [0.05, 0.3, 0.5, 1, 3, 5, 9])].svg" width= 49%/>
+<img src="./plots/search_paths/ParallelTempering [('system_temperatures', [0.1, 1, 10, 100])].png" width= 49%/>
+<img src="./plots/search_paths/ParallelTempering [('system_temperatures', [0.01, 100])].png" width= 49%/>
 </p>

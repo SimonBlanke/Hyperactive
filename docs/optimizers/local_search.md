@@ -11,20 +11,14 @@ Hill climbing is a very basic optimization technique, that explores the search s
 
 
 <p align="center">
-<embed src="./plots/search_paths/Bayesian.pdf" width= 49% height="600"/>
-<embed src="./plots/search_paths/Bayesian.pdf" width= 49% height="600"/>
+<img src="./plots/search_paths/HillClimbing [('epsilon', 0.03)].png" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('epsilon', 0.1)].png" width= 49%/>
 </p>
 
 <p align="center">
-<img src="./plots/search_paths/Bayesian.pdf" width= 49%/>
-<img src="./plots/search_paths/Bayesian.pdf" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('climb_dist', 'laplace')].png" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('climb_dist', 'logistic')].png" width= 49%/>
 </p>
-
-<p align="center">
-<img src="./plots/search_paths/HillClimbing [('epsilon', 0.1)].svg" width= 49%/>
-<img src="./plots/search_paths/HillClimbing [('epsilon', 0.03)].svg" width= 49%/>
-</p>
-
 
 ## Stochastic Hill Climbing
 Stochastic hill climbing extends the normal hill climbing by a simple method against getting stuck in local optima. It has a parameter you can set, that determines the probability to accept worse solutions as a next position.
@@ -36,10 +30,14 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 - When you have a very good initial point to start from
 
 <p align="center">
-<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.5)].svg" width= 49%/>
-<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.8)].svg" width= 49%/>
+<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.1)].png" width= 49%/>
+<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.3)].png" width= 49%/>
 </p>
 
+<p align="center">
+<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.5)].png" width= 49%/>
+<img src="./plots/search_paths/StochasticHillClimbing [('p_down', 0.9)].png" width= 49%/>
+</p>
 
 ## Tabu Search
 
@@ -51,6 +49,11 @@ Tabu search is a metaheuristic method, that explores new positions like hill cli
 - When you have a good initial point to start from
 
 <p align="center">
-<img src="./plots/search_paths/TabuSearch [('tabu_memory', 3)].svg" width= 49%/>
-<img src="./plots/search_paths/TabuSearch [('tabu_memory', 10)].svg" width= 49%/>
+<img src="./plots/search_paths/TabuSearch [('tabu_memory', 1)].png" width= 49%/>
+<img src="./plots/search_paths/TabuSearch [('tabu_memory', 3)].png" width= 49%/>
+</p>
+
+<p align="center">
+<img src="./plots/search_paths/TabuSearch [('tabu_memory', 10)].png" width= 49%/>
+<img src="./plots/search_paths/TabuSearch [('tabu_memory', 3), ('epsilon', 0.1)].png" width= 49%/>
 </p>

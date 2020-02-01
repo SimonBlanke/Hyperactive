@@ -9,7 +9,7 @@ The random search explores by choosing a new position at random after each itera
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="./plots/search_paths/RandomSearch.svg" width= 49%/>
+<img src="./plots/search_paths/RandomSearch.png" width= 49%/>
 </p>
 
 
@@ -24,8 +24,8 @@ Random restart hill climbing works by starting a hill climbing search and jumpin
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="./plots/search_paths/RandomRestartHillClimbing [('n_restarts', 5)].svg" width= 49%/>
-<img src="./plots/search_paths/RandomRestartHillClimbing [('n_restarts', 10)].svg" width= 49%/>
+<img src="./plots/search_paths/RandomRestartHillClimbing [('n_restarts', 5)].png" width= 49%/>
+<img src="./plots/search_paths/RandomRestartHillClimbing [('n_restarts', 10)].png" width= 49%/>
 </p>
 
 
@@ -41,8 +41,8 @@ An algorithm that chooses a new position within a large hypersphere around the c
 - For a short optimization run to get an acceptable solution
 
 <p align="center">
-<img src="./plots/search_paths/RandomAnnealing [('epsilon', 0.1)].svg" width= 49%/>
-<img src="./plots/search_paths/RandomAnnealing [('epsilon', 0.3)].svg" width= 49%/>
-<img src="./plots/search_paths/RandomAnnealing [('epsilon', 0.5)].svg" width= 49%/>
-<img src="./plots/search_paths/RandomAnnealing [('epsilon', 1)].svg" width= 49%/>
+<img src="./plots/search_paths/RandomAnnealing [('epsilon_mod', 3)].png" width= 49%/>
+<img src="./plots/search_paths/RandomAnnealing [('epsilon_mod', 10)].png" width= 49%/>
+<img src="./plots/search_paths/RandomAnnealing [('epsilon_mod', 25)].png" width= 49%/>
+<img src="./plots/search_paths/RandomAnnealing [('epsilon_mod', 25), ('annealing_rate', 0.9)].png" width= 49%/>
 </p>

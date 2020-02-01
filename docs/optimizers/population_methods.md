@@ -9,8 +9,8 @@ Particle swarm optimization works by initializing a number of positions at the s
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_paths/ParticleSwarm [('n_particles', 10)].svg" width= 49%/>
-<img src="./plots/search_paths/ParticleSwarm [('n_particles', 20)].svg" width= 49%/>
+<img src="./plots/search_paths/ParticleSwarm [('n_particles', 4)].png" width= 49%/>
+<img src="./plots/search_paths/ParticleSwarm [('n_particles', 10)].png" width= 49%/>
 </p>
 
 
@@ -24,8 +24,8 @@ Evolution strategy mutates and combines the best individuals of a population acr
 - If you have enough time for many model evaluations
 
 <p align="center">
-<img src="./plots/search_paths/EvolutionStrategy [('individuals', 4)].svg" width= 49%/>
-<img src="./plots/search_paths/EvolutionStrategy [('individuals', 10)].svg" width= 49%/>
-<img src="./plots/search_paths/EvolutionStrategy [('individuals', 10), ('mutation_rate', 0.1), ('crossover_rate', 0.9)].svg" width= 49%/>
-<img src="./plots/search_paths/EvolutionStrategy [('individuals', 10), ('mutation_rate', 0.9), ('crossover_rate', 0.1)].svg" width= 49%/>
+<img src="./plots/search_paths/EvolutionStrategy [('individuals', 4)].png" width= 49%/>
+<img src="./plots/search_paths/EvolutionStrategy [('individuals', 10)].png" width= 49%/>
+<img src="./plots/search_paths/EvolutionStrategy [('individuals', 10), ('mutation_rate', 0.1), ('crossover_rate', 0.9)].png" width= 49%/>
+<img src="./plots/search_paths/EvolutionStrategy [('individuals', 10), ('mutation_rate', 0.9), ('crossover_rate', 0.1)].png" width= 49%/>
 </p>
