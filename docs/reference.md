@@ -117,17 +117,17 @@ Starts the optimization run.
 
 | Argument | type | default |
 |---|---|---|
-| epsilon | float | 0.03 |
+| epsilon | float | 0.05 |
 | climb_dist | object | numpy.random.normal |
 | n_neighbours | int | 1 |
-| p_down | float | 1 |
-| tabu_memory | int | 10 |
+| p_down | float | 0.3 |
+| tabu_memory | int | 3 |
 | n_restarts | int | 10 |
 | epsilon_mod | float | 33 |
 | annealing_rate | float | 0.99 |
 | start_temp | float | 1 |
 | gamma | float | 0.5 |
-| system_temperatures | list | [0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10] |
+| system_temperatures | list | [0.1, 1, 10, 100] |
 | n_swaps | int | 10 |
 | n_particles | int | 10 |
 | inertia | float | 0.5 |
@@ -136,6 +136,8 @@ Starts the optimization run.
 | individuals | int | 10 |
 | mutation_rate | float | 0.7 |
 | crossover_rate | float | 0.3 |
+| warm_start_smbo  |  bool |  False |
+|  xi |  float | 0.01  |
 | kernel | object | sklearn.gaussian_process.kernels.Matern(nu=2.5) |
 
 
