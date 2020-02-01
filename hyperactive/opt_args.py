@@ -11,9 +11,7 @@ from numpy.random import normal
 
 class GPR:
     def __init__(self):
-        self.gpr = GaussianProcessRegressor(
-            kernel=Matern(nu=2.5), normalize_y=True, n_restarts_optimizer=10
-        )
+        self.gpr = GaussianProcessRegressor(kernel=Matern(nu=2.5), normalize_y=True)
 
     def fit(self, X, y):
         self.gpr.fit(X, y)
@@ -26,11 +24,11 @@ class Arguments:
     def __init__(self, *args, **kwargs):
         kwargs_opt = {
             # HillClimbingOptimizer
-            "epsilon": 0.03,
+            "epsilon": 0.05,
             "climb_dist": normal,
             "n_neighbours": 1,
             # StochasticHillClimbingOptimizer
-            "p_down": 0.5,
+            "p_down": 0.3,
             # TabuOptimizer
             "tabu_memory": 10,
             # RandomRestartHillClimbingOptimizer
