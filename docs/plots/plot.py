@@ -20,17 +20,17 @@ def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
     file_name_2 = "./data/opt_time_" + model_name
 
     eval_time_model = pd.read_csv(file_name_1, header=0)
-    opt_time_model = pd.read_csv(file_name_2, header=0)
+    iter_time_model = pd.read_csv(file_name_2, header=0)
 
     columns = eval_time_model.columns
     eval_time = eval_time_model.values
-    opt_time = opt_time_model.values
-
-    opt_time_mean = opt_time.mean(axis=0)
-    opt_time_std = opt_time.std(axis=0)
+    iter_time = iter_time_model.values
 
     eval_time_mean = eval_time.mean(axis=0)
     eval_time_std = eval_time.std(axis=0)
+
+    opt_time_mean = iter_time.mean(axis=0) - eval_time_mean
+    opt_time_std = iter_time.std(axis=0)
 
     ind = np.arange(opt_time_mean.shape[0])  # the x locations for the groups
     width = 0.35  # the width of the bars: can also be len(x) sequence
