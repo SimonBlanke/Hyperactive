@@ -71,7 +71,7 @@ class BaseOptimizer:
             if self._main_args_.get_search_path:
                 self._monitor_search_path(_p_)
 
-            _cand_.opt_times.append(time.time() - c_time)
+            _cand_.iter_times.append(time.time() - c_time)
 
         self._pbar_.close_p_bar()
         return _cand_
@@ -110,7 +110,7 @@ class BaseOptimizer:
         _cand_ = self._search(nth_process)
         self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
         self.eval_times[_cand_.func_] = _cand_.eval_time
-        self.opt_times[_cand_.func_] = _cand_.opt_times
+        self.iter_times[_cand_.func_] = _cand_.iter_times
         self.best_scores[_cand_.func_] = _cand_.score_best
 
     def _run_multiple_jobs(self):
@@ -122,14 +122,14 @@ class BaseOptimizer:
         for _cand_ in _cand_list:
             self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
             self.eval_times[_cand_.func_] = _cand_.eval_time
-            self.opt_times[_cand_.func_] = _cand_.opt_times
+            self.iter_times[_cand_.func_] = _cand_.iter_times
             self.best_scores[_cand_.func_] = _cand_.score_best
 
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
         self.results = {}
         self.eval_times = {}
-        self.opt_times = {}
+        self.iter_times = {}
         self.best_scores = {}
 
         if rayInit:
@@ -144,6 +144,6 @@ class BaseOptimizer:
             self.pos_list,
             self.score_list,
             self.eval_times,
-            self.opt_times,
+            self.iter_times,
             self.best_scores,
         )

@@ -32,7 +32,7 @@ class Distribution:
 
     def dist_default(self, optimizer_class, _main_args_, _opt_args_):
         _optimizer_ = optimizer_class(_main_args_, _opt_args_)
-        self.results, self.pos, self.scores, self.eval_times, self.opt_times, self.best_scores = (
+        self.results, self.pos, self.scores, self.eval_times, self.iter_times, self.best_scores = (
             _optimizer_.search()
         )
 
@@ -45,7 +45,7 @@ class Distribution:
         searches = [
             opt.search.remote(job, rayInit=True) for job, opt in enumerate(opts)
         ]
-        self.results, self.pos, self.scores, self.eval_times, self.opt_times, self.best_scores = ray.get(
+        self.results, self.pos, self.scores, self.eval_times, self.iter_times, self.best_scores = ray.get(
             searches
         )[
             0
