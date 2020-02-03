@@ -52,7 +52,7 @@ class TabuPositioner(HillClimbingPositioner):
             self.tabus.pop(0)
 
     def move_climb(self, _cand_, pos, epsilon_mod=1):
-        sigma = 3 + _cand_._space_.dim * self.epsilon * epsilon_mod
+        sigma = 1 + _cand_._space_.dim * self.epsilon * epsilon_mod
         pos_normal = np.random.normal(pos, sigma, pos.shape)
         pos_new_int = np.rint(pos_normal)
 
