@@ -23,11 +23,10 @@ class BayesianOptimizer(BaseOptimizer):
         sigma = sigma.reshape(-1, 1)
         mu_sample_opt = np.max(mu_sample)
 
-        with np.errstate(divide="warn"):
-            imp = mu - mu_sample_opt - self._opt_args_.xi
-            Z = imp / sigma
-            exp_imp = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
-            exp_imp[sigma == 0.0] = 0.0
+        imp = mu - mu_sample_opt - self._opt_args_.xi
+        Z = np.divide(imp, sigma, out=np.zeros_like(sigma), where=sigma != 0)
+        exp_imp = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
+        exp_imp[sigma == 0.0] = 0.0
 
         return exp_imp
 
