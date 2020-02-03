@@ -42,11 +42,17 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
                 _p2_.temp = temp_temp
 
     def _accept_swap(self, _p1_, _p2_):
-        score_diff_norm = (_p1_.score_current - _p2_.score_current) / (
-            _p1_.score_current + _p2_.score_current
-        )
-        temp = (1 / _p1_.temp) - (1 / _p2_.temp)
-        return np.exp(score_diff_norm * temp)
+        denom = _p1_.score_current + _p2_.score_current
+
+        if denom == 0:
+            return 100
+        elif abs(denom) == np.inf:
+            return 0
+        else:
+            score_diff_norm = (_p1_.score_current - _p2_.score_current) / denom
+
+            temp = (1 / _p1_.temp) - (1 / _p2_.temp)
+            return np.exp(score_diff_norm * temp)
 
     def _annealing_systems(self, _cand_, _p_list_):
         for _p_ in _p_list_:

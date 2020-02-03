@@ -20,11 +20,14 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
             _p_.pos_current = _p_.pos_new
 
     def _score_norm(self, _p_):
-        return (
-            100
-            * (_p_.score_current - _p_.score_new)
-            / (_p_.score_current + _p_.score_new)
-        )
+        denom = _p_.score_current + _p_.score_new
+
+        if denom == 0:
+            return 1
+        elif abs(denom) == np.inf:
+            return 0
+        else:
+            return 100 * (_p_.score_current - _p_.score_new) / denom
 
     def _accept(self, _p_):
         return np.exp(-self._score_norm(_p_))
