@@ -9,7 +9,7 @@ from ..local import HillClimbingOptimizer
 class RandomAnnealingOptimizer(HillClimbingOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
-        self.temp = 1
+        self.temp = _opt_args_.start_temp
 
     def _iterate(self, i, _cand_, _p_):
         _p_.pos_new = _p_.move_climb(

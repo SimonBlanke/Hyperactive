@@ -37,7 +37,7 @@ class Arguments:
             "epsilon_mod": 10,
             "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
-            "start_temp": 1,  # TODO
+            "start_temp": 1,
             # StochasticTunnelingOptimizer
             "gamma": 0.5,
             # ParallelTemperingOptimizer
@@ -71,6 +71,7 @@ class Arguments:
         self.n_restarts = kwargs_opt["n_restarts"]
         self.epsilon_mod = kwargs_opt["epsilon_mod"]
         self.annealing_rate = kwargs_opt["annealing_rate"]
+        self.start_temp = kwargs_opt["start_temp"]
         self.gamma = kwargs_opt["gamma"]
         self.system_temperatures = kwargs_opt["system_temperatures"]
         self.n_swaps = kwargs_opt["n_swaps"]
