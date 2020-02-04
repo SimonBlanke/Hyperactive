@@ -234,7 +234,7 @@ pip install hyperactive
   - [x] Ray integration
 </details>
 
-<details open>
+<details>
 <summary><b>v2.1.0</b>:heavy_check_mark:</summary>
 
   - [x] Save memory of evaluations for later runs (long term memory)
@@ -242,11 +242,19 @@ pip install hyperactive
   - [x] Gaussian process regressors from various packages (gpy, sklearn, GPflow, ...) via wrapper
 </details>
 
-<details>
+<details open>
 <summary><b>v2.2.0</b></summary>
 
   - [ ] Add basic dataset meta-features to long term memory
-  - [ ] Enable model specific meta-learning
+  - [ ] Add helper-functions for memory
+      - [ ] connect two different model/dataset hashes
+      - [ ] split two different model/dataset hashes
+      - [ ] delete memory of model/dataset
+      - [ ] return best known model for dataset
+      - [ ] return search space for best model
+      - [ ] list available models
+      - [ ] add/remove long term memory path
+  - [ ] add optimizer meta-data
 </details>
 
 <details>
@@ -255,13 +263,14 @@ pip install hyperactive
   - [ ] Tree-structured Parzen Estimator
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
+  - [ ] Differential evolution
 </details>
 
 <details>
 <summary><b>v2.4.0</b></summary>
 
-  - [ ] Helper-classes for early stopping
-  - [ ] Helper-classes for dataset approximation
+  - [ ] Helper-functions for early stopping
+  - [ ] Helper-functions for dataset approximation
 </details>
 
 <br>
