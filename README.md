@@ -235,7 +235,7 @@ pip install hyperactive
 </details>
 
 <details open>
-<summary><b>v2.1.0</b></summary>
+<summary><b>v2.1.0</b>:heavy_check_mark:</summary>
 
   - [x] Save memory of evaluations for later runs (long term memory)
   - [x] Warm start sequence based optimizers with long term memory
