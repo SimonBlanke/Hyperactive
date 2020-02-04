@@ -11,6 +11,11 @@ from .memory_load import MemoryLoad
 from .memory_dump import MemoryDump
 
 
+class Memory:
+    def __init__(self):
+        pass
+
+
 class BaseMemory:
     def __init__(self, _space_, _main_args_, _cand_):
         self._space_ = _space_
