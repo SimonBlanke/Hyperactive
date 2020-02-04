@@ -11,7 +11,7 @@ from .memory_load import MemoryLoad
 from .memory_dump import MemoryDump
 
 
-class Memory:
+class BaseMemory:
     def __init__(self, _space_, _main_args_, _cand_):
         self._space_ = _space_
         self._main_args_ = _main_args_
@@ -27,12 +27,12 @@ class Memory:
         self.n_dims = None
 
 
-class ShortTermMemory(Memory):
+class ShortTermMemory(BaseMemory):
     def __init__(self, _space_, _main_args_, _cand_):
         super().__init__(_space_, _main_args_, _cand_)
 
 
-class LongTermMemory(Memory):
+class LongTermMemory(BaseMemory):
     def __init__(self, _space_, _main_args_, _cand_):
         super().__init__(_space_, _main_args_, _cand_)
 
