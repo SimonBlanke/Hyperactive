@@ -2,24 +2,30 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import tqdm
+
 import time
-from hyperactive import Hyperactive
+import tqdm
+import hyperactive
 
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_val_score
 
+from hyperactive import Hyperactive
+
+
+version = str("_v" + hyperactive.__version__)
 
 #################################################################################################
 
-runs = 3
-n_iter = 100
+runs = 1
+n_iter = 10
+cv = 5
 
 opt_list = [
     "HillClimbing",
     "StochasticHillClimbing",
-    # "TabuSearch",
+    "TabuSearch",
     "RandomSearch",
     "RandomRestartHillClimbing",
     "RandomAnnealing",
@@ -28,75 +34,71 @@ opt_list = [
     "ParallelTempering",
     "ParticleSwarm",
     "EvolutionStrategy",
-    # "Bayesian",
+    "Bayesian",
 ]
+
 
 #################################################################################################
 
 
-def collect_data(runs, X, y, opt_list, search_config, n_iter):
+def collect_data(runs, X, y, sklearn_model, opt_list, search_config, n_iter):
     time_c = time.time()
 
-    data_runs_1 = []
-    data_runs_2 = []
-    for run in tqdm.tqdm(range(runs)):
+    data_runs = []
+    for run in range(runs):
         print("\nRun nr.", run, "\n")
-        eval_time_list = []
-        opt_time_list = []
+        time_opt = []
 
-        for key in opt_list:
-            print("optimizer:", key)
+        start = time.perf_counter()
+        for i in tqdm.tqdm(range(n_iter)):
+            scores = cross_val_score(
+                sklearn_model, X, y, scoring="accuracy", n_jobs=1, cv=cv
+            )
+        time_ = time.perf_counter() - start
+
+        time_opt.append(time_)
+        # data["No Opt"]["0"] = time_
+
+        for opt_str in opt_list:
+            print("optimizer:", opt_str, type(opt_str))
 
             n_iter_temp = n_iter
-
-            if key == "ParallelTempering":
+            if opt_str == "ParallelTempering":
                 n_iter_temp = int(n_iter / 4)
 
-            if key == "ParticleSwarm":
+            if opt_str == "ParticleSwarm":
                 n_iter_temp = int(n_iter / 10)
 
-            if key == "EvolutionStrategy":
+            if opt_str == "EvolutionStrategy":
                 n_iter_temp = int(n_iter / 10)
 
-            opt_obj = Hyperactive(X, y, memory=False)
-            opt_obj.search(search_config, optimizer=key, n_iter=n_iter_temp)
+            opt = Hyperactive(X, y, memory=False)
 
-            model = list(search_config.keys())[0]
+            start = time.perf_counter()
+            opt.search(search_config, n_iter=n_iter_temp, optimizer=opt_str)
+            time_ = time.perf_counter() - start
 
-            eval_times = opt_obj.eval_times[model]
-            opt_times = opt_obj.opt_times[model]
+            time_opt.append(time_)
 
-            eval_time = np.array(eval_times).sum()
-            opt_time = np.array(opt_times).sum()
+        time_opt = np.array(time_opt)
+        time_opt = time_opt / n_iter
+        # time_opt = np.expand_dims(time_opt_norm, axis=0)
 
-            eval_time_list.append(eval_time)
-            opt_time_list.append(opt_time)
+        data_runs.append(time_opt)
 
-        eval_time_list = np.array(eval_time_list)
-        opt_time_list = np.array(opt_time_list)
-
-        data_runs_1.append(eval_time_list)
-        data_runs_2.append(opt_time_list)
-
-    data_runs_1 = np.array(data_runs_1)
-    data_runs_2 = np.array(data_runs_2)
-
+    data_runs = np.array(data_runs)
     print("\nCreate Dataframe\n")
 
-    print("data_runs_1", data_runs_1, data_runs_1.shape)
+    print("data_runs", data_runs, data_runs.shape)
 
-    data = pd.DataFrame(data_runs_1, columns=opt_list)
+    column_names = ["No Opt."] + opt_list
+    data = pd.DataFrame(data_runs, columns=column_names)
 
     model_name = list(search_config.keys())[0]
 
-    calc_optimizer_time_name = "eval_time_" + model_name.__name__
-
-    file_name = str(calc_optimizer_time_name)
-    data.to_csv(file_name, index=False)
-
-    data = pd.DataFrame(data_runs_2, columns=opt_list)
-
-    calc_optimizer_time_name = "opt_time_" + model_name.__name__
+    calc_optimizer_time_name = (
+        "optimizer_calc_time_" + str(sklearn_model.__class__.__name__) + ".csv"
+    )
 
     file_name = str(calc_optimizer_time_name)
     data.to_csv(file_name, index=False)
@@ -106,7 +108,6 @@ def collect_data(runs, X, y, opt_list, search_config, n_iter):
 
 #################################################################################################
 from sklearn.datasets import load_iris
-from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 
 iris_data = load_iris()
@@ -114,22 +115,60 @@ iris_X, iris_y = iris_data.data, iris_data.target
 
 
 def model(para, X, y):
-    dtc = GradientBoostingClassifier(max_depth=para["max_depth"])
-    scores = cross_val_score(dtc, X, y, cv=2)
+    dtc = DecisionTreeClassifier(
+        max_depth=para["max_depth"],
+        min_samples_split=para["min_samples_split"],
+        min_samples_leaf=para["min_samples_leaf"],
+    )
+    scores = cross_val_score(dtc, X, y, cv=cv)
 
     return scores.mean()
 
 
-search_config = {model: {"max_depth": range(2, 20)}}
-
+search_config_DTC = {
+    model: {
+        "max_depth": range(1, 21),
+        "min_samples_split": range(2, 21),
+        "min_samples_leaf": range(1, 21),
+    }
+}
 
 data_runs_dict_KNN = {
     "runs": runs,
     "X": iris_X,
     "y": iris_y,
+    "sklearn_model": DecisionTreeClassifier(),
     "opt_list": opt_list,
-    "search_config": search_config,
+    "search_config": search_config_DTC,
     "n_iter": n_iter,
 }
 
-data_runs = collect_data(**data_runs_dict_KNN)
+collect_data(**data_runs_dict_KNN)
+
+#################################################################################################
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.datasets import load_breast_cancer
+
+data = load_breast_cancer()
+cancer_X, cancer_y = data.data, data.target
+
+
+def model(para, X, y):
+    gbc = GradientBoostingClassifier(n_estimators=para["n_estimators"])
+    scores = cross_val_score(gbc, X, y, cv=cv)
+
+    return scores.mean()
+
+
+search_config_gbc = {model: {"n_estimators": range(99, 102)}}
+data_runs_dict_gbc = {
+    "runs": runs,
+    "X": cancer_X,
+    "y": cancer_y,
+    "sklearn_model": GradientBoostingClassifier(n_estimators=100),
+    "opt_list": opt_list,
+    "search_config": search_config_gbc,
+    "n_iter": n_iter,
+}
+
+# collect_data(**data_runs_dict_gbc)

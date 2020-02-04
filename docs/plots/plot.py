@@ -16,20 +16,23 @@ sns.set(style="whitegrid")
 
 
 def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
-    file_name_1 = "./data/eval_time_" + model_name
-    file_name_2 = "./data/opt_time_" + model_name
+    file_name_1 = "./data/optimizer_calc_time_GradientBoostingClassifier.csv"
 
-    eval_time_model = pd.read_csv(file_name_1, header=0)
-    iter_time_model = pd.read_csv(file_name_2, header=0)
+    iter_time_model = pd.read_csv(file_name_1, header=0)
 
-    columns = eval_time_model.columns
-    eval_time = eval_time_model.values
-    iter_time = iter_time_model.values
+    columns = iter_time_model.columns[1:]
+    eval_time = iter_time_model.values[:, 0]
+    iter_time = iter_time_model.values[:, 1:]
+
+    print("eval_time", eval_time)
+    print("iter_time", iter_time, iter_time.shape)
 
     eval_time_mean = eval_time.mean(axis=0)
     eval_time_std = eval_time.std(axis=0)
 
-    opt_time_mean = iter_time.mean(axis=0) - eval_time_mean
+    eval_times = np.ones(eval_time_mean.shape)
+
+    opt_time_mean = (iter_time - eval_time_mean).mean(axis=0) / eval_time_mean
     opt_time_std = iter_time.std(axis=0)
 
     ind = np.arange(opt_time_mean.shape[0])  # the x locations for the groups
@@ -37,8 +40,11 @@ def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
 
     plt.figure(figsize=(15, 5))
 
-    p1 = plt.bar(ind, eval_time_mean, width, yerr=eval_time_std)
-    p2 = plt.bar(ind, opt_time_mean, width, bottom=eval_time_mean, yerr=opt_time_std)
+    print("\neval_times\n", eval_times)
+    print("\nopt_time_mean\n", opt_time_mean)
+
+    p2 = plt.bar(ind, opt_time_mean, width, bottom=eval_times, yerr=opt_time_std)
+    p1 = plt.bar(ind, eval_times, width, yerr=eval_time_std)
 
     plt.ylabel("Time")
     plt.title(title)
@@ -47,7 +53,7 @@ def plot_optimizer_time(model_name, y_min, y_max, step_major, title):
     plt.legend((p1[0], p2[0]), ("Eval time", "Opt time"))
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig("performance.png", dpi=400)
 
     """
     values_norm = values / no_opt[:, None]
