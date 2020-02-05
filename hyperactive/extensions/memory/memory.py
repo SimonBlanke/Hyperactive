@@ -20,6 +20,19 @@ class Memory:
         self.meta_learn_path, _ = current_path.rsplit("/", 1)
         self.meta_path = self.meta_learn_path + "/meta_data/"
 
+    def get_best_models(self, X, y):
+        # TODO: model_dict   key:model   value:score
+
+        return model_dict
+
+    def get_model_search_config(self, model):
+        # TODO
+        return search_config
+
+    def get_model_init_config(self, model):
+        # TODO
+        return init_config
+
     def delete_model(self, model):
         model_hash = self._get_model_hash(model)
         shutil.rmtree(self.meta_path + str(model_hash))
@@ -50,7 +63,7 @@ class Memory:
             json.dump(data, f)
 
     def split_model_hashes(self, model1, model2):
-        # do checks if search space has same dim
+        # TODO: do checks if search space has same dim
 
         with open(self.meta_path + 'model_connections.json') as f:
             data = json.load(f)
