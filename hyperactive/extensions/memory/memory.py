@@ -2,6 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
+import json
+import shutil
 import hashlib
 import inspect
 
@@ -13,7 +16,70 @@ from .memory_dump import MemoryDump
 
 class Memory:
     def __init__(self):
-        pass
+        current_path = os.path.realpath(__file__)
+        self.meta_learn_path, _ = current_path.rsplit("/", 1)
+        self.meta_path = self.meta_learn_path + "/meta_data/"
+
+    def delete_model(self, model):
+        model_hash = self._get_model_hash(model)
+        shutil.rmtree(self.meta_path + str(model_hash))
+
+    def delete_model_dataset(self, model, X, y):
+        self.func_path_ = self._get_model_hash(model) + "/"
+        self.func_path = self.meta_path + self.func_path_
+
+        self.feature_hash = self._get_hash(X)
+        self.label_hash = self._get_hash(y)
+
+        csv_file = self._get_file_path()
+        os.remove(csv_file)
+
+    def merge_model_hashes(self, model1, model2):
+        # do checks if search space has same dim
+
+        with open(self.meta_path + 'model_connections.json') as f:
+            data = json.load(f)
+
+        model1_hash = self._get_model_hash(model1)
+        model2_hash = self._get_model_hash(model2)
+
+        models_dict = {str(model1_hash): str(model2_hash)}
+        data.update(models_dict)
+
+        with open(self.meta_path + 'model_connections.json', 'w') as f:
+            json.dump(data, f)
+
+    def split_model_hashes(self, model1, model2):
+        # do checks if search space has same dim
+
+        with open(self.meta_path + 'model_connections.json') as f:
+            data = json.load(f)
+
+        model1_hash = self._get_model_hash(model1)
+        model2_hash = self._get_model_hash(model2)
+
+        if model1_hash in data.keys():
+            del data[model1_hash]
+        if model2_hash in data.keys():
+            del data[model2_hash]
+
+        with open(self.meta_path + 'model_connections.json', 'w') as f:
+            json.dump(data, f)
+
+    def _get_model_hash(self, model):
+        return self._get_hash(self._get_func_str(model).encode("utf-8"))
+
+    def _get_file_path(self):
+        if not os.path.exists(self.date_path):
+            os.makedirs(self.date_path)
+
+        return self.func_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
+
+    def _get_func_str(self, func):
+        return inspect.getsource(func)
+
+    def _get_hash(self, object):
+        return hashlib.sha1(object).hexdigest()
 
 
 class BaseMemory:
