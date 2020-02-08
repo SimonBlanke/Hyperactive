@@ -11,6 +11,7 @@ from . import HillClimbingOptimizer
 class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
+        self.norm_factor = _opt_args_.norm_factor
 
     def _consider(self, _p_, p_accept):
         rand = random.uniform(0, self._opt_args_.p_down)
@@ -27,7 +28,7 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
         elif abs(denom) == np.inf:
             return 0
         else:
-            return 100 * (_p_.score_current - _p_.score_new) / denom
+            return self.norm_factor * (_p_.score_current - _p_.score_new) / denom
 
     def _accept(self, _p_):
         return np.exp(-self._score_norm(_p_))
