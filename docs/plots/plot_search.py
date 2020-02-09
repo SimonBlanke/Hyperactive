@@ -173,4 +173,4 @@ for opt, opt_para in zip(opt_list, opt_para_names):
     plt.colorbar()
 
     plt.tight_layout()
-    plt.savefig("./search_paths/" + opt_file_name + ".png", dpi=400)
+    plt.savefig("./temp/search_paths/" + opt_file_name + ".png", dpi=400)

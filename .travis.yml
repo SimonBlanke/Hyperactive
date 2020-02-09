@@ -12,6 +12,7 @@ python:
   - "3.7"
 
 install:
+  - pip install scipy
   - pip install numpy
   - pip install scikit-learn
   - pip install dill

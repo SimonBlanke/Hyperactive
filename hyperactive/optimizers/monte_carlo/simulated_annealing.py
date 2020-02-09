@@ -15,8 +15,11 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
 
     # use _consider from StochasticHillClimbingOptimizer
 
-    def _accept(self, _p_):
+    def _accept_default(self, _p_):
         return np.exp(-self._score_norm(_p_) / self.temp)
+
+    def _accept_adapt(self, _p_):
+        return self._score_norm_adapt(_p_) * self.temp
 
     def _iterate(self, i, _cand_, _p_):
         _cand_ = self._stochastic_hill_climb_iter(_cand_, _p_)

@@ -9,12 +9,10 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 from hyperactive import Hyperactive
+from hyperactive.memory import delete_model
 
 data = load_iris()
-X = data.data
-y = data.target
-
-memory = False
+X, y = data.data, data.target
 
 
 def test_short_term_memory():
@@ -42,6 +40,8 @@ def test_long_term_memory_times():
         return scores.mean()
 
     search_config = {_model_: {"max_depth": range(2, 500)}}
+
+    delete_model(_model_)
 
     c_time = time.time()
     opt = Hyperactive(X, y, memory="long")
