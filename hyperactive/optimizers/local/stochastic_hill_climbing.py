@@ -13,6 +13,12 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
         super().__init__(_main_args_, _opt_args_)
         self.norm_factor = _opt_args_.norm_factor
 
+        if self.norm_factor == "adaptive":
+            self._accept = self._accept_adapt
+            self.diff_max = 0
+        else:
+            self._accept = self._accept_default
+
     def _consider(self, _p_, p_accept):
         rand = random.uniform(0, self._opt_args_.p_down)
 
@@ -20,7 +26,7 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
             _p_.score_current = _p_.score_new
             _p_.pos_current = _p_.pos_new
 
-    def _score_norm(self, _p_):
+    def _score_norm_default(self, _p_):
         denom = _p_.score_current + _p_.score_new
 
         if denom == 0:
@@ -30,14 +36,32 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
         else:
             return self.norm_factor * (_p_.score_current - _p_.score_new) / denom
 
-    def _accept(self, _p_):
+    def _score_norm_adapt(self, _p_):
+        diff = abs(_p_.score_current - _p_.score_new)
+        if self.diff_max < diff:
+            self.diff_max = diff
+
+        denom = self.diff_max + diff
+
+        if denom == 0:
+            return 1
+        elif abs(denom) == np.inf:
+            return 0
+        else:
+            return abs(self.diff_max - diff) / denom
+
+    def _accept_default(self, _p_):
         return np.exp(-self._score_norm(_p_))
+
+    def _accept_adapt(self, _p_):
+        return self._score_norm_adapt(_p_)
 
     def _stochastic_hill_climb_iter(self, _cand_, _p_):
         _cand_, _p_ = self._hill_climb_iter(_cand_, _p_)
 
         if _p_.score_new <= _cand_.score_best:
             p_accept = self._accept(_p_)
+            print("p_accept", p_accept)
             self._consider(_p_, p_accept)
 
         return _cand_

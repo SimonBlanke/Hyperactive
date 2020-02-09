@@ -49,9 +49,7 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         elif abs(denom) == np.inf:
             return 0
         else:
-            score_diff_norm = (
-                self.norm_factor * (_p1_.score_current - _p2_.score_current) / denom
-            )
+            score_diff_norm = (_p1_.score_current - _p2_.score_current) / denom
 
             temp = (1 / _p1_.temp) - (1 / _p2_.temp)
             return np.exp(score_diff_norm * temp)

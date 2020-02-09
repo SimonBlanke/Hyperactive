@@ -38,7 +38,7 @@ class Arguments:
             "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
             "start_temp": 1,
-            "norm_factor": 10,
+            "norm_factor": "adaptive",
             # StochasticTunnelingOptimizer
             "gamma": 0.5,
             # ParallelTemperingOptimizer
