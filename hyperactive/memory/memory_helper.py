@@ -44,7 +44,6 @@ def delete_model(model):
 
 def delete_model_dataset(model, X, y):
     csv_file = _get_file_path(model, X, y)
-    print("csv_file", csv_file)
 
     if os.path.exists(csv_file):
         os.remove(csv_file)

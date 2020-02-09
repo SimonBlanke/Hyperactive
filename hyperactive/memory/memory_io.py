@@ -34,6 +34,8 @@ class MemoryIO:
         self.func_path = self.meta_path + self.func_path_
         self.date_path = self.meta_path + self.func_path_ + self.datetime + "/"
 
+        self.dataset_info_path = self.func_path + "dataset_info/"
+
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path, exist_ok=True)
 

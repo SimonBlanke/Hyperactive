@@ -2,9 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
-import json
-import shutil
 import hashlib
 import inspect
 

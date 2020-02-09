@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 from .memory_io import MemoryIO
+from .dataset_features import get_dataset_features
 
 
 class MemoryDump(MemoryIO):
@@ -22,18 +23,21 @@ class MemoryDump(MemoryIO):
     def _save_memory(self, _main_args_, _opt_args_, _cand_, memory_dict):
         self.memory_dict = memory_dict
 
+        # Save meta_data
         path = self._get_file_path(_cand_.func_)
         meta_data = self._collect(_cand_)
 
         meta_data["run"] = self.datetime
         self._save_toCSV(meta_data, path)
 
+        # Save function string
         obj_func_path = self.func_path + "objective_function.py"
         if not os.path.exists(obj_func_path):
             file = open(obj_func_path, "w")
             file.write(self._get_func_str(_cand_.func_))
             file.close()
 
+        # Save search_config
         search_config_path = self.date_path + "search_config.py"
         search_config_temp = dict(self._main_args_.search_config)
 
@@ -49,6 +53,15 @@ class MemoryDump(MemoryIO):
             file = open(search_config_path, "w")
             file.write(search_config_str)
             file.close()
+
+        # Save data_features
+        data_features = get_dataset_features(_main_args_.X, _main_args_.y)
+
+        if not os.path.exists(self.dataset_info_path):
+            os.makedirs(self.dataset_info_path, exist_ok=True)
+
+        with open(self.dataset_info_path + "data_features.json", "w") as f:
+            json.dump(data_features, f, indent=4)
 
         """
         os.chdir(self.date_path)
