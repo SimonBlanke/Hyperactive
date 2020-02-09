@@ -61,7 +61,6 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
 
         if _p_.score_new <= _cand_.score_best:
             p_accept = self._accept(_p_)
-            print("p_accept", p_accept)
             self._consider(_p_, p_accept)
 
         return _cand_
