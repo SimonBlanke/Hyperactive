@@ -52,7 +52,7 @@ def delete_model_dataset(model, X, y):
         print("Model data not found in memory")
 
 
-def merge_model_hashes(model1, model2):
+def merge_model_IDs(model1, model2):
     # do checks if search space has same dim
 
     with open(meta_path + "model_connections.json") as f:
@@ -61,14 +61,46 @@ def merge_model_hashes(model1, model2):
     model1_hash = _get_model_hash(model1)
     model2_hash = _get_model_hash(model2)
 
-    models_dict = {str(model1_hash): str(model2_hash)}
-    data.update(models_dict)
+    if model1_hash in data:
+        key_model = model1_hash
+        value_model = model2_hash
+        data = _connect_key2value(data, key_model, value_model)
+    elif model2_hash in data:
+        key_model = model2_hash
+        value_model = model1_hash
+        data = _connect_key2value(data, key_model, value_model)
+    else:
+        data[model1_hash] = [model2_hash]
+        print("IDs successfully connected")
 
     with open(meta_path + "model_connections.json", "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
 
 
-def split_model_hashes(model1, model2):
+def _connect_key2value(data, key_model, value_model):
+    if value_model in data[key_model]:
+        print("IDs of models are already connected")
+    else:
+        data[key_model].append(value_model)
+        print("IDs successfully connected")
+
+    return data
+
+
+def _split_key_value(data, key_model, value_model):
+    if value_model in data[key_model]:
+        data[key_model].remove(value_model)
+
+        if len(data[key_model]) == 0:
+            del data[key_model]
+        print("ID connection successfully deleted")
+    else:
+        print("IDs of models are already connected")
+
+    return data
+
+
+def split_model_IDs(model1, model2):
     # TODO: do checks if search space has same dim
 
     with open(meta_path + "model_connections.json") as f:
@@ -77,13 +109,19 @@ def split_model_hashes(model1, model2):
     model1_hash = _get_model_hash(model1)
     model2_hash = _get_model_hash(model2)
 
-    if model1_hash in data.keys():
-        del data[model1_hash]
-    if model2_hash in data.keys():
-        del data[model2_hash]
+    if model1_hash in data:
+        key_model = model1_hash
+        value_model = model2_hash
+        data = _split_key_value(data, key_model, value_model)
+    elif model2_hash in data:
+        key_model = model2_hash
+        value_model = model1_hash
+        data = _split_key_value(data, key_model, value_model)
+    else:
+        print("IDs of models are not connected")
 
     with open(meta_path + "model_connections.json", "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
 
 
 def _get_file_path(model, X, y):
@@ -97,7 +135,7 @@ def _get_file_path(model, X, y):
 
 
 def _get_model_hash(model):
-    return _get_hash(_get_func_str(model).encode("utf-8"))
+    return str(_get_hash(_get_func_str(model).encode("utf-8")))
 
 
 def _get_func_str(func):
