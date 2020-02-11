@@ -83,6 +83,9 @@ class MemoryIO:
 
         return hash2obj_dict
 
+    def _get_model_hash(self, model):
+        return str(self._get_hash(self._get_func_str(model).encode("utf-8")))
+
     def _get_para_hash_list(self):
         para_hash_list = []
         for key in self._space_.search_space.keys():
