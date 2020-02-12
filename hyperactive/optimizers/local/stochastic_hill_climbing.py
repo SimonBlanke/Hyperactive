@@ -51,7 +51,7 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
             return abs(self.diff_max - diff) / denom
 
     def _accept_default(self, _p_):
-        return np.exp(-self._score_norm(_p_))
+        return np.exp(-self._score_norm_default(_p_))
 
     def _accept_adapt(self, _p_):
         return self._score_norm_adapt(_p_)
