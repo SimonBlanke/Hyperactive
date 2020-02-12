@@ -10,9 +10,22 @@ import multiprocessing
 from .checks import check_hyperactive_para, check_search_para
 
 
+def stop_warnings():
+    # because sklearn warnings are annoying when they appear 100 times
+    def warn(*args, **kwargs):
+        pass
+
+    import warnings
+
+    warnings.warn = warn
+
+
 class MainArgs:
-    def __init__(self, X, y, memory, random_state, verbosity):
+    def __init__(self, X, y, memory, random_state, verbosity, warnings, ext_warnings):
         check_hyperactive_para(X, y, memory, random_state, verbosity)
+
+        if not ext_warnings:
+            stop_warnings()
 
         self._verb_ = None
         self.hyperactive_para = {
