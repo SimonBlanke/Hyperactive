@@ -46,16 +46,18 @@ class ParticleSwarmOptimizer(BaseOptimizer):
             _p_.velo = new_velocity
             _p_.pos_new = _p_.move_part(_cand_, _p_.pos_current)
 
-    def _eval_particles(self, _cand_, _p_list_):
-        for _p_ in _p_list_:
-            _p_.score_new = _cand_.eval_pos(_p_.pos_new)
+    def _eval_particle(self, _cand_, _p_):
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new)
 
-            if _p_.score_new > _cand_.score_best:
-                _cand_, _p_ = self._update_pos(_cand_, _p_)
+        if _p_.score_new > _cand_.score_best:
+            _cand_, _p_ = self._update_pos(_cand_, _p_)
 
     def _iterate(self, i, _cand_, _p_list_):
-        self._move_positioners(_cand_, _p_list_)
-        self._eval_particles(_cand_, _p_list_)
+        if i % self._opt_args_.n_particles == 0:
+            self._move_positioners(_cand_, _p_list_)
+
+        _p_current = _p_list_[i % self._opt_args_.n_particles]
+        self._eval_particle(_cand_, _p_current)
 
         return _cand_
 
