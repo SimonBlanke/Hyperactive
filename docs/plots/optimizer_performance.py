@@ -1,11 +1,13 @@
-
 import tqdm
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from hyperactive import Hyperactive
-from test_functions import sphere_function_search_config, rastrigin_function_search_config
+from test_functions import (
+    sphere_function_search_config,
+    rastrigin_function_search_config,
+)
 
-search_config_list = [sphere_function_search_config, rastrigin_function_search_config]
+search_config_list = [rastrigin_function_search_config]
 
 X, y = np.array([0]), np.array([0])
 
@@ -23,7 +25,6 @@ optimizer_list = [
     "EvolutionStrategy",
     # "Bayesian",
 ]
-
 
 
 losses = []
@@ -49,10 +50,10 @@ for optimizer in tqdm.tqdm(optimizer_list):
     losses.append(loss_opt)
 
 losses = np.array(losses).reshape(-1, 1)
-
+"""
 scaler = MinMaxScaler()
 losses = scaler.fit_transform(losses)
-
+"""
 for loss, optimizer in zip(losses, optimizer_list):
     print("\n", optimizer)
-    print("loss=", loss[0]*100)
+    print("loss=", loss[0] * 100)
