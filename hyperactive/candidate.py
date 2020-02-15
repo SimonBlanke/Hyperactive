@@ -105,4 +105,5 @@ class Candidate:
         else:
             score = self.base_eval(pos)
             self.mem.memory_dict[pos_str] = score
+            self.mem.memory_dict_new[pos_str] = score
             return score

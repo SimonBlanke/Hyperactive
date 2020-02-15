@@ -21,6 +21,7 @@ class BaseMemory:
 
         self.memory_type = _main_args_.memory
         self.memory_dict = {}
+        self.memory_dict_new = {}
 
         self.meta_data_found = False
 
@@ -43,7 +44,7 @@ class LongTermMemory(BaseMemory):
         self.memory_dict = self._load_._load_memory(_cand_, _verb_, self.memory_dict)
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
-        self._dump_._save_memory(_main_args_, _opt_args_, _cand_, self.memory_dict)
+        self._dump_._save_memory(_main_args_, _opt_args_, _cand_, self.memory_dict_new)
 
     def _get_hash(self, object):
         return hashlib.sha1(object).hexdigest()
