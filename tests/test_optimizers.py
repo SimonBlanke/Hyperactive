@@ -2,6 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
+
 from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
@@ -13,29 +15,20 @@ y = data.target
 
 memory = False
 
-n_iter = 30
+n_iter = 100
 
 
-def model(para, X_train, y_train):
-    model = DecisionTreeClassifier(
-        criterion=para["criterion"],
-        max_depth=para["max_depth"],
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
-    )
-    scores = cross_val_score(model, X_train, y_train, cv=2)
+def sphere_function(para, X_train, y_train):
+    loss = []
+    for key in para.keys():
+        if key == "iteration":
+            continue
+        loss.append(para[key] * para[key])
 
-    return scores.mean()
+    return -np.array(loss).sum()
 
 
-search_config = {
-    model: {
-        "criterion": ["gini", "entropy"],
-        "max_depth": range(1, 11),
-        "min_samples_split": range(2, 11),
-        "min_samples_leaf": range(1, 11),
-    }
-}
+search_config = {sphere_function: {"x1": range(-10, 10), "x2": range(-10, 10)}}
 
 
 def test_HillClimbingOptimizer():
@@ -95,4 +88,4 @@ def test_EvolutionStrategyOptimizer():
 
 def test_BayesianOptimizer():
     opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config, n_iter=n_iter, optimizer="Bayesian")
+    opt.search(search_config, n_iter=int(n_iter / 10), optimizer="Bayesian")
