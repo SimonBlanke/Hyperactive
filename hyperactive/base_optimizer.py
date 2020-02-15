@@ -3,6 +3,7 @@
 # License: MIT License
 
 import time
+import numpy as np
 import multiprocessing
 
 from .base_positioner import BasePositioner
@@ -63,11 +64,11 @@ class BaseOptimizer:
         self.best_scores[_cand_.func_] = _cand_.score_best
 
         if isinstance(_p_, list):
-            self.pos_list[_cand_.func_] = [p.pos_best_list for p in _p_]
-            self.score_list[_cand_.func_] = [p.score_best_list for p in _p_]
+            self.pos_list[_cand_.func_] = [np.array(p.pos_new_list) for p in _p_]
+            self.score_list[_cand_.func_] = [np.array(p.score_new_list) for p in _p_]
         else:
-            self.pos_list[_cand_.func_] = _p_.pos_best_list
-            self.score_list[_cand_.func_] = _p_.score_best_list
+            self.pos_list[_cand_.func_] = [np.array(_p_.pos_new_list)]
+            self.score_list[_cand_.func_] = [np.array(_p_.score_new_list)]
 
     def _run_multiple_jobs(self):
         _cand_list, _p_list = self._search_multiprocessing()

@@ -7,35 +7,35 @@ import numpy as np
 
 class BasePositioner:
     def __init__(self, *args, **kwargs):
-        self.pos_new = None
-        self.score_new = -np.inf
+        self._pos_new = None
+        self._score_new = -np.inf
 
         self.pos_current = None
         self.score_current = -np.inf
 
-        self._pos_best = None
-        self._score_best = -np.inf
+        self.pos_best = None
+        self.score_best = -np.inf
 
-        self.pos_best_list = []
-        self.score_best_list = []
-
-    @property
-    def pos_best(self):
-        return self._pos_best
-
-    @pos_best.setter
-    def pos_best(self, value):
-        self.pos_best_list.append(value)
-        self._pos_best = value
+        self.pos_new_list = []
+        self.score_new_list = []
 
     @property
-    def score_best(self):
-        return self._score_best
+    def pos_new(self):
+        return self._pos_new
 
-    @score_best.setter
-    def score_best(self, value):
-        self.score_best_list.append(value)
-        self._score_best = value
+    @pos_new.setter
+    def pos_new(self, value):
+        self.pos_new_list.append(value)
+        self._pos_new = value
+
+    @property
+    def score_new(self):
+        return self._score_new
+
+    @score_new.setter
+    def score_new(self, value):
+        self.score_new_list.append(value)
+        self._score_new = value
 
     def move_climb(self, _cand_, pos, epsilon_mod=1):
         sigma = 3 + _cand_._space_.dim * self.epsilon * epsilon_mod

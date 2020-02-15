@@ -97,7 +97,7 @@ x_range = range(0, 100)
 
 search_config = {test_func: {"x": x_range, "y": x_range}}
 
-n_iter = 50
+n_iter = 30
 
 
 def _plot(plt, pos, score):
@@ -134,22 +134,29 @@ for opt, opt_para in zip(opt_list, opt_para_names):
 
     Xy = np.array([0])
 
-    opt_ = Hyperactive(Xy, Xy, verbosity=10, memory=False, random_state=5)
+    opt_ = Hyperactive(Xy, Xy, memory=False, random_state=5)
     opt_.search(search_config, optimizer=opt, n_iter=n_iter_temp)
+
+    model = list(search_config.keys())[0]
 
     pos_list = opt_.pos_list
     score_list = opt_.score_list
 
-    pos_list = np.array(pos_list)
-    score_list = np.array(score_list)
+    pos_list = pos_list[model]
+    score_list = score_list[model]
 
     plt.figure(figsize=(5.5, 4.7))
     plt.set_cmap("jet")
 
-    pos_list = np.swapaxes(pos_list, 0, 1)
-    score_list = np.swapaxes(score_list, 0, 1)
+    print("\npos_list\n", pos_list)
+    print("\nscore_list\n", score_list)
+
+    # pos_list = np.swapaxes(pos_list, 0, 1)
+    # score_list = np.swapaxes(score_list, 0, 1)
 
     for pos, score in zip(pos_list, score_list):
+        print("\npos", pos)
+        print("score", score)
         plt = _plot(plt, pos, score)
 
     if isinstance(opt, dict):
