@@ -54,14 +54,14 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
             temp = (1 / _p1_.temp) - (1 / _p2_.temp)
             return np.exp(score_diff_norm * temp)
 
-    def _annealing_systems(self, _cand_, _p_list_):
-        for _p_ in _p_list_:
-            _cand_ = super()._iterate(0, _cand_, _p_)
+    def _anneal_system(self, _cand_, _p_):
+        _cand_ = super()._iterate(0, _cand_, _p_)
 
         return _cand_
 
     def _iterate(self, i, _cand_, _p_list_):
-        _cand_ = self._annealing_systems(_cand_, _p_list_)
+        _p_current = _p_list_[i % len(_p_list_)]
+        _cand_ = self._anneal_system(_cand_, _p_current)
 
         if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
             self._swap_pos(_cand_, _p_list_)

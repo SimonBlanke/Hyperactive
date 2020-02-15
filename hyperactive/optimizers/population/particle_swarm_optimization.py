@@ -73,6 +73,7 @@ class ParticleSwarmOptimizer(BaseOptimizer):
 
 class Particle(BasePositioner):
     def __init__(self):
+        super().__init__(self)
         self.nr = None
         self.velo = None
 

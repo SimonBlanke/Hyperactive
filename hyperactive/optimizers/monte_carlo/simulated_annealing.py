@@ -22,7 +22,7 @@ class SimulatedAnnealingOptimizer(StochasticHillClimbingOptimizer):
         return self._score_norm_adapt(_p_) * self.temp
 
     def _iterate(self, i, _cand_, _p_):
-        _cand_ = self._stochastic_hill_climb_iter(_cand_, _p_)
+        _cand_ = self._stochastic_hill_climb_iter(i, _cand_, _p_)
 
         self.temp = self.temp * self._opt_args_.annealing_rate
 
