@@ -28,34 +28,41 @@ class MemoryLoad(MemoryIO):
         self.memory_type = _main_args_.memory
         self.meta_data_found = False
 
-        with open(self.meta_path + "model_connections.json") as f:
-            model_connections = json.load(f)
+        self.con_ids = []
 
-        print("\nmodel_connections\n", model_connections)
+        with open(self.meta_path + "model_connections.json") as f:
+            self.model_con = json.load(f)
+
+        print("\nmodel_con\n", self.model_con)
 
         model_id = self._get_model_hash(_cand_.func_)
-        self.connected_ids = [model_id]
+        if model_id in self.model_con:
+
+            self._get_id_list(self.model_con[model_id])
 
         print("\nmodel_id\n", model_id)
+        print("\nself.con_ids\n", self.con_ids)
 
-        if model_id in model_connections:
-            self.connected_ids = self.connected_ids + model_connections[model_id]
-        self._get_id_list(model_connections, model_id)
-        self.connected_ids = set(self.connected_ids)
+        self.con_ids = set(self.con_ids)
+        print("\nself.con_ids\n", self.con_ids)
 
-        print("\nself.connected_ids\n", self.connected_ids)
-
-    def _get_id_list(self, model_connections, id):
-        if id in model_connections:
-            id_list = model_connections[id]
-        else:
-            return
+    def _get_id_list(self, id_list):
+        print("\nrec\n")
+        self.con_ids = self.con_ids + id_list
 
         for id in id_list:
-            if id in model_connections:
-                self.connected_ids = self.connected_ids + model_connections[id]
+            id_list_new = self.model_con[id]
 
-            self._get_id_list(model_connections, id)
+            print("\nid_list_new\n", id_list_new)
+            print("\nself.con_ids\n", self.con_ids)
+
+            if set(id_list_new).issubset(self.con_ids):
+                continue
+
+            self._get_id_list(id_list_new)
+
+    def _add_connection2list(self, id_list):
+        self.con_ids = self.con_ids + id_list
 
     def _load_memory(self, _cand_, _verb_, memory_dict):
         self.memory_dict = memory_dict
@@ -82,7 +89,7 @@ class MemoryLoad(MemoryIO):
     def _read_func_metadata(self, model_func, _verb_):
         paths = self._get_func_data_names()
 
-        print("\npaths\n", paths)
+        # print("\npaths\n", paths)
 
         meta_data_list = []
         for path in paths:
@@ -108,7 +115,7 @@ class MemoryLoad(MemoryIO):
 
     def _get_func_data_names(self):
         paths = []
-        for id in self.connected_ids:
+        for id in self.con_ids:
             paths = paths + glob.glob(
                 self.meta_path
                 + id

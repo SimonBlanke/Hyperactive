@@ -65,12 +65,16 @@ def merge_model_IDs(model1, model2):
         key_model = model1_hash
         value_model = model2_hash
         data = _connect_key2value(data, key_model, value_model)
-    elif model2_hash in data:
+    else:
+        data[model1_hash] = [model2_hash]
+        print("IDs successfully connected")
+
+    if model2_hash in data:
         key_model = model2_hash
         value_model = model1_hash
         data = _connect_key2value(data, key_model, value_model)
     else:
-        data[model1_hash] = [model2_hash]
+        data[model2_hash] = [model1_hash]
         print("IDs successfully connected")
 
     with open(meta_path + "model_connections.json", "w") as f:
@@ -113,7 +117,10 @@ def split_model_IDs(model1, model2):
         key_model = model1_hash
         value_model = model2_hash
         data = _split_key_value(data, key_model, value_model)
-    elif model2_hash in data:
+    else:
+        print("IDs of models are not connected")
+
+    if model2_hash in data:
         key_model = model2_hash
         value_model = model1_hash
         data = _split_key_value(data, key_model, value_model)
