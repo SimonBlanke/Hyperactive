@@ -48,14 +48,6 @@ def test_long_term_memory_times():
     opt.search(search_config, n_iter=1000)
     diff_time_0 = time.time() - c_time
 
-    def _model_(para, X_train, y_train):
-        model = DecisionTreeClassifier(max_depth=para["max_depth"])
-        scores = cross_val_score(model, X_train, y_train, cv=2)
-
-        return scores.mean()
-
-    search_config = {_model_: {"max_depth": range(2, 500)}}
-
     c_time = time.time()
     opt = Hyperactive(X, y, memory="long")
     opt.search(search_config, n_iter=1000)
