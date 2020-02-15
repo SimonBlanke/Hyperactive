@@ -31,7 +31,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["machine learning", "deep learning", "optimization", "data-science"],
-    url="https://github.com/SimonBlanke/hyperactive",
+    url="https://github.com/SimonBlanke/Hyperactive",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
