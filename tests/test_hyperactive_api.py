@@ -227,14 +227,6 @@ def test_optimizer_args():
     opt.search(search_config, optimizer={"HillClimbing": {"epsilon": 0.1}})
 
 
-def test_get_search_path():
-    opt = Hyperactive(X, y, verbosity=10, memory=memory)
-    opt.search(search_config)
-
-    opt = Hyperactive(X, y, verbosity=10, memory=memory)
-    opt.search(search_config, optimizer="ParticleSwarm")
-
-
 """
 def test_ray_1():
     ray.init()
