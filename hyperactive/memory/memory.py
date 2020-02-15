@@ -46,6 +46,7 @@ class LongTermMemory(BaseMemory):
     def save_memory(self, _main_args_, _opt_args_, _cand_):
         self._dump_._save_memory(_main_args_, _opt_args_, _cand_, self.memory_dict_new)
 
+    """
     def _get_hash(self, object):
         return hashlib.sha1(object).hexdigest()
 
@@ -61,3 +62,4 @@ class LongTermMemory(BaseMemory):
             obj2hash_dict[para_hash] = obj
 
         return obj2hash_dict
+    """
