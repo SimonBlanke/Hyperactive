@@ -230,29 +230,35 @@ pip install Hyperactive/
 <details open>
 <summary><b>v2.2.0</b></summary>
 
-  - [ ] Add basic dataset meta-features to long term memory
+  - [x] Add basic dataset meta-features to long term memory
   - [ ] Add helper-functions for memory
-      - [ ] connect two different model/dataset hashes
-      - [ ] split two different model/dataset hashes
-      - [ ] delete memory of model/dataset
+      - [x] connect two different model/dataset hashes
+      - [x] split two different model/dataset hashes
+      - [x] delete memory of model/dataset
       - [ ] return best known model for dataset
       - [ ] return search space for best model
       - [ ] list available models
       - [ ] add/remove long term memory path
-  - [ ] add optimizer meta-data
 </details>
 
 <details>
 <summary><b>v2.3.0</b></summary>
 
   - [ ] Tree-structured Parzen Estimator
+  - [ ] Multiple experimental SBOM
+  - [ ] Meta-Optimization of all optimizers
+</details>
+
+<details>
+<summary><b>v2.4.0</b></summary>
+
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
   - [ ] Differential evolution
 </details>
 
 <details>
-<summary><b>v2.4.0</b></summary>
+<summary><b>v2.5.0</b></summary>
 
   - [ ] Helper-functions for early stopping
   - [ ] Helper-functions for dataset approximation
