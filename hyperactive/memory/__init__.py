@@ -7,14 +7,14 @@ from .memory import ShortTermMemory, LongTermMemory
 from .memory_helper import (
     delete_model,
     delete_model_dataset,
-    merge_model_IDs,
+    connect_model_IDs,
     split_model_IDs,
 )
 
 __all__ = [
     "delete_model",
     "delete_model_dataset",
-    "merge_model_IDs",
+    "connect_model_IDs",
     "split_model_IDs",
     "ShortTermMemory",
     "LongTermMemory",

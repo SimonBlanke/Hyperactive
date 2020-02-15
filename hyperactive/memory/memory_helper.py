@@ -52,7 +52,7 @@ def delete_model_dataset(model, X, y):
         print("Model data not found in memory")
 
 
-def merge_model_IDs(model1, model2):
+def connect_model_IDs(model1, model2):
     # do checks if search space has same dim
 
     with open(meta_path + "model_connections.json") as f:
