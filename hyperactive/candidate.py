@@ -60,6 +60,8 @@ class Candidate:
                 self.score_best = self.mem.score_best
 
         self.pos_best = self._init_._set_start_pos(self._info_)
+
+    def init_eval(self):
         self.score_best = self.eval_pos(self.pos_best)
 
     def _get_warm_start(self):

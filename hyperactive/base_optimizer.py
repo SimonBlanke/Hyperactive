@@ -102,8 +102,10 @@ class BaseOptimizer:
 
     def _initialize_search(self, _main_args_, nth_process, _info_):
         _main_args_._set_random_seed(nth_process)
+
         _cand_ = Candidate(nth_process, _main_args_, _info_)
-        self._pbar_.init_p_bar(_cand_, self._main_args_)
+        self._pbar_.init_p_bar(nth_process, self._main_args_)
+        _cand_.init_eval()
 
         _p_ = self._init_opt_positioner(_cand_)
         self._pbar_.update_p_bar(1, _cand_)
