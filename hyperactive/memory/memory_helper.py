@@ -99,7 +99,7 @@ def _split_key_value(data, key_model, value_model):
             del data[key_model]
         print("ID connection successfully deleted")
     else:
-        print("IDs of models are already connected")
+        print("IDs of models are not connected")
 
     return data
 
