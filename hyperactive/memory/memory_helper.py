@@ -4,11 +4,10 @@
 
 import os
 import sys
-import glob
 import json
 import shutil
-import hashlib
-import inspect
+
+from .util import get_hash, get_model_id
 
 
 current_path = os.path.realpath(__file__)
@@ -61,7 +60,7 @@ def query_yes_no():
 
 
 def delete_model(model):
-    model_hash = _get_model_hash(model)
+    model_hash = get_model_id(model)
     path = meta_path + str(model_hash)
 
     if os.path.exists(path) and os.path.isdir(path):
@@ -87,8 +86,8 @@ def connect_model_IDs(model1, model2):
     with open(meta_path + "model_connections.json") as f:
         data = json.load(f)
 
-    model1_hash = _get_model_hash(model1)
-    model2_hash = _get_model_hash(model2)
+    model1_hash = get_model_id(model1)
+    model2_hash = get_model_id(model2)
 
     if model1_hash in data:
         key_model = model1_hash
@@ -139,8 +138,8 @@ def split_model_IDs(model1, model2):
     with open(meta_path + "model_connections.json") as f:
         data = json.load(f)
 
-    model1_hash = _get_model_hash(model1)
-    model2_hash = _get_model_hash(model2)
+    model1_hash = get_model_id(model1)
+    model2_hash = get_model_id(model2)
 
     if model1_hash in data:
         key_model = model1_hash
@@ -161,22 +160,10 @@ def split_model_IDs(model1, model2):
 
 
 def _get_file_path(model, X, y):
-    func_path_ = _get_model_hash(model) + "/"
+    func_path_ = get_model_id(model) + "/"
     func_path = meta_path + func_path_
 
-    feature_hash = _get_hash(X)
-    label_hash = _get_hash(y)
+    feature_hash = get_hash(X)
+    label_hash = get_hash(y)
 
     return func_path + (feature_hash + "_" + label_hash + "_.csv")
-
-
-def _get_model_hash(model):
-    return str(_get_hash(_get_func_str(model).encode("utf-8")))
-
-
-def _get_func_str(func):
-    return inspect.getsource(func)
-
-
-def _get_hash(object):
-    return hashlib.sha1(object).hexdigest()
