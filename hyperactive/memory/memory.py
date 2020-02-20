@@ -2,8 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import hashlib
-import inspect
 
 import numpy as np
 

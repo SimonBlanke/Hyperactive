@@ -6,8 +6,8 @@ import os
 import glob
 import dill
 import datetime
-import inspect
-import hashlib
+
+from .util import _get_func_str, _get_hash
 
 
 class MemoryIO:
@@ -15,16 +15,16 @@ class MemoryIO:
         self._space_ = _space_
         self._main_args_ = _main_args_
 
-        self.feature_hash = self._get_hash(_main_args_.X)
-        self.label_hash = self._get_hash(_main_args_.y)
+        self.feature_hash = _get_hash(_main_args_.X)
+        self.label_hash = _get_hash(_main_args_.y)
 
         self.score_col_name = "mean_test_score"
 
         current_path = os.path.realpath(__file__)
         self.meta_learn_path, _ = current_path.rsplit("/", 1)
 
-        func_str = self._get_func_str(_cand_.func_)
-        self.func_path_ = self._get_hash(func_str.encode("utf-8")) + "/"
+        func_str = _get_func_str(_cand_.func_)
+        self.func_path_ = _get_hash(func_str.encode("utf-8")) + "/"
 
         self.datetime = "run_data/" + datetime.datetime.now().strftime(
             "%d.%m.%Y - %H:%M:%S"
@@ -40,23 +40,6 @@ class MemoryIO:
             os.makedirs(self.date_path, exist_ok=True)
 
         self.hash2obj = self._hash2obj()
-
-    def _get_func_str(self, func):
-        return inspect.getsource(func)
-
-    def _get_hash(self, object):
-        return hashlib.sha1(object).hexdigest()
-
-    """
-    def is_sha1(maybe_sha):
-        if len(maybe_sha) != 40:
-            return False
-        try:
-            sha_int = int(maybe_sha, 16)
-        except ValueError:
-            return False
-        return True
-    """
 
     def _read_dill(self, value):
         paths = self._get_pkl_hash(value)
@@ -83,9 +66,6 @@ class MemoryIO:
 
         return hash2obj_dict
 
-    def _get_model_hash(self, model):
-        return str(self._get_hash(self._get_func_str(model).encode("utf-8")))
-
     def _get_para_hash_list(self):
         para_hash_list = []
         for key in self._space_.search_space.keys():
@@ -99,7 +79,7 @@ class MemoryIO:
                 ):
 
                     para_dill = dill.dumps(value)
-                    para_hash = self._get_hash(para_dill)
+                    para_hash = _get_hash(para_dill)
                     para_hash_list.append(para_hash)
 
         return para_hash_list
