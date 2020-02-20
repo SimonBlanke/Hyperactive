@@ -26,7 +26,7 @@ class MemoryDump(MemoryIO):
 
         # Save meta_data
         path = self._get_file_path(_cand_.func_)
-        meta_data = self._collect(_cand_)
+        meta_data = self._collect(_cand_, memory_dict)
 
         meta_data["run"] = self.datetime
         self._save_toCSV(meta_data, path)
@@ -110,8 +110,8 @@ class MemoryDump(MemoryIO):
 
         return self.model_path + self.meta_data_name
 
-    def _collect(self, _cand_):
-        results_dict = self._get_opt_meta_data()
+    def _collect(self, _cand_, memory_dict):
+        results_dict = self._get_opt_meta_data(memory_dict)
 
         para_pd = pd.DataFrame(results_dict["params"])
         metric_pd = pd.DataFrame(results_dict["_score_"], columns=["_score_"])
@@ -123,15 +123,15 @@ class MemoryDump(MemoryIO):
 
         return md_model
 
-    def _get_opt_meta_data(self):
+    def _get_opt_meta_data(self, memory_dict):
         results_dict = {}
         para_list = []
         score_list = []
 
-        for key in self.memory_dict.keys():
+        for key in memory_dict.keys():
             pos = np.fromstring(key, dtype=int)
             para = self._space_.pos2para(pos)
-            score = self.memory_dict[key]
+            score = memory_dict[key]
 
             for key in para.keys():
                 if (

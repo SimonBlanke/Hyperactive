@@ -4,6 +4,7 @@
 
 
 import numpy as np
+import pandas as pd
 
 from .memory_load import MemoryLoad
 from .memory_dump import MemoryDump
@@ -43,6 +44,15 @@ class LongTermMemory(BaseMemory):
 
     def save_memory(self, _main_args_, _opt_args_, _cand_):
         self._dump_._save_memory(_main_args_, _opt_args_, _cand_, self.memory_dict_new)
+
+    def _get_para(self):
+        results_dict = self._dump_._get_opt_meta_data(self.memory_dict)
+
+        return pd.DataFrame(results_dict["params"])
+
+    def _get_score(self):
+        results_dict = self._dump_._get_opt_meta_data(self.memory_dict)
+        return pd.DataFrame(results_dict["_score_"], columns=["_score_"])
 
     """
     def _get_hash(self, object):
