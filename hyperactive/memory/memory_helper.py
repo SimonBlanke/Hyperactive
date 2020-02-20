@@ -49,6 +49,7 @@ def get_best_model(X, y):
     score_best = -np.inf
 
     for path in meta_data_paths:
+        path = str(path)
         meta_data = pd.read_csv(path)
         scores = meta_data["_score_"].values
 
@@ -60,7 +61,7 @@ def get_best_model(X, y):
         if score_max > score_best:
             score_best = score_max
 
-            model_path = str(path).rsplit("dataset_id:", 1)[0]
+            model_path = path.rsplit("dataset_id:", 1)[0]
 
             obj_func_path = model_path + "objective_function.pkl"
             search_space_path = model_path + "search_space.pkl"
