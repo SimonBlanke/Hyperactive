@@ -9,6 +9,7 @@ from .memory_helper import (
     delete_model_dataset,
     connect_model_IDs,
     split_model_IDs,
+    reset_memory,
 )
 
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     "delete_model_dataset",
     "connect_model_IDs",
     "split_model_IDs",
+    "reset_memory",
     "ShortTermMemory",
     "LongTermMemory",
 ]

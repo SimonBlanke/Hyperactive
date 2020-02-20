@@ -3,6 +3,8 @@
 # License: MIT License
 
 import os
+import sys
+import glob
 import json
 import shutil
 import hashlib
@@ -29,6 +31,33 @@ def get_model_init_config(model):
     # TODO
     return init_config
 """
+
+
+def reset_memory():
+    if query_yes_no():
+        dirs = next(os.walk(meta_path))[1]
+        for dir in dirs:
+            shutil.rmtree(meta_path + dir)
+
+    with open(meta_path + "model_connections.json", "w") as f:
+        json.dump({}, f, indent=4)
+
+    print("Memory reset successful")
+
+
+def query_yes_no():
+    valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
+    question = "Delete the entire long term memory?"
+
+    while True:
+        sys.stdout.write(question + " [y/n] ")
+        choice = input().lower()
+        if choice == "":
+            return False
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
 
 
 def delete_model(model):
