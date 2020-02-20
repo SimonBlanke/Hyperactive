@@ -14,9 +14,10 @@ from ...base_positioner import BasePositioner
 class ParticleSwarmOptimizer(BaseOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
+        self.n_pop = self._opt_args_.n_particles
 
     def _init_particles(self, _cand_):
-        _p_list_ = [Particle() for _ in range(self._opt_args_.n_particles)]
+        _p_list_ = [Particle() for _ in range(self.n_pop)]
         for i, _p_ in enumerate(_p_list_):
             _p_.nr = i
             _p_.pos_current = _cand_._space_.get_random_pos()
@@ -53,10 +54,10 @@ class ParticleSwarmOptimizer(BaseOptimizer):
             _cand_, _p_ = self._update_pos(_cand_, _p_)
 
     def _iterate(self, i, _cand_, _p_list_):
-        if i % self._opt_args_.n_particles == 0:
+        if i % self.n_pop == 0:
             self._move_positioners(_cand_, _p_list_)
 
-        _p_current = _p_list_[i % self._opt_args_.n_particles]
+        _p_current = _p_list_[i % self.n_pop]
         self._eval_particle(_cand_, _p_current)
 
         return _cand_
