@@ -18,6 +18,7 @@ def get_model_id(model):
     return str(get_hash(get_func_str(model).encode("utf-8")))
 
 
+"""
 def is_sha1(maybe_sha):
     if len(maybe_sha) != 40:
         return False
@@ -26,3 +27,4 @@ def is_sha1(maybe_sha):
     except ValueError:
         return False
     return True
+"""
