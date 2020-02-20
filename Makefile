@@ -33,6 +33,11 @@ test:
 		pytest test_memory.py -p no:warnings; \
 		pytest test_memory_helpers.py -p no:warnings
 
+test-memory:
+	cd tests/; \
+		pytest test_memory.py -p no:warnings; \
+		pytest test_memory_helpers.py -p no:warnings
+
 test-local:
 	cd tests/local; \
 		pytest _test_packages.py -p no:warnings; \
