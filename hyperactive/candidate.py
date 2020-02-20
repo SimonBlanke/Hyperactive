@@ -27,6 +27,8 @@ class Candidate:
         self.nth_process = nth_process
         model_nr = nth_process % _main_args_.n_models
         self.func_ = list(_main_args_.search_config.keys())[model_nr]
+        self.search_space = _main_args_.search_config[self.func_]
+
         self._space_ = SearchSpace(_main_args_, model_nr)
         self.func_name = str(self.func_).split(" ")[1]
         self._model_ = Model(self.func_, nth_process, _main_args_)
