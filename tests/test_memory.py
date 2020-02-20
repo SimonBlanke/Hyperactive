@@ -9,10 +9,12 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 from hyperactive import Hyperactive
-from hyperactive.memory import delete_model
+from hyperactive.memory import delete_model, reset_memory
 
 data = load_iris()
 X, y = data.data, data.target
+
+reset_memory(force_true=True)
 
 
 def test_short_term_memory():
@@ -198,3 +200,5 @@ def test_long_term_memory_search_space_reduction():
 
     opt = Hyperactive(X, y, memory="long")
     opt.search(search_config)
+
+    reset_memory(force_true=True)

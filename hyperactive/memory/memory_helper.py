@@ -81,16 +81,22 @@ def get_best_model(X, y):
         )  # TODO: init_config
 
 
-def reset_memory():
-    if query_yes_no():
-        dirs = next(os.walk(meta_path))[1]
-        for dir in dirs:
-            shutil.rmtree(meta_path + dir)
+def reset_memory(force_true=False):
+    if force_true:
+        _reset_memory()
+    elif query_yes_no():
+        _reset_memory()
 
-        with open(meta_path + "model_connections.json", "w") as f:
-            json.dump({}, f, indent=4)
 
-        print("Memory reset successful")
+def _reset_memory():
+    dirs = next(os.walk(meta_path))[1]
+    for dir in dirs:
+        shutil.rmtree(meta_path + dir)
+
+    with open(meta_path + "model_connections.json", "w") as f:
+        json.dump({}, f, indent=4)
+
+    print("Memory reset successful")
 
 
 def query_yes_no():

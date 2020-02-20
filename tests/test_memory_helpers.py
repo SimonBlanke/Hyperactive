@@ -14,6 +14,7 @@ from hyperactive.memory import (
     connect_model_IDs,
     split_model_IDs,
     get_best_model,
+    reset_memory,
 )
 
 data = load_iris()
@@ -44,6 +45,10 @@ def model2(para, X_train, y_train):
 search_config = {model: {"criterion": ["gini"]}}
 search_config1 = {model1: {"max_depth": range(2, 500)}}
 search_config2 = {model2: {"max_depth": range(2, 500)}}
+
+
+def test_reset_memory():
+    reset_memory(force_true=True)
 
 
 def test_delete_model():
@@ -106,3 +111,5 @@ def test_split_model_IDs():
 
 def test_get_best_model():
     score, search_config, init_config = get_best_model(X, y)
+
+    reset_memory(force_true=True)
