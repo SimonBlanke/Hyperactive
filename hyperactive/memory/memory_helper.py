@@ -37,7 +37,7 @@ def get_model_init_config(model):
 """
 
 
-def get_best(X, y):
+def get_best_model(X, y):
     meta_data_paths = []
     pattern = get_meta_data_name(X, y)
 
