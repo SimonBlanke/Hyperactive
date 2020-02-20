@@ -28,7 +28,9 @@ def sphere_function(para, X_train, y_train):
     return -np.array(loss).sum()
 
 
-search_config = {sphere_function: {"x1": range(-10, 10), "x2": range(-10, 10)}}
+search_config = {
+    sphere_function: {"x1": np.arange(-10, 10, 0.1), "x2": np.arange(-10, 10, 0.1)}
+}
 
 
 def test_HillClimbingOptimizer():
