@@ -39,10 +39,10 @@ def reset_memory():
         for dir in dirs:
             shutil.rmtree(meta_path + dir)
 
-    with open(meta_path + "model_connections.json", "w") as f:
-        json.dump({}, f, indent=4)
+        with open(meta_path + "model_connections.json", "w") as f:
+            json.dump({}, f, indent=4)
 
-    print("Memory reset successful")
+        print("Memory reset successful")
 
 
 def query_yes_no():
