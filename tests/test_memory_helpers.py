@@ -13,6 +13,7 @@ from hyperactive.memory import (
     delete_model_dataset,
     connect_model_IDs,
     split_model_IDs,
+    get_best_model,
 )
 
 data = load_iris()
@@ -101,3 +102,7 @@ def test_split_model_IDs():
     diff_time_1 = time.time() - c_time
 
     assert diff_time_0 / 2 < diff_time_1
+
+
+def test_get_best_model():
+    score, search_config, init_config = get_best_model(X, y)
