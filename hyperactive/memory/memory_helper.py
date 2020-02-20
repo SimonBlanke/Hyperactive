@@ -5,14 +5,19 @@
 import os
 import sys
 import json
+import dill
 import shutil
+import pathlib
+from fnmatch import fnmatch
 
-from .util import get_hash, get_model_id
+import numpy as np
+import pandas as pd
+
+from .util import get_hash, get_model_id, get_func_str
+from .paths import get_meta_path, get_meta_data_name
 
 
-current_path = os.path.realpath(__file__)
-meta_learn_path, _ = current_path.rsplit("/", 1)
-meta_path = meta_learn_path + "/meta_data/"
+meta_path = get_meta_path()
 
 """
 def get_best_models(X, y):
@@ -30,6 +35,49 @@ def get_model_init_config(model):
     # TODO
     return init_config
 """
+
+
+def get_best(X, y):
+    meta_data_paths = []
+    pattern = get_meta_data_name(X, y)
+
+    for path, subdirs, files in os.walk(meta_path):
+        for name in files:
+            if fnmatch(name, pattern):
+                meta_data_paths.append(pathlib.PurePath(path, name))
+
+    score_best = -np.inf
+
+    for path in meta_data_paths:
+        meta_data = pd.read_csv(path)
+        scores = meta_data["_score_"].values
+
+        # score_mean = scores.mean()
+        # score_std = scores.std()
+        score_max = scores.max()
+        # score_min = scores.min()
+
+        if score_max > score_best:
+            score_best = score_max
+
+            model_path = str(path).rsplit("dataset_id:", 1)[0]
+
+            obj_func_path = model_path + "objective_function.pkl"
+            search_space_path = model_path + "search_space.pkl"
+
+            with open(obj_func_path, "rb") as fp:
+                obj_func = dill.load(fp)
+
+            with open(search_space_path, "rb") as fp:
+                search_space = dill.load(fp)
+
+        # exec(get_func_str(obj_func))
+
+        return (
+            score_best,
+            {obj_func: search_space},
+            {obj_func: None},
+        )  # TODO: init_config
 
 
 def reset_memory():

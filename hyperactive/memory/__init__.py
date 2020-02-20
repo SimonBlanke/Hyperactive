@@ -10,6 +10,7 @@ from .memory_helper import (
     connect_model_IDs,
     split_model_IDs,
     reset_memory,
+    get_best_model,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "reset_memory",
     "ShortTermMemory",
     "LongTermMemory",
+    "get_best_model",
 ]
