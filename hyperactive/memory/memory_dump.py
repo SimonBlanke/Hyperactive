@@ -12,6 +12,7 @@ import pandas as pd
 
 from .memory_io import MemoryIO
 from .dataset_features import get_dataset_features
+from .util import get_hash
 
 
 class MemoryDump(MemoryIO):
@@ -31,7 +32,7 @@ class MemoryDump(MemoryIO):
         self._save_toCSV(meta_data, path)
 
         # Save function string
-        obj_func_path = self.func_path + "objective_function.py"
+        obj_func_path = self.model_path + "objective_function.py"
         if not os.path.exists(obj_func_path):
             file = open(obj_func_path, "w")
             file.write(self._get_func_str(_cand_.func_))
@@ -96,15 +97,13 @@ class MemoryDump(MemoryIO):
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path)
 
-        return self.func_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
+        return self.model_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
 
     def _collect(self, _cand_):
         results_dict = self._get_opt_meta_data()
 
         para_pd = pd.DataFrame(results_dict["params"])
-        metric_pd = pd.DataFrame(
-            results_dict["mean_test_score"], columns=["mean_test_score"]
-        )
+        metric_pd = pd.DataFrame(results_dict["_score_"], columns=["_score_"])
         n_rows = len(para_pd)
         eval_time = pd.DataFrame(_cand_.eval_time[-n_rows:], columns=["eval_time"])
         md_model = pd.concat(
@@ -131,10 +130,10 @@ class MemoryDump(MemoryIO):
                 ):
 
                     para_dill = dill.dumps(para[key])
-                    para_hash = self._get_hash(para_dill)
+                    para_hash = get_hash(para_dill)
 
                     with open(
-                        self.func_path + str(para_hash) + ".pkl", "wb"
+                        self.model_path + str(para_hash) + ".pkl", "wb"
                     ) as pickle_file:
                         dill.dump(para_dill, pickle_file)
 
@@ -145,7 +144,7 @@ class MemoryDump(MemoryIO):
                 score_list.append(score)
 
         results_dict["params"] = para_list
-        results_dict["mean_test_score"] = score_list
+        results_dict["_score_"] = score_list
 
         return results_dict
 
@@ -161,7 +160,7 @@ class MemoryDump(MemoryIO):
             meta_data = meta_data_old.append(meta_data_new)
 
             columns = list(meta_data.columns)
-            noScore = ["mean_test_score", "cv_default_score", "eval_time", "run"]
+            noScore = ["_score_", "cv_default_score", "eval_time", "run"]
             columns_noScore = [c for c in columns if c not in noScore]
 
             meta_data = meta_data.drop_duplicates(subset=columns_noScore)

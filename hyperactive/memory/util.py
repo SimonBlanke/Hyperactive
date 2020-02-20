@@ -6,16 +6,16 @@ import inspect
 import hashlib
 
 
-def _get_func_str(func):
+def get_func_str(func):
     return inspect.getsource(func)
 
 
-def _get_hash(object):
+def get_hash(object):
     return hashlib.sha1(object).hexdigest()
 
 
-def _get_model_hash(model):
-    return str(_get_hash(_get_func_str(model).encode("utf-8")))
+def get_model_id(model):
+    return str(get_hash(get_func_str(model).encode("utf-8")))
 
 
 def is_sha1(maybe_sha):

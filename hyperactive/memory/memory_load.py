@@ -11,7 +11,7 @@ import pandas as pd
 from functools import partial
 
 from .memory_io import MemoryIO
-from .util import _get_model_hash
+from .util import get_model_id
 
 
 def apply_tobytes(df):
@@ -33,7 +33,7 @@ class MemoryLoad(MemoryIO):
         with open(self.meta_path + "model_connections.json") as f:
             self.model_con = json.load(f)
 
-        model_id = _get_model_hash(_cand_.func_)
+        model_id = get_model_id(_cand_.func_)
         if model_id in self.model_con:
             self._get_id_list(self.model_con[model_id])
         else:

@@ -5,9 +5,10 @@
 import os
 import glob
 import dill
-import datetime
 
-from .util import _get_func_str, _get_hash
+
+from .util import get_hash, get_model_id
+from .paths import get_meta_path, get_model_path, get_date_path, get_datetime
 
 
 class MemoryIO:
@@ -15,26 +16,20 @@ class MemoryIO:
         self._space_ = _space_
         self._main_args_ = _main_args_
 
-        self.feature_hash = _get_hash(_main_args_.X)
-        self.label_hash = _get_hash(_main_args_.y)
+        self.feature_hash = get_hash(_main_args_.X)
+        self.label_hash = get_hash(_main_args_.y)
 
-        self.score_col_name = "mean_test_score"
+        self.score_col_name = "_score_"
 
-        current_path = os.path.realpath(__file__)
-        self.meta_learn_path, _ = current_path.rsplit("/", 1)
+        model_id = get_model_id(_cand_.func_)
 
-        func_str = _get_func_str(_cand_.func_)
-        self.func_path_ = _get_hash(func_str.encode("utf-8")) + "/"
+        self.datetime = get_datetime()
 
-        self.datetime = "run_data/" + datetime.datetime.now().strftime(
-            "%d.%m.%Y - %H:%M:%S"
-        )
+        self.meta_path = get_meta_path()
+        self.model_path = self.meta_path + get_model_path(model_id)
+        self.date_path = self.model_path + get_date_path(self.datetime)
 
-        self.meta_path = self.meta_learn_path + "/meta_data/"
-        self.func_path = self.meta_path + self.func_path_
-        self.date_path = self.meta_path + self.func_path_ + self.datetime + "/"
-
-        self.dataset_info_path = self.func_path + "dataset_info/"
+        self.dataset_info_path = self.model_path + "dataset_info/"
 
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path, exist_ok=True)
@@ -52,7 +47,7 @@ class MemoryIO:
         return value
 
     def _get_pkl_hash(self, hash):
-        paths = glob.glob(self.func_path + hash + "*.pkl")
+        paths = glob.glob(self.model_path + hash + "*.pkl")
 
         return paths
 
@@ -79,7 +74,7 @@ class MemoryIO:
                 ):
 
                     para_dill = dill.dumps(value)
-                    para_hash = _get_hash(para_dill)
+                    para_hash = get_hash(para_dill)
                     para_hash_list.append(para_hash)
 
         return para_hash_list
