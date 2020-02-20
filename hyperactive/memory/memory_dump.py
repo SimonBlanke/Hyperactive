@@ -31,13 +31,24 @@ class MemoryDump(MemoryIO):
         meta_data["run"] = self.datetime
         self._save_toCSV(meta_data, path)
 
-        # Save function string
-        obj_func_path = self.model_path + "objective_function.py"
+        # Save function
+        obj_func_path = self.model_path + "objective_function.pkl"
+
+        with open(obj_func_path, "wb") as pickle_file:
+            dill.dump(_cand_.func_, pickle_file)
+
+        # Save search space
+        search_space_path = self.model_path + "search_space.pkl"
+
+        with open(search_space_path, "wb") as pickle_file:
+            dill.dump(_cand_.search_space, pickle_file)
+
+        """
         if not os.path.exists(obj_func_path):
             file = open(obj_func_path, "w")
             file.write(self._get_func_str(_cand_.func_))
             file.close()
-
+        """
         # Save search_config
         search_config_path = self.date_path + "search_config.py"
         search_config_temp = dict(self._main_args_.search_config)

@@ -14,7 +14,7 @@ def get_meta_path():
 
 
 def get_model_path(model_id):
-    return model_id + "/"
+    return "model_id:" + model_id + "/"
 
 
 def get_date_path(datetime):
@@ -29,4 +29,4 @@ def get_meta_data_name(X, y):
     feature_hash = get_hash(X)
     label_hash = get_hash(y)
 
-    return feature_hash + "_" + label_hash + "_.csv"
+    return "dataset_id:" + feature_hash + "_" + label_hash + "_.csv"

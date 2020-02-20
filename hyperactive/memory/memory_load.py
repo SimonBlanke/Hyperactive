@@ -12,6 +12,7 @@ from functools import partial
 
 from .memory_io import MemoryIO
 from .util import get_model_id
+from .paths import get_model_path
 
 
 def apply_tobytes(df):
@@ -102,7 +103,9 @@ class MemoryLoad(MemoryIO):
     def _get_func_data_names(self):
         paths = []
         for id in self.con_ids:
-            paths = paths + glob.glob(self.meta_path + id + "/" + self.meta_data_name)
+            paths = paths + glob.glob(
+                self.meta_path + get_model_path(id) + self.meta_data_name
+            )
 
         return paths
 
