@@ -8,7 +8,13 @@ import dill
 
 
 from .util import get_hash, get_model_id
-from .paths import get_meta_path, get_model_path, get_date_path, get_datetime
+from .paths import (
+    get_meta_path,
+    get_model_path,
+    get_date_path,
+    get_datetime,
+    get_meta_data_name,
+)
 
 
 class MemoryIO:
@@ -16,13 +22,10 @@ class MemoryIO:
         self._space_ = _space_
         self._main_args_ = _main_args_
 
-        self.feature_hash = get_hash(_main_args_.X)
-        self.label_hash = get_hash(_main_args_.y)
-
+        self.meta_data_name = get_meta_data_name(_main_args_.X, _main_args_.y)
         self.score_col_name = "_score_"
 
         model_id = get_model_id(_cand_.func_)
-
         self.datetime = get_datetime()
 
         self.meta_path = get_meta_path()

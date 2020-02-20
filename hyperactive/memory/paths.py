@@ -5,6 +5,8 @@
 import os
 import datetime
 
+from .util import get_hash
+
 
 def get_meta_path():
     current_path = os.path.realpath(__file__)
@@ -21,3 +23,10 @@ def get_date_path(datetime):
 
 def get_datetime():
     return datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S")
+
+
+def get_meta_data_name(X, y):
+    feature_hash = get_hash(X)
+    label_hash = get_hash(y)
+
+    return feature_hash + "_" + label_hash + "_.csv"

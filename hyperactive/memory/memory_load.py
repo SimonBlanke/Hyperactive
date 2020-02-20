@@ -102,12 +102,7 @@ class MemoryLoad(MemoryIO):
     def _get_func_data_names(self):
         paths = []
         for id in self.con_ids:
-            paths = paths + glob.glob(
-                self.meta_path
-                + id
-                + "/"
-                + (self.feature_hash + "_" + self.label_hash + "_.csv")
-            )
+            paths = paths + glob.glob(self.meta_path + id + "/" + self.meta_data_name)
 
         return paths
 

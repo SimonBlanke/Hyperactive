@@ -97,7 +97,7 @@ class MemoryDump(MemoryIO):
         if not os.path.exists(self.date_path):
             os.makedirs(self.date_path)
 
-        return self.model_path + (self.feature_hash + "_" + self.label_hash + "_.csv")
+        return self.model_path + self.meta_data_name
 
     def _collect(self, _cand_):
         results_dict = self._get_opt_meta_data()
