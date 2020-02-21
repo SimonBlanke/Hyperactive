@@ -43,10 +43,9 @@ class SearchSpace:
         return pos
 
     def pos2para(self, pos):
-        if len(self.search_space.keys()) == pos.size:
-            values_dict = {}
-            for i, key in enumerate(self.search_space.keys()):
-                pos_ = int(pos[i])
-                values_dict[key] = list(self.search_space[key])[pos_]
+        values_dict = {}
+        for i, key in enumerate(self.search_space.keys()):
+            pos_ = int(pos[i])
+            values_dict[key] = list(self.search_space[key])[pos_]
 
-            return values_dict
+        return values_dict
