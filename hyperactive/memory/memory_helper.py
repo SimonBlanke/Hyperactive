@@ -117,10 +117,10 @@ def query_yes_no():
 
 def delete_model(model):
     model_hash = get_model_id(model)
-    path = meta_path + str(model_hash)
+    path = meta_path + "model_id:" + str(model_hash)
 
     if os.path.exists(path) and os.path.isdir(path):
-        shutil.rmtree(meta_path + str(model_hash))
+        shutil.rmtree(path)
         print("Model data successfully removed")
     else:
         print("Model data not found in memory")
@@ -216,7 +216,7 @@ def split_model_IDs(model1, model2):
 
 
 def _get_file_path(model, X, y):
-    func_path_ = get_model_id(model) + "/"
+    func_path_ = "model_id:" + get_model_id(model) + "/"
     func_path = meta_path + func_path_
 
     feature_hash = get_hash(X)
