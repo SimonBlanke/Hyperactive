@@ -62,6 +62,7 @@ opt_list = [
         }
     },
     "Bayesian",
+    "TPE",
 ]
 
 opt_para_names = copy.deepcopy(opt_list)
