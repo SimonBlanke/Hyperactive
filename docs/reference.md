@@ -112,6 +112,7 @@ Starts the optimization run.
         - "ParticleSwarm"
         - "EvolutionStrategy"
         - "Bayesian"
+        - "TPE"
 
     Table of available optimization parameters:
 
@@ -139,6 +140,8 @@ Starts the optimization run.
 | warm_start_smbo  |  bool |  False |
 |  xi |  float | 0.01  |
 | kernel | object | sklearn.gaussian_process.kernels.Matern(nu=2.5) |
+|  start_up_evals |  int |  10 |
+|  gamme_tpe |  float | 0.3  |
 
 
  - ``n_jobs``**:** int, optional (default: 1)
