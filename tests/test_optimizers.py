@@ -170,12 +170,12 @@ def test_EvolutionStrategyOptimizer():
 
 def test_BayesianOptimizer():
     opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config, n_iter=int(n_iter / 10), optimizer="Bayesian")
+    opt.search(search_config, n_iter=int(n_iter / 33), optimizer="Bayesian")
 
     for warm_start_smbo in [True]:
         opt = Hyperactive(X, y, memory="long")
         opt.search(
             search_config,
-            n_iter=n_iter,
+            n_iter=int(n_iter / 33),
             optimizer={"Bayesian": {"warm_start_smbo": warm_start_smbo}},
         )
