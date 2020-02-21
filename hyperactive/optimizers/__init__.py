@@ -19,6 +19,7 @@ from .population import ParticleSwarmOptimizer
 from .population import EvolutionStrategyOptimizer
 
 from .sequence_model import BayesianOptimizer
+from .sequence_model import TreeStructuredParzenEstimators
 
 __all__ = [
     "HillClimbingOptimizer",
@@ -33,4 +34,5 @@ __all__ = [
     "ParticleSwarmOptimizer",
     "EvolutionStrategyOptimizer",
     "BayesianOptimizer",
+    "TreeStructuredParzenEstimators",
 ]

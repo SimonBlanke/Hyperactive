@@ -3,8 +3,7 @@
 # License: MIT License
 
 from .bayesian_optimization import BayesianOptimizer
+from .tree_structured_parzen_estimators import TreeStructuredParzenEstimators
 
-# from .tree_of_parzen_estimators import TPEOptimizer
 
-
-__all__ = ["BayesianOptimizer"]
+__all__ = ["BayesianOptimizer", "TreeStructuredParzenEstimators"]

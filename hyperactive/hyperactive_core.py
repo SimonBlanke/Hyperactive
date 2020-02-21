@@ -20,6 +20,7 @@ from .optimizers import (
     ParticleSwarmOptimizer,
     EvolutionStrategyOptimizer,
     BayesianOptimizer,
+    TreeStructuredParzenEstimators,
 )
 
 optimizer_dict = {
@@ -35,6 +36,7 @@ optimizer_dict = {
     "ParticleSwarm": ParticleSwarmOptimizer,
     "EvolutionStrategy": EvolutionStrategyOptimizer,
     "Bayesian": BayesianOptimizer,
+    "TPE": TreeStructuredParzenEstimators,
 }
 
 

@@ -57,6 +57,9 @@ class Arguments:
             "warm_start_smbo": False,
             "xi": 0.01,
             "gpr": GPR(),
+            # TreeStructuredParzenEstimators
+            "start_up_evals": 10,
+            "gamme_tpe": 0.3,
         }
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
@@ -87,3 +90,5 @@ class Arguments:
         self.warm_start_smbo = kwargs_opt["warm_start_smbo"]
         self.xi = kwargs_opt["xi"]
         self.gpr = kwargs_opt["gpr"]
+        self.start_up_evals = kwargs_opt["start_up_evals"]
+        self.gamme_tpe = kwargs_opt["gamme_tpe"]
