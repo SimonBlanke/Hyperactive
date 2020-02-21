@@ -22,7 +22,7 @@ def get_date_path(datetime):
 
 
 def get_datetime():
-    return datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S")
+    return datetime.datetime.now().strftime("%d.%m.%Y - %H:%M:%S:%f")
 
 
 def get_meta_data_name(X, y):
