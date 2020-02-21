@@ -54,7 +54,7 @@ def test_reset_memory():
 def test_delete_model():
     delete_model(model)
 
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory="long")
     opt.search(search_config)
 
     delete_model(model)
@@ -63,7 +63,7 @@ def test_delete_model():
 def test_delete_model_dataset():
     delete_model_dataset(model, X, y)
 
-    opt = Hyperactive(X, y)
+    opt = Hyperactive(X, y, memory="long")
     opt.search(search_config)
 
     delete_model_dataset(model, X, y)
@@ -111,5 +111,3 @@ def test_split_model_IDs():
 
 def test_get_best_model():
     score, search_config, init_config = get_best_model(X, y)
-
-    reset_memory(force_true=True)
