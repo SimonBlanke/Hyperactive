@@ -7,11 +7,10 @@ import numpy as np
 from scipy.stats import norm
 
 
-from ...base_optimizer import BaseOptimizer
-from ...base_positioner import BasePositioner
+from .sbom import SBOM
 
 
-class BayesianOptimizer(BaseOptimizer):
+class BayesianOptimizer(SBOM):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
         self.gpr = self._opt_args_.gpr
@@ -29,14 +28,6 @@ class BayesianOptimizer(BaseOptimizer):
         exp_imp[sigma == 0.0] = 0.0
 
         return exp_imp
-
-    def _all_possible_pos(self, cand):
-        pos_space = []
-        for dim_ in cand._space_.dim:
-            pos_space.append(np.arange(dim_ + 1))
-
-        self.n_dim = len(pos_space)
-        self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
 
     def propose_location(self, cand):
         self.gpr.fit(self.X_sample, self.Y_sample)
@@ -61,25 +52,3 @@ class BayesianOptimizer(BaseOptimizer):
         self.Y_sample = np.vstack((self.Y_sample, _p_.score_new))
 
         return _cand_
-
-    def _init_opt_positioner(self, _cand_):
-        _p_ = Bayesian()
-
-        self._all_possible_pos(_cand_)
-
-        if self._opt_args_.warm_start_smbo:
-            self.X_sample = _cand_.mem._get_para()
-            self.Y_sample = _cand_.mem._get_score()
-        else:
-            self.X_sample = _cand_.pos_best.reshape(1, -1)
-            self.Y_sample = np.array(_cand_.score_best).reshape(1, -1)
-
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
-
-        return _p_
-
-
-class Bayesian(BasePositioner):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
