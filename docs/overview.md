@@ -137,6 +137,7 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="#/./optimizers/sequential_methods?id=bayesian-optimization">Bayesian Optimization</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_methods?id=tree-of-parzen-estimators">Tree of Parzen Estimators</a></li>
           </ul>
       </td>
       <td>
