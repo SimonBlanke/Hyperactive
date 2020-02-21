@@ -163,10 +163,9 @@ class MemoryDump(MemoryIO):
         if os.path.exists(path):
             meta_data_old = pd.read_csv(path)
 
-            if len(meta_data_old.columns) != len(meta_data_new.columns):
-                print("Warning meta data dimensionality does not match")
-                print("Meta data will not be saved")
-                return
+            assert len(meta_data_old.columns) == len(
+                meta_data_new.columns
+            ), "Warning meta data dimensionality does not match"
 
             meta_data = meta_data_old.append(meta_data_new)
 
