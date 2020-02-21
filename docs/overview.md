@@ -227,21 +227,20 @@ pip install Hyperactive/
   - [x] Gaussian process regressors from various packages (gpy, sklearn, GPflow, ...) via wrapper
 </details>
 
-<details open>
-<summary><b>v2.2.0</b></summary>
+<details>
+<summary><b>v2.2.0</b>:heavy_check_mark:</summary>
 
   - [x] Add basic dataset meta-features to long term memory
-  - [ ] Add helper-functions for memory
+  - [x] Add helper-functions for memory
       - [x] connect two different model/dataset hashes
       - [x] split two different model/dataset hashes
       - [x] delete memory of model/dataset
-      - [ ] return best known model for dataset
-      - [ ] return search space for best model
-      - [ ] list available models
-      - [ ] add/remove long term memory path
+      - [x] return best known model for dataset
+      - [x] return search space for best model
+      - [x] return best parameter for best model
 </details>
 
-<details>
+<details open>
 <summary><b>v2.3.0</b></summary>
 
   - [ ] Tree-structured Parzen Estimator
