@@ -72,13 +72,14 @@ def get_best_model(X, y):
             with open(search_space_path, "rb") as fp:
                 search_space = dill.load(fp)
 
-        # exec(get_func_str(obj_func))
+            para_names = list(search_space.keys())
 
-        return (
-            score_best,
-            {obj_func: search_space},
-            {obj_func: None},
-        )  # TODO: init_config
+            best_para = meta_data[meta_data["_score_"] == score_max]
+            best_para = best_para[para_names].iloc[0]
+
+            best_para = best_para.to_dict()
+
+        return (score_best, {obj_func: search_space}, {obj_func: best_para})
 
 
 def reset_memory(force_true=False):
