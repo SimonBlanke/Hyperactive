@@ -179,3 +179,8 @@ def test_BayesianOptimizer():
             n_iter=int(n_iter / 33),
             optimizer={"Bayesian": {"warm_start_smbo": warm_start_smbo}},
         )
+
+
+def test_TPE():
+    opt = Hyperactive(X, y, memory=memory)
+    opt.search(search_config, n_iter=int(n_iter / 5), optimizer="TPE")
