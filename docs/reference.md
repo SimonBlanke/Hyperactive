@@ -1,6 +1,6 @@
 ## Hyperactive
 
-> **Class:** hyperactive.Hyperactive(X, y, memory=True, random_state=1, verbosity=3, warnings=False) <br> [[source]](./source/hyperactive_source)
+> **Class:** hyperactive.Hyperactive(X, y, memory=True, random_state=1, verbosity=3, warnings=False)
 
 Optimization main class.
 
@@ -48,7 +48,7 @@ Optimization main class.
 
 ---
 
-> **Method:** search(search_config, n_iter=10, max_time=None, optimizer='RandomSearch', n_jobs=1) <br> [[source]](./source/search_source)
+> **Method:** search(search_config, n_iter=10, max_time=None, optimizer='RandomSearch', n_jobs=1)
 
 Starts the optimization run.
 
@@ -184,3 +184,43 @@ Starts the optimization run.
   - ``best_scores``**:** dict
     - keys: model-functions
     - values: best scores
+
+
+## Memory helper functions
+
+> **Function:** get_best_model(X, y)
+
+
+<br>
+
+---
+
+> **Function:** reset_memory(force_true=False)
+
+
+<br>
+
+---
+
+> **Function:** delete_model(model)
+
+
+<br>
+
+---
+
+> **Function:** delete_model_dataset(model, X, y)
+
+
+<br>
+
+---
+
+> **Function:** connect_model_IDs(model1, model2)
+
+
+<br>
+
+---
+
+> **Function:** split_model_IDs(model1, model2)

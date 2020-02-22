@@ -1,10 +1,13 @@
 - Introduction to Hyperactive
 
     - [Quick Start](README.md)
-    - [Project Overview](overview)
+    - [Overview](overview)
     - [Performance](./performance)
-    - [How to use Hyperactive](./tutorial)
-    - [API Documentation](./reference)
+    - [Basic Tutorial](./tutorial)
+    - [Machine Learning Tutorial](./tutorial_ml)
+    - [Deep Learning Tutorial](./tutorial_dl)
+    - [Memory](./memory)
+    - [API Reference](./reference)
 
 
 - Examples
