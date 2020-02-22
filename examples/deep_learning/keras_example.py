@@ -5,6 +5,8 @@ from keras.utils import to_categorical
 
 from hyperactive import Hyperactive
 
+import numpy as np
+
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
 y_train = to_categorical(y_train, 10)
@@ -45,6 +47,10 @@ def cnn(para, X_train, y_train):
 
 
 search_config = {cnn: {"filter.0": [16, 32, 64, 128], "layer.0": range(100, 1000, 100)}}
+
+
+X_train = np.asarray(X_train, order="C")
+y_train = np.asarray(y_train, order="C")
 
 opt = Hyperactive(X_train, y_train)
 opt.search(search_config, n_iter=5)
