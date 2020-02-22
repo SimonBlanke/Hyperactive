@@ -7,8 +7,7 @@ from sklearn.datasets import load_iris
 from hyperactive import Hyperactive
 
 iris_data = load_iris()
-X = iris_data.data
-y = iris_data.target
+X, y = iris_data.data, iris_data.target
 
 
 def model(para, X, y):
@@ -27,8 +26,8 @@ The memory will remember previous evaluations done during the optimization proce
 Instead of retraining the model, it accesses the memory and uses the saved score/loss.
 This shows as a speed up during the optimization process, since the whole search space has been explored.
 """
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=1000, memory=True)
+opt = Hyperactive(X, y, memory="short")
+opt.search(search_config, n_iter=1000)
 ```
 
 ## Scatter initialization
