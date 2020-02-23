@@ -23,8 +23,11 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         ]
 
         for _p_ in _p_list_:
-            _p_.pos_current = _cand_._space_.get_random_pos()
-            _p_.pos_best = _p_.pos_current
+            _p_.pos_new = _cand_._space_.get_random_pos()
+
+            self._optimizer_eval(_cand_, _p_)
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
 
         return _p_list_
 
@@ -55,23 +58,26 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
             return np.exp(score_diff_norm * temp)
 
     def _anneal_system(self, _cand_, _p_):
-        _cand_ = super()._iterate(0, _cand_, _p_)
+        self._p_ = _p_
+        super()._iterate(0, _cand_)
 
-        return _cand_
+    def _iterate(self, i, _cand_):
+        _p_current = self._p_list_[i % len(self._p_list_)]
 
-    def _iterate(self, i, _cand_, _p_list_):
-        _p_current = _p_list_[i % len(_p_list_)]
-        _cand_ = self._anneal_system(_cand_, _p_current)
+        self._anneal_system(_cand_, _p_current)
 
         if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
-            self._swap_pos(_cand_, _p_list_)
+            self._swap_pos(_cand_, self._p_list_)
 
         return _cand_
 
-    def _init_opt_positioner(self, _cand_):
-        _p_list_ = self._init_annealers(_cand_)
+    def _init_iteration(self, _cand_):
+        self._p_list_ = self._init_annealers(_cand_)
 
-        return _p_list_
+    def _finish_search(self):
+        self._pbar_.close_p_bar()
+
+        return self._p_list_
 
 
 class System(HillClimbingPositioner):

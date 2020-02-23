@@ -16,8 +16,8 @@ class BasePositioner:
         self.pos_best = None
         self.score_best = -np.inf
 
-        self.pos_new_list = []
-        self.score_new_list = []
+        self.pos_list = []
+        self.score_list = []
 
     @property
     def pos_new(self):
@@ -25,7 +25,6 @@ class BasePositioner:
 
     @pos_new.setter
     def pos_new(self, value):
-        self.pos_new_list.append(value)
         self._pos_new = value
 
     @property
@@ -34,7 +33,10 @@ class BasePositioner:
 
     @score_new.setter
     def score_new(self, value):
-        self.score_new_list.append(value)
+        # track pos/score for search path plot
+        self.pos_list.append(self.pos_new)
+        self.score_list.append(value)
+
         self._score_new = value
 
     def move_climb(self, _cand_, pos, epsilon_mod=1):
@@ -45,7 +47,7 @@ class BasePositioner:
         n_zeros = [0] * len(_cand_._space_.dim)
         pos = np.clip(pos_new_int, n_zeros, _cand_._space_.dim)
 
-        return pos.astype(int)
+        self.pos_new = pos.astype(int)
 
     def move_random(self, _cand_):
         return _cand_._space_.get_random_pos()

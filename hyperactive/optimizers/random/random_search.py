@@ -10,14 +10,21 @@ class RandomSearchOptimizer(BaseOptimizer):
     def __init__(self, _main_args_, _opt_args_):
         super().__init__(_main_args_, _opt_args_)
 
-    def _iterate(self, i, _cand_, _p_):
-        _p_.pos_new = _p_.move_random(_cand_)
-        _p_.score_new = _cand_.eval_pos(_p_.pos_new)
+    def _iterate(self, i, _cand_):
+        self._p_.move_random(_cand_)
+        self._optimizer_eval(_cand_, self._p_)
 
-        if _p_.score_new > _cand_.score_best:
-            _cand_, _p_ = self._update_pos(_cand_, _p_)
+        self._update_pos(_cand_, self._p_)
 
         return _cand_
 
-    def _init_opt_positioner(self, _cand_):
-        return super()._init_base_positioner(_cand_)
+    def _init_iteration(self, _cand_):
+        self._p_ = super()._init_base_positioner(_cand_)
+
+        self._optimizer_eval(_cand_, self._p_)
+        self._update_pos(_cand_, self._p_)
+
+    def _finish_search(self):
+        self._pbar_.close_p_bar()
+
+        return self._p_

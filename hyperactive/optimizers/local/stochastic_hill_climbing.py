@@ -56,16 +56,16 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
     def _accept_adapt(self, _p_):
         return self._score_norm_adapt(_p_)
 
-    def _stochastic_hill_climb_iter(self, i, _cand_, _p_):
-        _cand_, _p_ = self._hill_climb_iter(i, _cand_, _p_)
+    def _stochastic_hill_climb_iter(self, i, _cand_):
+        self._hill_climb_iter(i, _cand_)
+        self._transition(_cand_)
 
-        if _p_.score_new <= _cand_.score_best:
-            p_accept = self._accept(_p_)
-            self._consider(_p_, p_accept)
+    def _transition(self, _cand_):
+        if self._p_.score_new <= _cand_.score_best:
+            p_accept = self._accept(self._p_)
+            self._consider(self._p_, p_accept)
 
-        return _cand_
-
-    def _iterate(self, i, _cand_, _p_):
-        _cand_ = self._stochastic_hill_climb_iter(i, _cand_, _p_)
+    def _iterate(self, i, _cand_):
+        _cand_ = self._stochastic_hill_climb_iter(i, _cand_)
 
         return _cand_

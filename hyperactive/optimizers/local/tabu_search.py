@@ -27,16 +27,24 @@ class TabuOptimizer(HillClimbingOptimizer):
 
         return _p_
 
-    def _iterate(self, i, _cand_, _p_):
-        _cand_, _p_ = self._hill_climb_iter(i, _cand_, _p_)
+    def _iterate(self, i, _cand_):
+        self._hill_climb_iter(i, _cand_)
 
-        if _p_.score_new < _cand_.score_best:
-            _p_ = self._tabu_pos(_p_.pos_new, _p_)
+        if self._p_.score_new < _cand_.score_best:
+            self._p_ = self._tabu_pos(self._p_.pos_new, self._p_)
 
         return _cand_
 
-    def _init_opt_positioner(self, _cand_):
-        return super()._init_base_positioner(_cand_, positioner=TabuPositioner)
+    def _init_iteration(self, _cand_):
+        self._p_ = super()._init_base_positioner(_cand_, positioner=TabuPositioner)
+
+        self._optimizer_eval(_cand_, self._p_)
+        self._update_pos(_cand_, self._p_)
+
+    def _finish_search(self):
+        self._pbar_.close_p_bar()
+
+        return self._p_
 
 
 class TabuPositioner(HillClimbingPositioner):

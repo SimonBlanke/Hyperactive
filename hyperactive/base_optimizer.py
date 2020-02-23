@@ -64,11 +64,11 @@ class BaseOptimizer:
         self.best_scores[_cand_.func_] = _cand_.score_best
 
         if isinstance(_p_, list):
-            self.pos_list[_cand_.func_] = [np.array(p.pos_new_list) for p in _p_]
-            self.score_list[_cand_.func_] = [np.array(p.score_new_list) for p in _p_]
+            self.pos_list[_cand_.func_] = [np.array(p.pos_list) for p in _p_]
+            self.score_list[_cand_.func_] = [np.array(p.score_list) for p in _p_]
         else:
-            self.pos_list[_cand_.func_] = [np.array(_p_.pos_new_list)]
-            self.score_list[_cand_.func_] = [np.array(_p_.score_new_list)]
+            self.pos_list[_cand_.func_] = [np.array(_p_.pos_list)]
+            self.score_list[_cand_.func_] = [np.array(_p_.score_list)]
 
     def _run_multiple_jobs(self):
         _cand_list, _p_list = self._search_multiprocessing()
@@ -80,37 +80,35 @@ class BaseOptimizer:
             self._get_attributes(_cand_, _p_)
 
     def _search(self, nth_process):
-        _cand_, _p_ = self._initialize_search(
-            self._main_args_, nth_process, self._info_
-        )
+        _cand_ = self._initialize_search(self._main_args_, nth_process, self._info_)
 
-        for i in range(self._main_args_.n_iter - 1):
+        for i in range(1, self._main_args_.n_iter):
             c_time = time.time()
 
             _cand_.i = i
-            _cand_ = self._iterate(i, _cand_, _p_)
-            self._pbar_.update_p_bar(1, _cand_)
+            _cand_ = self._iterate(i, _cand_)
 
-            run_time = time.time() - self.start_time
-            if self._main_args_.max_time and run_time > self._main_args_.max_time:
+            if self._time_exceeded():
                 break
 
             _cand_.iter_times.append(time.time() - c_time)
 
-        self._pbar_.close_p_bar()
+        _p_ = self._finish_search()
         return _cand_, _p_
+
+    def _time_exceeded(self):
+        run_time = time.time() - self.start_time
+        return self._main_args_.max_time and run_time > self._main_args_.max_time
 
     def _initialize_search(self, _main_args_, nth_process, _info_):
         _main_args_._set_random_seed(nth_process)
 
         _cand_ = Candidate(nth_process, _main_args_, _info_)
         self._pbar_.init_p_bar(nth_process, self._main_args_)
-        _cand_.init_eval()
 
-        _p_ = self._init_opt_positioner(_cand_)
-        self._pbar_.update_p_bar(1, _cand_)
+        self._init_iteration(_cand_)
 
-        return _cand_, _p_
+        return _cand_
 
     def _init_base_positioner(self, _cand_, positioner=None):
         if positioner:
@@ -118,18 +116,25 @@ class BaseOptimizer:
         else:
             _p_ = BasePositioner(**self._opt_args_.kwargs_opt)
 
-        _p_.pos_current = _cand_.pos_best
-        _p_.score_current = _cand_.score_best
+        _p_.pos_new = _cand_.pos_best
+        _p_.score_new = _cand_.score_best
 
         return _p_
 
     def _update_pos(self, _cand_, _p_):
-        _cand_.pos_best = _p_.pos_new
-        _cand_.score_best = _p_.score_new
+        if _p_.score_new > _p_.score_best:
+            _p_.pos_best = _p_.pos_new
+            _p_.score_best = _p_.score_new
 
-        _p_.pos_current = _p_.pos_new
-        _p_.score_current = _p_.score_new
+        if _p_.score_new > _cand_.score_best:
+            _p_.pos_current = _p_.pos_new
+            _p_.score_current = _p_.score_new
 
-        self._pbar_.best_since_iter = _cand_.i
+            _cand_.pos_best = _p_.pos_new
+            _cand_.score_best = _p_.score_new
 
-        return _cand_, _p_
+            self._pbar_.best_since_iter = _cand_.i
+
+    def _optimizer_eval(self, _cand_, _p_):
+        _p_.score_new = _cand_.eval_pos(_p_.pos_new)
+        self._pbar_.update_p_bar(1, _cand_)
