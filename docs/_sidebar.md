@@ -3,9 +3,7 @@
     - [Quick Start](README.md)
     - [Overview](overview)
     - [Performance](./performance)
-    - [Basic Tutorial](./tutorial)
-    - [Machine Learning Tutorial](./tutorial_ml)
-    - [Deep Learning Tutorial](./tutorial_dl)
+    - [Tutorial](./tutorial)
     - [Memory](./memory)
     - [API Reference](./reference)
 
