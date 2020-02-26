@@ -6,11 +6,11 @@ The following chapters provide a step by step explanation of how to start your f
 
 ## Create the search-config
 
-Since v1.0.0 the search space is created by defining:
+Since v1.0.0 the search-config is created by defining:
   - a <b>function</b> for the model
-  - a parameter <b>dictionary</b> for the search space
-  
-The model function is the objective function for the optimization. It returns a score that will be maximized during the optimization run. The search space is a dictionary that contains the names of the parameters as dict-keys and the list of values that can be searched during the optimization as dict-values. 
+  - a <b>dictionary</b> for the search space
+
+The model function is the objective function for the optimization. It returns a score that will be maximized during the optimization run. The search space is a dictionary that contains the names of the parameters as dict-keys and the list of values that can be searched during the optimization as dict-values.
 
 Together the model and the search space create the search_config. The search_config contains the model as a key and the search space as a value in the search_config-dictionary.
 
@@ -20,7 +20,7 @@ search_config = {
 }
 ```
 
-You can also create a search_config with multiple models and search spaces to optimize them in parallel:
+You can also create a search-config with multiple models and search spaces to optimize them in parallel (this also requires to set the n_jobs to 3):
 
 ```python
 search_config = {
@@ -118,7 +118,7 @@ For the <b>iteration-time</b> you should take the following effects into account
 
 If the model training does not use all CPU cores, you can start multiple optimizations in <b>parallel</b> by increasing the number of jobs 'n_jobs'. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time. The parallelization is done by the Multiprocessing-package.
 
-It is also possible to distribute the model training by using the [Ray-package](https://github.com/ray-project/ray). Ray is a powerful framework for building and running distributed applications. Ray can be used with Hyperactive by just importing and initializing Ray. Hyperactive automatically detects this initialization and will use Ray instead of Multiprocessing. You can set the number of jobs 'n_jobs' like before, while passing the ray-specific parameters (like num_cpus, num_gpus, ...) to ray.init(). 
+It is also possible to distribute the model training by using the [Ray-package](https://github.com/ray-project/ray). Ray is a powerful framework for building and running distributed applications. Ray can be used with Hyperactive by just importing and initializing Ray. Hyperactive automatically detects this initialization and will use Ray instead of Multiprocessing. You can set the number of jobs 'n_jobs' like before, while passing the ray-specific parameters (like num_cpus, num_gpus, ...) to ray.init().
 
 ?>  If you want to learn more about it check out the [distribution-examples](./examples/distribution) and give it a try.
 
