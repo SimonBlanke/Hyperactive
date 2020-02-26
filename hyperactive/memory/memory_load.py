@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
 import json
 import glob
 
@@ -30,6 +31,10 @@ class MemoryLoad(MemoryIO):
         self.meta_data_found = False
 
         self.con_ids = []
+
+        if not os.path.exists(self.meta_path + "model_connections.json"):
+            with open(self.meta_path + "model_connections.json", "w") as f:
+                json.dump({}, f, indent=4)
 
         with open(self.meta_path + "model_connections.json") as f:
             self.model_con = json.load(f)
