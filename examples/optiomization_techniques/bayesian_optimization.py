@@ -39,7 +39,7 @@ class GPR0:
         self.m = GPy.models.GPRegression(X, y, self.kernel)
         self.m.optimize(messages=True)
 
-    def predict(self, X):
+    def predict(self, X, return_std=False):
         return self.m.predict(X)
 
 
@@ -52,7 +52,7 @@ class GPR1:
     def fit(self, X, y):
         self.gpr.fit(X, y)
 
-    def predict(self, X):
+    def predict(self, X, return_std=False):
         return self.gpr.predict(X, return_std=True)
 
 
