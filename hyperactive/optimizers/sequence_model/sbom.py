@@ -24,7 +24,7 @@ class SBOM(BaseOptimizer):
 
     def _init_iteration(self, _cand_):
         self._p_ = SbomPositioner()
-        self._p_.pos_new = self._p_.move_random(_cand_)
+        self._p_.move_random(_cand_)
 
         self._optimizer_eval(_cand_, self._p_)
         self._update_pos(_cand_, self._p_)

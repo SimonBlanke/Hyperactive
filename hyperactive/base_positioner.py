@@ -50,4 +50,4 @@ class BasePositioner:
         self.pos_new = pos.astype(int)
 
     def move_random(self, _cand_):
-        return _cand_._space_.get_random_pos()
+        self.pos_new = _cand_._space_.get_random_pos()
