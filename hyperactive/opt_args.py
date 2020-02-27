@@ -102,7 +102,7 @@ class Arguments:
             # TreeStructuredParzenEstimators
             "start_up_evals": 10,
             "gamme_tpe": 0.3,
-            "tree_regressor": RandomForestRegressor(),
+            "tree_regressor": RandomForestRegressor(n_estimators=10),
         }
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
