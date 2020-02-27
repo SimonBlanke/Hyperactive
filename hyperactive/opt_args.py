@@ -2,11 +2,53 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
 from .util import merge_dicts
 
 from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.ensemble import ExtraTreesRegressor as _ExtraTreesRegressor_
+from sklearn.ensemble import ExtraTreesRegressor as _RandomForestRegressor_
+
 from sklearn.gaussian_process.kernels import Matern
 from numpy.random import normal
+
+
+def _return_std(X, trees, predictions, min_variance):
+    std = np.zeros(len(X))
+
+    for tree in trees:
+        var_tree = tree.tree_.impurity[tree.apply(X)]
+        var_tree[var_tree < min_variance] = min_variance
+        mean_tree = tree.predict(X)
+        std += var_tree + mean_tree ** 2
+
+    std /= len(trees)
+    std -= predictions ** 2.0
+    std[std < 0.0] = 0.0
+    std = std ** 0.5
+    # print("std", std)
+    return std
+
+
+class RandomForestRegressor(_RandomForestRegressor_):
+    def __init__(self, min_variance=0.0, **kwargs):
+        self.min_variance = min_variance
+        super().__init__(**kwargs)
+
+    def fit(self, X, y):
+        super().fit(X, np.ravel(y))
+
+    def predict(self, X, return_std=False):
+        mean = super().predict(X)
+
+        if return_std:
+            if self.criterion != "mse":
+                raise ValueError(
+                    "Expected impurity to be 'mse', got %s instead" % self.criterion
+                )
+            std = _return_std(X, self.estimators_, mean, self.min_variance)
+            return mean.reshape(-1, 1), std
+        return mean.reshape(-1, 1)
 
 
 class GPR:
@@ -16,8 +58,8 @@ class GPR:
     def fit(self, X, y):
         self.gpr.fit(X, y)
 
-    def predict(self, X):
-        return self.gpr.predict(X, return_std=True)
+    def predict(self, X, return_std=False):
+        return self.gpr.predict(X, return_std=return_std)
 
 
 class Arguments:
@@ -60,6 +102,7 @@ class Arguments:
             # TreeStructuredParzenEstimators
             "start_up_evals": 10,
             "gamme_tpe": 0.3,
+            "tree_regressor": RandomForestRegressor(),
         }
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
@@ -92,3 +135,4 @@ class Arguments:
         self.gpr = kwargs_opt["gpr"]
         self.start_up_evals = kwargs_opt["start_up_evals"]
         self.gamme_tpe = kwargs_opt["gamme_tpe"]
+        self.tree_regressor = kwargs_opt["tree_regressor"]

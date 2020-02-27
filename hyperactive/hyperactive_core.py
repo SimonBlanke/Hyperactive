@@ -21,6 +21,7 @@ from .optimizers import (
     EvolutionStrategyOptimizer,
     BayesianOptimizer,
     TreeStructuredParzenEstimators,
+    DecisionTreeOptimizer,
 )
 
 optimizer_dict = {
@@ -37,6 +38,7 @@ optimizer_dict = {
     "EvolutionStrategy": EvolutionStrategyOptimizer,
     "Bayesian": BayesianOptimizer,
     "TPE": TreeStructuredParzenEstimators,
+    "DecisionTree": DecisionTreeOptimizer,
 }
 
 
