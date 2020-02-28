@@ -4,17 +4,10 @@
 
 import numpy as np
 
-from sklearn.datasets import load_iris
-from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeClassifier
 from hyperactive import Hyperactive
 
-data = load_iris()
-X = data.data
-y = data.target
-
+X, y = np.array([0]), np.array([0])
 memory = False
-
 n_iter = 100
 
 
@@ -184,3 +177,8 @@ def test_BayesianOptimizer():
 def test_TPE():
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=int(n_iter / 5), optimizer="TPE")
+
+
+def test_DecisionTreeOptimizer():
+    opt = Hyperactive(X, y, memory=memory)
+    opt.search(search_config, n_iter=int(n_iter / 33), optimizer="DecisionTree")

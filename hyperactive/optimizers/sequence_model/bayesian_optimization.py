@@ -15,6 +15,8 @@ class BayesianOptimizer(SBOM):
         super().__init__(_main_args_, _opt_args_)
         self.regr = self._opt_args_.gpr
 
+        # print("self.regr ", self.regr)
+
     def expected_improvement(self):
         mu, sigma = self.regr.predict(self.all_pos_comb, return_std=True)
         mu_sample = self.regr.predict(self.X_sample)
