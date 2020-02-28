@@ -66,6 +66,6 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
             self._consider(self._p_, p_accept)
 
     def _iterate(self, i, _cand_):
-        _cand_ = self._stochastic_hill_climb_iter(i, _cand_)
+        self._stochastic_hill_climb_iter(i, _cand_)
 
         return _cand_
