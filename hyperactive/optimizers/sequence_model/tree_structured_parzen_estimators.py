@@ -56,11 +56,18 @@ class TreeStructuredParzenEstimators(SBOM):
         return pos_best
 
     def _iterate(self, i, _cand_):
-        self.p_list[0].pos_new = self.propose_location(_cand_)
-        self.p_list[0].score_new = _cand_.eval_pos(self.p_list[0].pos_new)
+        if i < self._opt_args_.start_up_evals:
+            self.p_list[0].move_random(_cand_)
+            self._optimizer_eval(_cand_, self.p_list[0])
+            self._update_pos(_cand_, self.p_list[0])
 
-        self._optimizer_eval(_cand_, self.p_list[0])
-        self._update_pos(_cand_, self.p_list[0])
+        else:
+
+            self.p_list[0].pos_new = self.propose_location(_cand_)
+            self.p_list[0].score_new = _cand_.eval_pos(self.p_list[0].pos_new)
+
+            self._optimizer_eval(_cand_, self.p_list[0])
+            self._update_pos(_cand_, self.p_list[0])
 
         self.X_sample = np.vstack((self.X_sample, self.p_list[0].pos_new))
         self.Y_sample = np.vstack((self.Y_sample, self.p_list[0].score_new))
