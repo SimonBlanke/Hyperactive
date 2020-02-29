@@ -6,52 +6,18 @@
 from .opt_args import Arguments
 from .distribution import Distribution
 
-
-from .optimizers import (
-    HillClimbingOptimizer,
-    StochasticHillClimbingOptimizer,
-    TabuOptimizer,
-    RandomSearchOptimizer,
-    RandomRestartHillClimbingOptimizer,
-    RandomAnnealingOptimizer,
-    SimulatedAnnealingOptimizer,
-    StochasticTunnelingOptimizer,
-    ParallelTemperingOptimizer,
-    ParticleSwarmOptimizer,
-    EvolutionStrategyOptimizer,
-    BayesianOptimizer,
-    TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer,
-)
-
-optimizer_dict = {
-    "HillClimbing": HillClimbingOptimizer,
-    "StochasticHillClimbing": StochasticHillClimbingOptimizer,
-    "TabuSearch": TabuOptimizer,
-    "RandomSearch": RandomSearchOptimizer,
-    "RandomRestartHillClimbing": RandomRestartHillClimbingOptimizer,
-    "RandomAnnealing": RandomAnnealingOptimizer,
-    "SimulatedAnnealing": SimulatedAnnealingOptimizer,
-    "StochasticTunneling": StochasticTunnelingOptimizer,
-    "ParallelTempering": ParallelTemperingOptimizer,
-    "ParticleSwarm": ParticleSwarmOptimizer,
-    "EvolutionStrategy": EvolutionStrategyOptimizer,
-    "Bayesian": BayesianOptimizer,
-    "TPE": TreeStructuredParzenEstimators,
-    "DecisionTree": DecisionTreeOptimizer,
-}
+from .search import Search
 
 
 class HyperactiveCore:
     def __init__(self, _main_args_):
         self._main_args_ = _main_args_
         self._opt_args_ = Arguments(**self._main_args_.opt_para)
+        self._opt_args_.set_opt_args(_main_args_.n_iter)
 
     def run(self):
-        optimizer_class = optimizer_dict[self._main_args_.optimizer]
-
         dist = Distribution()
-        dist.dist(optimizer_class, self._main_args_, self._opt_args_)
+        dist.dist(Search, self._main_args_, self._opt_args_)
 
         self.results = dist.results
         self.pos_list = dist.pos

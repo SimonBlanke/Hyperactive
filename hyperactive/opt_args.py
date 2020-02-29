@@ -62,32 +62,41 @@ class Arguments:
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
 
-        self._set_specific_args(self.kwargs_opt)
+    def set_opt_args(self, n_iter):
+        self.epsilon = self.kwargs_opt["epsilon"]
+        self.climb_dist = self.kwargs_opt["climb_dist"]
+        self.n_neighbours = self.kwargs_opt["n_neighbours"]
 
-    def _set_specific_args(self, kwargs_opt):
-        self.epsilon = kwargs_opt["epsilon"]
-        self.climb_dist = kwargs_opt["climb_dist"]
-        self.n_neighbours = kwargs_opt["n_neighbours"]
-        self.p_down = kwargs_opt["p_down"]
-        self.tabu_memory = kwargs_opt["tabu_memory"]
-        self.n_restarts = kwargs_opt["n_restarts"]
-        self.epsilon_mod = kwargs_opt["epsilon_mod"]
-        self.annealing_rate = kwargs_opt["annealing_rate"]
-        self.start_temp = kwargs_opt["start_temp"]
-        self.norm_factor = kwargs_opt["norm_factor"]
-        self.gamma = kwargs_opt["gamma"]
-        self.system_temperatures = kwargs_opt["system_temperatures"]
-        self.n_swaps = kwargs_opt["n_swaps"]
-        self.n_particles = kwargs_opt["n_particles"]
-        self.inertia = kwargs_opt["inertia"]
-        self.cognitive_weight = kwargs_opt["cognitive_weight"]
-        self.social_weight = kwargs_opt["social_weight"]
-        self.individuals = kwargs_opt["individuals"]
-        self.mutation_rate = kwargs_opt["mutation_rate"]
-        self.crossover_rate = kwargs_opt["crossover_rate"]
-        self.warm_start_smbo = kwargs_opt["warm_start_smbo"]
-        self.xi = kwargs_opt["xi"]
-        self.gpr = kwargs_opt["gpr"]
-        self.start_up_evals = kwargs_opt["start_up_evals"]
-        self.gamma_tpe = kwargs_opt["gamma_tpe"]
-        self.tree_regressor = tree_regressor[kwargs_opt["tree_regressor"]]
+        self.p_down = self.kwargs_opt["p_down"]
+
+        self.tabu_memory = self.kwargs_opt["tabu_memory"]
+
+        self.n_restarts = self.kwargs_opt["n_restarts"]
+        self.n_iter_restart = int(n_iter / self.n_restarts)
+
+        self.epsilon_mod = self.kwargs_opt["epsilon_mod"]
+        self.annealing_rate = self.kwargs_opt["annealing_rate"]
+        self.start_temp = self.kwargs_opt["start_temp"]
+        self.norm_factor = self.kwargs_opt["norm_factor"]
+        self.gamma = self.kwargs_opt["gamma"]
+
+        self.system_temperatures = self.kwargs_opt["system_temperatures"]
+        self.n_swaps = self.kwargs_opt["n_swaps"]
+        self.n_iter_swap = int(n_iter / self.n_swaps)
+
+        self.n_particles = self.kwargs_opt["n_particles"]
+        self.inertia = self.kwargs_opt["inertia"]
+        self.cognitive_weight = self.kwargs_opt["cognitive_weight"]
+        self.social_weight = self.kwargs_opt["social_weight"]
+
+        self.individuals = self.kwargs_opt["individuals"]
+        self.mutation_rate = self.kwargs_opt["mutation_rate"]
+        self.crossover_rate = self.kwargs_opt["crossover_rate"]
+
+        self.warm_start_smbo = self.kwargs_opt["warm_start_smbo"]
+        self.xi = self.kwargs_opt["xi"]
+        self.gpr = self.kwargs_opt["gpr"]
+
+        self.start_up_evals = self.kwargs_opt["start_up_evals"]
+        self.gamma_tpe = self.kwargs_opt["gamma_tpe"]
+        self.tree_regressor = tree_regressor[self.kwargs_opt["tree_regressor"]]

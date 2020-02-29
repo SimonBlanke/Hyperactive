@@ -11,8 +11,8 @@ from ...base_positioner import BasePositioner
 
 
 class SBOM(BaseOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
 
     def _all_possible_pos(self, cand):
         pos_space = []

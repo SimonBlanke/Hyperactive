@@ -9,8 +9,8 @@ from . import HillClimbingOptimizer
 
 
 class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
         self.norm_factor = _opt_args_.norm_factor
 
         if self.norm_factor == "adaptive":

@@ -7,8 +7,8 @@ from ..local import HillClimbingOptimizer
 
 
 class RandomAnnealingOptimizer(HillClimbingOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
         self.temp = _opt_args_.start_temp
 
     def _iterate(self, i, _cand_):

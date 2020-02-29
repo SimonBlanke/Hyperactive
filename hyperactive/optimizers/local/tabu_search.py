@@ -19,8 +19,8 @@ def gaussian(distance, sig, sigma_factor=1):
 
 
 class TabuOptimizer(HillClimbingOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
 
     def _tabu_pos(self, pos, _p_):
         _p_.add_tabu(pos)

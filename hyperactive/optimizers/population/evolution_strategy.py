@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+from math import floor, ceil
 import numpy as np
 import random
 
@@ -11,12 +11,12 @@ from ..local import HillClimbingPositioner
 
 
 class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
         self.n_pop = self._opt_args_.individuals
 
-        self.n_mutations = int(round(self.n_pop * self._opt_args_.mutation_rate))
-        self.n_crossovers = int(round(self.n_pop * self._opt_args_.crossover_rate))
+        self.n_mutations = floor(self.n_pop * self._opt_args_.mutation_rate)
+        self.n_crossovers = ceil(self.n_pop * self._opt_args_.crossover_rate)
 
     def _init_individuals(self, _cand_):
         _p_list_ = [Individual(**self._opt_args_.kwargs_opt) for _ in range(self.n_pop)]
@@ -26,8 +26,6 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
             self._optimizer_eval(_cand_, _p_)
             _p_.pos_current = _p_.pos_new
             _p_.score_current = _p_.score_new
-
-            print("\n_p_.pos_current\n", _p_.pos_current)
 
         return _p_list_
 
@@ -49,9 +47,6 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
     def _cross_two_ind(self, _p_list_):
         pos_new = []
-
-        print("_p_list_[0].pos_current", _p_list_[0].pos_current)
-        print("_p_list_[1].pos_current", _p_list_[1].pos_current)
 
         for pos1, pos2 in zip(_p_list_[0].pos_current, _p_list_[1].pos_current):
             rand = random.randint(0, 1)
@@ -77,7 +72,7 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
         scores_np = np.array(scores_list)
         idx_sorted_ind = list(scores_np.argsort()[::-1])
 
-        return idx_sorted_ind
+        self._p_list_ = self._p_list_[idx_sorted_ind]
 
     def _select_individuals(self, index_best):
         mutate_idx = index_best[: self.n_mutations]
@@ -90,7 +85,6 @@ class EvolutionStrategyOptimizer(ParticleSwarmOptimizer):
 
     def _iterate(self, i, _cand_):
         _p_current = self._p_list_[i % self.n_pop]
-        print("\n_p_current.pos_current\n", _p_current.pos_current)
         self._move_positioners(_cand_)
         self._update_pos(_cand_, _p_current)
 

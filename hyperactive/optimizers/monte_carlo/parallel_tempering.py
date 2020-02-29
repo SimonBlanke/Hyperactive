@@ -12,9 +12,9 @@ from ..local import HillClimbingPositioner
 
 
 class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
-        self.n_iter_swap = int(self._main_args_.n_iter / self._opt_args_.n_swaps)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
+        self.n_iter_swap = _opt_args_.n_iter_swap
 
     def _init_annealers(self, _cand_):
         _p_list_ = [

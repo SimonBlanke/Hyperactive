@@ -11,15 +11,15 @@ from .sbom import SBOM
 
 
 class TreeStructuredParzenEstimators(SBOM):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
         self.kd_best = KernelDensity()
         self.kd_worst = KernelDensity()
 
     def _get_samples(self):
         n_samples = self.X_sample.shape[0]
 
-        n_best = int(n_samples * self._opt_args_.gamme_tpe)
+        n_best = int(n_samples * self._opt_args_.gamma_tpe)
 
         Y_sample = self.Y_sample[:, 0]
         index_best = Y_sample.argsort()[-n_best:][::-1]
@@ -56,7 +56,7 @@ class TreeStructuredParzenEstimators(SBOM):
 
     def _iterate(self, i, _cand_):
         if i < self._opt_args_.start_up_evals:
-            self._p_.pos_new = self._p_.move_random(_cand_)
+            self._p_.move_random(_cand_)
             self._optimizer_eval(_cand_, self._p_)
             self._update_pos(_cand_, self._p_)
 
@@ -64,8 +64,8 @@ class TreeStructuredParzenEstimators(SBOM):
             self._p_.pos_new = self.propose_location(_cand_)
             self._p_.score_new = _cand_.eval_pos(self._p_.pos_new)
 
-        self._optimizer_eval(_cand_, self._p_)
-        self._update_pos(_cand_, self._p_)
+            self._optimizer_eval(_cand_, self._p_)
+            self._update_pos(_cand_, self._p_)
 
         self.X_sample = np.vstack((self.X_sample, self._p_.pos_new))
         self.Y_sample = np.vstack((self.Y_sample, self._p_.score_new))

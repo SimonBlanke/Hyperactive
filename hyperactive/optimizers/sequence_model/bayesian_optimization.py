@@ -11,8 +11,8 @@ from .sbom import SBOM
 
 
 class BayesianOptimizer(SBOM):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
         self.regr = self._opt_args_.gpr
 
         # print("self.regr ", self.regr)

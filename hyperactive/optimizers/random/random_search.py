@@ -7,8 +7,8 @@ from ...base_optimizer import BaseOptimizer
 
 
 class RandomSearchOptimizer(BaseOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
 
     def _iterate(self, i, _cand_):
         self._p_.move_random(_cand_)

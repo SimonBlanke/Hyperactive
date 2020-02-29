@@ -9,8 +9,8 @@ from ...base_positioner import BasePositioner
 
 
 class HillClimbingOptimizer(BaseOptimizer):
-    def __init__(self, _main_args_, _opt_args_):
-        super().__init__(_main_args_, _opt_args_)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
 
     def _hill_climb_iter(self, i, _cand_):
         score_new = -np.inf
