@@ -5,6 +5,7 @@
 
 import numpy as np
 from scipy.stats import norm
+from scipy.spatial.distance import cdist
 
 
 from .sbom import SBOM
@@ -14,8 +15,7 @@ class BayesianOptimizer(SBOM):
     def __init__(self, _opt_args_):
         super().__init__(_opt_args_)
         self.regr = self._opt_args_.gpr
-
-        # print("self.regr ", self.regr)
+        self.new_positions = []
 
     def expected_improvement(self):
         mu, sigma = self.regr.predict(self.all_pos_comb, return_std=True)
@@ -31,25 +31,50 @@ class BayesianOptimizer(SBOM):
 
         return exp_imp
 
-    def propose_location(self, cand):
+    def _pos_valid(self, pos_best, pos_cand):
+        for pos_selected in pos_best:
+            dist = cdist(self.all_pos_comb, pos_cand)
+            if dist > len(self.all_pos_comb) / 3000:
+                return False
+
+    def propose_location(self, i, _cand_):
         self.regr.fit(self.X_sample, self.Y_sample)
         exp_imp = self.expected_improvement()
-        # print("\ņ exp_imp \ņ ", exp_imp)
         exp_imp = exp_imp[:, 0]
 
         index_best = list(exp_imp.argsort()[::-1])
-
         all_pos_comb_sorted = self.all_pos_comb[index_best]
-        pos_best = all_pos_comb_sorted[0]
 
-        # print("\ņ all_pos_comb_sorted \n", all_pos_comb_sorted)
+        pos_best = [all_pos_comb_sorted[0]]
+
+        while len(pos_best) < self._opt_args_.skip_retrain(i):
+            if all_pos_comb_sorted.shape[0] == 0:
+                break
+
+            dists = cdist(all_pos_comb_sorted, [pos_best[-1]], metric="cityblock")
+            dists_norm = dists / dists.max()
+            bool = np.squeeze(dists_norm > 0.25)
+            all_pos_comb_sorted = all_pos_comb_sorted[bool]
+
+            if len(all_pos_comb_sorted) > 0:
+                pos_best.append(all_pos_comb_sorted[0])
 
         return pos_best
 
     def _iterate(self, i, _cand_):
-        self.p_list[0].pos_new = self.propose_location(_cand_)
-        self._optimizer_eval(_cand_, self.p_list[0])
-        self._update_pos(_cand_, self.p_list[0])
+        if i < self._opt_args_.start_up_evals:
+            self.p_list[0].move_random(_cand_)
+            self._optimizer_eval(_cand_, self.p_list[0])
+            self._update_pos(_cand_, self.p_list[0])
+        else:
+            if len(self.new_positions) == 0:
+                self.new_positions = self.propose_location(i, _cand_)
+
+            self.p_list[0].pos_new = self.new_positions[0]
+            self._optimizer_eval(_cand_, self.p_list[0])
+            self._update_pos(_cand_, self.p_list[0])
+
+            self.new_positions.pop(0)
 
         self.X_sample = np.vstack((self.X_sample, self.p_list[0].pos_new))
         self.Y_sample = np.vstack((self.Y_sample, self.p_list[0].score_new))

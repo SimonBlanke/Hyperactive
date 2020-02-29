@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numpy as np
 from .util import merge_dicts
 from numpy.random import normal
 
@@ -11,9 +12,40 @@ from .optimizers.sequence_model.surrogate_models import (
     GPR,
 )
 
+
 tree_regressor = {
-    "random_forst": RandomForestRegressor(),
+    "random_forest": RandomForestRegressor(),
     "extra_tree": ExtraTreesRegressor(),
+}
+
+
+def skip_refit_75(i):
+    if i <= 33:
+        return 1
+    return int((i - 33) ** 0.75)
+
+
+def skip_refit_50(i):
+    if i <= 33:
+        return 1
+    return int((i - 33) ** 0.5)
+
+
+def skip_refit_25(i):
+    if i <= 33:
+        return 1
+    return int((i - 33) ** 0.25)
+
+
+def never_skip_refit(i):
+    return 1
+
+
+skip_retrain_ = {
+    "many": skip_refit_75,
+    "some": skip_refit_50,
+    "few": skip_refit_25,
+    "never": never_skip_refit,
 }
 
 
@@ -54,10 +86,11 @@ class Arguments:
             "warm_start_smbo": False,
             "xi": 0.01,
             "gpr": GPR(),
+            "skip_retrain": "some",
             # TreeStructuredParzenEstimators
-            "start_up_evals": 10,
+            "start_up_evals": 3,
             "gamma_tpe": 0.3,
-            "tree_regressor": "random_forst",
+            "tree_regressor": "random_forest",
         }
 
         self.kwargs_opt = merge_dicts(kwargs_opt, kwargs)
@@ -96,6 +129,7 @@ class Arguments:
         self.warm_start_smbo = self.kwargs_opt["warm_start_smbo"]
         self.xi = self.kwargs_opt["xi"]
         self.gpr = self.kwargs_opt["gpr"]
+        self.skip_retrain = skip_retrain_[self.kwargs_opt["skip_retrain"]]
 
         self.start_up_evals = self.kwargs_opt["start_up_evals"]
         self.gamma_tpe = self.kwargs_opt["gamma_tpe"]
