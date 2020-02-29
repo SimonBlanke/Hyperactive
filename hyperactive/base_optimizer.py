@@ -8,6 +8,22 @@ from .base_positioner import BasePositioner
 class BaseOptimizer:
     def __init__(self, _opt_args_):
         self._opt_args_ = _opt_args_
+        self.p_list = []
+
+    def iterate(self, i, _cand_):
+        self.i = i
+
+        if i < self.n_positioners:
+            p = self._init_iteration(_cand_)
+            self.p_list.append(p)
+
+        else:
+            self._iterate(i, _cand_)
+
+        return _cand_
+
+    def _finish_search(self):
+        self._pbar_.close_p_bar()
 
     def _update_pos(self, _cand_, _p_):
         if _p_.score_new > _p_.score_best:

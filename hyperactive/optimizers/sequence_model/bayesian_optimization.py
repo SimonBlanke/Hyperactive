@@ -47,11 +47,11 @@ class BayesianOptimizer(SBOM):
         return pos_best
 
     def _iterate(self, i, _cand_):
-        self._p_.pos_new = self.propose_location(_cand_)
-        self._optimizer_eval(_cand_, self._p_)
-        self._update_pos(_cand_, self._p_)
+        self.p_list[0].pos_new = self.propose_location(_cand_)
+        self._optimizer_eval(_cand_, self.p_list[0])
+        self._update_pos(_cand_, self.p_list[0])
 
-        self.X_sample = np.vstack((self.X_sample, self._p_.pos_new))
-        self.Y_sample = np.vstack((self.Y_sample, self._p_.score_new))
+        self.X_sample = np.vstack((self.X_sample, self.p_list[0].pos_new))
+        self.Y_sample = np.vstack((self.Y_sample, self.p_list[0].score_new))
 
         return _cand_

@@ -15,26 +15,20 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
     def __init__(self, _opt_args_):
         super().__init__(_opt_args_)
         self.n_iter_swap = _opt_args_.n_iter_swap
+        self.n_positioners = len(_opt_args_.system_temperatures)
 
-    def _init_annealers(self, _cand_):
-        _p_list_ = [
-            System(**self._opt_args_.kwargs_opt, temp=temp)
-            for temp in self._opt_args_.system_temperatures
-        ]
+    def _init_annealer(self, _cand_):
+        temp = self._opt_args_.system_temperatures[self.i]
+        _p_ = System(**self._opt_args_.kwargs_opt, temp=temp)
 
-        for _p_ in _p_list_:
-            _p_.pos_new = _cand_._space_.get_random_pos()
+        _p_.pos_new = _cand_._space_.get_random_pos()
 
-            self._optimizer_eval(_cand_, _p_)
-            _p_.pos_current = _p_.pos_new
-            _p_.score_current = _p_.score_new
+        return _p_
 
-        return _p_list_
+    def _swap_pos(self, _cand_):
+        _p_list_temp = self.p_list[:]
 
-    def _swap_pos(self, _cand_, _p_list_):
-        _p_list_temp = _p_list_[:]
-
-        for _p1_ in _p_list_:
+        for _p1_ in self.p_list:
             rand = random.uniform(0, 1)
             _p2_ = np.random.choice(_p_list_temp)
 
@@ -62,22 +56,25 @@ class ParallelTemperingOptimizer(SimulatedAnnealingOptimizer):
         super()._iterate(0, _cand_)
 
     def _iterate(self, i, _cand_):
-        _p_current = self._p_list_[i % len(self._p_list_)]
+        _p_current = self.p_list[i % len(self.p_list)]
 
         self._anneal_system(_cand_, _p_current)
 
         if self.n_iter_swap != 0 and i % self.n_iter_swap == 0:
-            self._swap_pos(_cand_, self._p_list_)
+            self._swap_pos(_cand_)
 
         return _cand_
 
     def _init_iteration(self, _cand_):
-        self._p_list_ = self._init_annealers(_cand_)
+        p = self._init_annealer(_cand_)
+
+        self._optimizer_eval(_cand_, p)
+        self._update_pos(_cand_, p)
+
+        return p
 
     def _finish_search(self):
         self._pbar_.close_p_bar()
-
-        return self._p_list_
 
 
 class System(HillClimbingPositioner):

@@ -9,22 +9,23 @@ from ...base_optimizer import BaseOptimizer
 class RandomSearchOptimizer(BaseOptimizer):
     def __init__(self, _opt_args_):
         super().__init__(_opt_args_)
+        self.n_positioners = 1
 
     def _iterate(self, i, _cand_):
-        self._p_.move_random(_cand_)
-        self._optimizer_eval(_cand_, self._p_)
+        if i < 1:
+            self._init_iteration(_cand_)
+        else:
+            self.p_list[0].move_random(_cand_)
+            self._optimizer_eval(_cand_, self.p_list[0])
 
-        self._update_pos(_cand_, self._p_)
+            self._update_pos(_cand_, self.p_list[0])
 
         return _cand_
 
     def _init_iteration(self, _cand_):
-        self._p_ = super()._init_base_positioner(_cand_)
+        p = super()._init_base_positioner(_cand_)
 
-        self._optimizer_eval(_cand_, self._p_)
-        self._update_pos(_cand_, self._p_)
+        self._optimizer_eval(_cand_, p)
+        self._update_pos(_cand_, p)
 
-    def _finish_search(self):
-        self._pbar_.close_p_bar()
-
-        return self._p_
+        return p

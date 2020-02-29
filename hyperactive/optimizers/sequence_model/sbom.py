@@ -13,6 +13,7 @@ from ...base_positioner import BasePositioner
 class SBOM(BaseOptimizer):
     def __init__(self, _opt_args_):
         super().__init__(_opt_args_)
+        self.n_positioners = 1
 
     def _all_possible_pos(self, cand):
         pos_space = []
@@ -23,11 +24,11 @@ class SBOM(BaseOptimizer):
         self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
 
     def _init_iteration(self, _cand_):
-        self._p_ = SbomPositioner()
-        self._p_.move_random(_cand_)
+        p = SbomPositioner()
+        p.move_random(_cand_)
 
-        self._optimizer_eval(_cand_, self._p_)
-        self._update_pos(_cand_, self._p_)
+        self._optimizer_eval(_cand_, p)
+        self._update_pos(_cand_, p)
 
         self._all_possible_pos(_cand_)
 
@@ -38,10 +39,7 @@ class SBOM(BaseOptimizer):
             self.X_sample = _cand_.pos_best.reshape(1, -1)
             self.Y_sample = np.array(_cand_.score_best).reshape(1, -1)
 
-    def _finish_search(self):
-        self._pbar_.close_p_bar()
-
-        return self._p_
+        return p
 
 
 class SbomPositioner(BasePositioner):

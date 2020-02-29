@@ -11,41 +11,35 @@ from ...base_positioner import BasePositioner
 class HillClimbingOptimizer(BaseOptimizer):
     def __init__(self, _opt_args_):
         super().__init__(_opt_args_)
+        self.n_positioners = 1
 
     def _hill_climb_iter(self, i, _cand_):
         score_new = -np.inf
         pos_new = None
 
-        self._p_.move_climb(_cand_, self._p_.pos_current)
-        self._optimizer_eval(_cand_, self._p_)
+        self.p_list[0].move_climb(_cand_, self.p_list[0].pos_current)
+        self._optimizer_eval(_cand_, self.p_list[0])
 
-        if self._p_.score_new > score_new:
-            score_new = self._p_.score_new
-            pos_new = self._p_.pos_new
+        if self.p_list[0].score_new > score_new:
+            score_new = self.p_list[0].score_new
+            pos_new = self.p_list[0].pos_new
 
         if i % self._opt_args_.n_neighbours == 0:
-            self._p_.pos_new = pos_new
-            self._p_.score_new = score_new
+            self.p_list[0].pos_new = pos_new
+            self.p_list[0].score_new = score_new
 
-            self._update_pos(_cand_, self._p_)
+            self._update_pos(_cand_, self.p_list[0])
 
     def _iterate(self, i, _cand_):
         self._hill_climb_iter(i, _cand_)
 
-        return _cand_
-
     def _init_iteration(self, _cand_):
-        self._p_ = super()._init_base_positioner(
-            _cand_, positioner=HillClimbingPositioner
-        )
+        p = super()._init_base_positioner(_cand_, positioner=HillClimbingPositioner)
 
-        self._optimizer_eval(_cand_, self._p_)
-        self._update_pos(_cand_, self._p_)
+        self._optimizer_eval(_cand_, p)
+        self._update_pos(_cand_, p)
 
-    def _finish_search(self):
-        self._pbar_.close_p_bar()
-
-        return self._p_
+        return p
 
 
 class HillClimbingPositioner(BasePositioner):

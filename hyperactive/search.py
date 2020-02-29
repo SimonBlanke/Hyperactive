@@ -121,19 +121,20 @@ class Search:
     def _search(self, nth_process):
         _cand_ = self._initialize_search(self._main_args_, nth_process, self._info_)
 
-        for i in range(1, self._main_args_.n_iter):
+        for i in range(self._main_args_.n_iter):
             c_time = time.time()
 
             _cand_.i = i
-            _cand_ = self.optimizer._iterate(i, _cand_)
+            _cand_ = self.optimizer.iterate(i, _cand_)
 
             if self._time_exceeded():
                 break
 
             _cand_.iter_times.append(time.time() - c_time)
 
-        _p_ = self.optimizer._finish_search()
-        return _cand_, _p_
+        self.optimizer._finish_search()
+
+        return _cand_, self.optimizer.p_list
 
     def _time_exceeded(self):
         run_time = time.time() - self.start_time
@@ -144,7 +145,5 @@ class Search:
 
         _cand_ = Candidate(nth_process, _main_args_, _info_)
         self._pbar_.init_p_bar(nth_process, self._main_args_)
-
-        self.optimizer._init_iteration(_cand_)
 
         return _cand_

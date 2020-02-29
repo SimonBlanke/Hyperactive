@@ -61,9 +61,9 @@ class StochasticHillClimbingOptimizer(HillClimbingOptimizer):
         self._transition(_cand_)
 
     def _transition(self, _cand_):
-        if self._p_.score_new <= _cand_.score_best:
-            p_accept = self._accept(self._p_)
-            self._consider(self._p_, p_accept)
+        if self.p_list[0].score_new <= _cand_.score_best:
+            p_accept = self._accept(self.p_list[0])
+            self._consider(self.p_list[0], p_accept)
 
     def _iterate(self, i, _cand_):
         self._stochastic_hill_climb_iter(i, _cand_)

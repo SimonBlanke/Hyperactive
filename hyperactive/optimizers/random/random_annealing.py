@@ -12,13 +12,13 @@ class RandomAnnealingOptimizer(HillClimbingOptimizer):
         self.temp = _opt_args_.start_temp
 
     def _iterate(self, i, _cand_):
-        self._p_.move_climb(
+        self.p_list[0].move_climb(
             _cand_,
-            self._p_.pos_current,
+            self.p_list[0].pos_current,
             epsilon_mod=self.temp * self._opt_args_.epsilon_mod,
         )
-        self._optimizer_eval(_cand_, self._p_)
-        self._update_pos(_cand_, self._p_)
+        self._optimizer_eval(_cand_, self.p_list[0])
+        self._update_pos(_cand_, self.p_list[0])
 
         self.temp = self.temp * self._opt_args_.annealing_rate
 
