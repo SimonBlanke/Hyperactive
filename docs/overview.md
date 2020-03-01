@@ -244,9 +244,9 @@ pip install Hyperactive/
 <details open>
 <summary><b>v2.3.0</b></summary>
 
-  - [ ] Tree-structured Parzen Estimator
-  - [ ] Multiple experimental SBOM
-  - [ ] Meta-Optimization of all optimizers
+  - [x] Tree-structured Parzen Estimator
+  - [x] Decision Tree Optimizer
+  - [x] add "max_sample_size" and "skip_retrain" parameter for sbom to decrease optimization time
 </details>
 
 <details>
@@ -254,14 +254,10 @@ pip install Hyperactive/
 
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
-  - [ ] Differential evolution
-</details>
-
-<details>
-<summary><b>v2.5.0</b></summary>
-
-  - [ ] Helper-functions for early stopping
-  - [ ] Helper-functions for dataset approximation
+  - [ ] upgrade particle swarm optimization
+  - [ ] upgrade evolution strategy
+  - [ ] add warm start for population based optimizers
+  - [ ] Meta-Optimization of local optimizers
 </details>
 
 <br><br>
