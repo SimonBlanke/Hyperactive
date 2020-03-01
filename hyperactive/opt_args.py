@@ -85,6 +85,7 @@ class Arguments:
             "mutation_rate": 0.7,
             "crossover_rate": 0.3,
             # BayesianOptimizer
+            "max_sample_size": 1000000,
             "warm_start_smbo": False,
             "xi": 0.01,
             "gpr": "gp_linear",
@@ -128,6 +129,7 @@ class Arguments:
         self.mutation_rate = self.kwargs_opt["mutation_rate"]
         self.crossover_rate = self.kwargs_opt["crossover_rate"]
 
+        self.max_sample_size = self.kwargs_opt["max_sample_size"]
         self.warm_start_smbo = self.kwargs_opt["warm_start_smbo"]
         self.xi = self.kwargs_opt["xi"]
 

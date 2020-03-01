@@ -15,6 +15,10 @@ class SBOM(BaseOptimizer):
         super().__init__(_opt_args_)
         self.n_positioners = 1
 
+    def sample_size(self):
+        n = self._opt_args_.max_sample_size
+        return int(n * np.tanh(self.all_pos_comb.size / n))
+
     def _all_possible_pos(self, cand):
         pos_space = []
         for dim_ in cand._space_.dim:

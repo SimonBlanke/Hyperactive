@@ -18,10 +18,17 @@ class BayesianOptimizer(SBOM):
         self.new_positions = []
 
     def expected_improvement(self):
-        mu, sigma = self.regr.predict(self.all_pos_comb, return_std=True)
+        sample_size = (self.sample_size(),)
+        row_sample = np.random.choice(self.all_pos_comb.shape[0], size=sample_size)
+        all_pos_comb_sampled = self.all_pos_comb[row_sample]
+
+        mu, sigma = self.regr.predict(all_pos_comb_sampled, return_std=True)
         mu_sample = self.regr.predict(self.X_sample)
 
+        mu = mu.reshape(-1, 1)
         sigma = sigma.reshape(-1, 1)
+        mu_sample = mu_sample.reshape(-1, 1)
+
         mu_sample_opt = np.max(mu_sample)
         imp = mu - mu_sample_opt - self._opt_args_.xi
 
@@ -39,6 +46,7 @@ class BayesianOptimizer(SBOM):
 
     def propose_location(self, i, _cand_):
         self.regr.fit(self.X_sample, self.Y_sample)
+
         exp_imp = self.expected_improvement()
         exp_imp = exp_imp[:, 0]
 
