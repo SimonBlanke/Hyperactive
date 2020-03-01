@@ -9,9 +9,11 @@ from numpy.random import normal
 from .optimizers.sequence_model.surrogate_models import (
     RandomForestRegressor,
     ExtraTreesRegressor,
+    GPR_linear,
     GPR,
 )
 
+gaussian_process = {"gp_nonlinear": GPR(), "gp_linear": GPR_linear()}
 
 tree_regressor = {
     "random_forest": RandomForestRegressor(),
@@ -85,10 +87,10 @@ class Arguments:
             # BayesianOptimizer
             "warm_start_smbo": False,
             "xi": 0.01,
-            "gpr": GPR(),
+            "gpr": "gp_linear",
             "skip_retrain": "some",
             # TreeStructuredParzenEstimators
-            "start_up_evals": 3,
+            "start_up_evals": 10,
             "gamma_tpe": 0.3,
             "tree_regressor": "random_forest",
         }
@@ -128,9 +130,18 @@ class Arguments:
 
         self.warm_start_smbo = self.kwargs_opt["warm_start_smbo"]
         self.xi = self.kwargs_opt["xi"]
-        self.gpr = self.kwargs_opt["gpr"]
+
+        if isinstance(self.kwargs_opt["gpr"], str):
+            self.gpr = gaussian_process[self.kwargs_opt["gpr"]]
+        else:
+            self.gpr = self.kwargs_opt["gpr"]
+
         self.skip_retrain = skip_retrain_[self.kwargs_opt["skip_retrain"]]
 
         self.start_up_evals = self.kwargs_opt["start_up_evals"]
         self.gamma_tpe = self.kwargs_opt["gamma_tpe"]
-        self.tree_regressor = tree_regressor[self.kwargs_opt["tree_regressor"]]
+
+        if isinstance(self.kwargs_opt["tree_regressor"], str):
+            self.tree_regressor = tree_regressor[self.kwargs_opt["tree_regressor"]]
+        else:
+            self.tree_regressor = self.kwargs_opt["tree_regressor"]

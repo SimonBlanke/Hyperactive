@@ -5,6 +5,7 @@
 
 import numpy as np
 
+from sklearn.linear_model import BayesianRidge
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern
 from sklearn.ensemble import ExtraTreesRegressor as _ExtraTreesRegressor_
@@ -45,8 +46,8 @@ class TreeEnsembleBase:
                     "Expected impurity to be 'mse', got %s instead" % self.criterion
                 )
             std = _return_std(X, self.estimators_, mean, self.min_variance)
-            return mean.reshape(-1, 1), std
-        return mean.reshape(-1, 1)
+            return mean, std
+        return mean
 
 
 class RandomForestRegressor(TreeEnsembleBase, _RandomForestRegressor_):
@@ -62,6 +63,17 @@ class ExtraTreesRegressor(TreeEnsembleBase, _ExtraTreesRegressor_):
 class GPR:
     def __init__(self):
         self.gpr = GaussianProcessRegressor(kernel=Matern(nu=2.5), normalize_y=True)
+
+    def fit(self, X, y):
+        self.gpr.fit(X, y)
+
+    def predict(self, X, return_std=False):
+        return self.gpr.predict(X, return_std=return_std)
+
+
+class GPR_linear:
+    def __init__(self):
+        self.gpr = BayesianRidge(n_iter=10, normalize=True)
 
     def fit(self, X, y):
         self.gpr.fit(X, y)
