@@ -18,9 +18,7 @@ class BayesianOptimizer(SBOM):
         self.new_positions = []
 
     def expected_improvement(self):
-        sample_size = (self.sample_size(),)
-        row_sample = np.random.choice(self.all_pos_comb.shape[0], size=sample_size)
-        all_pos_comb_sampled = self.all_pos_comb[row_sample]
+        all_pos_comb_sampled = self.get_random_sample()
 
         mu, sigma = self.regr.predict(all_pos_comb_sampled, return_std=True)
         mu_sample = self.regr.predict(self.X_sample)
