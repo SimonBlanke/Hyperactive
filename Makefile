@@ -24,7 +24,7 @@ clean-test:
 		rm -f .coverage; \
 		rm -fr htmlcov/
 
-test:
+test: test-opt-para
 	cd tests/; \
 		pytest test_attributes.py -p no:warnings; \
 		pytest test_hyperactive_api.py -p no:warnings; \
