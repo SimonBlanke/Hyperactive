@@ -86,7 +86,7 @@ def cnn(para, X_train, y_train):
     model.add(Conv2D(32, (3, 3), padding="same"))
     model.add(Activation("relu"))
     """
-    model = model_pretrained
+    model = para["model_pretrained"]
 
     model = para["conv_layer.0"](model)
     model.add(Dropout(0.25))
@@ -109,7 +109,11 @@ def cnn(para, X_train, y_train):
 
 
 search_config = {
-    cnn: {"conv_layer.0": [conv1, conv2, conv3], "neurons.0": range(100, 1000, 100)}
+    cnn: {
+        "model_pretrained": [model_pretrained],
+        "conv_layer.0": [conv1, conv2, conv3],
+        "neurons.0": range(100, 1000, 100),
+    }
 }
 
 opt = Hyperactive(X_train, y_train)
