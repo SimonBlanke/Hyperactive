@@ -36,12 +36,6 @@ class BayesianOptimizer(SBOM):
 
         return exp_imp
 
-    def _pos_valid(self, pos_best, pos_cand):
-        for pos_selected in pos_best:
-            dist = cdist(self.all_pos_comb, pos_cand)
-            if dist > len(self.all_pos_comb) / 3000:
-                return False
-
     def propose_location(self, i, _cand_):
         self.regr.fit(self.X_sample, self.Y_sample)
 
