@@ -22,7 +22,7 @@ def sphere_function(para, X_train, y_train):
 
 
 search_config = {
-    sphere_function: {"x1": np.arange(-10, 10, 0.1), "x2": np.arange(-10, 10, 0.1)}
+    sphere_function: {"x1": np.arange(-3, 3, 0.1), "x2": np.arange(-3, 3, 0.1)}
 }
 
 

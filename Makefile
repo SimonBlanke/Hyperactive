@@ -38,6 +38,22 @@ test-memory:
 		pytest test_memory.py -p no:warnings; \
 		pytest test_memory_helpers.py -p no:warnings
 
+test-opt-para:
+	cd tests/optimizer_parameter/; \
+		pytest HillClimbing.py -p no:warnings; \
+	    pytest StochasticHillClimbing.py -p no:warnings; \
+	    pytest TabuSearch.py -p no:warnings; \
+	    pytest RandomRestartHillClimbing.py -p no:warnings; \
+	    pytest RandomAnnealing.py -p no:warnings; \
+	    pytest SimulatedAnnealing.py -p no:warnings; \
+	    pytest StochasticTunneling.py -p no:warnings; \
+	    pytest ParallelTempering.py -p no:warnings; \
+	    pytest ParticleSwarm.py -p no:warnings; \
+	    pytest EvolutionStrategy.py -p no:warnings; \
+	    pytest Bayesian.py -p no:warnings; \
+	    pytest TPE.py -p no:warnings; \
+	    pytest DecisionTree.py -p no:warnings
+
 test-local:
 	cd tests/local; \
 		pytest _test_packages.py -p no:warnings; \
