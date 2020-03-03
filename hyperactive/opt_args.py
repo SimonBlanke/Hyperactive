@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
 from .util import merge_dicts
 from numpy.random import normal
 
@@ -72,6 +71,7 @@ class Arguments:
             "norm_factor": "adaptive",
             # StochasticTunnelingOptimizer
             "gamma": 0.5,
+            "warm_start_population": False,
             # ParallelTemperingOptimizer
             "system_temperatures": [0.1, 1, 10, 100],
             "n_swaps": 10,
@@ -88,7 +88,7 @@ class Arguments:
             "max_sample_size": 1000000,
             "warm_start_smbo": False,
             "xi": 0.01,
-            "gpr": "gp_linear",
+            "gpr": "gp_nonlinear",
             "skip_retrain": "some",
             # TreeStructuredParzenEstimators
             "start_up_evals": 10,
