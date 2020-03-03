@@ -29,6 +29,16 @@ search_config = {
 }
 
 
+def test_skip_retrain():
+    for skip_retrain in ["many", "some", "few", "never"]:
+        opt = Hyperactive(X, y, memory=memory)
+        opt.search(
+            search_config,
+            n_iter=n_iter,
+            optimizer={"Bayesian": {"skip_retrain": skip_retrain}},
+        )
+
+
 def test_start_up_evals():
     for start_up_evals in [1, 100]:
         opt = Hyperactive(X, y, memory=memory)
