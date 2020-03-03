@@ -1,8 +1,10 @@
 ## Introduction
 
-Hyperactive is primarily designed to optimize hyperparameters of machine learning models, but it can be used to optimize any other type of "model" that returns a fitness value. <br>
-In general hyperactive works by searching through a set of parameters of an objective function. The objective function returns a fitness value that gets maximized during the optimization process. The search space defines the range of parameters that will be searched during the optimization process. <br>
-The following chapters provide a step by step explanation of how to start your first optimization run. Alternatively there are plenty of examples to learn how to use hyperactive.
+Hyperactive is primarily designed to optimize **hyperparameters of machine learning models**, but it can be used to optimize any other type of "model" that returns a fitness value. <br>
+
+In general hyperactive works by searching through a set of parameters of an **objective function** (or model function). The objective function returns a fitness value that gets maximized during the optimization process. The **search space** defines the range of parameters that will be searched during the optimization process. <br>
+
+> The following chapters provide a step by step explanation of how to start your first optimization run. Alternatively there are plenty of examples to learn how to use hyperactive.
 
 <br>
 
@@ -11,20 +13,24 @@ The following chapters provide a step by step explanation of how to start your f
 ### Create the search-config
 
 Since v1.0.0 the search-config is created by defining:
-  - a <b>function</b> for the model
-  - a <b>dictionary</b> for the search space
+  - a **function** for the **model**:
+  ```python  
+  def model(para, X, y):
+    ...
+  return score
+  ```
+  - a **dictionary** for the **search space**:
+  ```python  
+  search_space = {"hyperparamter": [...]}
+  ```
+  - a **dictionary** for the **search-config** that adds both together:
+  ```python  
+  search_config = {model: search_space}
+  ```
 
-The model function is the objective function for the optimization. It returns a score that will be maximized during the optimization run. The search space is a dictionary that contains the names of the parameters as dict-keys and the list of values that can be searched during the optimization as dict-values.
+The model function is the objective function for the optimization. It returns a score that will be **maximized** during the optimization run. The search space is a dictionary that contains the names of the parameters as dict-keys and the list of elements that can be searched during the optimization as dict-values.
 
-?>  Together the model and the search space create the search_config.
-
-
-```python
-search_config = {
-    '''The search_config contains the model as a key and the search space as a value'''
-    model: search_space
-}
-```
+?>  Together the model and the search space create the search-config.
 
 <br>
 
@@ -36,7 +42,7 @@ The function receives 3 positional arguments:
   - <b>X</b> : (numpy array) Training features
   - <b>y</b> : (numpy array) Training target
 
-Via the positional argument ``para`` you can choose the parameters in the search space. Hyperactive will access the search space during the optimization and try out different positions in the lists.
+Via the positional argument **para** you can choose the parameters in the search space. Hyperactive will access the search space during the optimization and try out different positions in the lists.
 The function should return some kind of metric that will be <b>maximized</b> during the search.
 
 The finished model should like similar to this:
@@ -64,7 +70,7 @@ def model(para, X, y):
 
 ### Create the search space
 
-The search space is a dictionary that will defines the parameters and values that will be searched during the optimization run. The keys in the search space must be the same as the keys in "para" in the objective function. The values of the search space dictionary are the lists of values you want to search through. The search space for the model example above could look like this:
+The search space is a dictionary that **defines the parameters** and values that will be searched during the optimization run. The keys in the search space **must be the same** as the keys in "para" in the objective function. The values of the search space dictionary are the lists of elements you want to search through. The search space for the model example above could look like this:
 
 ```python
 search_space = {
@@ -135,6 +141,8 @@ search_config = {
 }
 ```
 
+<br>
+
 ### Position Initialization
 
 **Scatter-Initialization**
@@ -144,3 +152,13 @@ This technique was inspired by the 'Hyperband Optimization' and aims to find a g
 **Warm-Start**
 
 When a search is finished the warm-start-dictionary for the best position in the hyperparameter search space (and its metric) is printed in the command line (at verbosity>=1). If multiple searches ran in parallel the warm-start-dictionaries are sorted by the best metric in decreasing order. If the start position in the warm-start-dictionary is not within the search space defined in the search_config an error will occure.
+
+
+<br>
+
+## Machine Learning Guide
+
+
+<br>
+
+## Deep Learning Guide
