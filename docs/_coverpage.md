@@ -6,6 +6,6 @@
 > A hyperparameter optimization and meta-learning toolbox
 
 [GitHub](https://github.com/SimonBlanke/Hyperactive)
-[Get Started](#Installation)
+[Get Started](#Introduction)
 
 ![color](#ecebf2)
