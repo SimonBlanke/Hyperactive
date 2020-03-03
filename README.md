@@ -226,6 +226,38 @@ pip install hyperactive
 
 <br>
 
+## Minimal example
+
+```python
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.datasets import load_breast_cancer
+from hyperactive import Hyperactive
+
+data = load_breast_cancer()
+X, y = data.data, data.target
+
+'''define the model in a function'''
+def model(para, X, y):
+    '''optimize one or multiple hyperparameters'''
+    gbc = GradientBoostingClassifier(n_estimators=para['n_estimators'])
+    scores = cross_val_score(gbc, X, y)
+
+    return scores.mean()
+
+'''create the search space and search_config'''
+search_config = {
+    model: {'n_estimators': range(10, 200, 10)}
+}
+
+'''start the optimization run'''
+opt = Hyperactive(X, y)
+opt.search(search_config, n_iter=20)
+```
+
+
+<br>
+
 ## Roadmap
 
 <details>
