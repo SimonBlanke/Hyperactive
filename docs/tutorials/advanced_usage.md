@@ -22,6 +22,42 @@ search_config = {
 
 <br>
 
+
+## Optimization Parameters
+
+Table of available optimization parameters:
+
+| Argument | type | default |
+|---|---|---|
+| epsilon | float | 0.05 |
+| climb_dist | object | numpy.random.normal |
+| n_neighbours | int | 1 |
+| p_down | float | 0.3 |
+| tabu_memory | int | 3 |
+| n_restarts | int | 10 |
+| epsilon_mod | float | 33 |
+| annealing_rate | float | 0.99 |
+| start_temp | float | 1 |
+| gamma | float | 0.5 |
+| system_temperatures | list | [0.1, 1, 10, 100] |
+| n_swaps | int | 10 |
+| n_particles | int | 10 |
+| inertia | float | 0.5 |
+| cognitive_weight | float | 0.5 |
+| social_weight | float | 0.5 |
+| individuals | int | 10 |
+| mutation_rate | float | 0.7 |
+| crossover_rate | float | 0.3 |
+| warm_start_smbo  |  bool |  False |
+|  xi |  float | 0.01  |
+| kernel | object | sklearn.gaussian_process.kernels.Matern(nu=2.5) |
+|  start_up_evals |  int |  10 |
+|  gamme_tpe |  float | 0.3  |
+
+
+
+<br>
+
 ## Position Initialization
 
 **Scatter-Initialization**
