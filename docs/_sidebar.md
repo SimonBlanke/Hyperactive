@@ -1,15 +1,17 @@
 - Introduction to Hyperactive
-
-    - [Quick Start](README.md)
+    - [Quick Start](quick_start)
     - [Overview](overview)
-    - [Performance](./performance)
-    - [Tutorial](./tutorial)
-    - [Memory](./memory)
-    - [API Reference](./reference)
+    - [API Reference](reference)
 
+- Tutorials
+    - [Basic Tutorial](./tutorials/tutorial)
+    - [Advanced Usage](./tutorials/advanced_usage)
+    - [Memory](./tutorials/memory)
+    - [Performance](./tutorials/performance)
+    - [Machine Learning Guide](./tutorials/ml_guide)
+    - [Deep Learning Guide](./tutorials/dl_guide)
 
 - Examples
-
     - [Machine Learning](./examples/machine_learning)
     - [Deep Learning](./examples/deep_learning)
     - [Distribution](./examples/distribution)
@@ -17,9 +19,7 @@
     - [Mathematical Functions](./examples/test_functions)
     - [Advanced use Cases](./examples/use_cases)
 
-
 - Optimization Techniques
-
     - [Local Search](./optimizers/local_search)
     - [Random Methods](./optimizers/random_methods)
     - [Markov Chain Monte Carlo](./optimizers/mcmc)

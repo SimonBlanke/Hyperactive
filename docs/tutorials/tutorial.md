@@ -8,23 +8,23 @@ In general hyperactive works by searching through a set of parameters of an **ob
 
 <br>
 
-## Basic Tutorial
+## The search-config parameter
 
-### Create the search-config
+The search-config is a parameter of Hyperactive that contains the objective function(s) and search-space(s) of the optimization run. It therefore defines what model to evaluate and which hyperparameters to search through.
 
 Since v1.0.0 the search-config is created by defining:
   - a **function** for the **model**:
-  ```python  
+  ```python
   def model(para, X, y):
     ...
   return score
   ```
   - a **dictionary** for the **search space**:
-  ```python  
+  ```python
   search_space = {"hyperparamter": [...]}
   ```
   - a **dictionary** for the **search-config** that adds both together:
-  ```python  
+  ```python
   search_config = {model: search_space}
   ```
 
@@ -34,7 +34,7 @@ The model function is the objective function for the optimization. It returns a 
 
 <br>
 
-### Create the objective function
+## Create the objective function
 
 The objective function contains the enire model and its evaluation.
 The function receives 3 positional arguments:
@@ -68,7 +68,7 @@ def model(para, X, y):
 
 <br>
 
-### Create the search space
+## Create the search space
 
 The search space is a dictionary that **defines the parameters** and values that will be searched during the optimization run. The keys in the search space **must be the same** as the keys in "para" in the objective function. The values of the search space dictionary are the lists of elements you want to search through. The search space for the model example above could look like this:
 
@@ -89,7 +89,7 @@ search_space = {
 
 <br>
 
-### Choose an optimizer
+## Choose an optimizer
 
 Your decision to use a specific optimizer should be based on the time it takes to evaluate a model and if you already have a start point. Try to stick to the following <b>guidelines</b>, when choosing an optimizer:
 - only use local or mcmc optimizers, if you have a <b>good start point</b>
@@ -100,7 +100,7 @@ Your decision to use a specific optimizer should be based on the time it takes t
 
 <br>
 
-### How many iterations?
+## Number of iterations
 
 The number of iterations should be low for your first optimization to get to know the iteration-time.
 For the <b>iteration-time</b> you should take the following effects into account:
@@ -113,52 +113,3 @@ For the <b>iteration-time</b> you should take the following effects into account
 - The <b>number of epochs</b> should probably be kept low. You just want to compare different types of models. Retrain the best model afterwards with more epochs.
 
 ?>  Just start with a small number of iterations (~10) and continue from there.
-
-
-<br>
-
-## Advanced Usage
-
-### Distribution
-
-If the model training does not use all CPU cores, you can start multiple optimizations in <b>parallel</b> by increasing the number of jobs 'n_jobs'. This can make sense if you want to increase the chance of finding the optimal solution or optimize different models at the same time. The parallelization is done by the Multiprocessing-package.
-
-It is also possible to distribute the model training by using the [Ray-package](https://github.com/ray-project/ray). Ray is a powerful framework for building and running distributed applications. Ray can be used with Hyperactive by just importing and initializing Ray. Hyperactive automatically detects this initialization and will use Ray instead of Multiprocessing. You can set the number of jobs 'n_jobs' like before, while passing the ray-specific parameters (like num_cpus, num_gpus, ...) to ray.init().
-
-?>  If you want to learn more about it check out the [distribution-examples](./examples/distribution) and give it a try.
-
-
-
-
-To run multiple optimizations in parallel you can create a search-config with multiple models and search spaces:
-
-```python
-'''this also requires to set the n_jobs to 3'''
-search_config = {
-    model0: search_space0,
-    model1: search_space1,
-    model2: search_space2,
-}
-```
-
-<br>
-
-### Position Initialization
-
-**Scatter-Initialization**
-
-This technique was inspired by the 'Hyperband Optimization' and aims to find a good initial position for the optimization. It does so by evaluating n random positions with a training subset of 1/n the size of the original dataset. The position that achieves the best score is used as the starting position for the optimization.
-
-**Warm-Start**
-
-When a search is finished the warm-start-dictionary for the best position in the hyperparameter search space (and its metric) is printed in the command line (at verbosity>=1). If multiple searches ran in parallel the warm-start-dictionaries are sorted by the best metric in decreasing order. If the start position in the warm-start-dictionary is not within the search space defined in the search_config an error will occure.
-
-
-<br>
-
-## Machine Learning Guide
-
-
-<br>
-
-## Deep Learning Guide
