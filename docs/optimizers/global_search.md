@@ -12,6 +12,7 @@ The random search explores by choosing a new position at random after each itera
 <img src="./plots/search_paths/RandomSearch.png" width= 49%/>
 </p>
 
+<br>
 
 ## Random Restart Hill Climbing
 
@@ -34,6 +35,7 @@ Random restart hill climbing works by starting a hill climbing search and jumpin
 <img src="./plots/search_paths/RandomRestartHillClimbing [('n_restarts', 10)].png" width= 49%/>
 </p>
 
+<br>
 
 ## Random Annealing
 

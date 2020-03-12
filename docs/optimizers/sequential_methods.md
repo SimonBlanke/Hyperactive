@@ -22,7 +22,6 @@ Bayesian optimization chooses new positions by calculating the expected improvem
 
 <br>
 
-
 ## Tree of Parzen Estimators
 Tree of Parzen Estimators also chooses new positions by calculating the expected improvement. It does so by calculating the ratio of probability being among the best positions and the worst positions. Those probabilities are determined with a kernel density estimator, that is trained on alrady evaluated positions.
 
@@ -40,3 +39,5 @@ Tree of Parzen Estimators also chooses new positions by calculating the expected
 - If model evaluations take a long time
 - If you do not want to do many iterations
 - If your search space is not to big
+
+## Decision Tree Optimizer

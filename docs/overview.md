@@ -111,21 +111,17 @@
             <li><a href="#/./optimizers/local_search?id=Hill-Climbing">Hill Climbing</a></li>
             <li><a href="#/./optimizers/local_search?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
             <li><a href="#/./optimizers/local_search?id=tabu-search">Tabu Search</a></li>
+            <li><a href="#/./optimizers/mcmc?id=simulated-annealing">Simulated Annealing</a></li>
          </ul><br>
-        <a><b>Random Methods:</b></a>
+        <a><b>Global Search:</b></a>
           <ul>
             <li><a href="#/./optimizers/random_methods?id=random-search">Random Search</a></li>
             <li><a href="#/./optimizers/random_methods?id=random-restart-hill-climbing">Random Restart Hill Climbing</a></li>
             <li><a href="#/./optimizers/random_methods?id=random-annealing">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
          </ul><br>
-        <a><b>Markov Chain Monte Carlo:</b></a>
-          <ul>
-            <li><a href="#/./optimizers/mcmc?id=simulated-annealing">Simulated Annealing</a></li>
-            <li><a href="#/./optimizers/mcmc?id=stochastic-tunneling">Stochastic Tunneling</li>
-            <li><a href="#/./optimizers/mcmc?id=parallel-tempering">Parallel Tempering</a></li>
-          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
+            <li><a href="#/./optimizers/mcmc?id=parallel-tempering">Parallel Tempering</a></li>
             <li><a href="#/./optimizers/population_methods?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
             <li><a href="#/./optimizers/population_methods?id=evolution-strategy">Evolution Strategy</a></li>
           </ul><br>
@@ -133,6 +129,8 @@
           <ul>
             <li><a href="#/./optimizers/sequential_methods?id=bayesian-optimization">Bayesian Optimization</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_methods?id=tree-of-parzen-estimators">Tree of Parzen Estimators</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_methods?id=decision-tree-optimizer">Decision Tree Optimizer</a>
+            [<a href="#/./overview#references">dto</a>] </li>
           </ul>
       </td>
       <td>
@@ -274,7 +272,7 @@ Inspired by hyperband optimization.
 
 #### References
 
-#### [1] [Proxy Datasets for Training Convolutional Neural Networks](https://arxiv.org/pdf/1906.04887v1.pdf)
+[dto] [Scikit-Optimize](https://github.com/scikit-optimize/scikit-optimize/blob/master/skopt/learning/forest.py)
 
 <br>
 

@@ -19,7 +19,6 @@
 
 - Optimization Techniques
     - [Local Search](./optimizers/local_search)
-    - [Random Methods](./optimizers/random_methods)
-    - [Markov Chain Monte Carlo](./optimizers/mcmc)
+    - [Global Search](./optimizers/global_search)
     - [Population Methods](./optimizers/population_methods)
     - [Sequential Methods](./optimizers/sequential_methods)
