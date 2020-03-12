@@ -8,8 +8,6 @@
     - [Advanced Usage](./tutorials/advanced_usage)
     - [Memory](./tutorials/memory)
     - [Performance](./tutorials/performance)
-    - [Machine Learning Guide](./tutorials/ml_guide)
-    - [Deep Learning Guide](./tutorials/dl_guide)
 
 - Examples
     - [Machine Learning](./examples/machine_learning)
