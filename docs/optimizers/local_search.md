@@ -2,6 +2,11 @@
 
 Hill climbing is a very basic optimization technique, that explores the search space only localy. It starts at an initial point, which is often chosen randomly and continues to move to positions with a better solution. It has no method against getting stuck in local optima.
 
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+
 ---
 
 **Use case/properties:**
@@ -9,19 +14,27 @@ Hill climbing is a very basic optimization technique, that explores the search s
 - When you have a very good initial point to start from
 - If the search space is very simple and has few local optima or saddle points
 
-
 <p align="center">
 <img src="./plots/search_paths/HillClimbing [('epsilon', 0.03)].png" width= 49%/>
 <img src="./plots/search_paths/HillClimbing [('epsilon', 0.1)].png" width= 49%/>
 </p>
 
 <p align="center">
-<img src="./plots/search_paths/HillClimbing [('climb_dist', 'laplace')].png" width= 49%/>
-<img src="./plots/search_paths/HillClimbing [('climb_dist', 'logistic')].png" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('distribution', 'laplace')].png" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('distribution', 'logistic')].png" width= 49%/>
 </p>
+
+
+<br>
 
 ## Stochastic Hill Climbing
 Stochastic hill climbing extends the normal hill climbing by a simple method against getting stuck in local optima. It has a parameter you can set, that determines the probability to accept worse solutions as a next position.
+
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- p_down
 
 ---
 
@@ -42,6 +55,12 @@ Stochastic hill climbing extends the normal hill climbing by a simple method aga
 ## Tabu Search
 
 Tabu search is a metaheuristic method, that explores new positions like hill climbing but memorizes previous positions and avoids those. This helps finding new trajectories through the search space.
+
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- tabu_memory
 
 ---
 

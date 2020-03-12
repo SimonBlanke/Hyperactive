@@ -17,6 +17,12 @@ The random search explores by choosing a new position at random after each itera
 
 Random restart hill climbing works by starting a hill climbing search and jumping to a random new position after a number of iterations.
 
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- n_restarts
+
 ---
 
 **Use case/properties:**
@@ -32,6 +38,13 @@ Random restart hill climbing works by starting a hill climbing search and jumpin
 ## Random Annealing
 
 An algorithm that chooses a new position within a large hypersphere around the current position. This hypersphere gets smaller over time.
+
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- start_temp
+- annealing_rate
 
 ---
 

@@ -16,6 +16,14 @@ It simulates a temperature that decreases with each iteration, similar to a mate
   </a>
 </p>
 
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- start_temp
+- annealing_rate
+- norm_factor
+
 ---
 
 **Use case/properties:**
@@ -46,6 +54,15 @@ This new acceptance factor is used instead of the delta f in the original equati
   </a>
 </p>
 
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- start_temp
+- annealing_rate
+- norm_factor
+- gamma
+
 ---
 
 **Use case/properties:**
@@ -67,6 +84,14 @@ Parallel Tempering initializes multiple simulated annealing searches with differ
     <img src="https://latex.codecogs.com/gif.latex?p%20%3D%20%5Cmin%20%5Cleft%20%28%201%2C%20e%5E%7B%5CDelta%20f%20%5Cleft%20%28%20%5Cfrac%7B1%7D%7BT_x%7D%20-%20%5Cfrac%7B1%7D%7BT_y%7D%20%5Cright%20%29%7D%20%5Cright%20%29">
   </a>
 </p>
+
+**Available parameters:**
+- epsilon
+- distribution
+- n_neighbours
+- annealing_rate
+- system_temperatures
+- n_swaps
 
 ---
 

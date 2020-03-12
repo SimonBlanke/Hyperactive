@@ -2,6 +2,12 @@
 
 Particle swarm optimization works by initializing a number of positions at the same time and moving all of those closer to the best one after each iteration.
 
+**Available parameters:**
+- n_particles
+- inertia
+- cognitive_weight
+- social_weight
+
 ---
 
 **Use case/properties:**
@@ -16,6 +22,11 @@ Particle swarm optimization works by initializing a number of positions at the s
 
 ## Evolution Strategy
 Evolution strategy mutates and combines the best individuals of a population across a number of generations without transforming them into an array of bits (like genetic algorithms) but uses the real values of the positions.
+
+**Available parameters:**
+- individuals
+- mutation_rate
+- crossover_rate
 
 ---
 
