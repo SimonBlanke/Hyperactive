@@ -38,7 +38,7 @@ class SBOM(BaseOptimizer):
         self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
 
     def _init_iteration(self, _cand_):
-        p = SbomPositioner()
+        p = SbomPositioner(self._opt_args_)
         p.move_random(_cand_)
 
         self._optimizer_eval(_cand_, p)
@@ -57,5 +57,5 @@ class SBOM(BaseOptimizer):
 
 
 class SbomPositioner(BasePositioner):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)

@@ -45,10 +45,10 @@ class TabuOptimizer(HillClimbingOptimizer):
 
 
 class TabuPositioner(HillClimbingPositioner):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
         self.tabus = []
-        self.tabu_memory = kwargs["tabu_memory"]
+        self.tabu_memory = _opt_args_.tabu_memory
 
     def add_tabu(self, tabu):
         self.tabus.append(tabu)

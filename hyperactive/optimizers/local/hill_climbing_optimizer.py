@@ -43,8 +43,8 @@ class HillClimbingOptimizer(BaseOptimizer):
 
 
 class HillClimbingPositioner(BasePositioner):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
 
-        self.epsilon = kwargs["epsilon"]
-        self.climb_dist = kwargs["climb_dist"]
+        self.epsilon = _opt_args_.epsilon
+        self.distribution = _opt_args_.distribution

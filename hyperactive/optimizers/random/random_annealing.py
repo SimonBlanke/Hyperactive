@@ -13,9 +13,7 @@ class RandomAnnealingOptimizer(HillClimbingOptimizer):
 
     def _iterate(self, i, _cand_):
         self.p_list[0].move_climb(
-            _cand_,
-            self.p_list[0].pos_current,
-            epsilon_mod=self.temp * self._opt_args_.epsilon_mod,
+            _cand_, self.p_list[0].pos_current, epsilon_mod=self.temp / 10
         )
         self._optimizer_eval(_cand_, self.p_list[0])
         self._update_pos(_cand_, self.p_list[0])

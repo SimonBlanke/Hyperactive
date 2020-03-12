@@ -19,7 +19,7 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
         self.n_crossovers = ceil(self.n_positioners * self._opt_args_.crossover_rate)
 
     def _init_individual(self, _cand_):
-        _p_ = Individual(**self._opt_args_.kwargs_opt)
+        _p_ = Individual(self._opt_args_)
         _p_.move_random(_cand_)
 
         return _p_
@@ -102,5 +102,5 @@ class EvolutionStrategyOptimizer(BaseOptimizer):
 
 
 class Individual(HillClimbingPositioner):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, _opt_args_):
+        super().__init__(_opt_args_)
