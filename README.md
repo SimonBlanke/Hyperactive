@@ -131,15 +131,15 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
     <tr align="center" valign="center">
       <td>
         <strong>Optimization Techniques</strong>
-        <img src="./_media/blue.jpg"/>
+        <img src="./docs/_media/blue.jpg"/>
       </td>
       <td>
         <strong>Tested and Supported Packages</strong>
-        <img src="./_media/blue.jpg"/>
+        <img src="./docs/_media/blue.jpg"/>
       </td>
       <td>
         <strong>Optimization Extensions</strong>
-        <img src="./_media/blue.jpg"/>
+        <img src="./docs/_media/blue.jpg"/>
       </td>
     </tr>
     <tr/>
