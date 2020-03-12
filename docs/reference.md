@@ -162,12 +162,16 @@ Starts the optimization run.
 
 > **Function:** get_best_model(X, y)
 
+Searches for the best model (model with highest score) for the given dataset. Returns a tuple of the best score, the search-config and the init-config.
+
 
 <br>
 
 ---
 
-> **Function:** reset_memory(force_true=False)
+> **Function:** reset_memory()
+>
+After a yes/no-query the entire long term memory and the model connections are deleted.
 
 
 <br>
@@ -175,24 +179,33 @@ Starts the optimization run.
 ---
 
 > **Function:** delete_model(model)
-
+>
+Deletes the long term memory of the given model. It does not delete the model connections.
 
 <br>
 
 ---
 
 > **Function:** delete_model_dataset(model, X, y)
-
+>
+Deletes the long term memory of the given model/dataset combination. It does not delete the model connections.
 
 <br>
 
 ---
 
 > **Function:** connect_model_IDs(model1, model2)
+>
+Connects two models to share the long term memory. The purpose of this function is to connect objective-functions that perform exactly the same but look different to the long term memory module.
 
+**Example:** model2 has a doc string in it that model1 does not have. The long term memory recognizes them as different. If you already collected a lot of data for model1 but want to continue using model2 you can connect both to share the data.
+
+!> **Caution:** Only connect two models that deliver the exact same results.
 
 <br>
 
 ---
 
 > **Function:** split_model_IDs(model1, model2)
+>
+Splits the model connection between two models.
