@@ -325,7 +325,7 @@ Inspired by hyperband optimization.
 
 ## References
 
-#### [Scikit-Optimize](https://github.com/scikit-optimize/scikit-optimize/blob/master/skopt/learning/forest.py)
+#### [dto] [Scikit-Optimize](https://github.com/scikit-optimize/scikit-optimize/blob/master/skopt/learning/forest.py)
 
 <br>
 
