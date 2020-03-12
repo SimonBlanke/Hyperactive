@@ -3,7 +3,7 @@
 # License: MIT License
 
 from .util import merge_dicts
-from numpy.random import normal
+from numpy.random import normal, laplace, logistic, gumbel
 
 from .optimizers.sequence_model.surrogate_models import (
     RandomForestRegressor,
@@ -49,13 +49,20 @@ skip_retrain_ = {
     "never": never_skip_refit,
 }
 
+distribution = {
+    "normal": normal,
+    "laplace": laplace,
+    "logistic": logistic,
+    "gumbel": gumbel,
+}
+
 
 class Arguments:
     def __init__(self, *args, **kwargs):
         kwargs_opt = {
             # HillClimbingOptimizer
             "epsilon": 0.05,
-            "climb_dist": normal,
+            "distribution": "normal",
             "n_neighbours": 1,
             # StochasticHillClimbingOptimizer
             "p_down": 0.3,
@@ -100,7 +107,7 @@ class Arguments:
 
     def set_opt_args(self, n_iter):
         self.epsilon = self.kwargs_opt["epsilon"]
-        self.climb_dist = self.kwargs_opt["climb_dist"]
+        self.distribution = distribution[self.kwargs_opt["distribution"]]
         self.n_neighbours = self.kwargs_opt["n_neighbours"]
 
         self.p_down = self.kwargs_opt["p_down"]
