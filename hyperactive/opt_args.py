@@ -71,10 +71,9 @@ class Arguments:
             # RandomRestartHillClimbingOptimizer
             "n_restarts": 10,
             # RandomAnnealingOptimizer
-            "epsilon_mod": 10,
             "annealing_rate": 0.99,
             # SimulatedAnnealingOptimizer
-            "start_temp": 1,
+            "start_temp": 100,
             "norm_factor": "adaptive",
             # StochasticTunnelingOptimizer
             "gamma": 0.5,
@@ -117,7 +116,6 @@ class Arguments:
         self.n_restarts = self.kwargs_opt["n_restarts"]
         self.n_iter_restart = int(n_iter / self.n_restarts)
 
-        self.epsilon_mod = self.kwargs_opt["epsilon_mod"]
         self.annealing_rate = self.kwargs_opt["annealing_rate"]
         self.start_temp = self.kwargs_opt["start_temp"]
         self.norm_factor = self.kwargs_opt["norm_factor"]
