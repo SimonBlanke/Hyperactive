@@ -296,7 +296,17 @@ opt.search(search_config, n_iter=20)
 </details>
 
 <details>
-<summary><b>v2.4.0</b></summary>
+<summary><b>v3.0.0</b></summary>
+
+  - [ ] New API
+      - [ ] improve distributed computing abilities
+      - [ ] separate optimizer and n_iter for each job
+      - [ ] expand usage of objective-function
+
+</details>
+
+<details>
+<summary><b>v3.1.0</b></summary>
 
   - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
