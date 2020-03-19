@@ -30,12 +30,11 @@ Table of available optimization parameters:
 | Argument | type | default |
 |---|---|---|
 | epsilon | float | 0.05 |
-| climb_dist | object | numpy.random.normal |
+| distribution | object | normal |
 | n_neighbours | int | 1 |
 | p_down | float | 0.3 |
 | tabu_memory | int | 3 |
 | n_restarts | int | 10 |
-| epsilon_mod | float | 33 |
 | annealing_rate | float | 0.99 |
 | start_temp | float | 1 |
 | gamma | float | 0.5 |
