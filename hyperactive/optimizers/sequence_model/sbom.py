@@ -10,6 +10,34 @@ from ...base_optimizer import BaseOptimizer
 from ...base_positioner import BasePositioner
 
 
+def _split_into_subcubes(data, split_per_dim=2):
+    n_dim = data.shape[1]
+    subcubes = []
+
+    data_list = [data]
+
+    for dim in range(n_dim):
+        print("\n")
+        subdata_list = []
+
+        if dim == 0:
+            data_list = [data]
+
+        for data in data_list:
+            print("data", data.shape)
+            data_sorted = data[data[:, dim].argsort()]
+
+            subdata = np.array_split(data_sorted, 2, axis=0)
+
+            subdata_list = subdata_list + subdata
+
+        data_list = subdata_list
+
+        print("subdata_list", len(subdata_list))
+
+    return subcubes
+
+
 class SBOM(BaseOptimizer):
     def __init__(self, _opt_args_):
         super().__init__(_opt_args_)
@@ -36,6 +64,10 @@ class SBOM(BaseOptimizer):
 
         self.n_dim = len(pos_space)
         self.all_pos_comb = np.array(np.meshgrid(*pos_space)).T.reshape(-1, self.n_dim)
+
+        print("\n\nself.all_pos_comb", self.all_pos_comb.shape, "\n")
+
+        _split_into_subcubes(self.all_pos_comb)
 
     def _init_iteration(self, _cand_):
         p = SbomPositioner(self._opt_args_)
