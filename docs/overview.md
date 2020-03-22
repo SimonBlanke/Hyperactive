@@ -234,15 +234,15 @@ pip install Hyperactive/
       - [x] return best parameter for best model
 </details>
 
-<details open>
-<summary><b>v2.3.0</b></summary>
+<details>
+<summary><b>v2.3.0</b>:heavy_check_mark:</summary>
 
   - [x] Tree-structured Parzen Estimator
   - [x] Decision Tree Optimizer
   - [x] add "max_sample_size" and "skip_retrain" parameter for sbom to decrease optimization time
 </details>
 
-<details>
+<details open>
 <summary><b>v3.0.0</b></summary>
 
   - [ ] New API
