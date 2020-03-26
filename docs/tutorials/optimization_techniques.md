@@ -20,8 +20,8 @@ Hill climbing is a very basic optimization technique, that explores the search s
 </p>
 
 <p align="center">
-<img src="./plots/search_paths/HillClimbing [('distribution', 'laplace')].png" width= 49%/>
-<img src="./plots/search_paths/HillClimbing [('distribution', 'logistic')].png" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('climb_dist', 'laplace')].png" width= 49%/>
+<img src="./plots/search_paths/HillClimbing [('climb_dist', 'logistic')].png" width= 49%/>
 </p>
 
 
