@@ -6,6 +6,7 @@
 - Tutorials
     - [Basic Tutorial](./tutorials/tutorial)
     - [Advanced Usage](./tutorials/advanced_usage)
+    - [Optimization Techniques](./tutorials/optimization_techniques)
     - [Memory](./tutorials/memory)
     - [Performance](./tutorials/performance)
 
@@ -16,9 +17,3 @@
     - [Optimization Extensions](./examples/extensions)
     - [Mathematical Functions](./examples/test_functions)
     - [Advanced use Cases](./examples/use_cases)
-
-- Optimization Techniques
-    - [Local Search](./optimizers/local_search)
-    - [Global Search](./optimizers/global_search)
-    - [Population Methods](./optimizers/population_methods)
-    - [Sequential Methods](./optimizers/sequential_methods)
