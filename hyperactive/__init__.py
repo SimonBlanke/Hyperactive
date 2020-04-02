@@ -7,6 +7,5 @@ __license__ = "MIT"
 
 
 from .hyperactive_api import Hyperactive
-from .memory import memory
 
-__all__ = ["Hyperactive", "memory"]
+__all__ = ["Hyperactive"]
