@@ -13,11 +13,11 @@ from fnmatch import fnmatch
 import numpy as np
 import pandas as pd
 
-from .util import get_hash, get_model_id, get_func_str
-from .paths import get_meta_path, get_meta_data_name
+from hypermemory.utils import object_hash, model_id
+from hypermemory.paths import meta_data_path, meta_data_name
 
 
-meta_path = get_meta_path()
+meta_path = meta_data_path()
 
 """
 def get_best_models(X, y):
@@ -39,7 +39,7 @@ def get_model_init_config(model):
 
 def get_best_model(X, y):
     meta_data_paths = []
-    pattern = get_meta_data_name(X, y)
+    pattern = meta_data_name(X, y)
 
     for path, subdirs, files in os.walk(meta_path):
         for name in files:
@@ -116,7 +116,7 @@ def query_yes_no():
 
 
 def delete_model(model):
-    model_hash = get_model_id(model)
+    model_hash = model_id(model)
     path = meta_path + "model_id:" + str(model_hash)
 
     if os.path.exists(path) and os.path.isdir(path):
@@ -142,8 +142,8 @@ def connect_model_IDs(model1, model2):
     with open(meta_path + "model_connections.json") as f:
         data = json.load(f)
 
-    model1_hash = get_model_id(model1)
-    model2_hash = get_model_id(model2)
+    model1_hash = model_id(model1)
+    model2_hash = model_id(model2)
 
     if model1_hash in data:
         key_model = model1_hash
@@ -194,8 +194,8 @@ def split_model_IDs(model1, model2):
     with open(meta_path + "model_connections.json") as f:
         data = json.load(f)
 
-    model1_hash = get_model_id(model1)
-    model2_hash = get_model_id(model2)
+    model1_hash = model_id(model1)
+    model2_hash = model_id(model2)
 
     if model1_hash in data:
         key_model = model1_hash
@@ -216,10 +216,10 @@ def split_model_IDs(model1, model2):
 
 
 def _get_file_path(model, X, y):
-    func_path_ = "model_id:" + get_model_id(model) + "/"
+    func_path_ = "model_id:" + model_id(model) + "/"
     func_path = meta_path + func_path_
 
-    feature_hash = get_hash(X)
-    label_hash = get_hash(y)
+    feature_hash = object_hash(X)
+    label_hash = object_hash(y)
 
     return func_path + (feature_hash + "_" + label_hash + "_.csv")

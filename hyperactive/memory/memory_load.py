@@ -12,8 +12,8 @@ import pandas as pd
 from functools import partial
 
 from .memory_io import MemoryIO
-from .util import get_model_id
-from .paths import get_model_path
+from hypermemory.utils import model_id
+from hypermemory.paths import model_path
 
 
 def apply_tobytes(df):
@@ -39,11 +39,11 @@ class MemoryLoad(MemoryIO):
         with open(self.meta_path + "model_connections.json") as f:
             self.model_con = json.load(f)
 
-        model_id = get_model_id(_cand_.func_)
-        if model_id in self.model_con:
-            self._get_id_list(self.model_con[model_id])
+        model_id_ = model_id(_cand_.func_)
+        if model_id_ in self.model_con:
+            self._get_id_list(self.model_con[model_id_])
         else:
-            self.con_ids = [model_id]
+            self.con_ids = [model_id_]
 
         self.con_ids = set(self.con_ids)
 
@@ -109,7 +109,7 @@ class MemoryLoad(MemoryIO):
         paths = []
         for id in self.con_ids:
             paths = paths + glob.glob(
-                self.meta_path + get_model_path(id) + self.meta_data_name
+                self.meta_path + model_path(id) + self.meta_data_name
             )
 
         return paths

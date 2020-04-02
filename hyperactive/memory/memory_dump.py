@@ -12,7 +12,7 @@ import pandas as pd
 
 from .memory_io import MemoryIO
 from .dataset_features import get_dataset_features
-from .util import get_hash
+from hypermemory.utils import object_hash
 
 
 class MemoryDump(MemoryIO):
@@ -150,7 +150,7 @@ class MemoryDump(MemoryIO):
                 ):
 
                     para_dill = dill.dumps(para[key])
-                    para_hash = get_hash(para_dill)
+                    para_hash = object_hash(para_dill)
 
                     with open(
                         self.model_path + str(para_hash) + ".pkl", "wb"
