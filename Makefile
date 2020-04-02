@@ -29,14 +29,7 @@ test: test-opt-para
 		pytest test_attributes.py -p no:warnings; \
 		pytest test_hyperactive_api.py -p no:warnings; \
 		pytest test_optimizers.py -p no:warnings; \
-		pytest test_checks.py -p no:warnings; \
-		pytest test_memory.py -p no:warnings; \
-		pytest test_memory_helpers.py -p no:warnings
-
-test-memory:
-	cd tests/; \
-		pytest test_memory.py -p no:warnings; \
-		pytest test_memory_helpers.py -p no:warnings
+		pytest test_checks.py -p no:warnings
 
 test-opt-para:
 	cd tests/optimizer_parameter/; \
