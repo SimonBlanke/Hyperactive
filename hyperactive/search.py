@@ -11,7 +11,7 @@ from .verbosity import set_verbosity
 from .candidate import Candidate
 
 
-from .optimizers import (
+from derivative_free_optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
     TabuOptimizer,
@@ -47,14 +47,15 @@ optimizer_dict = {
 
 
 class Search:
-    def __init__(self, _main_args_, _opt_args_):
+    def __init__(self, _main_args_):
         self._main_args_ = _main_args_
-        self._opt_args_ = _opt_args_
 
         self._info_, _pbar_ = set_verbosity(_main_args_.verbosity)
         self._pbar_ = _pbar_()
 
-        self.optimizer = optimizer_dict[self._main_args_.optimizer](_opt_args_)
+        self.optimizer = optimizer_dict[self._main_args_.optimizer](
+            _main_args_.n_iter, self._main_args_.opt_para
+        )
 
         self.optimizer._pbar_ = self._pbar_
 
@@ -97,7 +98,7 @@ class Search:
         self._get_attributes(_cand_, _p_)
 
     def _get_attributes(self, _cand_, _p_):
-        self.results[_cand_.func_] = _cand_._process_results(self._opt_args_)
+        self.results[_cand_.func_] = _cand_._process_results()
         self.eval_times[_cand_.func_] = _cand_.eval_time
         self.iter_times[_cand_.func_] = _cand_.iter_times
         self.best_scores[_cand_.func_] = _cand_.score_best

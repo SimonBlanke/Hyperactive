@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-from .opt_args import Arguments
 from .distribution import Distribution
 
 from .search import Search
@@ -12,12 +11,10 @@ from .search import Search
 class HyperactiveCore:
     def __init__(self, _main_args_):
         self._main_args_ = _main_args_
-        self._opt_args_ = Arguments(**self._main_args_.opt_para)
-        self._opt_args_.set_opt_args(_main_args_.n_iter)
 
     def run(self):
         dist = Distribution()
-        dist.dist(Search, self._main_args_, self._opt_args_)
+        dist.dist(Search, self._main_args_)
 
         self.results = dist.results
         self.pos_list = dist.pos
