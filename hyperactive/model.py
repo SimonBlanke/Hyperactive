@@ -18,21 +18,24 @@ class Model:
         self.y = _main_args_.y
 
     def train_model(self, para_dict):
+        results_dict = {}
         start_time = time.time()
         results = self.func_(para_dict, self.X, self.y)
         eval_time = time.time() - start_time
 
-        if isinstance(results, tuple):
-            self.n_results = len(results)
+        if isinstance(results, dict):
+            if "score" not in results:
+                print("Error: model function must return dict with score-keyword")
 
-            score = results[0]
-            self.rest = results[1]
+            results_dict = results
+            if "eval_time" not in results_dict:
+                results_dict["eval_time"] = eval_time
+
         else:
-            self.n_results = 1
-            score = results
-            self.rest = None
+            results_dict["score"] = results
+            results_dict["eval_time"] = eval_time
 
-        if is_numeric(score):
-            return score, eval_time
+        if is_numeric(results_dict["score"]):
+            return results_dict
         else:
             print("Error: model function must return numeric variable")

@@ -57,9 +57,14 @@ class Candidate:
             self.eval_pos = self.eval_pos_noMem
 
         if self.mem:
+            print("1")
             if self.mem.meta_data_found:
                 self.pos_best = self.mem.pos_best
                 self.score_best = self.mem.score_best
+
+                print("self.score_best", self.score_best)
+
+        print("self.score_best", self.score_best)
 
         self.pos_best = self._init_._set_start_pos(self._info_)
 
@@ -91,10 +96,10 @@ class Candidate:
     def base_eval(self, pos):
         para = self._space_.pos2para(pos)
         para["iteration"] = self.i
-        score, eval_time = self._model_.train_model(para)
-        self.eval_time.append(eval_time)
+        results = self._model_.train_model(para)
+        self.eval_time.append(results["eval_time"])
 
-        return score
+        return results["score"]
 
     def eval_pos_noMem(self, pos):
         score = self.base_eval(pos)
