@@ -99,20 +99,20 @@ class Candidate:
         results = self._model_.train_model(para)
         self.eval_time.append(results["eval_time"])
 
-        return results["score"]
+        return results
 
     def eval_pos_noMem(self, pos):
-        score = self.base_eval(pos)
-        return score
+        results = self.base_eval(pos)
+        return results["score"]
 
     def eval_pos_Mem(self, pos, force_eval=False):
         pos.astype(int)
         pos_str = pos.tostring()
 
         if pos_str in self.mem.memory_dict and not force_eval:
-            return self.mem.memory_dict[pos_str]
+            return self.mem.memory_dict[pos_str]["score"]
         else:
-            score = self.base_eval(pos)
-            self.mem.memory_dict[pos_str] = score
-            self.mem.memory_dict_new[pos_str] = score
-            return score
+            results = self.base_eval(pos)
+            self.mem.memory_dict[pos_str] = results
+            self.mem.memory_dict_new[pos_str] = results
+            return results["score"]
