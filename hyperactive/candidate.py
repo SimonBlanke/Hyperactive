@@ -68,13 +68,9 @@ class Candidate:
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
-            self._init_eval()
-
         elif self.memory == "short":
             self.mem = None
             self.eval_pos = self.eval_pos_Mem
-
-            self._init_eval()
 
         elif self.memory == "long":
             self.mem = Hypermemory(
@@ -93,14 +89,10 @@ class Candidate:
             self.mem = None
             self.eval_pos = self.eval_pos_noMem
 
-            self._init_eval()
-
         if self.mem:
             if self.mem.meta_data_found:
                 self.pos_best = self.mem.pos_best
                 self.score_best = self.mem.score_best
-            else:
-                self._init_eval()
 
     def _init_eval(self):
         self.pos_best = self._init_._set_start_pos(self._info_)
@@ -127,26 +119,31 @@ class Candidate:
         self.model_best = self.model
         self._score_best = value
 
-    def base_eval(self, pos):
+    def base_eval(self, pos, p_bar, nth_iter):
         para = self._space_.pos2para(pos)
         para["iteration"] = self.i
         results = self._model_.train_model(para)
-        self.eval_time.append(results["eval_time"])
+
+        if results["score"] > self.score_best:
+            self.score_best = results["score"]
+            self.pos_best = pos
+
+            p_bar.best_since_iter = nth_iter
 
         return results
 
-    def eval_pos_noMem(self, pos):
-        results = self.base_eval(pos)
+    def eval_pos_noMem(self, pos, p_bar, nth_iter):
+        results = self.base_eval(pos, p_bar, nth_iter)
         return results["score"]
 
-    def eval_pos_Mem(self, pos, force_eval=False):
+    def eval_pos_Mem(self, pos, p_bar, nth_iter, force_eval=False):
         pos.astype(int)
         pos_str = pos.tostring()
 
         if pos_str in self.memory_dict and not force_eval:
             return self.memory_dict[pos_str]["score"]
         else:
-            results = self.base_eval(pos)
+            results = self.base_eval(pos, p_bar, nth_iter)
             self.memory_dict[pos_str] = results
             self.memory_dict_new[pos_str] = results
 
