@@ -46,17 +46,11 @@
          <strong>Code quality:</strong>
       </td>
       <td>
-        <a href="https://app.codacy.com/project/SimonBlanke/Hyperactive/dashboard">
-        <img src="https://img.shields.io/codacy/grade/acb6989093c44fb08cc3be1dd2df1be7?style=flat-square&logo=codacy" alt="img not loaded: try F5 :)">
-        </a>
         <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
         <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
         </a>
         <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
         <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://www.codefactor.io/repository/github/simonblanke/hyperactive">
-        <img src="https://img.shields.io/codefactor/grade/github/SimonBlanke/Hyperactive?label=code%20factor&style=flat-square&logo=codefactor" alt="img not loaded: try F5 :)">
         </a>
       </td>
     </tr>
