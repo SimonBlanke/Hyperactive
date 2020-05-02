@@ -1,5 +1,6 @@
 *___.*
 *.pyc
+*.csv
 *.xml
 *.iml
 *.pkl
@@ -8,6 +9,7 @@
 **/__pycache__/
 **/build/
 **/dist/
+**/meta_data/
 **/hyperactive.egg-info/
 **/_build/
 **/catboost_info/
