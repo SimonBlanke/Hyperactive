@@ -6,17 +6,15 @@ Optimization main class.
 
 #### Parameters
 
- - ``X``**:** array-like or None
+ - ``X``**:** array-like
 
     Training input samples used during the optimization process.
-    The training data is passed to the ``X`` argument in the objective function during the optimization process.
-    You can also pass ``None`` if you want to optimize an objective function that does not contain a machine learning model.
+    The training data is passed to the **X** argument in the objective function during the optimization process.
 
- - ``y``**:** array-like or None
+ - ``y``**:** array-like
 
     Training target values used during the optimization process.
-    The target values are passed to the ``y`` argument in the objective function during the optimization process.
-    You can also pass ``None`` if you want to optimize an objective function that does not contain a machine learning model.
+    The target values are passed to the **y** argument in the objective function during the optimization process.
 
  - ``memory``**:** string or bool, optional (default: "long")
 
@@ -118,7 +116,7 @@ Starts the optimization run.
 
  - ``n_jobs``**:** int, optional (default: 1)
 
-    Number of jobs to run.
+    Number of jobs to run in parallel.
 
 
  - ``init_config``**:** dictionary, optional (default: None)
@@ -182,6 +180,12 @@ After a yes/no-query the entire long term memory and the model connections are d
 >
 Deletes the long term memory of the given model. It does not delete the model connections.
 
+#### Parameters
+
+ - ``model``**:** function
+
+    Objective function
+
 <br>
 
 ---
@@ -189,6 +193,21 @@ Deletes the long term memory of the given model. It does not delete the model co
 > **Function:** delete_model_dataset(model, X, y)
 >
 Deletes the long term memory of the given model/dataset combination. It does not delete the model connections.
+
+#### Parameters
+
+ - ``model``**:** function
+
+    Objective function
+
+ - ``X``**:** array-like
+
+    Training input samples.
+
+ - ``y``**:** array-like
+
+    Training target values.
+
 
 <br>
 
