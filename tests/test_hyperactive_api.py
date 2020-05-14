@@ -57,31 +57,6 @@ search_config_2 = {
 }
 
 
-def test_func_return():
-    def model1(para, X, y):
-        dtc = DecisionTreeClassifier(
-            criterion=para["criterion"],
-            max_depth=para["max_depth"],
-            min_samples_split=para["min_samples_split"],
-            min_samples_leaf=para["min_samples_leaf"],
-        )
-        scores = cross_val_score(dtc, X, y, cv=3)
-
-        return scores.mean(), model
-
-    search_config1 = {
-        model1: {
-            "criterion": ["gini", "entropy"],
-            "max_depth": range(1, 21),
-            "min_samples_split": range(2, 21),
-            "min_samples_leaf": range(1, 21),
-        }
-    }
-
-    opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config1)
-
-
 def test_n_jobs_2():
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_jobs=2)
