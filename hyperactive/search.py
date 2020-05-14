@@ -8,10 +8,10 @@ import multiprocessing
 
 from .verbosity import set_verbosity
 
-from .candidate import Candidate
+from .search_process import SearchProcess
 
 
-from derivative_free_optimizers import (
+from gradient_free_optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
     TabuOptimizer,
@@ -53,12 +53,6 @@ class Search:
         self._info_, _pbar_ = set_verbosity(_main_args_.verbosity)
         self._pbar_ = _pbar_()
 
-        self.optimizer = optimizer_dict[self._main_args_.optimizer](
-            _main_args_.n_iter, self._main_args_.opt_para
-        )
-
-        self.optimizer._pbar_ = self._pbar_
-
     def search(self, nth_process=0, rayInit=False):
         self.start_time = time.time()
         self.results = {}
@@ -87,55 +81,74 @@ class Search:
     def _search_multiprocessing(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self._main_args_.n_jobs)
-        _cand_list, _p_list = zip(
+        self.processlist, _p_list = zip(
             *pool.map(self._search, self._main_args_._n_process_range)
         )
 
-        return _cand_list, _p_list
+        return self.processlist, _p_list
 
     def _run_job(self, nth_process):
-        _cand_, _p_ = self._search(nth_process)
-        self._get_attributes(_cand_, _p_)
+        self.process, _p_ = self._search(nth_process)
+        self._get_attributes(_p_)
 
-    def _get_attributes(self, _cand_, _p_):
-        self.results[_cand_.func_] = _cand_._process_results()
-        self.eval_times[_cand_.func_] = _cand_.eval_time
-        self.iter_times[_cand_.func_] = _cand_.iter_times
-        self.best_scores[_cand_.func_] = _cand_.score_best
+    def _get_attributes(self, _p_):
+        self.results[self.process.func_] = self.process._process_results()
+        self.eval_times[self.process.func_] = self.process.eval_time
+        self.iter_times[self.process.func_] = self.process.iter_times
+        self.best_scores[self.process.func_] = self.process.score_best
 
         if isinstance(_p_, list):
-            self.pos_list[_cand_.func_] = [np.array(p.pos_list) for p in _p_]
-            self.score_list[_cand_.func_] = [np.array(p.score_list) for p in _p_]
+            self.pos_list[self.process.func_] = [np.array(p.pos_list) for p in _p_]
+            self.score_list[self.process.func_] = [np.array(p.score_list) for p in _p_]
         else:
-            self.pos_list[_cand_.func_] = [np.array(_p_.pos_list)]
-            self.score_list[_cand_.func_] = [np.array(_p_.score_list)]
+            self.pos_list[self.process.func_] = [np.array(_p_.pos_list)]
+            self.score_list[self.process.func_] = [np.array(_p_.score_list)]
 
     def _run_multiple_jobs(self):
-        _cand_list, _p_list = self._search_multiprocessing()
+        self.processlist, _p_list = self._search_multiprocessing()
 
         for _ in range(int(self._main_args_.n_jobs / 2) + 2):
             print("\n")
 
-        for _cand_, _p_ in zip(_cand_list, _p_list):
-            self._get_attributes(_cand_, _p_)
+        for self.process, _p_ in zip(self.processlist, _p_list):
+            self._get_attributes(_p_)
 
     def _search(self, nth_process):
-        _cand_ = self._initialize_search(self._main_args_, nth_process, self._info_)
+        self._initialize_search(self._main_args_, nth_process, self._info_)
 
-        for i in range(self._main_args_.n_iter):
-            c_time = time.time()
+        n_positions = 10
 
-            _cand_.i = i
-            _cand_ = self.optimizer.iterate(i, _cand_)
+        init_positions = self.process.init_pos(n_positions)
 
-            if self._time_exceeded():
-                break
+        self.opt = optimizer_dict[self._main_args_.optimizer](
+            init_positions, self.process._space_.dim, self._main_args_.opt_para
+        )
 
-            _cand_.iter_times.append(time.time() - c_time)
+        # loop to initialize N positions
+        for nth_init in range(len(init_positions)):
+            pos_new = self.opt.init_pos(nth_init)
+            score_new = self._get_score(pos_new, 0)
+            self.opt.evaluate(score_new)
 
-        self.optimizer._finish_search()
+        # loop to do the iterations
+        for nth_iter in range(len(init_positions), self._main_args_.n_iter):
+            pos_new = self.opt.iterate(nth_iter)
+            score_new = self._get_score(pos_new, nth_iter)
+            self.opt.evaluate(score_new)
 
-        return _cand_, self.optimizer.p_list
+        self._pbar_.close_p_bar()
+
+        return self.process, self.opt.p_list
+
+    def _get_score(self, pos_new, nth_iter):
+        score_new = self.process.eval_pos(pos_new, self._pbar_, nth_iter)
+        self._pbar_.update_p_bar(1, self.process)
+
+        if score_new > self.process.score_best:
+            self.process.score = score_new
+            self.process.pos = pos_new
+
+        return score_new
 
     def _time_exceeded(self):
         run_time = time.time() - self.start_time
@@ -144,7 +157,5 @@ class Search:
     def _initialize_search(self, _main_args_, nth_process, _info_):
         _main_args_._set_random_seed(nth_process)
 
-        _cand_ = Candidate(nth_process, _main_args_, _info_)
+        self.process = SearchProcess(nth_process, _main_args_, _info_)
         self._pbar_.init_p_bar(nth_process, self._main_args_)
-
-        return _cand_

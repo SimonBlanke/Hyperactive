@@ -35,7 +35,7 @@ class ShortTermMemory:
         self.n_dims = None
 
 
-class Candidate:
+class SearchProcess:
     def __init__(self, nth_process, _main_args_, _info_):
         self.start_time = time.time()
         self.i = 0
@@ -47,9 +47,14 @@ class Candidate:
 
         self._info_ = _info_()
 
-        self._score_best = -np.inf
+        self._score = -np.inf
+        self._pos = None
+
+        self.score_best = -np.inf
         self.pos_best = None
-        self.model = None
+
+        self.score_list = []
+        self.pos_list = []
 
         self.nth_process = nth_process
         model_nr = nth_process % _main_args_.n_models
@@ -110,14 +115,32 @@ class Candidate:
 
         return start_point
 
-    @property
-    def score_best(self):
-        return self._score_best
+    def init_pos(self, n_positions):
+        init_pos_list = []
 
-    @score_best.setter
-    def score_best(self, value):
-        self.model_best = self.model
-        self._score_best = value
+        for i in range(n_positions):
+            init_pos = self._init_._set_start_pos(self._info_)
+            init_pos_list.append(init_pos)
+
+        return init_pos_list
+
+    @property
+    def score(self):
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        self.score_list.append(value)
+        self._score = value
+
+    @property
+    def pos(self):
+        return self._score
+
+    @pos.setter
+    def pos(self, value):
+        self.pos_list.append(value)
+        self._pos = value
 
     def base_eval(self, pos, p_bar, nth_iter):
         para = self._space_.pos2para(pos)
