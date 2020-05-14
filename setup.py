@@ -11,7 +11,7 @@ requires = [
     "numpy",
     "tqdm",
     "hypermemory",
-    "derivative-free-optimizers",
+    "gradient-free-optimizers",
 ]
 
 

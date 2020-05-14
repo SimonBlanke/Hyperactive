@@ -13,7 +13,7 @@ python:
 
 install:
   - pip install hypermemory
-  - pip install derivative-free-optimizers
+  - pip install gradient-free-optimizers
   - pip install packaging
   - pip install pytest
   - pip install pytest-cov
