@@ -46,6 +46,6 @@ class SearchSpace:
         values_dict = {}
         for i, key in enumerate(self.search_space.keys()):
             pos_ = int(pos[i])
-            values_dict[key] = list(self.search_space[key])[pos_]
+            values_dict[key] = self.search_space[key][pos_]
 
         return values_dict
