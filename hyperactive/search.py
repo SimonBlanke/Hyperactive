@@ -116,7 +116,10 @@ class Search:
     def _search(self, nth_process):
         self._initialize_search(self._main_args_, nth_process, self._info_)
 
-        n_positions = 10
+        if "n_positions" in self._main_args_.opt_para:
+            n_positions = self._main_args_.opt_para["n_positions"]
+        else:
+            n_positions = 1
 
         init_positions = self.process.init_pos(n_positions)
 
