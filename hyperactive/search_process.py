@@ -161,13 +161,13 @@ class SearchProcess:
 
     def eval_pos_Mem(self, pos, p_bar, nth_iter, force_eval=False):
         pos.astype(int)
-        pos_str = pos.tostring()
+        pos_tuple = tuple(pos)
 
-        if pos_str in self.memory_dict and not force_eval:
-            return self.memory_dict[pos_str]["score"]
+        if pos_tuple in self.memory_dict and not force_eval:
+            return self.memory_dict[pos_tuple]["score"]
         else:
             results = self.base_eval(pos, p_bar, nth_iter)
-            self.memory_dict[pos_str] = results
-            self.memory_dict_new[pos_str] = results
+            self.memory_dict[pos_tuple] = results
+            self.memory_dict_new[pos_tuple] = results
 
             return results["score"]
