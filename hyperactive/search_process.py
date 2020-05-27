@@ -79,11 +79,7 @@ class SearchProcess:
 
         elif self.memory == "long":
             self.mem = Hypermemory(
-                _main_args_.X,
-                _main_args_.y,
-                self.func_,
-                self.search_space,
-                path=meta_data_path(),
+                _main_args_.X, _main_args_.y, self.func_, self.search_space,
             )
             self.eval_pos = self.eval_pos_Mem
 
@@ -111,7 +107,7 @@ class SearchProcess:
         start_point = self._info_.print_start_point(self)
 
         if self._main_args_.memory == "long":
-            self.mem.dump(self.memory_dict_new, main_args=self._main_args_)
+            self.mem.dump(self.memory_dict_new)
 
         return start_point
 
