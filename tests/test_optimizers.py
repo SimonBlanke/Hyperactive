@@ -129,12 +129,12 @@ def test_ParallelTemperingOptimizer():
     opt = Hyperactive(X, y, memory=memory)
     opt.search(search_config, n_iter=n_iter, optimizer="ParallelTempering")
 
-    for n_swaps in [1, 10, 30]:
+    for n_iter_swap in [1, 10, 30]:
         opt = Hyperactive(X, y, memory=memory)
         opt.search(
             search_config,
             n_iter=n_iter,
-            optimizer={"ParallelTempering": {"n_swaps": n_swaps}},
+            optimizer={"ParallelTempering": {"n_iter_swap": n_iter_swap}},
         )
 
 
@@ -175,6 +175,9 @@ def test_BayesianOptimizer():
             n_iter=int(n_iter / 33),
             optimizer={"Bayesian": {"warm_start_smbo": warm_start_smbo}},
         )
+
+
+test_BayesianOptimizer()
 
 
 def test_TPE():
