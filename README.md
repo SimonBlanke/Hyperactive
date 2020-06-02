@@ -144,7 +144,7 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
             <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/local_search?id=Hill-Climbing">Hill Climbing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/local_search?id=stochastic-hill-climbing">Stochastic Hill Climbing</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/local_search?id=tabu-search">Tabu Search</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/mcmc?id=simulated-annealing">Simulated Annealing</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/local_search?id=simulated-annealing">Simulated Annealing</a></li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
@@ -154,7 +154,7 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/mcmc?id=parallel-tempering">Parallel Tempering</a></li>
+            <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/population_methods?id=parallel-tempering">Parallel Tempering</a></li>
             <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/population_methods?id=particle-swarm-optimization">Particle Swarm Optimizer</li>
             <li><a href="https://simonblanke.github.io/Hyperactive#/./optimizers/population_methods?id=evolution-strategy">Evolution Strategy</a></li>
           </ul><br>
