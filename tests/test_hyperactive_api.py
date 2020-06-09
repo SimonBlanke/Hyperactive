@@ -114,9 +114,16 @@ def test_memory():
     opt.search(search_config)
 
 
+"""
 def test_dill():
     from sklearn.gaussian_process import GaussianProcessClassifier
     from sklearn.gaussian_process.kernels import RBF, Matern
+    from hypermemory import reset_memory
+
+    reset_memory(
+        meta_path="/home/simon/git_workspace/Hyperactive/hyperactive/meta_data/",
+        force_true=True,
+    )
 
     def model(para, X, y):
         gpc = GaussianProcessClassifier(kernel=para["kernel"])
@@ -129,8 +136,11 @@ def test_dill():
     opt0 = Hyperactive(X, y, memory="long")
     opt0.search(search_config)
 
+    print("\n\n ------------------------------------------------------- \n\n")
+
     opt1 = Hyperactive(X, y, memory="long")
     opt1.search(search_config)
+"""
 
 
 def test_verbosity0():
