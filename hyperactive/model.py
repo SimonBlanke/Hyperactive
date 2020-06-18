@@ -11,16 +11,16 @@ def is_numeric(variable):
 
 
 class Model:
-    def __init__(self, func_, nth_process, _main_args_):
-        self.func_ = func_
-        self.nth_process = nth_process
-        self.X = _main_args_.X
-        self.y = _main_args_.y
+    def __init__(self, model, obj_func_para):
+        self.model = model
+        self.obj_func_para = obj_func_para
 
-    def train_model(self, para_dict):
+    def eval(self, para_dict):
+        para_dict = {**para_dict, **self.obj_func_para}
         results_dict = {}
+
         start_time = time.time()
-        results = self.func_(para_dict, self.X, self.y)
+        results = self.model(para_dict)
         eval_time = time.time() - start_time
 
         if isinstance(results, dict):
