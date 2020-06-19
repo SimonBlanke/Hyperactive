@@ -7,5 +7,6 @@ __license__ = "MIT"
 
 
 from .hyperactive_api import Hyperactive
+from .general_optimizer import Optimizer
 
-__all__ = ["Hyperactive"]
+__all__ = ["Hyperactive", "Optimizer"]

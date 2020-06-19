@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 
 class ProgressBar:
-    def init_p_bar(self, _cand_, _core_):
+    def init_p_bar(self, nth_process, n_iter, obj_func):
         pass
 
     def update_p_bar(self, n, _cand_):
@@ -20,8 +20,8 @@ class ProgressBarLVL0(ProgressBar):
     def __init__(self):
         self.best_since_iter = 0
 
-    def init_p_bar(self, nth_process, _core_):
-        self.p_bar = tqdm(**self._tqdm_dict(nth_process, _core_))
+    def init_p_bar(self, nth_process, n_iter, obj_func):
+        self.p_bar = tqdm(**self._tqdm_dict(nth_process, n_iter, obj_func))
 
     def update_p_bar(self, n, _cand_):
         self.p_bar.update(n)
@@ -29,14 +29,11 @@ class ProgressBarLVL0(ProgressBar):
     def close_p_bar(self):
         self.p_bar.close()
 
-    def _tqdm_dict(self, nth_process, _main_args_):
+    def _tqdm_dict(self, nth_process, n_iter, obj_func):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
-        model_func = list(_main_args_.search_config.keys())[
-            nth_process % _main_args_.n_models
-        ]
         return {
-            "total": _main_args_.n_iter,
-            "desc": "Thread " + str(nth_process) + " -> " + model_func.__name__,
+            "total": n_iter,
+            "desc": "Thread " + str(nth_process) + " -> " + obj_func.__name__,
             "position": nth_process,
             "leave": True,
         }

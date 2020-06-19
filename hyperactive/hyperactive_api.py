@@ -3,7 +3,7 @@
 # License: MIT License
 
 from .main_args import MainArgs
-from .hyperactive_core import HyperactiveCore
+from .general_optimizer import Optimizer
 
 
 class Hyperactive:
@@ -11,6 +11,7 @@ class Hyperactive:
         self,
         X,
         y,
+        max_time=None,
         memory="long",
         random_state=False,
         verbosity=3,
@@ -21,6 +22,20 @@ class Hyperactive:
         self._main_args_ = MainArgs(
             X, y, memory, random_state, verbosity, warnings, ext_warnings
         )
+
+    def add_search(
+        model,
+        search_space,
+        optimizer="RandomSearch",
+        n_iter=10,
+        n_jobs=1,
+        init=None,
+        distribution=None,
+    ):
+        pass
+
+    def run():
+        pass
 
     def search(
         self,
