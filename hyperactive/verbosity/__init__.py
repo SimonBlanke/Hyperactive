@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .verbosity import set_verbosity
+from .verbosity import Verbosity
 
 
-__all__ = ["set_verbosity"]
+__all__ = ["Verbosity"]
