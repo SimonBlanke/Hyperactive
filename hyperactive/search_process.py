@@ -11,11 +11,30 @@ from .model import Model
 from .init_position import InitSearchPosition
 
 from hypermemory import Hypermemory
+from importlib import import_module
 
 
 def meta_data_path():
     current_path = os.path.realpath(__file__)
     return current_path.rsplit("/", 1)[0] + "/meta_data/"
+
+
+optimizer_dict = {
+    "HillClimbing": "HillClimbingOptimizer",
+    "StochasticHillClimbing": "StochasticHillClimbingOptimizer",
+    "TabuSearch": "TabuOptimizer",
+    "RandomSearch": "RandomSearchOptimizer",
+    "RandomRestartHillClimbing": "RandomRestartHillClimbingOptimizer",
+    "RandomAnnealing": "RandomAnnealingOptimizer",
+    "SimulatedAnnealing": "SimulatedAnnealingOptimizer",
+    "StochasticTunneling": "StochasticTunnelingOptimizer",
+    "ParallelTempering": "ParallelTemperingOptimizer",
+    "ParticleSwarm": "ParticleSwarmOptimizer",
+    "EvolutionStrategy": "EvolutionStrategyOptimizer",
+    "Bayesian": "BayesianOptimizer",
+    "TPE": "TreeStructuredParzenEstimators",
+    "DecisionTree": "DecisionTreeOptimizer",
+}
 
 
 class ShortTermMemory:
@@ -46,32 +65,25 @@ class HypermemoryWrapper:
 
 
 class SearchProcess:
-    def __init__(
-        self,
-        nth_process,
-        study_para,
-        obj_func,
-        search_space,
-        opt_class,
-        n_iter,
-        n_jobs,
-        init,
-        distribution,
-        _pbar_,
-        _info_,
-    ):
-        self.study_para = study_para
-        self.obj_func = obj_func
-        self.search_space = search_space
-        self.opt_class = opt_class
-        self.n_iter = n_iter
-        self.n_jobs = n_jobs
-        self.init = init
-        self.distribution = distribution
+    def __init__(self, kwargs, verb):
+        self.verb = verb
+        module = import_module("gradient_free_optimizers")
+        self.opt_class = getattr(module, optimizer_dict[kwargs["optimizer"]])
 
-        self._pbar_ = _pbar_
-        self._info_ = _info_()
-        self._pbar_.init_p_bar(nth_process, n_iter, obj_func)
+        self.space = SearchSpace(kwargs["search_space"], None)
+
+        self.obj_func = kwargs["objective_function"]
+        self.func_para = kwargs["function_parameter"]
+        self.search_space = kwargs["search_space"]
+        self.n_iter = kwargs["n_iter"]
+        self.n_jobs = kwargs["n_jobs"]
+        self.memory = kwargs["memory"]
+        # self.init = kwargs["init"]
+        # self.distribution = kwargs["distribution"]
+
+        # self._pbar_ = _pbar_
+        # self._info_ = _info_()
+        # self._pbar_.init_p_bar(nth_process, n_iter, obj_func)
 
         self.start_time = time.time()
         self.i = 0
@@ -92,8 +104,7 @@ class SearchProcess:
         self.score_list = []
         self.pos_list = []
 
-        self.space = SearchSpace(search_space, init)
-        self.model = Model(obj_func, study_para["obj_func_para"])
+        self.model = Model(self.obj_func, self.func_para)
         # self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
 
         self.eval_time = []
@@ -128,9 +139,9 @@ class SearchProcess:
 
     def _process_results(self):
         self.total_time = time.time() - self.start_time
-        start_point = self._info_.print_start_point(self)
+        start_point = self.verb.info.print_start_point(self)
 
-        if self.study_para["memory"] == "long":
+        if self.memory == "long":
             self.mem.dump(self.memory_dict_new)
 
         return start_point
@@ -162,7 +173,7 @@ class SearchProcess:
         self.pos_list.append(value)
         self._pos = value
 
-    def base_eval(self, pos, p_bar, nth_iter):
+    def base_eval(self, pos, nth_iter):
         para = self.space.pos2para(pos)
         para["iteration"] = self.i
         results = self.model.eval(para)
@@ -171,30 +182,30 @@ class SearchProcess:
             self.score_best = results["score"]
             self.pos_best = pos
 
-            p_bar.best_since_iter = nth_iter
+            self.verb.p_bar.best_since_iter = nth_iter
 
         return results
 
-    def eval_pos_noMem(self, pos, p_bar, nth_iter):
-        results = self.base_eval(pos, p_bar, nth_iter)
+    def eval_pos_noMem(self, pos, nth_iter):
+        results = self.base_eval(pos, nth_iter)
         return results["score"]
 
-    def eval_pos_Mem(self, pos, p_bar, nth_iter, force_eval=False):
+    def eval_pos_Mem(self, pos, nth_iter, force_eval=False):
         pos.astype(int)
         pos_tuple = tuple(pos)
 
         if pos_tuple in self.memory_dict and not force_eval:
             return self.memory_dict[pos_tuple]["score"]
         else:
-            results = self.base_eval(pos, p_bar, nth_iter)
+            results = self.base_eval(pos, nth_iter)
             self.memory_dict[pos_tuple] = results
             self.memory_dict_new[pos_tuple] = results
 
             return results["score"]
 
     def _get_score(self, pos_new, nth_iter):
-        score_new = self.eval_pos(pos_new, self._pbar_, nth_iter)
-        self._pbar_.update_p_bar(1, self)
+        score_new = self.eval_pos(pos_new, nth_iter)
+        self.verb.p_bar.update_p_bar(1, self.score_best)
 
         if score_new > self.score_best:
             self.score = score_new
@@ -203,6 +214,8 @@ class SearchProcess:
         return score_new
 
     def search(self, nth_process):
+        self.verb.p_bar.init_p_bar(nth_process, self.n_iter, self.obj_func)
+
         # self._initialize_search(self._main_args_, nth_process, self._info_)
         """
         if "n_positions" in self._main_args_.opt_para:
@@ -213,9 +226,8 @@ class SearchProcess:
         init_positions = self.init_pos(n_positions)
         """
         init_positions = [np.array([1, 1])]
-        opt_para = dict()
 
-        self.opt = self.opt_class(init_positions, self.space.dim, opt_para)
+        self.opt = self.opt_class(init_positions, self.space.dim, opt_para={})
 
         # loop to initialize N positions
         for nth_init in range(len(init_positions)):
@@ -229,6 +241,6 @@ class SearchProcess:
             score_new = self._get_score(pos_new, nth_iter)
             self.opt.evaluate(score_new)
 
-        self._pbar_.close_p_bar()
+        self.verb.p_bar.close_p_bar()
 
         return self, self.opt.p_list

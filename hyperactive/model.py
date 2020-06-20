@@ -11,12 +11,12 @@ def is_numeric(variable):
 
 
 class Model:
-    def __init__(self, model, obj_func_para):
+    def __init__(self, model, study_para):
         self.model = model
-        self.obj_func_para = obj_func_para
+        self.study_para = study_para
 
     def eval(self, para_dict):
-        para_dict = {**para_dict, **self.obj_func_para}
+        para_dict = {**para_dict, **self.study_para}
         results_dict = {}
 
         start_time = time.time()

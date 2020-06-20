@@ -11,9 +11,10 @@ from .search_process import SearchProcess
 
 
 class Search:
-    def __init__(self, search_processes, n_jobs):
-        self.n_jobs = n_jobs
+    def __init__(self, search_processes, study_para, n_jobs):
+        self.study_para = study_para
         self.search_processes = search_processes
+        self.n_jobs = n_jobs
 
     def run(self):
         self.start_time = time.time()
@@ -42,13 +43,13 @@ class Search:
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = multiprocessing.Pool(self.n_jobs)
         self.processlist, _p_list = zip(
-            *pool.map(self._search_new, self._main_args_._n_process_range)
+            *pool.map(self._run, self.study_para._n_process_range)
         )
 
         return self.processlist, _p_list
 
     def _run_job(self, nth_process):
-        self.process, _p_ = self._search_new(nth_process)
+        self.process, _p_ = self._run(nth_process)
         self._get_attributes(_p_)
 
     def _get_attributes(self, _p_):
@@ -75,16 +76,16 @@ class Search:
         for self.process, _p_ in zip(self.processlist, _p_list):
             self._get_attributes(_p_)
 
-    def _search_new(self, nth_process):
+    def _run(self, nth_process):
         process = self.search_processes[nth_process]
         return process.search(nth_process)
 
     def _time_exceeded(self):
         run_time = time.time() - self.start_time
-        return self._main_args_.max_time and run_time > self._main_args_.max_time
+        return self.study_para.max_time and run_time > self.study_para.max_time
 
-    def _initialize_search(self, _main_args_, nth_process, _info_):
-        _main_args_._set_random_seed(nth_process)
+    def _initialize_search(self, study_para, nth_process, _info_):
+        study_para._set_random_seed(nth_process)
 
-        self.process = SearchProcess(nth_process, _main_args_, _info_)
-        self._pbar_.init_p_bar(nth_process, self._main_args_)
+        self.process = SearchProcess(nth_process, study_para, _info_)
+        self._pbar_.init_p_bar(nth_process, self.study_para)
