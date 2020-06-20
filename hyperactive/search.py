@@ -3,9 +3,9 @@
 # License: MIT License
 
 import time
-import numpy as np
-import multiprocessing
 
+import numpy as np
+from pathos.multiprocessing import ProcessingPool
 
 from .search_process import SearchProcess
 
@@ -15,6 +15,8 @@ class Search:
         self.study_para = study_para
         self.search_processes = search_processes
         self.n_jobs = n_jobs
+
+        self._n_process_range = range(0, int(n_jobs))
 
     def run(self):
         self.start_time = time.time()
@@ -41,10 +43,8 @@ class Search:
 
     def _search_multiprocessing(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-        pool = multiprocessing.Pool(self.n_jobs)
-        self.processlist, _p_list = zip(
-            *pool.map(self._run, self.study_para._n_process_range)
-        )
+        pool = ProcessingPool(self.n_jobs)
+        self.processlist, _p_list = zip(*pool.map(self._run, self._n_process_range))
 
         return self.processlist, _p_list
 
