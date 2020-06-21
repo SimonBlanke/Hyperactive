@@ -7,24 +7,10 @@ import numpy as np
 
 
 class SearchSpace:
-    def __init__(self, search_space, init):
+    def __init__(self, search_space, verb):
         self.search_space = search_space
-        self.init = init
-
         self.pos_space_limit()
-        self.init_type = None
-
-        self.para_names = list(self.search_space.keys())
-
-        """
-        if _core_.init_config:
-            self.init_para = _core_.init_config[list(init)[model_nr]]
-
-            if list(self.init_para.keys())[0] == list(self.search_space.keys())[0]:
-                self.init_type = "warm_start"
-            elif list(self.init_para.keys())[0] == "scatter_init":
-                self.init_type = "scatter_init"
-        """
+        self.verb = verb
 
     def pos_space_limit(self):
         dim = []

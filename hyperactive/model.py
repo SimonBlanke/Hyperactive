@@ -11,9 +11,10 @@ def is_numeric(variable):
 
 
 class Model:
-    def __init__(self, model, func_para):
+    def __init__(self, model, func_para, verb):
         self.model = model
         self.func_para = func_para
+        self.verb = verb
 
     def eval(self, para_dict):
         if self.func_para:
