@@ -17,7 +17,7 @@ class Model:
         self.verb = verb
 
     def eval(self, para_dict):
-        if self.func_para:
+        if self.func_para is not None:
             para_dict = {**para_dict, **self.func_para}
 
         results_dict = {}
