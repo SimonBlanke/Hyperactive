@@ -73,8 +73,11 @@
 Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
 
   - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
-  - The search space accepts not just int, float or str as data types but even functions, classes or any python objects.
+  - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
 
+A large part of the Hyperactive backend is developed and tested in separate repositories. If you want to take a look at the sourcecode, you can find them in the following repositories:
+  - Optimizer modules: <a href="https://github.com/SimonBlanke/Gradient-Free-Optimizers">Gradient-Free-Optimizers</a>
+  - Meta-data storage: <a href="https://github.com/SimonBlanke/Hypermemory">Hypermemory</a>
 
 
 <br>
