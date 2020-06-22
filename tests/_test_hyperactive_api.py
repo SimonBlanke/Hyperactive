@@ -7,14 +7,11 @@ import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import GradientBoostingClassifier
 
 from hyperactive import Hyperactive
 
 data = load_iris()
-X = data.data
-y = data.target
-memory = False
+X, y = data.data, data.target
 
 
 def model(para, X, y):
@@ -28,54 +25,30 @@ def model(para, X, y):
     return scores.mean()
 
 
-search_config = {
-    model: {
-        "max_depth": range(1, 21),
-        "min_samples_split": range(2, 21),
-        "min_samples_leaf": range(1, 21),
-    }
+search_space = {
+    "max_depth": range(1, 21),
+    "min_samples_split": range(2, 21),
+    "min_samples_leaf": range(1, 21),
 }
 
 
-def model0(para, X_train, y_train):
-    model = DecisionTreeClassifier(criterion=para["criterion"])
-    scores = cross_val_score(model, X_train, y_train, cv=2)
+def test_n_jobs():
+    n_jobs_list = [1, 2, 4, 10, 100, -1]
+    for n_jobs in n_jobs_list:
+        search = {
+            "model": model,
+            "search_space": search_space,
+            "n_iter": 3,
+            "n_jobs": 1,
+        }
 
-    return scores.mean()
-
-
-def model1(para, X_train, y_train):
-    model = GradientBoostingClassifier(n_estimators=para["n_estimators"])
-    scores = cross_val_score(model, X_train, y_train, cv=2)
-
-    return scores.mean()
-
-
-search_config_2 = {
-    model0: {"criterion": ["gini"]},
-    model1: {"n_estimators": range(10, 100)},
-}
-
-
-def test_n_jobs_2():
-    opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config, n_jobs=2)
-
-
-def test_n_jobs_4():
-    opt = Hyperactive(X, y, memory=memory)
-    opt.search(search_config, n_jobs=4)
+        hyper = Hyperactive(X, y)
+        hyper.add_search(**search)
 
 
 def test_positional_args():
-    opt0 = Hyperactive(X, y, random_state=False, memory=memory)
-    opt0.search(search_config)
-
-    opt1 = Hyperactive(X, y, random_state=1, memory=memory)
-    opt1.search(search_config)
-
-    opt2 = Hyperactive(X, y, random_state=1, memory=memory)
-    opt2.search(search_config)
+    hyper = Hyperactive(X, y)
+    hyper.add_search(model, search_space)
 
 
 def test_random_state():

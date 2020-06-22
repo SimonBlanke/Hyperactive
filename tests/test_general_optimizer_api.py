@@ -31,12 +31,6 @@ search_space = {
     "min_samples_leaf": range(1, 21),
 }
 
-search = {
-    "objective_function": objective_function,
-    "function_parameter": {"features": X, "target": y},
-    "search_space": search_space,
-}
-
 
 def _base_test(search):
     opt = Optimizer()
@@ -45,30 +39,64 @@ def _base_test(search):
 
 
 def test_n_jobs():
-    n_jobs_list = [1, 2, 4, 10, 100, -1]
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+
+    n_jobs_list = [1, 2, 4, 10, -1]
     for n_jobs in n_jobs_list:
         search["n_jobs"] = n_jobs
         _base_test(search)
 
 
 def test_positional_args():
-    opt = Optimizer()
-    opt.add_search(objective_function, search_space)
-    opt.run()
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+    _base_test(search)
 
 
 def test_n_iter():
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+
     n_iter_list = [0, 1, 2, 4, 10, 100]
     for n_iter in n_iter_list:
         search["n_iter"] = n_iter
         _base_test(search)
 
 
-test_n_iter()
-"""
 def test_optimizer():
-    optimizer_list = [0, 1, 2, 4, 10, 100]
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+        "n_iter": 33,
+    }
+
+    optimizer_list = [
+        "HillClimbing",
+        "StochasticHillClimbing",
+        "TabuSearch",
+        "RandomSearch",
+        "RandomRestartHillClimbing",
+        "RandomAnnealing",
+        "SimulatedAnnealing",
+        "StochasticTunneling",
+        "ParallelTempering",
+        "ParticleSwarm",
+        "EvolutionStrategy",
+        "Bayesian",
+        "TPE",
+        "DecisionTree",
+    ]
     for optimizer in optimizer_list:
         search["optimizer"] = optimizer
         _base_test(search)
-"""
