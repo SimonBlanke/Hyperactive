@@ -10,7 +10,7 @@ class Verbosity:
 
     def _get_verb_classes(self, verbosity):
         if verbosity == 0:
-            InfoLVL0, ProgressBar
+            return InfoLVL0, ProgressBar
         elif verbosity == 1:
             return InfoLVL1, ProgressBar
         elif verbosity == 2:
