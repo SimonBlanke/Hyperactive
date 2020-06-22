@@ -32,10 +32,43 @@ search_space = {
 }
 
 
-def _base_test(search):
-    opt = Optimizer()
+def _base_test(search, opt_args={}):
+    opt = Optimizer(**opt_args)
     opt.add_search(**search)
     opt.run()
+
+
+def test_init_para():
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+
+    init_para1 = {
+        "max_depth": 3,
+        "min_samples_split": 3,
+        "min_samples_leaf": 3,
+    }
+    init_para_list = [[init_para1]]
+    for init_para in init_para_list:
+        search["init_para"] = init_para
+        _base_test(search)
+
+
+test_init_para()
+
+
+def test_verbosity():
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+
+    verbosity_list = [0, 1, 2, 3]
+    for verbosity in verbosity_list:
+        _base_test(search, opt_args={"verbosity": verbosity})
 
 
 def test_n_jobs():
