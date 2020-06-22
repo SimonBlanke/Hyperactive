@@ -65,32 +65,30 @@ class HypermemoryWrapper:
 
 
 class SearchProcess:
-    def __init__(self, kwargs, verb):
+    def __init__(self, nth_process, pro_arg, verb):
+        self.nth_process = nth_process
+        self.pro_arg = pro_arg
         self.verb = verb
+
+        kwargs = self.pro_arg.kwargs
         module = import_module("gradient_free_optimizers")
-        self.opt_class = getattr(module, optimizer_dict[kwargs["optimizer"]])
 
-        self.space = SearchSpace(kwargs["search_space"], None)
-
+        self.opt_class = getattr(module, optimizer_dict[pro_arg.optimizer])
         self.obj_func = kwargs["objective_function"]
         self.func_para = kwargs["function_parameter"]
         self.search_space = kwargs["search_space"]
         self.n_iter = kwargs["n_iter"]
         self.n_jobs = kwargs["n_jobs"]
         self.memory = kwargs["memory"]
-        # self.init = kwargs["init"]
-        # self.distribution = kwargs["distribution"]
+        self.init_para = kwargs["init_para"]
+        self.distribution = kwargs["distribution"]
 
-        # self._pbar_ = _pbar_
-        # self._info_ = _info_()
-        # self._pbar_.init_p_bar(nth_process, n_iter, obj_func)
+        self.space = SearchSpace(kwargs["search_space"], verb)
+        self.model = Model(self.obj_func, self.func_para, verb)
+        self.init = InitSearchPosition(self.init_para, self.space, verb)
 
         self.start_time = time.time()
         self.i = 0
-        # self._main_args_ = _main_args_
-        # self.memory = _main_args_.memory
-
-        self.memory = None
 
         self.memory_dict = {}
         self.memory_dict_new = {}
@@ -104,11 +102,10 @@ class SearchProcess:
         self.score_list = []
         self.pos_list = []
 
-        self.model = Model(self.obj_func, self.func_para)
-        # self._init_ = InitSearchPosition(self._space_, self._model_, _main_args_)
-
         self.eval_time = []
         self.iter_times = []
+
+        print("self.memory", self.memory)
 
         self._memory_processor()
 
@@ -122,7 +119,15 @@ class SearchProcess:
             self.eval_pos = self.eval_pos_Mem
 
         elif self.memory == "long":
-            self._load_memory()
+            self.mem = Hypermemory(
+                self.func_para["features"],
+                self.func_para["target"],
+                self.obj_func,
+                self.search_space,
+            )
+            self.eval_pos = self.eval_pos_Mem
+
+            self.memory_dict = self.mem.load()
 
         else:
             print("Warning: Memory not defined")
@@ -145,15 +150,6 @@ class SearchProcess:
             self.mem.dump(self.memory_dict_new)
 
         return start_point
-
-    def init_pos(self, n_positions):
-        init_pos_list = []
-
-        for i in range(n_positions):
-            init_pos = self._init_._set_start_pos(self._info_)
-            init_pos_list.append(init_pos)
-
-        return init_pos_list
 
     @property
     def score(self):
@@ -214,19 +210,12 @@ class SearchProcess:
         return score_new
 
     def search(self, nth_process):
+        self.pro_arg.set_random_seed(nth_process)
         self.verb.p_bar.init_p_bar(nth_process, self.n_iter, self.obj_func)
 
         # self._initialize_search(self._main_args_, nth_process, self._info_)
-        """
-        if "n_positions" in self._main_args_.opt_para:
-            n_positions = self._main_args_.opt_para["n_positions"]
-        else:
-            n_positions = 1
-
-        init_positions = self.init_pos(n_positions)
-        """
-        init_positions = [np.array([1, 1])]
-
+        n_positions = self.pro_arg.n_positions
+        init_positions = self.init.set_start_pos(n_positions)
         self.opt = self.opt_class(init_positions, self.space.dim, opt_para={})
 
         # loop to initialize N positions
@@ -243,4 +232,4 @@ class SearchProcess:
 
         self.verb.p_bar.close_p_bar()
 
-        return self, self.opt.p_list
+        return self.opt.p_list
