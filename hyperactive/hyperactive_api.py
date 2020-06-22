@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from .main_args import MainArgs
 from .general_optimizer import Optimizer
 
 
