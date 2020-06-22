@@ -218,6 +218,8 @@ class SearchProcess:
         init_positions = self.init.set_start_pos(n_positions)
         self.opt = self.opt_class(init_positions, self.space.dim, opt_para={})
 
+        print("init_positions", init_positions)
+
         # loop to initialize N positions
         for nth_init in range(len(init_positions)):
             pos_new = self.opt.init_pos(nth_init)

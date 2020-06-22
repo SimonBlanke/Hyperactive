@@ -15,7 +15,7 @@ class InitSearchPosition:
         positions = []
         for init in self.init_para:
             self.verb.info.warm_start()
-            pos = self._warm_start_list()
+            pos = self._warm_start_one(init)
             positions.append(pos)
 
         for init in range(len(self.init_para), n_inits):
@@ -24,10 +24,6 @@ class InitSearchPosition:
             positions.append(pos)
 
         return positions
-
-    def _warm_start_list(self):
-        for init_para in self.init_para:
-            self._warm_start_one(init_para)
 
     def _warm_start_one(self, init_para):
         pos = []
