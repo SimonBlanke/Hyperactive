@@ -32,10 +32,19 @@ search_space = {
 }
 
 
-def _base_test(search, opt_args={}):
+def _base_test(search, opt_args={}, time=None):
     opt = Optimizer(**opt_args)
     opt.add_search(**search)
-    opt.run()
+    opt.run(time)
+
+
+def test_max_time():
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+    _base_test(search, time=0.01)
 
 
 def test_init_para():
@@ -54,9 +63,6 @@ def test_init_para():
     for init_para in init_para_list:
         search["init_para"] = init_para
         _base_test(search)
-
-
-test_init_para()
 
 
 def test_verbosity():

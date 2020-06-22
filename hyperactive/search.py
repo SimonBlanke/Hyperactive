@@ -2,7 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import time
 
 import numpy as np
 from multiprocessing import Pool
@@ -14,10 +13,10 @@ class Search:
         self.n_processes = len(search_processes)
         self._n_process_range = range(0, self.n_processes)
 
-        print("self.n_processes", self.n_processes)
+    def run(self, start_time, max_time):
+        self.start_time = start_time
+        self.max_time = max_time
 
-    def run(self, max_time):
-        self.start_time = time.time()
         self.results = {}
         self.eval_times = {}
         self.iter_times = {}
@@ -77,17 +76,4 @@ class Search:
 
     def _run(self, nth_process):
         process = self.search_processes[nth_process]
-        return process.search(nth_process)
-
-    """
-
-    def _time_exceeded(self):
-        run_time = time.time() - self.start_time
-        return self.study_para.max_time and run_time > self.study_para.max_time
-
-    def _initialize_search(self, study_para, nth_process, _info_):
-        study_para._set_random_seed(nth_process)
-
-        self.process = SearchProcess(nth_process, study_para, _info_)
-        self._pbar_.init_p_bar(nth_process, self.study_para)
-    """
+        return process.search(self.start_time, self.max_time, nth_process)

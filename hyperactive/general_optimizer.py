@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import time
 
 from .search import Search
 from .search_process import SearchProcess
@@ -30,7 +31,9 @@ class Optimizer:
         if max_time is not None:
             max_time = max_time * 60
 
-        self.search.run(max_time)
+        start_time = time.time()
+
+        self.search.run(start_time, max_time)
 
         """
         dist = Distribution()

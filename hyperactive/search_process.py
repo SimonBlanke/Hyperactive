@@ -209,29 +209,36 @@ class SearchProcess:
 
         return score_new
 
-    def search(self, nth_process):
-        self.pro_arg.set_random_seed(nth_process)
-        self.verb.p_bar.init_p_bar(nth_process, self.n_iter, self.obj_func)
-
-        # self._initialize_search(self._main_args_, nth_process, self._info_)
-        n_positions = self.pro_arg.n_positions
-        init_positions = self.init.set_start_pos(n_positions)
-        self.opt = self.opt_class(init_positions, self.space.dim, opt_para={})
-
-        print("init_positions", init_positions)
+    def search(self, start_time, max_time, nth_process):
+        self._initialize_search(nth_process)
 
         # loop to initialize N positions
-        for nth_init in range(len(init_positions)):
+        for nth_init in range(len(self.opt.init_positions)):
             pos_new = self.opt.init_pos(nth_init)
             score_new = self._get_score(pos_new, 0)
             self.opt.evaluate(score_new)
 
         # loop to do the iterations
-        for nth_iter in range(len(init_positions), self.n_iter):
+        for nth_iter in range(len(self.opt.init_positions), self.n_iter):
             pos_new = self.opt.iterate(nth_iter)
             score_new = self._get_score(pos_new, nth_iter)
             self.opt.evaluate(score_new)
 
+            if self._time_exceeded(start_time, max_time):
+                break
+
         self.verb.p_bar.close_p_bar()
 
         return self.opt.p_list
+
+    def _time_exceeded(self, start_time, max_time):
+        run_time = time.time() - start_time
+        return max_time and run_time > max_time
+
+    def _initialize_search(self, nth_process):
+        n_positions = self.pro_arg.n_positions
+        init_positions = self.init.set_start_pos(n_positions)
+        self.opt = self.opt_class(init_positions, self.space.dim, opt_para={})
+
+        self.pro_arg.set_random_seed(nth_process)
+        self.verb.p_bar.init_p_bar(nth_process, self.n_iter, self.obj_func)
