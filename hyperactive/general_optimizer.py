@@ -3,57 +3,34 @@
 # License: MIT License
 
 
-from .main_args import MainArgs
-
 from .search import Search
 from .search_process import SearchProcess
-
+from .process_arguments import ProcessArguments
 from .verbosity import Verbosity
-
-
-def check_parameter(kwargs):
-    pass
-
-
-def set_default(args, kwargs):
-    kwargs.setdefault("function_parameter", None)
-    kwargs.setdefault("memory", "long")
-    kwargs.setdefault("optimizer", "RandomSearch")
-    kwargs.setdefault("n_iter", 10)
-    kwargs.setdefault("n_jobs", 1)
-    kwargs.setdefault("random_state", None)
-    kwargs.setdefault("init", None)
-    kwargs.setdefault("distribution", None)
-
-    return kwargs
 
 
 class Optimizer:
     def __init__(
-        self, verbosity=3, warnings=False, ext_warnings=False,
+        self, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
     ):
         self.verb = Verbosity(verbosity, warnings)
+        self.random_state = random_state
         self.search_processes = []
 
     def add_search(self, *args, **kwargs):
-        # check_parameter(args, kwargs)
-        search_para = set_default(args, kwargs)
-        for arg in args:
-            if callable(arg):
-                search_para["objective_function"] = arg
-            elif isinstance(arg, dict):
-                search_para["search_space"] = arg
+        pro_arg = ProcessArguments(args, kwargs, random_state=self.random_state)
 
-        self.n_jobs = search_para["n_jobs"]
-
-        for nth_process in range(self.n_jobs):
-            new_search_process = SearchProcess(search_para, self.verb)
+        for nth_job in range(pro_arg.n_jobs):
+            new_search_process = SearchProcess(nth_job, pro_arg, self.verb)
             self.search_processes.append(new_search_process)
 
-        self.search = Search(self.search_processes, search_para, self.n_jobs)
+        self.search = Search(self.search_processes)
 
     def run(self, max_time=None):
-        self.search.run()
+        if max_time is not None:
+            max_time = max_time * 60
+
+        self.search.run(max_time)
 
         """
         dist = Distribution()
