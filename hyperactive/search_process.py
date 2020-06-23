@@ -6,9 +6,7 @@ import os
 import time
 import numpy as np
 
-from .search_space import SearchSpace
-from .model import Model
-from .init_position import InitSearchPosition
+from .candidate import Candidate
 
 from hypermemory import Hypermemory
 from importlib import import_module
@@ -83,9 +81,18 @@ class SearchProcess:
         self.init_para = kwargs["init_para"]
         self.distribution = kwargs["distribution"]
 
-        self.space = SearchSpace(kwargs["search_space"], verb)
-        self.model = Model(self.obj_func, self.func_para, verb)
-        self.init = InitSearchPosition(self.init_para, self.space, verb)
+        self.cand = Candidate(
+            self.obj_func,
+            self.func_para,
+            self.search_space,
+            self.init_para,
+            self.memory,
+            verb,
+        )
+
+        # self.space = SearchSpace(kwargs["search_space"], verb)
+        # self.model = Model(self.obj_func, self.func_para, verb)
+        # self.init = InitSearchPosition(self.init_para, self.space, verb)
 
         self.start_time = time.time()
         self.i = 0
@@ -105,20 +112,10 @@ class SearchProcess:
         self.eval_time = []
         self.iter_times = []
 
-        print("self.memory", self.memory)
-
-        self._memory_processor()
+        # self._memory_processor()
 
     def _memory_processor(self):
-        if not self.memory:
-            self.mem = None
-            self.eval_pos = self.eval_pos_noMem
-
-        elif self.memory == "short":
-            self.mem = None
-            self.eval_pos = self.eval_pos_Mem
-
-        elif self.memory == "long":
+        if self.memory == "long":
             self.mem = Hypermemory(
                 self.func_para["features"],
                 self.func_para["target"],
@@ -151,77 +148,19 @@ class SearchProcess:
 
         return start_point
 
-    @property
-    def score(self):
-        return self._score
-
-    @score.setter
-    def score(self, value):
-        self.score_list.append(value)
-        self._score = value
-
-    @property
-    def pos(self):
-        return self._score
-
-    @pos.setter
-    def pos(self, value):
-        self.pos_list.append(value)
-        self._pos = value
-
-    def base_eval(self, pos, nth_iter):
-        para = self.space.pos2para(pos)
-        para["iteration"] = self.i
-        results = self.model.eval(para)
-
-        if results["score"] > self.score_best:
-            self.score_best = results["score"]
-            self.pos_best = pos
-
-            self.verb.p_bar.best_since_iter = nth_iter
-
-        return results
-
-    def eval_pos_noMem(self, pos, nth_iter):
-        results = self.base_eval(pos, nth_iter)
-        return results["score"]
-
-    def eval_pos_Mem(self, pos, nth_iter, force_eval=False):
-        pos.astype(int)
-        pos_tuple = tuple(pos)
-
-        if pos_tuple in self.memory_dict and not force_eval:
-            return self.memory_dict[pos_tuple]["score"]
-        else:
-            results = self.base_eval(pos, nth_iter)
-            self.memory_dict[pos_tuple] = results
-            self.memory_dict_new[pos_tuple] = results
-
-            return results["score"]
-
-    def _get_score(self, pos_new, nth_iter):
-        score_new = self.eval_pos(pos_new, nth_iter)
-        self.verb.p_bar.update_p_bar(1, self.score_best)
-
-        if score_new > self.score_best:
-            self.score = score_new
-            self.pos = pos_new
-
-        return score_new
-
     def search(self, start_time, max_time, nth_process):
         self._initialize_search(nth_process)
 
         # loop to initialize N positions
         for nth_init in range(len(self.opt.init_positions)):
             pos_new = self.opt.init_pos(nth_init)
-            score_new = self._get_score(pos_new, 0)
+            score_new = self.cand.get_score(pos_new, 0)
             self.opt.evaluate(score_new)
 
         # loop to do the iterations
         for nth_iter in range(len(self.opt.init_positions), self.n_iter):
             pos_new = self.opt.iterate(nth_iter)
-            score_new = self._get_score(pos_new, nth_iter)
+            score_new = self.cand.get_score(pos_new, nth_iter)
             self.opt.evaluate(score_new)
 
             if self._time_exceeded(start_time, max_time):
@@ -237,8 +176,8 @@ class SearchProcess:
 
     def _initialize_search(self, nth_process):
         n_positions = self.pro_arg.n_positions
-        init_positions = self.init.set_start_pos(n_positions)
-        self.opt = self.opt_class(init_positions, self.space.dim, opt_para={})
+        init_positions = self.cand.init.set_start_pos(n_positions)
+        self.opt = self.opt_class(init_positions, self.cand.space.dim, opt_para={})
 
         self.pro_arg.set_random_seed(nth_process)
         self.verb.p_bar.init_p_bar(nth_process, self.n_iter, self.obj_func)
