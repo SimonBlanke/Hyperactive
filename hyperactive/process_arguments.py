@@ -22,6 +22,8 @@ def stop_warnings():
 
 class ProcessArguments:
     def __init__(self, args, kwargs, random_state):
+        self._check_opt_search(kwargs)
+
         self.kwargs = kwargs
         self._set_default()
         self._add_args2kwargs(args)
@@ -45,6 +47,25 @@ class ProcessArguments:
         else:
             self.opt_para = {}
             self.n_positions = self._get_n_positions()
+
+    def _check_opt_search(self, kwargs):
+        arguments = [
+            "objective_function",
+            "function_parameter",
+            "search_space",
+            "memory",
+            "optimizer",
+            "n_iter",
+            "n_jobs",
+            "init_para",
+            "distribution",
+        ]
+
+        for arg in kwargs:
+            if arg not in arguments:
+                raise TypeError(
+                    "add_search got an unexpected keyword argument " + str(arg)
+                )
 
     def _get_n_positions(self):
         n_positions_strings = [
