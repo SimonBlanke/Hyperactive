@@ -112,6 +112,19 @@ def test_n_iter():
         _base_test(search)
 
 
+def test_memory():
+    search = {
+        "objective_function": objective_function,
+        "function_parameter": {"features": X, "target": y},
+        "search_space": search_space,
+    }
+
+    memory_list = [False, "short"]
+    for memory in memory_list:
+        search["memory"] = memory
+        _base_test(search)
+
+
 def test_optimizer():
     search = {
         "objective_function": objective_function,
