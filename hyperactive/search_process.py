@@ -35,33 +35,6 @@ optimizer_dict = {
 }
 
 
-class ShortTermMemory:
-    def __init__(self, _space_, _main_args_, _cand_):
-        self._space_ = _space_
-        self._main_args_ = _main_args_
-
-        self.pos_best = None
-        self.score_best = -np.inf
-
-        self.memory_type = _main_args_.memory
-        self.memory_dict = {}
-        self.memory_dict_new = {}
-
-        self.meta_data_found = False
-
-        self.n_dims = None
-
-
-class HypermemoryWrapper:
-    def __init__(self):
-        pass
-
-    def load_memory(self, X, y):
-        self.mem = Hypermemory(X, y, self.obj_func, self.search_space,)
-        self.eval_pos = self.eval_pos_Mem
-        self.memory_dict = self.mem.load()
-
-
 class SearchProcess:
     def __init__(self, nth_process, pro_arg, verb):
         self.nth_process = nth_process
@@ -89,10 +62,6 @@ class SearchProcess:
             self.memory,
             verb,
         )
-
-        # self.space = SearchSpace(kwargs["search_space"], verb)
-        # self.model = Model(self.obj_func, self.func_para, verb)
-        # self.init = InitSearchPosition(self.init_para, self.space, verb)
 
         self.start_time = time.time()
         self.i = 0

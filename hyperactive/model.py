@@ -26,17 +26,8 @@ class Model:
         results = self.model(para_dict)
         eval_time = time.time() - start_time
 
-        if isinstance(results, dict):
-            if "score" not in results:
-                print("Error: model function must return dict with score-keyword")
-
-            results_dict = results
-            if "eval_time" not in results_dict:
-                results_dict["eval_time"] = eval_time
-
-        else:
-            results_dict["score"] = results
-            results_dict["eval_time"] = eval_time
+        results_dict["score"] = results
+        results_dict["eval_time"] = eval_time
 
         if is_numeric(results_dict["score"]):
             return results_dict
