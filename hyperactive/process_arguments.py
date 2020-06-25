@@ -94,7 +94,7 @@ class ProcessArguments:
 
     def _set_default(self):
         self.kwargs.setdefault("function_parameter", None)
-        self.kwargs.setdefault("memory", None)
+        self.kwargs.setdefault("memory", "short")
         self.kwargs.setdefault("optimizer", "RandomSearch")
         self.kwargs.setdefault("n_iter", 10)
         self.kwargs.setdefault("n_jobs", 1)
