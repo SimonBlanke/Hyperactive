@@ -16,9 +16,7 @@ X, y = data.data, data.target
 
 def objective_function(para):
     dtc = DecisionTreeClassifier(
-        max_depth=para["max_depth"],
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
+        max_depth=para["max_depth"], min_samples_split=para["min_samples_split"],
     )
     scores = cross_val_score(dtc, para["features"], para["target"], cv=2)
 
@@ -28,7 +26,6 @@ def objective_function(para):
 search_space = {
     "max_depth": range(1, 21),
     "min_samples_split": range(2, 21),
-    "min_samples_leaf": range(1, 21),
 }
 
 
@@ -57,7 +54,6 @@ def test_init_para():
     init_para1 = {
         "max_depth": 3,
         "min_samples_split": 3,
-        "min_samples_leaf": 3,
     }
     init_para_list = [[init_para1]]
     for init_para in init_para_list:
@@ -130,7 +126,7 @@ def test_optimizer():
         "objective_function": objective_function,
         "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
-        "n_iter": 33,
+        "n_iter": 15,
     }
 
     optimizer_list = [
