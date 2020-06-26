@@ -7,57 +7,23 @@ from .general_optimizer import Optimizer
 
 class Hyperactive:
     def __init__(
-        self,
-        X,
-        y,
-        max_time=None,
-        memory="long",
-        random_state=False,
-        verbosity=3,
-        warnings=False,
-        ext_warnings=False,
+        self, X, y, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
     ):
-
-        self._main_args_ = MainArgs(
-            X, y, memory, random_state, verbosity, warnings, ext_warnings
+        self.X = X
+        self.y = y
+        self.opt = Optimizer(
+            random_state=random_state,
+            verbosity=verbosity,
+            warnings=warnings,
+            ext_warnings=ext_warnings,
+            hyperactive=True,
         )
 
-    def add_search(
-        model,
-        search_space,
-        optimizer="RandomSearch",
-        n_iter=10,
-        n_jobs=1,
-        init=None,
-        distribution=None,
-    ):
-        pass
+    def add_search(self, *args, **kwargs):
+        kwargs["function_parameter"] = {"features": self.X, "target": self.y}
 
-    def run():
-        pass
+        self.opt.add_search(*args, **kwargs)
 
-    def search(
-        self,
-        search_config,
-        n_iter=10,
-        max_time=None,
-        optimizer="RandomSearch",
-        n_jobs=1,
-        scheduler=None,
-        init_config=None,
-    ):
-        self._main_args_.search_args(
-            search_config, max_time, n_iter, optimizer, n_jobs, scheduler, init_config
-        )
+    def run(self, max_time=None):
+        self.opt.run(max_time=max_time)
 
-        core = HyperactiveCore(self._main_args_)
-        core.run()
-
-        self.results = core.results
-        self.pos_list = core.pos_list
-        # self.para_list = None
-        self.score_list = core.score_list
-
-        self.eval_times = core.eval_times
-        self.iter_times = core.iter_times
-        self.best_scores = core.best_scores

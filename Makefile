@@ -27,6 +27,7 @@ clean-test:
 test:
 	cd tests/; \
 		pytest test_general_optimizer_api.py -p no:warnings; \
+		pytest test_hyperactive_api.py -p no:warnings; \
 		pytest test_checks.py -p no:warnings
 
 test-local:

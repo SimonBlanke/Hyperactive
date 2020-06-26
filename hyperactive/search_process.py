@@ -2,19 +2,13 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import os
 import time
 import numpy as np
 
 from .candidate import Candidate
+from .hypermemory_wrapper import HyperactiveMemory
 
-from hypermemory import Hypermemory
 from importlib import import_module
-
-
-def meta_data_path():
-    current_path = os.path.realpath(__file__)
-    return current_path.rsplit("/", 1)[0] + "/meta_data/"
 
 
 optimizer_dict = {
@@ -36,7 +30,7 @@ optimizer_dict = {
 
 
 class SearchProcess:
-    def __init__(self, nth_process, pro_arg, verb):
+    def __init__(self, nth_process, pro_arg, verb, hyperactive):
         self.nth_process = nth_process
         self.pro_arg = pro_arg
         self.verb = verb
@@ -61,6 +55,7 @@ class SearchProcess:
             self.init_para,
             self.memory,
             verb,
+            hyperactive,
         )
 
         self.start_time = time.time()
@@ -85,12 +80,7 @@ class SearchProcess:
 
     def _memory_processor(self):
         if self.memory == "long":
-            self.mem = Hypermemory(
-                self.func_para["features"],
-                self.func_para["target"],
-                self.obj_func,
-                self.search_space,
-            )
+            self.mem = HyperactiveMemory(meta_data_path, X, y, search_space)
             self.eval_pos = self.eval_pos_Mem
 
             self.memory_dict = self.mem.load()

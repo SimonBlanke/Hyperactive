@@ -10,7 +10,9 @@ from .init_position import InitSearchPosition
 
 
 class Candidate:
-    def __init__(self, obj_func, func_para, search_space, init_para, memory, verb):
+    def __init__(
+        self, obj_func, func_para, search_space, init_para, memory, verb, hyperactive
+    ):
         self.obj_func = obj_func
         self.func_para = func_para
         self.search_space = search_space
@@ -18,7 +20,7 @@ class Candidate:
         self.verb = verb
 
         self.space = SearchSpace(search_space, verb)
-        self.model = Model(obj_func, func_para, verb)
+        self.model = Model(obj_func, func_para, verb, hyperactive)
         self.init = InitSearchPosition(init_para, self.space, verb)
 
         self.memory_dict = {}
