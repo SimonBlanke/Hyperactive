@@ -43,6 +43,12 @@ class Optimizer:
 
         self.search.run(start_time, max_time)
 
+        self.position_results = self.search.position_results
+        self.eval_times = self.search.eval_times
+        self.iter_times = self.search.iter_times
+        # self.best_para = self.search.results
+        # self.best_score = self.search.results
+
         """
         self.results = dist.results
         self.pos_list = dist.pos

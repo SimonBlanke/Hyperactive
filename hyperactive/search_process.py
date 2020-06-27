@@ -4,6 +4,7 @@
 
 import time
 import numpy as np
+import pandas as pd
 
 from .candidate import Candidate
 from .hypermemory_wrapper import HyperactiveMemory
@@ -78,6 +79,17 @@ class SearchProcess:
 
         # self._memory_processor()
 
+    def _memory2dataframe(self, memory):
+        positions = np.array(list(memory.keys()))
+        scores_list = list(memory.values())
+
+        print("\n list(self.search_space.keys()) \n", list(self.search_space.keys()))
+
+        positions_df = pd.DataFrame(positions, columns=list(self.search_space.keys()))
+        scores_df = pd.DataFrame(scores_list)
+
+        self.position_results = pd.concat([positions_df, scores_df], axis=1)
+
     def _memory_processor(self):
         if self.memory == "long":
             self.mem = HyperactiveMemory(meta_data_path, X, y, search_space)
@@ -99,13 +111,16 @@ class SearchProcess:
         return self.space.pos2para(self.pos_best)
 
     def _process_results(self):
-        self.total_time = time.time() - self.start_time
-        start_point = self.verb.info.print_start_point(self)
+        self._memory2dataframe(self.cand.memory_dict_new)
 
+        self.total_time = time.time() - self.start_time
+        # start_point = self.verb.info.print_start_point(self)
+
+        """
         if self.memory == "long":
             self.mem.dump(self.memory_dict_new)
-
-        return start_point
+        """
+        # return start_point
 
     def search(self, start_time, max_time, nth_process):
         self._initialize_search(nth_process)
