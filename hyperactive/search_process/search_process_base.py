@@ -6,7 +6,6 @@ import time
 import numpy as np
 import pandas as pd
 
-from ..candidate import Candidate
 from ..hypermemory_wrapper import HyperactiveMemory
 
 from importlib import import_module
@@ -49,23 +48,12 @@ class SearchProcess:
         self.init_para = kwargs["init_para"]
         self.distribution = kwargs["distribution"]
 
-        self.cand = Candidate(
-            self.obj_func,
-            self.func_para,
-            self.search_space,
-            self.init_para,
-            self.memory,
-            verb,
-            hyperactive,
-        )
-
     def _get_warm_start(self):
         return self.space.pos2para(self.pos_best)
 
     def _process_results(self):
         self._memory2dataframe(self.cand.memory_dict_new)
 
-        self.total_time = time.time() - self.start_time
         # start_point = self.verb.info.print_start_point(self)
 
         """

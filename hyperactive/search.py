@@ -45,8 +45,8 @@ class Search:
         # self.results[self.process.obj_func] = self.process._process_results()
         self.process._process_results()
 
-        self.eval_times[self.process.obj_func] = self.process.eval_time
-        self.iter_times[self.process.obj_func] = self.process.iter_times
+        # self.eval_times[self.process.obj_func] = self.process.eval_time
+        # self.iter_times[self.process.obj_func] = self.process.iter_times
         # self.best_score[self.process.obj_func] = self.process.score_best
         # self.best_para[self.process.obj_func] = self.process.best_para
         self.position_results[self.process.obj_func] = self.process.position_results

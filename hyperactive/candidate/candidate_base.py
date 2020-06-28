@@ -4,9 +4,9 @@
 
 import numpy as np
 
-from .search_space import SearchSpace
-from .model import Model
-from .init_position import InitSearchPosition
+from ..search_space import SearchSpace
+from ..model import Model
+from ..init_position import InitSearchPosition
 
 
 class Candidate:
