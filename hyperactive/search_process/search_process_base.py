@@ -6,8 +6,8 @@ import time
 import numpy as np
 import pandas as pd
 
-from .candidate import Candidate
-from .hypermemory_wrapper import HyperactiveMemory
+from ..candidate import Candidate
+from ..hypermemory_wrapper import HyperactiveMemory
 
 from importlib import import_module
 
@@ -58,54 +58,6 @@ class SearchProcess:
             verb,
             hyperactive,
         )
-
-        self.start_time = time.time()
-        self.i = 0
-
-        self.memory_dict = {}
-        self.memory_dict_new = {}
-
-        self._score = -np.inf
-        self._pos = None
-
-        self.score_best = -np.inf
-        self.pos_best = None
-
-        self.score_list = []
-        self.pos_list = []
-
-        self.eval_time = []
-        self.iter_times = []
-
-        # self._memory_processor()
-
-    def _memory2dataframe(self, memory):
-        positions = np.array(list(memory.keys()))
-        scores_list = list(memory.values())
-
-        print("\n list(self.search_space.keys()) \n", list(self.search_space.keys()))
-
-        positions_df = pd.DataFrame(positions, columns=list(self.search_space.keys()))
-        scores_df = pd.DataFrame(scores_list)
-
-        self.position_results = pd.concat([positions_df, scores_df], axis=1)
-
-    def _memory_processor(self):
-        if self.memory == "long":
-            self.mem = HyperactiveMemory(meta_data_path, X, y, search_space)
-            self.eval_pos = self.eval_pos_Mem
-
-            self.memory_dict = self.mem.load()
-
-        else:
-            print("Warning: Memory not defined")
-            self.mem = None
-            self.eval_pos = self.eval_pos_noMem
-
-        if self.mem:
-            if self.mem.meta_data_found:
-                self.pos_best = self.mem.pos_best
-                self.score_best = self.mem.score_best
 
     def _get_warm_start(self):
         return self.space.pos2para(self.pos_best)

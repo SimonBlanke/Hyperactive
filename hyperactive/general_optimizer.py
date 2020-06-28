@@ -4,10 +4,18 @@
 
 import time
 
+from importlib import import_module
+
 from .search import Search
-from .search_process import SearchProcess
 from .process_arguments import ProcessArguments
 from .verbosity import Verbosity
+
+
+search_process_dict = {
+    False: "SearchProcessNoMem",
+    "short": "SearchProcessShortMem",
+    "long": "SearchProcessLongMem",
+}
 
 
 class Optimizer:
@@ -27,8 +35,13 @@ class Optimizer:
     def add_search(self, *args, **kwargs):
         pro_arg = ProcessArguments(args, kwargs, random_state=self.random_state)
 
+        module = import_module(".search_process", "hyperactive")
+        search_process_class = getattr(
+            module, search_process_dict[pro_arg.kwargs["memory"]]
+        )
+
         for nth_job in range(pro_arg.n_jobs):
-            new_search_process = SearchProcess(
+            new_search_process = search_process_class(
                 nth_job, pro_arg, self.verb, hyperactive=self.hyperactive
             )
             self.search_processes.append(new_search_process)
