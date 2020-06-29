@@ -31,11 +31,12 @@ class Candidate:
 
         self.score_best = -np.inf
         self.pos_best = None
+        self.para_best = None
 
         self.score_list = []
         self.pos_list = []
 
-        self.eval_time = []
+        self.eval_times = []
         self.iter_times = []
 
         if not memory:
@@ -71,6 +72,7 @@ class Candidate:
         if results["score"] > self.score_best:
             self.score_best = results["score"]
             self.pos_best = pos
+            self.para_best = para
 
             self.verb.p_bar.best_since_iter = nth_iter
 
