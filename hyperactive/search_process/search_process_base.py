@@ -48,19 +48,11 @@ class SearchProcess:
         self.init_para = kwargs["init_para"]
         self.distribution = kwargs["distribution"]
 
-    def _get_warm_start(self):
-        return self.space.pos2para(self.pos_best)
+    def store_memory(self, memory):
+        pass
 
-    def _process_results(self):
-        self._memory2dataframe(self.cand.memory_dict_new)
-
-        # start_point = self.verb.info.print_start_point(self)
-
-        """
-        if self.memory == "long":
-            self.mem.dump(self.memory_dict_new)
-        """
-        # return start_point
+    def print_best_para(self):
+        self.verb.info.print_start_point(self.cand)
 
     def search(self, start_time, max_time, nth_process):
         self._initialize_search(nth_process)
@@ -82,7 +74,18 @@ class SearchProcess:
 
         self.verb.p_bar.close_p_bar()
 
-        return self.opt.p_list
+        return self._results()
+
+    def _results(self):
+        results = {
+            "eval_times": self.cand.eval_times,
+            "iter_times": self.cand.iter_times,
+            "memory": self.cand.memory,
+            "para_best": self.cand.para_best,
+            "score_best": self.cand.score_best,
+        }
+
+        return results
 
     def _time_exceeded(self, start_time, max_time):
         run_time = time.time() - start_time
