@@ -66,7 +66,6 @@ class Candidate:
 
     def base_eval(self, pos, nth_iter):
         para = self.space.pos2para(pos)
-        para["iteration"] = nth_iter
         results = self.model.eval(para)
 
         if results["score"] > self.score_best:
