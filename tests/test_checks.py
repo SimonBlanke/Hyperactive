@@ -208,25 +208,3 @@ def test_init_para_value():
     with pytest.raises(ValueError):
         _base_test(search)
 
-
-def test_distribution_key():
-    search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
-        "search_space": search_space,
-        "distribution_": {},
-    }
-    with pytest.raises(TypeError):
-        _base_test(search)
-
-
-def test_distribution_value():
-    search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
-        "search_space": search_space,
-        "distribution": 1,
-    }
-    with pytest.raises(ValueError):
-        _base_test(search)
-

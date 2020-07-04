@@ -62,11 +62,31 @@ arguments = {
     "n_iter": _check_n_iter,
     "n_jobs": _check_n_jobs,
     "init_para": _check_init_para,
-    "distribution": _check_distribution,
+    # "distribution": _check_distribution,
 }
 
 
-def check_kwargs(kwargs):
+def check_args(
+    objective_function,
+    search_space,
+    n_iter,
+    function_parameter,
+    optimizer,
+    n_jobs,
+    init_para,
+    memory,
+):
+    kwargs = {
+        "objective_function": objective_function,
+        "search_space": search_space,
+        "n_iter": n_iter,
+        "function_parameter": function_parameter,
+        "optimizer": optimizer,
+        "n_jobs": n_jobs,
+        "init_para": init_para,
+        "memory": memory,
+    }
+
     for keyword in kwargs:
         if keyword not in arguments:
             raise TypeError(
