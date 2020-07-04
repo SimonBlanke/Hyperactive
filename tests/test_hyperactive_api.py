@@ -14,7 +14,7 @@ data = load_iris()
 X, y = data.data, data.target
 
 
-def objective_function(para, X, y):
+def model(para, X, y):
     dtc = DecisionTreeClassifier(
         max_depth=para["max_depth"], min_samples_split=para["min_samples_split"],
     )
@@ -37,7 +37,7 @@ def _base_test(search, opt_args={}, time=None):
 
 def test_max_time():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
     _base_test(search, time=0.01)
@@ -45,7 +45,7 @@ def test_max_time():
 
 def test_init_para():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
 
@@ -61,7 +61,7 @@ def test_init_para():
 
 def test_verbosity():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
 
@@ -72,7 +72,7 @@ def test_verbosity():
 
 def test_n_jobs():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
 
@@ -84,7 +84,7 @@ def test_n_jobs():
 
 def test_positional_args():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
     _base_test(search)
@@ -92,7 +92,7 @@ def test_positional_args():
 
 def test_n_iter():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
 
@@ -104,7 +104,7 @@ def test_n_iter():
 
 def test_memory():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "search_space": search_space,
     }
 
@@ -116,7 +116,7 @@ def test_memory():
 
 def test_optimizer():
     search = {
-        "objective_function": objective_function,
+        "model": model,
         "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
