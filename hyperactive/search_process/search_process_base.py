@@ -7,8 +7,6 @@ import random
 import numpy as np
 import pandas as pd
 
-from ..hypermemory_wrapper import HyperactiveMemory
-
 from importlib import import_module
 
 

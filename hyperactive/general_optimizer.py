@@ -7,7 +7,6 @@ import time
 from importlib import import_module
 
 import multiprocessing
-from .search import Search
 from .verbosity import Verbosity
 
 from .checks import check_args
@@ -15,17 +14,28 @@ from .checks import check_args
 search_process_dict = {
     False: "SearchProcessNoMem",
     "short": "SearchProcessShortMem",
-    "long": "SearchProcessLongMem",
+    "long": "SearchProcessShortMem",
+}
+
+search_dict = {
+    False: "Search",
+    "short": "Search",
+    "long": "SearchLongTermMemory",
 }
 
 
-def _set_n_jobs(n_jobs):
+def set_n_jobs(n_jobs):
     """Sets the number of jobs to run in parallel"""
     num_cores = multiprocessing.cpu_count()
     if n_jobs == -1 or n_jobs > num_cores:
         return num_cores
     else:
         return n_jobs
+
+
+def get_class(file_path, class_name):
+    module = import_module(file_path, "hyperactive")
+    return getattr(module, class_name)
 
 
 class Optimizer:
@@ -54,9 +64,6 @@ class Optimizer:
         init_para,
         memory,
     ):
-        module = import_module(".search_process", "hyperactive")
-        search_process_class = getattr(module, search_process_dict[memory])
-
         search_process_kwargs = {
             "nth_process": nth_process,
             "verb": self.verb,
@@ -72,9 +79,8 @@ class Optimizer:
             "random_state": self.random_state,
         }
 
-        print("search_process_class", search_process_class)
-
-        new_search_process = search_process_class(**search_process_kwargs)
+        SearchProcess = get_class(".search_process", search_process_dict[memory])
+        new_search_process = SearchProcess(**search_process_kwargs)
         self.search_processes.append(new_search_process)
 
     def add_search(
@@ -100,7 +106,7 @@ class Optimizer:
             memory,
         )
 
-        n_jobs = _set_n_jobs(n_jobs)
+        n_jobs = set_n_jobs(n_jobs)
 
         for nth_job in range(n_jobs):
             self._add_process(
@@ -115,7 +121,8 @@ class Optimizer:
                 memory,
             )
 
-        self.search = Search(self.search_processes)
+        Search = get_class(".search", search_dict[memory])
+        self.search = Search(function_parameter, self.search_processes)
 
     def run(self, max_time=None, distribution=None):
         if max_time is not None:

@@ -5,18 +5,29 @@
 
 import numpy as np
 import pandas as pd
+
 from multiprocessing import Pool
+from importlib import import_module
+
+from .hypermemory_wrapper import HypermemoryWrapper
 
 
-class Search:
-    def __init__(self, search_processes):
+class SearchBase:
+    def __init__(self, function_parameter, search_processes):
+        self.function_parameter = function_parameter
         self.search_processes = search_processes
         self.n_processes = len(search_processes)
         self._n_process_range = range(0, self.n_processes)
 
         self.obj_functions = self._uniques_obj_func(search_processes)
 
-        # self._load_memory()
+        self.results = {}
+        self.eval_times = {}
+        self.iter_times = {}
+        self.best_scores = {}
+        self.pos_list = {}
+        self.score_list = {}
+        self.position_results = {}
 
     def _uniques_obj_func(self, search_processes):
         self.obj_func_list = []
@@ -24,14 +35,6 @@ class Search:
             self.obj_func_list.append(process.objective_function)
 
         return set(self.obj_func_list)
-
-    def _load_memory(self):
-        for process in self.search_processes:
-            process.memory_dict
-
-    def _save_memory(self,):
-        for process in self.search_processes:
-            process
 
     def _get_results(self):
         position_results_dict = {}
@@ -74,33 +77,6 @@ class Search:
 
         return results_list
 
-    def run(self, start_time, max_time):
-        self.start_time = start_time
-        self.max_time = max_time
-
-        self.results = {}
-        self.eval_times = {}
-        self.iter_times = {}
-        self.best_scores = {}
-        self.pos_list = {}
-        self.score_list = {}
-        self.position_results = {}
-
-        if len(self.search_processes) == 1:
-            results_list = [self._run_job(0)]
-        else:
-            results_list = self._run_multiple_jobs()
-
-        print("\n results_list \n", results_list)
-
-        for result in results_list:
-            print("\n result \n", result)
-
-            self._memory_dict2dataframe(result)
-
-            # self._store_memory(result["memory"])
-            # self._print_best_para()
-
     def _memory_dict2dataframe(self, results_dict):
         memory_dict = results_dict["memory"]
         tuple_list = list(memory_dict.keys())
@@ -117,8 +93,55 @@ class Search:
 
         return results
 
+    def _run(self, start_time, max_time):
+        self.start_time = start_time
+        self.max_time = max_time
 
-class SearchLongTermMemory:
-    def __init__(self, search_processes):
-        super().__init__(search_processes)
+        if len(self.search_processes) == 1:
+            results_list = [self._run_job(0)]
+        else:
+            results_list = self._run_multiple_jobs()
+
+        # print("\n results_list \n", results_list)
+
+        """
+        for result in results_list:
+            # print("\n result \n", result)
+
+            self._memory_dict2dataframe(result)
+
+            # self._store_memory(result["memory"])
+            # self._print_best_para()
+        """
+
+
+class Search(SearchBase):
+    def __init__(self, function_parameter, search_processes):
+        super().__init__(function_parameter, search_processes)
+
+    def run(self, start_time, max_time):
+        self._run(start_time, max_time)
+
+
+class SearchLongTermMemory(Search):
+    def __init__(self, function_parameter, search_processes):
+        super().__init__(function_parameter, search_processes)
+        module = import_module(".", "hypermemory")
+        Hypermemory = getattr(module, "Hypermemory")
+
+        self.mem = HypermemoryWrapper(self.function_parameter)
+
+        self._load_memory()
+
+    def _load_memory(self):
+        for process in self.search_processes:
+            process.cand.memory_dict = self.mem.load(process.objective_function)
+
+    def _save_memory(self,):
+        for process in self.search_processes:
+            self.mem.save(process.objective_function, process.cand.memory_dict)
+
+    def run(self, start_time, max_time):
+        self._run(start_time, max_time)
+        self._save_memory()
 
