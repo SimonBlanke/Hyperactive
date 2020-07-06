@@ -19,10 +19,27 @@ class Hyperactive:
             hyperactive=True,
         )
 
-    def add_search(self, *args, **kwargs):
-        kwargs["function_parameter"] = {"features": self.X, "target": self.y}
-
-        self.opt.add_search(*args, **kwargs)
+    def add_search(
+        self,
+        model,
+        search_space,
+        n_iter=10,
+        function_parameter=None,
+        optimizer="RandomSearch",
+        n_jobs=1,
+        init_para=[],
+        memory="short",
+    ):
+        self.opt.add_search(
+            objective_function=model,
+            search_space=search_space,
+            function_parameter={"features": self.X, "target": self.y},
+            n_iter=n_iter,
+            optimizer=optimizer,
+            n_jobs=n_jobs,
+            init_para=init_para,
+            memory=memory,
+        )
 
     def run(self, max_time=None):
         self.opt.run(max_time=max_time)
