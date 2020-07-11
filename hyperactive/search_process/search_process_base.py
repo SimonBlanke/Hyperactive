@@ -65,10 +65,10 @@ class SearchProcess:
         module = import_module("gradient_free_optimizers")
         self.opt_class = getattr(module, optimizer_dict[optimizer])
 
-    def _results(self):
-        results = {
-            "objective_function": self.objective_function,
-            "search_space": self.search_space,
+        self.res = ResultsManager(objective_function, search_space, function_parameter)
+
+    def _results_dict(self):
+        results_dict = {
             "eval_times": self.eval_times,
             "iter_times": self.iter_times,
             "memory": self.cand.memory_dict_new,
@@ -76,7 +76,7 @@ class SearchProcess:
             "score_best": self.cand.score_best,
         }
 
-        return results
+        return results_dict
 
     def _time_exceeded(self, start_time, max_time):
         run_time = time.time() - start_time
@@ -164,4 +164,36 @@ class SearchProcess:
 
         self.verb.p_bar.close_p_bar()
 
-        return self._results()
+        self.res.memory_dict_new = self.cand.memory_dict_new
+        self.res.results_dict = self._results_dict()
+
+        return self.res
+
+
+from hypermemory import HyperactiveWrapper
+from ..meta_data.meta_data_path import meta_data_path
+
+
+class ResultsManager:
+    def __init__(
+        self, objective_function, search_space, function_parameter,
+    ):
+        self.objective_function = objective_function
+        self.search_space = search_space
+        self.function_parameter = function_parameter
+
+        self.memory_dict_new = {}
+
+        self.hypermem = HyperactiveWrapper(
+            main_path=meta_data_path(),
+            X=function_parameter["features"],
+            y=function_parameter["target"],
+            model=self.objective_function,
+            search_space=search_space,
+        )
+
+    def load_long_term_memory(self):
+        return self.hypermem.load()
+
+    def save_long_term_memory(self):
+        self.hypermem.save(self.memory_dict_new)

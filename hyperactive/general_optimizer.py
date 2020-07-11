@@ -14,7 +14,7 @@ from .checks import check_args
 search_process_dict = {
     False: "SearchProcessNoMem",
     "short": "SearchProcessShortMem",
-    "long": "SearchProcessShortMem",
+    "long": "SearchProcessLongMem",
 }
 
 search_dict = {

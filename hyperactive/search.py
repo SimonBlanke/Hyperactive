@@ -9,8 +9,6 @@ import pandas as pd
 from multiprocessing import Pool
 from importlib import import_module
 
-from .hypermemory_wrapper import HypermemoryWrapper
-
 
 class SearchBase:
     def __init__(self, function_parameter, search_processes):
@@ -102,7 +100,7 @@ class SearchBase:
         else:
             results_list = self._run_multiple_jobs()
 
-        # print("\n results_list \n", results_list)
+        return results_list
 
         """
         for result in results_list:
@@ -126,20 +124,15 @@ class Search(SearchBase):
 class SearchLongTermMemory(Search):
     def __init__(self, function_parameter, search_processes):
         super().__init__(function_parameter, search_processes)
-        module = import_module(".", "hypermemory")
-        Hypermemory = getattr(module, "Hypermemory")
-
-        self.mem = HypermemoryWrapper(self.function_parameter)
-
         self._load_memory()
 
     def _load_memory(self):
         for process in self.search_processes:
-            process.cand.memory_dict = self.mem.load(process.objective_function)
+            process.cand.memory_dict = process.res.load_long_term_memory()
 
-    def _save_memory(self,):
+    def _save_memory(self):
         for process in self.search_processes:
-            self.mem.save(process.objective_function, process.cand.memory_dict)
+            process.res.save_long_term_memory()
 
     def run(self, start_time, max_time):
         self._run(start_time, max_time)
