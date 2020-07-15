@@ -27,20 +27,19 @@ class InfoLVL0(Info):
     def __init__(self):
         pass
 
-    def print_start_point(self, _cand_):
-        return _cand_._get_warm_start()
+    def print_start_point(self):
+        pass
+        # return cand._get_warm_start()
 
 
 class InfoLVL1(InfoLVL0):
     def __init__(self):
         pass
 
-    def print_start_point(self, _cand_):
-        start_point = _cand_._get_warm_start()
-        print("best para =", start_point)
-        print("score     =", _cand_.score_best, "\n")
-
-        return start_point
+    def print_start_point(self):
+        pass
+        # print("best para =", start_point)
+        # print("score     =", score_best, "\n")
 
     def warm_start(self):
         print("Set warm start")
