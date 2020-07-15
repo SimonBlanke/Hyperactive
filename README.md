@@ -77,7 +77,7 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
 
 A large part of the Hyperactive backend is developed and tested in separate repositories. If you want to take a look at the sourcecode, you can find them in the following repositories:
   - Optimizer modules: <a href="https://github.com/SimonBlanke/Gradient-Free-Optimizers">Gradient-Free-Optimizers</a>
-  - Meta-data storage: <a href="https://github.com/SimonBlanke/Hypermemory">Hypermemory</a>
+  - Meta-data storage: <a href="https://github.com/SimonBlanke/Optimization-Metadata">Optimization-Metadata</a>
 
 
 <br>
