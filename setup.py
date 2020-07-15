@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
 requires = [
     "numpy",
     "tqdm",
-    "hypermemory",
+    "optimization-metadata",
     "gradient-free-optimizers",
 ]
 

@@ -170,7 +170,7 @@ class SearchProcess:
         return self.res
 
 
-from hypermemory import HyperactiveWrapper
+from optimization_metadata import HyperactiveWrapper
 from ..meta_data.meta_data_path import meta_data_path
 
 

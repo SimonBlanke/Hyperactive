@@ -12,7 +12,7 @@ python:
   - "3.7"
 
 install:
-  - pip install hypermemory
+  - pip install optimization-metadata
   - pip install gradient-free-optimizers
   - pip install packaging
   - pip install pytest
