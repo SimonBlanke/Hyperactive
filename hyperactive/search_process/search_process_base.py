@@ -133,31 +133,32 @@ class SearchProcess:
         self.verb.info.print_start_point()
 
     def search(self, start_time, max_time, nth_process):
+        start_time_search = time.time()
         self._initialize_search(nth_process)
 
         # loop to initialize N positions
         for nth_init in range(len(self.opt.init_positions)):
-            start_time = time.time()
+            start_time_iter = time.time()
             pos_new = self.opt.init_pos(nth_init)
 
-            start_time = time.time()
+            start_time_eval = time.time()
             score_new = self.cand.get_score(pos_new, nth_init)
-            self.eval_times.append(time.time() - start_time)
+            self.eval_times.append(time.time() - start_time_eval)
 
             self.opt.evaluate(score_new)
-            self.iter_times.append(time.time() - start_time)
+            self.iter_times.append(time.time() - start_time_iter)
 
         # loop to do the iterations
         for nth_iter in range(len(self.opt.init_positions), self.n_iter):
-            start_time = time.time()
+            start_time_iter = time.time()
             pos_new = self.opt.iterate(nth_iter)
 
-            start_time = time.time()
+            start_time_eval = time.time()
             score_new = self.cand.get_score(pos_new, nth_iter)
-            self.eval_times.append(time.time() - start_time)
+            self.eval_times.append(time.time() - start_time_eval)
 
             self.opt.evaluate(score_new)
-            self.iter_times.append(time.time() - start_time)
+            self.iter_times.append(time.time() - start_time_search)
 
             if self._time_exceeded(start_time, max_time):
                 break
