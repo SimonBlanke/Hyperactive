@@ -120,31 +120,3 @@ def test_memory():
         search["memory"] = memory
         _base_test(search)
 
-
-def test_optimizer():
-    search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
-        "search_space": search_space,
-        "n_iter": 15,
-    }
-
-    optimizer_list = [
-        "HillClimbing",
-        "StochasticHillClimbing",
-        "TabuSearch",
-        "RandomSearch",
-        "RandomRestartHillClimbing",
-        "RandomAnnealing",
-        "SimulatedAnnealing",
-        "StochasticTunneling",
-        "ParallelTempering",
-        "ParticleSwarm",
-        "EvolutionStrategy",
-        "Bayesian",
-        "TPE",
-        "DecisionTree",
-    ]
-    for optimizer in optimizer_list:
-        search["optimizer"] = optimizer
-        _base_test(search)

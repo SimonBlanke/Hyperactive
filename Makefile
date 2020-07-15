@@ -25,10 +25,7 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-	cd tests/; \
-		pytest test_general_optimizer_api.py -p no:warnings; \
-		pytest test_hyperactive_api.py -p no:warnings; \
-		pytest test_checks.py -p no:warnings
+	pytest -p no:warnings -rfEX tests/ \
 
 test-local:
 	cd tests/local; \
