@@ -71,7 +71,6 @@ class SearchBase:
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = Pool(self.n_processes)
         results_list = pool.map(self._run_job, self._n_process_range)
-        print("\n results_list \n", results_list)
 
         return results_list
 
