@@ -141,7 +141,7 @@ class SearchProcess:
             pos_new = self.opt.init_pos(nth_init)
 
             start_time = time.time()
-            score_new = self.cand.get_score(pos_new, 0)
+            score_new = self.cand.get_score(pos_new, nth_init)
             self.eval_times.append(time.time() - start_time)
 
             self.opt.evaluate(score_new)
