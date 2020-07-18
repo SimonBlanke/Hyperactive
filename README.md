@@ -296,9 +296,9 @@ opt.search(search_config, n_iter=20)
 <summary><b>v3.0.0</b></summary>
 
   - [ ] New API
-      - [ ] improve distributed computing abilities
       - [ ] separate optimizer and n_iter for each job
       - [ ] expand usage of objective-function
+  - [x] Simpler and faster meta-data collection, saving and loading
 
 </details>
 
@@ -313,7 +313,19 @@ opt.search(search_config, n_iter=20)
   - [ ] Meta-Optimization of local optimizers
 </details>
 
+<details>
+<summary><b>v3.2.0</b></summary>
+
+  - [ ] improve distributed computing abilities
+
+</details>
+
 <br>
+
+
+
+
+
 
 ## Experimental algorithms
 

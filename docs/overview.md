@@ -240,9 +240,9 @@ pip install Hyperactive/
 <summary><b>v3.0.0</b></summary>
 
   - [ ] New API
-      - [ ] improve distributed computing abilities
       - [ ] separate optimizer and n_iter for each job
       - [ ] expand usage of objective-function
+  - [x] Simpler and faster meta-data collection, saving and loading
 
 </details>
 
@@ -255,6 +255,7 @@ pip install Hyperactive/
   - [ ] upgrade evolution strategy
   - [ ] add warm start for population based optimizers
   - [ ] Meta-Optimization of local optimizers
+  - [ ] improve distributed computing abilities
 </details>
 
 <br><br>
