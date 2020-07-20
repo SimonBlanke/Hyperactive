@@ -9,6 +9,8 @@ import pandas as pd
 
 from importlib import import_module
 
+from ..results_manager import ResultsManager
+
 
 optimizer_dict = {
     "HillClimbing": "HillClimbingOptimizer",
@@ -67,17 +69,6 @@ class SearchProcess:
 
         self.res = ResultsManager(objective_function, search_space, function_parameter)
 
-    def _results_dict(self):
-        results_dict = {
-            "eval_times": self.eval_times,
-            "iter_times": self.iter_times,
-            "memory": self.cand.memory_dict_new,
-            "para_best": self.cand.para_best,
-            "score_best": self.cand.score_best,
-        }
-
-        return results_dict
-
     def _time_exceeded(self, start_time, max_time):
         run_time = time.time() - start_time
         return max_time and run_time > max_time
@@ -117,6 +108,14 @@ class SearchProcess:
                     n_positions = len(n_positions)
 
         return n_positions
+
+    def _save_results(self):
+        self.res.eval_times = self.eval_times
+        self.res.iter_times = self.iter_times
+        self.res.memory_dict_new = self.cand.memory_dict_new
+        self.res.para_best = self.cand.para_best
+        self.res.score_best = self.cand.score_best
+        self.res.objective_function = self.objective_function
 
     def _set_random_seed(self):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
@@ -164,11 +163,7 @@ class SearchProcess:
                 break
 
         self.verb.p_bar.close_p_bar()
-
-        self.res.memory_dict_new = self.cand.memory_dict_new
-        self.res.results_dict = self._results_dict()
-
-        return self.res
+        self._save_results()
 
 
 from optimization_metadata import HyperactiveWrapper

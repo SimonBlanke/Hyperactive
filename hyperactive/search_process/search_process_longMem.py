@@ -9,6 +9,8 @@ import pandas as pd
 from ..candidate import CandidateShortMem
 from .search_process_shortMem import SearchProcessShortMem
 
+from ..results_manager import ResultsManagerMemory
+
 
 class SearchProcessLongMem(SearchProcessShortMem):
     def __init__(
@@ -39,6 +41,10 @@ class SearchProcessLongMem(SearchProcessShortMem):
             memory,
             hyperactive,
             random_state,
+        )
+
+        self.res = ResultsManagerMemory(
+            objective_function, search_space, function_parameter
         )
 
         self.cand = CandidateShortMem(
