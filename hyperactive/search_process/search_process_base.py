@@ -9,7 +9,7 @@ import pandas as pd
 
 from importlib import import_module
 
-from ..results_manager import ResultsManager
+from ..verbosity import ProgressBar
 
 
 optimizer_dict = {
@@ -37,6 +37,7 @@ class SearchProcess:
         verb,
         objective_function,
         search_space,
+        search_name,
         n_iter,
         function_parameter,
         optimizer,
@@ -59,6 +60,9 @@ class SearchProcess:
         self.hyperactive = hyperactive
         self.random_state = random_state
 
+        self.p_bar = ProgressBar(nth_process, n_iter, objective_function)
+
+        self._set_random_seed(nth_process)
         self._process_arguments()
 
         self.iter_times = []
@@ -66,8 +70,6 @@ class SearchProcess:
 
         module = import_module("gradient_free_optimizers")
         self.opt_class = getattr(module, optimizer_dict[optimizer])
-
-        self.res = ResultsManager(objective_function, search_space, function_parameter)
 
     def _time_exceeded(self, start_time, max_time):
         run_time = time.time() - start_time
@@ -77,11 +79,7 @@ class SearchProcess:
         init_positions = self.cand.init.set_start_pos(self.n_positions)
         self.opt = self.opt_class(init_positions, self.cand.space.dim, opt_para={})
 
-        self.verb.p_bar.init_p_bar(nth_process, self.n_iter, self.objective_function)
-
     def _process_arguments(self):
-        self._set_random_seed()
-
         if isinstance(self.optimizer, dict):
             optimizer = list(self.optimizer.keys())[0]
             self.opt_para = self.optimizer[optimizer]
@@ -117,13 +115,15 @@ class SearchProcess:
         self.res.score_best = self.cand.score_best
         self.res.objective_function = self.objective_function
 
-    def _set_random_seed(self):
+    def _set_random_seed(self, nth_process):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
         if self.random_state is None:
             self.random_state = np.random.randint(0, high=2 ** 32 - 2)
 
-        random.seed(self.random_state + self.nth_process)
-        np.random.seed(self.random_state + self.nth_process)
+        print("self.random_state + nth_process", self.random_state + nth_process)
+
+        random.seed(self.random_state + nth_process)
+        np.random.seed(self.random_state + nth_process)
 
     def store_memory(self, memory):
         pass
@@ -162,8 +162,10 @@ class SearchProcess:
             if self._time_exceeded(start_time, max_time):
                 break
 
-        self.verb.p_bar.close_p_bar()
+        self.p_bar.close_p_bar()
         self._save_results()
+
+        return self.res
 
 
 from optimization_metadata import HyperactiveWrapper

@@ -57,6 +57,7 @@ class Optimizer:
         nth_process,
         objective_function,
         search_space,
+        name,
         n_iter,
         function_parameter,
         optimizer,
@@ -69,6 +70,7 @@ class Optimizer:
             "verb": self.verb,
             "objective_function": objective_function,
             "search_space": search_space,
+            "search_name": name,
             "n_iter": n_iter,
             "function_parameter": function_parameter,
             "optimizer": optimizer,
@@ -78,7 +80,6 @@ class Optimizer:
             "hyperactive": self.hyperactive,
             "random_state": self.random_state,
         }
-
         SearchProcess = get_class(".search_process", search_process_dict[memory])
         new_search_process = SearchProcess(**search_process_kwargs)
         self.search_processes.append(new_search_process)
@@ -87,6 +88,7 @@ class Optimizer:
         self,
         objective_function,
         search_space,
+        name=None,
         n_iter=10,
         function_parameter=None,
         optimizer="RandomSearch",
@@ -109,10 +111,12 @@ class Optimizer:
         n_jobs = set_n_jobs(n_jobs)
 
         for nth_job in range(n_jobs):
+            nth_process = len(self.search_processes)
             self._add_process(
-                nth_job,
+                nth_process,
                 objective_function,
                 search_space,
+                name,
                 n_iter,
                 function_parameter,
                 optimizer,
@@ -132,9 +136,9 @@ class Optimizer:
 
         self.search.run(start_time, max_time)
 
-        self.position_results = self.search.position_results
-        self.eval_times = self.search.eval_times
-        self.iter_times = self.search.iter_times
-        self.best_para = self.search.results
-        self.best_score = self.search.results
+        # self.position_results = self.search.position_results
+        self.eval_times = self.search.eval_times_dict
+        self.iter_times = self.search.iter_times_dict
+        self.best_para = self.search.para_best_dict
+        self.best_score = self.search.score_best_dict
 

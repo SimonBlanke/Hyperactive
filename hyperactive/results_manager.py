@@ -9,8 +9,9 @@ from .meta_data.meta_data_path import meta_data_path
 
 class ResultsManagerBase:
     def __init__(
-        self, objective_function, search_space, function_parameter,
+        self, search_name, objective_function, search_space, function_parameter,
     ):
+        self.search_name = search_name
         self.objective_function = objective_function
         self.search_space = search_space
         self.function_parameter = function_parameter
@@ -20,16 +21,20 @@ class ResultsManagerBase:
 
 class ResultsManager(ResultsManagerBase):
     def __init__(
-        self, objective_function, search_space, function_parameter,
+        self, search_name, objective_function, search_space, function_parameter,
     ):
-        super().__init__(objective_function, search_space, function_parameter)
+        super().__init__(
+            search_name, objective_function, search_space, function_parameter
+        )
 
 
 class ResultsManagerMemory(ResultsManagerBase):
     def __init__(
-        self, objective_function, search_space, function_parameter,
+        self, search_name, objective_function, search_space, function_parameter,
     ):
-        super().__init__(objective_function, search_space, function_parameter)
+        super().__init__(
+            search_name, objective_function, search_space, function_parameter
+        )
 
         self.hypermem = HyperactiveWrapper(
             main_path=meta_data_path(),

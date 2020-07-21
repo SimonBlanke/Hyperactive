@@ -19,6 +19,7 @@ class SearchProcessLongMem(SearchProcessShortMem):
         verb,
         objective_function,
         search_space,
+        search_name,
         n_iter,
         function_parameter,
         optimizer,
@@ -33,6 +34,7 @@ class SearchProcessLongMem(SearchProcessShortMem):
             verb,
             objective_function,
             search_space,
+            search_name,
             n_iter,
             function_parameter,
             optimizer,
@@ -43,8 +45,11 @@ class SearchProcessLongMem(SearchProcessShortMem):
             random_state,
         )
 
+        if not isinstance(search_name, str):
+            search_name = str(nth_process)
+
         self.res = ResultsManagerMemory(
-            objective_function, search_space, function_parameter
+            search_name, objective_function, search_space, function_parameter
         )
 
         self.cand = CandidateShortMem(

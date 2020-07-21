@@ -8,6 +8,7 @@ import pandas as pd
 
 from ..candidate import CandidateShortMem
 from .search_process_base import SearchProcess
+from ..results_manager import ResultsManager
 
 
 class SearchProcessShortMem(SearchProcess):
@@ -17,6 +18,7 @@ class SearchProcessShortMem(SearchProcess):
         verb,
         objective_function,
         search_space,
+        search_name,
         n_iter,
         function_parameter,
         optimizer,
@@ -31,6 +33,7 @@ class SearchProcessShortMem(SearchProcess):
             verb,
             objective_function,
             search_space,
+            search_name,
             n_iter,
             function_parameter,
             optimizer,
@@ -49,6 +52,13 @@ class SearchProcessShortMem(SearchProcess):
             self.memory,
             verb,
             hyperactive,
+        )
+
+        if not isinstance(search_name, str):
+            search_name = str(nth_process)
+
+        self.res = ResultsManager(
+            search_name, objective_function, search_space, function_parameter
         )
 
     def _memory2dataframe(self, memory):

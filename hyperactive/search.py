@@ -34,28 +34,21 @@ class SearchBase:
 
         return set(self.obj_func_list)
 
-    def _get_results(self):
+    def _get_results(self, results_list):
         position_results_dict = {}
 
-        eval_times_dict = {}
-        iter_times_dict = {}
+        self.eval_times_dict = {}
+        self.iter_times_dict = {}
+        self.para_best_dict = {}
+        self.score_best_dict = {}
 
-        score_best_dict = {}
-        para_best_dict = {}
+        for results in results_list:
+            search_name = results.search_name
 
-        score_best = -np.inf
-        para_best = None
-        for objective_function in self.obj_func_set:
-            for process in self.search_processes:
-                if objective_function != process.objective_function:
-                    continue
-
-                if score_best < process.cand.score_best:
-                    score_best = process.cand.score_best
-                    para_best = process.cand.para_best
-
-            score_best_dict[objective_function] = score_best
-            para_best_dict[objective_function] = para_best
+            self.eval_times_dict[search_name] = results.eval_times
+            self.iter_times_dict[search_name] = results.iter_times
+            self.para_best_dict[search_name] = results.para_best
+            self.score_best_dict[search_name] = results.score_best
 
     def _print_best_para(self):
         for _ in range(int(self.n_processes / 2) + 2):
@@ -99,17 +92,7 @@ class SearchBase:
         else:
             results_list = self._run_multiple_jobs()
 
-        return results_list
-
-        """
-        for result in results_list:
-            # print("\n result \n", result)
-
-            self._memory_dict2dataframe(result)
-
-            # self._store_memory(result["memory"])
-            # self._print_best_para()
-        """
+        self._get_results(results_list)
 
 
 class Search(SearchBase):
