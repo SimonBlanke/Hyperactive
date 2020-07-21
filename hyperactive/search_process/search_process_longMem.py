@@ -16,7 +16,7 @@ class SearchProcessLongMem(SearchProcessShortMem):
     def __init__(
         self,
         nth_process,
-        verb,
+        p_bar,
         objective_function,
         search_space,
         search_name,
@@ -26,12 +26,11 @@ class SearchProcessLongMem(SearchProcessShortMem):
         n_jobs,
         init_para,
         memory,
-        hyperactive,
         random_state,
     ):
         super().__init__(
             nth_process,
-            verb,
+            p_bar,
             objective_function,
             search_space,
             search_name,
@@ -41,7 +40,6 @@ class SearchProcessLongMem(SearchProcessShortMem):
             n_jobs,
             init_para,
             memory,
-            hyperactive,
             random_state,
         )
 
@@ -58,7 +56,6 @@ class SearchProcessLongMem(SearchProcessShortMem):
             self.search_space,
             self.init_para,
             self.memory,
-            verb,
-            hyperactive,
+            p_bar,
         )
 

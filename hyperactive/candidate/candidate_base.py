@@ -10,18 +10,16 @@ from ..init_position import InitSearchPosition
 
 
 class Candidate:
-    def __init__(
-        self, obj_func, func_para, search_space, init_para, memory, verb, hyperactive
-    ):
+    def __init__(self, obj_func, func_para, search_space, init_para, memory, p_bar):
         self.obj_func = obj_func
         self.func_para = func_para
         self.search_space = search_space
         self.memory = memory
-        self.verb = verb
+        self.p_bar = p_bar
 
-        self.space = SearchSpace(search_space, verb)
-        self.model = Model(obj_func, func_para, verb, hyperactive)
-        self.init = InitSearchPosition(init_para, self.space, verb)
+        self.space = SearchSpace(search_space)
+        self.model = Model(obj_func, func_para)
+        self.init = InitSearchPosition(init_para, self.space)
 
         self.memory_dict = {}
         self.memory_dict_new = {}
@@ -73,7 +71,7 @@ class Candidate:
             self.pos_best = pos
             self.para_best = para
 
-            self.verb.p_bar.best_since_iter = nth_iter
+            self.p_bar.best_since_iter = nth_iter
 
         return results
 
@@ -96,7 +94,7 @@ class Candidate:
 
     def get_score(self, pos_new, nth_iter):
         score_new = self.eval_pos(pos_new, nth_iter)
-        self.verb.p_bar.update_p_bar(1, self.score_best)
+        self.p_bar.update_p_bar(1, self.score_best)
 
         if score_new > self.score_best:
             self.score = score_new
