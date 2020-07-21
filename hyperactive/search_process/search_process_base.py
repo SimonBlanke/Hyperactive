@@ -9,8 +9,6 @@ import pandas as pd
 
 from importlib import import_module
 
-from ..verbosity import ProgressBar
-
 
 optimizer_dict = {
     "HillClimbing": "HillClimbingOptimizer",
@@ -34,7 +32,7 @@ class SearchProcess:
     def __init__(
         self,
         nth_process,
-        verb,
+        p_bar,
         objective_function,
         search_space,
         search_name,
@@ -44,11 +42,10 @@ class SearchProcess:
         n_jobs,
         init_para,
         memory,
-        hyperactive,
         random_state,
     ):
         self.nth_process = nth_process
-        self.verb = verb
+        self.p_bar = p_bar
         self.objective_function = objective_function
         self.search_space = search_space
         self.n_iter = n_iter
@@ -57,12 +54,8 @@ class SearchProcess:
         self.n_jobs = n_jobs
         self.init_para = init_para
         self.memory = memory
-        self.hyperactive = hyperactive
         self.random_state = random_state
 
-        self.p_bar = ProgressBar(nth_process, n_iter, objective_function)
-
-        self._set_random_seed(nth_process)
         self._process_arguments()
 
         self.iter_times = []
@@ -76,6 +69,9 @@ class SearchProcess:
         return max_time and run_time > max_time
 
     def _initialize_search(self, nth_process):
+        self._set_random_seed(nth_process)
+
+        self.p_bar.init_p_bar(nth_process, self.n_iter, self.objective_function)
         init_positions = self.cand.init.set_start_pos(self.n_positions)
         self.opt = self.opt_class(init_positions, self.cand.space.dim, opt_para={})
 
@@ -167,31 +163,3 @@ class SearchProcess:
 
         return self.res
 
-
-from optimization_metadata import HyperactiveWrapper
-from ..meta_data.meta_data_path import meta_data_path
-
-
-class ResultsManager:
-    def __init__(
-        self, objective_function, search_space, function_parameter,
-    ):
-        self.objective_function = objective_function
-        self.search_space = search_space
-        self.function_parameter = function_parameter
-
-        self.memory_dict_new = {}
-
-        self.hypermem = HyperactiveWrapper(
-            main_path=meta_data_path(),
-            X=function_parameter["features"],
-            y=function_parameter["target"],
-            model=self.objective_function,
-            search_space=search_space,
-        )
-
-    def load_long_term_memory(self):
-        return self.hypermem.load()
-
-    def save_long_term_memory(self):
-        self.hypermem.save(self.memory_dict_new)
