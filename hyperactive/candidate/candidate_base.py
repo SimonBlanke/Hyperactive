@@ -10,15 +10,14 @@ from ..init_position import InitSearchPosition
 
 
 class Candidate:
-    def __init__(self, obj_func, func_para, search_space, init_para, memory, p_bar):
+    def __init__(self, obj_func, training_data, search_space, init_para, memory, p_bar):
         self.obj_func = obj_func
-        self.func_para = func_para
         self.search_space = search_space
         self.memory = memory
         self.p_bar = p_bar
 
         self.space = SearchSpace(search_space)
-        self.model = Model(obj_func, func_para)
+        self.model = Model(obj_func, training_data)
         self.init = InitSearchPosition(init_para, self.space)
 
         self.memory_dict = {}

@@ -33,11 +33,11 @@ class SearchProcess:
         self,
         nth_process,
         p_bar,
-        objective_function,
+        model,
         search_space,
         search_name,
         n_iter,
-        function_parameter,
+        training_data,
         optimizer,
         n_jobs,
         init_para,
@@ -46,10 +46,10 @@ class SearchProcess:
     ):
         self.nth_process = nth_process
         self.p_bar = p_bar
-        self.objective_function = objective_function
+        self.model = model
         self.search_space = search_space
         self.n_iter = n_iter
-        self.function_parameter = function_parameter
+        self.training_data = training_data
         self.optimizer = optimizer
         self.n_jobs = n_jobs
         self.init_para = init_para
@@ -71,7 +71,7 @@ class SearchProcess:
     def _initialize_search(self, nth_process):
         self._set_random_seed(nth_process)
 
-        self.p_bar.init_p_bar(nth_process, self.n_iter, self.objective_function)
+        self.p_bar.init_p_bar(nth_process, self.n_iter, self.model)
         init_positions = self.cand.init.set_start_pos(self.n_positions)
         self.opt = self.opt_class(init_positions, self.cand.space.dim, opt_para={})
 
@@ -109,7 +109,7 @@ class SearchProcess:
         self.res.memory_dict_new = self.cand.memory_dict_new
         self.res.para_best = self.cand.para_best
         self.res.score_best = self.cand.score_best
-        self.res.objective_function = self.objective_function
+        self.res.model = self.model
 
     def _set_random_seed(self, nth_process):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""

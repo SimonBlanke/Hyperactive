@@ -17,8 +17,6 @@ class SearchBase:
         self.n_processes = len(search_processes)
         self._n_process_range = range(0, self.n_processes)
 
-        self.obj_functions = self._uniques_obj_func(search_processes)
-
         self.results = {}
         self.eval_times = {}
         self.iter_times = {}
@@ -26,13 +24,6 @@ class SearchBase:
         self.pos_list = {}
         self.score_list = {}
         self.position_results = {}
-
-    def _uniques_obj_func(self, search_processes):
-        self.obj_func_list = []
-        for process in search_processes:
-            self.obj_func_list.append(process.objective_function)
-
-        return set(self.obj_func_list)
 
     def _get_results(self, results_list):
         position_results_dict = {}

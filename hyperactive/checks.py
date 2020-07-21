@@ -12,11 +12,6 @@ def _check_objective_function(value):
         raise ValueError(r"objective_function must be callable")
 
 
-def _check_function_parameter(value):
-    if not isinstance(value, dict):
-        raise ValueError(r"function_parameter must be of type dict")
-
-
 def _check_search_space(value):
     if not isinstance(value, dict):
         raise ValueError(r"search_space must be of type dict")
@@ -55,7 +50,6 @@ def _check_distribution(value):
 
 arguments = {
     "objective_function": _check_objective_function,
-    "function_parameter": _check_function_parameter,
     "search_space": _check_search_space,
     "memory": _check_memory,
     "optimizer": _check_optimizer,
@@ -67,20 +61,12 @@ arguments = {
 
 
 def check_args(
-    objective_function,
-    search_space,
-    n_iter,
-    function_parameter,
-    optimizer,
-    n_jobs,
-    init_para,
-    memory,
+    objective_function, search_space, n_iter, optimizer, n_jobs, init_para, memory,
 ):
     kwargs = {
         "objective_function": objective_function,
         "search_space": search_space,
         "n_iter": n_iter,
-        "function_parameter": function_parameter,
         "optimizer": optimizer,
         "n_jobs": n_jobs,
         "init_para": init_para,

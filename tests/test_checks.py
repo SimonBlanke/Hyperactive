@@ -9,19 +9,19 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
-from hyperactive import Optimizer
+from hyperactive import Hyperactive
 
 data = load_iris()
 X, y = data.data, data.target
 
 
-def objective_function(para):
+def model(para, X, y):
     dtc = DecisionTreeClassifier(
         max_depth=para["max_depth"],
         min_samples_split=para["min_samples_split"],
         min_samples_leaf=para["min_samples_leaf"],
     )
-    scores = cross_val_score(dtc, para["features"], para["target"], cv=2)
+    scores = cross_val_score(dtc, X, y, cv=2)
 
     return scores.mean()
 
@@ -34,45 +34,23 @@ search_space = {
 
 
 def _base_test(search, opt_args={}, time=None):
-    opt = Optimizer(**opt_args)
-    opt.add_search(**search)
-    opt.run(time)
+    hyper = Hyperactive(X, y, **opt_args)
+    hyper.add_search(**search)
+    hyper.run(time)
 
 
-def test_objective_function_key():
+def test_model_key():
     search = {
-        "objective_function_": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model_": model,
         "search_space": search_space,
     }
     with pytest.raises(TypeError):
         _base_test(search)
 
 
-def test_objective_function_value():
+def test_model_value():
     search = {
-        "objective_function": 1,
-        "function_parameter": {"features": X, "target": y},
-        "search_space": search_space,
-    }
-    with pytest.raises(ValueError):
-        _base_test(search)
-
-
-def test_function_parameter_key():
-    search = {
-        "objective_function": objective_function,
-        "function_parameter_": {"features": X, "target": y},
-        "search_space": search_space,
-    }
-    with pytest.raises(TypeError):
-        _base_test(search)
-
-
-def test_function_parameter_value():
-    search = {
-        "objective_function": objective_function,
-        "function_parameter": 1,
+        "model": 1,
         "search_space": search_space,
     }
     with pytest.raises(ValueError):
@@ -81,8 +59,7 @@ def test_function_parameter_value():
 
 def test_search_space_key():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space_": search_space,
     }
     with pytest.raises(TypeError):
@@ -91,8 +68,7 @@ def test_search_space_key():
 
 def test_search_space_value():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": 1,
     }
     with pytest.raises(ValueError):
@@ -101,8 +77,7 @@ def test_search_space_value():
 
 def test_memory_key():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "memory_": "short",
     }
@@ -112,8 +87,7 @@ def test_memory_key():
 
 def test_memory_value():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "memory": 1,
     }
@@ -123,8 +97,7 @@ def test_memory_value():
 
 def test_optimizer_key():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "optimizer_": 1,
     }
@@ -134,8 +107,7 @@ def test_optimizer_key():
 
 def test_optimizer_value():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "optimizer": 1,
     }
@@ -145,8 +117,7 @@ def test_optimizer_value():
 
 def test_n_iter_key():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "n_iter_": 10,
     }
@@ -156,8 +127,7 @@ def test_n_iter_key():
 
 def test_n_iter_value():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "n_iter": 0.1,
     }
@@ -167,8 +137,7 @@ def test_n_iter_value():
 
 def test_n_jobs_key():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "n_jobs_": 1,
     }
@@ -178,8 +147,7 @@ def test_n_jobs_key():
 
 def test_n_jobs_value():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "n_jobs": 0.1,
     }
@@ -189,8 +157,7 @@ def test_n_jobs_value():
 
 def test_init_para_key():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "init_para_": {},
     }
@@ -200,8 +167,7 @@ def test_init_para_key():
 
 def test_init_para_value():
     search = {
-        "objective_function": objective_function,
-        "function_parameter": {"features": X, "target": y},
+        "model": model,
         "search_space": search_space,
         "init_para": 1,
     }

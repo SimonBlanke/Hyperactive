@@ -39,22 +39,25 @@ def get_class(file_path, class_name):
     return getattr(module, class_name)
 
 
-class Optimizer:
+class Hyperactive:
     def __init__(
-        self, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
+        self, X, y, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
     ):
-        self.verb = None
+        self.training_data = {
+            "features": X,
+            "target": y,
+        }
+        self.verbosity = verbosity
         self.random_state = random_state
         self.search_processes = []
 
     def _add_process(
         self,
         nth_process,
-        objective_function,
+        model,
         search_space,
         name,
         n_iter,
-        function_parameter,
         optimizer,
         n_jobs,
         init_para,
@@ -63,11 +66,11 @@ class Optimizer:
         search_process_kwargs = {
             "nth_process": nth_process,
             "p_bar": ProgressBar(),
-            "objective_function": objective_function,
+            "model": model,
             "search_space": search_space,
             "search_name": name,
             "n_iter": n_iter,
-            "function_parameter": function_parameter,
+            "training_data": self.training_data,
             "optimizer": optimizer,
             "n_jobs": n_jobs,
             "init_para": init_para,
@@ -80,11 +83,10 @@ class Optimizer:
 
     def add_search(
         self,
-        objective_function,
+        model,
         search_space,
         name=None,
         n_iter=10,
-        function_parameter=None,
         optimizer="RandomSearch",
         n_jobs=1,
         init_para=[],
@@ -92,14 +94,7 @@ class Optimizer:
     ):
 
         check_args(
-            objective_function,
-            search_space,
-            n_iter,
-            function_parameter,
-            optimizer,
-            n_jobs,
-            init_para,
-            memory,
+            model, search_space, n_iter, optimizer, n_jobs, init_para, memory,
         )
 
         n_jobs = set_n_jobs(n_jobs)
@@ -108,11 +103,10 @@ class Optimizer:
             nth_process = len(self.search_processes)
             self._add_process(
                 nth_process,
-                objective_function,
+                model,
                 search_space,
                 name,
                 n_iter,
-                function_parameter,
                 optimizer,
                 n_jobs,
                 init_para,
@@ -120,7 +114,7 @@ class Optimizer:
             )
 
         Search = get_class(".search", search_dict[memory])
-        self.search = Search(function_parameter, self.search_processes)
+        self.search = Search(self.training_data, self.search_processes)
 
     def run(self, max_time=None, distribution=None):
         if max_time is not None:

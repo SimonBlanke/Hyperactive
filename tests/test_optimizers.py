@@ -38,7 +38,6 @@ def _base_test(search, opt_args={}, time=None):
 def test_HillClimbingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "HillClimbing",
@@ -50,7 +49,6 @@ def test_HillClimbingOptimizer():
 def test_StochasticHillClimbingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "StochasticHillClimbing",
@@ -62,7 +60,6 @@ def test_StochasticHillClimbingOptimizer():
 def test_TabuOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "TabuSearch",
@@ -74,7 +71,6 @@ def test_TabuOptimizer():
 def test_RandomSearchOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "RandomSearch",
@@ -86,7 +82,6 @@ def test_RandomSearchOptimizer():
 def test_RandomRestartHillClimbingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "RandomRestartHillClimbing",
@@ -98,7 +93,6 @@ def test_RandomRestartHillClimbingOptimizer():
 def test_RandomAnnealingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "RandomAnnealing",
@@ -110,7 +104,6 @@ def test_RandomAnnealingOptimizer():
 def test_SimulatedAnnealingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "SimulatedAnnealing",
@@ -122,7 +115,6 @@ def test_SimulatedAnnealingOptimizer():
 def test_StochasticTunnelingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "StochasticTunneling",
@@ -134,7 +126,6 @@ def test_StochasticTunnelingOptimizer():
 def test_ParallelTemperingOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "ParallelTempering",
@@ -146,7 +137,6 @@ def test_ParallelTemperingOptimizer():
 def test_ParticleSwarmOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "ParticleSwarm",
@@ -158,7 +148,6 @@ def test_ParticleSwarmOptimizer():
 def test_EvolutionStrategyOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "EvolutionStrategy",
@@ -170,7 +159,6 @@ def test_EvolutionStrategyOptimizer():
 def test_BayesianOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "Bayesian",
@@ -182,7 +170,6 @@ def test_BayesianOptimizer():
 def test_TPE():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "TPE",
@@ -194,7 +181,6 @@ def test_TPE():
 def test_DecisionTreeOptimizer():
     search = {
         "model": model,
-        "function_parameter": {"features": X, "target": y},
         "search_space": search_space,
         "n_iter": 15,
         "optimizer": "DecisionTree",

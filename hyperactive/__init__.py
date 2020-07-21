@@ -6,7 +6,6 @@ __version__ = "2.3.0"
 __license__ = "MIT"
 
 
-from .hyperactive_api import Hyperactive
-from .general_optimizer import Optimizer
+from .hyperactive import Hyperactive
 
-__all__ = ["Hyperactive", "Optimizer"]
+__all__ = ["Hyperactive"]

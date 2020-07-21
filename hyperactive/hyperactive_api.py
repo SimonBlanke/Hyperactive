@@ -16,7 +16,6 @@ class Hyperactive:
             verbosity=verbosity,
             warnings=warnings,
             ext_warnings=ext_warnings,
-            hyperactive=True,
         )
 
     def add_search(

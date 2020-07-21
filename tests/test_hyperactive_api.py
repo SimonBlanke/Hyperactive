@@ -30,9 +30,11 @@ search_space = {
 
 
 def _base_test(search, opt_args={}, time=None):
-    opt = Hyperactive(X, y, **opt_args)
-    opt.add_search(**search)
-    opt.run(time)
+    hyper = Hyperactive(X, y, **opt_args)
+    hyper.add_search(**search)
+    hyper.run(time)
+
+    return hyper
 
 
 def test_max_time():

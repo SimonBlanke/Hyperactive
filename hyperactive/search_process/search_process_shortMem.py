@@ -16,11 +16,11 @@ class SearchProcessShortMem(SearchProcess):
         self,
         nth_process,
         p_bar,
-        objective_function,
+        model,
         search_space,
         search_name,
         n_iter,
-        function_parameter,
+        training_data,
         optimizer,
         n_jobs,
         init_para,
@@ -30,11 +30,11 @@ class SearchProcessShortMem(SearchProcess):
         super().__init__(
             nth_process,
             p_bar,
-            objective_function,
+            model,
             search_space,
             search_name,
             n_iter,
-            function_parameter,
+            training_data,
             optimizer,
             n_jobs,
             init_para,
@@ -43,8 +43,8 @@ class SearchProcessShortMem(SearchProcess):
         )
 
         self.cand = CandidateShortMem(
-            self.objective_function,
-            self.function_parameter,
+            self.model,
+            self.training_data,
             self.search_space,
             self.init_para,
             self.memory,
@@ -54,9 +54,7 @@ class SearchProcessShortMem(SearchProcess):
         if not isinstance(search_name, str):
             search_name = str(nth_process)
 
-        self.res = ResultsManager(
-            search_name, objective_function, search_space, function_parameter
-        )
+        self.res = ResultsManager(search_name, model, search_space, training_data)
 
     def _memory2dataframe(self, memory):
         positions = np.array(list(memory.keys()))
