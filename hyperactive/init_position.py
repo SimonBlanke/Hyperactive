@@ -6,20 +6,17 @@ import numpy as np
 
 
 class InitSearchPosition:
-    def __init__(self, init_para, space, verb):
+    def __init__(self, init_para, space):
         self.init_para = init_para
         self.space = space
-        self.verb = verb
 
     def set_start_pos(self, n_inits):
         positions = []
         for init in self.init_para:
-            self.verb.info.warm_start()
             pos = self._warm_start_one(init)
             positions.append(pos)
 
         for init in range(len(self.init_para), n_inits):
-            self.verb.info.random_start()
             pos = self.space.get_random_pos()
             positions.append(pos)
 

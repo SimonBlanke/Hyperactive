@@ -7,10 +7,9 @@ import numpy as np
 
 
 class SearchSpace:
-    def __init__(self, search_space, verb):
+    def __init__(self, search_space):
         self.search_space = search_space
         self.pos_space_limit()
-        self.verb = verb
 
     def pos_space_limit(self):
         dim = []
