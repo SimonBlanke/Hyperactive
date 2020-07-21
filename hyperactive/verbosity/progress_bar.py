@@ -6,17 +6,6 @@ from tqdm.auto import tqdm
 
 
 class ProgressBar:
-    def init_p_bar(self, nth_process, n_iter, obj_func):
-        pass
-
-    def update_p_bar(self, n, score_best):
-        pass
-
-    def close_p_bar(self):
-        pass
-
-
-class ProgressBarLVL0(ProgressBar):
     def __init__(self):
         self.best_since_iter = 0
 
@@ -25,6 +14,9 @@ class ProgressBarLVL0(ProgressBar):
 
     def update_p_bar(self, n, score_best):
         self._tqdm.update(n)
+        self._tqdm.set_postfix(
+            best_score=str(score_best), best_since_iter=self.best_since_iter
+        )
 
     def close_p_bar(self):
         self._tqdm.close()
@@ -33,18 +25,8 @@ class ProgressBarLVL0(ProgressBar):
         """Generates the parameter dict for tqdm in the iteration-loop of each optimizer"""
         return {
             "total": n_iter,
-            "desc": "Thread " + str(nth_process) + " -> " + obj_func.__name__,
+            "desc": "Process " + str(nth_process) + " -> " + obj_func.__name__,
             "position": nth_process,
             "leave": True,
         }
 
-
-class ProgressBarLVL1(ProgressBarLVL0):
-    def __init__(self):
-        self.best_since_iter = 0
-
-    def update_p_bar(self, n, score_best):
-        self._tqdm.update(n)
-        self._tqdm.set_postfix(
-            best_score=str(score_best), best_since_iter=self.best_since_iter
-        )

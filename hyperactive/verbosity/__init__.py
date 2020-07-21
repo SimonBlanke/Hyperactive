@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .verbosity import Verbosity
+from .progress_bar import ProgressBar
 
 
-__all__ = ["Verbosity"]
+__all__ = ["ProgressBar"]
