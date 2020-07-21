@@ -44,8 +44,8 @@ class Hyperactive:
     def run(self, max_time=None):
         self.opt.run(max_time=max_time)
 
-        self.position_results = self.opt.position_results
+        # self.position_results = self.opt.position_results
         self.eval_times = self.opt.eval_times
         self.iter_times = self.opt.iter_times
-        # self.best_para = self.search.results
-        # self.best_score = self.search.results
+        self.best_para = self.opt.best_para
+        self.best_score = self.opt.best_score
