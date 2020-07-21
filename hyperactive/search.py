@@ -51,8 +51,6 @@ class SearchBase:
             self.score_best_dict[search_name] = results.score_best
 
     def _print_best_para(self):
-        for _ in range(int(self.n_processes / 2) + 2):
-            print("\n")  # make room in cmd for prints
         for process in self.search_processes:
             process.print_best_para()
 
@@ -64,6 +62,9 @@ class SearchBase:
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
         pool = Pool(self.n_processes)
         results_list = pool.map(self._run_job, self._n_process_range)
+
+        for _ in range(int(self.n_processes / 2) + 2):
+            print("\n")  # make room in cmd for prints
 
         return results_list
 
