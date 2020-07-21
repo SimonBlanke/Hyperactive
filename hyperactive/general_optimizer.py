@@ -7,9 +7,10 @@ import time
 from importlib import import_module
 
 import multiprocessing
-from .verbosity import Verbosity
 
 from .checks import check_args
+from .verbosity import ProgressBar
+
 
 search_process_dict = {
     False: "SearchProcessNoMem",
@@ -40,16 +41,10 @@ def get_class(file_path, class_name):
 
 class Optimizer:
     def __init__(
-        self,
-        random_state=None,
-        verbosity=3,
-        warnings=False,
-        ext_warnings=False,
-        hyperactive=False,
+        self, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
     ):
-        self.verb = Verbosity(verbosity, warnings)
+        self.verb = None
         self.random_state = random_state
-        self.hyperactive = hyperactive
         self.search_processes = []
 
     def _add_process(
@@ -67,7 +62,7 @@ class Optimizer:
     ):
         search_process_kwargs = {
             "nth_process": nth_process,
-            "verb": self.verb,
+            "p_bar": ProgressBar(),
             "objective_function": objective_function,
             "search_space": search_space,
             "search_name": name,
@@ -77,7 +72,6 @@ class Optimizer:
             "n_jobs": n_jobs,
             "init_para": init_para,
             "memory": memory,
-            "hyperactive": self.hyperactive,
             "random_state": self.random_state,
         }
         SearchProcess = get_class(".search_process", search_process_dict[memory])
