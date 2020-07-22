@@ -57,3 +57,5 @@ class SearchProcessLongMem(SearchProcessShortMem):
             p_bar,
         )
 
+        self.cand.memory_dict = self.res.load_long_term_memory()
+

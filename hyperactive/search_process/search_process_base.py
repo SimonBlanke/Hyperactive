@@ -110,22 +110,16 @@ class SearchProcess:
         self.res.para_best = self.cand.para_best
         self.res.score_best = self.cand.score_best
         self.res.model = self.model
+        self.res.search_space = self.search_space
+        self.res.memory = self.memory
 
     def _set_random_seed(self, nth_process):
         """Sets the random seed separately for each thread (to avoid getting the same results in each thread)"""
         if self.random_state is None:
             self.random_state = np.random.randint(0, high=2 ** 32 - 2)
 
-        print("self.random_state + nth_process", self.random_state + nth_process)
-
         random.seed(self.random_state + nth_process)
         np.random.seed(self.random_state + nth_process)
-
-    def store_memory(self, memory):
-        pass
-
-    def print_best_para(self):
-        self.verb.info.print_start_point()
 
     def search(self, start_time, max_time, nth_process):
         start_time_search = time.time()
