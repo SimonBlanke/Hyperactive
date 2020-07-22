@@ -10,10 +10,12 @@ from multiprocessing import Pool
 from importlib import import_module
 
 
-class SearchBase:
-    def __init__(self, function_parameter, search_processes):
+class Search:
+    def __init__(self, function_parameter, search_processes, verb):
         self.function_parameter = function_parameter
         self.search_processes = search_processes
+        self.verb = verb
+
         self.n_processes = len(search_processes)
         self._n_process_range = range(0, self.n_processes)
 
@@ -32,6 +34,7 @@ class SearchBase:
         self.iter_times_dict = {}
         self.para_best_dict = {}
         self.score_best_dict = {}
+        self.memory_dict_new = {}
 
         for results in results_list:
             search_name = results.search_name
@@ -40,10 +43,13 @@ class SearchBase:
             self.iter_times_dict[search_name] = results.iter_times
             self.para_best_dict[search_name] = results.para_best
             self.score_best_dict[search_name] = results.score_best
+            self.memory_dict_new[search_name] = results.memory_dict_new
+            self.position_results[search_name] = self._memory_dict2dataframe(
+                results.memory_dict_new, results.search_space
+            )
 
-    def _print_best_para(self):
-        for process in self.search_processes:
-            process.print_best_para()
+            print("best para =", results.para_best)
+            print("score     =", results.score_best, "\n")
 
     def _run_job(self, nth_process):
         self.process = self.search_processes[nth_process]
@@ -59,16 +65,15 @@ class SearchBase:
 
         return results_list
 
-    def _memory_dict2dataframe(self, results_dict):
-        memory_dict = results_dict["memory"]
+    def _memory_dict2dataframe(self, memory_dict, search_space):
         tuple_list = list(memory_dict.keys())
         result_list = list(memory_dict.values())
 
         results_df = pd.DataFrame(result_list)
         np_pos = np.array(tuple_list)
 
-        columns = list(results_dict["search_space"].keys())
-        columns = [col + ".index" for col in columns]
+        columns = list(search_space.keys())
+        columns = [col for col in columns]
         pd_pos = pd.DataFrame(np_pos, columns=columns)
 
         results = pd.concat([pd_pos, results_df], axis=1)
@@ -85,30 +90,13 @@ class SearchBase:
             results_list = self._run_multiple_jobs()
 
         self._get_results(results_list)
-
-
-class Search(SearchBase):
-    def __init__(self, function_parameter, search_processes):
-        super().__init__(function_parameter, search_processes)
+        self._save_memory(results_list)
 
     def run(self, start_time, max_time):
         self._run(start_time, max_time)
 
-
-class SearchLongTermMemory(Search):
-    def __init__(self, function_parameter, search_processes):
-        super().__init__(function_parameter, search_processes)
-        self._load_memory()
-
-    def _load_memory(self):
-        for process in self.search_processes:
-            process.cand.memory_dict = process.res.load_long_term_memory()
-
-    def _save_memory(self):
-        for process in self.search_processes:
-            process.res.save_long_term_memory()
-
-    def run(self, start_time, max_time):
-        self._run(start_time, max_time)
-        self._save_memory()
+    def _save_memory(self, results):
+        for result in results:
+            if result.memory == "long":
+                result.save_long_term_memory()
 

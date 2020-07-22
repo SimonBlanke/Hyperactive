@@ -11,17 +11,13 @@ import multiprocessing
 from .checks import check_args
 from .verbosity import ProgressBar
 
+from .search import Search
+
 
 search_process_dict = {
     False: "SearchProcessNoMem",
     "short": "SearchProcessShortMem",
     "long": "SearchProcessLongMem",
-}
-
-search_dict = {
-    False: "Search",
-    "short": "Search",
-    "long": "SearchLongTermMemory",
 }
 
 
@@ -113,10 +109,9 @@ class Hyperactive:
                 memory,
             )
 
-        Search = get_class(".search", search_dict[memory])
-        self.search = Search(self.training_data, self.search_processes)
-
     def run(self, max_time=None, distribution=None):
+        self.search = Search(self.training_data, self.search_processes, self.verbosity)
+
         if max_time is not None:
             max_time = max_time * 60
 
@@ -124,9 +119,9 @@ class Hyperactive:
 
         self.search.run(start_time, max_time)
 
-        # self.position_results = self.search.position_results
         self.eval_times = self.search.eval_times_dict
         self.iter_times = self.search.iter_times_dict
         self.best_para = self.search.para_best_dict
         self.best_score = self.search.score_best_dict
 
+        self.position_results = self.search.position_results
