@@ -110,7 +110,7 @@ def test_memory():
         "search_space": search_space,
     }
 
-    memory_list = [False, "short"]
+    memory_list = [False, "short", "long"]
     for memory in memory_list:
         search["memory"] = memory
         _base_test(search)
