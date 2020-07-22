@@ -48,8 +48,15 @@ class Search:
                 results.memory_dict_new, results.search_space
             )
 
-            print("best para =", results.para_best)
-            print("score     =", results.score_best, "\n")
+            print(
+                "Process",
+                results.nth_process,
+                "->",
+                results.model.__name__,
+                "search results:",
+            )
+            print("best parameter =", results.para_best)
+            print("best score     =", results.score_best, "\n")
 
     def _run_job(self, nth_process):
         self.process = self.search_processes[nth_process]
@@ -66,19 +73,21 @@ class Search:
         return results_list
 
     def _memory_dict2dataframe(self, memory_dict, search_space):
-        tuple_list = list(memory_dict.keys())
+        columns = list(search_space.keys())
+
+        if not bool(memory_dict):
+            return pd.DataFrame([], columns=columns)
+
+        pos_tuple_list = list(memory_dict.keys())
         result_list = list(memory_dict.values())
 
         results_df = pd.DataFrame(result_list)
-        np_pos = np.array(tuple_list)
+        np_pos = np.array(pos_tuple_list)
 
-        columns = list(search_space.keys())
-        columns = [col for col in columns]
         pd_pos = pd.DataFrame(np_pos, columns=columns)
+        dataframe = pd.concat([pd_pos, results_df], axis=1)
 
-        results = pd.concat([pd_pos, results_df], axis=1)
-
-        return results
+        return dataframe
 
     def _run(self, start_time, max_time):
         self.start_time = start_time

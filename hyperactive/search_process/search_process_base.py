@@ -104,6 +104,7 @@ class SearchProcess:
         return n_positions
 
     def _save_results(self):
+        self.res.nth_process = self.nth_process
         self.res.eval_times = self.eval_times
         self.res.iter_times = self.iter_times
         self.res.memory_dict_new = self.cand.memory_dict_new
