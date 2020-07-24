@@ -62,7 +62,7 @@ class SearchProcess:
         self.eval_times = []
 
         module = import_module("gradient_free_optimizers")
-        self.opt_class = getattr(module, optimizer_dict[optimizer])
+        self.opt_class = getattr(module, optimizer_dict[self.optimizer])
 
     def _time_exceeded(self, start_time, max_time):
         run_time = time.time() - start_time
