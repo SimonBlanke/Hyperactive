@@ -146,13 +146,11 @@
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="#/./examples/distribution?id=multiprocessing">Multiprocessing</a></li>
-              <li><a href="#/./examples/distribution?id=ray">Ray</a></li>
           </ul>
       </td>
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-            <li><a href="#/./examples/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
             <li><a href="#/./examples/extensions?id=warm-start">Warm-start</a></li>
           </ul>
         <a><b>Resource Allocation:</b></a>
@@ -269,10 +267,6 @@ If any of these algorithms already exist I would like you to share it with me in
 
 A combination between simulated annealing and random search.
 
-**Scatter Initialization**
-
-Inspired by hyperband optimization.
-
 <br>
 
 #### References
@@ -280,6 +274,20 @@ Inspired by hyperband optimization.
 [dto] [Scikit-Optimize](https://github.com/scikit-optimize/scikit-optimize/blob/master/skopt/learning/forest.py)
 
 <br>
+
+
+#### Citing Hyperactive
+
+    @Misc{hyperactive2019,
+      author =   {{Simon Blanke}},
+      title =    {{Hyperactive}: A hyperparameter optimization and meta-learning toolbox for machine-/deep-learning models.},
+      howpublished = {\url{https://github.com/SimonBlanke}},
+      year = {since 2019}
+    }
+
+
+<br>
+
 
 #### License
 

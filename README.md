@@ -96,6 +96,7 @@ A large part of the Hyperactive backend is developed and tested in separate repo
     <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
   </h3>
 </div>
@@ -188,13 +189,11 @@ A large part of the Hyperactive backend is developed and tested in separate repo
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/distribution?id=multiprocessing">Multiprocessing</a></li>
-              <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/distribution?id=ray">Ray</a></li>
           </ul>
       </td>
       <td>
         <a><b>Position Initialization:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/extensions?id=scatter-initialization">Scatter-Initialization</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
             <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/extensions?id=warm-start">Warm-start</a></li>
           </ul>
         <a><b>Resource Allocation:</b></a>
@@ -324,9 +323,6 @@ opt.search(search_config, n_iter=20)
 
 
 
-
-
-
 ## Experimental algorithms
 
 The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
@@ -336,15 +332,24 @@ If any of these algorithms already exist I would like you to share it with me in
 
 A combination between simulated annealing and random search.
 
-#### Scatter Initialization
-
-Inspired by hyperband optimization.
 
 <br>
 
 ## References
 
 #### [dto] [Scikit-Optimize](https://github.com/scikit-optimize/scikit-optimize/blob/master/skopt/learning/forest.py)
+
+<br>
+
+## Citing Hyperactive
+
+    @Misc{hyperactive2019,
+      author =   {{Simon Blanke}},
+      title =    {{Hyperactive}: A hyperparameter optimization and meta-learning toolbox for machine-/deep-learning models.},
+      howpublished = {\url{https://github.com/SimonBlanke}},
+      year = {since 2019}
+    }
+
 
 <br>
 
