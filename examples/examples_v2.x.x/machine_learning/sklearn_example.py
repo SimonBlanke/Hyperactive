@@ -18,14 +18,13 @@ def model(para, X, y):
     return scores.mean()
 
 
-search_config = {
-    model: {
-        "n_estimators": range(10, 200, 10),
-        "max_depth": range(2, 12),
-        "min_samples_split": range(2, 12),
-    }
+search_space = {
+	"n_estimators": range(10, 100, 10),
+	"max_depth": range(2, 12),
+	"min_samples_split": range(2, 12),
 }
 
 
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=100)
+hyper = Hyperactive(X, y)
+hyper.add_search(model, search_space, n_iter=10)
+hyper.run()
