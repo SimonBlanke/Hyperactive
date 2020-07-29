@@ -22,13 +22,12 @@ def model(para, X, y):
     return scores.mean()
 
 
-search_config = {
-    model: {
-        "max_leaf": range(1000, 10000, 100),
-        "reg_depth": range(1, 21),
-        "min_samples_leaf": range(1, 21),
-    }
+search_space = {
+    "max_leaf": range(10, 2000, 10),
+    "reg_depth": range(1, 21),
+    "min_samples_leaf": range(1, 21),
 }
 
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=5)
+hyper = Hyperactive(X, y)
+hyper.add_search(model, search_space, n_iter=10)
+hyper.run()

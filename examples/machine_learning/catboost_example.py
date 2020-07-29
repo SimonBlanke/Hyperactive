@@ -16,10 +16,12 @@ def model(para, X, y):
     return scores.mean()
 
 
-search_config = {
-    model: {"depth": range(2, 22), "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0]}
+search_space = {
+    "depth": range(2, 15),
+    "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
 }
 
 
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=5)
+hyper = Hyperactive(X, y)
+hyper.add_search(model, search_space, n_iter=10)
+hyper.run()

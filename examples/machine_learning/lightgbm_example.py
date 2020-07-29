@@ -1,9 +1,9 @@
 from sklearn.model_selection import cross_val_score
 from lightgbm import LGBMRegressor
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_diabetes
 from hyperactive import Hyperactive
 
-data = load_breast_cancer()
+data = load_diabetes()
 X, y = data.data, data.target
 
 
@@ -18,14 +18,13 @@ def model(para, X, y):
     return scores.mean()
 
 
-search_config = {
-    model: {
-        "num_leaves": range(2, 20),
-        "bagging_freq": range(2, 12),
-        "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
-    }
+search_space = {
+    "num_leaves": range(2, 50),
+    "bagging_freq": range(2, 12),
+    "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
 }
 
 
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=30)
+hyper = Hyperactive(X, y)
+hyper.add_search(model, search_space, n_iter=30)
+hyper.run()
