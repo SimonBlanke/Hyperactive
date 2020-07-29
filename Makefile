@@ -33,34 +33,8 @@ test-local:
 		pytest _test_performance.py -p no:warnings
 
 test-examples:
-	cd examples/machine_learning; \
-		python sklearn_example.py; \
-		python xgboost_example.py; \
-		python lightgbm_example.py; \
-		python catboost_example.py; \
-		python rgf_example.py; \
-		python mlxtend_example.py
-	cd examples/deep_learning; \
-		python tensorflow_example.py; \
-		python keras_example.py
-	cd examples/distribution; \
-		python multiprocessing_example.py; \
-		python ray_example.py
-	cd examples/memory_example; \
-		python memory_example.py; \
-		python scatter_init_example.py; \
-		python warm_start_example.py
-	cd examples/test_functions; \
-		python himmelblau_function_example.py; \
-		python rosenbrock_function_example.py
-	cd examples/use_cases; \
-		python SklearnPreprocessing.py; \
-		python SklearnPipeline.py; \
-		python Stacking.py; \
-		python NeuralArchitectureSearch.py; \
-		python ENAS.py; \
-		python TransferLearning.py; \
-		python MetaOptimization.py
+	cd tests; \
+		python test_examples.py
 
 test-extensive: test test-local test-examples
 
