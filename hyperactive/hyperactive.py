@@ -35,10 +35,22 @@ def get_class(file_path, class_name):
     return getattr(module, class_name)
 
 
+def no_ext_warnings():
+    def warn(*args, **kwargs):
+        pass
+
+    import warnings
+
+    warnings.warn = warn
+
+
 class Hyperactive:
     def __init__(
         self, X, y, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
     ):
+        if ext_warnings is False:
+            no_ext_warnings()
+
         self.training_data = {
             "features": X,
             "target": y,
