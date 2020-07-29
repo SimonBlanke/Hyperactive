@@ -4,14 +4,12 @@
 *.xml
 *.iml
 *.pkl
+*.json
 *.npy
 *.pypirc
 **/__pycache__/
 **/build/
 **/dist/
-**/meta_data/
 **/hyperactive.egg-info/
 **/_build/
 **/catboost_info/
-/hyperactive/memory/meta_data
-/docs/plots/search_paths/temp/
