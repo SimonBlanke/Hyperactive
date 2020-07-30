@@ -32,15 +32,26 @@ class Search:
 
         self.eval_times_dict = {}
         self.iter_times_dict = {}
+
+        self.positions_dict = {}
+        self.scores_dict = {}
+        self.best_score_list_dict = {}
+
         self.para_best_dict = {}
         self.score_best_dict = {}
         self.memory_dict_new = {}
 
         for results in results_list:
             search_name = results.search_name
+            print("results.score_list", results.score_list)
 
             self.eval_times_dict[search_name] = results.eval_times
             self.iter_times_dict[search_name] = results.iter_times
+
+            self.positions_dict[search_name] = results.pos_list
+            self.scores_dict[search_name] = results.score_list
+            self.best_score_list_dict[search_name] = results.best_score_list
+
             self.para_best_dict[search_name] = results.para_best
             self.score_best_dict[search_name] = results.score_best
             self.memory_dict_new[search_name] = results.memory_dict_new

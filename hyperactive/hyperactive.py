@@ -133,6 +133,11 @@ class Hyperactive:
 
         self.eval_times = self.search.eval_times_dict
         self.iter_times = self.search.iter_times_dict
+
+        self.positions = self.search.positions_dict
+        self.scores = self.search.scores_dict
+        self.best_score_list = self.search.best_score_list_dict
+
         self.best_para = self.search.para_best_dict
         self.best_score = self.search.score_best_dict
 

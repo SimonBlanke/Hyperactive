@@ -107,6 +107,11 @@ class SearchProcess:
         self.res.nth_process = self.nth_process
         self.res.eval_times = self.eval_times
         self.res.iter_times = self.iter_times
+
+        self.res.pos_list = self.cand.pos_list
+        self.res.score_list = self.cand.score_list
+        self.res.best_score_list = self.cand.scores_best_list
+
         self.res.memory_dict_new = self.cand.memory_dict_new
         self.res.para_best = self.cand.para_best
         self.res.score_best = self.cand.score_best
