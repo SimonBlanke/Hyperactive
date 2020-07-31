@@ -98,7 +98,7 @@ class Hyperactive:
         optimizer="RandomSearch",
         n_jobs=1,
         init_para=[],
-        memory="short",
+        memory="long",
     ):
 
         check_args(
@@ -124,11 +124,7 @@ class Hyperactive:
     def run(self, max_time=None, distribution=None):
         self.search = Search(self.training_data, self.search_processes, self.verbosity)
 
-        if max_time is not None:
-            max_time = max_time * 60
-
         start_time = time.time()
-
         self.search.run(start_time, max_time)
 
         self.eval_times = self.search.eval_times_dict
