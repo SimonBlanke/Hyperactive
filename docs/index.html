@@ -1,52 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
   <style>
-  :root {
-      --theme-color   : purple;
+    :root {
+      --theme-color: purple;
       --zoomimage-overlay-background: rgba(0, 0, 0, 0);
-      --sidebar-width                               : 20rem;
-      --heading-h3-font-size              : var(--font-size-xl);
-      --heading-h2-border-color           : purple;
-      --heading-h3-border-bottom          : 3px;
-      --heading-h4-font-size              : var(--font-size-l);
-  }
+      --sidebar-width: 25rem;
+      --heading-h3-font-size: var(--font-size-xl);
+      --heading-h2-border-color: purple;
+      --heading-h3-border-bottom: 3px;
+      --heading-h4-font-size: var(--font-size-l);
+    }
+
+
     body {
       font-size: 18px;
     }
+
     pre:after {
       padding: 1em;
       right: .5em;
     }
+
     nav.app-nav li ul {
       min-width: 100px;
     }
-    .sidebar ul li a, .app-nav a {
-      font-size: 16px;
+
+    .sidebar ul li a,
+    .app-nav a {
+      font-size: 20px;
     }
+
     .markdown-section a {
       font-weight: normal;
       text-decoration: none;
     }
+
     .markdown-section a:hover {
       font-weight: normal;
       text-decoration: underline;
     }
+
     .markdown-section {
-      max-width: 50%;
+      max-width: 55%;
     }
+
     .markdown-section code {
       font-size: inherit;
     }
+
     .markdown-section pre>code {
       white-space: pre-wrap;
     }
+
     .markdown-section ol,
     .markdown-section ul {
       margin: 0;
@@ -58,23 +72,24 @@
       display: inline-block;
       width: 38px;
       height: 30px;
-      content:"";
+      content: "";
     }
 
-
-    }
     a:link {
       color: darkblue;
     }
+
     a:visited {
       color: darkblue;
     }
+
     a:hover {
       color: blue;
       text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
   <div id="app"></div>
   <script>
@@ -92,8 +107,8 @@
       themeColor: '#110c6e',
       executeScript: true,
       themeable: {
-          readyTransition: true // default
-        }
+        readyTransition: true // default
+      }
     }
   </script>
   <script src="//unpkg.com/docsify-copy-code"></script>
@@ -107,4 +122,5 @@
   <script src="//unpkg.com/prismjs/components/prism-python.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
 </body>
+
 </html>
