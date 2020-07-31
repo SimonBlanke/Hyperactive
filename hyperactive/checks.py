@@ -16,6 +16,12 @@ def _check_search_space(value):
     if not isinstance(value, dict):
         raise ValueError(r"search_space must be of type dict")
 
+    dict_values = list(value.values())
+    for key in list(value.keys()):
+        dict_value = value[key]
+        if not isinstance(dict_value, list):
+            raise ValueError(r"search_space value in", key, "must be of type list")
+
 
 def _check_memory(value):
     memory_list = ["short", "long", False]
