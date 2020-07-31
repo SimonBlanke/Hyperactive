@@ -23,9 +23,9 @@ def model(para, X, y):
 
 
 search_space = {
-    "max_leaf": range(10, 2000, 10),
-    "reg_depth": range(1, 21),
-    "min_samples_leaf": range(1, 21),
+    "max_leaf": list(range(10, 2000, 10)),
+    "reg_depth": list(range(1, 21)),
+    "min_samples_leaf": list(range(1, 21)),
 }
 
 hyper = Hyperactive(X, y)

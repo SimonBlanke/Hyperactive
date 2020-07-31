@@ -19,8 +19,8 @@ def model(para, X, y):
 
 
 search_space = {
-    "num_leaves": range(2, 50),
-    "bagging_freq": range(2, 12),
+    "num_leaves": list(range(2, 50)),
+    "bagging_freq": list(range(2, 12)),
     "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
 }
 

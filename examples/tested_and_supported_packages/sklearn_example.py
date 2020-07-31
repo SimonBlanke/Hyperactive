@@ -19,9 +19,9 @@ def model(para, X, y):
 
 
 search_space = {
-    "n_estimators": range(10, 150, 5),
-    "max_depth": range(2, 12),
-    "min_samples_split": range(2, 22),
+    "n_estimators": list(range(10, 150, 5)),
+    "max_depth": list(range(2, 12)),
+    "min_samples_split": list(range(2, 22)),
 }
 
 

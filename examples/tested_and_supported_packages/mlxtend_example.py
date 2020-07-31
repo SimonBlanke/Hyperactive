@@ -29,12 +29,12 @@ def model(para, X, y):
 
 
 search_space = {
-    "min_samples_split": range(2, 15),
-    "min_samples_leaf": range(1, 15),
+    "min_samples_split": list(range(2, 15)),
+    "min_samples_leaf": list(range(1, 15)),
     "hidden_layer_sizes": [(x,) for x in range(5, 30)],
     "weights": [[1, 1, 1], [2, 1, 1], [1, 2, 1], [1, 1, 2]],
-    "C": range(1, 1000),
-    "degree": range(0, 8),
+    "C": list(range(1, 1000)),
+    "degree": list(range(0, 8)),
 }
 
 

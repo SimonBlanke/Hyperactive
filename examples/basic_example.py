@@ -17,7 +17,7 @@ def model(para, X, y):
 
 
 search_space = {
-    "n_neighbors": range(1, 100),
+    "n_neighbors": list(range(1, 100)),
 }
 
 

@@ -19,8 +19,8 @@ def model(para, X, y):
 
 
 search_space = {
-    "n_estimators": range(10, 200, 10),
-    "max_depth": range(2, 12),
+    "n_estimators": list(range(10, 200, 10)),
+    "max_depth": list(range(2, 12)),
     "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
 }
 
