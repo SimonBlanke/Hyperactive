@@ -44,6 +44,6 @@ class ProgressBarLVL1:
             "total": n_iter,
             "desc": "Process " + str(nth_process) + " -> " + obj_func.__name__,
             "position": nth_process,
-            "leave": True,
+            "leave": False,
         }
 

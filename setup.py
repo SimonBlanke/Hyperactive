@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 requires = [
     "numpy",
-    "tqdm",
+    "tqdm>=4.48.0",
     "optimization-metadata",
     "gradient-free-optimizers",
 ]

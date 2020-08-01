@@ -6,6 +6,7 @@
 import numpy as np
 import pandas as pd
 
+from tqdm import tqdm
 from multiprocessing import Pool
 from importlib import import_module
 
@@ -62,14 +63,17 @@ class Search:
                 continue
 
             print(
-                "Process",
+                "\nSearch-process",
                 results.nth_process,
                 "->",
-                results.model.__name__,
-                "search results:",
+                '"{}"'.format(results.model.__name__),
+                "results: ",
             )
-            print("best parameter =", results.para_best)
-            print("best score     =", results.score_best, "\n")
+            print("  best parameter =", results.para_best, " ")
+            print("  best score     =", results.score_best, " ")
+
+            if results.memory == "long":
+                results.save_long_term_memory()
 
     def _run_job(self, nth_process):
         self.process = self.search_processes[nth_process]
@@ -77,10 +81,12 @@ class Search:
 
     def _run_multiple_jobs(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-        pool = Pool(self.n_processes)
+        pool = Pool(
+            self.n_processes, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),)
+        )
         results_list = pool.map(self._run_job, self._n_process_range)
 
-        for _ in range(int(self.n_processes / 2) + 2):
+        for _ in range(int(self.n_processes / 2)):
             print("\n")  # make room in cmd for prints
 
         return results_list
@@ -112,13 +118,7 @@ class Search:
             results_list = self._run_multiple_jobs()
 
         self._get_results(results_list)
-        self._save_memory(results_list)
 
     def run(self, start_time, max_time):
         self._run(start_time, max_time)
-
-    def _save_memory(self, results):
-        for result in results:
-            if result.memory == "long":
-                result.save_long_term_memory()
 
