@@ -9,7 +9,7 @@ from importlib import import_module
 import multiprocessing
 
 from .checks import check_args
-from .verbosity import ProgressBar
+from .progress_bar import ProgressBarLVL0, ProgressBarLVL1
 
 from .search import Search
 
@@ -46,7 +46,7 @@ def no_ext_warnings():
 
 class Hyperactive:
     def __init__(
-        self, X, y, random_state=None, verbosity=3, warnings=False, ext_warnings=False,
+        self, X, y, random_state=None, verbosity=1, warnings=False, ext_warnings=False,
     ):
         if ext_warnings is False:
             no_ext_warnings()
@@ -58,6 +58,11 @@ class Hyperactive:
         self.verbosity = verbosity
         self.random_state = random_state
         self.search_processes = []
+
+        if verbosity == 0:
+            self.p_bar = ProgressBarLVL0
+        else:
+            self.p_bar = ProgressBarLVL1
 
     def _add_process(
         self,
@@ -73,7 +78,7 @@ class Hyperactive:
     ):
         search_process_kwargs = {
             "nth_process": nth_process,
-            "p_bar": ProgressBar(),
+            "p_bar": self.p_bar(),
             "model": model,
             "search_space": search_space,
             "search_name": name,

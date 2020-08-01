@@ -5,7 +5,24 @@
 from tqdm.auto import tqdm
 
 
-class ProgressBar:
+class ProgressBarLVL0:
+    def __init__(self):
+        pass
+
+    def init_p_bar(self, nth_process, n_iter, obj_func):
+        pass
+
+    def update_p_bar(self, n, score_best):
+        pass
+
+    def close_p_bar(self):
+        pass
+
+    def _tqdm_dict(self, nth_process, n_iter, obj_func):
+        pass
+
+
+class ProgressBarLVL1:
     def __init__(self):
         self.best_since_iter = 0
 
