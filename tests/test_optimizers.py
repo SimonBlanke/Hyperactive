@@ -24,8 +24,8 @@ def model(para, X, y):
 
 
 search_space = {
-    "max_depth": range(1, 21),
-    "min_samples_split": range(2, 21),
+    "max_depth": list(range(1, 21)),
+    "min_samples_split": list(range(2, 21)),
 }
 
 
@@ -172,7 +172,7 @@ def test_TPE():
         "model": model,
         "search_space": search_space,
         "n_iter": 15,
-        "optimizer": "TPE",
+        "optimizer": "TreeStructured",
     }
 
     _base_test(search)
