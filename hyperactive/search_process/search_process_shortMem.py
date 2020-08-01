@@ -26,6 +26,7 @@ class SearchProcessShortMem(SearchProcess):
         init_para,
         memory,
         random_state,
+        verbosity,
     ):
         super().__init__(
             nth_process,
@@ -40,6 +41,7 @@ class SearchProcessShortMem(SearchProcess):
             init_para,
             memory,
             random_state,
+            verbosity,
         )
 
         self.cand = CandidateShortMem(
@@ -54,7 +56,9 @@ class SearchProcessShortMem(SearchProcess):
         if not isinstance(search_name, str):
             search_name = str(nth_process)
 
-        self.res = ResultsManager(search_name, model, search_space, training_data)
+        self.res = ResultsManager(
+            search_name, model, search_space, training_data, verbosity
+        )
 
     def _memory2dataframe(self, memory):
         positions = np.array(list(memory.keys()))

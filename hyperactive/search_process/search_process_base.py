@@ -23,7 +23,7 @@ optimizer_dict = {
     "ParticleSwarm": "ParticleSwarmOptimizer",
     "EvolutionStrategy": "EvolutionStrategyOptimizer",
     "Bayesian": "BayesianOptimizer",
-    "TPE": "TreeStructuredParzenEstimators",
+    "TreeStructured": "TreeStructuredParzenEstimators",
     "DecisionTree": "DecisionTreeOptimizer",
 }
 
@@ -43,6 +43,7 @@ class SearchProcess:
         init_para,
         memory,
         random_state,
+        verbosity,
     ):
         self.nth_process = nth_process
         self.p_bar = p_bar
@@ -55,6 +56,7 @@ class SearchProcess:
         self.init_para = init_para
         self.memory = memory
         self.random_state = random_state
+        self.verbosity = verbosity
 
         self._process_arguments()
 

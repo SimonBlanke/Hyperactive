@@ -89,6 +89,7 @@ class Hyperactive:
             "init_para": init_para,
             "memory": memory,
             "random_state": self.random_state,
+            "verbosity": self.verbosity,
         }
         SearchProcess = get_class(".search_process", search_process_dict[memory])
         new_search_process = SearchProcess(**search_process_kwargs)

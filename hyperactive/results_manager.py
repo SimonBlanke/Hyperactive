@@ -9,7 +9,12 @@ from .meta_data.meta_data_path import meta_data_path
 
 class ResultsManagerBase:
     def __init__(
-        self, search_name, objective_function, search_space, function_parameter,
+        self,
+        search_name,
+        objective_function,
+        search_space,
+        function_parameter,
+        verbosity,
     ):
         self.search_name = search_name
         self.objective_function = objective_function
@@ -21,19 +26,29 @@ class ResultsManagerBase:
 
 class ResultsManager(ResultsManagerBase):
     def __init__(
-        self, search_name, objective_function, search_space, function_parameter,
+        self,
+        search_name,
+        objective_function,
+        search_space,
+        function_parameter,
+        verbosity,
     ):
         super().__init__(
-            search_name, objective_function, search_space, function_parameter
+            search_name, objective_function, search_space, function_parameter, verbosity
         )
 
 
 class ResultsManagerMemory(ResultsManagerBase):
     def __init__(
-        self, search_name, objective_function, search_space, function_parameter,
+        self,
+        search_name,
+        objective_function,
+        search_space,
+        function_parameter,
+        verbosity,
     ):
         super().__init__(
-            search_name, objective_function, search_space, function_parameter
+            search_name, objective_function, search_space, function_parameter, verbosity
         )
 
         self.hypermem = HyperactiveWrapper(
@@ -42,6 +57,7 @@ class ResultsManagerMemory(ResultsManagerBase):
             y=function_parameter["target"],
             model=self.objective_function,
             search_space=search_space,
+            verbosity=verbosity,
         )
 
     def load_long_term_memory(self):

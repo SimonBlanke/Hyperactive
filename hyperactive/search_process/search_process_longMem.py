@@ -27,6 +27,7 @@ class SearchProcessLongMem(SearchProcessShortMem):
         init_para,
         memory,
         random_state,
+        verbosity,
     ):
         super().__init__(
             nth_process,
@@ -41,12 +42,15 @@ class SearchProcessLongMem(SearchProcessShortMem):
             init_para,
             memory,
             random_state,
+            verbosity,
         )
 
         if not isinstance(search_name, str):
             search_name = str(nth_process)
 
-        self.res = ResultsManagerMemory(search_name, model, search_space, training_data)
+        self.res = ResultsManagerMemory(
+            search_name, model, search_space, training_data, verbosity
+        )
 
         self.cand = CandidateShortMem(
             self.model,

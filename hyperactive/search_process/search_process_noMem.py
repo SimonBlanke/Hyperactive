@@ -22,6 +22,7 @@ class SearchProcessNoMem(SearchProcess):
         init_para,
         memory,
         random_state,
+        verbosity,
     ):
         super().__init__(
             nth_process,
@@ -36,6 +37,7 @@ class SearchProcessNoMem(SearchProcess):
             init_para,
             memory,
             random_state,
+            verbosity,
         )
 
         self.cand = CandidateNoMem(
@@ -50,4 +52,6 @@ class SearchProcessNoMem(SearchProcess):
         if not isinstance(search_name, str):
             search_name = str(nth_process)
 
-        self.res = ResultsManager(search_name, model, search_space, training_data)
+        self.res = ResultsManager(
+            search_name, model, search_space, training_data, verbosity
+        )

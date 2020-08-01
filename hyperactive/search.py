@@ -11,10 +11,10 @@ from importlib import import_module
 
 
 class Search:
-    def __init__(self, function_parameter, search_processes, verb):
+    def __init__(self, function_parameter, search_processes, verbosity):
         self.function_parameter = function_parameter
         self.search_processes = search_processes
-        self.verb = verb
+        self.verbosity = verbosity
 
         self.n_processes = len(search_processes)
         self._n_process_range = range(0, self.n_processes)
@@ -43,7 +43,6 @@ class Search:
 
         for results in results_list:
             search_name = results.search_name
-            print("results.score_list", results.score_list)
 
             self.eval_times_dict[search_name] = results.eval_times
             self.iter_times_dict[search_name] = results.iter_times
@@ -58,6 +57,9 @@ class Search:
             self.position_results[search_name] = self._memory_dict2dataframe(
                 results.memory_dict_new, results.search_space
             )
+
+            if self.verbosity == 0:
+                continue
 
             print(
                 "Process",
