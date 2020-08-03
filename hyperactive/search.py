@@ -42,6 +42,8 @@ class Search:
         self.score_best_dict = {}
         self.memory_dict_new = {}
 
+        print("\nsearch finished")
+
         for results in results_list:
             search_name = results.search_name
 
@@ -63,14 +65,17 @@ class Search:
                 continue
 
             print(
-                "\nSearch-process",
+                "\nsearch-process:",
                 results.nth_process,
-                "->",
-                '"{}"'.format(results.model.__name__),
-                "results: ",
+                "search name:",
+                '"{}"'.format(results.search_name),
+                ":",
             )
-            print("  best parameter =", results.para_best, " ")
-            print("  best score     =", results.score_best, " ")
+
+            # '"{}"'.format(results.model.__name__),
+
+            print("  best parameter =", results.para_best)
+            print("  best score     =", results.score_best)
 
             if results.memory == "long":
                 results.save_long_term_memory()
@@ -85,9 +90,6 @@ class Search:
             self.n_processes, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),)
         )
         results_list = pool.map(self._run_job, self._n_process_range)
-
-        for _ in range(int(self.n_processes / 2)):
-            print("\n")  # make room in cmd for prints
 
         return results_list
 
