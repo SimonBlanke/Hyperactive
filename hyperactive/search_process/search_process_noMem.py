@@ -41,12 +41,7 @@ class SearchProcessNoMem(SearchProcess):
         )
 
         self.cand = CandidateNoMem(
-            self.model,
-            self.training_data,
-            self.search_space,
-            self.init_para,
-            self.memory,
-            p_bar,
+            self.model, self.training_data, self.search_space, self.init_para, p_bar,
         )
 
         if not isinstance(search_name, str):

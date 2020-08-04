@@ -114,6 +114,7 @@ class SearchProcess:
         self.res.score_list = self.cand.score_list
         self.res.best_score_list = self.cand.scores_best_list
 
+        self.res.n_jobs = self.n_jobs
         self.res.memory_dict_new = self.cand.memory_dict_new
         self.res.para_best = self.cand.para_best
         self.res.score_best = self.cand.score_best

@@ -53,12 +53,7 @@ class SearchProcessLongMem(SearchProcessShortMem):
         )
 
         self.cand = CandidateShortMem(
-            self.model,
-            self.training_data,
-            self.search_space,
-            self.init_para,
-            self.memory,
-            p_bar,
+            self.model, self.training_data, self.search_space, self.init_para, p_bar,
         )
 
         self.cand.memory_dict = self.res.load_long_term_memory()
