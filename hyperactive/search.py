@@ -10,6 +10,8 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from importlib import import_module
 
+from joblib import Parallel, delayed
+
 
 class Search:
     def __init__(self, function_parameter, search_processes, verbosity):
@@ -44,8 +46,14 @@ class Search:
 
         print("\nsearch finished")
 
+        search_name_n_jobs = {}
+        for results in results_list:
+            search_name_n_jobs[results.search_name] = results.n_jobs
+
         for results in results_list:
             search_name = results.search_name
+
+            search_id = str(results.model.__name__) + "." + str(results.nth_process)
 
             self.eval_times_dict[search_name] = results.eval_times
             self.iter_times_dict[search_name] = results.iter_times
@@ -64,21 +72,12 @@ class Search:
             if self.verbosity == 0:
                 continue
 
-            print(
-                "\nsearch-process:",
-                results.nth_process,
-                "search name:",
-                '"{}"'.format(results.search_name),
-                ":",
-            )
-
-            # '"{}"'.format(results.model.__name__),
-
+            print("\nSearch-ID:", search_id)
             print("  best parameter =", results.para_best)
             print("  best score     =", results.score_best)
 
-            if results.memory == "long":
-                results.save_long_term_memory()
+            # if results.memory == "long":
+            #     results.save_long_term_memory()
 
     def _run_job(self, nth_process):
         self.process = self.search_processes[nth_process]
@@ -86,10 +85,16 @@ class Search:
 
     def _run_multiple_jobs(self):
         """Wrapper for the parallel search. Passes integer that corresponds to process number"""
+
+        """
         pool = Pool(
             self.n_processes, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),)
         )
         results_list = pool.map(self._run_job, self._n_process_range)
+        """
+        results_list = Parallel(n_jobs=self.n_processes)(
+            delayed(self._run_job)(i) for i in self._n_process_range
+        )
 
         return results_list
 
