@@ -136,7 +136,7 @@ A large part of the Hyperactive backend is developed and tested in separate repo
         <img src="./docs/_media/blue.jpg"/>
       </td>
       <td>
-        <strong>Optimization Extensions</strong>
+        <strong>Optimization Applications</strong>
         <img src="./docs/_media/blue.jpg"/>
       </td>
     </tr>
