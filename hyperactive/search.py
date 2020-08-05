@@ -6,11 +6,7 @@
 import numpy as np
 import pandas as pd
 
-from tqdm import tqdm
-from multiprocessing import Pool
-from importlib import import_module
-
-from joblib import Parallel, delayed
+from .distribution import joblib_wrapper
 
 
 class Search:
@@ -20,7 +16,6 @@ class Search:
         self.verbosity = verbosity
 
         self.n_processes = len(search_processes)
-        self._n_process_range = range(0, self.n_processes)
 
         self.results = {}
         self.eval_times = {}
@@ -83,21 +78,6 @@ class Search:
         self.process = self.search_processes[nth_process]
         return self.process.search(self.start_time, self.max_time, nth_process)
 
-    def _run_multiple_jobs(self):
-        """Wrapper for the parallel search. Passes integer that corresponds to process number"""
-
-        """
-        pool = Pool(
-            self.n_processes, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),)
-        )
-        results_list = pool.map(self._run_job, self._n_process_range)
-        """
-        results_list = Parallel(n_jobs=self.n_processes)(
-            delayed(self._run_job)(i) for i in self._n_process_range
-        )
-
-        return results_list
-
     def _memory_dict2dataframe(self, memory_dict, search_space):
         columns = list(search_space.keys())
 
@@ -122,7 +102,7 @@ class Search:
         if len(self.search_processes) == 1:
             results_list = [self._run_job(0)]
         else:
-            results_list = self._run_multiple_jobs()
+            results_list = joblib_wrapper(self.n_processes, self._run_job)
 
         self._get_results(results_list)
 
