@@ -33,7 +33,7 @@ class Candidate:
         self.eval_times = []
         self.iter_times = []
 
-    def base_eval(self, pos, nth_iter):
+    def base_eval(self, pos):
         para = self.space.pos2para(pos)
         results = self.model.eval(para)
 
@@ -45,12 +45,10 @@ class Candidate:
             self.pos_best = pos
             self.para_best = para
 
-            self.p_bar.best_since_iter = nth_iter
-
         return results
 
-    def get_score(self, pos_new, nth_iter):
-        score_new = self.evaluate(pos_new, nth_iter)
-        self.p_bar.update_p_bar(1, self.score_best)
+    def get_score(self, pos_new):
+        score_new = self.evaluate(pos_new)
+        self.p_bar.update_p_bar(1, score_new)
 
         return score_new

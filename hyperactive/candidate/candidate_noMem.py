@@ -10,11 +10,11 @@ class CandidateNoMem(Candidate):
     def __init__(self, obj_func, func_para, search_space, init_para, p_bar):
         super().__init__(obj_func, func_para, search_space, init_para, p_bar)
 
-    def evaluate(self, pos, nth_iter):
+    def evaluate(self, pos):
         pos.astype(int)
         pos_tuple = tuple(pos)
 
-        results = self.base_eval(pos, nth_iter)
+        results = self.base_eval(pos)
         if pos_tuple not in self.memory_dict_new:
             self.memory_dict_new[pos_tuple] = results
 
