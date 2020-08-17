@@ -39,28 +39,25 @@ class Search:
         self.score_best_dict = {}
         self.memory_dict_new = {}
 
-        print("\nsearch finished")
-
         search_name_n_jobs = {}
         for results in results_list:
             search_name_n_jobs[results.search_name] = results.n_jobs
 
         for results in results_list:
             search_name = results.search_name
-
             search_id = str(results.model.__name__) + "." + str(results.nth_process)
 
-            self.eval_times_dict[search_name] = results.eval_times
-            self.iter_times_dict[search_name] = results.iter_times
+            self.eval_times_dict[search_id] = results.eval_times
+            self.iter_times_dict[search_id] = results.iter_times
 
-            self.positions_dict[search_name] = results.pos_list
-            self.scores_dict[search_name] = results.score_list
-            self.best_score_list_dict[search_name] = results.best_score_list
+            self.positions_dict[search_id] = results.pos_list
+            self.scores_dict[search_id] = results.score_list
+            self.best_score_list_dict[search_id] = results.best_score_list
 
-            self.para_best_dict[search_name] = results.para_best
-            self.score_best_dict[search_name] = results.score_best
-            self.memory_dict_new[search_name] = results.memory_dict_new
-            self.position_results[search_name] = self._memory_dict2dataframe(
+            self.para_best_dict[search_id] = results.para_best
+            self.score_best_dict[search_id] = results.score_best
+            self.memory_dict_new[search_id] = results.memory_dict_new
+            self.position_results[search_id] = self._memory_dict2dataframe(
                 results.memory_dict_new, results.search_space
             )
 
@@ -71,8 +68,8 @@ class Search:
             print("  best parameter =", results.para_best)
             print("  best score     =", results.score_best)
 
-            # if results.memory == "long":
-            #     results.save_long_term_memory()
+            if results.memory == "long":
+                results.save_long_term_memory()
 
     def _run_job(self, nth_process):
         self.process = self.search_processes[nth_process]

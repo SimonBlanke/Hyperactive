@@ -104,7 +104,7 @@ class Hyperactive:
         optimizer="RandomSearch",
         n_jobs=1,
         init_para=[],
-        memory="long",
+        memory="short",
     ):
 
         check_args(
@@ -138,9 +138,9 @@ class Hyperactive:
 
         self.positions = self.search.positions_dict
         self.scores = self.search.scores_dict
-        self.best_score_list = self.search.best_score_list_dict
+        self.score_best_list = self.search.best_score_list_dict
 
-        self.best_para = self.search.para_best_dict
-        self.best_score = self.search.score_best_dict
+        self.para_best = self.search.para_best_dict
+        self.score_best = self.search.score_best_dict
 
         self.position_results = self.search.position_results
