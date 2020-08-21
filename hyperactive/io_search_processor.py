@@ -91,7 +91,7 @@ class IoSearchProcessor:
 
     def _get_optimizer(self, cand):
         init_positions = cand.init.set_start_pos(self.n_positions)
-        return self.opt_class(init_positions, cand.space.dim, opt_para=self.opt_para)
+        return self.opt_class(cand.space.search_space_pos, **self.opt_para)
 
     def init_search(self, nth_process, cand):
         self.p_bar.init_p_bar(nth_process, self.n_iter, self.model)

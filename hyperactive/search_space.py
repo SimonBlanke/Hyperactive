@@ -11,6 +11,12 @@ class SearchSpace:
         self.search_space = search_space
         self.pos_space_limit()
 
+        self.search_space_pos = []
+
+        for dict_value in search_space.values():
+            space_dim = np.array(range(len(dict_value)))
+            self.search_space_pos.append(space_dim)
+
     def pos_space_limit(self):
         dim = []
 
