@@ -3,14 +3,11 @@
 # License: MIT License
 
 import time
+import multiprocessing
 
 from importlib import import_module
 
-import multiprocessing
-
 from .checks import check_args
-from .progress_bar import ProgressBarLVL0, ProgressBarLVL1
-
 from .search import Search
 
 
@@ -59,11 +56,6 @@ class Hyperactive:
         self.random_state = random_state
         self.search_processes = []
 
-        if verbosity == 0:
-            self.p_bar = ProgressBarLVL0
-        else:
-            self.p_bar = ProgressBarLVL1
-
     def _add_process(
         self,
         nth_process,
@@ -78,7 +70,6 @@ class Hyperactive:
     ):
         search_process_kwargs = {
             "nth_process": nth_process,
-            "p_bar": self.p_bar(),
             "model": model,
             "search_space": search_space,
             "search_name": name,
@@ -89,7 +80,7 @@ class Hyperactive:
             "init_para": init_para,
             "memory": memory,
             "random_state": self.random_state,
-            "verbosity": self.verbosity,
+            "verbosity": 1,
         }
         SearchProcess = get_class(".search_process", search_process_dict[memory])
         new_search_process = SearchProcess(**search_process_kwargs)
@@ -106,7 +97,6 @@ class Hyperactive:
         init_para=[],
         memory="short",
     ):
-
         check_args(
             model, search_space, n_iter, optimizer, n_jobs, init_para, memory,
         )

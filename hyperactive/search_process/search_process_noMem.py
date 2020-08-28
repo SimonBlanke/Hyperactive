@@ -4,14 +4,12 @@
 
 from ..candidate import CandidateNoMem
 from .search_process_base import SearchProcess
-from ..results_manager import ResultsManager
 
 
 class SearchProcessNoMem(SearchProcess):
     def __init__(
         self,
         nth_process,
-        p_bar,
         model,
         search_space,
         search_name,
@@ -26,7 +24,6 @@ class SearchProcessNoMem(SearchProcess):
     ):
         super().__init__(
             nth_process,
-            p_bar,
             model,
             search_space,
             search_name,
@@ -41,12 +38,9 @@ class SearchProcessNoMem(SearchProcess):
         )
 
         self.cand = CandidateNoMem(
-            self.model, self.training_data, self.search_space, self.init_para, p_bar,
+            self.model, self.training_data, self.search_space, self.init_para,
         )
 
         if not isinstance(search_name, str):
             search_name = str(nth_process)
 
-        self.res = ResultsManager(
-            search_name, model, search_space, training_data, verbosity
-        )

@@ -8,14 +8,12 @@ import pandas as pd
 
 from ..candidate import CandidateShortMem
 from .search_process_base import SearchProcess
-from ..results_manager import ResultsManager
 
 
 class SearchProcessShortMem(SearchProcess):
     def __init__(
         self,
         nth_process,
-        p_bar,
         model,
         search_space,
         search_name,
@@ -30,7 +28,6 @@ class SearchProcessShortMem(SearchProcess):
     ):
         super().__init__(
             nth_process,
-            p_bar,
             model,
             search_space,
             search_name,
@@ -45,15 +42,11 @@ class SearchProcessShortMem(SearchProcess):
         )
 
         self.cand = CandidateShortMem(
-            self.model, self.training_data, self.search_space, self.init_para, p_bar,
+            self.model, self.training_data, self.search_space, self.init_para,
         )
 
         if not isinstance(search_name, str):
             search_name = str(nth_process)
-
-        self.res = ResultsManager(
-            search_name, model, search_space, training_data, verbosity
-        )
 
     def _memory2dataframe(self, memory):
         positions = np.array(list(memory.keys()))

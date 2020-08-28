@@ -31,7 +31,6 @@ class IoSearchProcessor:
     def __init__(
         self,
         nth_process,
-        p_bar,
         model,
         search_space,
         n_iter,
@@ -40,7 +39,6 @@ class IoSearchProcessor:
         random_state,
     ):
         self.nth_process = nth_process
-        self.p_bar = p_bar
         self.model = model
         self.search_space = search_space
         self.n_iter = n_iter
@@ -94,7 +92,4 @@ class IoSearchProcessor:
         return self.opt_class(cand.space.search_space_pos, **self.opt_para)
 
     def init_search(self, nth_process, cand):
-        self.p_bar.init_p_bar(nth_process, self.n_iter, self.model)
-        self._set_random_seed(nth_process)
-
         return self._get_optimizer(cand)

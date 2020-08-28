@@ -10,10 +10,9 @@ from ..init_position import InitSearchPosition
 
 
 class Candidate:
-    def __init__(self, obj_func, training_data, search_space, init_para, p_bar):
+    def __init__(self, obj_func, training_data, search_space, init_para):
         self.obj_func = obj_func
         self.search_space = search_space
-        self.p_bar = p_bar
 
         self.space = SearchSpace(search_space)
         self.model = Model(obj_func, training_data)
@@ -48,7 +47,4 @@ class Candidate:
         return results
 
     def get_score(self, pos_new):
-        score_new = self.evaluate(pos_new)
-        self.p_bar.update_p_bar(1, score_new)
-
-        return score_new
+        return self.evaluate(pos_new)

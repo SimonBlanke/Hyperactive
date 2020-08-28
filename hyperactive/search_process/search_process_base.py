@@ -6,6 +6,7 @@ import time
 import random
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 
 from ..io_search_processor import IoSearchProcessor
@@ -15,7 +16,6 @@ class SearchProcess:
     def __init__(
         self,
         nth_process,
-        p_bar,
         model,
         search_space,
         search_name,
@@ -29,7 +29,6 @@ class SearchProcess:
         verbosity,
     ):
         self.nth_process = nth_process
-        self.p_bar = p_bar
         self.model = model
         self.search_space = search_space
         self.search_name = search_name
@@ -47,7 +46,6 @@ class SearchProcess:
 
         self.search_io = IoSearchProcessor(
             nth_process,
-            p_bar,
             model,
             search_space,
             n_iter,
@@ -79,9 +77,14 @@ class SearchProcess:
             # initialize={"grid": 7, "random": 3,},
             max_time=max_time,
             memory=True,
-            verbosity=self.verbosity,
+            print_results=False,
+            progress_bar=self.verbosity,
             random_state=self.random_state,
             nth_process=nth_process,
+        )
+
+        self.opt.p_bar._tqdm = tqdm(
+            total=self.n_iter, leave=False, position=nth_process
         )
 
         return self.opt

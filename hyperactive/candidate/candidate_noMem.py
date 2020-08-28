@@ -7,8 +7,8 @@ from .candidate_base import Candidate
 
 
 class CandidateNoMem(Candidate):
-    def __init__(self, obj_func, func_para, search_space, init_para, p_bar):
-        super().__init__(obj_func, func_para, search_space, init_para, p_bar)
+    def __init__(self, obj_func, func_para, search_space, init_para):
+        super().__init__(obj_func, func_para, search_space, init_para)
 
     def evaluate(self, pos):
         pos.astype(int)

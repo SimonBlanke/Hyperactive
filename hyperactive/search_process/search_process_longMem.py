@@ -9,8 +9,6 @@ import pandas as pd
 from ..candidate import CandidateShortMem
 from .search_process_shortMem import SearchProcessShortMem
 
-from ..results_manager import ResultsManagerMemory
-
 from optimization_metadata import HyperactiveWrapper
 from ..meta_data.meta_data_path import meta_data_path
 
@@ -19,7 +17,6 @@ class SearchProcessLongMem(SearchProcessShortMem):
     def __init__(
         self,
         nth_process,
-        p_bar,
         model,
         search_space,
         search_name,
@@ -34,7 +31,6 @@ class SearchProcessLongMem(SearchProcessShortMem):
     ):
         super().__init__(
             nth_process,
-            p_bar,
             model,
             search_space,
             search_name,
@@ -61,7 +57,7 @@ class SearchProcessLongMem(SearchProcessShortMem):
         )
 
         self.cand = CandidateShortMem(
-            self.model, self.training_data, self.search_space, self.init_para, p_bar,
+            self.model, self.training_data, self.search_space, self.init_para,
         )
 
         self.cand.memory_dict = self.load_long_term_memory()

@@ -6,7 +6,7 @@
 import numpy as np
 import pandas as pd
 
-from .distribution import joblib_wrapper
+from .distribution import joblib_wrapper, multiprocessing_wrapper
 
 
 class Search:
@@ -39,6 +39,8 @@ class Search:
         self.score_best_dict = {}
         self.memory_dict_new = {}
 
+        """
+
         search_name_n_jobs = {}
         for results in results_list:
             search_name_n_jobs[results.search_name] = results.n_jobs
@@ -70,6 +72,8 @@ class Search:
 
             if results.memory == "long":
                 results.save_long_term_memory()
+
+        """
 
     def _run_job(self, nth_process):
         self.process = self.search_processes[nth_process]
