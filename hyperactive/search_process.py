@@ -9,7 +9,16 @@ import pandas as pd
 from tqdm import tqdm
 
 
-from ..io_search_processor import IoSearchProcessor
+from .io_search_processor import IoSearchProcessor
+
+
+def pos2para(search_space, pos):
+    values_dict = {}
+    for i, key in enumerate(search_space.keys()):
+        pos_ = int(pos[i])
+        values_dict[key] = search_space[key][pos_]
+
+    return values_dict
 
 
 class SearchProcess:
@@ -56,23 +65,30 @@ class SearchProcess:
 
     def search(self, start_time, max_time, nth_process):
         start_time_search = time.time()
-        self.opt = self.search_io.init_search(nth_process, self.cand)
+
+        self.search_space_pos = []
+
+        for dict_value in self.search_space.values():
+            space_dim = np.array(range(len(dict_value)))
+            self.search_space_pos.append(space_dim)
+
+        self.opt = self.search_io.init_search(nth_process, self.search_space_pos)
 
         X = self.training_data["features"]
         y = self.training_data["target"]
 
-        def _gfo_wrapper_model():
+        def gfo_wrapper_model():
             # rename _model
             def _model(array):
                 # wrapper for GFOs
-                para = self.cand.space.pos2para(array)
+                para = pos2para(self.search_space, array)
                 return self.model(para, X, y)
 
             _model.__name__ = self.model.__name__
             return _model
 
         self.opt.search(
-            objective_function=_gfo_wrapper_model(),
+            objective_function=gfo_wrapper_model(),
             n_iter=self.n_iter,
             # initialize={"grid": 7, "random": 3,},
             max_time=max_time,

@@ -9,13 +9,7 @@ from importlib import import_module
 
 from .checks import check_args
 from .search import Search
-
-
-search_process_dict = {
-    False: "SearchProcessNoMem",
-    "short": "SearchProcessShortMem",
-    "long": "SearchProcessLongMem",
-}
+from .search_process import SearchProcess
 
 
 def set_n_jobs(n_jobs):
@@ -82,7 +76,6 @@ class Hyperactive:
             "random_state": self.random_state,
             "verbosity": 1,
         }
-        SearchProcess = get_class(".search_process", search_process_dict[memory])
         new_search_process = SearchProcess(**search_process_kwargs)
         self.search_processes.append(new_search_process)
 
@@ -123,6 +116,7 @@ class Hyperactive:
         start_time = time.time()
         self.search.run(start_time, max_time)
 
+        """
         self.eval_times = self.search.eval_times_dict
         self.iter_times = self.search.iter_times_dict
 
@@ -134,3 +128,5 @@ class Hyperactive:
         self.score_best = self.search.score_best_dict
 
         self.position_results = self.search.position_results
+        """
+

@@ -87,9 +87,8 @@ class IoSearchProcessor:
         random.seed(self.random_state + nth_process)
         np.random.seed(self.random_state + nth_process)
 
-    def _get_optimizer(self, cand):
-        init_positions = cand.init.set_start_pos(self.n_positions)
-        return self.opt_class(cand.space.search_space_pos, **self.opt_para)
+    def _get_optimizer(self, search_space_pos):
+        return self.opt_class(search_space_pos, **self.opt_para)
 
     def init_search(self, nth_process, cand):
         return self._get_optimizer(cand)
