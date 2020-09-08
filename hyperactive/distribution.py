@@ -6,17 +6,30 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from joblib import Parallel, delayed
 
-
-def multiprocessing_wrapper(n_processes, run_job_parallel):
-    n_process_range = range(0, n_processes)
-
-    pool = Pool(n_processes, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),))
-    return pool.map(run_job_parallel, n_process_range)
+from .search_process import search_process
 
 
-def joblib_wrapper(n_processes, run_job_parallel):
-    n_process_range = range(0, n_processes)
+def proxy(Dict):
+    return search_process(**Dict)
 
-    return Parallel(n_jobs=n_processes)(
-        delayed(run_job_parallel)(i) for i in n_process_range
-    )
+
+def single_process(search_processes_infos):
+    results = [search_process(**search_processes_infos[0])]
+
+    return results
+
+
+def multiprocessing_wrapper(search_processes_infos):
+    n_jobs = len(search_processes_infos)
+    pool = Pool(n_jobs, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),))
+    results = pool.map(proxy, search_processes_infos)
+
+    return results
+
+
+def joblib_wrapper(search_processes_infos):
+    n_jobs = len(search_processes_infos)
+    jobs = [delayed(search_process)(**kwargs) for kwargs in search_processes_infos]
+    results = Parallel(n_jobs=n_jobs)(jobs)
+
+    return results

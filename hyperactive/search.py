@@ -6,16 +6,16 @@
 import numpy as np
 import pandas as pd
 
-from .distribution import joblib_wrapper, multiprocessing_wrapper
+from .distribution import single_process, joblib_wrapper, multiprocessing_wrapper
 
 
 class Search:
-    def __init__(self, function_parameter, search_processes, verbosity):
+    def __init__(self, function_parameter, verbosity):
         self.function_parameter = function_parameter
-        self.search_processes = search_processes
+        # self.search_processes = search_processes
         self.verbosity = verbosity
 
-        self.n_processes = len(search_processes)
+        # self.n_processes = len(search_processes)
 
         self.results = {}
         self.eval_times = {}
@@ -24,6 +24,8 @@ class Search:
         self.pos_list = {}
         self.score_list = {}
         self.position_results = {}
+
+    """
 
     def _get_results(self, results_list):
         position_results_dict = {}
@@ -39,7 +41,7 @@ class Search:
         self.score_best_dict = {}
         self.memory_dict_new = {}
 
-        """
+        
 
         search_name_n_jobs = {}
         for results in results_list:
@@ -73,11 +75,32 @@ class Search:
             if results.memory == "long":
                 results.save_long_term_memory()
 
-        """
 
-    def _run_job(self, nth_process):
-        self.process = self.search_processes[nth_process]
-        return self.process.search(self.start_time, self.max_time, nth_process)
+
+
+
+        self.hypermem = HyperactiveWrapper(
+            main_path=meta_data_path(),
+            X=training_data["features"],
+            y=training_data["target"],
+            model=model,
+            search_space=search_space,
+            verbosity=verbosity,
+        )
+
+        self.cand = CandidateShortMem(
+            self.model, self.training_data, self.search_space, self.init_para,
+        )
+
+        self.cand.memory_dict = self.load_long_term_memory()
+
+    def load_long_term_memory(self):
+        return self.hypermem.load()
+
+    def save_long_term_memory(self):
+        self.hypermem.save(self.memory_dict_new)
+
+        
 
     def _memory_dict2dataframe(self, memory_dict, search_space):
         columns = list(search_space.keys())
@@ -95,18 +118,15 @@ class Search:
         dataframe = pd.concat([pd_pos, results_df], axis=1)
 
         return dataframe
+    """
 
-    def _run(self, start_time, max_time):
-        self.start_time = start_time
-        self.max_time = max_time
+    def run(self, process_infos):
+        # self._print_search_info()
 
-        if len(self.search_processes) == 1:
-            results_list = [self._run_job(0)]
+        if len(process_infos) == 1:
+            results_list = single_process(process_infos)
         else:
-            results_list = joblib_wrapper(self.n_processes, self._run_job)
+            results_list = joblib_wrapper(process_infos)
 
-        self._get_results(results_list)
-
-    def run(self, start_time, max_time):
-        self._run(start_time, max_time)
+        # self._print_results_info()
 

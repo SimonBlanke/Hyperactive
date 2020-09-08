@@ -21,6 +21,46 @@ def pos2para(search_space, pos):
     return values_dict
 
 
+def search_process(
+    nth_process,
+    model,
+    search_space,
+    n_iter,
+    name,
+    optimizer,
+    initialize,
+    memory,
+    max_time,
+    distribution,
+    X,
+    y,
+    random_state,
+    verbosity,
+):
+    def gfo_wrapper_model():
+        # rename _model
+        def _model(array):
+            # wrapper for GFOs
+            para = pos2para(search_space, array)
+            return model(para, X, y)
+
+        _model.__name__ = model.__name__
+        return _model
+
+    verbosity["print_results"] = False
+
+    optimizer.search(
+        objective_function=gfo_wrapper_model(),
+        n_iter=n_iter,
+        initialize=initialize,
+        max_time=max_time,
+        memory=memory,
+        verbosity=verbosity,
+        random_state=random_state,
+        nth_process=nth_process,
+    )
+
+
 class SearchProcess:
     def __init__(
         self,
@@ -72,7 +112,7 @@ class SearchProcess:
             space_dim = np.array(range(len(dict_value)))
             self.search_space_pos.append(space_dim)
 
-        self.opt = self.search_io.init_search(nth_process, self.search_space_pos)
+        opt = self.search_io.init_search(nth_process, self.search_space_pos)
 
         X = self.training_data["features"]
         y = self.training_data["target"]
@@ -87,7 +127,7 @@ class SearchProcess:
             _model.__name__ = self.model.__name__
             return _model
 
-        self.opt.search(
+        opt.search(
             objective_function=gfo_wrapper_model(),
             n_iter=self.n_iter,
             # initialize={"grid": 7, "random": 3,},
@@ -99,9 +139,7 @@ class SearchProcess:
             nth_process=nth_process,
         )
 
-        self.opt.p_bar._tqdm = tqdm(
-            total=self.n_iter, leave=False, position=nth_process
-        )
+        opt.p_bar._tqdm = tqdm(total=self.n_iter, leave=False, position=nth_process)
 
-        return self.opt
+        return opt
 
