@@ -6,6 +6,9 @@ import numpy as np
 
 from importlib import import_module
 
+from optimization_metadata import HyperactiveWrapper
+from .meta_data.meta_data_path import meta_data_path
+
 optimizer_dict = {
     "HillClimbing": "HillClimbingOptimizer",
     "StochasticHillClimbing": "StochasticHillClimbingOptimizer",
@@ -23,7 +26,7 @@ optimizer_dict = {
 }
 
 
-class SearchProcessInfo:
+class ProcessInfo:
     def __init__(self, X, y, random_state, verbosity):
         self.X = X
         self.y = y
@@ -65,6 +68,24 @@ class SearchProcessInfo:
     ):
         opt = self._init_optimizer(optimizer, search_space)
 
+        self.hypermem = HyperactiveWrapper(
+            main_path=meta_data_path(),
+            X=self.X,
+            y=self.y,
+            model=model,
+            search_space=search_space,
+            # verbosity=verbosity,
+        )
+        memory_dict = self.hypermem.load()
+
+        values = np.array(list(memory_dict.keys()))
+        scores = np.array(list(memory_dict.values())).reshape(-1, 1)
+
+        memory = {
+            "values": values,
+            "scores": scores,
+        }
+
         self.process_infos.append(
             {
                 "nth_process": nth_process,
@@ -72,9 +93,9 @@ class SearchProcessInfo:
                 "search_space": search_space,
                 "n_iter": n_iter,
                 "name": name,
-                "optimizer": opt,
+                "opt": opt,
                 "initialize": initialize,
-                "memory": True,
+                "memory": memory,
             }
         )
 
