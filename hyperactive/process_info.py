@@ -6,8 +6,6 @@ import numpy as np
 
 from importlib import import_module
 
-from optimization_metadata import HyperactiveWrapper
-from .meta_data.meta_data_path import meta_data_path
 
 optimizer_dict = {
     "HillClimbing": "HillClimbingOptimizer",
@@ -34,6 +32,7 @@ class ProcessInfo:
         self.verbosity = verbosity
 
         self.process_infos = []
+        self.model_processID_dict = {}
 
     def _init_optimizer(self, optimizer, search_space):
         if isinstance(optimizer, dict):
@@ -65,26 +64,15 @@ class ProcessInfo:
         optimizer,
         initialize,
         memory,
+        memory_dict,
     ):
+
+        self.model_processID_dict[nth_process] = model
+
         opt = self._init_optimizer(optimizer, search_space)
 
-        self.hypermem = HyperactiveWrapper(
-            main_path=meta_data_path(),
-            X=self.X,
-            y=self.y,
-            model=model,
-            search_space=search_space,
-            # verbosity=verbosity,
-        )
-        memory_dict = self.hypermem.load()
-
         values = np.array(list(memory_dict.keys()))
-        scores = np.array(list(memory_dict.values())).reshape(-1, 1)
-
-        memory = {
-            "values": values,
-            "scores": scores,
-        }
+        scores = np.array(list(memory_dict.values())).reshape(-1,)
 
         self.process_infos.append(
             {
@@ -95,7 +83,7 @@ class ProcessInfo:
                 "name": name,
                 "opt": opt,
                 "initialize": initialize,
-                "memory": memory,
+                "memory": {"values": values, "scores": scores,},
             }
         )
 

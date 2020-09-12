@@ -3,13 +3,34 @@
 # License: MIT License
 
 import time
+import numpy as np
 import multiprocessing
+from importlib import import_module
 
 
 from .checks import check_args
-from .search import Search
-from .search_process import SearchProcess
-from .search_process_info import SearchProcessInfo
+from .search import SearchManager
+from .process import _process_
+from .search_info import SearchInfo
+
+from optimization_metadata import HyperactiveWrapper
+from .meta_data.meta_data_path import meta_data_path
+
+optimizer_dict = {
+    "HillClimbing": "HillClimbingOptimizer",
+    "StochasticHillClimbing": "StochasticHillClimbingOptimizer",
+    "TabuSearch": "TabuOptimizer",
+    "RandomSearch": "RandomSearchOptimizer",
+    "RandomRestartHillClimbing": "RandomRestartHillClimbingOptimizer",
+    "RandomAnnealing": "RandomAnnealingOptimizer",
+    "SimulatedAnnealing": "SimulatedAnnealingOptimizer",
+    "ParallelTempering": "ParallelTemperingOptimizer",
+    "ParticleSwarm": "ParticleSwarmOptimizer",
+    "EvolutionStrategy": "EvolutionStrategyOptimizer",
+    "Bayesian": "BayesianOptimizer",
+    "TreeStructured": "TreeStructuredParzenEstimators",
+    "DecisionTree": "DecisionTreeOptimizer",
+}
 
 
 def set_n_jobs(n_jobs):
@@ -35,6 +56,27 @@ def no_ext_warnings():
     warnings.warn = warn
 
 
+def init_optimizer(optimizer, search_space):
+    if isinstance(optimizer, dict):
+        opt_string = list(optimizer.keys())[0]
+        opt_para = optimizer[opt_string]
+    else:
+        opt_string = optimizer
+        opt_para = {}
+
+    module = import_module("gradient_free_optimizers")
+    opt_class = getattr(module, optimizer_dict[opt_string])
+
+    search_space_pos = []
+    for dict_value in search_space.values():
+        space_dim = np.array(range(len(dict_value)))
+        search_space_pos.append(space_dim)
+
+    opt = opt_class(search_space_pos, **opt_para)
+
+    return opt
+
+
 class Hyperactive:
     def __init__(
         self,
@@ -48,7 +90,18 @@ class Hyperactive:
         },
         ext_warnings=False,
     ):
-        self.info = SearchProcessInfo(X, y, random_state, verbosity)
+        self.X = X
+        self.y = y
+        self.random_state = random_state
+        self.verbosity = verbosity
+
+        self.s_info = SearchInfo()
+
+        self.opt_metadata_dict = {}
+        self.model_memory_dict = {}
+
+        self.process_info_dict = {}
+        self.search_process_dict = {}
 
     def add_search(
         self,
@@ -68,26 +121,72 @@ class Hyperactive:
         """
         n_jobs = set_n_jobs(n_jobs)
 
-        for nth_job in range(n_jobs):
-            nth_process = len(self.info.process_infos)
-
-            self.info.add_search_process(
-                nth_process,
-                model,
-                search_space,
-                n_iter,
-                name,
-                optimizer,
-                initialize,
-                memory,
+        if model not in self.opt_metadata_dict:
+            self.opt_metadata_dict[model] = HyperactiveWrapper(
+                main_path=meta_data_path(),
+                X=self.X,
+                y=self.y,
+                model=model,
+                search_space=search_space,
+                verbosity=0,
             )
 
-    def run(self, max_time=None, distribution=None):
-        self.search = Search(1, 1)
-        self.info.add_run_info(max_time, distribution)
+            self.model_memory_dict[model] = self.opt_metadata_dict[model].load()
 
-        start_time = time.time()
-        self.search.run(self.info.process_infos)
+            memory_dict = self.model_memory_dict[model]
+            values = np.array(list(memory_dict.keys()))
+            scores = np.array(list(memory_dict.values())).reshape(-1,)
+
+        processes = []
+        for nth_job in range(n_jobs):
+            nth_process = len(self.process_info_dict)
+            processes.append(nth_process)
+
+            self.process_info_dict[nth_process] = {
+                "X": self.X,
+                "y": self.y,
+                "random_state": self.random_state,
+                "verbosity": self.verbosity,
+                "nth_process": nth_process,
+                "model": model,
+                "search_space": search_space,
+                "n_iter": n_iter,
+                "name": name,
+                "optimizer": init_optimizer(optimizer, search_space),
+                "initialize": initialize,
+                "memory": {"values": values, "scores": scores,},
+            }
+
+        self.s_info.add_search(
+            processes,
+            model,
+            search_space,
+            n_iter,
+            name,
+            optimizer,
+            n_jobs,
+            initialize,
+            memory,
+            self.model_memory_dict[model],
+        )
+
+    def run(self, max_time=None, distribution=None):
+        for key in self.process_info_dict.keys():
+            self.process_info_dict[key]["max_time"] = max_time
+            self.process_info_dict[key]["distribution"] = distribution
+
+        self.s_manage = SearchManager(self.s_info)
+
+        self.s_manage.run(self.process_info_dict)
+
+        for results in self.s_manage.results_list:
+            nth_process = results["nth_process"]
+            memory_dict_new = results["memory_dict_new"]
+
+            model = self.process_info_dict[nth_process]["model"]
+            metadata = self.opt_metadata_dict[model]
+
+            metadata.save(results["memory_dict_new"])
 
         """
         self.eval_times = self.search.eval_times_dict
