@@ -7,13 +7,12 @@ import numpy as np
 import pandas as pd
 
 from .distribution import single_process, joblib_wrapper, multiprocessing_wrapper
+from .model_info import print_results_info
 
 
-class Search:
-    def __init__(self, function_parameter, verbosity):
-        self.function_parameter = function_parameter
-        # self.search_processes = search_processes
-        self.verbosity = verbosity
+class SearchManager:
+    def __init__(self, search_info):
+        self.s_info = search_info
 
         # self.n_processes = len(search_processes)
 
@@ -120,13 +119,16 @@ class Search:
         return dataframe
     """
 
-    def run(self, process_infos):
-        # self._print_search_info()
+    def run(self, process_info_dict):
+        self.s_info.print_search_info()
+        process_infos = list(process_info_dict.values())
 
         if len(process_infos) == 1:
             results_list = single_process(process_infos)
         else:
-            results_list = joblib_wrapper(process_infos)
+            results_list = multiprocessing_wrapper(process_infos)
 
-        # self._print_results_info()
+        self.results_list = results_list
+
+        print_results_info(results_list, process_info_dict)
 

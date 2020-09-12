@@ -21,6 +21,7 @@ class SearchInfo:
         n_jobs,
         initialize,
         memory,
+        memory_dict,
     ):
 
         space_lengths = []
@@ -43,6 +44,7 @@ class SearchInfo:
                 "n_jobs": n_jobs,
                 "initialize": initialize,
                 "memory": memory,
+                "memory_dict": memory_dict,
             }
         )
 
@@ -54,6 +56,8 @@ class SearchInfo:
             print("   Optimization strategy:    ", search_info["optimizer"])
             print("   Search space:")
             print("      size:                  ", search_info["search_space_size"])
-            print("      known:                 ", 1)
+            print(
+                "      known:                 ", len(search_info["memory_dict"]),
+            )
             print("")
 

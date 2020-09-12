@@ -14,33 +14,39 @@ def pos2para(search_space, pos):
     return values_dict
 
 
-def print_results_info(results_list):
+def print_results_info(results_list, process_info_dict):
     model_results = {}
 
-    unique_model_names = []
+    unique_models = []
     for results in results_list:
-        unique_model_names.append(results["model_name"])
-    unique_model_names = set(unique_model_names)
+        nth_process = results["nth_process"]
+        model = process_info_dict[nth_process]["model"]
 
-    for model_name in unique_model_names:
+        unique_models.append(model)
+    unique_models = set(unique_models)
+
+    for unique_model in unique_models:
         best_score = -np.inf
         best_para = None
 
         for results in results_list:
-            if results["model_name"] != model_name:
+            nth_process = results["nth_process"]
+            search_space = process_info_dict[nth_process]["search_space"]
+            model = process_info_dict[nth_process]["model"]
+
+            if model != unique_model:
                 continue
 
             if results["best_score"] > best_score:
                 best_score = results["best_score"]
-
                 pos = results["best_pos"]
-                best_para = pos2para(results["search_space"], pos)
+                best_para = pos2para(search_space, pos)
 
-        model_results[model_name] = (best_score, best_para)
+        model_results[unique_model] = (best_score, best_para)
 
     print("\nModel results information:")
-    for model_name in model_results.keys():
-        print("   Model name:      ", model_name)
-        print("   Best score:      ", model_results[model_name][0])
-        print("   Best parameters: ", model_results[model_name][1])
+    for unique_model in model_results.keys():
+        print("   Model name:      ", unique_model.__name__)
+        print("   Best score:      ", model_results[unique_model][0])
+        print("   Best parameters: ", model_results[unique_model][1])
         print("")
