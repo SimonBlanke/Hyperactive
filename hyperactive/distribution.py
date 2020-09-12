@@ -6,15 +6,15 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from joblib import Parallel, delayed
 
-from .search_process import search_process
+from .process import _process_
 
 
-def proxy(Dict):
-    return search_process(**Dict)
+def proxy(_dict_):
+    return _process_(**_dict_)
 
 
 def single_process(search_processes_infos):
-    results = [search_process(**search_processes_infos[0])]
+    results = [_process_(**search_processes_infos[0])]
 
     return results
 
@@ -29,7 +29,7 @@ def multiprocessing_wrapper(search_processes_infos):
 
 def joblib_wrapper(search_processes_infos):
     n_jobs = len(search_processes_infos)
-    jobs = [delayed(search_process)(**kwargs) for kwargs in search_processes_infos]
+    jobs = [delayed(_process_)(**kwargs) for kwargs in search_processes_infos]
     results = Parallel(n_jobs=n_jobs)(jobs)
 
     return results
