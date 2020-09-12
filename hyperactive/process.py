@@ -24,9 +24,10 @@ def _process_(
     search_space,
     n_iter,
     name,
-    opt,
+    optimizer,
     initialize,
     memory,
+    # memory_dict,
     max_time,
     distribution,
     X,
@@ -46,7 +47,7 @@ def _process_(
 
     verbosity["print_results"] = False
 
-    opt.search(
+    optimizer.search(
         objective_function=gfo_wrapper_model(),
         n_iter=n_iter,
         initialize=initialize,
@@ -58,10 +59,10 @@ def _process_(
     )
 
     return {
-        "model_name": model.__name__,
-        "search_space": search_space,
-        "best_pos": opt.best_values,
-        "best_score": opt.best_score,
-        "values": opt.values,
-        "scores": opt.scores,
+        "nth_process": nth_process,
+        "best_pos": optimizer.best_values,
+        "best_score": optimizer.best_score,
+        "values": optimizer.values,
+        "scores": optimizer.scores,
+        "memory_dict_new": optimizer.memory_dict_new,
     }
