@@ -9,10 +9,10 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def pos2para(search_space, pos):
+def gfo2hyper(search_space, para):
     values_dict = {}
     for i, key in enumerate(search_space.keys()):
-        pos_ = int(pos[i])
+        pos_ = int(para[key])
         values_dict[key] = search_space[key][pos_]
 
     return values_dict
@@ -37,9 +37,9 @@ def _process_(
 ):
     def gfo_wrapper_model():
         # rename _model
-        def _model(array):
+        def _model(para):
             # wrapper for GFOs
-            para = pos2para(search_space, array)
+            para = gfo2hyper(search_space, para)
             return model(para, X, y)
 
         _model.__name__ = model.__name__
@@ -60,9 +60,8 @@ def _process_(
 
     return {
         "nth_process": nth_process,
-        "best_pos": optimizer.best_values,
+        "best_para": optimizer.best_para,
         "best_score": optimizer.best_score,
-        "values": optimizer.values,
-        "scores": optimizer.scores,
+        "results": optimizer.results,
         "memory_dict_new": optimizer.memory_dict_new,
     }
