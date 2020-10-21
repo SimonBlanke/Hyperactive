@@ -11,7 +11,7 @@ class Hyperactive:
         self,
         X,
         y,
-        memory="long",
+        memory="short",
         random_state=False,
         verbosity=3,
         warnings=False,
@@ -33,7 +33,13 @@ class Hyperactive:
         init_config=None,
     ):
         self._main_args_.search_args(
-            search_config, max_time, n_iter, optimizer, n_jobs, scheduler, init_config
+            search_config,
+            max_time,
+            n_iter,
+            optimizer,
+            n_jobs,
+            scheduler,
+            init_config,
         )
 
         core = HyperactiveCore(self._main_args_)
