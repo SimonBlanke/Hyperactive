@@ -3,7 +3,10 @@ import subprocess
 from subprocess import DEVNULL, STDOUT
 
 
-files = glob.glob("../examples/*/*.py")
+files0 = glob.glob("../examples/*/*.py")
+files1 = glob.glob("../examples/*.py")
+
+files = files0 + files1
 
 for file_path in files:
     file_name = str(file_path.rsplit("/", maxsplit=1)[1])
