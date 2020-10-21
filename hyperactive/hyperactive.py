@@ -67,12 +67,14 @@ def init_optimizer(optimizer, search_space):
     module = import_module("gradient_free_optimizers")
     opt_class = getattr(module, optimizer_dict[opt_string])
 
-    search_space_pos = []
-    for dict_value in search_space.values():
+    search_space_gfo = {}
+    for key in search_space.keys():
+        dict_value = search_space[key]
         space_dim = np.array(range(len(dict_value)))
-        search_space_pos.append(space_dim)
+        # search_space_pos.append(space_dim)
+        search_space_gfo[key] = space_dim
 
-    opt = opt_class(search_space_pos, **opt_para)
+    opt = opt_class(search_space_gfo, **opt_para)
 
     return opt
 
@@ -154,7 +156,7 @@ class Hyperactive:
                 "name": name,
                 "optimizer": init_optimizer(optimizer, search_space),
                 "initialize": initialize,
-                "memory": {"values": values, "scores": scores,},
+                "memory": True,
             }
 
         self.s_info.add_search(
@@ -176,7 +178,6 @@ class Hyperactive:
             self.process_info_dict[key]["distribution"] = distribution
 
         self.s_manage = SearchManager(self.s_info)
-
         self.s_manage.run(self.process_info_dict)
 
         for results in self.s_manage.results_list:
