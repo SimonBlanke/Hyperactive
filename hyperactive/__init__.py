@@ -7,5 +7,18 @@ __license__ = "MIT"
 
 
 from .hyperactive import Hyperactive
+from .optimizers import (
+    HillClimbingOptimizer,
+    StochasticHillClimbingOptimizer,
+    TabuOptimizer,
+    RandomSearchOptimizer,
+)
 
-__all__ = ["Hyperactive"]
+
+__all__ = [
+    "Hyperactive",
+    "HillClimbingOptimizer",
+    "StochasticHillClimbingOptimizer",
+    "TabuOptimizer",
+    "RandomSearchOptimizer",
+]

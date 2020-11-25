@@ -22,30 +22,25 @@ def _process_(
     nth_process,
     model,
     search_space,
-    n_iter,
-    name,
     optimizer,
+    n_iter,
     initialize,
     memory,
-    # memory_dict,
     max_time,
-    distribution,
-    X,
-    y,
     random_state,
     verbosity,
 ):
     def gfo_wrapper_model():
-        # rename _model
+        # wrapper for GFOs
         def _model(para):
-            # wrapper for GFOs
             para = gfo2hyper(search_space, para)
-            return model(para, X, y)
+            optimizer.suggested_params = para
+            return model(optimizer)
 
         _model.__name__ = model.__name__
         return _model
 
-    verbosity["print_results"] = False
+    # verbosity["print_results"] = False
 
     optimizer.search(
         objective_function=gfo_wrapper_model(),
