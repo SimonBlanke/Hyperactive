@@ -37,8 +37,14 @@ class _BaseOptimizer_:
             search_space_positions, **self.opt_params
         )
 
+    def print_info(self, *args):
+        self.optimizer.print_info(*args)
+
     def search(self, *args, **kwargs):
         self.optimizer.search(*args, **kwargs)
+
+        self.eval_time = np.array(self.optimizer.eval_times).sum()
+        self.iter_time = np.array(self.optimizer.iter_times).sum()
 
         self.best_para = self.optimizer.best_para
         self.best_score = self.optimizer.best_score
