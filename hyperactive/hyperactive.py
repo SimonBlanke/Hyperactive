@@ -64,9 +64,9 @@ class Hyperactive:
         self,
         random_state=None,
         verbosity={
-            "print_search_info": True,
             "progress_bar": True,
             "print_results": True,
+            "print_times": True,
         },
         ext_warnings=False,
     ):
