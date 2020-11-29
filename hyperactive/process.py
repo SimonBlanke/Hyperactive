@@ -40,17 +40,29 @@ def _process_(
         _model.__name__ = model.__name__
         return _model
 
-    # verbosity["print_results"] = False
-
     optimizer.search(
         objective_function=gfo_wrapper_model(),
         n_iter=n_iter,
         initialize=initialize,
         max_time=max_time,
         memory=memory,
-        verbosity=verbosity,
+        verbosity={
+            "progress_bar": True,
+            "print_results": False,
+            "print_times": False,
+        },
         random_state=random_state,
         nth_process=nth_process,
+    )
+
+    optimizer.print_info(
+        verbosity,
+        model,
+        optimizer.best_score,
+        gfo2hyper(search_space, optimizer.best_para),
+        optimizer.eval_time,
+        optimizer.iter_time,
+        n_iter,
     )
 
     return {
