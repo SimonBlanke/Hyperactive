@@ -189,20 +189,39 @@ A large part of the Hyperactive backend is developed and tested in separate repo
         <a><b>Distribution:</b></a>
           <ul>
               <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/distribution?id=multiprocessing">Multiprocessing</a></li>
+              <li>Joblib</li>
           </ul>
       </td>
       <td>
-        <a><b>Position Initialization:</b></a>
+        <a><b>Feature Engineering:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/extensions?id=warm-start">Warm-start</a></li>
+            <li>Feature Transformation</li>
+            <li>Feature Selection</li>
+            <li>Feature Construction</li>
           </ul>
-        <a><b>Resource Allocation:</b></a>
+        <a><b>Machine Learning:</b></a>
           <ul>
-            <li><a href="https://simonblanke.github.io/Hyperactive#/./examples/extensions?id=memory">Memory</a></li>
-               <ul>
-                 <li>Short term</li>
-                 <li>Long term</li>
-               </ul>
+            <li>Hyperparameter Tuning</li>
+            <li>Model Selection</li>
+            <li>Sklearn Pipelines</li>
+            <li>Ensemble Learning</li>
+          </ul>
+        <a><b>Deep Learning:</b></a>
+          <ul>
+            <li>Neural Architecture Search</li>
+            <li>Efficient Neural Architecture Search</li>
+            <li>Transfer Learning</li>
+          </ul>
+        <a><b>Meta-data:</b></a>
+          <ul>
+            <li>Meta-data Collection</li>
+            <li>Meta Optimization</li>
+            <li>Meta Learning</li>
+          </ul>
+        <a><b>Miscellaneous:</b></a>
+          <ul>
+            <li>Test Functions</li>
+            <li>Fit Gaussian Curves</li>
           </ul>
       </td>
     </tr>
@@ -225,30 +244,213 @@ pip install hyperactive
 
 ```python
 from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.datasets import load_breast_cancer
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import load_boston
 from hyperactive import Hyperactive
 
-data = load_breast_cancer()
+data = load_boston()
 X, y = data.data, data.target
 
-'''define the model in a function'''
-def model(para, X, y):
-    '''optimize one or multiple hyperparameters'''
-    gbc = GradientBoostingClassifier(n_estimators=para['n_estimators'])
-    scores = cross_val_score(gbc, X, y)
+""" define the model in a function """
+def model(optimizer):
+    """ pass the suggested parameter to the machine learning model """
+    gbr = GradientBoostingRegressor(
+        n_estimators=optimizer.suggested_params["n_estimators"]
+    )
+    scores = cross_val_score(gbr, X, y, cv=3)
 
+    """ return a single numerical value, which gets maximized """
     return scores.mean()
 
-'''create the search space and search_config'''
-search_config = {
-    model: {'n_estimators': range(10, 200, 10)}
-}
 
-'''start the optimization run'''
-opt = Hyperactive(X, y)
-opt.search(search_config, n_iter=20)
+""" 
+create the search space 
+determines the ranges of parameters you want the optimizer to search through
+"""
+search_space = {"n_estimators": list(range(10, 200, 5))}
+
+""" start the optimization run """
+hyper = Hyperactive()
+hyper.search(model, search_space, n_iter=50)
 ```
+
+
+## Hyperactive API information
+
+<details>
+<summary><b> Hyperactive(...)</b></summary>
+
+    - random_state
+    - verbosity
+
+</details>
+
+
+<details>
+<summary><b> .search(...)</b></summary>
+
+    - model
+    - search_space
+    - n_iter
+    - optimizer=RandomSearchOptimizer()
+    - max_time=None
+    - n_jobs=1
+    - initialize={"grid": 4, "random": 2, "vertices": 4}
+    - memory=True
+
+</details>
+
+### Optimizers
+
+<details>
+<summary><b> HillClimbingOptimizer</b></summary>
+
+    - epsilon=0.05
+    - distribution="normal"
+    - n_neighbours=3
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> StochasticHillClimbingOptimizer</b></summary>
+
+    - epsilon=0.05
+    - distribution="normal"
+    - n_neighbours=3
+    - rand_rest_p=0.03
+    - p_accept=0.1
+    - norm_factor="adaptive"
+
+</details>
+
+<details>
+<summary><b> TabuOptimizer</b></summary>
+
+    - epsilon=0.05
+    - distribution="normal"
+    - n_neighbours=3
+    - rand_rest_p=0.03
+    - tabu_factor=3
+
+</details>
+
+<details>
+<summary><b> SimulatedAnnealingOptimizer</b></summary>
+
+    - epsilon=0.05
+    - distribution="normal"
+    - n_neighbours=3
+    - rand_rest_p=0.03
+    - p_accept=0.1
+    - norm_factor="adaptive"
+    - annealing_rate=0.975
+    - start_temp=1
+
+</details>
+
+<details>
+<summary><b> RandomSearchOptimizer</b></summary>
+
+</details>
+
+<details>
+<summary><b> RandomRestartHillClimbingOptimizer</b></summary>
+
+    - epsilon=0.05
+    - distribution="normal"
+    - n_neighbours=3
+    - rand_rest_p=0.03
+    - n_iter_restart=10
+
+</details>
+
+<details>
+<summary><b> RandomAnnealingOptimizer</b></summary>
+
+    - epsilon=0.05
+    - distribution="normal"
+    - n_neighbours=3
+    - rand_rest_p=0.03
+    - annealing_rate=0.975
+    - start_temp=1
+
+</details>
+
+<details>
+<summary><b> ParallelTemperingOptimizer</b></summary>
+
+    - n_iter_swap=10
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> ParticleSwarmOptimizer</b></summary>
+
+    - inertia=0.5
+    - cognitive_weight=0.5
+    - social_weight=0.5
+    - temp_weight=0.2
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> EvolutionStrategyOptimizer</b></summary>
+
+    - mutation_rate=0.7
+    - crossover_rate=0.3
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> BayesianOptimizer</b></summary>
+
+    - gpr=gaussian_process["gp_nonlinear"]
+    - xi=0.03
+    - warm_start_smbo=None
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> TreeStructuredParzenEstimators</b></summary>
+
+    - gamma_tpe=0.5
+    - warm_start_smbo=None
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> DecisionTreeOptimizer</b></summary>
+
+    - tree_regressor="extra_tree"
+    - xi=0.01
+    - warm_start_smbo=None
+    - rand_rest_p=0.03
+
+</details>
+
+<details>
+<summary><b> EnsembleOptimizer</b></summary>
+
+    - estimators=[
+            GradientBoostingRegressor(n_estimators=5),
+            GaussianProcessRegressor(),
+        ]
+    - xi=0.01
+    - warm_start_smbo=None
+    - rand_rest_p=0.03
+
+</details>
+
+
+
+
+
 
 
 <br>
@@ -259,7 +461,6 @@ opt.search(search_config, n_iter=20)
 <summary><b>v2.0.0</b>:heavy_check_mark:</summary>
 
   - [x] Change API
-  - [x] Ray integration
 </details>
 
 <details>
@@ -295,21 +496,19 @@ opt.search(search_config, n_iter=20)
 <summary><b>v3.0.0</b></summary>
 
   - [ ] New API
-      - [ ] separate optimizer and n_iter for each job
       - [ ] expand usage of objective-function
-  - [x] Simpler and faster meta-data collection, saving and loading
+      - [ ] No passing of training data into Hyperactive
+      - [ ] Removing "long term memory"-support (better to do in separate package)
+      - [ ] More intuitive selection of optimization strategies and parameters
+      - [ ] Separate optimization algorithms into other package
 
 </details>
 
 <details>
 <summary><b>v3.1.0</b></summary>
 
-  - [ ] Spiral optimization
   - [ ] Downhill-Simplex-Method
-  - [ ] upgrade particle swarm optimization
-  - [ ] upgrade evolution strategy
   - [ ] add warm start for population based optimizers
-  - [ ] Meta-Optimization of local optimizers
 </details>
 
 <details>
