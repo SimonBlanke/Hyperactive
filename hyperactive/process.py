@@ -20,13 +20,14 @@ def gfo2hyper(search_space, para):
 
 def _process_(
     nth_process,
-    model,
+    objective_function,
     search_space,
     optimizer,
     n_iter,
     initialize,
     memory,
     max_time,
+    max_score,
     random_state,
     verbosity,
 ):
@@ -35,9 +36,9 @@ def _process_(
         def _model(para):
             para = gfo2hyper(search_space, para)
             optimizer.suggested_params = para
-            return model(optimizer)
+            return objective_function(optimizer)
 
-        _model.__name__ = model.__name__
+        _model.__name__ = objective_function.__name__
         return _model
 
     optimizer.search(
@@ -45,6 +46,7 @@ def _process_(
         n_iter=n_iter,
         initialize=initialize,
         max_time=max_time,
+        max_score=max_score,
         memory=memory,
         verbosity={
             "progress_bar": True,
@@ -57,7 +59,7 @@ def _process_(
 
     optimizer.print_info(
         verbosity,
-        model,
+        objective_function,
         optimizer.best_score,
         gfo2hyper(search_space, optimizer.best_para),
         optimizer.eval_time,

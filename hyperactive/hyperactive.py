@@ -75,11 +75,12 @@ class Hyperactive:
 
     def search(
         self,
-        model,
+        objective_function,
         search_space,
         n_iter,
         optimizer=RandomSearchOptimizer(),
         max_time=None,
+        max_score=None,
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
         memory=True,
@@ -98,11 +99,12 @@ class Hyperactive:
                 "random_state": self.random_state,
                 "verbosity": self.verbosity,
                 "nth_process": nth_process,
-                "model": model,
+                "objective_function": objective_function,
                 "search_space": search_space,
                 "optimizer": optimizer,
                 "n_iter": n_iter,
                 "max_time": max_time,
+                "max_score": max_score,
                 "initialize": initialize,
                 "memory": memory,
             }
