@@ -19,17 +19,24 @@ def single_process(search_processes_infos):
     return results
 
 
-def multiprocessing_wrapper(search_processes_infos):
+def multiprocessing_wrapper(search_processes_infos, **kwargs):
     n_jobs = len(search_processes_infos)
-    pool = Pool(n_jobs, initializer=tqdm.set_lock, initargs=(tqdm.get_lock(),))
+    pool = Pool(
+        n_jobs,
+        initializer=tqdm.set_lock,
+        initargs=(tqdm.get_lock(),),
+        **kwargs
+    )
     results = pool.map(proxy, search_processes_infos)
 
     return results
 
 
-def joblib_wrapper(search_processes_infos):
+def joblib_wrapper(search_processes_infos, **kwargs):
     n_jobs = len(search_processes_infos)
-    jobs = [delayed(_process_)(**kwargs) for kwargs in search_processes_infos]
-    results = Parallel(n_jobs=n_jobs)(jobs)
+    jobs = [
+        delayed(_process_)(**info_dict) for info_dict in search_processes_infos
+    ]
+    results = Parallel(n_jobs=n_jobs, **kwargs)(jobs)
 
     return results

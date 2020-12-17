@@ -62,51 +62,63 @@ def init_optimizer(optimizer, search_space):
 class Hyperactive:
     def __init__(
         self,
-        random_state=None,
         verbosity={
             "progress_bar": True,
             "print_results": True,
             "print_times": True,
         },
-        ext_warnings=False,
+        distribution="multiprocessing",
     ):
-        self.random_state = random_state
         self.verbosity = verbosity
+        self.distribution = distribution
 
-    def search(
+        self.search_processes_infos = {}
+
+    def _add_search_processes(self):
+        for nth_job in range(self.n_jobs):
+            nth_process = len(self.search_processes_infos)
+
+            self.search_processes_infos[nth_process] = {
+                "random_state": self.random_state,
+                "verbosity": self.verbosity,
+                "nth_process": nth_process,
+                "objective_function": self.objective_function,
+                "search_space": self.search_space,
+                "optimizer": self.optimizer,
+                "n_iter": set_n_jobs(self.n_iter),
+                "initialize": self.initialize,
+                "memory": self.memory,
+            }
+
+    def add_search(
         self,
         objective_function,
         search_space,
         n_iter,
         optimizer=RandomSearchOptimizer(),
-        max_time=None,
-        max_score=None,
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
+        random_state=None,
         memory=True,
     ):
-        n_jobs = set_n_jobs(n_jobs)
+        self.objective_function = objective_function
+        self.search_space = search_space
+        self.n_iter = n_iter
+        self.optimizer = optimizer
+        self.n_jobs = n_jobs
+        self.initialize = initialize
+        self.random_state = random_state
+        self.memory = memory
 
-        optimizer.init(search_space)
+        self.optimizer.init(search_space)
 
-        process_info_dict = {}
-        processes = []
-        for nth_job in range(n_jobs):
-            nth_process = len(process_info_dict)
-            processes.append(nth_process)
+        self._add_search_processes()
 
-            process_info_dict[nth_process] = {
-                "random_state": self.random_state,
-                "verbosity": self.verbosity,
-                "nth_process": nth_process,
-                "objective_function": objective_function,
-                "search_space": search_space,
-                "optimizer": optimizer,
-                "n_iter": n_iter,
-                "max_time": max_time,
-                "max_score": max_score,
-                "initialize": initialize,
-                "memory": memory,
-            }
+    def run(self, max_time=None, max_score=None):
+        for nth_process in self.search_processes_infos.keys():
+            self.search_processes_infos[nth_process]["max_time"] = max_time
+            self.search_processes_infos[nth_process]["max_score"] = max_score
 
-        results_list = run_search(process_info_dict)
+        results_list = run_search(
+            self.search_processes_infos, self.distribution
+        )
