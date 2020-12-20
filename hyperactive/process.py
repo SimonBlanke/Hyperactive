@@ -2,12 +2,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import time
-import random
-import numpy as np
-import pandas as pd
-from tqdm import tqdm
-
 
 def gfo2hyper(search_space, para):
     values_dict = {}
@@ -61,7 +55,7 @@ def _process_(
         verbosity,
         objective_function,
         optimizer.best_score,
-        gfo2hyper(search_space, optimizer.best_para),
+        optimizer.best_para,
         optimizer.eval_time,
         optimizer.iter_time,
         n_iter,
