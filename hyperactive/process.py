@@ -20,10 +20,12 @@ def _process_(
     n_iter,
     initialize,
     memory,
+    memory_warm_start,
     max_time,
     max_score,
     random_state,
     verbosity,
+    **kwargs,
 ):
     def gfo_wrapper_model():
         # wrapper for GFOs
@@ -42,6 +44,7 @@ def _process_(
         max_time=max_time,
         max_score=max_score,
         memory=memory,
+        memory_warm_start=memory_warm_start,
         verbosity={
             "progress_bar": True,
             "print_results": False,
@@ -66,5 +69,4 @@ def _process_(
         "best_para": optimizer.best_para,
         "best_score": optimizer.best_score,
         "results": optimizer.results,
-        "memory_dict_new": optimizer.memory_dict_new,
     }
