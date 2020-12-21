@@ -25,7 +25,7 @@ def _process_(
     max_score,
     random_state,
     verbosity,
-    **kwargs,
+    **kwargs
 ):
     def gfo_wrapper_model():
         # wrapper for GFOs
