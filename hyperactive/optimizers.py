@@ -27,6 +27,7 @@ class _BaseOptimizer_:
         self.opt_params = opt_params
 
     def init(self, search_space):
+        self.search_space = search_space
         self.optimizer_hyper_ss = self._OptimizerClass(search_space)
 
         search_space_positions = {}
@@ -38,10 +39,21 @@ class _BaseOptimizer_:
         self.optimizer = self._OptimizerClass(
             search_space_positions, **self.opt_params
         )
+        self.search_space_positions = search_space_positions
+
         self.conv = self.optimizer.conv
 
     def print_info(self, *args):
         self.optimizer.print_info(*args)
+
+    def _process_results(self):
+        for para_name in self.conv.para_names:
+            positions_list = self.search_space_positions[para_name]
+            values_list = self.search_space[para_name]
+
+            self.results[para_name].replace(
+                positions_list, values_list, inplace=True
+            )
 
     def search(
         self,
@@ -99,6 +111,8 @@ class _BaseOptimizer_:
         self.best_score = self.optimizer.best_score
         self.results = self.optimizer.results
         self.memory_dict_new = self.optimizer.memory_dict_new
+
+        self._process_results()
 
 
 class HillClimbingOptimizer(_BaseOptimizer_):
