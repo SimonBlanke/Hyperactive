@@ -10,10 +10,11 @@ def objective_function(optimizer):
 
 
 search_space = {
-    "x1": np.arange(0, 100000, 0.1),
+    "x1": np.arange(0, 1000, 1),
 }
 
-err = 0.01
+
+err = 0.001
 
 
 def test_random_state_0():
@@ -21,7 +22,7 @@ def test_random_state_0():
     hyper0.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=10,
         initialize={"random": 1},
         random_state=1,
     )
@@ -31,14 +32,14 @@ def test_random_state_0():
     hyper1.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=10,
         initialize={"random": 1},
         random_state=1,
     )
     hyper1.run()
 
-    best_score0 = hyper0.best_score[objective_function]
-    best_score1 = hyper1.best_score[objective_function]
+    best_score0 = hyper0.best_score(objective_function)
+    best_score1 = hyper1.best_score(objective_function)
 
     assert abs(best_score0 - best_score1) < err
 
@@ -48,7 +49,7 @@ def test_random_state_1():
     hyper0.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=10,
         initialize={"random": 1},
         random_state=10,
     )
@@ -58,14 +59,14 @@ def test_random_state_1():
     hyper1.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=10,
         initialize={"random": 1},
         random_state=10,
     )
     hyper1.run()
 
-    best_score0 = hyper0.best_score[objective_function]
-    best_score1 = hyper1.best_score[objective_function]
+    best_score0 = hyper0.best_score(objective_function)
+    best_score1 = hyper1.best_score(objective_function)
 
     assert abs(best_score0 - best_score1) < err
 
@@ -75,7 +76,7 @@ def test_random_state_2():
     hyper0.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=10,
         initialize={"random": 1},
         random_state=1,
     )
@@ -85,14 +86,14 @@ def test_random_state_2():
     hyper1.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=10,
         initialize={"random": 1},
         random_state=10,
     )
     hyper1.run()
 
-    best_score0 = hyper0.best_score[objective_function]
-    best_score1 = hyper1.best_score[objective_function]
+    best_score0 = hyper0.best_score(objective_function)
+    best_score1 = hyper1.best_score(objective_function)
 
     assert abs(best_score0 - best_score1) > err
 
@@ -100,17 +101,17 @@ def test_random_state_2():
 def test_no_random_state_0():
     hyper0 = Hyperactive()
     hyper0.add_search(
-        objective_function, search_space, n_iter=100, initialize={"random": 1},
+        objective_function, search_space, n_iter=10, initialize={"random": 1},
     )
     hyper0.run()
 
     hyper1 = Hyperactive()
     hyper1.add_search(
-        objective_function, search_space, n_iter=100, initialize={"random": 1},
+        objective_function, search_space, n_iter=10, initialize={"random": 1},
     )
     hyper1.run()
 
-    best_score0 = hyper0.best_score[objective_function]
-    best_score1 = hyper1.best_score[objective_function]
+    best_score0 = hyper0.best_score(objective_function)
+    best_score1 = hyper1.best_score(objective_function)
 
     assert abs(best_score0 - best_score1) > err

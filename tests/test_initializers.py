@@ -27,7 +27,7 @@ def test_initialize_warm_start_0():
     )
     hyper.run()
 
-    assert abs(hyper.best_score[objective_function]) < 0.001
+    assert abs(hyper.best_score(objective_function)) < 0.001
 
 
 def test_initialize_warm_start_1():
@@ -46,7 +46,7 @@ def test_initialize_warm_start_1():
     )
     hyper.run()
 
-    assert hyper.best_para[objective_function] == init
+    assert hyper.best_para(objective_function) == init
 
 
 def test_initialize_vertices():
@@ -58,7 +58,7 @@ def test_initialize_vertices():
     )
     hyper.run()
 
-    assert abs(hyper.best_score[objective_function]) - 10000 < 0.001
+    assert abs(hyper.best_score(objective_function)) - 10000 < 0.001
 
 
 def test_initialize_grid_0():
@@ -73,7 +73,7 @@ def test_initialize_grid_0():
     )
     hyper.run()
 
-    assert abs(hyper.best_score[objective_function]) < 0.001
+    assert abs(hyper.best_score(objective_function)) < 0.001
 
 
 def test_initialize_grid_1():
@@ -89,7 +89,7 @@ def test_initialize_grid_1():
     )
     hyper.run()
 
-    assert abs(hyper.best_score[objective_function]) - 1 < 0.001
+    assert abs(hyper.best_score(objective_function)) - 1 < 0.001
 
 
 def test_initialize_all_0():

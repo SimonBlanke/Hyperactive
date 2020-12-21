@@ -19,10 +19,14 @@ search_space = {
 
 
 def test_max_time_0():
+    search_space = {
+        "x1": np.arange(0, 10, 1),
+    }
+
     c_time1 = time.time()
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=1000000,
+        objective_function, search_space, n_iter=1000000, memory=False,
     )
     hyper.run(max_time=0.1)
     diff_time1 = time.time() - c_time1
@@ -31,10 +35,14 @@ def test_max_time_0():
 
 
 def test_max_time_1():
+    search_space = {
+        "x1": np.arange(0, 10, 1),
+    }
+
     c_time1 = time.time()
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=1000000,
+        objective_function, search_space, n_iter=1000000, memory=False,
     )
     hyper.run(max_time=1)
     diff_time1 = time.time() - c_time1
@@ -69,12 +77,12 @@ def test_max_score_0():
     )
     hyper.run()
 
-    print("\n Results head \n", hyper.results[objective_function].head())
-    print("\n Results tail \n", hyper.results[objective_function].tail())
+    print("\n Results head \n", hyper.results(objective_function).head())
+    print("\n Results tail \n", hyper.results(objective_function).tail())
 
-    print("\nN iter:", len(hyper.results[objective_function]))
+    print("\nN iter:", len(hyper.results(objective_function)))
 
-    assert -100 > hyper.best_score[objective_function] > max_score
+    assert -100 > hyper.best_score(objective_function) > max_score
 
 
 def test_max_score_1():
@@ -108,10 +116,10 @@ def test_max_score_1():
 
     diff_time = time.time() - c_time
 
-    print("\n Results head \n", hyper.results[objective_function].head())
-    print("\n Results tail \n", hyper.results[objective_function].tail())
+    print("\n Results head \n", hyper.results(objective_function).head())
+    print("\n Results tail \n", hyper.results(objective_function).tail())
 
-    print("\nN iter:", len(hyper.results[objective_function]))
+    print("\nN iter:", len(hyper.results(objective_function)))
 
     assert diff_time < 1
 
