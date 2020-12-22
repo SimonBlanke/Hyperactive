@@ -2,9 +2,11 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import multiprocessing
-from .optimizers import RandomSearchOptimizer
 
+import multiprocessing
+from tqdm import tqdm
+
+from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
 
 
@@ -25,7 +27,12 @@ class Hyperactive:
             "print_results": True,
             "print_times": True,
         },
-        distribution="multiprocessing",
+        distribution={
+            "multiprocessing": {
+                "initializer": tqdm.set_lock,
+                "initargs": (tqdm.get_lock(),),
+            }
+        },
     ):
         self.verbosity = verbosity
         self.distribution = distribution
