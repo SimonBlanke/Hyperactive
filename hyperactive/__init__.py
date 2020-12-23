@@ -10,8 +10,18 @@ from .hyperactive import Hyperactive
 from .optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
-    TabuOptimizer,
+    RepulsingHillClimbingOptimizer,
     RandomSearchOptimizer,
+    RandomRestartHillClimbingOptimizer,
+    RandomAnnealingOptimizer,
+    SimulatedAnnealingOptimizer,
+    ParallelTemperingOptimizer,
+    ParticleSwarmOptimizer,
+    EvolutionStrategyOptimizer,
+    BayesianOptimizer,
+    TreeStructuredParzenEstimators,
+    DecisionTreeOptimizer,
+    EnsembleOptimizer,
 )
 
 
@@ -19,6 +29,16 @@ __all__ = [
     "Hyperactive",
     "HillClimbingOptimizer",
     "StochasticHillClimbingOptimizer",
-    "TabuOptimizer",
+    "RepulsingHillClimbingOptimizer",
     "RandomSearchOptimizer",
+    "RandomRestartHillClimbingOptimizer",
+    "RandomAnnealingOptimizer",
+    "SimulatedAnnealingOptimizer",
+    "ParallelTemperingOptimizer",
+    "ParticleSwarmOptimizer",
+    "EvolutionStrategyOptimizer",
+    "BayesianOptimizer",
+    "TreeStructuredParzenEstimators",
+    "DecisionTreeOptimizer",
+    "EnsembleOptimizer",
 ]

@@ -127,7 +127,7 @@ class StochasticHillClimbingOptimizer(_BaseOptimizer_):
         self._OptimizerClass = _StochasticHillClimbingOptimizer
 
 
-class TabuOptimizer(_BaseOptimizer_):
+class RepulsingHillClimbingOptimizer(_BaseOptimizer_):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self._OptimizerClass = _RepulsingHillClimbingOptimizer
