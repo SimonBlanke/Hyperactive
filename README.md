@@ -280,25 +280,36 @@ hyper.search(model, search_space, n_iter=50)
 <details>
 <summary><b> Hyperactive(...)</b></summary>
 
-    - random_state
-    - verbosity
+    - verbosity = ["progress_bar", "print_results", "print_times"]
+    - distribution = {"multiprocessing": {"initializer": tqdm.set_lock, "initargs": (tqdm.get_lock(),),}}
 
 </details>
 
 
 <details>
-<summary><b> .search(...)</b></summary>
+<summary><b> .add_search(...)</b></summary>
 
     - model
     - search_space
     - n_iter
-    - optimizer=RandomSearchOptimizer()
-    - max_time=None
-    - n_jobs=1
-    - initialize={"grid": 4, "random": 2, "vertices": 4}
-    - memory=True
+    - optimizer = RandomSearchOptimizer()
+    - n_jobs = 1
+    - initialize = {"grid": 4, "random": 2, "vertices": 4}
+    - max_score = None
+    - random_state = None
+    - memory = True
+    - memory_warm_start = None
 
 </details>
+
+
+<details>
+<summary><b> .run(...)</b></summary>
+
+    - max_time = None
+
+</details>
+
 
 ### Optimizers
 
