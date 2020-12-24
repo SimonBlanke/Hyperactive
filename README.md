@@ -70,24 +70,23 @@
   </tbody>
 </table>
 
+<br>
+
+NEWS:
+
+Hyperactive is currently in a transition phase between version 2 and 3. All of the source code for the optimization algorithms will be stored in <a href="https://github.com/SimonBlanke/Gradient-Free-Optimizers">Gradient-Free-Optimizers</a>. Gradient-Free-Optimizers will serve as an easy to use stand alone package as well as the optimization backend for Hyperactive in the future. Until Hyperactive version 3 is released you can either switch to the 2.x.x branch for the old version in Github or use Gradient-Free-Optimizers to enjoy new algorithms and improved performance.
+
+
+
+<br>
+
 Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
 
   - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
   - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
 
-A large part of the Hyperactive backend is developed and tested in separate repositories. If you want to take a look at the sourcecode, you can find them in the following repositories:
-  - Optimizer modules: <a href="https://github.com/SimonBlanke/Gradient-Free-Optimizers">Gradient-Free-Optimizers</a>
-  - Meta-data storage: <a href="https://github.com/SimonBlanke/Optimization-Metadata">Optimization-Metadata</a>
-
 
 <br>
-
-<div align="center">
-  <h3>
-    For more information, visualization and details about the API check out the <br/>
-    <a href="https://simonblanke.github.io/Hyperactive/">website</a>
-  </h3>
-</div>
 
 ---
 
