@@ -271,7 +271,8 @@ search_space = {"n_estimators": list(range(10, 200, 5))}
 
 """ start the optimization run """
 hyper = Hyperactive()
-hyper.search(model, search_space, n_iter=50)
+hyper.add_search(model, search_space, n_iter=50)
+hyper.run()
 ```
 
 
