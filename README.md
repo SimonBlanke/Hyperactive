@@ -508,27 +508,16 @@ hyper.run()
 <summary><b>v3.0.0</b></summary>
 
   - [ ] New API
-      - [ ] expand usage of objective-function
-      - [ ] No passing of training data into Hyperactive
-      - [ ] Removing "long term memory"-support (better to do in separate package)
-      - [ ] More intuitive selection of optimization strategies and parameters
-      - [ ] Separate optimization algorithms into other package
+      - [x] expand usage of objective-function
+      - [x] No passing of training data into Hyperactive
+      - [x] Removing "long term memory"-support (better to do in separate package)
+      - [x] More intuitive selection of optimization strategies and parameters
+      - [x] Separate optimization algorithms into other package
+      - [x] expand api so that optimizer parameter can be changed at runtime
+      - [ ] add extensive testing procedure (similar to Gradient-Free-Optimizers)
 
 </details>
 
-<details>
-<summary><b>v3.1.0</b></summary>
-
-  - [ ] Downhill-Simplex-Method
-  - [ ] add warm start for population based optimizers
-</details>
-
-<details>
-<summary><b>v3.2.0</b></summary>
-
-  - [ ] improve distributed computing abilities
-
-</details>
 
 <br>
 
