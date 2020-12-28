@@ -4,10 +4,8 @@ import pandas as pd
 from hyperactive import Hyperactive
 
 
-def objective_function(optimizer):
-    score = (
-        -optimizer.suggested_params["x1"] * optimizer.suggested_params["x1"]
-    )
+def objective_function(opt):
+    score = -opt["x1"] * opt["x1"]
     return score
 
 
@@ -82,11 +80,8 @@ def test_attributes_results_5():
 
 
 def test_attributes_results_6():
-    def objective_function(optimizer):
-        score = (
-            -optimizer.suggested_params["x1"]
-            * optimizer.suggested_params["x1"]
-        )
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
         return score
 
     search_space = {

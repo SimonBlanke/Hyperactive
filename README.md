@@ -270,7 +270,8 @@ search_space = {"n_estimators": list(range(10, 200, 5))}
 
 """ start the optimization run """
 hyper = Hyperactive()
-hyper.search(model, search_space, n_iter=50)
+hyper.add_search(model, search_space, n_iter=50)
+hyper.run()
 ```
 
 
@@ -279,25 +280,36 @@ hyper.search(model, search_space, n_iter=50)
 <details>
 <summary><b> Hyperactive(...)</b></summary>
 
-    - random_state
-    - verbosity
+    - verbosity = ["progress_bar", "print_results", "print_times"]
+    - distribution = {"multiprocessing": {"initializer": tqdm.set_lock, "initargs": (tqdm.get_lock(),),}}
 
 </details>
 
 
 <details>
-<summary><b> .search(...)</b></summary>
+<summary><b> .add_search(...)</b></summary>
 
     - model
     - search_space
     - n_iter
-    - optimizer=RandomSearchOptimizer()
-    - max_time=None
-    - n_jobs=1
-    - initialize={"grid": 4, "random": 2, "vertices": 4}
-    - memory=True
+    - optimizer = RandomSearchOptimizer()
+    - n_jobs = 1
+    - initialize = {"grid": 4, "random": 2, "vertices": 4}
+    - max_score = None
+    - random_state = None
+    - memory = True
+    - memory_warm_start = None
 
 </details>
+
+
+<details>
+<summary><b> .run(...)</b></summary>
+
+    - max_time = None
+
+</details>
+
 
 ### Optimizers
 
@@ -495,27 +507,16 @@ hyper.search(model, search_space, n_iter=50)
 <summary><b>v3.0.0</b></summary>
 
   - [ ] New API
-      - [ ] expand usage of objective-function
-      - [ ] No passing of training data into Hyperactive
-      - [ ] Removing "long term memory"-support (better to do in separate package)
-      - [ ] More intuitive selection of optimization strategies and parameters
-      - [ ] Separate optimization algorithms into other package
+      - [x] expand usage of objective-function
+      - [x] No passing of training data into Hyperactive
+      - [x] Removing "long term memory"-support (better to do in separate package)
+      - [x] More intuitive selection of optimization strategies and parameters
+      - [x] Separate optimization algorithms into other package
+      - [x] expand api so that optimizer parameter can be changed at runtime
+      - [ ] add extensive testing procedure (similar to Gradient-Free-Optimizers)
 
 </details>
 
-<details>
-<summary><b>v3.1.0</b></summary>
-
-  - [ ] Downhill-Simplex-Method
-  - [ ] add warm start for population based optimizers
-</details>
-
-<details>
-<summary><b>v3.2.0</b></summary>
-
-  - [ ] improve distributed computing abilities
-
-</details>
 
 <br>
 

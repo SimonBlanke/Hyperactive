@@ -10,10 +10,8 @@ from sklearn.ensemble import GradientBoostingClassifier
 from hyperactive import Hyperactive
 
 
-def objective_function(optimizer):
-    score = (
-        -optimizer.suggested_params["x1"] * optimizer.suggested_params["x1"]
-    )
+def objective_function(opt):
+    score = -opt["x1"] * opt["x1"]
     return score
 
 
@@ -26,9 +24,9 @@ def test_memory_timeSave_0():
     data = load_breast_cancer()
     X, y = data.data, data.target
 
-    def objective_function(optimizer):
+    def objective_function(opt):
         dtc = DecisionTreeClassifier(
-            min_samples_split=optimizer.suggested_params["min_samples_split"]
+            min_samples_split=opt["min_samples_split"]
         )
         scores = cross_val_score(dtc, X, y, cv=5)
 
@@ -59,10 +57,8 @@ def test_memory_timeSave_1():
     data = load_breast_cancer()
     X, y = data.data, data.target
 
-    def objective_function(optimizer):
-        dtc = DecisionTreeClassifier(
-            max_depth=optimizer.suggested_params["max_depth"]
-        )
+    def objective_function(opt):
+        dtc = DecisionTreeClassifier(max_depth=opt["max_depth"])
         scores = cross_val_score(dtc, X, y, cv=5)
 
         return scores.mean()
@@ -89,10 +85,10 @@ def test_memory_warm_start():
     data = load_breast_cancer()
     X, y = data.data, data.target
 
-    def objective_function(optimizer):
+    def objective_function(opt):
         dtc = DecisionTreeClassifier(
-            max_depth=optimizer.suggested_params["max_depth"],
-            min_samples_split=optimizer.suggested_params["min_samples_split"],
+            max_depth=opt["max_depth"],
+            min_samples_split=opt["min_samples_split"],
         )
         scores = cross_val_score(dtc, X, y, cv=5)
 
@@ -131,10 +127,8 @@ def test_memory_warm_start_manual():
     data = load_breast_cancer()
     X, y = data.data, data.target
 
-    def objective_function(optimizer):
-        dtc = GradientBoostingClassifier(
-            n_estimators=optimizer.suggested_params["n_estimators"],
-        )
+    def objective_function(opt):
+        dtc = GradientBoostingClassifier(n_estimators=opt["n_estimators"],)
         scores = cross_val_score(dtc, X, y, cv=5)
 
         return scores.mean()

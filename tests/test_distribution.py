@@ -3,10 +3,8 @@ from tqdm import tqdm
 from hyperactive import Hyperactive
 
 
-def objective_function(optimizer):
-    score = (
-        -optimizer.suggested_params["x1"] * optimizer.suggested_params["x1"]
-    )
+def objective_function(opt):
+    score = -opt["x1"] * opt["x1"]
     return score
 
 
