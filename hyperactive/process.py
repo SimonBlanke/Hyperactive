@@ -31,7 +31,7 @@ def _process_(
         # wrapper for GFOs
         def _model(para):
             para = gfo2hyper(search_space, para)
-            optimizer.suggested_params = para
+            optimizer.para_dict = para
             return objective_function(optimizer)
 
         _model.__name__ = objective_function.__name__

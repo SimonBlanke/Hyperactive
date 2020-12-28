@@ -22,8 +22,32 @@ from gradient_free_optimizers import (
 )
 
 
-class _BaseOptimizer_:
+class DictClass:
+    def __init__(self):
+        self.para_dict = {}
+
+    def __getitem__(self, key):
+        return self.para_dict[key]
+
+    def __setitem__(self, key, value):
+        self.para_dict[key] = value
+
+    def __delitem__(self, key):
+        del self.para_dict[key]
+
+    def __contains__(self, key):
+        return key in self.para_dict
+
+    def __len__(self):
+        return len(self.para_dict)
+
+    def __repr__(self):
+        return repr(self.para_dict)
+
+
+class _BaseOptimizer_(DictClass):
     def __init__(self, **opt_params):
+        super().__init__()
         self.opt_params = opt_params
 
     def init(self, search_space):

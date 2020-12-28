@@ -6,24 +6,18 @@ from hyperactive import Hyperactive
 from ._parametrize import optimizers
 
 
-def objective_function(optimizer):
-    score = (
-        -optimizer.suggested_params["x1"] * optimizer.suggested_params["x1"]
-    )
+def objective_function(opt):
+    score = -opt["x1"] * opt["x1"]
     return score
 
 
-def objective_function_m5(optimizer):
-    score = -(optimizer.suggested_params["x1"] - 5) * (
-        optimizer.suggested_params["x1"] - 5
-    )
+def objective_function_m5(opt):
+    score = -(opt["x1"] - 5) * (opt["x1"] - 5)
     return score
 
 
-def objective_function_p5(optimizer):
-    score = -(optimizer.suggested_params["x1"] + 5) * (
-        optimizer.suggested_params["x1"] + 5
-    )
+def objective_function_p5(opt):
+    score = -(opt["x1"] + 5) * (opt["x1"] + 5)
     return score
 
 
@@ -59,15 +53,8 @@ def test_best_results_0(Optimizer, objective):
     )
     hyper.run()
 
-    class test_class:
-        def __init__(self):
-            pass
-
-    optimizer = test_class()
-    optimizer.suggested_params = hyper.best_para(objective_function)
-
     assert hyper.best_score(objective_function) == objective_function(
-        optimizer
+        hyper.best_para(objective_function)
     )
 
 
@@ -75,11 +62,8 @@ def test_best_results_0(Optimizer, objective):
 def test_best_results_1(Optimizer):
     search_space = {"x1": np.arange(-100, 101, 1)}
 
-    def objective_function(optimizer):
-        score = (
-            -optimizer.suggested_params["x1"]
-            * optimizer.suggested_params["x1"]
-        )
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
         return score
 
     initialize = {"vertices": 2}

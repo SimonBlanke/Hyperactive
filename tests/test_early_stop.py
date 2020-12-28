@@ -6,10 +6,8 @@ from sklearn.tree import DecisionTreeClassifier
 from hyperactive import Hyperactive, HillClimbingOptimizer
 
 
-def objective_function(optimizer):
-    score = (
-        -optimizer.suggested_params["x1"] * optimizer.suggested_params["x1"]
-    )
+def objective_function(opt):
+    score = -opt["x1"] * opt["x1"]
     return score
 
 
@@ -51,11 +49,8 @@ def test_max_time_1():
 
 
 def test_max_score_0():
-    def objective_function(optimizer):
-        score = (
-            -optimizer.suggested_params["x1"]
-            * optimizer.suggested_params["x1"]
-        )
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
         return score
 
     search_space = {
@@ -86,11 +81,8 @@ def test_max_score_0():
 
 
 def test_max_score_1():
-    def objective_function(optimizer):
-        score = (
-            -optimizer.suggested_params["x1"]
-            * optimizer.suggested_params["x1"]
-        )
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
         time.sleep(0.01)
         return score
 
