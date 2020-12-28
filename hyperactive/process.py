@@ -45,11 +45,7 @@ def _process_(
         max_score=max_score,
         memory=memory,
         memory_warm_start=memory_warm_start,
-        verbosity={
-            "progress_bar": True,
-            "print_results": False,
-            "print_times": False,
-        },
+        verbosity=["progress_bar"],
         random_state=random_state,
         nth_process=nth_process,
     )

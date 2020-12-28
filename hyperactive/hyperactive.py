@@ -22,11 +22,7 @@ def set_n_jobs(n_jobs):
 class Hyperactive:
     def __init__(
         self,
-        verbosity={
-            "progress_bar": True,
-            "print_results": True,
-            "print_times": True,
-        },
+        verbosity=["progress_bar", "print_results", "print_times"],
         distribution={
             "multiprocessing": {
                 "initializer": tqdm.set_lock,
