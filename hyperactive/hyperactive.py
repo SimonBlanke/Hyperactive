@@ -151,24 +151,24 @@ class Hyperactive:
 
         self.results_list = run_search(self.process_infos, self.distribution)
 
-    def _get_one_result(self, id, result_name):
-        if isinstance(id, str):
-            if id not in self.search_id2results:
-                self._sort_results_search_id(id)
+    def _get_one_result(self, id_, result_name):
+        if isinstance(id_, str):
+            if id_ not in self.search_id2results:
+                self._sort_results_search_id(id_)
 
-            return self.search_id2results[id][result_name]
+            return self.search_id2results[id_][result_name]
 
         else:
-            if id not in self.objFunc2results:
-                self._sort_results_objFunc(id)
+            if id_ not in self.objFunc2results:
+                self._sort_results_objFunc(id_)
 
-            return self.objFunc2results[id][result_name]
+            return self.objFunc2results[id_][result_name]
 
-    def best_para(self, id):
-        return self._get_one_result(id, "best_para")
+    def best_para(self, id_):
+        return self._get_one_result(id_, "best_para")
 
-    def best_score(self, id):
-        return self._get_one_result(id, "best_score")
+    def best_score(self, id_):
+        return self._get_one_result(id_, "best_score")
 
-    def results(self, id):
-        return self._get_one_result(id, "results")
+    def results(self, id_):
+        return self._get_one_result(id_, "results")
