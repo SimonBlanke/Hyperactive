@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <a href="https://simonblanke.github.io/Hyperactive/"><img src="./docs/_media/hyperactive_logo.png" height="200"></a>
+  <a href="https://simonblanke.github.io/Hyperactive/"><img src="./docs/images/logo.png" height="200"></a>
   <br>
 </p>
 
@@ -128,15 +128,15 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
     <tr align="center" valign="center">
       <td>
         <strong>Optimization Techniques</strong>
-        <img src="./docs/_media/blue.jpg"/>
+        <img src="./docs/images/blue.jpg"/>
       </td>
       <td>
         <strong>Tested and Supported Packages</strong>
-        <img src="./docs/_media/blue.jpg"/>
+        <img src="./docs/images/blue.jpg"/>
       </td>
       <td>
         <strong>Optimization Applications</strong>
-        <img src="./docs/_media/blue.jpg"/>
+        <img src="./docs/images/blue.jpg"/>
       </td>
     </tr>
     <tr/>
