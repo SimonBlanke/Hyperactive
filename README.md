@@ -251,10 +251,10 @@ data = load_boston()
 X, y = data.data, data.target
 
 """ define the model in a function """
-def model(optimizer):
+def model(opt):
     """ pass the suggested parameter to the machine learning model """
     gbr = GradientBoostingRegressor(
-        n_estimators=optimizer.suggested_params["n_estimators"]
+        n_estimators=opt["n_estimators"]
     )
     scores = cross_val_score(gbr, X, y, cv=3)
 
