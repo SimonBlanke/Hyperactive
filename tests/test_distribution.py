@@ -13,6 +13,30 @@ search_space = {
 }
 
 
+def test_n_jobs_0():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.run()
+
+
+def test_n_jobs_1():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
+    hyper.run()
+
+
+def test_n_jobs_2():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=8)
+    hyper.run()
+
+
+def test_n_jobs_3():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=-1)
+    hyper.run()
+
+
 def test_multiprocessing_0():
     hyper = Hyperactive(distribution="multiprocessing")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
@@ -56,3 +80,4 @@ def test_joblib_1():
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
 
     hyper.run()
+
