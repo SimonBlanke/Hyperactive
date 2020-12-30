@@ -1,6 +1,13 @@
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Activation, Dropout
+from keras.layers import (
+    Dense,
+    Conv2D,
+    MaxPooling2D,
+    Flatten,
+    Activation,
+    Dropout,
+)
 from keras.datasets import cifar10
 from keras.utils import to_categorical
 
@@ -29,30 +36,37 @@ def conv3(nn):
     return nn
 
 
-def cnn(para, X_train, y_train):
+def cnn(opt):
     nn = Sequential()
     nn.add(
-        Conv2D(para["filters.0"], (3, 3), padding="same", input_shape=X_train.shape[1:])
+        Conv2D(
+            opt["filters.0"],
+            (3, 3),
+            padding="same",
+            input_shape=X_train.shape[1:],
+        )
     )
     nn.add(Activation("relu"))
-    nn.add(Conv2D(para["filters.0"], (3, 3)))
+    nn.add(Conv2D(opt["filters.0"], (3, 3)))
     nn.add(Activation("relu"))
     nn.add(MaxPooling2D(pool_size=(2, 2)))
     nn.add(Dropout(0.25))
 
-    nn.add(Conv2D(para["filters.0"], (3, 3), padding="same"))
+    nn.add(Conv2D(opt["filters.0"], (3, 3), padding="same"))
     nn.add(Activation("relu"))
-    nn = para["conv_layer.0"](nn)
+    nn = opt["conv_layer.0"](nn)
     nn.add(Dropout(0.25))
 
     nn.add(Flatten())
-    nn.add(Dense(para["neurons.0"]))
+    nn.add(Dense(opt["neurons.0"]))
     nn.add(Activation("relu"))
     nn.add(Dropout(0.5))
     nn.add(Dense(10))
     nn.add(Activation("softmax"))
 
-    nn.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    nn.compile(
+        optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
+    )
     nn.fit(X_train, y_train, epochs=25, batch_size=128)
 
     _, score = nn.evaluate(x=X_test, y=y_test)
@@ -66,10 +80,7 @@ search_space = {
     "neurons.0": list(range(100, 1000, 100)),
 }
 
-# make numpy array "C-contiguous". This is important for saving meta-data
-X_train = np.asarray(X_train, order="C")
-y_train = np.asarray(y_train, order="C")
 
-hyper = Hyperactive(X_train, y_train)
+hyper = Hyperactive()
 hyper.add_search(cnn, search_space, n_iter=5)
 hyper.run()

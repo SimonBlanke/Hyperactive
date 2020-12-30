@@ -1,5 +1,6 @@
 import itertools
 
+
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import cross_val_score
 from mlxtend.classifier import StackingClassifier
@@ -39,12 +40,12 @@ lr = LogisticRegression()
 rc = RidgeClassifier()
 
 
-def stacking(para, X, y):
+def stacking(opt):
     stack_lvl_0 = StackingClassifier(
-        classifiers=para["lvl_0"], meta_classifier=para["top"]
+        classifiers=opt["lvl_0"], meta_classifier=opt["top"]
     )
     stack_lvl_1 = StackingClassifier(
-        classifiers=para["lvl_1"], meta_classifier=stack_lvl_0
+        classifiers=opt["lvl_1"], meta_classifier=stack_lvl_0
     )
     scores = cross_val_score(stack_lvl_1, X, y, cv=3)
 
@@ -69,8 +70,12 @@ stack_lvl_0_clfs = get_combinations(models_0)
 stack_lvl_1_clfs = get_combinations(models_1)
 
 
-search_space = {"lvl_1": stack_lvl_1_clfs, "lvl_0": stack_lvl_0_clfs, "top": top}
-
-hyper = Hyperactive(X, y)
+search_space = {
+    "lvl_1": stack_lvl_1_clfs,
+    "lvl_0": stack_lvl_0_clfs,
+    "top": top,
+}
+hyper = Hyperactive()
 hyper.add_search(stacking, search_space, n_iter=20)
 hyper.run()
+

@@ -8,8 +8,8 @@ data = load_iris()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
-    knr = KNeighborsClassifier(n_neighbors=para["n_neighbors"])
+def model(opt):
+    knr = KNeighborsClassifier(n_neighbors=opt["n_neighbors"])
     scores = cross_val_score(knr, X, y, cv=5)
     score = scores.mean()
 
@@ -24,7 +24,7 @@ search_space = {
 """
 - set memory to "long" to enable Hyperactive to collect and save data about the search
 """
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=100, memory="long")
 hyper.run()
 
@@ -33,6 +33,6 @@ hyper.run()
 - when starting a new search Hyperactive will load the previously saved search data
 - loaded search data will be used to save computation time
 """
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=100, memory="long")
 hyper.run()

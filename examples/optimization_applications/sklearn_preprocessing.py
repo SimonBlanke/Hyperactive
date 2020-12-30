@@ -10,25 +10,25 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def pca(X, para):
-    X = PCA(n_components=para["n_components"]).fit_transform(X)
+def pca(X, opt):
+    X = PCA(n_components=opt["n_components"]).fit_transform(X)
 
     return X
 
 
-def none(X, para):
+def none(X, opt):
     return X
 
 
-def model(para, X, y):
+def model(opt):
     model = GradientBoostingClassifier(
-        n_estimators=para["n_estimators"], max_depth=para["max_depth"],
+        n_estimators=opt["n_estimators"], max_depth=opt["max_depth"],
     )
 
-    X_pca = para["decomposition"](X, para)
+    X_pca = opt["decomposition"](X, opt)
     X = np.hstack((X, X_pca))
 
-    X = SelectKBest(f_classif, k=para["k"]).fit_transform(X, y)
+    X = SelectKBest(f_classif, k=opt["k"]).fit_transform(X, y)
     scores = cross_val_score(model, X, y, cv=3)
 
     return scores.mean()
@@ -43,6 +43,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=20)
 hyper.run()

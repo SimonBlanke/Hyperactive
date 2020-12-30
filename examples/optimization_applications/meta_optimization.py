@@ -8,15 +8,15 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def meta_opt(para, X, y):
+def meta_opt(opt):
     scores = []
 
     for i in range(100):
 
-        def sphere_function(para, X, y):
+        def sphere_function(opt):
             loss = []
-            for key in para.keys():
-                loss.append(para[key] * para[key])
+            for key in opt.keys():
+                loss.append(opt[key] * opt[key])
 
             return -np.array(loss).sum()
 
@@ -27,18 +27,18 @@ def meta_opt(para, X, y):
             "x2": dim_size,
         }
 
-        hyper = Hyperactive(X, y, random_state=i, verbosity=0)
+        hyper = Hyperactive(verbosity=0)
         hyper.add_search(
             sphere_function,
             search_space,
             n_iter=100,
             optimizer={
                 "EvolutionStrategy": {
-                    "individuals": para["individuals"],
-                    "mutation_rate": para["mutation_rate"],
-                    "crossover_rate": 1 - para["mutation_rate"],
+                    "individuals": opt["individuals"],
+                    "mutation_rate": opt["mutation_rate"],
                 }
             },
+            random_state=i,
         )
         hyper.run()
 
@@ -53,6 +53,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(meta_opt, search_space, n_iter=300, optimizer="RandomSearch")
 hyper.run()

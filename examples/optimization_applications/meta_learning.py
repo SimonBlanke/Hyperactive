@@ -11,8 +11,8 @@ from sklearn.model_selection import cross_val_score
 from hyperactive import Hyperactive
 
 
-def model(para, X, y):
-    knr = KNeighborsClassifier(n_neighbors=para["n_neighbors"])
+def model(opt):
+    knr = KNeighborsClassifier(n_neighbors=opt["n_neighbors"])
     scores = cross_val_score(knr, X, y, cv=5)
     score = scores.mean()
 
@@ -90,6 +90,6 @@ y_meta_pred_max_idx = y_meta_pred.argmax()
 n_neighbors_best = search_space["n_neighbors"][y_meta_pred_max_idx]
 print("n_neighbors_best", n_neighbors_best)
 
-hyper = Hyperactive(X_new, y_new)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=200)
 hyper.run()

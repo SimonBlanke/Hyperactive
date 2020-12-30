@@ -9,33 +9,41 @@ data = load_boston()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     feature_list = []
-    for key in para.keys():
+    for key in opt.keys():
         if "feature" not in key:
             continue
 
         nth_feature = int(key.rsplit(".", 1)[1])
 
-        if para[key] is False:
+        if opt[key] is False:
             continue
-        elif para[key] is True:
+        elif opt[key] is True:
             feature = X[:, nth_feature]
             feature_list.append(feature)
         else:
-            feature = para[key](X[:, nth_feature])
+            feature = opt[key](X[:, nth_feature])
             feature_list.append(feature)
 
     X_new = np.array(feature_list).T
 
-    knr = KNeighborsRegressor(n_neighbors=para["n_neighbors"])
+    knr = KNeighborsRegressor(n_neighbors=opt["n_neighbors"])
     scores = cross_val_score(knr, X_new, y, cv=5)
     score = scores.mean()
 
     return score
 
 
-features_search_space = [True, False, np.log, np.square, np.sqrt, np.sin, np.cos]
+features_search_space = [
+    True,
+    False,
+    np.log,
+    np.square,
+    np.sqrt,
+    np.sin,
+    np.cos,
+]
 
 search_space = {
     "n_neighbors": list(range(1, 100)),
@@ -55,6 +63,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=1500)
 hyper.run()

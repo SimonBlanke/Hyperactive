@@ -18,17 +18,19 @@ for layer in nn.layers[:5]:
     layer.trainable = False
 
 
-def cnn(para, X_train, y_train):
+def cnn(opt):
     nn = Sequential()
 
     nn.add(Flatten())
-    nn.add(Dense(para["Dense.0"]))
+    nn.add(Dense(opt["Dense.0"]))
     nn.add(Activation("relu"))
-    nn.add(Dropout(para["Dropout.0"]))
+    nn.add(Dropout(opt["Dropout.0"]))
     nn.add(Dense(10))
     nn.add(Activation("softmax"))
 
-    nn.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    nn.compile(
+        optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
+    )
     nn.fit(X_train, y_train, epochs=25, batch_size=128)
 
     _, score = nn.evaluate(x=X_test, y=y_test)
@@ -41,10 +43,7 @@ search_space = {
     "Dropout.0": list(np.arange(0.1, 0.9, 0.1)),
 }
 
-# make numpy array "C-contiguous". This is important for saving meta-data
-X_train = np.asarray(X_train, order="C")
-y_train = np.asarray(y_train, order="C")
 
-hyper = Hyperactive(X_train, y_train)
+hyper = Hyperactive()
 hyper.add_search(cnn, search_space, n_iter=5)
 hyper.run()

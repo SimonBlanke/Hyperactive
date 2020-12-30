@@ -18,15 +18,15 @@ def pipeline2(filter_, gbc):
     return gbc
 
 
-def model(para, X, y):
+def model(opt):
     gbc = GradientBoostingClassifier(
-        n_estimators=para["n_estimators"],
-        max_depth=para["max_depth"],
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
+        n_estimators=opt["n_estimators"],
+        max_depth=opt["max_depth"],
+        min_samples_split=opt["min_samples_split"],
+        min_samples_leaf=opt["min_samples_leaf"],
     )
-    filter_ = SelectKBest(f_classif, k=para["k"])
-    model_ = para["pipeline"](filter_, gbc)
+    filter_ = SelectKBest(f_classif, k=opt["k"])
+    model_ = opt["pipeline"](filter_, gbc)
 
     scores = cross_val_score(model_, X, y, cv=3)
 
@@ -43,6 +43,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=30)
 hyper.run()

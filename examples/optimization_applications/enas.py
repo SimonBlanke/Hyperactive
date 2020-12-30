@@ -1,6 +1,13 @@
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Activation, Dropout
+from keras.layers import (
+    Dense,
+    Conv2D,
+    MaxPooling2D,
+    Flatten,
+    Activation,
+    Dropout,
+)
 from keras.datasets import cifar10
 from keras.utils import to_categorical
 
@@ -43,7 +50,9 @@ def conv3(model):
 
 
 model_pretrained = Sequential()
-model_pretrained.add(Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:]))
+model_pretrained.add(
+    Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:])
+)
 model_pretrained.add(Activation("relu"))
 model_pretrained.add(Conv2D(32, (3, 3)))
 model_pretrained.add(Activation("relu"))
@@ -77,7 +86,7 @@ for layer in model_pretrained.layers:
 print(model_pretrained.summary())
 
 
-def cnn(para, X_train, y_train):
+def cnn(opt):
     """
     model = Sequential()
     model.add(
@@ -91,13 +100,13 @@ def cnn(para, X_train, y_train):
     model.add(Conv2D(32, (3, 3), padding="same"))
     model.add(Activation("relu"))
     """
-    model = para["model_pretrained"]
+    model = opt["model_pretrained"]
 
-    model = para["conv_layer.0"](model)
+    model = opt["conv_layer.0"](model)
     model.add(Dropout(0.25))
 
     model.add(Flatten())
-    model.add(Dense(para["neurons.0"]))
+    model.add(Dense(opt["neurons.0"]))
     model.add(Activation("relu"))
     model.add(Dropout(0.5))
     model.add(Dense(10))
@@ -119,10 +128,7 @@ search_space = {
     "neurons.0": list(range(100, 1000, 100)),
 }
 
-# make numpy array "C-contiguous". This is important for saving meta-data
-X_train = np.asarray(X_train, order="C")
-y_train = np.asarray(y_train, order="C")
 
-hyper = Hyperactive(X_train, y_train)
+hyper = Hyperactive()
 hyper.add_search(cnn, search_space, n_iter=5)
 hyper.run()
