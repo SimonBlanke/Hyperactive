@@ -122,3 +122,25 @@ def test_search_space_4():
     assert (
         hyper.best_para(objective_function)["class1"] in search_space["class1"]
     )
+
+
+def test_search_space_5():
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
+        return score
+
+    search_space = {
+        "x1": list(range(0, 100, 1)),
+        "list1": [[1, 1, 1], [1, 2, 1], [1, 1, 2]],
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function, search_space, n_iter=15,
+    )
+    hyper.run()
+
+    assert isinstance(hyper.results(objective_function), pd.DataFrame)
+    assert (
+        hyper.best_para(objective_function)["list1"] in search_space["list1"]
+    )
