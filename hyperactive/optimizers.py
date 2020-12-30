@@ -3,6 +3,7 @@
 # License: MIT License
 
 import numpy as np
+import pandas as pd
 
 from gradient_free_optimizers import (
     HillClimbingOptimizer as _HillClimbingOptimizer,
@@ -28,21 +29,6 @@ class DictClass:
 
     def __getitem__(self, key):
         return self.para_dict[key]
-
-    def __setitem__(self, key, value):
-        self.para_dict[key] = value
-
-    def __delitem__(self, key):
-        del self.para_dict[key]
-
-    def __contains__(self, key):
-        return key in self.para_dict
-
-    def __len__(self):
-        return len(self.para_dict)
-
-    def __repr__(self):
-        return repr(self.para_dict)
 
 
 class _BaseOptimizer_(DictClass):
@@ -71,13 +57,18 @@ class _BaseOptimizer_(DictClass):
         self.optimizer.print_info(*args)
 
     def _process_results(self):
-        for para_name in self.conv.para_names:
-            positions_list = self.search_space_positions[para_name]
-            values_list = self.search_space[para_name]
+        results_dict = {}
 
-            self.results[para_name].replace(
-                positions_list, values_list, inplace=True
-            )
+        for para_name in self.conv.para_names:
+            values_list = self.search_space[para_name]
+            pos_ = self.positions[para_name].values
+            values_ = [values_list[idx] for idx in pos_]
+            results_dict[para_name] = values_
+
+        self.results = pd.DataFrame.from_dict(results_dict)
+
+        diff_list = np.setdiff1d(self.positions.columns, self.results.columns)
+        self.results[diff_list] = self.positions[diff_list]
 
     def search(
         self,
@@ -133,7 +124,7 @@ class _BaseOptimizer_(DictClass):
 
         self.best_para = best_para
         self.best_score = self.optimizer.best_score
-        self.results = self.optimizer.results
+        self.positions = self.optimizer.results
         self.memory_dict_new = self.optimizer.memory_dict_new
 
         self._process_results()
