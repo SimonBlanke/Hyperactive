@@ -104,24 +104,9 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
 
 <br>
 
-## Main features
 
-  - Thoroughly tested code base
-  - Compatible with <b>any python machine-learning framework</b>
-  - Optimize:
-    - Anything from [simple models](https://simonblanke.github.io/Hyperactive/#/./examples/machine_learning?id=sklearn) <br/> to complex [machine-learning-pipelines](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=sklearn-pipeline)
-    - Multi-level [ensembles](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=stacking)
-    - [Deep neural network](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=neural-architecture-search) architecture
-    - Other [optimization techniques](https://simonblanke.github.io/Hyperactive/#/./examples/use_cases?id=meta-optimization) (meta-optimization)
-    - Or [any function](https://simonblanke.github.io/Hyperactive/#/./examples/test_functions?id=rosenbrock-function) you can specify with this API
-  - Utilize state of the art optimization techniques like:
-    - Simulated annealing
-    - Evolution strategy
-    - Bayesian optimization
-  - [High performance](https://simonblanke.github.io/Hyperactive/#/./performance?id=performance): Optimizer time is neglectable for most models
-  - Choose from a variety of different [optimization extensions](https://simonblanke.github.io/Hyperactive/#/./examples/extensions) to improve the optimization
 
-<br>
+Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
 
 <table>
   <tbody>
@@ -324,25 +309,13 @@ hyper.run()
 </details>
 
 <details>
-<summary><b> StochasticHillClimbingOptimizer</b></summary>
+<summary><b> RepulsingHillClimbingOptimizer</b></summary>
 
     - epsilon=0.05
     - distribution="normal"
     - n_neighbours=3
     - rand_rest_p=0.03
-    - p_accept=0.1
-    - norm_factor="adaptive"
-
-</details>
-
-<details>
-<summary><b> TabuOptimizer</b></summary>
-
-    - epsilon=0.05
-    - distribution="normal"
-    - n_neighbours=3
-    - rand_rest_p=0.03
-    - tabu_factor=3
+    - repulsion_factor=3
 
 </details>
 
