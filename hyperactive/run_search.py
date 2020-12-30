@@ -32,12 +32,6 @@ def _get_distribution(distribution):
         return dist_dict[dist_key], dist_paras
 
     elif isinstance(distribution, str):
-        print(
-            "dist_dict[distribution]",
-            dist_dict[distribution],
-            type(dist_dict[distribution]),
-        )
-
         return dist_dict[distribution], {}
 
 
