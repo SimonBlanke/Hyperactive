@@ -64,5 +64,6 @@ def _process_(
         "nth_process": nth_process,
         "best_para": optimizer.best_para,
         "best_score": optimizer.best_score,
+        "positions": optimizer.positions,
         "results": optimizer.results,
     }
