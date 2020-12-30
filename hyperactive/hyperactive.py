@@ -39,23 +39,36 @@ class Hyperactive:
         self.objFunc2results = {}
         self.search_id2results = {}
 
-    def _add_search_processes(self):
-        for nth_job in range(set_n_jobs(self.n_jobs)):
+    def _add_search_processes(
+        self,
+        random_state,
+        objective_function,
+        search_space,
+        optimizer,
+        n_iter,
+        initialize,
+        n_jobs,
+        max_score,
+        memory,
+        memory_warm_start,
+        search_id,
+    ):
+        for nth_job in range(set_n_jobs(n_jobs)):
             nth_process = len(self.process_infos)
 
             self.process_infos[nth_process] = {
-                "random_state": self.random_state,
+                "random_state": random_state,
                 "verbosity": self.verbosity,
                 "nth_process": nth_process,
-                "objective_function": self.objective_function,
-                "search_space": self.search_space,
-                "optimizer": self.optimizer,
-                "n_iter": self.n_iter,
-                "initialize": self.initialize,
-                "max_score": self.max_score,
-                "memory": self.memory,
-                "memory_warm_start": self.memory_warm_start,
-                "search_id": self.search_id,
+                "objective_function": objective_function,
+                "search_space": search_space,
+                "optimizer": optimizer,
+                "n_iter": n_iter,
+                "initialize": initialize,
+                "max_score": max_score,
+                "memory": memory,
+                "memory_warm_start": memory_warm_start,
+                "search_id": search_id,
             }
 
     def add_search(
@@ -64,7 +77,7 @@ class Hyperactive:
         search_space,
         n_iter,
         search_id=None,
-        optimizer=RandomSearchOptimizer(),
+        optimizer="default",
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
         max_score=None,
@@ -72,27 +85,32 @@ class Hyperactive:
         memory=True,
         memory_warm_start=None,
     ):
-        self.objective_function = objective_function
-        self.search_space = search_space
-        self.n_iter = n_iter
-        self.optimizer = optimizer
-        self.n_jobs = n_jobs
-        self.initialize = initialize
-        self.max_score = max_score
-        self.random_state = random_state
-        self.memory = memory
-        self.memory_warm_start = memory_warm_start
+
+        if isinstance(optimizer, str):
+            if optimizer == "default":
+                optimizer = RandomSearchOptimizer()
+        optimizer.init(search_space)
 
         if search_id is not None:
-            self.search_id = search_id
-            self.search_ids.append(self.search_id)
+            search_id = search_id
+            self.search_ids.append(search_id)
         else:
-            self.search_id = str(len(self.search_ids))
-            self.search_ids.append(self.search_id)
+            search_id = str(len(self.search_ids))
+            self.search_ids.append(search_id)
 
-        self.optimizer.init(search_space)
-
-        self._add_search_processes()
+        self._add_search_processes(
+            random_state,
+            objective_function,
+            search_space,
+            optimizer,
+            n_iter,
+            initialize,
+            n_jobs,
+            max_score,
+            memory,
+            memory_warm_start,
+            search_id,
+        )
 
     def _sort_results_objFunc(self, objective_function):
         import numpy as np
@@ -172,3 +190,6 @@ class Hyperactive:
 
     def results(self, id_):
         return self._get_one_result(id_, "results")
+
+    def positions(self, id_):
+        return self._get_one_result(id_, "positions")
