@@ -7,11 +7,11 @@ data = load_boston()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     gbr = GradientBoostingRegressor(
-        n_estimators=para["n_estimators"],
-        max_depth=para["max_depth"],
-        min_samples_split=para["min_samples_split"],
+        n_estimators=opt["n_estimators"],
+        max_depth=opt["max_depth"],
+        min_samples_split=opt["min_samples_split"],
     )
     scores = cross_val_score(gbr, X, y, cv=3)
 
@@ -25,6 +25,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=20)
 hyper.run()

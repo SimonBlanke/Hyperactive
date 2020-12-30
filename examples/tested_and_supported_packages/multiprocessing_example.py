@@ -11,54 +11,54 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def model_etc(para, X, y):
+def model_etc(opt):
     etc = ExtraTreesClassifier(
-        n_estimators=para["n_estimators"],
-        criterion=para["criterion"],
-        max_features=para["max_features"],
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
-        bootstrap=para["bootstrap"],
+        n_estimators=opt["n_estimators"],
+        criterion=opt["criterion"],
+        max_features=opt["max_features"],
+        min_samples_split=opt["min_samples_split"],
+        min_samples_leaf=opt["min_samples_leaf"],
+        bootstrap=opt["bootstrap"],
     )
     scores = cross_val_score(etc, X, y, cv=3)
 
     return scores.mean()
 
 
-def model_rfc(para, X, y):
+def model_rfc(opt):
     rfc = RandomForestClassifier(
-        n_estimators=para["n_estimators"],
-        criterion=para["criterion"],
-        max_features=para["max_features"],
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
-        bootstrap=para["bootstrap"],
+        n_estimators=opt["n_estimators"],
+        criterion=opt["criterion"],
+        max_features=opt["max_features"],
+        min_samples_split=opt["min_samples_split"],
+        min_samples_leaf=opt["min_samples_leaf"],
+        bootstrap=opt["bootstrap"],
     )
     scores = cross_val_score(rfc, X, y, cv=3)
 
     return scores.mean()
 
 
-def model_gbc(para, X, y):
+def model_gbc(opt):
     gbc = GradientBoostingClassifier(
-        n_estimators=para["n_estimators"],
-        learning_rate=para["learning_rate"],
-        max_depth=para["max_depth"],
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
-        subsample=para["subsample"],
-        max_features=para["max_features"],
+        n_estimators=opt["n_estimators"],
+        learning_rate=opt["learning_rate"],
+        max_depth=opt["max_depth"],
+        min_samples_split=opt["min_samples_split"],
+        min_samples_leaf=opt["min_samples_leaf"],
+        subsample=opt["subsample"],
+        max_features=opt["max_features"],
     )
     scores = cross_val_score(gbc, X, y, cv=3)
 
     return scores.mean()
 
 
-def model_xgb(para, X, y):
+def model_xgb(opt):
     xgb = XGBClassifier(
-        n_estimators=para["n_estimators"],
-        max_depth=para["max_depth"],
-        learning_rate=para["learning_rate"],
+        n_estimators=opt["n_estimators"],
+        max_depth=opt["max_depth"],
+        learning_rate=opt["learning_rate"],
     )
     scores = cross_val_score(xgb, X, y, cv=3)
 
@@ -101,9 +101,9 @@ search_space_xgb = {
     "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
 }
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model_etc, search_space_etc, n_iter=50)
 hyper.add_search(model_rfc, search_space_rfc, n_iter=50)
 hyper.add_search(model_gbc, search_space_gbc, n_iter=50)
 hyper.add_search(model_xgb, search_space_xgb, n_iter=50)
-hyper.run(max_time=10)
+hyper.run(max_time=5)

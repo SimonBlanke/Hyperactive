@@ -7,9 +7,9 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     cbc = CatBoostClassifier(
-        iterations=10, depth=para["depth"], learning_rate=para["learning_rate"]
+        iterations=10, depth=opt["depth"], learning_rate=opt["learning_rate"]
     )
     scores = cross_val_score(cbc, X, y, cv=3)
 
@@ -17,11 +17,11 @@ def model(para, X, y):
 
 
 search_space = {
-    "depth": list(range(2, 15)),
+    "depth": list(range(2, 12)),
     "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=10)
 hyper.run()

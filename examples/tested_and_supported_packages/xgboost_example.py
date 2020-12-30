@@ -7,11 +7,11 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     xgb = XGBClassifier(
-        n_estimators=para["n_estimators"],
-        max_depth=para["max_depth"],
-        learning_rate=para["learning_rate"],
+        n_estimators=opt["n_estimators"],
+        max_depth=opt["max_depth"],
+        learning_rate=opt["learning_rate"],
     )
     scores = cross_val_score(xgb, X, y, cv=3)
 
@@ -25,6 +25,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=30)
 hyper.run()

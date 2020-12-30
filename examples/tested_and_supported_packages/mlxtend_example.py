@@ -11,16 +11,16 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     dtc = DecisionTreeClassifier(
-        min_samples_split=para["min_samples_split"],
-        min_samples_leaf=para["min_samples_leaf"],
+        min_samples_split=opt["min_samples_split"],
+        min_samples_leaf=opt["min_samples_leaf"],
     )
-    mlp = MLPClassifier(hidden_layer_sizes=para["hidden_layer_sizes"])
-    svc = SVC(C=para["C"], degree=para["degree"], gamma="auto", probability=True)
+    mlp = MLPClassifier(hidden_layer_sizes=opt["hidden_layer_sizes"])
+    svc = SVC(C=opt["C"], degree=opt["degree"], gamma="auto", probability=True)
 
     eclf = EnsembleVoteClassifier(
-        clfs=[dtc, mlp, svc], weights=para["weights"], voting="soft"
+        clfs=[dtc, mlp, svc], weights=opt["weights"], voting="soft",
     )
 
     scores = cross_val_score(eclf, X, y, cv=3)
@@ -31,14 +31,14 @@ def model(para, X, y):
 search_space = {
     "min_samples_split": list(range(2, 15)),
     "min_samples_leaf": list(range(1, 15)),
-    "hidden_layer_sizes": [(x,) for x in range(5, 30)],
+    "hidden_layer_sizes": list(range(5, 50, 5)),
     "weights": [[1, 1, 1], [2, 1, 1], [1, 2, 1], [1, 1, 2]],
     "C": list(range(1, 1000)),
     "degree": list(range(0, 8)),
 }
 
 
-hyper = Hyperactive(X, y)
-hyper.add_search(model, search_space, n_iter=30)
+hyper = Hyperactive()
+hyper.add_search(model, search_space, n_iter=25)
 hyper.run()
 

@@ -7,11 +7,11 @@ data = load_diabetes()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     lgbm = LGBMRegressor(
-        num_leaves=para["num_leaves"],
-        bagging_freq=para["bagging_freq"],
-        learning_rate=para["learning_rate"],
+        num_leaves=opt["num_leaves"],
+        bagging_freq=opt["bagging_freq"],
+        learning_rate=opt["learning_rate"],
     )
     scores = cross_val_score(lgbm, X, y, cv=3)
 
@@ -25,6 +25,6 @@ search_space = {
 }
 
 
-hyper = Hyperactive(X, y)
-hyper.add_search(model, search_space, n_iter=30)
+hyper = Hyperactive()
+hyper.add_search(model, search_space, n_iter=20)
 hyper.run()

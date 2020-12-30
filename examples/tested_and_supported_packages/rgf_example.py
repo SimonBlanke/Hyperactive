@@ -8,11 +8,11 @@ data = load_breast_cancer()
 X, y = data.data, data.target
 
 
-def model(para, X, y):
+def model(opt):
     rgf = RGFClassifier(
-        max_leaf=para["max_leaf"],
-        reg_depth=para["reg_depth"],
-        min_samples_leaf=para["min_samples_leaf"],
+        max_leaf=opt["max_leaf"],
+        reg_depth=opt["reg_depth"],
+        min_samples_leaf=opt["min_samples_leaf"],
         algorithm="RGF_Sib",
         test_interval=100,
         verbose=False,
@@ -28,6 +28,6 @@ search_space = {
     "min_samples_leaf": list(range(1, 21)),
 }
 
-hyper = Hyperactive(X, y)
+hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=10)
 hyper.run()
