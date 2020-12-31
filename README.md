@@ -418,20 +418,6 @@ hyper.run()
 
 </details>
 
-<details>
-<summary><b> EnsembleOptimizer</b></summary>
-
-    - estimators=[
-            GradientBoostingRegressor(n_estimators=5),
-            GaussianProcessRegressor(),
-        ]
-    - xi=0.01
-    - warm_start_smbo=None
-    - rand_rest_p=0.03
-
-</details>
-
-
 
 
 
@@ -479,14 +465,14 @@ hyper.run()
 <details open>
 <summary><b>v3.0.0</b></summary>
 
-  - [ ] New API
+  - [x] New API
       - [x] expand usage of objective-function
       - [x] No passing of training data into Hyperactive
       - [x] Removing "long term memory"-support (better to do in separate package)
       - [x] More intuitive selection of optimization strategies and parameters
       - [x] Separate optimization algorithms into other package
       - [x] expand api so that optimizer parameter can be changed at runtime
-      - [ ] add extensive testing procedure (similar to Gradient-Free-Optimizers)
+      - [x] add extensive testing procedure (similar to Gradient-Free-Optimizers)
 
 </details>
 
