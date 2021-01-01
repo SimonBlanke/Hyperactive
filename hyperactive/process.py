@@ -37,6 +37,11 @@ def _process_(
         _model.__name__ = objective_function.__name__
         return _model
 
+    if "progress_bar" in verbosity:
+        verbosity_gfo = ["progress_bar"]
+    else:
+        verbosity_gfo = []
+
     optimizer.search(
         objective_function=gfo_wrapper_model(),
         n_iter=n_iter,
@@ -45,7 +50,7 @@ def _process_(
         max_score=max_score,
         memory=memory,
         memory_warm_start=memory_warm_start,
-        verbosity=["progress_bar"],
+        verbosity=verbosity_gfo,
         random_state=random_state,
         nth_process=nth_process,
     )

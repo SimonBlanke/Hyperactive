@@ -30,6 +30,9 @@ class Hyperactive:
             }
         },
     ):
+        if verbosity is False:
+            verbosity = []
+
         self.verbosity = verbosity
         self.distribution = distribution
         self.search_ids = []
