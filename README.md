@@ -72,14 +72,6 @@
 
 <br>
 
-NEWS:
-
-Hyperactive is currently in a transition phase between version 2 and 3. All of the source code for the optimization algorithms will be stored in <a href="https://github.com/SimonBlanke/Gradient-Free-Optimizers">Gradient-Free-Optimizers</a>. Gradient-Free-Optimizers will serve as an easy to use stand alone package as well as the optimization backend for Hyperactive in the future. Until Hyperactive version 3 is released you can either switch to the 2.x.x branch for the old version in Github or use Gradient-Free-Optimizers to enjoy new algorithms and improved performance.
-
-
-
-<br>
-
 Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
 
   - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
@@ -104,9 +96,13 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
 
 <br>
 
-
-
+<div align="center"></a>
+<h3>
 Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
+</h3>
+</div>
+
+<br>
 
 <table>
   <tbody>
@@ -184,7 +180,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
         <a><b>Machine Learning:</b></a>
           <ul>
-            <li>Hyperparameter Tuning/li>
+            <li>Hyperparameter Tuning</li>
             <li>Model Selection</li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/sklearn_pipeline_example.py">Sklearn Pipelines</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/ensemble_learning_example.py">Ensemble Learning</a></li>
@@ -210,6 +206,9 @@ Hyperactive features a collection of optimization algorithms that can be used fo
     </tr>
   </tbody>
 </table>
+
+The examples above are not necessarly done with realistic datasets or training procedures. 
+The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
 <br>
 
