@@ -30,6 +30,12 @@ class DictClass:
     def __getitem__(self, key):
         return self.para_dict[key]
 
+    def keys(self):
+        return self.para_dict.keys()
+
+    def values(self):
+        return self.para_dict.values()
+
 
 class _BaseOptimizer_(DictClass):
     def __init__(self, **opt_params):
