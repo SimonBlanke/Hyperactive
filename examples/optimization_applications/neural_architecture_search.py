@@ -18,6 +18,13 @@ from hyperactive import Hyperactive
 y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
 
+# to make the example quick
+X_train = X_train[0:1000]
+y_train = y_train[0:1000]
+
+X_test = X_test[0:1000]
+y_test = y_test[0:1000]
+
 
 def conv1(nn):
     nn.add(Conv2D(32, (3, 3)))
