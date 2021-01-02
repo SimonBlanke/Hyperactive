@@ -26,7 +26,7 @@ search_space = {
 
 search_data_list = []
 
-for i in range(30):
+for i in range(25):
     n_samples = random.randint(100, 1000)
     n_features = random.randint(3, 20)
     n_informative = n_features - random.randint(0, n_features - 2)
@@ -40,11 +40,11 @@ for i in range(30):
         random_state=i,
     )
 
-    hyper = Hyperactive(X, y)
+    hyper = Hyperactive(verbosity=False)
     hyper.add_search(model, search_space, n_iter=10)
     hyper.run()
 
-    search_data = hyper.position_results["model.0"]
+    search_data = hyper.results(model)
 
     search_data["size_X"] = X.size
     search_data["itemsize_X"] = X.itemsize
@@ -59,11 +59,8 @@ for i in range(30):
 
 meta_data = pd.concat(search_data_list)
 
-X_meta = meta_data.drop(["score", "eval_time"], axis=1)
+X_meta = meta_data.drop(["score", "eval_time", "iter_time"], axis=1)
 y_meta = meta_data["score"]
-
-print("X_meta", X_meta)
-print("y_meta", y_meta)
 
 
 gbr = GradientBoostingRegressor()
@@ -84,11 +81,9 @@ X_meta_test["ndim_y"] = y_new.ndim
 
 
 y_meta_pred = gbr.predict(X_meta_test)
-print("y_meta_pred", y_meta_pred)
 
 y_meta_pred_max_idx = y_meta_pred.argmax()
 n_neighbors_best = search_space["n_neighbors"][y_meta_pred_max_idx]
-print("n_neighbors_best", n_neighbors_best)
 
 hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=200)

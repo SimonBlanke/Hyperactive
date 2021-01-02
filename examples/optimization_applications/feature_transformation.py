@@ -27,6 +27,7 @@ def model(opt):
             feature_list.append(feature)
 
     X_new = np.array(feature_list).T
+    print("X_new", X_new)
 
     knr = KNeighborsRegressor(n_neighbors=opt["n_neighbors"])
     scores = cross_val_score(knr, X_new, y, cv=5)

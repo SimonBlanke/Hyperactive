@@ -31,22 +31,7 @@ y_train = y_train[0:1000]
 X_test = X_test[0:1000]
 y_test = y_test[0:1000]
 
-
-def conv1(model):
-    model.add(Conv2D(32, (3, 3)))
-    model.add(Activation("relu"))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    return model
-
-
-def conv2(model):
-    model.add(Conv2D(32, (3, 3)))
-    model.add(Activation("relu"))
-    return model
-
-
-def conv3(model):
-    return model
+print("X_train.shape[1:]", X_train.shape)
 
 
 model_pretrained = Sequential()
@@ -73,34 +58,21 @@ model_pretrained.add(Activation("softmax"))
 model_pretrained.compile(
     optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
 )
-model_pretrained.fit(X_train, y_train, epochs=50, batch_size=128)
+model_pretrained.fit(X_train, y_train, epochs=5, batch_size=256)
 
-n_layers = len(model_pretrained.layers)
-
-for i in range(n_layers - 8):
-    model_pretrained.pop()
-
-for layer in model_pretrained.layers:
-    layer.trainable = False
 
 print(model_pretrained.summary())
 
 
 def cnn(opt):
-    """
-    model = Sequential()
-    model.add(
-        Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:])
-    )
-    model.add(Activation("relu"))
-    model.add(Conv2D(32, (3, 3)))
-    model.add(Activation("relu"))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-    model.add(Conv2D(32, (3, 3), padding="same"))
-    model.add(Activation("relu"))
-    """
-    model = opt["model_pretrained"]
+    model = model_pretrained
+    n_layers = len(model.layers)
+
+    for i in range(n_layers - 9):
+        model.pop()
+
+    for layer in model.layers:
+        layer.trainable = False
 
     model = opt["conv_layer.0"](model)
     model.add(Dropout(0.25))
@@ -115,15 +87,31 @@ def cnn(opt):
     model.compile(
         optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
     )
-    model.fit(X_train, y_train, epochs=25, batch_size=128)
+    model.fit(X_train, y_train, epochs=5, batch_size=256)
 
     _, score = model.evaluate(x=X_test, y=y_test)
 
     return score
 
 
+def conv1(model):
+    model.add(Conv2D(64, (3, 3)))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    return model
+
+
+def conv2(model):
+    model.add(Conv2D(64, (3, 3)))
+    model.add(Activation("relu"))
+    return model
+
+
+def conv3(model):
+    return model
+
+
 search_space = {
-    "model_pretrained": [model_pretrained],
     "conv_layer.0": [conv1, conv2, conv3],
     "neurons.0": list(range(100, 1000, 100)),
 }

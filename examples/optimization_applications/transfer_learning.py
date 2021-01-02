@@ -31,7 +31,7 @@ def cnn(opt):
     nn.compile(
         optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
     )
-    nn.fit(X_train, y_train, epochs=25, batch_size=128)
+    nn.fit(X_train, y_train, epochs=5, batch_size=256)
 
     _, score = nn.evaluate(x=X_test, y=y_test)
 
