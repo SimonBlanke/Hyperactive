@@ -263,33 +263,162 @@ hyper.run()
 <details>
 <summary><b> Hyperactive(...)</b></summary>
 
-    - verbosity = ["progress_bar", "print_results", "print_times"]
-    - distribution = {"multiprocessing": {"initializer": tqdm.set_lock, "initargs": (tqdm.get_lock(),),}}
+- verbosity = ["progress_bar", "print_results", "print_times"]
+  - (list, False)
+  - The verbosity list determines what part of the optimization information will be printed in the command line.
 
+- distribution = {"multiprocessing": {"initializer": tqdm.set_lock, "initargs": (tqdm.get_lock(),),}}
+  - (str, dict, callable)
+  - Access the parallel processing in three ways:
+    - Via a str "multiprocessing" or "joblib" to choose one of the two.
+    - Via a dictionary with one key "multiprocessing" or "joblib" and a value that is the input argument of Pool and Parallel. The default argument is a good example of this.
+    - Via your own parallel processing function that will be used instead of those for multiprocessing and joblib. The wrapper-function must work similar to the following two functions:
+    
+    Multiprocessing:
+    ```python
+    def multiprocessing_wrapper(process_func, search_processes_paras, **kwargs):
+      n_jobs = len(search_processes_paras)
+
+      pool = Pool(n_jobs, **kwargs)
+      results = pool.map(process_func, search_processes_paras)
+
+      return results
+    ```
+    
+    Joblib:
+    ```python
+    def joblib_wrapper(process_func, search_processes_paras, **kwargs):
+        n_jobs = len(search_processes_paras)
+
+        jobs = [
+            delayed(process_func)(**info_dict)
+            for info_dict in search_processes_paras
+        ]
+        results = Parallel(n_jobs=n_jobs, **kwargs)(jobs)
+
+        return results
+      ```
+      
 </details>
 
 
 <details>
 <summary><b> .add_search(...)</b></summary>
 
-    - model
-    - search_space
-    - n_iter
-    - optimizer = RandomSearchOptimizer()
-    - n_jobs = 1
-    - initialize = {"grid": 4, "random": 2, "vertices": 4}
-    - max_score = None
-    - random_state = None
-    - memory = True
-    - memory_warm_start = None
 
+- objective_function
+  - (callable)
+  - The objective function defines the optimization problem. The optimization algorithm will try to maximize the numerical value that is returned by the objective function by trying out different parameters from the search space.
+
+- search_space
+  - (dict)
+  - Defines the space were the optimization algorithm can search for the best parameters for the given objective function.
+
+- n_iter
+  - (int)
+  - The number of iterations that will be performed during the optimiation run. The entire iteration consists of the optimization-step, which decides the next parameter that will be evaluated and the evaluation-step, which will run the objective function with the chosen parameter and return the score.
+
+- optimizer = "default"
+  - (object)
+  - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The following classes can be imported and used:
+    - HillClimbingOptimizer
+    - StochasticHillClimbingOptimizer
+    - RepulsingHillClimbingOptimizer
+    - RandomSearchOptimizer
+    - RandomRestartHillClimbingOptimizer
+    - RandomAnnealingOptimizer
+    - SimulatedAnnealingOptimizer
+    - ParallelTemperingOptimizer
+    - ParticleSwarmOptimizer
+    - EvolutionStrategyOptimizer
+    - BayesianOptimizer
+    - TreeStructuredParzenEstimators
+    - DecisionTreeOptimizer
+    - EnsembleOptimizer
+
+- n_jobs = 1
+  - (int)
+  - Number of jobs to run in parallel. Those jobs are optimization runs that work independend from another (no information sharing). If n_jobs == -1 the maximum available number of cpu cores is used.
+
+- initialize = {"grid": 4, "random": 2, "vertices": 4}
+  - (dict)
+  - The initialization dictionary automatically determines a number of parameters that will be evaluated in the first n iterations (n is the sum of the values in initialize). The initialize keywords are the following:
+    - grid
+      - Initializes positions in a grid like pattern. Positions that cannot be put into a grid are randomly positioned.
+    - vertices
+      - Initializes positions at the vertices of the search space. Positions that cannot be put into a vertices are randomly positioned.
+
+    - random
+      - Number of random initialized positions
+
+    - warm_start
+      - List of parameter dictionaries that marks additional start points for the optimization run.
+
+- max_score = None
+  - (float, None)
+  - Maximum score until the optimization stops. The score will be checked after each completed iteration.
+
+- random_state = None
+  - (int, None)
+  - Random state for random processes in the random, numpy and scipy module.
+
+- memory = True
+  - (bool)
+  - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time).
+
+- memory_warm_start = None
+  - (pandas dataframe, None)
+  - Pandas dataframe that contains score and paramter information that will be automatically loaded into the memory-dictionary.
+
+      example:
+
+      <table class="table">
+        <thead class="table-head">
+          <tr class="row">
+            <td class="cell">score</td>
+            <td class="cell">x1</td>
+            <td class="cell">x2</td>
+            <td class="cell">x...</td>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <tr class="row">
+            <td class="cell">0.756</td>
+            <td class="cell">0.1</td>
+            <td class="cell">0.2</td>
+            <td class="cell">...</td>
+          </tr>
+          <tr class="row">
+            <td class="cell">0.823</td>
+            <td class="cell">0.3</td>
+            <td class="cell">0.1</td>
+            <td class="cell">...</td>
+          </tr>
+          <tr class="row">
+            <td class="cell">...</td>
+            <td class="cell">...</td>
+            <td class="cell">...</td>
+            <td class="cell">...</td>
+          </tr>
+          <tr class="row">
+            <td class="cell">...</td>
+            <td class="cell">...</td>
+            <td class="cell">...</td>
+            <td class="cell">...</td>
+          </tr>
+        </tbody>
+      </table>
+  
 </details>
+
 
 
 <details>
 <summary><b> .run(...)</b></summary>
 
-    - max_time = None
+- max_time = None
+  - (float, None)
+  - Maximum number of seconds until the optimization stops. The time will be checked after each completed iteration.
 
 </details>
 
