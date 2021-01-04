@@ -322,6 +322,7 @@ hyper.run()
 - optimizer = "default"
   - (object)
   - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The following classes can be imported and used:
+  
     - HillClimbingOptimizer
     - StochasticHillClimbingOptimizer
     - RepulsingHillClimbingOptimizer
@@ -336,6 +337,19 @@ hyper.run()
     - TreeStructuredParzenEstimators
     - DecisionTreeOptimizer
     - EnsembleOptimizer
+    
+  - Example:
+    ```python
+    ...
+    
+    opt_hco = HillClimbingOptimizer(epsilon=0.08)
+    hyper = Hyperactive()
+    hyper.add_search(..., optimizer=opt_hco)
+    hyper.run()
+    
+    ...
+    ```
+
 
 - n_jobs = 1
   - (int)
