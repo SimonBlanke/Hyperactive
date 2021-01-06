@@ -10,8 +10,7 @@ with open("README.md", "r") as fh:
 requires = [
     "numpy",
     "tqdm>=4.48.0",
-    "optimization-metadata",
-    "gradient-free-optimizers",
+    "gradient-free-optimizers>=0.2.6",
 ]
 
 
@@ -35,7 +34,12 @@ setup(
     description="A hyperparameter optimization toolbox for convenient and fast prototyping",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    keywords=["machine learning", "deep learning", "optimization", "data-science"],
+    keywords=[
+        "machine learning",
+        "deep learning",
+        "optimization",
+        "data-science",
+    ],
     url="https://github.com/SimonBlanke/Hyperactive",
     packages=find_packages(),
     classifiers=[
