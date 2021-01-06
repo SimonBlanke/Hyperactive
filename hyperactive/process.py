@@ -18,7 +18,6 @@ def _process_(
     search_space,
     optimizer,
     n_iter,
-    initialize,
     memory,
     memory_warm_start,
     max_time,
@@ -45,7 +44,6 @@ def _process_(
     optimizer.search(
         objective_function=gfo_wrapper_model(),
         n_iter=n_iter,
-        initialize=initialize,
         max_time=max_time,
         max_score=max_score,
         memory=memory,

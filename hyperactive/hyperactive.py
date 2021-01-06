@@ -49,7 +49,6 @@ class Hyperactive:
         search_space,
         optimizer,
         n_iter,
-        initialize,
         n_jobs,
         max_score,
         memory,
@@ -67,7 +66,6 @@ class Hyperactive:
                 "search_space": search_space,
                 "optimizer": optimizer,
                 "n_iter": n_iter,
-                "initialize": initialize,
                 "max_score": max_score,
                 "memory": memory,
                 "memory_warm_start": memory_warm_start,
@@ -92,7 +90,7 @@ class Hyperactive:
         if isinstance(optimizer, str):
             if optimizer == "default":
                 optimizer = RandomSearchOptimizer()
-        optimizer.init(search_space)
+        optimizer.init(search_space, initialize)
 
         if search_id is not None:
             search_id = search_id
@@ -107,7 +105,6 @@ class Hyperactive:
             search_space,
             optimizer,
             n_iter,
-            initialize,
             n_jobs,
             max_score,
             memory,

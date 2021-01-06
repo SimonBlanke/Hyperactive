@@ -42,9 +42,13 @@ class _BaseOptimizer_(DictClass):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(self, search_space):
+    def init(
+        self, search_space, initialize={"grid": 8, "random": 4, "vertices": 8}
+    ):
         self.search_space = search_space
-        self.optimizer_hyper_ss = self._OptimizerClass(search_space)
+        self.optimizer_hyper_ss = self._OptimizerClass(
+            search_space, initialize
+        )
 
         search_space_positions = {}
         for key in search_space.keys():
@@ -52,8 +56,10 @@ class _BaseOptimizer_(DictClass):
                 range(len(search_space[key]))
             )
 
+        initialize = self._warm_start_conv(initialize)
+
         self.optimizer = self._OptimizerClass(
-            search_space_positions, **self.opt_params
+            search_space_positions, initialize, **self.opt_params
         )
         self.search_space_positions = search_space_positions
 
@@ -61,6 +67,21 @@ class _BaseOptimizer_(DictClass):
 
     def print_info(self, *args):
         self.optimizer.print_info(*args)
+
+    def _warm_start_conv(self, initialize):
+        if "warm_start" in list(initialize.keys()):
+            warm_start = initialize["warm_start"]
+            warm_start_gfo = []
+            for warm_start_ in warm_start:
+                value = self.optimizer_hyper_ss.conv.para2value(warm_start_)
+                position = self.optimizer_hyper_ss.conv.value2position(value)
+                pos_para = self.optimizer_hyper_ss.conv.value2para(position)
+
+                warm_start_gfo.append(pos_para)
+
+            initialize["warm_start"] = warm_start_gfo
+
+        return initialize
 
     def _process_results(self):
         results_dict = {}
@@ -80,7 +101,6 @@ class _BaseOptimizer_(DictClass):
         self,
         objective_function,
         n_iter,
-        initialize={"grid": 8, "random": 4, "vertices": 8},
         warm_start=None,
         max_time=None,
         max_score=None,
@@ -94,22 +114,10 @@ class _BaseOptimizer_(DictClass):
         random_state=None,
         nth_process=None,
     ):
-        if "warm_start" in list(initialize.keys()):
-            warm_start = initialize["warm_start"]
-            warm_start_gfo = []
-            for warm_start_ in warm_start:
-                value = self.optimizer_hyper_ss.conv.para2value(warm_start_)
-                position = self.optimizer_hyper_ss.conv.value2position(value)
-                pos_para = self.optimizer_hyper_ss.conv.value2para(position)
-
-                warm_start_gfo.append(pos_para)
-
-            initialize["warm_start"] = warm_start_gfo
 
         self.optimizer.search(
             objective_function,
             n_iter,
-            initialize,
             max_time,
             max_score,
             memory,
