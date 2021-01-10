@@ -24,9 +24,12 @@ from .optimizers import (
     EnsembleOptimizer,
 )
 
+from .long_term_memory import LongTermMemory
+
 
 __all__ = [
     "Hyperactive",
+    "LongTermMemory",
     "HillClimbingOptimizer",
     "StochasticHillClimbingOptimizer",
     "RepulsingHillClimbingOptimizer",

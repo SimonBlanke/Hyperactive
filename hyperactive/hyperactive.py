@@ -53,6 +53,7 @@ class Hyperactive:
         max_score,
         memory,
         memory_warm_start,
+        long_term_memory,
         search_id,
     ):
         for nth_job in range(set_n_jobs(n_jobs)):
@@ -69,6 +70,7 @@ class Hyperactive:
                 "max_score": max_score,
                 "memory": memory,
                 "memory_warm_start": memory_warm_start,
+                "long_term_memory": long_term_memory,
                 "search_id": search_id,
             }
 
@@ -85,7 +87,9 @@ class Hyperactive:
         random_state=None,
         memory=True,
         memory_warm_start=None,
+        long_term_memory=None,
     ):
+        self.long_term_memory = long_term_memory
 
         if isinstance(optimizer, str):
             if optimizer == "default":
@@ -99,6 +103,9 @@ class Hyperactive:
             search_id = str(len(self.search_ids))
             self.search_ids.append(search_id)
 
+        if self.long_term_memory is not None:
+            memory_warm_start = self.long_term_memory.load()
+
         self._add_search_processes(
             random_state,
             objective_function,
@@ -109,6 +116,7 @@ class Hyperactive:
             max_score,
             memory,
             memory_warm_start,
+            long_term_memory,
             search_id,
         )
 
@@ -168,6 +176,15 @@ class Hyperactive:
             self.process_infos[nth_process]["max_time"] = max_time
 
         self.results_list = run_search(self.process_infos, self.distribution)
+
+        for nth_process in self.process_infos.keys():
+            long_term_memory = self.process_infos[nth_process][
+                "long_term_memory"
+            ]
+            memory_results = self.results_list[nth_process]["memory_results"]
+
+            if long_term_memory is not None:
+                long_term_memory.save(memory_results)
 
     def _get_one_result(self, id_, result_name):
         if isinstance(id_, str):
