@@ -17,9 +17,14 @@ class LongTermMemory:
         self.model_name = model_name
 
         if path is None:
-            self.model_path = meta_data_path() + str(self.model_name) + ".pkl"
+            model_dir = meta_data_path()
         else:
-            self.model_path = path + str(self.model_name) + ".pkl"
+            model_dir = path
+
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+
+        self.model_path = model_dir + str(self.model_name) + ".pkl"
 
         self.n_old_samples = 0
         self.n_new_samples = 0
