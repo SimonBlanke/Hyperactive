@@ -106,6 +106,11 @@ search_space_para = (
     ],
 )
 
+path_para = (
+    "path",
+    [("./"), (None),],
+)
+
 
 def test_ltm_0():
     model_name = "test_ltm_0"
@@ -132,15 +137,16 @@ def test_ltm_0():
     assert results1.equals(results2)
 
 
+@pytest.mark.parametrize(*path_para)
 @pytest.mark.parametrize(*search_space_para)
-def test_ltm_1(search_space):
+def test_ltm_1(search_space, path):
     model_name = "test_ltm_1"
 
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
 
-    memory = LongTermMemory(model_name, path="./")
+    memory = LongTermMemory(model_name, path=path)
 
     hyper0 = Hyperactive()
     hyper0.add_search(
