@@ -7,12 +7,6 @@ from setuptools import find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requires = [
-    "numpy",
-    "tqdm>=4.48.0",
-    "gradient-free-optimizers>=0.2.6",
-]
-
 
 def find_version(*filepath):
     here = os.path.abspath(os.path.dirname(__file__))
@@ -57,5 +51,5 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=requires,
+    install_requires=open("requirements.txt").readlines(),
 )
