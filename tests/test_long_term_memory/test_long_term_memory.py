@@ -14,7 +14,7 @@ def remove_file(model_name):
 
 
 def test_ltm_0():
-    model_name = "test_model"
+    model_name = "test_ltm_0"
 
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
@@ -39,7 +39,7 @@ def test_ltm_0():
 
 
 def test_ltm_1():
-    model_name = "test_model"
+    model_name = "test_ltm_1"
 
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
@@ -67,7 +67,7 @@ def test_ltm_1():
 
 
 def test_ltm_int():
-    model_name = "test_model"
+    model_name = "test_ltm_int"
     array = np.arange(3 * 10).reshape(10, 3)
     results1 = pd.DataFrame(array, columns=["x1", "x2", "x3"])
 
@@ -82,7 +82,7 @@ def test_ltm_int():
 
 
 def test_ltm_float():
-    model_name = "test_model"
+    model_name = "test_ltm_float"
     array = np.arange(3 * 10).reshape(10, 3)
     array = array / 1000
     results1 = pd.DataFrame(array, columns=["x1", "x2", "x3"])
@@ -98,7 +98,7 @@ def test_ltm_float():
 
 
 def test_ltm_str():
-    model_name = "test_model"
+    model_name = "test_ltm_str"
     array = ["str1", "str2", "str3"]
     results1 = pd.DataFrame(
         [array, array, array, array, array], columns=["x1", "x2", "x3"]
@@ -127,7 +127,7 @@ def func3():
 
 
 def test_ltm_func():
-    model_name = "test_model"
+    model_name = "test_ltm_func"
 
     array = [func1, func2, func3]
     results1 = pd.DataFrame(
@@ -164,7 +164,7 @@ class class3:
 
 
 def test_ltm_class():
-    model_name = "test_model"
+    model_name = "test_ltm_class"
 
     array = [class1, class2, class3]
     results1 = pd.DataFrame(
@@ -204,7 +204,7 @@ class class3_:
 
 
 def test_ltm_obj():
-    model_name = "test_model"
+    model_name = "test_ltm_obj"
 
     array = [class1_(), class2_(), class3_()]
     results1 = pd.DataFrame(
@@ -229,7 +229,7 @@ def test_ltm_obj():
 
 
 def test_ltm_list():
-    model_name = "test_model"
+    model_name = "test_ltm_list"
 
     dict_ = {"x1": [[1, 1, 1], [1, 2, 1], [1, 1, 2]]}
     results1 = pd.DataFrame(dict_)
