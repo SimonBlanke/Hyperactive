@@ -13,9 +13,13 @@ def meta_data_path():
 
 
 class LongTermMemory:
-    def __init__(self, model_name, verbosity=None):
+    def __init__(self, model_name, path=None, verbosity=None):
         self.model_name = model_name
-        self.model_path = meta_data_path() + str(self.model_name) + ".pkl"
+
+        if path is None:
+            self.model_path = meta_data_path() + str(self.model_name) + ".pkl"
+        else:
+            self.model_path = path + str(self.model_name) + ".pkl"
 
         self.n_old_samples = 0
         self.n_new_samples = 0
@@ -44,14 +48,18 @@ class LongTermMemory:
             return self.results_old
 
     def save(self, dataframe):
-        self.n_new_samples = len(dataframe)
-
         if self._pkl_valid():
+            with open(self.model_path, "rb") as handle:
+                self.results_old = dill.load(handle)
+
+            self.n_old_samples = len(self.results_old)
+
             dataframe = (
                 pd.concat([self.results_old, dataframe])
                 .drop_duplicates(keep="last")
                 .reset_index(drop=True)
             )
+        self.n_new_samples = len(dataframe)
 
         print("Saving long term memory ...", end="\r")
 
