@@ -7,10 +7,15 @@ import dill
 import pandas as pd
 
 
+def meta_data_path():
+    current_path = os.path.realpath(__file__)
+    return current_path.rsplit("/", 1)[0] + "/data/"
+
+
 class LongTermMemory:
     def __init__(self, model_name, verbosity=None):
         self.model_name = model_name
-        self.model_path = str(self.model_name) + ".pkl"
+        self.model_path = meta_data_path() + str(self.model_name) + ".pkl"
 
         self.n_old_samples = 0
         self.n_new_samples = 0
@@ -31,7 +36,7 @@ class LongTermMemory:
                 self.n_old_samples = len(self.results_old)
 
             print(
-                "Reading long term memory was successful: ",
+                "Reading long term memory was successful:",
                 self.n_old_samples,
                 "samples found",
             )
@@ -54,7 +59,7 @@ class LongTermMemory:
             dill.dump(dataframe, handle, protocol=dill.HIGHEST_PROTOCOL)
 
         print(
-            "Saving long term memory was successful: ",
+            "Saving long term memory was successful:",
             self.n_new_samples - self.n_old_samples,
             "new samples found",
         )
