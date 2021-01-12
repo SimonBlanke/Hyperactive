@@ -604,7 +604,7 @@ hyper.run()
   - [x] add "max_sample_size" and "skip_retrain" parameter for sbom to decrease optimization time
 </details>
 
-<details open>
+<details>
 <summary><b>v3.0.0</b></summary>
 
   - [x] New API
@@ -617,6 +617,17 @@ hyper.run()
       - [x] add extensive testing procedure (similar to Gradient-Free-Optimizers)
 
 </details>
+
+<details open>
+<summary><b>v3.1.0</b></summary>
+
+  - [ ] New implementation of "long term memory" for search-data storage and usage
+  - [ ] New creation of dashboard for visualization of search-data
+
+
+</details>
+
+
 
 
 <br>
