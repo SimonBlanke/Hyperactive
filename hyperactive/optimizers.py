@@ -97,6 +97,22 @@ class _BaseOptimizer_(DictClass):
         diff_list = np.setdiff1d(self.positions.columns, self.results.columns)
         self.results[diff_list] = self.positions[diff_list]
 
+    def _values2positions_dataframe(self, results):
+        para_names = list(self.search_space.keys())
+        search_space_values = list(self.search_space.values())
+
+        df_positions_dict = {}
+        for para_name in para_names:
+            list1_values = list(results[para_name].values)
+            list1_positions = [self.search_space[para_name].index(value) for value in list1_values]
+            df_positions_dict[para_name] = list1_positions
+
+        results_new = pd.DataFrame(df_positions_dict)
+        results_new["score"] = results["score"]
+
+        return results_new
+
+
     def search(
         self,
         objective_function,
@@ -114,6 +130,8 @@ class _BaseOptimizer_(DictClass):
         random_state=None,
         nth_process=None,
     ):
+        # if memory_warm_start is not None:
+        #     memory_warm_start = self._values2positions_dataframe(memory_warm_start)
 
         self.optimizer.search(
             objective_function,
@@ -139,7 +157,6 @@ class _BaseOptimizer_(DictClass):
         self.best_para = best_para
         self.best_score = self.optimizer.best_score
         self.positions = self.optimizer.results
-        self.memory_dict_new = self.optimizer.memory_dict_new
 
         self._process_results()
 
