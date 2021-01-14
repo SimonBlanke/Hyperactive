@@ -181,10 +181,13 @@ class Hyperactive:
             long_term_memory = self.process_infos[nth_process][
                 "long_term_memory"
             ]
+            objective_function = self.process_infos[nth_process][
+                "objective_function"
+            ]
             memory_results = self.results_list[nth_process]["memory_results"]
 
             if long_term_memory is not None:
-                long_term_memory.save(memory_results)
+                long_term_memory.save(memory_results, objective_function)
 
     def _get_one_result(self, id_, result_name):
         if isinstance(id_, str):
