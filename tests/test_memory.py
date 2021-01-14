@@ -16,7 +16,7 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": np.arange(0, 10, 1),
+    "x1": list(np.arange(0, 10, 1)),
 }
 
 
@@ -64,7 +64,7 @@ def test_memory_timeSave_1():
         return scores.mean()
 
     search_space = {
-        "max_depth": np.arange(1, 101),
+        "max_depth": list(np.arange(1, 101)),
     }
 
     results = pd.DataFrame(np.arange(1, 101), columns=["max_depth"])
@@ -95,8 +95,8 @@ def test_memory_warm_start():
         return scores.mean()
 
     search_space = {
-        "max_depth": np.arange(1, 10),
-        "min_samples_split": np.arange(2, 20),
+        "max_depth": list(np.arange(1, 10)),
+        "min_samples_split": list(np.arange(2, 20)),
     }
 
     c_time1 = time.time()
@@ -134,7 +134,7 @@ def test_memory_warm_start_manual():
         return scores.mean()
 
     search_space = {
-        "n_estimators": np.arange(500, 502),
+        "n_estimators": list(np.arange(500, 502)),
     }
 
     c_time_1 = time.time()
