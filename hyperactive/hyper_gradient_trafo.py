@@ -35,7 +35,6 @@ class Converter:
         return np.array(value)
 
     def para2value(self, para):
-
         value = []
         for para_name in self.para_names:
             value.append(para[para_name])
@@ -50,9 +49,7 @@ class HyperGradientTrafo(Converter):
 
         search_space_positions = {}
         for key in search_space.keys():
-            search_space_positions[key] = np.array(
-                range(len(search_space[key]))
-            )
+            search_space_positions[key] = np.array(range(len(search_space[key])))
         self.search_space_positions = search_space_positions
 
     def trafo_initialize(self, initialize):
@@ -60,9 +57,9 @@ class HyperGradientTrafo(Converter):
             warm_start = initialize["warm_start"]
             warm_start_gfo = []
             for warm_start_ in warm_start:
-                value = self.trafo.para2value(warm_start_)
-                position = self.trafo.value2position(value)
-                pos_para = self.trafo.value2para(position)
+                value = self.para2value(warm_start_)
+                position = self.value2position(value)
+                pos_para = self.value2para(position)
 
                 warm_start_gfo.append(pos_para)
 
@@ -77,10 +74,20 @@ class HyperGradientTrafo(Converter):
         df_positions_dict = {}
         for para_name in self.para_names:
             list1_values = list(results[para_name].values)
-            list1_positions = [self.search_space[para_name].index(value) for value in list1_values]
-            df_positions_dict[para_name] = list1_positions
+
+            search_dim = self.search_space[para_name]
+            list1_positions = [
+                search_dim.index(value) if value in search_dim else None
+                for value in list1_values
+            ]
+
+            # remove None
+            list1_positions_ = [x for x in list1_positions if x is not None]
+            df_positions_dict[para_name] = list1_positions_
 
         results_new = pd.DataFrame(df_positions_dict)
         results_new["score"] = results["score"]
+
+        results_new.dropna(how="any", inplace=True)
 
         return results_new
