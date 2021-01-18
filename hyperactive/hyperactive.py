@@ -170,7 +170,8 @@ class Hyperactive:
             }
 
     def run(
-        self, max_time=None,
+        self,
+        max_time=None,
     ):
         for nth_process in self.process_infos.keys():
             self.process_infos[nth_process]["max_time"] = max_time
@@ -178,13 +179,9 @@ class Hyperactive:
         self.results_list = run_search(self.process_infos, self.distribution)
 
         for nth_process in self.process_infos.keys():
-            long_term_memory = self.process_infos[nth_process][
-                "long_term_memory"
-            ]
-            objective_function = self.process_infos[nth_process][
-                "objective_function"
-            ]
-            memory_results = self.results_list[nth_process]["memory_results"]
+            long_term_memory = self.process_infos[nth_process]["long_term_memory"]
+            objective_function = self.process_infos[nth_process]["objective_function"]
+            memory_results = self.results_list[nth_process]["results"]
 
             if long_term_memory is not None:
                 long_term_memory.save(memory_results, objective_function)

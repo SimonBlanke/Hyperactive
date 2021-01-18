@@ -22,6 +22,8 @@ from gradient_free_optimizers import (
     EnsembleOptimizer as _EnsembleOptimizer,
 )
 
+from .hyper_gradient_trafo import HyperGradientTrafo
+
 
 class DictClass:
     def __init__(self):
@@ -42,46 +44,22 @@ class _BaseOptimizer_(DictClass):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(
-        self, search_space, initialize={"grid": 8, "random": 4, "vertices": 8}
-    ):
+    def init(self, search_space, initialize={"grid": 8, "random": 4, "vertices": 8}):
         self.search_space = search_space
-        self.optimizer_hyper_ss = self._OptimizerClass(
-            search_space, initialize
-        )
 
-        search_space_positions = {}
-        for key in search_space.keys():
-            search_space_positions[key] = np.array(
-                range(len(search_space[key]))
-            )
+        self.trafo = HyperGradientTrafo(search_space)
 
-        initialize = self._warm_start_conv(initialize)
+        initialize = self.trafo.trafo_initialize(initialize)
+        search_space_positions = self.trafo.search_space_positions
 
         self.optimizer = self._OptimizerClass(
             search_space_positions, initialize, **self.opt_params
         )
-        self.search_space_positions = search_space_positions
 
         self.conv = self.optimizer.conv
 
     def print_info(self, *args):
         self.optimizer.print_info(*args)
-
-    def _warm_start_conv(self, initialize):
-        if "warm_start" in list(initialize.keys()):
-            warm_start = initialize["warm_start"]
-            warm_start_gfo = []
-            for warm_start_ in warm_start:
-                value = self.optimizer_hyper_ss.conv.para2value(warm_start_)
-                position = self.optimizer_hyper_ss.conv.value2position(value)
-                pos_para = self.optimizer_hyper_ss.conv.value2para(position)
-
-                warm_start_gfo.append(pos_para)
-
-            initialize["warm_start"] = warm_start_gfo
-
-        return initialize
 
     def _process_results(self):
         results_dict = {}
@@ -96,6 +74,25 @@ class _BaseOptimizer_(DictClass):
 
         diff_list = np.setdiff1d(self.positions.columns, self.results.columns)
         self.results[diff_list] = self.positions[diff_list]
+
+    def _convert_args2gfo(self, memory_warm_start):
+        memory_warm_start = self.trafo.trafo_memory_warm_start(memory_warm_start)
+
+        return memory_warm_start
+
+    def _convert_results2hyper(self):
+        self.eval_time = np.array(self.optimizer.eval_times).sum()
+        self.iter_time = np.array(self.optimizer.iter_times).sum()
+
+        value = self.trafo.para2value(self.optimizer.best_para)
+        self.position = self.trafo.position2value(value)
+        best_para = self.trafo.value2para(self.position)
+
+        self.best_para = best_para
+        self.best_score = self.optimizer.best_score
+        self.positions = self.optimizer.results
+
+        self._process_results()
 
     def search(
         self,
@@ -114,6 +111,7 @@ class _BaseOptimizer_(DictClass):
         random_state=None,
         nth_process=None,
     ):
+        memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
         self.optimizer.search(
             objective_function,
@@ -127,23 +125,7 @@ class _BaseOptimizer_(DictClass):
             nth_process,
         )
 
-        self.eval_time = np.array(self.optimizer.eval_times).sum()
-        self.iter_time = np.array(self.optimizer.iter_times).sum()
-
-        value = self.optimizer_hyper_ss.conv.para2value(
-            self.optimizer.best_para
-        )
-        position = self.optimizer_hyper_ss.conv.position2value(value)
-        best_para = self.optimizer_hyper_ss.conv.value2para(position)
-
-        self.best_para = best_para
-        self.best_score = self.optimizer.best_score
-        self.positions = self.optimizer.results
-
-        self._process_results()
-        self.memory_results = self.optimizer_hyper_ss.conv.memory_dict2dataframe(
-            self.optimizer.memory_dict
-        )
+        self._convert_results2hyper()
 
 
 class HillClimbingOptimizer(_BaseOptimizer_):
@@ -228,4 +210,3 @@ class EnsembleOptimizer(_BaseOptimizer_):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self._OptimizerClass = _EnsembleOptimizer
-
