@@ -25,7 +25,7 @@ clean-test:
 		rm -fr htmlcov/
 
 test:
-	python -m pytest -p no:warnings -rfEX tests/ \
+	python -m pytest -x -p no:warnings -rfEX tests/ \
 
 test-local:
 	cd tests/local; \
