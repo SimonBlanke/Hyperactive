@@ -181,7 +181,7 @@ class Hyperactive:
         for nth_process in self.process_infos.keys():
             long_term_memory = self.process_infos[nth_process]["long_term_memory"]
             objective_function = self.process_infos[nth_process]["objective_function"]
-            memory_results = self.results_list[nth_process]["results"]
+            memory_results = self.results_list[nth_process]["memory_values_df"]
 
             if long_term_memory is not None:
                 long_term_memory.save(memory_results, objective_function)

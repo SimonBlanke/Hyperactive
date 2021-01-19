@@ -69,4 +69,5 @@ def _process_(
         "best_score": optimizer.best_score,
         "positions": optimizer.positions,
         "results": optimizer.results,
+        "memory_values_df": optimizer.memory_values_df,
     }

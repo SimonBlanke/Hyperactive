@@ -34,12 +34,33 @@ class Converter:
 
         return np.array(value)
 
+    def positions2values(self, positions):
+        values_temp = []
+        positions_np = np.array(positions)
+
+        for n, space_dim in enumerate(self.search_space_values):
+            pos_1d = positions_np[:, n]
+            value_ = np.take(space_dim, pos_1d, axis=0)
+            values_temp.append(value_)
+
+        values = list(np.array(values_temp).T)
+        return values
+
     def para2value(self, para):
         value = []
         for para_name in self.para_names:
             value.append(para[para_name])
 
         return np.array(value)
+
+    def _memory2dataframe(self, memory_dict):
+        positions = [np.array(pos).astype(int) for pos in list(memory_dict.keys())]
+        scores = list(memory_dict.values())
+
+        memory_positions = pd.DataFrame(positions, columns=self.para_names)
+        memory_positions["score"] = scores
+
+        return memory_positions
 
 
 class HyperGradientTrafo(Converter):
@@ -87,7 +108,6 @@ class HyperGradientTrafo(Converter):
 
         results_new = pd.DataFrame(df_positions_dict)
         results_new["score"] = results["score"]
-
         results_new.dropna(how="any", inplace=True)
 
         return results_new

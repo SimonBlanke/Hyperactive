@@ -61,19 +61,21 @@ class _BaseOptimizer_(DictClass):
     def print_info(self, *args):
         self.optimizer.print_info(*args)
 
-    def _process_results(self):
+    def _positions2results(self, positions):
         results_dict = {}
 
         for para_name in self.conv.para_names:
             values_list = self.search_space[para_name]
-            pos_ = self.positions[para_name].values
+            pos_ = positions[para_name].values
             values_ = [values_list[idx] for idx in pos_]
             results_dict[para_name] = values_
 
-        self.results = pd.DataFrame.from_dict(results_dict)
+        results = pd.DataFrame.from_dict(results_dict)
 
-        diff_list = np.setdiff1d(self.positions.columns, self.results.columns)
-        self.results[diff_list] = self.positions[diff_list]
+        diff_list = np.setdiff1d(positions.columns, results.columns)
+        results[diff_list] = positions[diff_list]
+
+        return results
 
     def _convert_args2gfo(self, memory_warm_start):
         memory_warm_start = self.trafo.trafo_memory_warm_start(memory_warm_start)
@@ -85,14 +87,17 @@ class _BaseOptimizer_(DictClass):
         self.iter_time = np.array(self.optimizer.iter_times).sum()
 
         value = self.trafo.para2value(self.optimizer.best_para)
-        self.position = self.trafo.position2value(value)
-        best_para = self.trafo.value2para(self.position)
+        position = self.trafo.position2value(value)
+        best_para = self.trafo.value2para(position)
 
         self.best_para = best_para
         self.best_score = self.optimizer.best_score
         self.positions = self.optimizer.results
 
-        self._process_results()
+        self.results = self._positions2results(self.positions)
+
+        self.memory_positions = self.trafo._memory2dataframe(self.optimizer.memory_dict)
+        self.memory_values_df = self._positions2results(self.memory_positions)
 
     def search(
         self,
