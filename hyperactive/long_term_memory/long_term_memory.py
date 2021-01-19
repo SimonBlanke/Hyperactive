@@ -10,7 +10,7 @@ import pandas as pd
 
 def meta_data_path():
     current_path = os.path.realpath(__file__)
-    return current_path.rsplit("/", 1)[0]
+    return current_path.rsplit("/", 1)[0] + "/"
 
 
 class LongTermMemory:
@@ -21,11 +21,12 @@ class LongTermMemory:
         model_study_name = model_name + ":" + study_name
 
         if path is None:
-            self.model_dir = (
-                meta_data_path() + "/ltm_data/" + model_study_name + "/"
-            )
+            default_path = meta_data_path()
+            self.ltm_data_dir = default_path + "/ltm_data/"
         else:
-            self.model_dir = path + "/ltm_data/" + model_study_name + "/"
+            self.ltm_data_dir = path + "/ltm_data/"
+
+        self.model_dir = self.ltm_data_dir + model_study_name + "/"
 
         if not os.path.exists(self.model_dir):
             os.makedirs(self.model_dir)
@@ -83,16 +84,6 @@ class LongTermMemory:
 
     def save(self, dataframe, objective_function):
         self.results_old = self._dill_load(self.search_data_path)
-
-        if self.results_old is not None:
-            self.n_old_samples = len(self.results_old)
-
-            dataframe = (
-                pd.merge(dataframe, self.results_old, how="outer")
-                .drop_duplicates(keep="last")
-                .reset_index(drop=True)
-            )
-
         self.n_new_samples = len(dataframe)
 
         self._dill_dump(objective_function, self.obj_func_path)
@@ -105,3 +96,10 @@ class LongTermMemory:
             self.n_new_samples - self.n_old_samples,
             "new samples found",
         )
+
+    def open_dashboard(self):
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+
+        command = "streamlit run " + dname + "/st_script.py " + self.ltm_data_dir
+        os.system(command)
