@@ -13,6 +13,9 @@ def meta_data_path():
     return current_path.rsplit("/", 1)[0] + "/"
 
 
+from .ltm_data_path import ltm_data_path
+
+
 class LongTermMemory:
     def __init__(self, model_name, study_name=None, path=None, verbosity=None):
         if study_name is None:
@@ -21,8 +24,7 @@ class LongTermMemory:
         model_study_name = model_name + ":" + study_name
 
         if path is None:
-            default_path = meta_data_path()
-            self.ltm_data_dir = default_path + "/ltm_data/"
+            self.ltm_data_dir = ltm_data_path()
         else:
             self.ltm_data_dir = path + "/ltm_data/"
 
