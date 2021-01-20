@@ -96,10 +96,3 @@ class LongTermMemory:
             self.n_new_samples - self.n_old_samples,
             "new samples found",
         )
-
-    def open_dashboard(self):
-        abspath = os.path.abspath(__file__)
-        dname = os.path.dirname(abspath)
-
-        command = "streamlit run " + dname + "/st_script.py " + self.ltm_data_dir
-        os.system(command)
