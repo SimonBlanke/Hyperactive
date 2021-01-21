@@ -75,29 +75,29 @@ search_space_float = {
 
 search_space_str = {
     "x1": list(range(2, 30, 1)),
-    "str1": ["0", "1", "2"],
+    "x2": ["0", "1", "2"],
 }
 
 search_space_func = {
     "x1": list(range(2, 30, 1)),
-    "func1": [func1, func2, func3],
+    "x2": [func1, func2, func3],
 }
 
 
 search_space_class = {
     "x1": list(range(2, 30, 1)),
-    "class1": [class1, class2, class3],
+    "x2": [class1, class2, class3],
 }
 
 
 search_space_obj = {
     "x1": list(range(2, 30, 1)),
-    "class1": [class1_(), class2_(), class3_()],
+    "x2": [class1_(), class2_(), class3_()],
 }
 
 search_space_lists = {
     "x1": list(range(2, 30, 1)),
-    "list1": [[1, 1, 1], [1, 2, 1], [1, 1, 2]],
+    "x2": [[1, 1, 1], [1, 2, 1], [1, 1, 2]],
 }
 
 
@@ -118,18 +118,31 @@ def keras_model(para):
     pass
 
 
+def compare_0(results1, results2):
+    assert results1.equals(results2)
+
+
+def compare_obj(results1, results2):
+    obj1_list = list(results1["x2"].values)
+    obj2_list = list(results1["x2"].values)
+
+    for obj1, obj2 in zip(obj1_list, obj2_list):
+        if obj1 != obj2:
+            assert False
+
+
 search_space_para = (
     "search_space",
     [
-        (search_space_int0),
-        (search_space_int1),
-        (search_space_int2),
-        (search_space_float),
-        (search_space_str),
-        (search_space_func),
-        (search_space_class),
-        (search_space_obj),
-        (search_space_lists),
+        (search_space_int0, compare_0),
+        (search_space_int1, compare_0),
+        (search_space_int2, compare_0),
+        (search_space_float, compare_0),
+        (search_space_str, compare_0),
+        (search_space_func, compare_obj),
+        (search_space_class, compare_obj),
+        (search_space_obj, compare_obj),
+        (search_space_lists, compare_obj),
     ],
 )
 
@@ -141,7 +154,10 @@ path_para = (
 
 objective_function_para = (
     "objective_function",
-    [(objective_function), (model),],
+    [
+        (objective_function),
+        (model),
+    ],
 )
 
 
@@ -149,12 +165,14 @@ objective_function_para = (
 @pytest.mark.parametrize(*path_para)
 @pytest.mark.parametrize(*search_space_para)
 def test_ltm_0(objective_function, search_space, path):
+    (search_space, compare) = search_space
+
+    print("\n objective_function \n", objective_function)
+    print("\n search_space \n", search_space)
+    print("\n compare \n", compare)
+    print("\n path \n", path)
+
     model_name = str(objective_function.__name__)
-    """
-    array = np.arange(3 * 10).reshape(10, 3)
-    array = array / 1000
-    results1 = pd.DataFrame(array, columns=["x1", "x2", "x3"])
-    """
 
     hyper = Hyperactive()
     hyper.add_search(
@@ -172,4 +190,4 @@ def test_ltm_0(objective_function, search_space, path):
 
     memory.remove_model_data()
 
-    assert results1.equals(results2)
+    compare(results1, results2)
