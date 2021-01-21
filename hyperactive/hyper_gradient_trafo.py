@@ -97,14 +97,22 @@ class HyperGradientTrafo(Converter):
             list1_values = list(results[para_name].values)
 
             search_dim = self.search_space[para_name]
+            """
             list1_positions = [
                 search_dim.index(value) if value in search_dim else None
                 for value in list1_values
             ]
+            """
+            list1_positions = [
+                search_dim.index(value1)
+                for value2 in list1_values
+                for value1 in search_dim
+                if value1 == value2
+            ]
 
             # remove None
-            list1_positions_ = [x for x in list1_positions if x is not None]
-            df_positions_dict[para_name] = list1_positions_
+            # list1_positions_ = [x for x in list1_positions if x is not None]
+            df_positions_dict[para_name] = list1_positions
 
         results_new = pd.DataFrame(df_positions_dict)
         results_new["score"] = results["score"]
