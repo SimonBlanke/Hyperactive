@@ -191,3 +191,44 @@ def test_ltm_0(objective_function, search_space, path):
     memory.remove_model_data()
 
     compare(results1, results2)
+
+
+@pytest.mark.parametrize(*objective_function_para)
+@pytest.mark.parametrize(*path_para)
+@pytest.mark.parametrize(*search_space_para)
+def test_ltm_1(objective_function, search_space, path):
+    (search_space, compare) = search_space
+
+    print("\n objective_function \n", objective_function)
+    print("\n search_space \n", search_space)
+    print("\n compare \n", compare)
+    print("\n path \n", path)
+
+    model_name = str(objective_function.__name__)
+    memory = LongTermMemory(model_name, path=path)
+
+    hyper1 = Hyperactive()
+    hyper1.add_search(
+        objective_function,
+        search_space,
+        n_iter=10,
+        initialize={"random": 1},
+        long_term_memory=memory,
+    )
+    hyper1.run()
+    results1 = hyper1.results(objective_function)
+
+    hyper2 = Hyperactive()
+    hyper2.add_search(
+        objective_function,
+        search_space,
+        n_iter=10,
+        initialize={"random": 1},
+        long_term_memory=memory,
+    )
+    hyper2.run()
+    results2 = hyper2.results(objective_function)
+    memory.remove_model_data()
+
+    print("\n results1 \n", results1)
+    print("\n results2 \n", results2)
