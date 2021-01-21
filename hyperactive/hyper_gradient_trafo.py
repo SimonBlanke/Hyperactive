@@ -88,6 +88,22 @@ class HyperGradientTrafo(Converter):
 
         return initialize
 
+    def get_list_positions(self, list1_values, search_dim):
+        list_positions = []
+
+        for value2 in list1_values:
+            pos_appended = False
+            for value1 in search_dim:
+                if value1 == value2:
+                    list_positions.append(search_dim.index(value1))
+                    pos_appended = True
+                    break
+
+            if not pos_appended:
+                list_positions.append(None)
+
+        return list_positions
+
     def trafo_memory_warm_start(self, results):
         if results is None:
             return results
@@ -95,7 +111,6 @@ class HyperGradientTrafo(Converter):
         df_positions_dict = {}
         for para_name in self.para_names:
             list1_values = list(results[para_name].values)
-
             search_dim = self.search_space[para_name]
             """
             list1_positions = [
@@ -103,12 +118,16 @@ class HyperGradientTrafo(Converter):
                 for value in list1_values
             ]
             """
+
+            """
             list1_positions = [
                 search_dim.index(value1)
                 for value2 in list1_values
                 for value1 in search_dim
                 if value1 == value2
             ]
+            """
+            list1_positions = self.get_list_positions(list1_values, search_dim)
 
             # remove None
             # list1_positions_ = [x for x in list1_positions if x is not None]
