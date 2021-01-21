@@ -19,7 +19,91 @@ def set_n_jobs(n_jobs):
         return n_jobs
 
 
-class Hyperactive:
+class HyperactiveResults:
+    def __init__(*args, **kwargs):
+        pass
+
+    def _sort_results_objFunc(self, objective_function):
+        import numpy as np
+        import pandas as pd
+
+        best_score = -np.inf
+        best_para = None
+        results_list = []
+
+        for results in self.results_list:
+            nth_process = results["nth_process"]
+
+            process_infos = self.process_infos[nth_process]
+            objective_function_ = process_infos["objective_function"]
+
+            if objective_function_ != objective_function:
+                continue
+
+            if results["best_score"] > best_score:
+                best_score = results["best_score"]
+                best_para = results["best_para"]
+
+            results_list.append(results["results"])
+
+        results = pd.concat(results_list)
+
+        self.objFunc2results[objective_function] = {
+            "best_para": best_para,
+            "best_score": best_score,
+            "results": results,
+        }
+
+    def _sort_results_search_id(self, search_id):
+        for results in self.results_list:
+            nth_process = results["nth_process"]
+            search_id_ = self.process_infos[nth_process]["search_id"]
+
+            if search_id_ != search_id:
+                continue
+
+            best_score = results["best_score"]
+            best_para = results["best_para"]
+            results = results["results"]
+
+            self.search_id2results[search_id] = {
+                "best_para": best_para,
+                "best_score": best_score,
+                "results": results,
+            }
+
+    def _get_one_result(self, id_, result_name):
+        if isinstance(id_, str):
+            if id_ not in self.search_id2results:
+                self._sort_results_search_id(id_)
+
+            return self.search_id2results[id_][result_name]
+
+        else:
+            if id_ not in self.objFunc2results:
+                self._sort_results_objFunc(id_)
+
+            return self.objFunc2results[id_][result_name]
+
+    def best_para(self, id_):
+        return self._get_one_result(id_, "best_para")
+
+    def best_score(self, id_):
+        return self._get_one_result(id_, "best_score")
+
+    def results(self, id_):
+        return self._get_one_result(id_, "results")
+
+    def positions(self, id_):
+        return self._get_one_result(id_, "positions")
+
+
+class HyperactiveLongTermMemory:
+    def __init__(*args, **kwargs):
+        pass
+
+
+class Hyperactive(HyperactiveResults, HyperactiveLongTermMemory):
     def __init__(
         self,
         verbosity=["progress_bar", "print_results", "print_times"],
@@ -30,6 +114,7 @@ class Hyperactive:
             }
         },
     ):
+        super().__init__()
         if verbosity is False:
             verbosity = []
 
@@ -103,8 +188,7 @@ class Hyperactive:
             search_id = str(len(self.search_ids))
             self.search_ids.append(search_id)
 
-        if self.long_term_memory is not None:
-            memory_warm_start = self.long_term_memory.load()
+        memory_warm_start = self._load_ltm(memory_warm_start)
 
         self._add_search_processes(
             random_state,
@@ -119,55 +203,6 @@ class Hyperactive:
             long_term_memory,
             search_id,
         )
-
-    def _sort_results_objFunc(self, objective_function):
-        import numpy as np
-        import pandas as pd
-
-        best_score = -np.inf
-        best_para = None
-        results_list = []
-
-        for results in self.results_list:
-            nth_process = results["nth_process"]
-
-            process_infos = self.process_infos[nth_process]
-            objective_function_ = process_infos["objective_function"]
-
-            if objective_function_ != objective_function:
-                continue
-
-            if results["best_score"] > best_score:
-                best_score = results["best_score"]
-                best_para = results["best_para"]
-
-            results_list.append(results["results"])
-
-        results = pd.concat(results_list)
-
-        self.objFunc2results[objective_function] = {
-            "best_para": best_para,
-            "best_score": best_score,
-            "results": results,
-        }
-
-    def _sort_results_search_id(self, search_id):
-        for results in self.results_list:
-            nth_process = results["nth_process"]
-            search_id_ = self.process_infos[nth_process]["search_id"]
-
-            if search_id_ != search_id:
-                continue
-
-            best_score = results["best_score"]
-            best_para = results["best_para"]
-            results = results["results"]
-
-            self.search_id2results[search_id] = {
-                "best_para": best_para,
-                "best_score": best_score,
-                "results": results,
-            }
 
     def run(
         self,
@@ -185,28 +220,3 @@ class Hyperactive:
 
             if long_term_memory is not None:
                 long_term_memory.save(memory_results, objective_function)
-
-    def _get_one_result(self, id_, result_name):
-        if isinstance(id_, str):
-            if id_ not in self.search_id2results:
-                self._sort_results_search_id(id_)
-
-            return self.search_id2results[id_][result_name]
-
-        else:
-            if id_ not in self.objFunc2results:
-                self._sort_results_objFunc(id_)
-
-            return self.objFunc2results[id_][result_name]
-
-    def best_para(self, id_):
-        return self._get_one_result(id_, "best_para")
-
-    def best_score(self, id_):
-        return self._get_one_result(id_, "best_score")
-
-    def results(self, id_):
-        return self._get_one_result(id_, "results")
-
-    def positions(self, id_):
-        return self._get_one_result(id_, "positions")
