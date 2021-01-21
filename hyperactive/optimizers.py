@@ -39,7 +39,50 @@ class DictClass:
         return self.para_dict.values()
 
 
-class _BaseOptimizer_(DictClass):
+class TrafoClass:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def _convert_args2gfo(self, memory_warm_start):
+        memory_warm_start = self.trafo.trafo_memory_warm_start(memory_warm_start)
+
+        return memory_warm_start
+
+    def _positions2results(self, positions):
+        results_dict = {}
+
+        for para_name in self.conv.para_names:
+            values_list = self.search_space[para_name]
+            pos_ = positions[para_name].values
+            values_ = [values_list[idx] for idx in pos_]
+            results_dict[para_name] = values_
+
+        results = pd.DataFrame.from_dict(results_dict)
+
+        diff_list = np.setdiff1d(positions.columns, results.columns)
+        results[diff_list] = positions[diff_list]
+
+        return results
+
+    def _convert_results2hyper(self):
+        self.eval_time = np.array(self.optimizer.eval_times).sum()
+        self.iter_time = np.array(self.optimizer.iter_times).sum()
+
+        value = self.trafo.para2value(self.optimizer.best_para)
+        position = self.trafo.position2value(value)
+        best_para = self.trafo.value2para(position)
+
+        self.best_para = best_para
+        self.best_score = self.optimizer.best_score
+        self.positions = self.optimizer.results
+
+        self.results = self._positions2results(self.positions)
+
+        self.memory_positions = self.trafo._memory2dataframe(self.optimizer.memory_dict)
+        self.memory_values_df = self._positions2results(self.memory_positions)
+
+
+class _BaseOptimizer_(DictClass, TrafoClass):
     def __init__(self, **opt_params):
         super().__init__()
         self.opt_params = opt_params
@@ -60,44 +103,6 @@ class _BaseOptimizer_(DictClass):
 
     def print_info(self, *args):
         self.optimizer.print_info(*args)
-
-    def _positions2results(self, positions):
-        results_dict = {}
-
-        for para_name in self.conv.para_names:
-            values_list = self.search_space[para_name]
-            pos_ = positions[para_name].values
-            values_ = [values_list[idx] for idx in pos_]
-            results_dict[para_name] = values_
-
-        results = pd.DataFrame.from_dict(results_dict)
-
-        diff_list = np.setdiff1d(positions.columns, results.columns)
-        results[diff_list] = positions[diff_list]
-
-        return results
-
-    def _convert_args2gfo(self, memory_warm_start):
-        memory_warm_start = self.trafo.trafo_memory_warm_start(memory_warm_start)
-
-        return memory_warm_start
-
-    def _convert_results2hyper(self):
-        self.eval_time = np.array(self.optimizer.eval_times).sum()
-        self.iter_time = np.array(self.optimizer.iter_times).sum()
-
-        value = self.trafo.para2value(self.optimizer.best_para)
-        position = self.trafo.position2value(value)
-        best_para = self.trafo.value2para(position)
-
-        self.best_para = best_para
-        self.best_score = self.optimizer.best_score
-        self.positions = self.optimizer.results
-
-        self.results = self._positions2results(self.positions)
-
-        self.memory_positions = self.trafo._memory2dataframe(self.optimizer.memory_dict)
-        self.memory_values_df = self._positions2results(self.memory_positions)
 
     def search(
         self,
