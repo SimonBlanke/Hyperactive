@@ -102,6 +102,21 @@ class HyperactiveLongTermMemory:
     def __init__(*args, **kwargs):
         pass
 
+    def _load_ltm(self, memory_warm_start):
+        if self.long_term_memory is not None:
+            return self.long_term_memory.load()
+        else:
+            return memory_warm_start
+
+    def _save_ltm(self):
+        for nth_process in self.process_infos.keys():
+            long_term_memory = self.process_infos[nth_process]["long_term_memory"]
+            objective_function = self.process_infos[nth_process]["objective_function"]
+            memory_results = self.results_list[nth_process]["memory_values_df"]
+
+            if long_term_memory is not None:
+                long_term_memory.save(memory_results, objective_function)
+
 
 class Hyperactive(HyperactiveResults, HyperactiveLongTermMemory):
     def __init__(
@@ -213,10 +228,4 @@ class Hyperactive(HyperactiveResults, HyperactiveLongTermMemory):
 
         self.results_list = run_search(self.process_infos, self.distribution)
 
-        for nth_process in self.process_infos.keys():
-            long_term_memory = self.process_infos[nth_process]["long_term_memory"]
-            objective_function = self.process_infos[nth_process]["objective_function"]
-            memory_results = self.results_list[nth_process]["memory_values_df"]
-
-            if long_term_memory is not None:
-                long_term_memory.save(memory_results, objective_function)
+        self._save_ltm()
