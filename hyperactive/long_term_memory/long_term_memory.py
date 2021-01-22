@@ -31,6 +31,10 @@ def merge_unhashable_df(df1, df2):
     return result.drop(["item"], axis=1)
 
 
+def drop_duplicates_unhashable_df(df):
+    return df.loc[df.astype(str).drop_duplicates().index]
+
+
 def meta_data_path():
     current_path = os.path.realpath(__file__)
     return current_path.rsplit("/", 1)[0] + "/"
@@ -114,6 +118,7 @@ class LongTermMemory:
             self.n_old_samples = len(self.results_old)
 
             dataframe = merge_unhashable_df(dataframe, self.results_old)
+            dataframe = drop_duplicates_unhashable_df(dataframe).reset_index(drop=True)
 
         self.n_new_samples = len(dataframe)
 
