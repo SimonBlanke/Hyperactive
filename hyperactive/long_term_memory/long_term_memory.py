@@ -7,13 +7,12 @@ import dill
 import shutil
 import pandas as pd
 
+from .ltm_data_path import ltm_data_path
+
 
 def merge_unhashable_df(df1, df2):
     columns = df1.columns
     columns0 = df2.columns
-
-    print("columns", columns)
-    print("columns0", columns0)
 
     if set(columns) != set(columns0):
         print("Error columns of df1 and df2 must be the same")
@@ -40,9 +39,6 @@ def meta_data_path():
     return current_path.rsplit("/", 1)[0] + "/"
 
 
-from .ltm_data_path import ltm_data_path
-
-
 class LongTermMemory:
     def __init__(self, model_name, study_name=None, path=None, verbosity=None):
         if study_name is None:
@@ -60,7 +56,7 @@ class LongTermMemory:
         if not os.path.exists(self.model_dir):
             os.makedirs(self.model_dir)
 
-        print("\n model_dir \n", self.model_dir)
+        # print("\n model_dir \n", self.model_dir)
 
         self.search_data_path = self.model_dir + "search_data.pkl"
         self.obj_func_path = self.model_dir + "objective_function.pkl"
