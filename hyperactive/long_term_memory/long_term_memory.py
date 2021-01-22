@@ -8,6 +8,29 @@ import shutil
 import pandas as pd
 
 
+def merge_unhashable_df(df1, df2):
+    columns = df1.columns
+    columns0 = df2.columns
+
+    print("columns", columns)
+    print("columns0", columns0)
+
+    if set(columns) != set(columns0):
+        print("Error columns of df1 and df2 must be the same")
+        return
+
+    df1["item"] = range(len(df1))
+    df2["item"] = range(len(df1), len(df1) + len(df2))
+
+    result = pd.merge(df1, df2, on="item", how="outer", suffixes=["", "_y"])
+
+    for col in columns:
+        result[col].update(result[col + "_y"])
+
+    result = result[result.columns[~result.columns.str.endswith("_y")]]
+    return result.drop(["item"], axis=1)
+
+
 def meta_data_path():
     current_path = os.path.realpath(__file__)
     return current_path.rsplit("/", 1)[0] + "/"
@@ -86,6 +109,12 @@ class LongTermMemory:
 
     def save(self, dataframe, objective_function):
         self.results_old = self._dill_load(self.search_data_path)
+
+        if self.results_old is not None:
+            self.n_old_samples = len(self.results_old)
+
+            dataframe = merge_unhashable_df(dataframe, self.results_old)
+
         self.n_new_samples = len(dataframe)
 
         self._dill_dump(objective_function, self.obj_func_path)
