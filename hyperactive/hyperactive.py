@@ -94,9 +94,6 @@ class HyperactiveResults:
     def results(self, id_):
         return self._get_one_result(id_, "results")
 
-    def positions(self, id_):
-        return self._get_one_result(id_, "positions")
-
 
 class HyperactiveLongTermMemory:
     def __init__(*args, **kwargs):
