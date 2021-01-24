@@ -54,17 +54,6 @@ def model_gbc(opt):
     return scores.mean()
 
 
-def model_xgb(opt):
-    xgb = XGBClassifier(
-        n_estimators=opt["n_estimators"],
-        max_depth=opt["max_depth"],
-        learning_rate=opt["learning_rate"],
-    )
-    scores = cross_val_score(xgb, X, y, cv=3)
-
-    return scores.mean()
-
-
 search_space_etc = {
     "n_estimators": list(range(10, 200, 10)),
     "criterion": ["gini", "entropy"],
@@ -95,15 +84,9 @@ search_space_gbc = {
     "max_features": list(np.arange(0.05, 1.01, 0.05)),
 }
 
-search_space_xgb = {
-    "n_estimators": list(range(10, 200, 10)),
-    "max_depth": list(range(2, 12)),
-    "learning_rate": [1e-3, 1e-2, 1e-1, 0.5, 1.0],
-}
 
 hyper = Hyperactive()
 hyper.add_search(model_etc, search_space_etc, n_iter=50)
 hyper.add_search(model_rfc, search_space_rfc, n_iter=50)
 hyper.add_search(model_gbc, search_space_gbc, n_iter=50)
-hyper.add_search(model_xgb, search_space_xgb, n_iter=50)
 hyper.run(max_time=5)
