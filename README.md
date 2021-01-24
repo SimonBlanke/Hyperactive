@@ -165,6 +165,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
               <li>Tensorflow</li>
               <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
               <li>Pytorch</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
           </ul><br>
         <a><b>Parallel Computing:</b></a>
           <ul>
