@@ -165,6 +165,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
               <li>Tensorflow</li>
               <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
               <li>Pytorch</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
           </ul><br>
         <a><b>Parallel Computing:</b></a>
           <ul>
@@ -181,8 +182,8 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
         <a><b>Machine Learning:</b></a>
           <ul>
-            <li>Hyperparameter Tuning</li>
-            <li>Model Selection</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/hyperpara_optimize.py">Hyperparameter Tuning</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/model_selection.py">Model Selection</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/sklearn_pipeline_example.py">Sklearn Pipelines</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/ensemble_learning_example.py">Ensemble Learning</a></li>
           </ul>
@@ -200,7 +201,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
         <a><b>Miscellaneous:</b></a>
           <ul>
-            <li>Test Functions</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/test_function.py">Test Functions</a></li>
             <li>Fit Gaussian Curves</li>
           </ul>
       </td>

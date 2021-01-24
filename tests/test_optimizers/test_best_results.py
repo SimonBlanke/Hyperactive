@@ -21,24 +21,43 @@ def objective_function_p5(opt):
     return score
 
 
-search_space = {"x1": np.arange(-100, 101, 1)}
+search_space_0 = {"x1": np.arange(-100, 101, 1)}
+search_space_1 = {"x1": np.arange(0, 101, 1)}
+search_space_2 = {"x1": np.arange(-100, 1, 1)}
+
+search_space_3 = {"x1": np.arange(-10, 11, 0.1)}
+search_space_4 = {"x1": np.arange(0, 11, 0.1)}
+search_space_5 = {"x1": np.arange(-10, 1, 0.1)}
 
 
 objective_para = (
     "objective",
     [
-        (objective_function, search_space),
-        (objective_function_m5, search_space),
-        (objective_function_p5, search_space),
+        (objective_function),
+        (objective_function_m5),
+        (objective_function_p5),
+    ],
+)
+
+search_space_para = (
+    "search_space",
+    [
+        (search_space_0),
+        (search_space_1),
+        (search_space_2),
+        (search_space_3),
+        (search_space_4),
+        (search_space_5),
     ],
 )
 
 
 @pytest.mark.parametrize(*objective_para)
+@pytest.mark.parametrize(*search_space_para)
 @pytest.mark.parametrize(*optimizers)
-def test_best_results_0(Optimizer, objective):
-    search_space = objective[1]
-    objective_function = objective[0]
+def test_best_results_0(Optimizer, search_space, objective):
+    search_space = search_space
+    objective_function = objective
 
     initialize = {"vertices": 2}
 
@@ -47,7 +66,7 @@ def test_best_results_0(Optimizer, objective):
         objective_function,
         search_space,
         optimizer=Optimizer(),
-        n_iter=30,
+        n_iter=10,
         memory=False,
         initialize=initialize,
     )
@@ -58,13 +77,12 @@ def test_best_results_0(Optimizer, objective):
     )
 
 
+@pytest.mark.parametrize(*objective_para)
+@pytest.mark.parametrize(*search_space_para)
 @pytest.mark.parametrize(*optimizers)
-def test_best_results_1(Optimizer):
-    search_space = {"x1": np.arange(-100, 101, 1)}
-
-    def objective_function(opt):
-        score = -opt["x1"] * opt["x1"]
-        return score
+def test_best_results_1(Optimizer, search_space, objective):
+    search_space = search_space
+    objective_function = objective
 
     initialize = {"vertices": 2}
 
@@ -73,7 +91,7 @@ def test_best_results_1(Optimizer):
         objective_function,
         search_space,
         optimizer=Optimizer(),
-        n_iter=30,
+        n_iter=10,
         memory=False,
         initialize=initialize,
     )
@@ -82,4 +100,3 @@ def test_best_results_1(Optimizer):
     assert hyper.best_para(objective_function)["x1"] in list(
         hyper.results(objective_function)["x1"]
     )
-
