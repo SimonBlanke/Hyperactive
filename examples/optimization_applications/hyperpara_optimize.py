@@ -1,3 +1,10 @@
+"""
+This example shows the original purpose of Hyperactive.
+You can search for any number of hyperparameters and Hyperactive
+will return the best one after the optimization run.
+
+"""
+
 import numpy as np
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
