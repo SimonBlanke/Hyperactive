@@ -56,6 +56,7 @@ def _1d_scatter(search_data):
     scatter1_para1 = col1.selectbox(
         "1D scatter plot parameter 1",
         para_names,
+        index=0,
     )
 
     fig = px.scatter(
@@ -76,10 +77,12 @@ def _2d_scatter(search_data):
     scatter2_para1 = col1.selectbox(
         "2D scatter plot parameter 1",
         para_names,
+        index=0,
     )
     scatter2_para2 = col1.selectbox(
         "2D scatter plot parameter 2",
         para_names,
+        index=1,
     )
 
     fig = px.scatter(
@@ -100,14 +103,17 @@ def _3d_scatter(search_data):
     scatter3_para1 = col1.selectbox(
         "3D scatter plot parameter 1",
         para_names,
+        index=0,
     )
     scatter3_para2 = col1.selectbox(
         "3D scatter plot parameter 2",
         para_names,
+        index=1,
     )
     scatter3_para3 = col1.selectbox(
         "3D scatter plot parameter 3",
         para_names,
+        index=2,
     )
 
     fig = px.scatter_3d(
