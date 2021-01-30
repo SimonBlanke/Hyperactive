@@ -3,11 +3,10 @@
 # License: MIT License
 
 import sys
-import os
-import dill
 import glob
-import inspect
-import imageio
+
+# import inspect
+# import imageio
 
 import hiplot as hip
 import numpy as np
@@ -15,61 +14,6 @@ import pandas as pd
 
 import streamlit as st
 import plotly.express as px
-import plotly.graph_objects as go
-
-
-def meta_data_path():
-    current_path = os.path.realpath(__file__)
-    return current_path.rsplit("/", 1)[0] + "/"
-
-
-def _pkl_valid(pkl_path):
-    return os.path.isfile(pkl_path) and os.path.getsize(pkl_path) > 0
-
-
-def search_data_path(ltm_data_path, model_name, study_name):
-    return ltm_data_path + model_name + ":" + study_name + "/search_data.pkl"
-
-
-def objective_function_path(ltm_data_path, model_name, study_name):
-    return ltm_data_path + model_name + ":" + study_name + "/objective_function.pkl"
-
-
-def dill_load(path):
-    if _pkl_valid(path):
-        with open(path, "rb") as handle:
-            object_ = dill.load(handle)
-
-        return object_
-
-
-def read_model_study_names(path):
-    model_paths = glob.glob(path + "*/")
-
-    model_names = []
-    study_names = []
-
-    study2model_name = {}
-
-    for model_path in model_paths:
-        model_study_name = model_path.rsplit("/", 2)[1]
-
-        model_name = model_study_name.rsplit(":", 2)[0]
-        study_name = model_study_name.rsplit(":", 2)[1]
-
-        if study_name in study2model_name:
-            study2model_name[study_name].append(model_name)
-        else:
-            study2model_name[study_name] = [model_name]
-
-        model_names.append(model_name)
-        study_names.append(study_name)
-
-    return study2model_name
-
-
-def get_model_string(function):
-    return inspect.getsource(function)
 
 
 def _score_statistics(search_data):
@@ -198,49 +142,16 @@ plots_dict = {
 
 
 st.set_page_config(page_title="Hyperactive Dashboard", layout="wide")
-ltm_data_path = sys.argv[1]
+path = sys.argv[1]
 streamlit_plot_args = sys.argv[2:]
 
+search_data = pd.read_csv(path)
+print("\n search_data \n", search_data)
 
 st.title("Hyperactive Dashboard")
 st.text("")
 st.text("")
 
-study2model_name = read_model_study_names(ltm_data_path)
-
-col1, col2 = st.beta_columns(2)
-
-col1.subheader("Study name")
-study_name_select = col1.selectbox(
-    "  ",
-    list(study2model_name.keys()),
-    index=0,
-)
-col1.subheader("Model name")
-model_name_select = col1.selectbox(
-    " ",
-    study2model_name[study_name_select],
-    # format_func=selectbox_model_names.get,
-    index=0,
-)
-
-# --- # paths
-model_study_path_ = search_data_path(
-    ltm_data_path, model_name_select, study_name_select
-)
-objective_function_path_ = objective_function_path(
-    ltm_data_path, model_name_select, study_name_select
-)
-
-# --- # data readin
-search_data = dill_load(model_study_path_)
-objective_function_ = dill_load(objective_function_path_)
-
-
-# --- # show objective_function_ code
-model_string = get_model_string(objective_function_)
-col2.subheader("Objective function:")
-col2.code(model_string)
 
 if len(search_data) > 0:
     # --- # create plots in order of "streamlit_plot_args"

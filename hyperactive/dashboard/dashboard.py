@@ -4,15 +4,18 @@
 
 import os
 
-from ..ltm_data_path import ltm_data_path
+# from ..ltm_data_path import ltm_data_path
 
 
 class Dashboard:
-    def __init__(self, path=None):
+    def __init__(self, path):
+        self.path = path
+        """
         if path is None:
             self.ltm_data_dir = ltm_data_path()
         else:
             self.ltm_data_dir = path + "/ltm_data/"
+        """
 
     def open(
         self,
@@ -33,7 +36,7 @@ class Dashboard:
             "streamlit run "
             + dname
             + "/st_script.py "
-            + self.ltm_data_dir
+            + self.path
             + " "
             + streamlit_plot_args
         )
