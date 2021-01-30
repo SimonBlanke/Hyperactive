@@ -19,6 +19,9 @@ def find_version(*filepath):
         raise RuntimeError("Unable to find version string.")
 
 
+extras_require = {"dashboard": ["streamlit", "matplotlib", "plotly", "hiplot"]}
+
+
 setup(
     name="hyperactive",
     version=find_version("hyperactive/__init__.py"),
@@ -52,4 +55,5 @@ setup(
         "Intended Audience :: Science/Research",
     ],
     install_requires=open("requirements.txt").readlines(),
+    extras_require=extras_require,
 )
