@@ -85,7 +85,7 @@ search_space_gbc = {
 }
 
 
-hyper = Hyperactive()
+hyper = Hyperactive(distribution="joblib")
 hyper.add_search(model_etc, search_space_etc, n_iter=50)
 hyper.add_search(model_rfc, search_space_rfc, n_iter=50)
 hyper.add_search(model_gbc, search_space_gbc, n_iter=50)

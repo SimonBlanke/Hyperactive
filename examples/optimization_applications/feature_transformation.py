@@ -1,3 +1,11 @@
+"""
+This example shows how you can search for useful feature 
+transformations for your dataset. This example is very similar to
+"feature_selection". It adds the possibility to change the features 
+with the numpy functions in the search space.
+
+"""
+
 import numpy as np
 import itertools
 from sklearn.datasets import load_boston
@@ -9,7 +17,7 @@ data = load_boston()
 X, y = data.data, data.target
 
 
-def model(opt):
+def get_feature_list(opt):
     feature_list = []
     for key in opt.keys():
         if "feature" not in key:
@@ -26,8 +34,12 @@ def model(opt):
             feature = opt[key](X[:, nth_feature])
             feature_list.append(feature)
 
+    return feature_list
+
+
+def model(opt):
+    feature_list = get_feature_list(opt)
     X_new = np.array(feature_list).T
-    print("X_new", X_new)
 
     knr = KNeighborsRegressor(n_neighbors=opt["n_neighbors"])
     scores = cross_val_score(knr, X_new, y, cv=5)
@@ -36,6 +48,7 @@ def model(opt):
     return score
 
 
+# features can be used (True), not used (False) or transformed for training
 features_search_space = [
     True,
     False,
@@ -65,5 +78,5 @@ search_space = {
 
 
 hyper = Hyperactive()
-hyper.add_search(model, search_space, n_iter=1500)
+hyper.add_search(model, search_space, n_iter=150)
 hyper.run()

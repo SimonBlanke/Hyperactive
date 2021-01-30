@@ -162,15 +162,14 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul><br>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li>Tensorflow</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/tensorflow_example.py">Tensorflow</a></li>
               <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
-              <li>Pytorch</li>
               <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
           </ul><br>
         <a><b>Parallel Computing:</b></a>
           <ul>
               <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/multiprocessing_example.py">Multiprocessing</a></li>
-              <li>Joblib</li>
+              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/joblib_example.py">Joblib</a></li>
           </ul>
       </td>
       <td>

@@ -1,5 +1,26 @@
-import itertools
+"""
+This example shows how you can search for the best models in each layer in a 
+stacking ensemble. 
 
+We want to create a stacking ensemble with 3 layers:
+    - a top layer with one model
+    - a middle layer with multiple models
+    - a bottom layer with multiple models
+
+We also want to know how many models should be used in the middle and bottom layer.
+For that we can use the helper function "get_combinations". It works as follows:
+
+input = [1, 2 , 3]
+output = get_combinations(input, comb_len=2)
+output: [[1, 2], [1, 3], [2, 3], [1, 2, 3]]
+
+Instead of numbers we insert models into "input". This way we get each combination
+with more than 2 elements. Only 1 model per layer would not make much sense.
+
+The ensemble itself is created via the package "mlxtend" in the objective-function "stacking".
+"""
+
+import itertools
 
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import cross_val_score
@@ -18,14 +39,14 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.linear_model.ridge import RidgeClassifier
+from sklearn.linear_model import RidgeClassifier
 
 from hyperactive import Hyperactive
 
 data = load_breast_cancer()
 X, y = data.data, data.target
 
-
+# define models that are later used in search space
 gbc = GradientBoostingClassifier()
 rfc = RandomForestClassifier()
 etc = ExtraTreesClassifier()
@@ -52,14 +73,23 @@ def stacking(opt):
     return scores.mean()
 
 
-def get_combinations(models):
-    comb = []
+# helper function to create search space dimensions
+def get_combinations(models, comb_len=2):
+    def _list_in_list_of_lists(list_, list_of_lists):
+        for list__ in list_of_lists:
+            if set(list_) == set(list__):
+                return True
+
+    comb_list = []
     for i in range(0, len(models) + 1):
         for subset in itertools.permutations(models, i):
-            if len(subset) == 0:
+            if len(subset) < comb_len:
                 continue
-            comb.append(list(subset))
-    return comb
+            if _list_in_list_of_lists(subset, comb_list):
+                continue
+
+            comb_list.append(list(subset))
+    return comb_list
 
 
 top = [lr, dtc, gnb, rc]
@@ -78,4 +108,3 @@ search_space = {
 hyper = Hyperactive()
 hyper.add_search(stacking, search_space, n_iter=20)
 hyper.run()
-
