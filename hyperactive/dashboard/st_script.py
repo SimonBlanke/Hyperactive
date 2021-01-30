@@ -38,10 +38,13 @@ def _score_statistics(search_data):
 
     col1.table(df_data)
 
-    fig = px.histogram(
-        search_data, x="score", nbins=int(len(search_data))
-    ).update_layout(width=1000, height=300)
-    col2.plotly_chart(fig)
+    def _score_statistics_plot(search_data):
+        fig = px.histogram(
+            search_data, x="score", nbins=int(len(search_data))
+        ).update_layout(width=1000, height=300)
+        col2.plotly_chart(fig)
+
+    _score_statistics_plot(search_data)
 
 
 def _1d_scatter(search_data):
@@ -59,10 +62,13 @@ def _1d_scatter(search_data):
         index=0,
     )
 
-    fig = px.scatter(
-        search_data, x=scatter1_para1, y=search_data["score"]
-    ).update_layout(width=1000, height=600)
-    col2.plotly_chart(fig)
+    def _1d_scatter_plot(search_data):
+        fig = px.scatter(
+            search_data, x=scatter1_para1, y=search_data["score"]
+        ).update_layout(width=1000, height=600)
+        col2.plotly_chart(fig)
+
+    _1d_scatter_plot(search_data)
 
 
 def _2d_scatter(search_data):
@@ -85,10 +91,13 @@ def _2d_scatter(search_data):
         index=1,
     )
 
-    fig = px.scatter(
-        search_data, x=scatter2_para1, y=scatter2_para2, color="score"
-    ).update_layout(width=1000, height=600)
-    col2.plotly_chart(fig)
+    def _2d_scatter_plot(search_data):
+        fig = px.scatter(
+            search_data, x=scatter2_para1, y=scatter2_para2, color="score"
+        ).update_layout(width=1000, height=600)
+        col2.plotly_chart(fig)
+
+    _2d_scatter_plot(search_data)
 
 
 def _3d_scatter(search_data):
@@ -116,14 +125,17 @@ def _3d_scatter(search_data):
         index=2,
     )
 
-    fig = px.scatter_3d(
-        search_data,
-        x=scatter3_para1,
-        y=scatter3_para2,
-        z=scatter3_para3,
-        color="score",
-    ).update_layout(width=1000, height=600)
-    col2.plotly_chart(fig)
+    def _3d_scatter_plot(search_data):
+        fig = px.scatter_3d(
+            search_data,
+            x=scatter3_para1,
+            y=scatter3_para2,
+            z=scatter3_para3,
+            color="score",
+        ).update_layout(width=1000, height=600)
+        col2.plotly_chart(fig)
+
+    _3d_scatter_plot(search_data)
 
 
 def _parallel_coordinates(search_data):
@@ -152,7 +164,7 @@ path = sys.argv[1]
 streamlit_plot_args = sys.argv[2:]
 
 search_data = pd.read_csv(path)
-print("\n search_data \n", search_data)
+# print("\n search_data \n", search_data)
 
 st.title("Hyperactive Dashboard")
 st.text("")
