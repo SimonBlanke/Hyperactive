@@ -24,13 +24,9 @@ from .optimizers import (
     EnsembleOptimizer,
 )
 
-# from .long_term_memory import LongTermMemory, Dashboard
-
 
 __all__ = [
     "Hyperactive",
-    # "LongTermMemory",
-    # "Dashboard",
     "HillClimbingOptimizer",
     "StochasticHillClimbingOptimizer",
     "RepulsingHillClimbingOptimizer",

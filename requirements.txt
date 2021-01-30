@@ -1,5 +1,4 @@
 numpy ==1.18.1
 tqdm >=4.48.0
 pandas
-dill
 gradient-free-optimizers >=0.2.6, <1.0.0
