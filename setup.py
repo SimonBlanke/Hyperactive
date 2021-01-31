@@ -19,7 +19,7 @@ def find_version(*filepath):
         raise RuntimeError("Unable to find version string.")
 
 
-extras_require = {"dashboard": ["streamlit", "matplotlib", "plotly", "hiplot"]}
+extras_require = {"dashboard": open("./requirements/dashboard.txt").readlines()}
 
 
 setup(
@@ -54,6 +54,6 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=open("requirements.txt").readlines(),
+    install_requires=open("./requirements/main.txt").readlines(),
     extras_require=extras_require,
 )
