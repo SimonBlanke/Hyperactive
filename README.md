@@ -438,6 +438,102 @@ hyper.run()
 </details>
 
 
+<br>
+
+
+<details>
+<summary><b> .best_para(...)</b></summary>
+
+- objective_function
+  - (callable)
+- returnes: dictionary
+- Parameter dictionary of the best score of the given objective_function.
+
+  example:
+  ```python
+  {
+    'x1': 0.2, 
+    'x2': 0.3,
+  }
+  ```
+  
+</details>
+
+
+<details>
+<summary><b> .best_score(...)</b></summary>
+
+- objective_function
+  - (callable)
+- returnes: int or float
+- Numerical value of the best score of the given objective_function.
+
+</details>
+
+
+<details>
+<summary><b> .results(...)</b></summary>
+
+- objective_function
+  - (callable)
+- returnes: Pandas dataframe 
+- The dataframe contains score, paramter information, iteration times and evaluation times of the given objective_function.
+
+    example:
+
+    <table class="table">
+      <thead class="table-head">
+        <tr class="row">
+          <td class="cell">score</td>
+          <td class="cell">x1</td>
+          <td class="cell">x2</td>
+          <td class="cell">x...</td>
+          <td class="cell">eval_times</td>
+          <td class="cell">iter_times</td>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        <tr class="row">
+          <td class="cell">0.756</td>
+          <td class="cell">0.1</td>
+          <td class="cell">0.2</td>
+          <td class="cell">...</td>
+          <td class="cell">0.953</td>
+          <td class="cell">1.123</td>
+        </tr>
+        <tr class="row">
+          <td class="cell">0.823</td>
+          <td class="cell">0.3</td>
+          <td class="cell">0.1</td>
+          <td class="cell">...</td>
+          <td class="cell">0.948</td>
+          <td class="cell">1.101</td>
+        </tr>
+        <tr class="row">
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+        </tr>
+        <tr class="row">
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+          <td class="cell">...</td>
+        </tr>
+      </tbody>
+    </table>
+
+</details>
+
+
+<br>
+
+
 ### Optimizers
 
 <details>
@@ -605,7 +701,7 @@ hyper.run()
 </details>
 
 <details>
-<summary><b>v3.0.0</b></summary>
+<summary><b>v3.0.0</b>:heavy_check_mark:</summary>
 
   - [x] New API
       - [x] expand usage of objective-function
@@ -621,8 +717,15 @@ hyper.run()
 <details open>
 <summary><b>v3.1.0</b></summary>
 
-  - [ ] New implementation of "long term memory" for search-data storage and usage
   - [ ] New creation of dashboard for visualization of search-data
+
+
+</details>
+
+<details>
+<summary><b>v3.2.0</b></summary>
+
+  - [ ] New implementation of "long term memory" for search-data storage and usage
 
 
 </details>
@@ -630,8 +733,8 @@ hyper.run()
 
 
 
-<br>
 
+<br>
 
 
 ## Experimental algorithms
