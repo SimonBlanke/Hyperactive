@@ -262,7 +262,7 @@ hyper.run()
 ## Hyperactive API reference
 
 <details>
-<summary><b> Hyperactive(...)</b></summary>
+<summary><b> Hyperactive(verbosity, distribution)</b></summary>
 
 - verbosity = ["progress_bar", "print_results", "print_times"]
   - (list, False)
@@ -304,7 +304,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .add_search(...)</b></summary>
+<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, max_score, random_state, memory, memory_warm_start)</b></summary>
 
 
 - objective_function
@@ -429,7 +429,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .run(...)</b></summary>
+<summary><b> .run(max_time)</b></summary>
 
 - max_time = None
   - (float, None)
@@ -442,12 +442,12 @@ hyper.run()
 
 
 <details>
-<summary><b> .best_para(...)</b></summary>
+<summary><b> .best_para(objective_function)</b></summary>
 
 - objective_function
   - (callable)
 - returnes: dictionary
-- Parameter dictionary of the best score of the given objective_function.
+- Parameter dictionary of the best score of the given objective_function found in the previous optimization run.
 
   example:
   ```python
@@ -461,23 +461,23 @@ hyper.run()
 
 
 <details>
-<summary><b> .best_score(...)</b></summary>
+<summary><b> .best_score(objective_function)</b></summary>
 
 - objective_function
   - (callable)
 - returnes: int or float
-- Numerical value of the best score of the given objective_function.
+- Numerical value of the best score of the given objective_function found in the previous optimization run.
 
 </details>
 
 
 <details>
-<summary><b> .results(...)</b></summary>
+<summary><b> .results(objective_function)</b></summary>
 
 - objective_function
   - (callable)
 - returnes: Pandas dataframe 
-- The dataframe contains score, paramter information, iteration times and evaluation times of the given objective_function.
+- The dataframe contains score, paramter information, iteration times and evaluation times of the given objective_function found in the previous optimization run.
 
     example:
 
@@ -666,13 +666,13 @@ hyper.run()
 ## Roadmap
 
 <details>
-<summary><b>v2.0.0</b>:heavy_check_mark:</summary>
+<summary><b>v2.0.0</b> :heavy_check_mark:</summary>
 
   - [x] Change API
 </details>
 
 <details>
-<summary><b>v2.1.0</b>:heavy_check_mark:</summary>
+<summary><b>v2.1.0</b> :heavy_check_mark:</summary>
 
   - [x] Save memory of evaluations for later runs (long term memory)
   - [x] Warm start sequence based optimizers with long term memory
@@ -680,7 +680,7 @@ hyper.run()
 </details>
 
 <details>
-<summary><b>v2.2.0</b>:heavy_check_mark:</summary>
+<summary><b>v2.2.0</b> :heavy_check_mark:</summary>
 
   - [x] Add basic dataset meta-features to long term memory
   - [x] Add helper-functions for memory
@@ -693,7 +693,7 @@ hyper.run()
 </details>
 
 <details>
-<summary><b>v2.3.0</b>:heavy_check_mark:</summary>
+<summary><b>v2.3.0</b> :heavy_check_mark:</summary>
 
   - [x] Tree-structured Parzen Estimator
   - [x] Decision Tree Optimizer
@@ -701,7 +701,7 @@ hyper.run()
 </details>
 
 <details>
-<summary><b>v3.0.0</b>:heavy_check_mark:</summary>
+<summary><b>v3.0.0</b> :heavy_check_mark:</summary>
 
   - [x] New API
       - [x] expand usage of objective-function
@@ -717,7 +717,7 @@ hyper.run()
 <details open>
 <summary><b>v3.1.0</b></summary>
 
-  - [ ] New creation of dashboard for visualization of search-data
+  - [ ] New implementation of dashboard for visualization of search-data
 
 
 </details>
