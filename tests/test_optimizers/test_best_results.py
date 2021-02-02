@@ -29,6 +29,9 @@ search_space_3 = {"x1": np.arange(-10, 11, 0.1)}
 search_space_4 = {"x1": np.arange(0, 11, 0.1)}
 search_space_5 = {"x1": np.arange(-10, 1, 0.1)}
 
+search_space_6 = {"x1": np.arange(-0.0000000003, 0.0000000003, 0.0000000001)}
+search_space_7 = {"x1": np.arange(0, 0.0000000003, 0.0000000001)}
+search_space_8 = {"x1": np.arange(-0.0000000003, 0, 0.0000000001)}
 
 objective_para = (
     "objective",
@@ -48,6 +51,9 @@ search_space_para = (
         (search_space_3),
         (search_space_4),
         (search_space_5),
+        (search_space_6),
+        (search_space_7),
+        (search_space_8),
     ],
 )
 
