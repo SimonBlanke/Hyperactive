@@ -25,6 +25,15 @@ from gradient_free_optimizers import (
 from .hyper_gradient_trafo import HyperGradientTrafo
 
 
+def gfo2hyper(search_space, para):
+    values_dict = {}
+    for i, key in enumerate(search_space.keys()):
+        pos_ = int(para[key])
+        values_dict[key] = search_space[key][pos_]
+
+    return values_dict
+
+
 class DictClass:
     def __init__(self):
         self.para_dict = {}
@@ -123,8 +132,18 @@ class _BaseOptimizer_(DictClass, TrafoClass):
     ):
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
+        def gfo_wrapper_model():
+            # wrapper for GFOs
+            def _model(para):
+                para = gfo2hyper(self.search_space, para)
+                self.para_dict = para
+                return objective_function(self)
+
+            _model.__name__ = objective_function.__name__
+            return _model
+
         self.optimizer.search(
-            objective_function,
+            gfo_wrapper_model(),
             n_iter,
             max_time,
             max_score,

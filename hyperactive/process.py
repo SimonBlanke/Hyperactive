@@ -3,15 +3,6 @@
 # License: MIT License
 
 
-def gfo2hyper(search_space, para):
-    values_dict = {}
-    for i, key in enumerate(search_space.keys()):
-        pos_ = int(para[key])
-        values_dict[key] = search_space[key][pos_]
-
-    return values_dict
-
-
 def _process_(
     nth_process,
     objective_function,
@@ -26,23 +17,13 @@ def _process_(
     verbosity,
     **kwargs
 ):
-    def gfo_wrapper_model():
-        # wrapper for GFOs
-        def _model(para):
-            para = gfo2hyper(search_space, para)
-            optimizer.para_dict = para
-            return objective_function(optimizer)
-
-        _model.__name__ = objective_function.__name__
-        return _model
-
     if "progress_bar" in verbosity:
         verbosity_gfo = ["progress_bar"]
     else:
         verbosity_gfo = []
 
     optimizer.search(
-        objective_function=gfo_wrapper_model(),
+        objective_function=objective_function,
         n_iter=n_iter,
         max_time=max_time,
         max_score=max_score,
