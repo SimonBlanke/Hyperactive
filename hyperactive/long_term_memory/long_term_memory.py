@@ -2,6 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+'''
+
 import os
 import dill
 import shutil
@@ -128,3 +130,5 @@ class LongTermMemory:
             self.n_new_samples - self.n_old_samples,
             "new samples found",
         )
+        
+'''
