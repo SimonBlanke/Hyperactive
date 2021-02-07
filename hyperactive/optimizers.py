@@ -104,6 +104,12 @@ class _BaseOptimizer_(DictClass, TrafoClass):
         initialize = self.trafo.trafo_initialize(initialize)
         search_space_positions = self.trafo.search_space_positions
 
+        # trafo warm start for smbo from values into positions
+        if "warm_start_smbo" in self.opt_params:
+            self.opt_params["warm_start_smbo"] = self.trafo.trafo_memory_warm_start(
+                self.opt_params["warm_start_smbo"]
+            )
+
         self.optimizer = self._OptimizerClass(
             search_space_positions, initialize, **self.opt_params
         )
