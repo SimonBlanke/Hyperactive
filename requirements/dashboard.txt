@@ -1,4 +1,1 @@
-streamlit
-matplotlib
-plotly
-hiplot
+optimization-dashboard
