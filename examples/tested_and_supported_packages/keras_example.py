@@ -1,3 +1,4 @@
+import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import (
     Dense,
@@ -12,7 +13,14 @@ from keras.utils import to_categorical
 
 from hyperactive import Hyperactive
 
-import numpy as np
+
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+config.log_device_placement = True
+
+sess = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(sess)
+
 
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -23,6 +31,7 @@ y_test = to_categorical(y_test, 10)
 # to make the example quick
 X_train = X_train[0:1000]
 y_train = y_train[0:1000]
+
 
 X_test = X_test[0:1000]
 y_test = y_test[0:1000]
@@ -58,10 +67,8 @@ def cnn(opt):
     nn.add(Dense(10))
     nn.add(Activation("softmax"))
 
-    nn.compile(
-        optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
-    )
-    nn.fit(X_train, y_train, epochs=10, batch_size=128)
+    nn.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    nn.fit(X_train, y_train, epochs=20, batch_size=512)
 
     _, score = nn.evaluate(x=X_test, y=y_test)
 
@@ -77,4 +84,3 @@ search_space = {
 hyper = Hyperactive()
 hyper.add_search(cnn, search_space, n_iter=5)
 hyper.run()
-
