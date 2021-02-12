@@ -3,6 +3,8 @@
 # License: MIT License
 
 
+import numpy as np
+import pandas as pd
 import multiprocessing
 from tqdm import tqdm
 
@@ -24,15 +26,14 @@ class HyperactiveResults:
         pass
 
     def _sort_results_objFunc(self, objective_function):
-        import numpy as np
-        import pandas as pd
-
         best_score = -np.inf
         best_para = None
+        search_data = None
+
         results_list = []
 
-        for results in self.results_list:
-            nth_process = results["nth_process"]
+        for results_ in self.results_list:
+            nth_process = results_["nth_process"]
 
             process_infos = self.process_infos[nth_process]
             objective_function_ = process_infos["objective_function"]
@@ -40,36 +41,37 @@ class HyperactiveResults:
             if objective_function_ != objective_function:
                 continue
 
-            if results["best_score"] > best_score:
-                best_score = results["best_score"]
-                best_para = results["best_para"]
+            if results_["best_score"] > best_score:
+                best_score = results_["best_score"]
+                best_para = results_["best_para"]
 
-            results_list.append(results["results"])
+            results_list.append(results_["results"])
 
-        results = pd.concat(results_list)
+        if len(results_list) > 0:
+            search_data = pd.concat(results_list)
 
         self.objFunc2results[objective_function] = {
             "best_para": best_para,
             "best_score": best_score,
-            "results": results,
+            "search_data": search_data,
         }
 
     def _sort_results_search_id(self, search_id):
-        for results in self.results_list:
-            nth_process = results["nth_process"]
+        for results_ in self.results_list:
+            nth_process = results_["nth_process"]
             search_id_ = self.process_infos[nth_process]["search_id"]
 
             if search_id_ != search_id:
                 continue
 
-            best_score = results["best_score"]
-            best_para = results["best_para"]
-            results = results["results"]
+            best_score = results_["best_score"]
+            best_para = results_["best_para"]
+            search_data = results_["results"]
 
             self.search_id2results[search_id] = {
                 "best_para": best_para,
                 "best_score": best_score,
-                "results": results,
+                "search_data": search_data,
             }
 
     def _get_one_result(self, id_, result_name):
@@ -92,7 +94,7 @@ class HyperactiveResults:
         return self._get_one_result(id_, "best_score")
 
     def results(self, id_):
-        return self._get_one_result(id_, "results")
+        return self._get_one_result(id_, "search_data")
 
 
 class Hyperactive(HyperactiveResults):
