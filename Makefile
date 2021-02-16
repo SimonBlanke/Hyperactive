@@ -24,6 +24,13 @@ clean-test:
 		rm -f .coverage; \
 		rm -fr htmlcov/
 
+test-search_space:
+	cd tests/; \
+		i=0; while [ "$$i" -le 100 ]; do \
+			i=$$((i + 1));\
+			pytest -q test_search_spaces.py; \
+	done
+
 test:
 	python -m pytest -x -p no:warnings -rfEX tests/ \
 
