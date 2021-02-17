@@ -1,9 +1,8 @@
 """
-This examples shows how to do an "efficient neural architecture search" 
-as described in the following paper:
-
-Efficient Neural Architecture Search via Parameter Sharing:
-https://arxiv.org/pdf/1802.03268.pdf
+This script describes how to save time during the optimization by
+using a pretrained model. It is similar to the transer learning example,
+but here you do the training and model creation of the pretrained model 
+yourself.
 
 The problem is that most of the optimization time is "waisted" by 
 training the model. The time to find a new position to explore by
@@ -11,7 +10,7 @@ Hyperactive is very small compared to the training time of
 neural networks. This means, that we can do more optimization
 if we keep the training time as little as possible. 
 
-The idea of enas is to pretrain a complete model one time.
+The idea of pretrained neural architecture search is to pretrain a complete model one time.
 In the next step we remove the layers that should be optimized 
 and make the remaining layers not-trainable.
 
@@ -46,12 +45,6 @@ from hyperactive import Hyperactive
 
 y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
-
-
-"""
-Efficient Neural Architecture Search via Parameter Sharing:
-https://arxiv.org/pdf/1802.03268.pdf
-"""
 
 # to make the example quick
 X_train = X_train[0:1000]

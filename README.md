@@ -189,7 +189,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <a><b>Deep Learning:</b></a>
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/neural_architecture_search.py">Neural Architecture Search</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/enas.py">Efficient Neural Architecture Search</a></li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/pretrained_nas.py">Pretrained Neural Architecture Search</a></li>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/transfer_learning.py">Transfer Learning</a></li>
           </ul>
         <a><b>Meta-data:</b></a>
