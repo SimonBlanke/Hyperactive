@@ -25,8 +25,8 @@ the added layers of the model. This saves a lot of training time.
 
 """
 
-
 import numpy as np
+import keras
 from keras.models import Sequential
 from keras.layers import (
     Dense,
@@ -55,44 +55,43 @@ y_test = y_test[0:1000]
 
 
 # create model and train it
-model_pretrained = Sequential()
-model_pretrained.add(Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:]))
-model_pretrained.add(Activation("relu"))
-model_pretrained.add(Conv2D(32, (3, 3)))
-model_pretrained.add(Activation("relu"))
-model_pretrained.add(MaxPooling2D(pool_size=(2, 2)))
-model_pretrained.add(Dropout(0.25))
+model = Sequential()
+model.add(Conv2D(64, (3, 3), padding="same", input_shape=X_train.shape[1:]))
+model.add(Activation("relu"))
+model.add(Conv2D(32, (3, 3)))
+model.add(Activation("relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
-model_pretrained.add(Conv2D(32, (3, 3), padding="same"))
-model_pretrained.add(Activation("relu"))
-model_pretrained.add(Dropout(0.25))
-model_pretrained.add(Flatten())
-model_pretrained.add(Dense(200))
-model_pretrained.add(Activation("relu"))
-model_pretrained.add(Dropout(0.5))
-model_pretrained.add(Dense(10))
-model_pretrained.add(Activation("softmax"))
+model.add(Conv2D(32, (3, 3), padding="same"))
+model.add(Activation("relu"))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(200))
+model.add(Activation("relu"))
+model.add(Dropout(0.5))
+model.add(Dense(10))
+model.add(Activation("softmax"))
 
-model_pretrained.compile(
-    optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
-)
-model_pretrained.fit(X_train, y_train, epochs=5, batch_size=256)
+model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+model.fit(X_train, y_train, epochs=5, batch_size=500)
+
+model_pretrained = model
+n_layers = len(model_pretrained.layers)
+
+# delete the last 9 layers
+for i in range(n_layers - 9):
+    model_pretrained.pop()
+
+# set remaining layers to not-trainable
+for layer in model_pretrained.layers:
+    layer.trainable = False
+
+model_pretrained.summary()
 
 
 def cnn(opt):
-    model = model_pretrained
-    n_layers = len(model.layers)
-
-    # delete the last 9 layers
-    for i in range(n_layers - 9):
-        model.pop()
-
-    # set remaining layers to not-trainable
-    for layer in model.layers:
-        layer.trainable = False
-
-    model = opt["conv_layer.0"](model)
-    model.add(Dropout(0.25))
+    model = keras.models.clone_model(model_pretrained)
 
     model.add(Flatten())
     model.add(Dense(opt["neurons.0"]))
@@ -104,7 +103,9 @@ def cnn(opt):
     model.compile(
         optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
     )
-    model.fit(X_train, y_train, epochs=5, batch_size=256)
+    model.fit(X_train, y_train, epochs=5, batch_size=500)
+
+    model.summary()
 
     _, score = model.evaluate(x=X_test, y=y_test)
 
@@ -136,5 +137,5 @@ search_space = {
 
 
 hyper = Hyperactive()
-hyper.add_search(cnn, search_space, n_iter=5)
+hyper.add_search(cnn, search_space, n_iter=3)
 hyper.run()
