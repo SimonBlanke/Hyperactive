@@ -97,6 +97,8 @@ Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims 
 
 <br>
 
+
+
 <div align="center"></a>
 <h3>
 Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
@@ -213,6 +215,76 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 
 <br>
 
+
+### Hyperactive is very easy to use:
+
+<table>
+<tr>
+<th> Regular training </th>
+<th> Hyperactive </th>
+</tr>
+<tr>
+<td>
+
+```python
+from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.datasets import load_boston
+
+
+data = load_boston()
+X, y = data.data, data.target
+
+
+gbr = DecisionTreeRegressor(max_depth=10)
+
+
+score = cross_val_score(gbr, X, y, cv=3).mean()
+
+
+
+
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```python
+from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.datasets import load_boston
+from hyperactive import Hyperactive
+
+data = load_boston()
+X, y = data.data, data.target
+
+def model(opt):
+    gbr = DecisionTreeRegressor(
+      max_depth=opt["max_depth"]
+    )
+    return cross_val_score(gbr, X, y, cv=3).mean()
+
+
+search_space = {"max_depth": list(range(3, 25))}
+
+hyper = Hyperactive()
+hyper.add_search(model, search_space, n_iter=50)
+hyper.run()
+```
+
+</td>
+</tr>
+</table>
+
+
+
+<br>
+
 ## Installation
 [![PyPI version](https://badge.fury.io/py/hyperactive.svg)](https://badge.fury.io/py/hyperactive)
 
@@ -223,7 +295,7 @@ pip install hyperactive
 
 <br>
 
-## Minimal example
+## Example
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -234,25 +306,22 @@ from hyperactive import Hyperactive
 data = load_boston()
 X, y = data.data, data.target
 
-""" define the model in a function """
+# define the model in a function
 def model(opt):
-    """ pass the suggested parameter to the machine learning model """
+    # pass the suggested parameter to the machine learning model
     gbr = GradientBoostingRegressor(
         n_estimators=opt["n_estimators"]
     )
     scores = cross_val_score(gbr, X, y, cv=3)
 
-    """ return a single numerical value, which gets maximized """
+    # return a single numerical value, which gets maximized
     return scores.mean()
 
 
-""" 
-create the search space 
-determines the ranges of parameters you want the optimizer to search through
-"""
+# search space determines the ranges of parameters you want the optimizer to search through
 search_space = {"n_estimators": list(range(10, 200, 5))}
 
-""" start the optimization run """
+# start the optimization run
 hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=50)
 hyper.run()
