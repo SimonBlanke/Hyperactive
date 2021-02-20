@@ -225,6 +225,7 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 </tr>
 <tr>
 <td>
+<sub>
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -237,9 +238,8 @@ X, y = data.data, data.target
 
 
 gbr = DecisionTreeRegressor(max_depth=10)
-
-
 score = cross_val_score(gbr, X, y, cv=3).mean()
+
 
 
 
@@ -251,8 +251,10 @@ score = cross_val_score(gbr, X, y, cv=3).mean()
 
 ```
 
+</sub>
 </td>
 <td>
+<sup>
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -264,9 +266,7 @@ data = load_boston()
 X, y = data.data, data.target
 
 def model(opt):
-    gbr = DecisionTreeRegressor(
-      max_depth=opt["max_depth"]
-    )
+    gbr = DecisionTreeRegressor(max_depth=opt["max_depth"])
     return cross_val_score(gbr, X, y, cv=3).mean()
 
 
@@ -277,6 +277,7 @@ hyper.add_search(model, search_space, n_iter=50)
 hyper.run()
 ```
 
+</sub>
 </td>
 </tr>
 </table>
