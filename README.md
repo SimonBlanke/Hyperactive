@@ -213,6 +213,15 @@ Hyperactive features a collection of optimization algorithms that can be used fo
 The examples above are not necessarly done with realistic datasets or training procedures. 
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
+
+
+<br>
+
+## Tutorials
+
+  - [Optimization Strategies for Deep Learning with Hyperactive](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/Optimization%20Strategies%20for%20Deep%20Learning.ipynb)
+
+
 <br>
 
 
@@ -332,6 +341,7 @@ hyper.add_search(model, search_space, n_iter=50)
 hyper.run()
 ```
 
+<br>
 
 ## Hyperactive API reference
 
