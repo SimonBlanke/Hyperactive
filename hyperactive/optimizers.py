@@ -87,8 +87,12 @@ class TrafoClass:
 
         self.results = self._positions2results(self.positions)
 
-        self.memory_positions = self.trafo._memory2dataframe(self.optimizer.memory_dict)
-        self.memory_values_df = self._positions2results(self.memory_positions)
+        results_dd = self.optimizer.results.drop_duplicates(
+            subset=self.trafo.para_names, keep="first"
+        )
+        self.memory_values_df = results_dd[
+            self.trafo.para_names + ["score"]
+        ].reset_index(drop=True)
 
 
 class _BaseOptimizer_(DictClass, TrafoClass):
