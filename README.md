@@ -67,6 +67,16 @@
         </a>
       </td>
     </tr>
+    <tr align="left" valign="center">
+      <td>
+        <strong>Tested versions:</strong>
+      </td>
+      <td>
+        <a href="https://pypi.org/project/hyperactive/">
+          <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=Python&logoColor=white" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
   </tbody>
 </table>
 
