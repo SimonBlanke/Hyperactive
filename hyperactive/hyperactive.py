@@ -15,7 +15,7 @@ from .run_search import run_search
 def set_n_jobs(n_jobs):
     """Sets the number of jobs to run in parallel"""
     num_cores = multiprocessing.cpu_count()
-    if n_jobs == -1 or n_jobs > num_cores:
+    if n_jobs == -1:
         return num_cores
     else:
         return n_jobs
