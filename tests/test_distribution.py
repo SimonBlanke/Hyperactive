@@ -18,11 +18,15 @@ def test_n_jobs_0():
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
+    assert len(hyper.results_list) == 2
+
 
 def test_n_jobs_1():
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
     hyper.run()
+
+    assert len(hyper.results_list) == 4
 
 
 def test_n_jobs_2():
@@ -30,11 +34,21 @@ def test_n_jobs_2():
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=8)
     hyper.run()
 
+    assert len(hyper.results_list) == 8
+
 
 def test_n_jobs_3():
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=-1)
     hyper.run()
+
+
+def test_n_jobs_4():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=100)
+    hyper.run()
+
+    assert len(hyper.results_list) == 100
 
 
 def test_multiprocessing_0():
@@ -69,8 +83,7 @@ def test_joblib_1():
         n_jobs = len(search_processes_paras)
 
         jobs = [
-            delayed(process_func)(**info_dict)
-            for info_dict in search_processes_paras
+            delayed(process_func)(**info_dict) for info_dict in search_processes_paras
         ]
         results = Parallel(n_jobs=n_jobs, **kwargs)(jobs)
 
@@ -80,4 +93,3 @@ def test_joblib_1():
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
 
     hyper.run()
-
