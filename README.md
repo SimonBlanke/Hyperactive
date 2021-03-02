@@ -735,6 +735,84 @@ A combination between simulated annealing and random search.
 
 <br>
 
+## FAQ
+
+#### Known Errors + Solutions
+
+<details>
+<summary><b> Read this before opening a bug-issue </b></summary>
+
+<br>
+
+Are you sure the bug is located in Hyperactive?
+
+Look at the error message from the command line. <b>If</b> one of the last messages look like this:
+   - File "/.../gradient_free_optimizers/...", line ...
+
+<b>Then</b> you should post the bug report in: 
+   - https://github.com/SimonBlanke/Gradient-Free-Optimizers
+
+<b>Otherwise</b> you can post the bug report in Hyperactive
+
+</details>
+
+
+<details>
+<summary> MemoryError: Unable to allocate ... for an array with shape (...) </summary>
+
+<br>
+
+This is expected of the current implementation of smb-optimizers. For all Sequential model based algorithms you have to keep your eyes on the search space size:
+```python
+search_space_size = 1
+for value_ in search_space.values():
+    search_space_size *= len(value_)
+    
+print("search_space_size", search_space_size)
+```
+Reduce the search space size to resolve this error.
+
+</details>
+
+
+<details>
+<summary> TypeError: cannot pickle '_thread.RLock' object </summary>
+
+<br>
+
+Setting distribution to "joblib" may fix this problem:
+```python
+hyper = Hyperactive(distribution="joblib")
+```
+
+</details>
+
+
+<details>
+<summary> Command line full of warnings </summary>
+
+<br>
+
+Very often warnings from sklearn or numpy. Those warnings do not correlate with bad performance from Hyperactive. Your code will most likely run fine. Those warnings are very difficult to silence.
+
+Put this at the very top of your script:
+```python
+def warn(*args, **kwargs):
+    pass
+
+
+import warnings
+
+warnings.warn = warn
+```
+
+</details>
+
+
+
+
+<br>
+
 ## References
 
 #### [dto] [Scikit-Optimize](https://github.com/scikit-optimize/scikit-optimize/blob/master/skopt/learning/forest.py)
