@@ -82,7 +82,7 @@
 
 <br>
 
-Hyperactive is primarly a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
+Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
 
   - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
   - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
@@ -220,7 +220,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
   </tbody>
 </table>
 
-The examples above are not necessarly done with realistic datasets or training procedures. 
+The examples above are not necessarily done with realistic datasets or training procedures. 
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
 
@@ -411,7 +411,7 @@ hyper.run()
 
 - n_iter
   - (int)
-  - The number of iterations that will be performed during the optimiation run. The entire iteration consists of the optimization-step, which decides the next parameter that will be evaluated and the evaluation-step, which will run the objective function with the chosen parameter and return the score.
+  - The number of iterations that will be performed during the optimization run. The entire iteration consists of the optimization-step, which decides the next parameter that will be evaluated and the evaluation-step, which will run the objective function with the chosen parameter and return the score.
 
 - optimizer = "default"
   - (object)
@@ -447,7 +447,7 @@ hyper.run()
 
 - n_jobs = 1
   - (int)
-  - Number of jobs to run in parallel. Those jobs are optimization runs that work independend from another (no information sharing). If n_jobs == -1 the maximum available number of cpu cores is used.
+  - Number of jobs to run in parallel. Those jobs are optimization runs that work independent from another (no information sharing). If n_jobs == -1 the maximum available number of cpu cores is used.
 
 - initialize = {"grid": 4, "random": 2, "vertices": 4}
   - (dict)
@@ -477,7 +477,7 @@ hyper.run()
 
 - memory_warm_start = None
   - (pandas dataframe, None)
-  - Pandas dataframe that contains score and paramter information that will be automatically loaded into the memory-dictionary.
+  - Pandas dataframe that contains score and parameter information that will be automatically loaded into the memory-dictionary.
 
       example:
 
@@ -559,7 +559,7 @@ hyper.run()
 
 - objective_function
   - (callable)
-- returnes: int or float
+- returns: int or float
 - Numerical value of the best score of the given objective_function found in the previous optimization run.
 
 </details>
@@ -570,8 +570,8 @@ hyper.run()
 
 - objective_function
   - (callable)
-- returnes: Pandas dataframe 
-- The dataframe contains score, paramter information, iteration times and evaluation times of the given objective_function found in the previous optimization run.
+- returns: Pandas dataframe 
+- The dataframe contains score, parameter information, iteration times and evaluation times of the given objective_function found in the previous optimization run.
 
     example:
 
