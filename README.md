@@ -6,6 +6,10 @@
 
 <br>
 
+
+![example workflow](https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=dev)
+
+
 ---
 
 <h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-learning models.</h2>
@@ -19,11 +23,11 @@
         <strong>Master status:</strong>
       </td>
       <td>
-        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/travis/com/SimonBlanke/Hyperactive/master?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
         </a>
-        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=flat-square&logo=codecov" alt="img not loaded: try F5 :)">
+        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master&logo=codecov" alt="img not loaded: try F5 :)">
         </a>
       </td>
     </tr>
@@ -33,11 +37,11 @@
         <strong>Dev status:</strong>
       </td>
       <td>
-        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive/dev?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
         </a>
-        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive?branch=dev">
-          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive/dev?style=flat-square&logo=codecov" alt="img not loaded: try F5 :)">
+        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/dev&logo=codecov" alt="img not loaded: try F5 :)">
         </a>
       </td>
     </tr>
