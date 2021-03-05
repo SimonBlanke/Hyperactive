@@ -7,9 +7,6 @@
 <br>
 
 
-![example workflow](https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=dev)
-
-
 ---
 
 <h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-learning models.</h2>
