@@ -215,6 +215,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/test_function.py">Test Functions</a></li>
             <li>Fit Gaussian Curves</li>
+            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/multiple_scores.py">Managing multiple objectives</a></li>
           </ul>
       </td>
     </tr>
