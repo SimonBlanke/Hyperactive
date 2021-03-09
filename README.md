@@ -15,7 +15,6 @@
 
 
 <table>
-<tr align="center" valign="center">
 <td>
 
 <table>
@@ -92,7 +91,6 @@
 <img src="./docs/images/bayes_convex.gif" style="width: 400px;"/>
 
 </td>
-</tr>
 </table>
 
 <br>
