@@ -31,7 +31,7 @@
 
 <br>
 
-<img src="./docs/images/bayes_convex.gif" align="right" alt="logo" width="600" height="500">
+<img src="./docs/images/bayes_convex.gif" align="right" alt="logo" width="500" height="400">
 
 ## Hyperactive:
 
