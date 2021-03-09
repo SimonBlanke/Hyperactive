@@ -13,6 +13,11 @@
 
 <br>
 
+
+<table>
+<tr align="center" valign="center">
+<td>
+
 <table>
   <tbody>
     <tr align="left" valign="center">
@@ -44,7 +49,7 @@
     </tr>
     <tr/>    <tr align="left" valign="center">
       <td>
-         <strong>Code quality:</strong>
+        <strong>Code quality:</strong>
       </td>
       <td>
         <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
@@ -68,7 +73,7 @@
         </a>
       </td>
     </tr>
-    <tr align="left" valign="center">
+    <tr/>    <tr align="left" valign="center">
       <td>
         <strong>Tested versions:</strong>
       </td>
@@ -79,6 +84,15 @@
       </td>
     </tr>
   </tbody>
+</table>
+
+</td>
+<td>
+
+<img src="./docs/images/bayes_convex.gif" style="width: 400px;"/>
+
+</td>
+</tr>
 </table>
 
 <br>
