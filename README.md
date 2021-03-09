@@ -1,105 +1,58 @@
 <p align="center">
-  <br>
   <a href="https://simonblanke.github.io/Hyperactive/"><img src="./docs/images/logo.png" height="240"></a>
-  <br>
 </p>
 
 <br>
 
-
 ---
+
+<p align="center">
+  <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+            <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
+          </a>
+  <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
+    <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master&logo=codecov" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
+  <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
+  <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://pypi.org/project/hyperactive/">
+  <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://pypi.org/project/hyperactive/">
+  <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=Python&logoColor=white" alt="img not loaded: try F5 :)">
+  </a>
+</p>
 
 <h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-learning models.</h2>
 
 <br>
 
+<img src="./docs/images/bayes_convex.gif" align="right" alt="logo" width="500" height="400">
 
-<table  border="0" cellspacing="0" cellpadding="0">
-<td>
+## Hyperactive:
 
-<table>
-  <tbody>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Master status:</strong>
-      </td>
-      <td>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master&logo=codecov" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Dev status:</strong>
-      </td>
-      <td>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/dev&logo=codecov" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>    <tr align="left" valign="center">
-      <td>
-        <strong>Code quality:</strong>
-      </td>
-      <td>
-        <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
-        <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
-        <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>    <tr align="left" valign="center">
-      <td>
-        <strong>Latest versions:</strong>
-      </td>
-      <td>
-        <a href="https://github.com/SimonBlanke/Hyperactive/releases">
-          <img src="https://img.shields.io/github/v/release/SimonBlanke/Hyperactive?style=flat-square&logo=github" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://pypi.org/project/hyperactive/">
-          <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>    <tr align="left" valign="center">
-      <td>
-        <strong>Tested versions:</strong>
-      </td>
-      <td>
-        <a href="https://pypi.org/project/hyperactive/">
-          <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=Python&logoColor=white" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+- is very easy to learn but extremly versatile
 
-</td>
-<td>
+- provides intelligent optimization algorithms
 
-<img src="./docs/images/bayes_convex.gif" style="width: 400px;"/>
+- makes optimization data collection simple
 
-</td>
-</table>
+- visualizes your collected data
+
+- saves your computation time
+
+- supports parallel computing
+
 
 <br>
-
-Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
-
-  - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
-  - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
-
+<br>
+<br>
+<br>
+<br>
 
 <br>
 
@@ -117,6 +70,16 @@ Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims
 </div>
 
 ---
+
+
+<br>
+
+Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
+
+  - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
+  - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
+
+
 
 <br>
 
