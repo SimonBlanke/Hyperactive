@@ -27,11 +27,11 @@
   </a>
 </p>
 
-<h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-learning models.</h2>
+<h2 align="center">A hyperparameter optimization and data collection toolbox for convenient and fast prototyping of machine-learning models.</h2>
 
 <br>
 
-<img src="./docs/images/bayes_convex.gif" align="right" alt="logo" width="500" height="400">
+<img src="./docs/images/bayes_convex.gif" align="right" alt="logo" width="600" height="500">
 
 ## Hyperactive:
 
@@ -53,6 +53,7 @@
 <br>
 <br>
 <br>
+<br>
 
 ---
 
@@ -69,25 +70,12 @@
 
 ---
 
-
 <br>
 
-Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
-
-  - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
-  - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
-
-
-
-<br>
-
-
-
-<div align="center"></a>
-<h3>
+<h3 align="center">
 Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
 </h3>
-</div>
+
 
 <br>
 
