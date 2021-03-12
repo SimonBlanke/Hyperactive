@@ -12,6 +12,7 @@ class class_:
         pass
 
 
+# Hyperactive can handle python objects in the search space
 search_space = {
     "int": list(range(1, 10)),
     "float": [0.1, 0.01, 0.001],

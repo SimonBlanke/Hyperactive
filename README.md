@@ -35,7 +35,7 @@
 
 ## Hyperactive:
 
-- is [very easy](#hyperactive-is-very-easy-to-use:) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
+- is [very easy](#hyperactive-is-very-easy-to-use) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
 
 - provides intelligent optimization algorithms
 
