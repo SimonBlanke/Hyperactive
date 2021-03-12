@@ -35,17 +35,17 @@
 
 ## Hyperactive:
 
-- is very easy to learn but extremly versatile
+- is [very easy](#hyperactive-is-very-easy-to-use:) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
 
 - provides intelligent optimization algorithms
 
-- makes optimization data collection simple
+- makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
-- visualizes your collected data
+- visualizes your collected data (> v3.1.0)
 
-- saves your computation time
+- saves your [computation time](./examples/optimization_applications/memory.py)
 
-- supports parallel computing
+- supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
 
 
 <br>
@@ -66,7 +66,6 @@
 
 <div align="center"><a name="menu"></a>
   <h3>
-    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api-reference">API reference</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
@@ -184,6 +183,8 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_applications/test_function.py">Test Functions</a></li>
             <li>Fit Gaussian Curves</li>
             <li><a href="./examples/optimization_applications/multiple_scores.py">Managing multiple objectives</a></li>
+            <li><a href="./examples/optimization_applications/search_space_example.py">Managing objects in search space</a></li>
+            <li><a href="./examples/optimization_applications/memory.py">Memorize evaluations</a></li>
           </ul>
       </td>
     </tr>
