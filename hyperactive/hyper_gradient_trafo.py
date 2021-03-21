@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numbers
 import numpy as np
 import pandas as pd
 
@@ -73,6 +74,33 @@ class HyperGradientTrafo(Converter):
             search_space_positions[key] = np.array(range(len(search_space[key])))
         self.search_space_positions = search_space_positions
 
+        self.search_space_ltm = {}
+        self.data_types = {}
+        for para_name in search_space.keys():
+            value0 = search_space[para_name][0]
+
+            if isinstance(value0, numbers.Number):
+                type0 = "number"
+                search_dim_ltm = search_space[para_name]
+            elif isinstance(value0, str):
+                type0 = "string"
+                search_dim_ltm = search_space[para_name]
+
+            elif callable(value0):
+                type0 = "function"
+
+                search_dim_ltm = []
+                for func in list(search_space[para_name]):
+                    search_dim_ltm.append(func.__name__)
+
+            else:
+                type0 = None
+                search_dim_ltm = search_space[para_name]
+
+            self.data_types[para_name] = type0
+
+            self.search_space_ltm[para_name] = search_dim_ltm
+
     def trafo_initialize(self, initialize):
         if "warm_start" in list(initialize.keys()):
             warm_start = initialize["warm_start"]
@@ -111,22 +139,8 @@ class HyperGradientTrafo(Converter):
         df_positions_dict = {}
         for para_name in self.para_names:
             list1_values = list(results[para_name].values)
-            search_dim = self.search_space[para_name]
-            """
-            list1_positions = [
-                search_dim.index(value) if value in search_dim else None
-                for value in list1_values
-            ]
-            """
+            search_dim = self.search_space_ltm[para_name]
 
-            """
-            list1_positions = [
-                search_dim.index(value1)
-                for value2 in list1_values
-                for value1 in search_dim
-                if value1 == value2
-            ]
-            """
             list1_positions = self.get_list_positions(list1_values, search_dim)
 
             # remove None
