@@ -77,11 +77,15 @@ class TrafoClass:
         self.eval_time = np.array(self.optimizer.eval_times).sum()
         self.iter_time = np.array(self.optimizer.iter_times).sum()
 
-        value = self.trafo.para2value(self.optimizer.best_para)
-        position = self.trafo.position2value(value)
-        best_para = self.trafo.value2para(position)
+        if self.optimizer.best_para is not None:
+            value = self.trafo.para2value(self.optimizer.best_para)
+            position = self.trafo.position2value(value)
+            best_para = self.trafo.value2para(position)
 
-        self.best_para = best_para
+            self.best_para = best_para
+        else:
+            self.best_para = None
+
         self.best_score = self.optimizer.best_score
         self.positions = self.optimizer.results
 
@@ -140,6 +144,46 @@ class _BaseOptimizer_(DictClass, TrafoClass):
         random_state=None,
         nth_process=None,
     ):
+
+        """
+        import copy
+        import inspect
+
+        if inspect.isclass(type(memory)):
+            print(memory, type(memory))
+            print("Long Term Memory")
+            ltm = copy.deepcopy(memory)
+            ltm._get_data_types(self.search_space)
+
+            memory_warm_start = ltm._load()
+
+            ltm._init_data_path(objective_function, nth_process)
+            memory = True
+
+            if ltm.save_on == "iteration":
+
+                def ltm_wrapper(results, para):
+                    if isinstance(results, tuple):
+                        score = results[0]
+                        results_dict = results[1]
+                    else:
+                        score = results
+                        results_dict = {}
+
+                    results_dict["score"] = score
+                    ltm_dict = {**para, **results_dict}
+                    ltm._append(ltm_dict)
+
+            else:
+
+                def ltm_wrapper(results, para):
+                    pass
+
+        print("\n self.search_space \n", self.search_space, "\n")
+
+        print("\n memory_warm_start \n", memory_warm_start, "\n")
+        """
+
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
         def gfo_wrapper_model():
@@ -147,7 +191,11 @@ class _BaseOptimizer_(DictClass, TrafoClass):
             def _model(para):
                 para = gfo2hyper(self.search_space, para)
                 self.para_dict = para
-                return objective_function(self)
+                results = objective_function(self)
+
+                # ltm_wrapper(results, para)
+
+                return results
 
             _model.__name__ = objective_function.__name__
             return _model
@@ -165,6 +213,11 @@ class _BaseOptimizer_(DictClass, TrafoClass):
         )
 
         self._convert_results2hyper()
+
+        """
+        if inspect.isclass(type(memory)):
+            ltm._save(self.results)
+        """
 
 
 class HillClimbingOptimizer(_BaseOptimizer_):
