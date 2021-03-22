@@ -125,7 +125,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_me./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
+            <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/decision_tree_optimization.py">Decision Tree Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
           </ul>
