@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
+from .print_info import print_info
 
 
 def set_n_jobs(n_jobs):
@@ -165,7 +166,6 @@ class Hyperactive(HyperactiveResults):
         memory=True,
         memory_warm_start=None,
     ):
-
         if isinstance(optimizer, str):
             if optimizer == "default":
                 optimizer = RandomSearchOptimizer()
@@ -191,11 +191,23 @@ class Hyperactive(HyperactiveResults):
             search_id,
         )
 
-    def run(
-        self,
-        max_time=None,
-    ):
+    def run(self, max_time=None):
         for nth_process in self.process_infos.keys():
             self.process_infos[nth_process]["max_time"] = max_time
 
         self.results_list = run_search(self.process_infos, self.distribution)
+
+        for results in self.results_list:
+            nth_process = results["nth_process"]
+
+            print_info(
+                verbosity=self.process_infos[nth_process]["verbosity"],
+                objective_function=self.process_infos[nth_process][
+                    "objective_function"
+                ],
+                best_score=results["best_score"],
+                best_para=results["best_para"],
+                eval_times=results["eval_times"],
+                iter_times=results["iter_times"],
+                n_iter=self.process_infos[nth_process]["n_iter"],
+            )
