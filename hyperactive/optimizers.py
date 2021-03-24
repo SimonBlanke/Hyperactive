@@ -213,6 +213,7 @@ class _BaseOptimizer_(DictClass, TrafoClass):
         )
 
         self._convert_results2hyper()
+        self.p_bar = self.optimizer.p_bar
 
         """
         if inspect.isclass(type(memory)):

@@ -62,17 +62,20 @@ def align_para_names(para_names):
     return para_names_align
 
 
-def _print_results(objective_function, best_score, best_para):
+def _print_results(objective_function, best_score, best_para, best_iter):
     print("\nResults: '{}'".format(objective_function.__name__), " ")
     if best_para is None:
         print(indent, "Best score:", best_score, " ")
-        print(indent, "Best parameter:", best_para, " ")
+        print(indent, "Best parameter set:", best_para, " ")
+        print(indent, "Best iteration:", best_iter, " ")
+
     else:
         para_names = list(best_para.keys())
         para_names_align = align_para_names(para_names)
 
         print(indent, "Best score:", best_score, " ")
-        print(indent, "Best parameter:")
+        print(indent, "Best parameter set:")
+
         for para_key in best_para.keys():
             added_spaces = para_names_align[para_key]
             print(
@@ -83,6 +86,8 @@ def _print_results(objective_function, best_score, best_para):
                 best_para[para_key],
                 " ",
             )
+        print(indent, "Best iteration:", best_iter, " ")
+
     print(" ")
 
 
@@ -91,6 +96,7 @@ def print_info(
     objective_function,
     best_score,
     best_para,
+    best_iter,
     eval_times,
     iter_times,
     n_iter,
@@ -100,7 +106,7 @@ def print_info(
     iter_time = np.array(iter_times).sum()
 
     if "print_results" in verbosity:
-        _print_results(objective_function, best_score, best_para)
+        _print_results(objective_function, best_score, best_para, best_iter)
 
     if "print_times" in verbosity:
         _print_times(eval_time, iter_time, n_iter)

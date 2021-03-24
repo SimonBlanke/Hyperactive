@@ -207,6 +207,7 @@ class Hyperactive(HyperactiveResults):
                 ],
                 best_score=results["best_score"],
                 best_para=results["best_para"],
+                best_iter=results["best_iter"],
                 eval_times=results["eval_times"],
                 iter_times=results["iter_times"],
                 n_iter=self.process_infos[nth_process]["n_iter"],
