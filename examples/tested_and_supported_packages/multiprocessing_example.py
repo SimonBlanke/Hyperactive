@@ -1,3 +1,17 @@
+'''
+Hyperactive can perform optimizations of multiple different objective functions
+in parallel. This can be done via multiprocessing, joblib or a custom wrapper-function.
+The processes won't communicate with each other.
+
+You can add as many searches to the optimization run (.add_search(...)) and 
+run each of those searches n-times (n_jobs).
+
+In the example below we are performing 4 searches in parallel:
+    - model_etc one time
+    - model_rfc one time
+    - model_gbc two times
+
+'''
 import numpy as np
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingClassifier
@@ -88,5 +102,15 @@ search_space_gbc = {
 hyper = Hyperactive()
 hyper.add_search(model_etc, search_space_etc, n_iter=50)
 hyper.add_search(model_rfc, search_space_rfc, n_iter=50)
-hyper.add_search(model_gbc, search_space_gbc, n_iter=50)
+hyper.add_search(model_gbc, search_space_gbc, n_iter=50, n_jobs=2)
 hyper.run(max_time=5)
+
+search_data_etc = hyper.results(model_etc)
+search_data_rfc = hyper.results(model_rfc)
+search_data_gbc = hyper.results(model_gbc)
+
+print("\n ExtraTreesClassifier search data \n", search_data_etc)
+print("\n GradientBoostingClassifier search data \n", search_data_gbc)
+
+
+
