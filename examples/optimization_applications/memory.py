@@ -1,3 +1,15 @@
+'''
+Hyperactive saves all positions it explores in a memory dictionary. If it encounters 
+this positions again Hyperactive will just read the score from the memory dictionary 
+instead of reevaluating the objective function. If there is a machine-/deep-learning
+model within the objective function this memory saves you a lot of computation
+time, because it is much faster to just look up the score in a dictionary instead
+of retraining an entire machine learning model.
+
+You can also pass the search data to the "memory_warm_start"-parameter of the next 
+optimization run. This way the next optimization run has the memory of the 
+previous run, which (again) saves you a lot of computation time.
+'''
 import time
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor

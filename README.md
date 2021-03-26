@@ -37,7 +37,7 @@
 
 - is [very easy](#hyperactive-is-very-easy-to-use) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
 
-- provides intelligent optimization algorithms
+- provides intelligent [optimization algorithms](#overview), support for all mayor [machine-learning frameworks](#overview) and many interesting [applications](#overview)
 
 - makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
@@ -77,6 +77,8 @@
 ---
 
 <br>
+
+## Overview
 
 <h3 align="center">
 Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
@@ -125,7 +127,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_me./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
+            <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/decision_tree_optimization.py">Decision Tree Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
           </ul>
