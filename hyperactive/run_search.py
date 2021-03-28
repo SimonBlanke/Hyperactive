@@ -35,8 +35,11 @@ def _get_distribution(distribution):
         return dist_dict[distribution], {}
 
 
-def run_search(search_processes_infos, distribution, n_jobs=1):
+def run_search(search_processes_infos, distribution, n_jobs="auto"):
     process_infos = list(search_processes_infos.values())
+
+    if n_jobs == "auto":
+        n_jobs = len(process_infos)
 
     if n_jobs == 1:
         results_list = single_process(_process_, process_infos)
