@@ -201,3 +201,18 @@ class Hyperactive(HyperactiveResults):
             self.process_infos[nth_process]["max_time"] = max_time
 
         self.results_list = run_search(self.process_infos, self.distribution, self.n_jobs)
+	for results in self.results_list:
+            nth_process = results["nth_process"]
+
+            print_info(
+                verbosity=self.process_infos[nth_process]["verbosity"],
+                objective_function=self.process_infos[nth_process][
+                    "objective_function"
+                ],
+                best_score=results["best_score"],
+                best_para=results["best_para"],
+                best_iter=results["best_iter"],
+                eval_times=results["eval_times"],
+                iter_times=results["iter_times"],
+                n_iter=self.process_infos[nth_process]["n_iter"],
+            )
