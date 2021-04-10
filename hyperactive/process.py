@@ -34,20 +34,13 @@ def _process_(
         nth_process=nth_process,
     )
 
-    optimizer.print_info(
-        verbosity,
-        objective_function,
-        optimizer.best_score,
-        optimizer.best_para,
-        optimizer.eval_time,
-        optimizer.iter_time,
-        n_iter,
-    )
-
     return {
         "nth_process": nth_process,
         "best_para": optimizer.best_para,
         "best_score": optimizer.best_score,
+        "best_iter": optimizer.p_bar._best_since_iter,
+        "eval_times": optimizer.eval_time,
+        "iter_times": optimizer.iter_time,
         "positions": optimizer.positions,
         "results": optimizer.results,
         "memory_values_df": optimizer.memory_values_df,

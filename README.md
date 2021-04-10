@@ -1,92 +1,64 @@
 <p align="center">
-  <br>
   <a href="https://simonblanke.github.io/Hyperactive/"><img src="./docs/images/logo.png" height="240"></a>
-  <br>
 </p>
 
 <br>
 
 ---
 
-<h2 align="center">A hyperparameter optimization and meta-learning toolbox for convenient and fast prototyping of machine-learning models.</h2>
+<p align="center">
+  <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+            <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
+          </a>
+  <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
+    <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master&logo=codecov" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
+  <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
+  <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://pypi.org/project/hyperactive/">
+  <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
+  </a>
+  <a href="https://pypi.org/project/hyperactive/">
+  <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=Python&logoColor=white" alt="img not loaded: try F5 :)">
+  </a>
+</p>
+
+<h2 align="center">A hyperparameter optimization and data collection toolbox for convenient and fast prototyping of machine-learning models.</h2>
 
 <br>
 
-<table>
-  <tbody>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Master status:</strong>
-      </td>
-      <td>
-        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/travis/com/SimonBlanke/Hyperactive/master?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive?style=flat-square&logo=codecov" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Dev status:</strong>
-      </td>
-      <td>
-        <a href="https://travis-ci.com/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/travis/SimonBlanke/Hyperactive/dev?style=flat-square&logo=travis" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://coveralls.io/github/SimonBlanke/Hyperactive?branch=dev">
-          <img src="https://img.shields.io/coveralls/github/SimonBlanke/Hyperactive/dev?style=flat-square&logo=codecov" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>    <tr align="left" valign="center">
-      <td>
-         <strong>Code quality:</strong>
-      </td>
-      <td>
-        <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
-        <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
-        <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr/>    <tr align="left" valign="center">
-      <td>
-        <strong>Latest versions:</strong>
-      </td>
-      <td>
-        <a href="https://github.com/SimonBlanke/Hyperactive/releases">
-          <img src="https://img.shields.io/github/v/release/SimonBlanke/Hyperactive?style=flat-square&logo=github" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://pypi.org/project/hyperactive/">
-          <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Tested versions:</strong>
-      </td>
-      <td>
-        <a href="https://pypi.org/project/hyperactive/">
-          <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=Python&logoColor=white" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<img src="./docs/images/bayes_convex.gif" align="right" width="500">
+
+## Hyperactive:
+
+- is [very easy](#hyperactive-is-very-easy-to-use) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
+
+- provides intelligent [optimization algorithms](#overview), support for all mayor [machine-learning frameworks](#overview) and many interesting [applications](#overview)
+
+- makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
+
+- visualizes your collected data (> v3.1.0)
+
+- saves your [computation time](./examples/optimization_applications/memory.py)
+
+- supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
+
+
+<br>
+<br>
+<br>
+<br>
+
 
 <br>
 
-Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims to simplify the model-selection and -tuning process. You can use any machine- or deep-learning package and it is not necessary to learn new syntax. Hyperactive offers <b>high versatility</b> in model optimization because of two characteristics:
+## What's new?
 
-  - You can define any kind of model in the objective function. It just has to return a score/metric that gets maximized.
-  - The search space accepts not just 'int', 'float' or 'str' as data types but even functions, classes or any python objects.
-
+  - ### [Neural Architecture Search Tutorial](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/Optimization%20Strategies%20for%20Deep%20Learning.ipynb)
 
 <br>
 
@@ -94,7 +66,6 @@ Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims
 
 <div align="center"><a name="menu"></a>
   <h3>
-    <a href="https://github.com/SimonBlanke/Hyperactive#main-features">Main features</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api-reference">API reference</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
@@ -107,13 +78,12 @@ Hyperactive is primarily a <b>hyperparameter optimization toolkit</b>, that aims
 
 <br>
 
+## Overview
 
-
-<div align="center"></a>
-<h3>
+<h3 align="center">
 Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
 </h3>
-</div>
+
 
 <br>
 
@@ -138,82 +108,85 @@ Hyperactive features a collection of optimization algorithms that can be used fo
       <td>
         <a><b>Local Search:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
+            <li><a href="./examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
+            <li><a href="./examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
+            <li><a href="./examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/random_search.py">Random Search</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
+            <li><a href="./examples/optimization_techniques/random_search.py">Random Search</a></li>
+            <li><a href="./examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
+            <li><a href="./examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
+            <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
+            <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
+            <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
-            <li><a href="https://simonblanke.github.io/Hyperactive/#/./optimizers/sequential_mehttps://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_techniques/decision_tree_optimization.py">Decision Tree Optimizer</a>
+            <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
+            <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
+            <li><a href="./examples/optimization_techniques/decision_tree_optimization.py">Decision Tree Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
           </ul>
       </td>
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/sklearn_example.py">Scikit-learn</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/xgboost_example.py">XGBoost</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/lightgbm_example.py">LightGBM</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/catboost_example.py">CatBoost</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/rgf_example.py">RGF</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/mlxtend_example.py">Mlxtend</a></li>
+              <li><a href="./examples/tested_and_supported_packages/sklearn_example.py">Scikit-learn</a></li>
+              <li><a href="./examples/tested_and_supported_packages/xgboost_example.py">XGBoost</a></li>
+              <li><a href="./examples/tested_and_supported_packages/lightgbm_example.py">LightGBM</a></li>
+              <li><a href="./examples/tested_and_supported_packages/catboost_example.py">CatBoost</a></li>
+              <li><a href="./examples/tested_and_supported_packages/rgf_example.py">RGF</a></li>
+              <li><a href="./examples/tested_and_supported_packages/mlxtend_example.py">Mlxtend</a></li>
           </ul><br>
         <a><b>Deep Learning:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/tensorflow_example.py">Tensorflow</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
+              <li><a href="./examples/tested_and_supported_packages/tensorflow_example.py">Tensorflow</a></li>
+              <li><a href="./examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
+              <li><a href="./examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
           </ul><br>
         <a><b>Parallel Computing:</b></a>
           <ul>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/multiprocessing_example.py">Multiprocessing</a></li>
-              <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/tested_and_supported_packages/joblib_example.py">Joblib</a></li>
+              <li><a href="./examples/tested_and_supported_packages/multiprocessing_example.py">Multiprocessing</a></li>
+              <li><a href="./examples/tested_and_supported_packages/joblib_example.py">Joblib</a></li>
           </ul>
       </td>
       <td>
         <a><b>Feature Engineering:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/feature_transformation.py">Feature Transformation</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/feature_selection.py">Feature Selection</a></li>
+            <li><a href="./examples/optimization_applications/feature_transformation.py">Feature Transformation</a></li>
+            <li><a href="./examples/optimization_applications/feature_selection.py">Feature Selection</a></li>
             <li>Feature Construction</li>
           </ul>
         <a><b>Machine Learning:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/hyperpara_optimize.py">Hyperparameter Tuning</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/model_selection.py">Model Selection</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/sklearn_pipeline_example.py">Sklearn Pipelines</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/ensemble_learning_example.py">Ensemble Learning</a></li>
+            <li><a href="./examples/optimization_applications/hyperpara_optimize.py">Hyperparameter Tuning</a></li>
+            <li><a href="./examples/optimization_applications/model_selection.py">Model Selection</a></li>
+            <li><a href="./examples/optimization_applications/sklearn_pipeline_example.py">Sklearn Pipelines</a></li>
+            <li><a href="./examples/optimization_applications/ensemble_learning_example.py">Ensemble Learning</a></li>
           </ul>
         <a><b>Deep Learning:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/neural_architecture_search.py">Neural Architecture Search</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/pretrained_nas.py">Pretrained Neural Architecture Search</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/transfer_learning.py">Transfer Learning</a></li>
+            <li><a href="./examples/optimization_applications/neural_architecture_search.py">Neural Architecture Search</a></li>
+            <li><a href="./examples/optimization_applications/pretrained_nas.py">Pretrained Neural Architecture Search</a></li>
+            <li><a href="./examples/optimization_applications/transfer_learning.py">Transfer Learning</a></li>
           </ul>
         <a><b>Meta-data:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/meta_data_collection.py">Meta-data Collection</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
+            <li><a href="./examples/optimization_applications/meta_data_collection.py">Meta-data Collection</a></li>
+            <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
+            <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
           </ul>
         <a><b>Miscellaneous:</b></a>
           <ul>
-            <li><a href="https://github.com/SimonBlanke/Hyperactive/tree/master/examples/optimization_applications/test_function.py">Test Functions</a></li>
+            <li><a href="./examples/optimization_applications/test_function.py">Test Functions</a></li>
             <li>Fit Gaussian Curves</li>
+            <li><a href="./examples/optimization_applications/multiple_scores.py">Managing multiple objectives</a></li>
+            <li><a href="./examples/optimization_applications/search_space_example.py">Managing objects in search space</a></li>
+            <li><a href="./examples/optimization_applications/memory.py">Memorize evaluations</a></li>
           </ul>
       </td>
     </tr>
@@ -224,12 +197,6 @@ The examples above are not necessarily done with realistic datasets or training 
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
 
-
-<br>
-
-## Tutorials
-
-  - [Optimization Strategies for Deep Learning with Hyperactive](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/Optimization%20Strategies%20for%20Deep%20Learning.ipynb)
 
 
 <br>
@@ -731,6 +698,84 @@ If any of these algorithms already exist I would like you to share it with me in
 #### Random Annealing
 
 A combination between simulated annealing and random search.
+
+
+<br>
+
+## FAQ
+
+#### Known Errors + Solutions
+
+<details>
+<summary><b> Read this before opening a bug-issue </b></summary>
+
+<br>
+
+Are you sure the bug is located in Hyperactive?
+
+Look at the error message from the command line. <b>If</b> one of the last messages look like this:
+   - File "/.../gradient_free_optimizers/...", line ...
+
+<b>Then</b> you should post the bug report in: 
+   - https://github.com/SimonBlanke/Gradient-Free-Optimizers
+
+<b>Otherwise</b> you can post the bug report in Hyperactive
+
+</details>
+
+
+<details>
+<summary> MemoryError: Unable to allocate ... for an array with shape (...) </summary>
+
+<br>
+
+This is expected of the current implementation of smb-optimizers. For all Sequential model based algorithms you have to keep your eyes on the search space size:
+```python
+search_space_size = 1
+for value_ in search_space.values():
+    search_space_size *= len(value_)
+    
+print("search_space_size", search_space_size)
+```
+Reduce the search space size to resolve this error.
+
+</details>
+
+
+<details>
+<summary> TypeError: cannot pickle '_thread.RLock' object </summary>
+
+<br>
+
+Setting distribution to "joblib" may fix this problem:
+```python
+hyper = Hyperactive(distribution="joblib")
+```
+
+</details>
+
+
+<details>
+<summary> Command line full of warnings </summary>
+
+<br>
+
+Very often warnings from sklearn or numpy. Those warnings do not correlate with bad performance from Hyperactive. Your code will most likely run fine. Those warnings are very difficult to silence.
+
+Put this at the very top of your script:
+```python
+def warn(*args, **kwargs):
+    pass
+
+
+import warnings
+
+warnings.warn = warn
+```
+
+</details>
+
+
 
 
 <br>

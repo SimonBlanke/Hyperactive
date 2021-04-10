@@ -7,15 +7,7 @@ assignees: ''
 
 ---
 
-"Start of Note"
-Are you sure the bug is located in Hyperactive?
-Look at the error message from the command line. Post the bug report in: 
-   https://github.com/SimonBlanke/Gradient-Free-Optimizers  
-if one of the last messages look like this:
-   File "/.../gradient_free_optimizers/...", line ...
-
-If you are sure about your bug report you can delete this "Note" from this report.
-"End of Note"
+**Look into the FAQ of the readme. Can the bug be resolved by one of those solutions?**
 
 **Describe the bug**
 
