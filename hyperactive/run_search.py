@@ -35,16 +35,19 @@ def _get_distribution(distribution):
         return dist_dict[distribution], {}
 
 
-def run_search(search_processes_infos, distribution):
+def run_search(search_processes_infos, distribution, n_jobs="auto"):
     process_infos = list(search_processes_infos.values())
 
-    if len(process_infos) == 1:
+    if n_jobs == "auto":
+        n_jobs = len(process_infos)
+
+    if n_jobs == 1:
         results_list = single_process(_process_, process_infos)
     else:
         (distribution, process_func), dist_paras = _get_distribution(
             distribution
         )
-        results_list = distribution(process_func, process_infos, **dist_paras)
+        results_list = distribution(process_func, process_infos, n_jobs, **dist_paras)
 
     return results_list
 
