@@ -27,7 +27,7 @@
   </a>
 </p>
 
-<h2 align="center">A hyperparameter optimization and data collection toolbox for convenient and fast prototyping of machine-learning models.</h2>
+<h2 align="center">A optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
 
 <br>
 
