@@ -14,7 +14,7 @@ search_space = {
 
 
 def test_n_jobs_0():
-    hyper = Hyperactive(n_processes=2)
+    hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
@@ -22,7 +22,7 @@ def test_n_jobs_0():
 
 
 def test_n_jobs_1():
-    hyper = Hyperactive(n_processes=4)
+    hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
     hyper.run()
 
@@ -30,7 +30,7 @@ def test_n_jobs_1():
 
 
 def test_n_jobs_2():
-    hyper = Hyperactive(n_processes=8)
+    hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=8)
     hyper.run()
 
@@ -38,21 +38,43 @@ def test_n_jobs_2():
 
 
 def test_n_jobs_3():
-    hyper = Hyperactive(n_processes=-1)
+    hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15)
     hyper.run()
 
 
 def test_n_jobs_4():
-    hyper = Hyperactive(n_processes=100)
+    hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=100)
     hyper.run()
 
     assert len(hyper.results_list) == 100
 
 
+def test_n_jobs_5():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+
+    hyper.run()
+
+    assert len(hyper.results_list) == 4
+
+
+def test_n_jobs_6():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+
+    hyper.run()
+
+    assert len(hyper.results_list) == 8
+
+
 def test_multiprocessing_0():
-    hyper = Hyperactive(distribution="multiprocessing", n_processes=2)
+    hyper = Hyperactive(distribution="multiprocessing")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
@@ -65,14 +87,13 @@ def test_multiprocessing_1():
                 "initargs": (tqdm.get_lock(),),
             }
         },
-        n_processes=2,
     )
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
 
 def test_joblib_0():
-    hyper = Hyperactive(distribution="joblib", n_processes=2)
+    hyper = Hyperactive(distribution="joblib")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
@@ -90,7 +111,56 @@ def test_joblib_1():
 
         return results
 
-    hyper = Hyperactive(distribution=joblib_wrapper, n_processes=2)
+    hyper = Hyperactive(distribution=joblib_wrapper)
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
 
     hyper.run()
+
+
+def test_n_processes_0():
+    hyper = Hyperactive(n_processes=1)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.run()
+
+    assert len(hyper.results_list) == 2
+
+
+def test_n_processes_1():
+    hyper = Hyperactive(n_processes=2)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.run()
+
+    assert len(hyper.results_list) == 2
+
+
+def test_n_processes_2():
+    hyper = Hyperactive(n_processes=4)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper.run()
+
+    assert len(hyper.results_list) == 2
+
+
+def test_n_processes_3():
+    hyper = Hyperactive(n_processes=4)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=3)
+    hyper.run()
+
+    assert len(hyper.results_list) == 3
+
+
+def test_n_processes_4():
+    hyper = Hyperactive(n_processes=-1)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
+    hyper.run()
+
+    assert len(hyper.results_list) == 4
+
+
+def test_n_processes_5():
+    hyper = Hyperactive(n_processes=-1)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
+    hyper.run()
+
+    assert len(hyper.results_list) == 8
