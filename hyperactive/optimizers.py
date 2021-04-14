@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import copy
 import numpy as np
 import pandas as pd
 
@@ -23,6 +24,7 @@ from gradient_free_optimizers import (
 )
 
 from .hyper_gradient_trafo import HyperGradientTrafo
+from .long_term_memory import LongTermMemory
 
 
 def gfo2hyper(search_space, para):
@@ -145,60 +147,52 @@ class _BaseOptimizer_(DictClass, TrafoClass):
         nth_process=None,
     ):
 
-        """
-        import copy
-        import inspect
-
-        if inspect.isclass(type(memory)):
-            print(memory, type(memory))
-            print("Long Term Memory")
+        # long term memory
+        if isinstance(memory, LongTermMemory):
             ltm = copy.deepcopy(memory)
-            ltm._get_data_types(self.search_space)
-
-            memory_warm_start = ltm._load()
-
-            ltm._init_data_path(objective_function, nth_process)
+            ltm.init_study_(objective_function, self.search_space)
+            memory_warm_start = ltm.load()
+            ltm_bool = True
             memory = True
 
-            if ltm.save_on == "iteration":
+            def gfo_wrapper_model():
+                # wrapper for GFOs
+                def _model(para):
+                    para = gfo2hyper(self.search_space, para)
+                    self.para_dict = para
 
-                def ltm_wrapper(results, para):
-                    if isinstance(results, tuple):
-                        score = results[0]
-                        results_dict = results[1]
-                    else:
-                        score = results
-                        results_dict = {}
+                    self.nth_iter = self.optimizer.nth_iter
+                    self.nth_process = nth_process
 
-                    results_dict["score"] = score
-                    ltm_dict = {**para, **results_dict}
-                    ltm._append(ltm_dict)
+                    results = objective_function(self)
 
-            else:
+                    # long term memory
+                    ltm.ltm_obj_func_wrapper(results, para, nth_process)
 
-                def ltm_wrapper(results, para):
-                    pass
+                    return results
 
-        print("\n self.search_space \n", self.search_space, "\n")
+                _model.__name__ = objective_function.__name__
+                return _model
 
-        print("\n memory_warm_start \n", memory_warm_start, "\n")
-        """
+        else:
+            ltm_bool = False
+
+            def gfo_wrapper_model():
+                # wrapper for GFOs
+                def _model(para):
+                    para = gfo2hyper(self.search_space, para)
+                    self.para_dict = para
+
+                    self.nth_iter = self.optimizer.nth_iter
+                    self.nth_process = nth_process
+
+                    results = objective_function(self)
+                    return results
+
+                _model.__name__ = objective_function.__name__
+                return _model
 
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
-
-        def gfo_wrapper_model():
-            # wrapper for GFOs
-            def _model(para):
-                para = gfo2hyper(self.search_space, para)
-                self.para_dict = para
-                results = objective_function(self)
-
-                # ltm_wrapper(results, para)
-
-                return results
-
-            _model.__name__ = objective_function.__name__
-            return _model
 
         self.optimizer.search(
             gfo_wrapper_model(),
@@ -215,10 +209,10 @@ class _BaseOptimizer_(DictClass, TrafoClass):
         self._convert_results2hyper()
         self.p_bar = self.optimizer.p_bar
 
-        """
-        if inspect.isclass(type(memory)):
-            ltm._save(self.results)
-        """
+        # long term memory
+        if ltm_bool:
+            if ltm.save_on == "finish":
+                ltm.save_on_finish(self.results)
 
 
 class HillClimbingOptimizer(_BaseOptimizer_):
