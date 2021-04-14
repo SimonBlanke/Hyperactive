@@ -3,6 +3,8 @@
 # License: MIT License
 
 
+import multiprocessing
+
 from .distribution import (
     single_process,
     joblib_wrapper,
@@ -35,19 +37,21 @@ def _get_distribution(distribution):
         return dist_dict[distribution], {}
 
 
-def run_search(search_processes_infos, distribution, n_jobs="auto"):
+def run_search(search_processes_infos, distribution, n_processes):
     process_infos = list(search_processes_infos.values())
 
-    if n_jobs == "auto":
-        n_jobs = len(process_infos)
+    if n_processes == "auto":
+        n_processes = len(process_infos)
+    elif n_processes == -1:
+        n_processes = multiprocessing.cpu_count()
 
-    if n_jobs == 1:
+    if n_processes == 1:
         results_list = single_process(_process_, process_infos)
     else:
-        (distribution, process_func), dist_paras = _get_distribution(
-            distribution
+        (distribution, process_func), dist_paras = _get_distribution(distribution)
+
+        results_list = distribution(
+            process_func, process_infos, n_processes, **dist_paras
         )
-        results_list = distribution(process_func, process_infos, n_jobs, **dist_paras)
 
     return results_list
-

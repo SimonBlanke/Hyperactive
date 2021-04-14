@@ -5,21 +5,11 @@
 
 import numpy as np
 import pandas as pd
-import multiprocessing
 from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
 from .print_info import print_info
-
-
-def set_n_jobs(n_jobs):
-    """Sets the number of jobs to run in parallel"""
-    num_cores = multiprocessing.cpu_count()
-    if n_jobs == -1:
-        return num_cores
-    else:
-        return n_jobs
 
 
 class HyperactiveResults:
@@ -108,7 +98,7 @@ class Hyperactive(HyperactiveResults):
                 "initargs": (tqdm.get_lock(),),
             }
         },
-        n_jobs=1
+        n_processes="auto",
     ):
         super().__init__()
         if verbosity is False:
@@ -116,13 +106,12 @@ class Hyperactive(HyperactiveResults):
 
         self.verbosity = verbosity
         self.distribution = distribution
+        self.n_processes = n_processes
+
         self.search_ids = []
-
         self.process_infos = {}
-
         self.objFunc2results = {}
         self.search_id2results = {}
-        self.n_jobs= set_n_jobs(n_jobs)
 
     def _add_search_processes(
         self,
@@ -131,13 +120,13 @@ class Hyperactive(HyperactiveResults):
         search_space,
         optimizer,
         n_iter,
-        n_runs,
+        n_jobs,
         max_score,
         memory,
         memory_warm_start,
         search_id,
     ):
-        for _ in range(n_runs):
+        for _ in range(n_jobs):
             nth_process = len(self.process_infos)
 
             self.process_infos[nth_process] = {
@@ -161,7 +150,7 @@ class Hyperactive(HyperactiveResults):
         n_iter,
         search_id=None,
         optimizer="default",
-        n_runs=1,
+        n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
         max_score=None,
         random_state=None,
@@ -186,7 +175,7 @@ class Hyperactive(HyperactiveResults):
             search_space,
             optimizer,
             n_iter,
-            n_runs,
+            n_jobs,
             max_score,
             memory,
             memory_warm_start,
@@ -197,7 +186,9 @@ class Hyperactive(HyperactiveResults):
         for nth_process in self.process_infos.keys():
             self.process_infos[nth_process]["max_time"] = max_time
 
-        self.results_list = run_search(self.process_infos, self.distribution, self.n_jobs)
+        self.results_list = run_search(
+            self.process_infos, self.distribution, self.n_processes
+        )
 
         for results in self.results_list:
             nth_process = results["nth_process"]
