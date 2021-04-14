@@ -27,7 +27,7 @@
   </a>
 </p>
 
-<h2 align="center">A hyperparameter optimization and data collection toolbox for convenient and fast prototyping of machine-learning models.</h2>
+<h2 align="center">A optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
 
 <br>
 
@@ -51,14 +51,7 @@
 <br>
 <br>
 <br>
-<br>
 
-
-<br>
-
-## What's new?
-
-  - ### [Neural Architecture Search Tutorial](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/Optimization%20Strategies%20for%20Deep%20Learning.ipynb)
 
 <br>
 
@@ -66,6 +59,7 @@
 
 <div align="center"><a name="menu"></a>
   <h3>
+    <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api-reference">API reference</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
@@ -75,6 +69,14 @@
 </div>
 
 ---
+
+<br>
+
+## What's new?
+
+  - ### [Neural Architecture Search Tutorial](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/Optimization%20Strategies%20for%20Deep%20Learning.ipynb)
+
+
 
 <br>
 
