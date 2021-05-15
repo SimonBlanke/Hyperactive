@@ -27,7 +27,7 @@
   </a>
 </p>
 
-<h2 align="center">A optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
+<h2 align="center">An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
 
 <br>
 
@@ -792,7 +792,7 @@ warnings.warn = warn
 
     @Misc{hyperactive2019,
       author =   {{Simon Blanke}},
-      title =    {{Hyperactive}: A hyperparameter optimization and meta-learning toolbox for machine-/deep-learning models.},
+      title =    {{Hyperactive}: An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.},
       howpublished = {\url{https://github.com/SimonBlanke}},
       year = {since 2019}
     }
