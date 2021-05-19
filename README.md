@@ -73,9 +73,8 @@
 <br>
 
 ## What's new?
-
+  - ### [Hyperactive Tutorial](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb)
   - ### [Neural Architecture Search Tutorial](https://nbviewer.jupyter.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/Optimization%20Strategies%20for%20Deep%20Learning.ipynb)
-
 
 
 <br>
