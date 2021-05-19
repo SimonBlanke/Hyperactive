@@ -655,7 +655,7 @@ You can read more about each optimization-strategy and its parameters in the [Op
 </details>
 
 <details>
-<summary><b>v3.0.0</b> :heavy_check_mark:</summary>
+<summary><b>v3.0.0</b></summary>
 
   - [x] New API
       - [x] expand usage of objective-function
@@ -668,18 +668,18 @@ You can read more about each optimization-strategy and its parameters in the [Op
 
 </details>
 
-<details open>
-<summary><b>v3.1.0</b></summary>
+<details>
+<summary><b>v3.1.0</b> :heavy_check_mark:</summary>
 
-  - [ ] New implementation of dashboard for visualization of search-data
-
+  - [x] Decouple number of runs from active processes (Thanks to [PartiallyTyped](https://github.com/PartiallyTyped))
 
 </details>
 
 <details>
-<summary><b>v3.2.0</b></summary>
-
-  - [ ] New implementation of "long term memory" for search-data storage and usage
+<summary><b>Next Features</b></summary>
+  
+  - [ ] Implementation of "long term memory" for search-data storage and usage
+  - [ ] Implementation of dashboard for visualization of search-data
 
 
 </details>
