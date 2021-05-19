@@ -1,6 +1,4 @@
 import numpy as np
-from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_breast_cancer
 from hyperactive import Hyperactive
 
@@ -33,12 +31,12 @@ def meta_opt(opt_para):
             search_space,
             mutation_rate=opt_para["mutation_rate"],
             crossover_rate=opt_para["crossover_rate"],
+            initialize={"random": opt_para["individuals"]},
         )
         opt.search(
             sphere_function,
             n_iter=100,
             random_state=i,
-            initialize={"random": opt_para["individuals"]},
             verbosity=False,
         )
 

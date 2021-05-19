@@ -28,17 +28,12 @@ hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=100)
 hyper.run()
 
-results = hyper.results(model)
-values = results[list(search_space.keys())].values
-scores = results["score"].values
-
-warm_start_smbo = (values, scores)
-
+search_data = hyper.results(model)
 
 optimizer = EnsembleOptimizer(
     estimators=[SVR(), DecisionTreeRegressor(), MLPRegressor()],
     xi=0.02,
-    warm_start_smbo=warm_start_smbo,
+    warm_start_smbo=search_data,
     rand_rest_p=0.05,
 )
 
