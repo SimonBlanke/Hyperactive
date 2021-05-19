@@ -324,7 +324,7 @@ hyper.run()
 ## Hyperactive API reference
 
 <details>
-<summary><b> Hyperactive(verbosity, distribution)</b></summary>
+<summary><b> Hyperactive(verbosity, distribution, n_processes)</b></summary>
 
 - verbosity = ["progress_bar", "print_results", "print_times"]
   - (list, False)
@@ -362,6 +362,10 @@ hyper.run()
         return results
       ```
       
+- n_processes = "auto",   
+  - (str, int)
+  - The maximum number of processes that are allowed to run simultaneously. If n_processes is of int-type there will only run n_processes-number of jobs simultaneously instead of all at once. So if n_processes=10 and n_jobs_total=35, then the schedule would look like this 10 - 10 - 10 - 5. This saves computational resources if there is a large number of n_jobs. If "auto", then n_processes is the sum of all n_jobs (from .add_search(...)).
+
 </details>
 
 
