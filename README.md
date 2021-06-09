@@ -427,14 +427,37 @@ hyper.run()
     - grid
       - Initializes positions in a grid like pattern. Positions that cannot be put into a grid are randomly positioned.
     - vertices
-      - Initializes positions at the vertices of the search space. Positions that cannot be put into a vertices are randomly positioned.
+      - Initializes positions at the vertices of the search space. Positions that cannot be put into a new vertex are randomly positioned.
 
     - random
       - Number of random initialized positions
 
     - warm_start
       - List of parameter dictionaries that marks additional start points for the optimization run.
+  
+    Example:
+    ```python
+    ... 
+    search_space = {
+        "x1": list(range(10, 150, 5)),
+        "x2": list(range(2, 12)),
+    }
 
+    ws1 = {"x1": 10, "x2": 2}
+    ws2 = {"x1": 15, "x2": 10}
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        model,
+        search_space,
+        n_iter=30,
+        initialize={"grid": 4, "random": 10, "vertices": 4, "warm_start": [ws1, ws2]},
+    )
+    hyper.run()
+    ```
+  
+  
+  
 - max_score = None
   - (float, None)
   - Maximum score until the optimization stops. The score will be checked after each completed iteration.
