@@ -705,8 +705,10 @@ You can read more about each optimization-strategy and its parameters in the [Op
 <details>
 <summary><b>Next Features</b></summary>
   
-  - [ ] Implementation of "long term memory" for search-data storage and usage
-  - [ ] Implementation of dashboard for visualization of search-data
+  - [ ] "long term memory" for search-data storage and usage
+  - [ ] Data collector tool to use inside the objective function
+  - [ ] Dashboard for visualization of stored search-data
+  - [ ] Dashboard for visualization of search-data at runtime (progress-bar)
 
 
 </details>
