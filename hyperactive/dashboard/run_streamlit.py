@@ -16,7 +16,7 @@ from bokeh.plotting import figure
 color_scale = px.colors.sequential.Jet
 
 
-def parallel_coordinates_plotly(*args, plotly_width=1200, plotly_height=550, **kwargs):
+def parallel_coordinates_plotly(*args, plotly_width=1200, plotly_height=540, **kwargs):
     fig = px.parallel_coordinates(*args, **kwargs, color_continuous_scale=color_scale)
     fig.update_layout(autosize=False, width=plotly_width, height=plotly_height)
 
@@ -62,6 +62,9 @@ def main():
             col1.pyplot(fig)
         else:
             fig, ax = plt.subplots()
+            ax.set_xlabel("nth iteration")
+            ax.set_ylabel("score")
+
             for i in np.unique(nth_process):
                 nth_iter_p = nth_iter[nth_process == i]
                 score_best_p = score_best[nth_process == i]
