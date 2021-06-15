@@ -2,12 +2,13 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
+import os
 from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
 from .print_info import print_info
+from .data_tools import DataCollector
 
 from .hyperactive_results import HyperactiveResults
 
@@ -39,6 +40,8 @@ class Hyperactive(HyperactiveResults):
 
         self.progress_paths = []
 
+        self.progress_boards = {}
+
     def _add_search_processes(
         self,
         random_state,
@@ -67,6 +70,35 @@ class Hyperactive(HyperactiveResults):
                 "search_id": search_id,
             }
 
+    def _default_opt(self, optimizer):
+        if isinstance(optimizer, str):
+            if optimizer == "default":
+                optimizer = RandomSearchOptimizer()
+        return optimizer
+
+    def _default_search_id(self, search_id, objective_function):
+        if not search_id:
+            search_id = objective_function.__name__
+        return search_id
+
+    def _init_progress_board(self, progress_board, search_id):
+        if progress_board:
+            temp_ = "./" + search_id + ".csv~"
+
+            if os.path.isfile(temp_):
+                os.remove(temp_)
+
+            data_c = DataCollector(temp_)
+            self.progress_paths.append(temp_)
+
+            progress_board.paths_list.append(temp_)
+            if progress_board.uuid not in self.progress_boards:
+                self.progress_boards[progress_board.uuid] = progress_board
+        else:
+            data_c = None
+
+        return data_c
+
     def add_search(
         self,
         objective_function,
@@ -80,15 +112,12 @@ class Hyperactive(HyperactiveResults):
         random_state=None,
         memory=True,
         memory_warm_start=None,
+        progress_board=None,
     ):
-        if isinstance(optimizer, str):
-            if optimizer == "default":
-                optimizer = RandomSearchOptimizer()
-
-        if not search_id:
-            search_id = objective_function.__name__
-
-        optimizer.init(search_space, initialize)
+        optimizer = self._default_opt(optimizer)
+        search_id = self._default_search_id(search_id, objective_function)
+        data_c = self._init_progress_board(progress_board, search_id)
+        optimizer.init(search_space, initialize, data_c)
 
         self._add_search_processes(
             random_state,
@@ -105,6 +134,10 @@ class Hyperactive(HyperactiveResults):
     def run(self, max_time=None):
         for nth_process in self.process_infos.keys():
             self.process_infos[nth_process]["max_time"] = max_time
+
+        # open progress board
+        for progress_board in self.progress_boards.values():
+            progress_board.open_dashboard()
 
         self.results_list = run_search(
             self.process_infos, self.distribution, self.n_processes
