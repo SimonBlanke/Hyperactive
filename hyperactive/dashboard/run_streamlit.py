@@ -54,12 +54,24 @@ def main():
 
         nth_iter = progress_data_f["nth_iter"]
         score_best = progress_data_f["score_best"]
+        nth_process = list(progress_data_f["nth_process"])
 
-        fig, ax = plt.subplots()
-        plt.plot(nth_iter, score_best)
-        col1.pyplot(fig)
+        if np.all(nth_process == nth_process[0]):
+            fig, ax = plt.subplots()
+            plt.plot(nth_iter, score_best)
+            col1.pyplot(fig)
+        else:
+            fig, ax = plt.subplots()
+            for i in np.unique(nth_process):
+                nth_iter_p = nth_iter[nth_process == i]
+                score_best_p = score_best[nth_process == i]
+                plt.plot(nth_iter_p, score_best_p, label=str(i) + ". process")
+            plt.legend()
+            col1.pyplot(fig)
 
-        progress_data_f.drop(["nth_iter", "score_best"], axis=1, inplace=True)
+        progress_data_f.drop(
+            ["nth_iter", "score_best", "nth_process"], axis=1, inplace=True
+        )
 
         fig = parallel_coordinates_plotly(progress_data_f, color="score")
         col2.plotly_chart(fig)
@@ -67,7 +79,7 @@ def main():
         for _ in range(3):
             st.write(" ")
 
-    time.sleep(3)
+    time.sleep(1)
     st.experimental_rerun()
 
 

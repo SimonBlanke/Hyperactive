@@ -16,11 +16,12 @@ def gfo2hyper(search_space, para):
 
 
 class ObjectiveFunction(DictClass):
-    def __init__(self, objective_function, optimizer):
+    def __init__(self, objective_function, optimizer, nth_process):
         super().__init__()
 
         self.objective_function = objective_function
         self.optimizer = optimizer
+        self.nth_process = nth_process
 
     def __call__(self, search_space, data_c):
         # wrapper for GFOs
@@ -42,8 +43,9 @@ class ObjectiveFunction(DictClass):
                 results_dict["score"] = score
 
                 progress_dict.update(results_dict)
-                progress_dict["score_best"] = self._optimizer.score_best
-                progress_dict["nth_iter"] = self._optimizer.nth_iter
+                progress_dict["score_best"] = self.optimizer.p_bar.score_best
+                progress_dict["nth_iter"] = self.optimizer.nth_iter
+                progress_dict["nth_process"] = self.optimizer.nth_process
 
                 data_c.save_iter(progress_dict)
 

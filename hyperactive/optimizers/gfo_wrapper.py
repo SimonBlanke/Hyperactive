@@ -113,7 +113,6 @@ class _BaseOptimizer_(TrafoClass):
         self,
         objective_function,
         n_iter,
-        warm_start=None,
         max_time=None,
         max_score=None,
         memory=True,
@@ -129,7 +128,9 @@ class _BaseOptimizer_(TrafoClass):
         self.objective_function = objective_function
         self.nth_process = nth_process
 
-        gfo_wrapper_model = ObjectiveFunction(objective_function, self._optimizer)
+        gfo_wrapper_model = ObjectiveFunction(
+            objective_function, self._optimizer, nth_process
+        )
 
         # ltm init
         self.check_LTM(memory)
