@@ -9,17 +9,16 @@ from hyperactive_long_term_memory import LongTermMemory as _LongTermMemory_
 class LongTermMemory:
     def __init__(
         self,
+        study_id,
         model_id,
-        experiment_id="default",
         save_on="finish",
     ):
+        self.study_id = study_id
+        self.model_id = model_id
 
-        path, _ = os.path.realpath(__file__).rsplit("/", 1)
-        path = path + "/"
+        path = os.path.realpath(__file__).rsplit("/", 1)[0] + "/"
 
-        self.ltm_origin = _LongTermMemory_(
-            model_id=model_id, experiment_id=experiment_id, path="."
-        )
+        self.ltm_origin = _LongTermMemory_(path=".")
         self.save_on = save_on
 
         if save_on == "finish":
@@ -40,13 +39,16 @@ class LongTermMemory:
 
         results_dict["score"] = score
         ltm_dict = {**para, **results_dict}
-        self.save_on_iteration(ltm_dict)
+        self.save_on_iteration(ltm_dict, self.nth_process)
 
-    def clean_files(self):
-        self.ltm_origin.clean_files()
-
-    def init_data_types(self, search_space):
-        self.ltm_origin.init_data_types(search_space)
+    def init_study(self, objective_function, search_space, nth_process):
+        self.nth_process = nth_process
+        self.ltm_origin.init_study(
+            objective_function,
+            search_space,
+            study_id=self.study_id,
+            model_id=self.model_id,
+        )
 
     def load(self):
         return self.ltm_origin.load()
@@ -54,5 +56,5 @@ class LongTermMemory:
     def save_on_finish(self, dataframe):
         self.ltm_origin.save_on_finish(dataframe)
 
-    def save_on_iteration(self, data_dict):
-        self.ltm_origin.save_on_iteration(data_dict)
+    def save_on_iteration(self, data_dict, nth_process):
+        self.ltm_origin.save_on_iteration(data_dict, nth_process)
