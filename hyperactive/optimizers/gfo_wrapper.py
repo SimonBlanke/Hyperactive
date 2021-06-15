@@ -8,17 +8,8 @@ import numpy as np
 import pandas as pd
 
 
+from .objective_function import ObjectiveFunction
 from .hyper_gradient_trafo import HyperGradientTrafo
-from .dictionary import DictClass
-
-
-def gfo2hyper(search_space, para):
-    values_dict = {}
-    for i, key in enumerate(search_space.keys()):
-        pos_ = int(para[key])
-        values_dict[key] = search_space[key][pos_]
-
-    return values_dict
 
 
 class TrafoClass:
@@ -72,13 +63,15 @@ class TrafoClass:
         ].reset_index(drop=True)
 
 
-class _BaseOptimizer_(TrafoClass, DictClass):
+class _BaseOptimizer_(TrafoClass):
     def __init__(self, **opt_params):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(self, search_space, initialize={"grid": 8, "random": 4, "vertices": 8}):
+    def init(self, search_space, initialize, data_c):
         self.search_space = search_space
+        self.initialize = initialize
+        self.data_c = data_c
 
         self.trafo = HyperGradientTrafo(search_space)
 
@@ -136,27 +129,14 @@ class _BaseOptimizer_(TrafoClass, DictClass):
         self.objective_function = objective_function
         self.nth_process = nth_process
 
+        gfo_wrapper_model = ObjectiveFunction(objective_function, self._optimizer)
+
         # ltm init
         self.check_LTM(memory)
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
-        def gfo_wrapper_model():
-            # wrapper for GFOs
-            def _model(para):
-                para = gfo2hyper(self.search_space, para)
-                self.para_dict = para
-                results = objective_function(self)
-
-                # ltm save after iteration
-                # self.ltm.ltm_obj_func_wrapper(results, para, nth_process)
-
-                return results
-
-            _model.__name__ = objective_function.__name__
-            return _model
-
         self._optimizer.search(
-            gfo_wrapper_model(),
+            gfo_wrapper_model(self.search_space, self.data_c),
             n_iter,
             max_time,
             max_score,
