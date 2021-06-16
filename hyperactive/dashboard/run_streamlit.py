@@ -29,18 +29,21 @@ def main():
     except:
         pass
 
-    paths = sys.argv[1:]
+    search_ids = sys.argv[1:]
+
     progress_data_list = []
+    filter_list = []
+    for search_id in search_ids:
+        progress_data_path = "./progress_data_" + search_id + ".csv~"
+        filter_path = "./filter_" + search_id + ".csv"
 
-    model_names = []
-    for path in paths:
-        progress_data_list.append(pd.read_csv(path))
-        model_name_ = path.rsplit(".", 2)[1]
-        model_name = model_name_.rsplit("/", 2)[1]
-        model_names.append(model_name)
+        progress_data_list.append(pd.read_csv(progress_data_path))
+        filter_list.append(pd.read_csv(filter_path))
 
-    for progress_data, model_name in zip(progress_data_list, model_names):
-        st.title(model_name)
+    for progress_data, filter, search_id in zip(
+        progress_data_list, filter_list, search_ids
+    ):
+        st.title(search_id)
         st.components.v1.html(
             """<hr style="height:1px;border:none;color:#333;background-color:#333;" /> """,
             height=10,
@@ -75,11 +78,53 @@ def main():
         progress_data_f.drop(
             ["nth_iter", "score_best", "nth_process"], axis=1, inplace=True
         )
-        parallel_dim = list(progress_data_f.columns)
-        parallel_dim.remove("score")
+        print("\n filter \n", filter)
+
+        # filter data
+        prog_data_columns = list(progress_data_f.columns)
+        print("\n progress_data_f \n", progress_data_f, type(progress_data_f))
+
+        if len(progress_data_f) > 1:
+            for prog_data_column in prog_data_columns:
+                print("\n prog_data_column \n", prog_data_column)
+                print("\n parameter \n", filter["parameter"])
+
+                if prog_data_column not in list(filter["parameter"]):
+                    continue
+                filter_ = filter[filter["parameter"] == prog_data_column]
+                lower, upper = (
+                    filter_["lower bound"].values[0],
+                    filter_["upper bound"].values[0],
+                )
+                print("\n filter_ \n", filter_)
+                print("\n lower \n", lower, type(lower))
+                print("\n upper \n", upper)
+
+                col_data = progress_data_f[prog_data_column]
+
+                if lower == "lower":
+                    lower = np.min(col_data)
+                else:
+                    lower = float(lower)
+
+                if upper == "upper":
+                    upper = np.max(col_data)
+                else:
+                    upper = float(upper)
+
+                print("\n lower \n", lower)
+                print("\n upper \n", upper)
+
+                progress_data_f = progress_data_f[
+                    (progress_data_f[prog_data_column] >= lower)
+                    & (progress_data_f[prog_data_column] <= upper)
+                ]
+
+        # remove score
+        prog_data_columns.remove("score")
 
         fig = parallel_coordinates_plotly(
-            progress_data_f, dimensions=parallel_dim, color="score"
+            progress_data_f, dimensions=prog_data_columns, color="score"
         )
         col2.plotly_chart(fig)
 

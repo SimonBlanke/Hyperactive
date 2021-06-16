@@ -81,17 +81,35 @@ class Hyperactive(HyperactiveResults):
             search_id = objective_function.__name__
         return search_id
 
+    def _create_filter_file(self, search_id, search_space):
+        import numpy as np
+        import pandas as pd
+
+        filter_path = "./filter_" + search_id + ".csv"
+        if os.path.isfile(filter_path):
+            os.remove(filter_path)
+
+        indices = list(search_space.keys()) + ["score"]
+        filter_dict = {
+            "parameter": indices,
+            "lower bound": "lower",
+            "upper bound": "upper",
+        }
+
+        df = pd.DataFrame(filter_dict)
+        df.to_csv(filter_path, index=None)
+
     def _init_progress_board(self, progress_board, search_id):
         if progress_board:
-            temp_ = "./" + search_id + ".csv~"
+            progress_data_path = "./progress_data_" + search_id + ".csv~"
 
-            if os.path.isfile(temp_):
-                os.remove(temp_)
+            if os.path.isfile(progress_data_path):
+                os.remove(progress_data_path)
 
-            data_c = DataCollector(temp_)
-            self.progress_paths.append(temp_)
+            data_c = DataCollector(progress_data_path)
+            # self.progress_paths.append(progress_data_path)
 
-            progress_board.paths_list.append(temp_)
+            progress_board.paths_list.append(search_id)
             if progress_board.uuid not in self.progress_boards:
                 self.progress_boards[progress_board.uuid] = progress_board
         else:
@@ -116,7 +134,10 @@ class Hyperactive(HyperactiveResults):
     ):
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
+
         data_c = self._init_progress_board(progress_board, search_id)
+        self._create_filter_file(search_id, search_space)
+
         optimizer.init(search_space, initialize, data_c)
 
         self._add_search_processes(
