@@ -8,7 +8,6 @@ from tqdm import tqdm
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
 from .print_info import print_info
-from .data_tools import DataCollector
 
 from .hyperactive_results import HyperactiveResults
 
@@ -37,8 +36,6 @@ class Hyperactive(HyperactiveResults):
         self.process_infos = {}
         self.objFunc2results = {}
         self.search_id2results = {}
-
-        self.progress_paths = []
 
         self.progress_boards = {}
 
@@ -81,39 +78,14 @@ class Hyperactive(HyperactiveResults):
             search_id = objective_function.__name__
         return search_id
 
-    def _create_filter_file(self, search_id, search_space):
-        import numpy as np
-        import pandas as pd
+    def _init_progress_board(self, progress_board, search_id, search_space):
+        data_c = None
 
-        filter_path = "./filter_" + search_id + ".csv"
-        if os.path.isfile(filter_path):
-            os.remove(filter_path)
-
-        indices = list(search_space.keys()) + ["score"]
-        filter_dict = {
-            "parameter": indices,
-            "lower bound": "lower",
-            "upper bound": "upper",
-        }
-
-        df = pd.DataFrame(filter_dict)
-        df.to_csv(filter_path, index=None)
-
-    def _init_progress_board(self, progress_board, search_id):
         if progress_board:
-            progress_data_path = "./progress_data_" + search_id + ".csv~"
+            data_c = progress_board.init_paths(search_id, search_space)
 
-            if os.path.isfile(progress_data_path):
-                os.remove(progress_data_path)
-
-            data_c = DataCollector(progress_data_path)
-            # self.progress_paths.append(progress_data_path)
-
-            progress_board.paths_list.append(search_id)
             if progress_board.uuid not in self.progress_boards:
                 self.progress_boards[progress_board.uuid] = progress_board
-        else:
-            data_c = None
 
         return data_c
 
@@ -134,9 +106,7 @@ class Hyperactive(HyperactiveResults):
     ):
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
-
-        data_c = self._init_progress_board(progress_board, search_id)
-        self._create_filter_file(search_id, search_space)
+        data_c = self._init_progress_board(progress_board, search_id, search_space)
 
         optimizer.init(search_space, initialize, data_c)
 

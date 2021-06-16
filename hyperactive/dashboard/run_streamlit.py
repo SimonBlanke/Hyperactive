@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
 import sys
 import time
 import numpy as np
@@ -10,8 +11,6 @@ import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
 
-
-from bokeh.plotting import figure
 
 color_scale = px.colors.sequential.Jet
 
@@ -23,6 +22,35 @@ def parallel_coordinates_plotly(*args, plotly_width=1200, plotly_height=540, **k
     return fig
 
 
+def filter_data(filter, df, columns):
+    if len(df) > 1:
+        for column in columns:
+            if column not in list(filter["parameter"]):
+                continue
+
+            filter_ = filter[filter["parameter"] == column]
+            lower, upper = (
+                filter_["lower bound"].values[0],
+                filter_["upper bound"].values[0],
+            )
+
+            col_data = df[column]
+
+            if lower == "lower":
+                lower = np.min(col_data)
+            else:
+                lower = float(lower)
+
+            if upper == "upper":
+                upper = np.max(col_data)
+            else:
+                upper = float(upper)
+
+            df = df[(df[column] >= lower) & (df[column] <= upper)]
+
+    return df
+
+
 def main():
     try:
         st.set_page_config(page_title="Hyperactive Progress Board", layout="wide")
@@ -31,18 +59,22 @@ def main():
 
     search_ids = sys.argv[1:]
 
-    progress_data_list = []
-    filter_list = []
+    search_id_dict = {}
     for search_id in search_ids:
+        search_id_dict[search_id] = {}
+
         progress_data_path = "./progress_data_" + search_id + ".csv~"
         filter_path = "./filter_" + search_id + ".csv"
 
-        progress_data_list.append(pd.read_csv(progress_data_path))
-        filter_list.append(pd.read_csv(filter_path))
+        if os.path.isfile(progress_data_path):
+            search_id_dict[search_id]["progress_data"] = pd.read_csv(progress_data_path)
+        if os.path.isfile(filter_path):
+            search_id_dict[search_id]["filter"] = pd.read_csv(filter_path)
 
-    for progress_data, filter, search_id in zip(
-        progress_data_list, filter_list, search_ids
-    ):
+    for search_id in search_id_dict.keys():
+        progress_data = search_id_dict[search_id]["progress_data"]
+        filter = search_id_dict[search_id]["filter"]
+
         st.title(search_id)
         st.components.v1.html(
             """<hr style="height:1px;border:none;color:#333;background-color:#333;" /> """,
@@ -78,47 +110,9 @@ def main():
         progress_data_f.drop(
             ["nth_iter", "score_best", "nth_process"], axis=1, inplace=True
         )
-        print("\n filter \n", filter)
-
-        # filter data
         prog_data_columns = list(progress_data_f.columns)
-        print("\n progress_data_f \n", progress_data_f, type(progress_data_f))
 
-        if len(progress_data_f) > 1:
-            for prog_data_column in prog_data_columns:
-                print("\n prog_data_column \n", prog_data_column)
-                print("\n parameter \n", filter["parameter"])
-
-                if prog_data_column not in list(filter["parameter"]):
-                    continue
-                filter_ = filter[filter["parameter"] == prog_data_column]
-                lower, upper = (
-                    filter_["lower bound"].values[0],
-                    filter_["upper bound"].values[0],
-                )
-                print("\n filter_ \n", filter_)
-                print("\n lower \n", lower, type(lower))
-                print("\n upper \n", upper)
-
-                col_data = progress_data_f[prog_data_column]
-
-                if lower == "lower":
-                    lower = np.min(col_data)
-                else:
-                    lower = float(lower)
-
-                if upper == "upper":
-                    upper = np.max(col_data)
-                else:
-                    upper = float(upper)
-
-                print("\n lower \n", lower)
-                print("\n upper \n", upper)
-
-                progress_data_f = progress_data_f[
-                    (progress_data_f[prog_data_column] >= lower)
-                    & (progress_data_f[prog_data_column] <= upper)
-                ]
+        progress_data_f = filter_data(filter, progress_data_f, prog_data_columns)
 
         # remove score
         prog_data_columns.remove("score")
