@@ -43,7 +43,7 @@ class ObjectiveFunction(DictClass):
                 results_dict["score"] = score
 
                 progress_dict.update(results_dict)
-                progress_dict["score_best"] = self.optimizer.p_bar.score_best
+                progress_dict["score_best"] = self.optimizer.best_score
                 progress_dict["nth_iter"] = self.optimizer.nth_iter
                 progress_dict["nth_process"] = self.optimizer.nth_process
 
