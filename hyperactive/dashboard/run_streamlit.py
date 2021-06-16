@@ -75,8 +75,12 @@ def main():
         progress_data_f.drop(
             ["nth_iter", "score_best", "nth_process"], axis=1, inplace=True
         )
+        parallel_dim = list(progress_data_f.columns)
+        parallel_dim.remove("score")
 
-        fig = parallel_coordinates_plotly(progress_data_f, color="score")
+        fig = parallel_coordinates_plotly(
+            progress_data_f, dimensions=parallel_dim, color="score"
+        )
         col2.plotly_chart(fig)
 
         for _ in range(3):
