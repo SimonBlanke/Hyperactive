@@ -108,7 +108,7 @@ def test_filter_data_0():
     }
     filter_df = pd.DataFrame(filter_dict)
     threshold = -1000
-    filter_df.iloc[1, 1] = threshold
+    filter_df["lower bound"].iloc[1] = threshold
 
     board = StreamlitBackend(search_ids)
     progress_data = board.filter_data(search_data, filter_df)
