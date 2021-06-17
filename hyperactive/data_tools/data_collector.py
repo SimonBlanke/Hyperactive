@@ -78,9 +78,9 @@ class DataCollector:
     def load(self):
         return self.io.load(self.path)
 
-    def save_iter(self, dictionary):
+    def append(self, dictionary):
         search_data = pd.DataFrame(dictionary, index=[0])
         self.io.locked_write(search_data, self.path)
 
-    def save_run(self, dataframe, replace_existing=False):
+    def save(self, dataframe, replace_existing=False):
         self.io.atomic_write(dataframe, self.path, replace_existing)

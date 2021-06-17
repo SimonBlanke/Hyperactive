@@ -47,7 +47,7 @@ class ObjectiveFunction(DictClass):
                 progress_dict["nth_iter"] = self.optimizer.nth_iter
                 progress_dict["nth_process"] = self.optimizer.nth_process
 
-                data_c.save_iter(progress_dict)
+                data_c.append(progress_dict)
 
             # ltm save after iteration
             # self.ltm.ltm_obj_func_wrapper(results, para, nth_process)
