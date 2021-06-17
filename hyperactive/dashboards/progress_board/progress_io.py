@@ -1,0 +1,57 @@
+# Author: Simon Blanke
+# Email: simon.blanke@yahoo.com
+# License: MIT License
+
+import os
+import pandas as pd
+
+
+class ProgressIO:
+    def __init__(self, path):
+        self.path = path
+
+    def get_filter_file_path(self, search_id):
+        return self.path + "/filter_" + search_id + ".csv"
+
+    def get_progress_data_path(self, search_id):
+        return self.path + "/progress_data_" + search_id + ".csv"
+
+    def load_filter(self, search_id):
+        path = self.get_filter_file_path(search_id)
+        if os.path.isfile(path):
+            return pd.read_csv(path)
+        else:
+            print("\n Warning: Filter file not found in:", path)
+            return None
+
+    def load_progress(self, search_id):
+        path = self.get_progress_data_path(search_id)
+        if os.path.isfile(path):
+            return pd.read_csv(path)
+        else:
+            print("\n Warning: Progress data not found in:", path)
+            return None
+
+    def remove_filter(self, search_id):
+        path = self.get_filter_file_path(search_id)
+        if os.path.isfile(path):
+            os.remove(path)
+
+    def remove_progress(self, search_id):
+        path = self.get_progress_data_path(search_id)
+        if os.path.isfile(path):
+            os.remove(path)
+
+    def create_filter(self, search_id, search_space):
+        path = self.get_filter_file_path(search_id)
+        self.remove_filter(search_id)
+
+        indices = list(search_space.keys()) + ["score"]
+        filter_dict = {
+            "parameter": indices,
+            "lower bound": "lower",
+            "upper bound": "upper",
+        }
+
+        df = pd.DataFrame(filter_dict)
+        df.to_csv(path, index=None)
