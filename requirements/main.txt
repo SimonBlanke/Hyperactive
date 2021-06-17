@@ -2,3 +2,6 @@ numpy >=1.18.1
 tqdm >=4.48.0
 pandas
 gradient-free-optimizers >=0.2.6, <1.0.0
+streamlit
+plotly
+matplotlib
