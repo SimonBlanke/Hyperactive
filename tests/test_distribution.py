@@ -73,6 +73,12 @@ def test_n_jobs_6():
     assert len(hyper.results_list) == 8
 
 
+def test_n_jobs_7():
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=-1)
+    hyper.run()
+
+
 def test_multiprocessing_0():
     hyper = Hyperactive(distribution="multiprocessing")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
@@ -150,7 +156,7 @@ def test_n_processes_3():
 
 
 def test_n_processes_4():
-    hyper = Hyperactive(n_processes=-1)
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
     hyper.run()
 
@@ -158,7 +164,7 @@ def test_n_processes_4():
 
 
 def test_n_processes_5():
-    hyper = Hyperactive(n_processes=-1)
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=4)
     hyper.run()

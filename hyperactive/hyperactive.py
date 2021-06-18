@@ -3,6 +3,7 @@
 # License: MIT License
 
 import os
+import multiprocessing
 from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
@@ -51,6 +52,9 @@ class Hyperactive(HyperactiveResults):
         memory_warm_start,
         search_id,
     ):
+        if n_jobs == -1:
+            n_jobs = multiprocessing.cpu_count()
+
         for _ in range(n_jobs):
             nth_process = len(self.process_infos)
 

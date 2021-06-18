@@ -42,8 +42,6 @@ def run_search(search_processes_infos, distribution, n_processes):
 
     if n_processes == "auto":
         n_processes = len(process_infos)
-    elif n_processes == -1:
-        n_processes = multiprocessing.cpu_count()
 
     if n_processes == 1:
         results_list = single_process(_process_, process_infos)
