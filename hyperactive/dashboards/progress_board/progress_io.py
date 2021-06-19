@@ -19,28 +19,32 @@ class ProgressIO:
     def load_filter(self, search_id):
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
+            print("Filter file loaded")
             return pd.read_csv(path)
         else:
-            print("\n Warning: Filter file not found in:", path)
+            print("Warning: Filter file not found in:", path)
             return None
 
     def load_progress(self, search_id):
         path = self.get_progress_data_path(search_id)
         if os.path.isfile(path):
+            print("Progress data loaded")
             return pd.read_csv(path)
         else:
-            print("\n Warning: Progress data not found in:", path)
+            print("Warning: Progress data not found in:", path)
             return None
 
     def remove_filter(self, search_id):
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
             os.remove(path)
+            print("Filter file removed")
 
     def remove_progress(self, search_id):
         path = self.get_progress_data_path(search_id)
         if os.path.isfile(path):
             os.remove(path)
+            print("Progress data removed")
 
     def create_filter(self, search_id, search_space):
         path = self.get_filter_file_path(search_id)
