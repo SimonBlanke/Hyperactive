@@ -3,6 +3,7 @@
 # License: MIT License
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 
@@ -10,6 +11,9 @@ try:
     from progress_io import ProgressIO
 except:
     from .progress_io import ProgressIO
+
+
+pd.options.mode.chained_assignment = "raise"
 
 
 color_scale = px.colors.sequential.Jet
@@ -89,8 +93,8 @@ class StreamlitBackend:
     def plotly(self, progress_data, search_id):
         filter_df = self.search_id_dict[search_id]["filt_f"]
 
-        progress_data.drop(
-            ["nth_iter", "score_best", "nth_process"], axis=1, inplace=True
+        progress_data = progress_data.drop(
+            ["nth_iter", "score_best", "nth_process"], axis=1
         )
 
         if filter_df is not None:
