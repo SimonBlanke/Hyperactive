@@ -32,7 +32,8 @@ test-search_space:
 	done
 
 test:
-	python -m pytest -x -p no:warnings -rfEX tests/ \
+	python -m pytest -x -p no:warnings -rfEX tests/; \
+	python ./tests/_test_progress_board.py \
 
 test-local:
 	cd tests/local; \
