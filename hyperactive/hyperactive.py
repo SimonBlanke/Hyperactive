@@ -126,13 +126,14 @@ class Hyperactive(HyperactiveResults):
             search_id,
         )
 
-    def run(self, max_time=None):
+    def run(self, max_time=None, _test_st_backend=False):
         for nth_process in self.process_infos.keys():
             self.process_infos[nth_process]["max_time"] = max_time
 
         # open progress board
-        for progress_board in self.progress_boards.values():
-            progress_board.open_dashboard()
+        if not _test_st_backend:
+            for progress_board in self.progress_boards.values():
+                progress_board.open_dashboard()
 
         self.results_list = run_search(
             self.process_infos, self.distribution, self.n_processes
