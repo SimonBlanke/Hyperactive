@@ -17,7 +17,7 @@ class ProgressBoard:
         self.uuid = uuid.uuid4().hex
         self.search_ids = []
 
-        self._io_ = ProgressIO("./")
+        self._io_ = ProgressIO("./", verbosity=False)
 
     def init_paths(self, search_id, search_space):
         self._io_.remove_progress(search_id)
@@ -37,4 +37,4 @@ class ProgressBoard:
         open_streamlit = "streamlit run " + dir_ + "/run_streamlit.py " + paths
 
         # from: https://stackoverflow.com/questions/7574841/open-a-terminal-from-python
-        os.system("gnome-terminal -e 'bash -c \" " + open_streamlit + " \"'")
+        os.system('gnome-terminal -x bash -c " ' + open_streamlit + ' " ')

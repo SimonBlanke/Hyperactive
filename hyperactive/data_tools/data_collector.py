@@ -39,31 +39,31 @@ class DataIO:
             header = search_data.columns
         return header
 
-    def _save_search_data(self, search_data, io_wrap):
+    def _save_dataframe(self, dataframe, io_wrap):
         if self.drop_duplicates:
-            search_data.drop_duplicates(subset=self.drop_duplicates, inplace=True)
+            dataframe.drop_duplicates(subset=self.drop_duplicates, inplace=True)
 
-        search_data.to_csv(io_wrap, index=False, header=not io_wrap.tell())
+        dataframe.to_csv(io_wrap, index=False, header=not io_wrap.tell())
 
-    def atomic_write(self, search_data, path, replace_existing):
+    def atomic_write(self, dataframe, path, replace_existing):
         self.replace_existing = replace_existing
 
         with atomic_overwrite(path) as io_wrap:
-            self._save_search_data(search_data, io_wrap)
+            self._save_dataframe(dataframe, io_wrap)
 
-    def locked_write(self, search_data, path):
+    def locked_write(self, dataframe, path):
 
         lock = FileLock(path + ".lock")
         with lock:
             with open(path, self.mode) as io_wrap:
-                self._save_search_data(search_data, io_wrap)
+                self._save_dataframe(dataframe, io_wrap)
 
         """
         import fcntl
 
         with open(path, self.mode) as io_wrap:
             fcntl.flock(io_wrap, fcntl.LOCK_EX)
-            self._save_search_data(search_data, io_wrap)
+            self._save_dataframe(dataframe, io_wrap)
             fcntl.flock(io_wrap, fcntl.LOCK_UN)
         """
 
@@ -86,9 +86,8 @@ class DataCollector:
         return self.io.load(self.path)
 
     def append(self, dictionary):
-        search_data = pd.DataFrame(dictionary, index=[0])
-
-        self.io.locked_write(search_data, self.path)
+        dataframe = pd.DataFrame(dictionary, index=[0])
+        self.io.locked_write(dataframe, self.path)
 
     def save(self, dataframe, replace_existing=False):
         self.io.atomic_write(dataframe, self.path, replace_existing)

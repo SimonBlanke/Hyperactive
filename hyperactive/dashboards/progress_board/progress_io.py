@@ -7,8 +7,10 @@ import pandas as pd
 
 
 class ProgressIO:
-    def __init__(self, path):
+    def __init__(self, path, verbosity=True, warnings=True):
         self.path = path
+        self.verbosity = verbosity
+        self.warnings = warnings
 
     def get_filter_file_path(self, search_id):
         return self.path + "/filter_" + search_id + ".csv"
@@ -19,32 +21,38 @@ class ProgressIO:
     def load_filter(self, search_id):
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
-            print("Load filter file from path:", path)
+            if self.verbosity:
+                print("Load filter file from path:", path)
             return pd.read_csv(path)
         else:
-            print("Warning: Filter file not found in:", path)
+            if self.warnings:
+                print("Warning: Filter file not found in:", path)
             return None
 
     def load_progress(self, search_id):
         path = self.get_progress_data_path(search_id)
         if os.path.isfile(path):
-            print("Load progress data file from path:", path)
+            if self.verbosity:
+                print("Load progress data file from path:", path)
             return pd.read_csv(path)
         else:
-            print("Warning: Progress data not found in:", path)
+            if self.warnings:
+                print("Warning: Progress data not found in:", path)
             return None
 
     def remove_filter(self, search_id):
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
             os.remove(path)
-            print("Remove filter file from path:", path)
+            if self.verbosity:
+                print("Remove filter file from path:", path)
 
     def remove_progress(self, search_id):
         path = self.get_progress_data_path(search_id)
         if os.path.isfile(path):
             os.remove(path)
-            print("Remove progress data file from path:", path)
+            if self.verbosity:
+                print("Remove progress data file from path:", path)
 
     def create_filter(self, search_id, search_space):
         path = self.get_filter_file_path(search_id)
