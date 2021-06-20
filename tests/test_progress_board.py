@@ -57,30 +57,6 @@ def test_progress_io_4():
     assert progress_ is not None
 
 
-def test_progress_board_0():
-    search_id = "test_model"
-
-    search_space = {
-        "x1": np.arange(-100, 101, 1),
-    }
-
-    board = ProgressBoard()
-    board.init_paths(search_id=search_id, search_space=search_space)
-
-
-def test_streamlit_backend_0():
-    search_id1 = "test_model1"
-    search_id2 = "test_model2"
-    search_id3 = "test_model3"
-
-    search_ids = [search_id1, search_id2, search_id3]
-
-    board = StreamlitBackend(search_ids)
-    progress_data = board.get_progress_data(search_id1)
-
-    assert progress_data is None
-
-
 def test_filter_data_0():
     search_id1 = "test_model1"
     search_id2 = "test_model2"
@@ -103,8 +79,8 @@ def test_filter_data_0():
     indices = list(search_space.keys()) + ["score"]
     filter_dict = {
         "parameter": indices,
-        "lower bound": "lower",
-        "upper bound": "upper",
+        "lower bound": "---",
+        "upper bound": "---",
     }
     filter_df = pd.DataFrame(filter_dict)
     threshold = -1000
@@ -115,3 +91,76 @@ def test_filter_data_0():
 
     assert not np.all(search_data["score"].values >= threshold)
     assert np.all(progress_data["score"].values >= threshold)
+
+
+def test_streamlit_backend_0():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+    progress_data = board.get_progress_data(search_id1)
+
+    assert progress_data is None
+
+
+def test_streamlit_backend_1():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
+        return score
+
+    search_space = {
+        "x1": np.arange(-100, 101, 1),
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=200)
+    hyper.run()
+    search_data = hyper.results(objective_function)
+    search_data["nth_iter"] = 0
+    search_data["score_best"] = 0
+    search_data["nth_process"] = 0
+
+    pyplot_fig = board.pyplot(search_data, search_id1)
+
+    assert pyplot_fig is not None
+
+
+def test_streamlit_backend_2():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
+        return score
+
+    search_space = {
+        "x1": np.arange(-100, 101, 1),
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(objective_function, search_space, n_iter=200)
+    hyper.run()
+    search_data = hyper.results(objective_function)
+    search_data["nth_iter"] = 0
+    search_data["score_best"] = 0
+    search_data["nth_process"] = 0
+
+    plotly_fig = board.plotly(search_data, search_id1)
+
+    assert plotly_fig is not None
