@@ -19,7 +19,7 @@ class ProgressIO:
     def load_filter(self, search_id):
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
-            print("Filter file loaded")
+            print("Load filter file from path:", path)
             return pd.read_csv(path)
         else:
             print("Warning: Filter file not found in:", path)
@@ -28,7 +28,7 @@ class ProgressIO:
     def load_progress(self, search_id):
         path = self.get_progress_data_path(search_id)
         if os.path.isfile(path):
-            print("Progress data loaded")
+            print("Load progress data file from path:", path)
             return pd.read_csv(path)
         else:
             print("Warning: Progress data not found in:", path)
@@ -38,13 +38,13 @@ class ProgressIO:
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
             os.remove(path)
-            print("Filter file removed")
+            print("Remove filter file from path:", path)
 
     def remove_progress(self, search_id):
         path = self.get_progress_data_path(search_id)
         if os.path.isfile(path):
             os.remove(path)
-            print("Progress data removed")
+            print("Remove progress data file from path:", path)
 
     def create_filter(self, search_id, search_space):
         path = self.get_filter_file_path(search_id)
@@ -53,8 +53,8 @@ class ProgressIO:
         indices = list(search_space.keys()) + ["score"]
         filter_dict = {
             "parameter": indices,
-            "lower bound": "lower",
-            "upper bound": "upper",
+            "lower bound": "---",
+            "upper bound": "---",
         }
 
         df = pd.DataFrame(filter_dict)

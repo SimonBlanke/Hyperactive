@@ -36,6 +36,7 @@ def main():
             st.write(" ")
 
     time.sleep(1)
+    print("\nStart next run:")
     st.experimental_rerun()
 
 

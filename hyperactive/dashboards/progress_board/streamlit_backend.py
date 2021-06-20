@@ -76,12 +76,12 @@ class StreamlitBackend:
 
                 col_data = df[column]
 
-                if lower == "lower":
+                if lower == "---":
                     lower = np.min(col_data)
                 else:
                     lower = float(lower)
 
-                if upper == "upper":
+                if upper == "---":
                     upper = np.max(col_data)
                 else:
                     upper = float(upper)
