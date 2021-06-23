@@ -29,8 +29,10 @@ def main():
 
         pyplot_fig, plotly_fig = backend.create_plots(search_id)
 
-        col1.pyplot(pyplot_fig)
-        col2.plotly_chart(plotly_fig)
+        if pyplot_fig is not None:
+            col1.pyplot(pyplot_fig)
+        if plotly_fig is not None:
+            col2.plotly_chart(plotly_fig)
 
         for _ in range(3):
             st.write(" ")

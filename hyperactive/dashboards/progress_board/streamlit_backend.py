@@ -39,7 +39,10 @@ class StreamlitBackend:
 
         return progress_data[~progress_data.isin([np.nan, np.inf, -np.inf]).any(1)]
 
-    def pyplot(self, progress_data, search_id):
+    def pyplot(self, progress_data):
+        if progress_data is None or len(progress_data) <= 1:
+            return None
+
         nth_iter = progress_data["nth_iter"]
         score_best = progress_data["score_best"]
         nth_process = list(progress_data["nth_process"])
@@ -91,6 +94,9 @@ class StreamlitBackend:
         return df
 
     def plotly(self, progress_data, search_id):
+        if progress_data is None or len(progress_data) <= 1:
+            return None
+
         filter_df = self.search_id_dict[search_id]["filt_f"]
 
         progress_data = progress_data.drop(
@@ -116,10 +122,8 @@ class StreamlitBackend:
 
     def create_plots(self, search_id):
         progress_data = self.get_progress_data(search_id)
-        if progress_data is None:
-            return None, None
 
-        pyplot_fig = self.pyplot(progress_data, search_id)
+        pyplot_fig = self.pyplot(progress_data)
         plotly_fig = self.plotly(progress_data, search_id)
 
         return pyplot_fig, plotly_fig
