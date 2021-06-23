@@ -7,16 +7,21 @@ import pandas as pd
 
 
 class ProgressIO:
-    def __init__(self, path, verbosity=True, warnings=True):
+    def __init__(self, path, hide_progress_data=True, verbosity=True, warnings=True):
         self.path = path
         self.verbosity = verbosity
         self.warnings = warnings
+
+        if hide_progress_data:
+            self.csv = ".csv~"
+        else:
+            self.csv = ".csv"
 
     def get_filter_file_path(self, search_id):
         return self.path + "/filter_" + search_id + ".csv"
 
     def get_progress_data_path(self, search_id):
-        return self.path + "/progress_data_" + search_id + ".csv"
+        return self.path + "/progress_data_" + search_id + self.csv
 
     def load_filter(self, search_id):
         path = self.get_filter_file_path(search_id)

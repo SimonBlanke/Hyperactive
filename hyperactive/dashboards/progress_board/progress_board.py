@@ -11,13 +11,16 @@ from .progress_io import ProgressIO
 
 
 class ProgressBoard:
-    def __init__(self, filter_file=None):
+    def __init__(self, filter_file=None, hide_progress_data=True):
         self.filter_file = filter_file
+        self.hide_progress_data = hide_progress_data
 
         self.uuid = uuid.uuid4().hex
         self.search_ids = []
 
-        self._io_ = ProgressIO("./", verbosity=False)
+        self._io_ = ProgressIO(
+            "./", hide_progress_data=hide_progress_data, verbosity=False
+        )
 
     def init_paths(self, search_id, search_space):
         self._io_.remove_progress(search_id)
