@@ -131,7 +131,7 @@ def test_streamlit_backend_1():
     search_data["score_best"] = 0
     search_data["nth_process"] = 0
 
-    pyplot_fig = board.pyplot(search_data, search_id1)
+    pyplot_fig = board.pyplot(search_data)
 
     assert pyplot_fig is not None
 
@@ -164,3 +164,59 @@ def test_streamlit_backend_2():
     plotly_fig = board.plotly(search_data, search_id1)
 
     assert plotly_fig is not None
+
+
+def test_streamlit_backend_3():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+
+    df_empty = pd.DataFrame()
+
+    board.pyplot(df_empty)
+
+
+def test_streamlit_backend_4():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+
+    df_empty = pd.DataFrame([], columns=["nth_iter", "score_best", "nth_process"])
+
+    board.pyplot(df_empty)
+
+
+def test_streamlit_backend_3():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+
+    df_empty = pd.DataFrame()
+
+    board.plotly(df_empty, search_id1)
+
+
+def test_streamlit_backend_4():
+    search_id1 = "test_model1"
+    search_id2 = "test_model2"
+    search_id3 = "test_model3"
+
+    search_ids = [search_id1, search_id2, search_id3]
+
+    board = StreamlitBackend(search_ids)
+
+    df_empty = pd.DataFrame([], columns=["nth_iter", "score_best", "nth_process"])
+
+    board.plotly(df_empty, search_id1)
