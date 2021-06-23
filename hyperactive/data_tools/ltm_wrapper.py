@@ -10,18 +10,19 @@ from hyperactive_long_term_memory import Dashboard as _Dashboard_
 class LongTermMemory:
     def __init__(
         self,
+        study_id,
         model_id,
-        experiment_id="default",
         save_on="finish",
     ):
-        self.model_id = model_id
-        self.experiment_id = experiment_id
-        self.save_on = save_on
 
-        path, _ = os.path.realpath(__file__).rsplit("/", 1)
-        path = path + "/"
+        self.study_id = study_id
+        self.model_id = model_id
+
+        path = os.path.realpath(__file__).rsplit("/", 1)[0] + "/"
 
         self.ltm_origin = _LongTermMemory_(path=".")
+
+        self.save_on = save_on
 
         if save_on == "finish":
             self.ltm_obj_func_wrapper = self._no_ltm_wrapper
@@ -41,17 +42,16 @@ class LongTermMemory:
 
         results_dict["score"] = score
         ltm_dict = {**para, **results_dict}
-        self.save_on_iteration(ltm_dict, nth_process)
 
-    def clean_files(self):
-        self.ltm_origin.clean_files()
+        self.save_on_iteration(ltm_dict, self.nth_process)
 
-    def init_study_(self, objective_function, search_space):
+    def init_study(self, objective_function, search_space, nth_process):
+        self.nth_process = nth_process
         self.ltm_origin.init_study(
             objective_function,
             search_space,
+            study_id=self.study_id,
             model_id=self.model_id,
-            experiment_id=self.experiment_id,
         )
 
     def load(self):
@@ -62,11 +62,3 @@ class LongTermMemory:
 
     def save_on_iteration(self, data_dict, nth_process):
         self.ltm_origin.save_on_iteration(data_dict, nth_process)
-
-
-class Dashboard:
-    def __init__(self):
-        self.dashboard = _Dashboard_(".")
-
-    def open(self):
-        self.dashboard.open()

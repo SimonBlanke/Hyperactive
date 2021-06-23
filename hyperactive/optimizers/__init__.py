@@ -2,11 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-__version__ = "3.2.1"
-__license__ = "MIT"
 
 
-from .hyperactive import Hyperactive
 from .optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
@@ -26,7 +23,7 @@ from .optimizers import (
 
 
 __all__ = [
-    "Hyperactive",
+
     "HillClimbingOptimizer",
     "StochasticHillClimbingOptimizer",
     "RepulsingHillClimbingOptimizer",

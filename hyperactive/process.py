@@ -6,7 +6,6 @@
 def _process_(
     nth_process,
     objective_function,
-    search_space,
     optimizer,
     n_iter,
     memory,
