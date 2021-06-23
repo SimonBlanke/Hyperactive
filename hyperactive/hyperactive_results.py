@@ -8,8 +8,9 @@ import pandas as pd
 
 
 class HyperactiveResults:
-    def __init__(*args, **kwargs):
-        pass
+    def __init__(self, *args, **kwargs):
+        self.objFunc2results = {}
+        self.search_id2results = {}
 
     def _sort_results_objFunc(self, objective_function):
         best_score = -np.inf
@@ -74,10 +75,25 @@ class HyperactiveResults:
             return self.objFunc2results[id_][result_name]
 
     def best_para(self, id_):
-        return self._get_one_result(id_, "best_para")
+        best_para_ = self._get_one_result(id_, "best_para")
+
+        if best_para_ is not None:
+            return best_para_
+
+        raise ValueError("objective function name not recognized")
 
     def best_score(self, id_):
-        return self._get_one_result(id_, "best_score")
+        best_score_ = self._get_one_result(id_, "best_score")
+
+        if best_score_ != -np.inf:
+            return best_score_
+
+        raise ValueError("objective function name not recognized")
 
     def results(self, id_):
-        return self._get_one_result(id_, "search_data")
+        results_ = self._get_one_result(id_, "search_data")
+
+        if results_ is not None:
+            return results_
+
+        raise ValueError("objective function name not recognized")

@@ -35,8 +35,6 @@ class Hyperactive(HyperactiveResults):
 
         self.search_ids = []
         self.process_infos = {}
-        self.objFunc2results = {}
-        self.search_id2results = {}
 
         self.progress_boards = {}
 
