@@ -323,6 +323,11 @@ hyper.run()
 
 ## Hyperactive API reference
 
+
+<br>
+
+### Basic Usage
+
 <details>
 <summary><b> Hyperactive(verbosity, distribution, n_processes)</b></summary>
 
@@ -527,7 +532,140 @@ hyper.run()
 </details>
 
 
+
 <br>
+
+### Special Parameters
+
+<details>
+<summary><b> Objective Function</b></summary>
+
+Each iteration consists of two steps:
+ - The optimization step: decides what position in the search space (parameter set) to evaluate next 
+ - The evaluation step: calls the objective function, which returns the score for the given position in the search space
+  
+The objective function has one argument that is often called "para", "params" or "opt".
+This argument is your access to the parameter set that the optimizer has selected in the
+corresponding iteration. 
+
+```python
+def objective_function(opt):
+    # get x1 and x2 from the argument "opt"
+    x1 = opt["x1"]
+    x2 = opt["x1"]
+
+    # calculate the score with the parameter set
+    score = -(x1 * x1 + x2 * x2)
+
+    # return the score
+    return score
+```
+
+The objective function always needs a score, which shows how "good" or "bad" the current parameter set is. But you can also return some additional information with a dictionary:
+
+```python
+def objective_function(opt):
+    x1 = opt["x1"]
+    x2 = opt["x1"]
+
+    score = -(x1 * x1 + x2 * x2)
+
+    other_info = {
+      "x1 squared" : x1**2,
+      "x2 squared" : x2**2,
+    }
+
+    return score, other_info
+```
+
+When you take a look at the results (a pandas dataframe with all iteration information) after the run has ended you will see the additional information in it. The reason we need a dictionary for this is because Hyperactive needs to know the names of the additonal parameters. The score does not need that, because it is always called "score" in the results. You can run [this example script](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/optimization_applications/multiple_scores.py) if you want to give it a try.
+
+</details>
+
+
+<details>
+<summary><b> Search Space Dictionary</b></summary>
+
+The search space defines what values the optimizer can select during the search. These selected values will be inside the objective function argument and can be accessed like in a dictionary. The values in each search space dimension should always be in a list. If you use np.arange you should put it in a list afterwards:
+
+```python
+search_space = {
+    "x1": list(np.arange(-100, 101, 1)),
+    "x2": list(np.arange(-100, 101, 1)),
+}
+```
+
+A special feature of Hyperactive is shown in the next example. You can put not just numeric values into the search space dimensions, but also strings and functions. This enables a very high flexibility in how you can create your studies.
+
+```python
+def func1():
+  # do stuff
+  return stuff
+  
+
+def func2():
+  # do stuff
+  return stuff
+
+
+search_space = {
+    "x": list(np.arange(-100, 101, 1)),
+    "str": ["a string", "another string"],
+    "function" : [func1, func2],
+}
+```
+
+If you want to put other types of variables (like numpy arrays, pandas dataframes, lists, ...) into the search space you can do that via functions:
+
+```python
+def array1():
+  return np.array([0, 1, 2])
+  
+
+def array2():
+  return np.array([0, 1, 2])
+
+
+search_space = {
+    "x": list(np.arange(-100, 101, 1)),
+    "str": ["a string", "another string"],
+    "numpy_array" : [array1, array2],
+}
+```
+
+The functions contain the numpy arrays and returns them. This way you can use them inside the objective function. 
+
+
+</details>
+
+
+<details>
+<summary><b> Optimizer Classes</b></summary>
+
+Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts additional paramters.
+You can read more about each optimization-strategy and its parameters in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
+
+- HillClimbingOptimizer
+- RepulsingHillClimbingOptimizer
+- SimulatedAnnealingOptimizer
+- RandomSearchOptimizer
+- RandomRestartHillClimbingOptimizer
+- RandomAnnealingOptimizer
+- ParallelTemperingOptimizer
+- ParticleSwarmOptimizer
+- EvolutionStrategyOptimizer
+- BayesianOptimizer
+- TreeStructuredParzenEstimators
+- DecisionTreeOptimizer
+
+</details>
+
+
+
+
+<br>
+
+### Result Attributes
 
 
 <details>
@@ -620,27 +758,6 @@ hyper.run()
 </details>
 
 
-<br>
-
-### Optimizer Classes
-
-Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts additional paramters.
-You can read more about each optimization-strategy and its parameters in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
-
-- HillClimbingOptimizer
-- RepulsingHillClimbingOptimizer
-- SimulatedAnnealingOptimizer
-- RandomSearchOptimizer
-- RandomRestartHillClimbingOptimizer
-- RandomAnnealingOptimizer
-- ParallelTemperingOptimizer
-- ParticleSwarmOptimizer
-- EvolutionStrategyOptimizer
-- BayesianOptimizer
-- TreeStructuredParzenEstimators
-- DecisionTreeOptimizer
-
-
 
 <br>
 
@@ -682,7 +799,7 @@ You can read more about each optimization-strategy and its parameters in the [Op
 </details>
 
 <details>
-<summary><b>v3.0.0</b></summary>
+<summary><b>v3.0.0</b> :heavy_check_mark:</summary>
 
   - [x] New API
       - [x] expand usage of objective-function
