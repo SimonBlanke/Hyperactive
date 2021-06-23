@@ -34,12 +34,12 @@ progress_board = ProgressBoard()
 
 hyper = Hyperactive()
 
-# pass the instance of the ProgressBoard to .add_search(...)
 hyper.add_search(
     model,
     search_space,
     n_iter=120,
-    progress_board=progress_board,
+    n_jobs=2,  # the progress board works seamlessly with multiprocessing
+    progress_board=progress_board,  # pass the instance of the ProgressBoard to .add_search(...)
 )
 
 # a terminal will open, which opens a dashboard in your browser
