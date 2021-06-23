@@ -68,10 +68,10 @@ class _BaseOptimizer_(TrafoClass):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(self, search_space, initialize, data_c):
+    def init(self, search_space, initialize, progress_collector):
         self.search_space = search_space
         self.initialize = initialize
-        self.data_c = data_c
+        self.progress_collector = progress_collector
 
         self.trafo = HyperGradientTrafo(search_space)
 
@@ -137,7 +137,7 @@ class _BaseOptimizer_(TrafoClass):
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
         self._optimizer.search(
-            gfo_wrapper_model(self.search_space, self.data_c),
+            gfo_wrapper_model(self.search_space, self.progress_collector),
             n_iter,
             max_time,
             max_score,

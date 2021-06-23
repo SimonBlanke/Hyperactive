@@ -110,9 +110,11 @@ class Hyperactive(HyperactiveResults):
     ):
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
-        data_c = self._init_progress_board(progress_board, search_id, search_space)
+        progress_collector = self._init_progress_board(
+            progress_board, search_id, search_space
+        )
 
-        optimizer.init(search_space, initialize, data_c)
+        optimizer.init(search_space, initialize, progress_collector)
 
         self._add_search_processes(
             random_state,

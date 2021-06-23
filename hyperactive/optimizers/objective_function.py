@@ -23,14 +23,14 @@ class ObjectiveFunction(DictClass):
         self.optimizer = optimizer
         self.nth_process = nth_process
 
-    def __call__(self, search_space, data_c):
+    def __call__(self, search_space, progress_collector):
         # wrapper for GFOs
         def _model(para):
             para = gfo2hyper(search_space, para)
             self.para_dict = para
             results = self.objective_function(self)
 
-            if data_c:
+            if progress_collector:
                 progress_dict = para
 
                 if isinstance(results, tuple):
@@ -47,7 +47,7 @@ class ObjectiveFunction(DictClass):
                 progress_dict["nth_iter"] = self.optimizer.nth_iter
                 progress_dict["nth_process"] = self.optimizer.nth_process
 
-                data_c.append(progress_dict)
+                progress_collector.append(progress_dict)
 
             # ltm save after iteration
             # self.ltm.ltm_obj_func_wrapper(results, para, nth_process)
