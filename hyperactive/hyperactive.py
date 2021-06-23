@@ -91,6 +91,21 @@ class Hyperactive(HyperactiveResults):
 
         return data_c
 
+    @staticmethod
+    def check_list(search_space):
+        for key in search_space.keys():
+            search_dim = search_space[key]
+
+            error_msg = (
+                "Value in '{}' of search space dictionary must be of type list".format(
+                    key
+                )
+            )
+
+            if not isinstance(search_dim, list):
+                print("Warning", error_msg)
+                # raise ValueError(error_msg)
+
     def add_search(
         self,
         objective_function,
@@ -111,6 +126,8 @@ class Hyperactive(HyperactiveResults):
         progress_collector = self._init_progress_board(
             progress_board, search_id, search_space
         )
+
+        self.check_list(search_space)
 
         optimizer.init(search_space, initialize, progress_collector)
 
