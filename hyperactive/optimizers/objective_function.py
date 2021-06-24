@@ -3,6 +3,7 @@
 # License: MIT License
 
 
+import numpy as np
 from .dictionary import DictClass
 
 
@@ -23,6 +24,21 @@ class ObjectiveFunction(DictClass):
         self.optimizer = optimizer
         self.nth_process = nth_process
 
+        self.best = False
+        self.nth_iter = -1
+        self.best_para = None
+        self.best_score = -np.inf
+
+    def get_best(self, score, para):
+        self.nth_iter += 1
+
+        if score > self.best_score:
+            self.best_score = score
+            self.best_para = para
+            self.best = True
+        else:
+            self.best = False
+
     def __call__(self, search_space, progress_collector):
         # wrapper for GFOs
         def _model(para):
@@ -40,11 +56,16 @@ class ObjectiveFunction(DictClass):
                     score = results
                     results_dict = {}
 
+                # keep track on best score and para
+                self.get_best(score, para)
+
                 results_dict["score"] = score
 
                 progress_dict.update(results_dict)
-                progress_dict["score_best"] = self.optimizer.best_score
-                progress_dict["nth_iter"] = self.optimizer.nth_iter
+                progress_dict["score_best"] = self.best_score
+                progress_dict["nth_iter"] = self.nth_iter
+                progress_dict["best"] = self.best
+
                 progress_dict["nth_process"] = self.optimizer.nth_process
 
                 progress_collector.append(progress_dict)
