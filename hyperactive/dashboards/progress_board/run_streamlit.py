@@ -34,11 +34,14 @@ def main():
         if plotly_fig is not None:
             col2.plotly_chart(plotly_fig)
 
+        last_best = backend.create_info(search_id)
+        if last_best is not None:
+            st.table(last_best)
+
         for _ in range(3):
             st.write(" ")
 
     time.sleep(1)
-    print("\nStart next run:")
     st.experimental_rerun()
 
 

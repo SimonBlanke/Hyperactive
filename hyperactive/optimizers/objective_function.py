@@ -24,7 +24,7 @@ class ObjectiveFunction(DictClass):
         self.optimizer = optimizer
         self.nth_process = nth_process
 
-        self.best = False
+        self.best = 0
         self.nth_iter = -1
         self.best_para = None
         self.best_score = -np.inf
@@ -35,9 +35,9 @@ class ObjectiveFunction(DictClass):
         if score > self.best_score:
             self.best_score = score
             self.best_para = para
-            self.best = True
+            self.best = 1
         else:
-            self.best = False
+            self.best = 0
 
     def __call__(self, search_space, progress_collector):
         # wrapper for GFOs

@@ -34,6 +34,7 @@ class StreamlitBackend:
 
     def get_progress_data(self, search_id):
         progress_data = self.search_id_dict[search_id]["prog_d"]
+
         if progress_data is None:
             return
 
@@ -100,7 +101,7 @@ class StreamlitBackend:
         filter_df = self.search_id_dict[search_id]["filt_f"]
 
         progress_data = progress_data.drop(
-            ["nth_iter", "score_best", "nth_process"], axis=1
+            ["nth_iter", "score_best", "nth_process", "best"], axis=1
         )
 
         if filter_df is not None:
@@ -127,3 +128,19 @@ class StreamlitBackend:
         plotly_fig = self.plotly(progress_data, search_id)
 
         return pyplot_fig, plotly_fig
+
+    def create_info(self, search_id):
+        progress_data = self.get_progress_data(search_id)
+        if progress_data is None or len(progress_data) <= 1:
+            return None
+
+        progress_data_best = progress_data[progress_data["best"] == 1]
+
+        progress_data_best = progress_data_best.drop(
+            ["nth_iter", "score_best", "nth_process", "best"], axis=1
+        )
+
+        progress_data_best = progress_data_best.sort_values("score")
+        last_best = progress_data_best.tail(5)
+
+        return last_best
