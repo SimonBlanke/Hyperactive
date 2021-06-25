@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import numbers
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -80,15 +81,15 @@ class StreamlitBackend:
 
                 col_data = df[column]
 
-                if lower == "---":
-                    lower = np.min(col_data)
-                else:
+                if isinstance(lower, numbers.Number):
                     lower = float(lower)
-
-                if upper == "---":
-                    upper = np.max(col_data)
                 else:
+                    lower = np.min(col_data)
+
+                if isinstance(upper, numbers.Number):
                     upper = float(upper)
+                else:
+                    upper = np.max(col_data)
 
                 df = df[(df[column] >= lower) & (df[column] <= upper)]
 
