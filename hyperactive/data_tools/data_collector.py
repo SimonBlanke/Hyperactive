@@ -29,16 +29,6 @@ class DataIO:
         else:
             self.mode = "a"
 
-    def _get_header(self, search_data, path):
-        if os.path.isfile(path):
-            if self.replace_existing:
-                header = search_data.columns
-            else:
-                header = False
-        else:
-            header = search_data.columns
-        return header
-
     def _save_dataframe(self, dataframe, io_wrap):
         if self.drop_duplicates:
             dataframe.drop_duplicates(subset=self.drop_duplicates, inplace=True)
@@ -53,7 +43,7 @@ class DataIO:
 
     def locked_write(self, dataframe, path):
 
-        lock = FileLock(path + ".lock")
+        lock = FileLock(path + ".lock~")
         with lock:
             with open(path, self.mode) as io_wrap:
                 self._save_dataframe(dataframe, io_wrap)
