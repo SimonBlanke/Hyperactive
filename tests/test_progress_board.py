@@ -160,6 +160,7 @@ def test_streamlit_backend_2():
     search_data["nth_iter"] = 0
     search_data["score_best"] = 0
     search_data["nth_process"] = 0
+    search_data["best"] = 0
 
     plotly_fig = board.plotly(search_data, search_id1)
 
@@ -194,7 +195,7 @@ def test_streamlit_backend_4():
     board.pyplot(df_empty)
 
 
-def test_streamlit_backend_3():
+def test_streamlit_backend_5():
     search_id1 = "test_model1"
     search_id2 = "test_model2"
     search_id3 = "test_model3"
@@ -208,7 +209,7 @@ def test_streamlit_backend_3():
     board.plotly(df_empty, search_id1)
 
 
-def test_streamlit_backend_4():
+def test_streamlit_backend_6():
     search_id1 = "test_model1"
     search_id2 = "test_model2"
     search_id3 = "test_model3"
