@@ -882,12 +882,19 @@ hyper.run()
 </details>
 
 <details>
+<summary><b>v3.2.0</b> :heavy_check_mark:</summary>
+
+  - [x] Dashboard for visualization of search-data at runtime via streamlit (Progress-Board)
+
+</details>
+
+
+<details>
 <summary><b>Next Features</b></summary>
   
   - [ ] "long term memory" for search-data storage and usage
   - [ ] Data collector tool to use inside the objective function
   - [ ] Dashboard for visualization of stored search-data
-  - [ ] Dashboard for visualization of search-data at runtime (progress-bar)
 
 
 </details>
