@@ -671,7 +671,15 @@ You can read more about each optimization-strategy and its parameters in the [Op
 <details>
 <summary><b> Progress Board</b></summary>
 
-The progress board enables the visualization of search data during the optimization run. This will help you to understand what is happening during the optimization and give an overview of the explored parameter sets and scores. The following script provides an example:
+The progress board enables the visualization of search data during the optimization run. This will help you to understand what is happening during the optimization and give an overview of the explored parameter sets and scores. 
+
+
+- filter_file
+  - (None, True)
+  - If the filter_file-parameter is True Hyperactive will create a file in the current directory, which allows the filtering of parameters or the score by setting an upper or lower bound.
+
+
+The following script provides an example:
 
 ```python
 from sklearn.model_selection import cross_val_score
