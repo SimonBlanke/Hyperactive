@@ -55,7 +55,7 @@ class StreamlitBackend:
         else:
             fig, ax = plt.subplots()
             ax.set_xlabel("nth iteration")
-            ax.set_ylabel("score")
+            ax.set_ylabel("best score")
 
             for i in np.unique(nth_process):
                 nth_iter_p = nth_iter[nth_process == i]

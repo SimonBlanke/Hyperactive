@@ -5,6 +5,7 @@
 *.iml
 *.pkl
 *.json
+*.*~
 *.npy
 *.csv
 *.pypirc

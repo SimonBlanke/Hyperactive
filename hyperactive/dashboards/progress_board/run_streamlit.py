@@ -36,7 +36,7 @@ def main():
 
         last_best = backend.create_info(search_id)
         if last_best is not None:
-            st.table(last_best)
+            st.table(last_best.assign(hack="").set_index("hack"))
 
         for _ in range(3):
             st.write(" ")
