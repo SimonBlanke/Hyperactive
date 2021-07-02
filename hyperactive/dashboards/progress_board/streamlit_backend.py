@@ -143,5 +143,10 @@ class StreamlitBackend:
 
         progress_data_best = progress_data_best.sort_values("score")
         last_best = progress_data_best.tail(5)
+        last_best = last_best.rename(
+            columns={
+                "score": "best 5 scores",
+            }
+        )
 
         return last_best
