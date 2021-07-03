@@ -143,19 +143,7 @@ class Hyperactive(HyperactiveResults):
             search_id,
         )
 
-    def run(self, max_time=None, _test_st_backend=False):
-        for nth_process in self.process_infos.keys():
-            self.process_infos[nth_process]["max_time"] = max_time
-
-        # open progress board
-        if not _test_st_backend:
-            for progress_board in self.progress_boards.values():
-                progress_board.open_dashboard()
-
-        self.results_list = run_search(
-            self.process_infos, self.distribution, self.n_processes
-        )
-
+    def _print_info(self):
         for results in self.results_list:
             nth_process = results["nth_process"]
 
@@ -171,3 +159,18 @@ class Hyperactive(HyperactiveResults):
                 iter_times=results["iter_times"],
                 n_iter=self.process_infos[nth_process]["n_iter"],
             )
+
+    def run(self, max_time=None, _test_st_backend=False):
+        for nth_process in self.process_infos.keys():
+            self.process_infos[nth_process]["max_time"] = max_time
+
+        # open progress board
+        if not _test_st_backend:
+            for progress_board in self.progress_boards.values():
+                progress_board.open_dashboard()
+
+        self.results_list = run_search(
+            self.process_infos, self.distribution, self.n_processes
+        )
+
+        self._print_info()
