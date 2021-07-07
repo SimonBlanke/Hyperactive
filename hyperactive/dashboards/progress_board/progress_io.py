@@ -7,8 +7,8 @@ import pandas as pd
 
 
 class ProgressIO:
-    def __init__(self, path, verbosity=True, warnings=True):
-        self.path = path
+    def __init__(self, verbosity=True, warnings=True):
+        self.path = "./"
         self.verbosity = verbosity
         self.warnings = warnings
 

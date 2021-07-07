@@ -50,18 +50,16 @@ def main():
         lock_file = backend._io_.get_lock_file_path(search_id)
         lock_files.append(os.path.isfile(lock_file))
 
-    print("\n lock_files", lock_files, "\n")
-
     time.sleep(1)
     if all(lock_file is False for lock_file in lock_files):
-        print("\n --- Deleting progress-/filter-files ---")
+        print("\n --- Deleting progress- and filter-files --- \n")
 
         for search_id in search_ids:
             backend._io_.remove_progress(search_id)
             backend._io_.remove_filter(search_id)
 
     else:
-        print("\n --- Rerun streamlit ---")
+        print("\n --- Rerun streamlit --- \n")
         st.experimental_rerun()
 
 

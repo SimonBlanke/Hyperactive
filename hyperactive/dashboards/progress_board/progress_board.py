@@ -16,7 +16,7 @@ class ProgressBoard:
 
         self.uuid = uuid.uuid4().hex
         self.search_ids = []
-        self._io_ = ProgressIO("./", verbosity=False)
+        self._io_ = ProgressIO(verbosity=False)
 
     def create_lock(self, search_id):
         path = self._io_.get_lock_file_path(search_id)

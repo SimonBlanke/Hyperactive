@@ -25,7 +25,7 @@ class StreamlitBackend:
         self.search_ids = search_ids
         self.search_id_dict = {}
 
-        self._io_ = ProgressIO("./")
+        self._io_ = ProgressIO()
 
         for search_id in search_ids:
             self.search_id_dict[search_id] = {}
@@ -120,7 +120,7 @@ class StreamlitBackend:
             color="score",
             color_continuous_scale=color_scale,
         )
-        fig.update_layout(autosize=False, width=1200, height=540)
+        fig.update_layout(width=1200, height=540)
 
         return fig
 
