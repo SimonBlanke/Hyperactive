@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import os
 import sys
 import time
 import streamlit as st
@@ -18,6 +19,7 @@ def main():
 
     search_ids = sys.argv[1:]
     backend = StreamlitBackend(search_ids)
+    lock_files = []
 
     for search_id in search_ids:
         st.title(search_id)
@@ -27,7 +29,10 @@ def main():
         )
         col1, col2 = st.beta_columns([1, 2])
 
-        pyplot_fig, plotly_fig = backend.create_plots(search_id)
+        progress_data = backend.get_progress_data(search_id)
+
+        pyplot_fig = backend.pyplot(progress_data)
+        plotly_fig = backend.plotly(progress_data, search_id)
 
         if pyplot_fig is not None:
             col1.pyplot(pyplot_fig)
@@ -42,9 +47,22 @@ def main():
         for _ in range(3):
             st.write(" ")
 
+        lock_file = backend._io_.get_lock_file_path(search_id)
+        lock_files.append(os.path.isfile(lock_file))
+
+    print("\n lock_files", lock_files, "\n")
+
     time.sleep(1)
-    print("\n --- Rerun streamlit ---")
-    st.experimental_rerun()
+    if all(lock_file is False for lock_file in lock_files):
+        print("\n --- Deleting progress-/filter-files ---")
+
+        for search_id in search_ids:
+            backend._io_.remove_progress(search_id)
+            backend._io_.remove_filter(search_id)
+
+    else:
+        print("\n --- Rerun streamlit ---")
+        st.experimental_rerun()
 
 
 if __name__ == "__main__":

@@ -25,13 +25,15 @@ class StreamlitBackend:
         self.search_ids = search_ids
         self.search_id_dict = {}
 
-        _io_ = ProgressIO("./")
+        self._io_ = ProgressIO("./")
 
         for search_id in search_ids:
             self.search_id_dict[search_id] = {}
 
-            self.search_id_dict[search_id]["prog_d"] = _io_.load_progress(search_id)
-            self.search_id_dict[search_id]["filt_f"] = _io_.load_filter(search_id)
+            self.search_id_dict[search_id]["prog_d"] = self._io_.load_progress(
+                search_id
+            )
+            self.search_id_dict[search_id]["filt_f"] = self._io_.load_filter(search_id)
 
     def get_progress_data(self, search_id):
         progress_data = self.search_id_dict[search_id]["prog_d"]

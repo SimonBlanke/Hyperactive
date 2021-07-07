@@ -18,8 +18,14 @@ class ProgressBoard:
         self.search_ids = []
         self._io_ = ProgressIO("./", verbosity=False)
 
+    def create_lock(self, search_id):
+        path = self._io_.get_lock_file_path(search_id)
+        if not os.path.exists(path):
+            os.mknod(path)
+
     def init_paths(self, search_id, search_space):
         self._io_.remove_progress(search_id)
+        self.create_lock(search_id)
         data_c = DataCollector(self._io_.get_progress_data_path(search_id))
 
         self.search_ids.append(search_id)

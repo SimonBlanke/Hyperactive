@@ -18,6 +18,9 @@ class ProgressIO:
     def get_progress_data_path(self, search_id):
         return self.path + "/progress_data_" + search_id + ".csv~"
 
+    def get_lock_file_path(self, search_id):
+        return self.path + "/progress_data_" + search_id + ".csv~.lock~"
+
     def load_filter(self, search_id):
         path = self.get_filter_file_path(search_id)
         if os.path.isfile(path):
@@ -53,6 +56,13 @@ class ProgressIO:
             os.remove(path)
             if self.verbosity:
                 print("Remove progress data file from path:", path)
+
+    def remove_lock(self, search_id):
+        path = self.get_lock_file_path(search_id)
+        if os.path.isfile(path):
+            os.remove(path)
+            if self.verbosity:
+                print("Remove lock file from path:", path)
 
     def create_filter(self, search_id, search_space):
         path = self.get_filter_file_path(search_id)

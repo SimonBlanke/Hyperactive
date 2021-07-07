@@ -173,4 +173,10 @@ class Hyperactive(HyperactiveResults):
             self.process_infos, self.distribution, self.n_processes
         )
 
+        # delete lock files
+        if not _test_st_backend:
+            for progress_board in self.progress_boards.values():
+                for search_id in progress_board.search_ids:
+                    progress_board._io_.remove_lock(search_id)
+
         self._print_info()
