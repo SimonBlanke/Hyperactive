@@ -27,6 +27,9 @@ def main():
             """<hr style="height:1px;border:none;color:#333;background-color:#333;" /> """,
             height=10,
         )
+        st.write(" ")
+
+        _, col_2, _, col_4 = st.beta_columns([0.1, 0.9, 0.2, 1.8])
         col1, col2 = st.beta_columns([1, 2])
 
         progress_data = backend.get_progress_data(search_id)
@@ -35,13 +38,19 @@ def main():
         plotly_fig = backend.plotly(progress_data, search_id)
 
         if pyplot_fig is not None:
+            col_2.header("Best score progression")
             col1.pyplot(pyplot_fig)
         if plotly_fig is not None:
+            col_4.header("Parallel Coordinates")
             col2.plotly_chart(plotly_fig)
 
         last_best = backend.create_info(search_id)
+
+        _, col2 = st.beta_columns([0.1, 0.9])
         if last_best is not None:
             last_best = last_best.assign(hack="").set_index("hack")
+            st.write(" ")
+            col2.header("Up to 5 best scores information")
             st.table(last_best)
 
         for _ in range(3):
