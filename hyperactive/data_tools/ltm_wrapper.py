@@ -2,6 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+
+"""
 import os
 from hyperactive_long_term_memory import LongTermMemory as _LongTermMemory_
 from hyperactive_long_term_memory import Dashboard as _Dashboard_
@@ -62,3 +64,4 @@ class LongTermMemory:
 
     def save_on_iteration(self, data_dict, nth_process):
         self.ltm_origin.save_on_iteration(data_dict, nth_process)
+"""
