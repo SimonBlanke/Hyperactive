@@ -41,7 +41,7 @@
 
 - makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
-- visualizes your collected data (> v3.1.0)
+- [visualizes](./examples/optimization_applications/progress_visualization.py) your collected data
 
 - saves your [computation time](./examples/optimization_applications/memory.py)
 
@@ -893,6 +893,13 @@ hyper.run()
 <summary><b>v3.2.0</b> :heavy_check_mark:</summary>
 
   - [x] Dashboard for visualization of search-data at runtime via streamlit (Progress-Board)
+
+</details>
+
+<details>
+<summary><b>v3.3.0</b> :heavy_check_mark:</summary>
+
+  - [ ] Data collector tool to store data (from inside the objective function) into csv- or sql-files
 
 </details>
 
