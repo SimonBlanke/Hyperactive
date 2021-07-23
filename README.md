@@ -336,11 +336,11 @@ hyper.run()
 <summary><b> Hyperactive(verbosity, distribution, n_processes)</b></summary>
 
 - verbosity = ["progress_bar", "print_results", "print_times"]
-  - (list, False)
+  - Possible parameter types: (list, False)
   - The verbosity list determines what part of the optimization information will be printed in the command line.
 
 - distribution = {"multiprocessing": {"initializer": tqdm.set_lock, "initargs": (tqdm.get_lock(),),}}
-  - (str, dict, callable)
+  - Possible parameter types: (str, dict, callable)
   - Access the parallel processing in three ways:
     - Via a str "multiprocessing" or "joblib" to choose one of the two.
     - Via a dictionary with one key "multiprocessing" or "joblib" and a value that is the input argument of Pool and Parallel. The default argument is a good example of this.
@@ -372,30 +372,30 @@ hyper.run()
       ```
       
 - n_processes = "auto",   
-  - (str, int)
+  - Possible parameter types: (str, int)
   - The maximum number of processes that are allowed to run simultaneously. If n_processes is of int-type there will only run n_processes-number of jobs simultaneously instead of all at once. So if n_processes=10 and n_jobs_total=35, then the schedule would look like this 10 - 10 - 10 - 5. This saves computational resources if there is a large number of n_jobs. If "auto", then n_processes is the sum of all n_jobs (from .add_search(...)).
 
 </details>
 
 
 <details>
-<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, max_score, random_state, memory, memory_warm_start)</b></summary>
+<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, max_score, random_state, memory, memory_warm_start, progress_board)</b></summary>
 
 
 - objective_function
-  - (callable)
+  - Possible parameter types: (callable)
   - The objective function defines the optimization problem. The optimization algorithm will try to maximize the numerical value that is returned by the objective function by trying out different parameters from the search space.
 
 - search_space
-  - (dict)
+  - Possible parameter types: (dict)
   - Defines the space were the optimization algorithm can search for the best parameters for the given objective function.
 
 - n_iter
-  - (int)
+  - Possible parameter types: (int)
   - The number of iterations that will be performed during the optimization run. The entire iteration consists of the optimization-step, which decides the next parameter that will be evaluated and the evaluation-step, which will run the objective function with the chosen parameter and return the score.
 
 - optimizer = "default"
-  - (object)
+  - Possible parameter types: ("default", initialized optimizer object)
   - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The following classes can be imported and used:
   
     - HillClimbingOptimizer
@@ -427,11 +427,11 @@ hyper.run()
 
 
 - n_jobs = 1
-  - (int)
+  - Possible parameter types: (int)
   - Number of jobs to run in parallel. Those jobs are optimization runs that work independent from another (no information sharing). If n_jobs == -1 the maximum available number of cpu cores is used.
 
 - initialize = {"grid": 4, "random": 2, "vertices": 4}
-  - (dict)
+  - Possible parameter types: (dict)
   - The initialization dictionary automatically determines a number of parameters that will be evaluated in the first n iterations (n is the sum of the values in initialize). The initialize keywords are the following:
     - grid
       - Initializes positions in a grid like pattern. Positions that cannot be put into a grid are randomly positioned.
@@ -468,19 +468,19 @@ hyper.run()
   
   
 - max_score = None
-  - (float, None)
+  - Possible parameter types: (float, None)
   - Maximum score until the optimization stops. The score will be checked after each completed iteration.
 
 - random_state = None
-  - (int, None)
+  - Possible parameter types: (int, None)
   - Random state for random processes in the random, numpy and scipy module.
 
 - memory = True
-  - (bool)
+  - Possible parameter types: (bool)
   - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time).
 
 - memory_warm_start = None
-  - (pandas dataframe, None)
+  - Possible parameter types: (pandas dataframe, None)
   - Pandas dataframe that contains score and parameter information that will be automatically loaded into the memory-dictionary.
 
       example:
@@ -522,6 +522,11 @@ hyper.run()
         </tbody>
       </table>
   
+- progress_board = None
+  - Possible parameter types: (initialized ProgressBoard object, None)
+  - Initialize the ProgressBoard class and pass the object to the progress_board-parameter. 
+
+
 </details>
 
 
@@ -530,7 +535,7 @@ hyper.run()
 <summary><b> .run(max_time)</b></summary>
 
 - max_time = None
-  - (float, None)
+  - Possible parameter types: (float, None)
   - Maximum number of seconds until the optimization stops. The time will be checked after each completed iteration.
 
 </details>
@@ -675,7 +680,7 @@ The progress board enables the visualization of search data during the optimizat
 
 
 - filter_file
-  - (None, True)
+  - Possible parameter types: (None, True)
   - If the filter_file-parameter is True Hyperactive will create a file in the current directory, which allows the filtering of parameters or the score by setting an upper or lower bound.
 
 
