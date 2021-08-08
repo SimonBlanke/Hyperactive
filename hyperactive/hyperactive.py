@@ -100,10 +100,11 @@ class Hyperactive(HyperactiveResults):
         data_c = None
 
         if progress_board:
-            data_c = progress_board.init_paths(search_id, search_space)
+            if search_id not in progress_board.search_ids:
+                data_c = progress_board.init_paths(search_id, search_space)
 
-            if progress_board.uuid not in self.progress_boards:
-                self.progress_boards[progress_board.uuid] = progress_board
+                if progress_board.uuid not in self.progress_boards:
+                    self.progress_boards[progress_board.uuid] = progress_board
 
         return data_c
 
