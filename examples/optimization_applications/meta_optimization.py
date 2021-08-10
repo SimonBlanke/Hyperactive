@@ -1,40 +1,40 @@
 import numpy as np
-from sklearn.datasets import load_breast_cancer
-from hyperactive import Hyperactive
+from hyperactive import Hyperactive, BayesianOptimizer
 
-from gradient_free_optimizers import EvolutionStrategyOptimizer
-
-data = load_breast_cancer()
-X, y = data.data, data.target
-
+from gradient_free_optimizers import RandomRestartHillClimbingOptimizer
 
 def meta_opt(opt_para):
     scores = []
 
-    for i in range(25):
+    for i in range(33):
 
-        def sphere_function(para):
-            loss = []
-            for key in para.keys():
-                loss.append(para[key] * para[key])
+        def ackley_function(para):
+            x = para["x"]
+            y = para["y"]
+            loss1 = - 20 * np.exp(-0.2 * np.sqrt(0.5 * (x * x + y * y)))
+            loss2 = -np.exp(0.5 * (np.cos(2 * np.pi * x) + np.cos(2 * np.pi * y)))
+            loss3 = np.exp(1)
+            loss4 = 20
 
-            return -np.array(loss).sum()
+            loss = loss1 + loss2 + loss3 + loss4
 
-        dim_size = np.arange(-10, 10, 0.01)
+            return -loss
+
+        dim_size = np.arange(-6, 6, 0.01)
 
         search_space = {
-            "x1": dim_size,
-            "x2": dim_size,
+            "x": dim_size,
+            "y": dim_size,
         }
 
-        opt = EvolutionStrategyOptimizer(
+        opt = RandomRestartHillClimbingOptimizer(
             search_space,
-            mutation_rate=opt_para["mutation_rate"],
-            crossover_rate=opt_para["crossover_rate"],
-            initialize={"random": opt_para["individuals"]},
+            epsilon=opt_para["epsilon"],
+            n_neighbours=opt_para["n_neighbours"],
+            n_iter_restart=opt_para["n_iter_restart"],
         )
         opt.search(
-            sphere_function,
+            ackley_function,
             n_iter=100,
             random_state=i,
             verbosity=False,
@@ -46,12 +46,14 @@ def meta_opt(opt_para):
 
 
 search_space = {
-    "individuals": list(range(2, 11)),
-    "mutation_rate": list(np.arange(0, 1, 0.1)),
-    "crossover_rate": list(np.arange(0, 1, 0.1)),
+    "epsilon": list(np.arange(0.01, 0.1, 0.01)),
+    "n_neighbours": list(range(1, 10)),
+    "n_iter_restart": list(range(2, 12)),
 }
 
 
+optimizer = BayesianOptimizer()
+
 hyper = Hyperactive()
-hyper.add_search(meta_opt, search_space, n_iter=50)
+hyper.add_search(meta_opt, search_space, n_iter=120, optimizer=optimizer)
 hyper.run()
