@@ -177,7 +177,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
         <a><b>Data Collection:</b></a>
           <ul>
-            <li><a href="./examples/optimization_applications/meta_data_collection.py">Meta-data Collection</a></li>
+            <li><a href="./examples/optimization_applications/meta_data_collection.py">Search Data Collection</a></li>
             <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
             <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
           </ul>
