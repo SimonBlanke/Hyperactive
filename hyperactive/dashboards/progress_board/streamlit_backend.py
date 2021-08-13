@@ -21,22 +21,24 @@ color_scale = px.colors.sequential.Jet
 
 
 class StreamlitBackend:
-    def __init__(self, search_ids):
-        self.search_ids = search_ids
-        self.search_id_dict = {}
+    def __init__(self, progress_ids):
+        self.progress_ids = progress_ids
+        self.progress_id_dict = {}
 
         self._io_ = ProgressIO()
 
-        for search_id in search_ids:
-            self.search_id_dict[search_id] = {}
+        for progress_id in progress_ids:
+            self.progress_id_dict[progress_id] = {}
 
-            self.search_id_dict[search_id]["prog_d"] = self._io_.load_progress(
-                search_id
+            self.progress_id_dict[progress_id]["prog_d"] = self._io_.load_progress(
+                progress_id
             )
-            self.search_id_dict[search_id]["filt_f"] = self._io_.load_filter(search_id)
+            self.progress_id_dict[progress_id]["filt_f"] = self._io_.load_filter(
+                progress_id
+            )
 
-    def get_progress_data(self, search_id):
-        progress_data = self.search_id_dict[search_id]["prog_d"]
+    def get_progress_data(self, progress_id):
+        progress_data = self.progress_id_dict[progress_id]["prog_d"]
 
         if progress_data is None:
             return
@@ -97,11 +99,11 @@ class StreamlitBackend:
 
         return df
 
-    def plotly(self, progress_data, search_id):
+    def plotly(self, progress_data, progress_id):
         if progress_data is None or len(progress_data) <= 1:
             return None
 
-        filter_df = self.search_id_dict[search_id]["filt_f"]
+        filter_df = self.progress_id_dict[progress_id]["filt_f"]
 
         progress_data = progress_data.drop(
             ["nth_iter", "score_best", "nth_process", "best"], axis=1
@@ -124,16 +126,16 @@ class StreamlitBackend:
 
         return fig
 
-    def create_plots(self, search_id):
-        progress_data = self.get_progress_data(search_id)
+    def create_plots(self, progress_id):
+        progress_data = self.get_progress_data(progress_id)
 
         pyplot_fig = self.pyplot(progress_data)
-        plotly_fig = self.plotly(progress_data, search_id)
+        plotly_fig = self.plotly(progress_data, progress_id)
 
         return pyplot_fig, plotly_fig
 
-    def create_info(self, search_id):
-        progress_data = self.get_progress_data(search_id)
+    def create_info(self, progress_id):
+        progress_data = self.get_progress_data(progress_id)
         if progress_data is None or len(progress_data) <= 1:
             return None
 
