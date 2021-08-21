@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
+import plotly.graph_objects as go
 
 try:
     from progress_io import ProgressIO
@@ -124,6 +125,43 @@ class StreamlitBackend:
         )
         fig.update_layout(width=1200, height=540)
 
+        return fig
+
+    def table_plotly(self, search_data):
+        df_len = len(search_data)
+
+        headerColor = "#b5beff"
+        rowEvenColor = "#e8e8e8"
+        rowOddColor = "white"
+
+        fig = go.Figure(
+            data=[
+                go.Table(
+                    header=dict(
+                        values=list(search_data.columns),
+                        fill_color=headerColor,
+                        align="center",
+                        font_size=18,
+                        height=30,
+                    ),
+                    cells=dict(
+                        values=[search_data[col] for col in search_data.columns],
+                        # fill_color="lavender",
+                        fill_color=[
+                            [
+                                rowOddColor,
+                                rowEvenColor,
+                            ]
+                            * int((df_len / 2) + 1)
+                        ],
+                        align=["center"],
+                        font_size=14,
+                        height=30,
+                    ),
+                )
+            ]
+        )
+        fig.update_layout(height=550)
         return fig
 
     def create_plots(self, progress_id):

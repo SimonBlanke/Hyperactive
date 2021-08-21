@@ -44,8 +44,7 @@ def main():
             col1.pyplot(pyplot_fig)
         if plotly_fig is not None:
             col_4.header("Parallel Coordinates")
-            plotly_fig.data = []
-            col2.plotly_chart(plotly_fig)
+            col2.plotly_chart(plotly_fig, use_container_width=True)
 
         last_best = backend.create_info(progress_id)
 
@@ -53,8 +52,10 @@ def main():
         if last_best is not None:
             last_best = last_best.assign(hack="").set_index("hack")
             st.write(" ")
-            col2.header("Up to 5 best scores information")
-            st.table(last_best)
+            # col2.header("Up to 5 best scores information")
+            # st.table(last_best)
+            plotly_table = backend.table_plotly(last_best)
+            st.plotly_chart(plotly_table, use_container_width=True)
 
         for _ in range(3):
             st.write(" ")
