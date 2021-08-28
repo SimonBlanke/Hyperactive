@@ -177,14 +177,12 @@ class StreamlitBackend:
         if progress_data is None or len(progress_data) <= 1:
             return None
 
-        progress_data_best = progress_data[progress_data["best"] == 1]
-
-        progress_data_best = progress_data_best.drop(
+        progress_data_best = progress_data.drop(
             ["nth_iter", "score_best", "nth_process", "best"], axis=1
         )
 
         progress_data_best = progress_data_best.sort_values("score")
-        last_best = progress_data_best.tail(5)
+        last_best = progress_data_best.tail(10)
         last_best = last_best.rename(
             columns={
                 "score": "best 5 scores",

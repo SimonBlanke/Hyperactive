@@ -31,7 +31,7 @@ def main():
         )
         st.write(" ")
 
-        _, col_2, _, col_4 = st.beta_columns([0.1, 0.9, 0.2, 1.8])
+        _, col_2, _, col_4 = st.beta_columns([0.1, 0.9, 0.1, 2])
         col1, col2 = st.beta_columns([1, 2])
 
         progress_data = backend.get_progress_data(progress_id)
@@ -48,10 +48,10 @@ def main():
 
         last_best = backend.create_info(progress_id)
 
-        _, col2 = st.beta_columns([0.1, 0.9])
+        # _, col2 = st.beta_columns([0.1, 0.9])
         if last_best is not None:
-            last_best = last_best.assign(hack="").set_index("hack")
-            st.write(" ")
+            # last_best = last_best.assign(hack="").set_index("hack")
+            # st.write(" ")
             # col2.header("Up to 5 best scores information")
             # st.table(last_best)
             plotly_table = backend.table_plotly(last_best)
@@ -63,7 +63,7 @@ def main():
         lock_file = backend._io_.get_lock_file_path(progress_id)
         lock_files.append(os.path.isfile(lock_file))
 
-    time.sleep(1)
+    time.sleep(3)
     if all(lock_file is False for lock_file in lock_files):
         print("\n --- Deleting progress- and filter-files --- \n")
 
