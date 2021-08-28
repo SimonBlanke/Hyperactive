@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-import multiprocessing
+import multiprocessing as mp
 from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
@@ -17,12 +17,7 @@ class Hyperactive(HyperactiveResults):
     def __init__(
         self,
         verbosity=["progress_bar", "print_results", "print_times"],
-        distribution={
-            "multiprocessing": {
-                "initializer": tqdm.set_lock,
-                "initargs": (tqdm.get_lock(),),
-            }
-        },
+        distribution="multiprocessing",
         n_processes="auto",
     ):
         super().__init__()
@@ -38,6 +33,26 @@ class Hyperactive(HyperactiveResults):
 
         self.progress_boards = {}
 
+    def _create_shared_memory(self, memory, objective_function, optimizer):
+        if memory is not False:
+            if len(self.process_infos) == 0:
+                manager = mp.Manager()
+                memory = manager.dict()
+
+            for process_info in self.process_infos.values():
+                same_obj_func = process_info["objective_function"] == objective_function
+                same_ss_length = len(process_info["optimizer"].search_space) == len(
+                    optimizer.search_space
+                )
+
+                if same_obj_func and same_ss_length:
+                    memory = process_info["memory"]
+                else:
+                    manager = mp.Manager()
+                    memory = manager.dict()
+
+        return memory
+
     def _add_search_processes(
         self,
         random_state,
@@ -51,10 +66,13 @@ class Hyperactive(HyperactiveResults):
         search_id,
     ):
         if n_jobs == -1:
-            n_jobs = multiprocessing.cpu_count()
+            n_jobs = mp.cpu_count()
 
         for _ in range(n_jobs):
             nth_process = len(self.process_infos)
+            print("\n nth_process \n", nth_process)
+
+            memory = self._create_shared_memory(memory, objective_function, optimizer)
 
             self.process_infos[nth_process] = {
                 "random_state": random_state,

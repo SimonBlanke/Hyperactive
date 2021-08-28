@@ -136,16 +136,20 @@ class _BaseOptimizer_(TrafoClass):
         self.check_LTM(memory)
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
+        gfo_objective_function = gfo_wrapper_model(
+            self.search_space, self.progress_collector
+        )
+
         self._optimizer.search(
-            gfo_wrapper_model(self.search_space, self.progress_collector),
-            n_iter,
-            max_time,
-            max_score,
-            memory,
-            memory_warm_start,
-            verbosity,
-            random_state,
-            nth_process,
+            objective_function=gfo_objective_function,
+            n_iter=n_iter,
+            max_time=max_time,
+            max_score=max_score,
+            memory=memory,
+            memory_warm_start=memory_warm_start,
+            verbosity=verbosity,
+            random_state=random_state,
+            nth_process=nth_process,
         )
 
         self._convert_results2hyper()
