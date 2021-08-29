@@ -12,6 +12,7 @@ def _process_(
     memory_warm_start,
     max_time,
     max_score,
+    early_stopping,
     random_state,
     verbosity,
     **kwargs
@@ -26,6 +27,7 @@ def _process_(
         n_iter=n_iter,
         max_time=max_time,
         max_score=max_score,
+        early_stopping=early_stopping,
         memory=memory,
         memory_warm_start=memory_warm_start,
         verbosity=verbosity_gfo,

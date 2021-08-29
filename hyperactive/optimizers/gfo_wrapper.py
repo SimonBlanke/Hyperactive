@@ -115,6 +115,7 @@ class _BaseOptimizer_(TrafoClass):
         n_iter,
         max_time=None,
         max_score=None,
+        early_stopping=None,
         memory=True,
         memory_warm_start=None,
         verbosity={
@@ -145,6 +146,7 @@ class _BaseOptimizer_(TrafoClass):
             n_iter=n_iter,
             max_time=max_time,
             max_score=max_score,
+            early_stopping=early_stopping,
             memory=memory,
             memory_warm_start=memory_warm_start,
             verbosity=verbosity,
