@@ -1,5 +1,9 @@
 clean: clean-pyc clean-ipynb clean-catboost clean-build clean-test
 
+clean-progress_board:
+	find . -name '*.csv~' -exec rm -f {} +
+	find . -name '*.lock~' -exec rm -f {} +
+
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
@@ -31,9 +35,13 @@ test-search_space:
 			pytest -q test_search_spaces.py; \
 	done
 
-test:
+test_:
 	python -m pytest -x -p no:warnings -rfEX tests/; \
 	python ./tests/test_dashboards/_test_progress_board.py \
+
+
+test: clean-progress_board test_ clean-progress_board
+
 
 test-local:
 	cd tests/local; \
