@@ -68,23 +68,25 @@ search_space = {
 
 def test_shared_memory_0():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
         n_iter=100,
         n_jobs=1,
+        memory=True,
     )
     hyper.run()
     d_time_1 = time.time() - c_time
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
         n_iter=100,
         n_jobs=4,
+        memory=True,
     )
     hyper.run()
     d_time_2 = time.time() - c_time
@@ -92,12 +94,14 @@ def test_shared_memory_0():
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
 
-    assert d_time_2 * 1.4 - d_time_1 < 0
+    d_time_2 = d_time_2 / 2
+
+    assert d_time_2 - d_time_1 < 0
 
 
 def test_shared_memory_1():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -108,7 +112,7 @@ def test_shared_memory_1():
     d_time_1 = time.time() - c_time
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -120,13 +124,15 @@ def test_shared_memory_1():
 
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
+
+    d_time_2 = d_time_2 / 2
 
     assert d_time_1 / d_time_2 > 1.1
 
 
 def test_shared_memory_2():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -137,7 +143,7 @@ def test_shared_memory_2():
     d_time_1 = time.time() - c_time
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -168,12 +174,14 @@ def test_shared_memory_2():
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
 
+    d_time_2 = d_time_2 / 2
+
     assert d_time_1 / d_time_2 > 1.1
 
 
 def test_shared_memory_3():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model1,
         search_space,
@@ -190,7 +198,7 @@ def test_shared_memory_3():
     d_time_1 = time.time() - c_time
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -227,13 +235,14 @@ def test_shared_memory_3():
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
 
+    d_time_2 = d_time_2 / 2
+
     assert d_time_1 / d_time_2 < 1.2
-    assert d_time_1 / d_time_2 > 0.8
 
 
 def test_shared_memory_warm_start_0():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -246,7 +255,7 @@ def test_shared_memory_warm_start_0():
     search_data0 = hyper.results(model)
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -259,13 +268,15 @@ def test_shared_memory_warm_start_0():
 
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
+
+    d_time_2 = d_time_2 / 2
 
     assert d_time_2 * 1.4 - d_time_1 < 0
 
 
 def test_shared_memory_warm_start_1():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -278,7 +289,7 @@ def test_shared_memory_warm_start_1():
     search_data0 = hyper.results(model)
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -292,12 +303,14 @@ def test_shared_memory_warm_start_1():
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
 
+    d_time_2 = d_time_2 / 2
+
     assert d_time_1 / d_time_2 > 1.1
 
 
 def test_shared_memory_warm_start_2():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -310,7 +323,7 @@ def test_shared_memory_warm_start_2():
     search_data0 = hyper.results(model)
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -345,12 +358,14 @@ def test_shared_memory_warm_start_2():
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
 
+    d_time_2 = d_time_2 / 2
+
     assert d_time_1 / d_time_2 > 1.1
 
 
 def test_shared_memory_warm_start_3():
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -387,7 +402,7 @@ def test_shared_memory_warm_start_3():
     search_data0 = hyper.results(model1)
 
     c_time = time.time()
-    hyper = Hyperactive()
+    hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
         search_space,
@@ -428,5 +443,7 @@ def test_shared_memory_warm_start_3():
 
     print("\n d_time_1 \n", d_time_1)
     print("\n d_time_2 \n", d_time_2)
+
+    d_time_2 = d_time_2 / 2
 
     assert d_time_1 / d_time_2 > 1.4
