@@ -917,7 +917,8 @@ hyper.run()
 <details>
 <summary><b>v3.3.0</b> :heavy_check_mark:</summary>
 
-  - [ ] Data collector tool to store data (from inside the objective function) into csv- or sql-files
+  - [x] Early stopping 
+  - [x] Shared memory dictionary between processes with the same objective function
 
 </details>
 
@@ -928,6 +929,7 @@ hyper.run()
   - [ ] "long term memory" for search-data storage and usage
   - [ ] Data collector tool to use inside the objective function
   - [ ] Dashboard for visualization of stored search-data
+  - [ ] Data collector tool to store data (from inside the objective function) into csv- or sql-files
 
 
 </details>
