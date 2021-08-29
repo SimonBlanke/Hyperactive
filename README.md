@@ -177,7 +177,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
         <a><b>Data Collection:</b></a>
           <ul>
-            <li><a href="./examples/optimization_applications/meta_data_collection.py">Meta-data Collection</a></li>
+            <li><a href="./examples/optimization_applications/meta_data_collection.py">Search Data Collection</a></li>
             <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
             <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
           </ul>
@@ -959,17 +959,33 @@ A combination between simulated annealing and random search.
 <summary><b> Read this before opening a bug-issue </b></summary>
 
 <br>
+  
+- <b>Are you sure the bug is located in Hyperactive? </b>
 
-Are you sure the bug is located in Hyperactive?
+  The error might be located in the optimization-backend. 
+  Look at the error message from the command line. <b>If</b> one of the last messages look like this:
+     - File "/.../gradient_free_optimizers/...", line ...
 
-Look at the error message from the command line. <b>If</b> one of the last messages look like this:
-   - File "/.../gradient_free_optimizers/...", line ...
+  <b>Then</b> you should post the bug report in: 
+     - https://github.com/SimonBlanke/Gradient-Free-Optimizers
 
-<b>Then</b> you should post the bug report in: 
-   - https://github.com/SimonBlanke/Gradient-Free-Optimizers
-
-<b>Otherwise</b> you can post the bug report in Hyperactive
-
+  <br>Otherwise</b> you can post the bug report in Hyperactive
+  
+- <b>Do you have the correct Hyperactive version? </b>
+  
+  Every major version update (e.g. v2.2 -> v3.0) the API of Hyperactive changes.
+  Check which version of Hyperactive you have. If your major version is older you have two options:
+  
+  <b>Recommended:</b> You could just update your Hyperactive version with:
+  ```bash
+  pip install hyperactive --upgrade
+  ```
+  This way you can use all the new documentation and examples from the current repository.
+    
+  Or you could continue using the old version and use an old repository branch as documentation.
+  You can do that by selecting the corresponding branch. (top right of the repository. The default is "master" or "main")
+  So if your major version is older (e.g. v2.1.0) you can select the 2.x.x branch to get the old repository for that version.
+  
 </details>
 
 
