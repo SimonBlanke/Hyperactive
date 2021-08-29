@@ -339,7 +339,7 @@ hyper.run()
   - Possible parameter types: (list, False)
   - The verbosity list determines what part of the optimization information will be printed in the command line.
 
-- distribution = {"multiprocessing": {"initializer": tqdm.set_lock, "initargs": (tqdm.get_lock(),),}}
+- distribution = "multiprocessing"
   - Possible parameter types: (str, dict, callable)
   - Access the parallel processing in three ways:
     - Via a str "multiprocessing" or "joblib" to choose one of the two.
@@ -386,13 +386,16 @@ hyper.run()
   - Possible parameter types: (callable)
   - The objective function defines the optimization problem. The optimization algorithm will try to maximize the numerical value that is returned by the objective function by trying out different parameters from the search space.
 
+
 - search_space
   - Possible parameter types: (dict)
   - Defines the space were the optimization algorithm can search for the best parameters for the given objective function.
 
+
 - n_iter
   - Possible parameter types: (int)
   - The number of iterations that will be performed during the optimization run. The entire iteration consists of the optimization-step, which decides the next parameter that will be evaluated and the evaluation-step, which will run the objective function with the chosen parameter and return the score.
+
 
 - optimizer = "default"
   - Possible parameter types: ("default", initialized optimizer object)
@@ -430,6 +433,7 @@ hyper.run()
   - Possible parameter types: (int)
   - Number of jobs to run in parallel. Those jobs are optimization runs that work independent from another (no information sharing). If n_jobs == -1 the maximum available number of cpu cores is used.
 
+
 - initialize = {"grid": 4, "random": 2, "vertices": 4}
   - Possible parameter types: (dict)
   - The initialization dictionary automatically determines a number of parameters that will be evaluated in the first n iterations (n is the sum of the values in initialize). The initialize keywords are the following:
@@ -466,18 +470,26 @@ hyper.run()
     ```
   
   
-  
 - max_score = None
   - Possible parameter types: (float, None)
   - Maximum score until the optimization stops. The score will be checked after each completed iteration.
 
-- random_state = None
+
+- early_stopping=None
+  - (dict, None)
+  - Stops the optimization run early if it did not achive any score-improvement within the last iterations. The early_stopping-parameter enables to set three parameters:
+    - `n_iter_no_change`: Non-optional int-parameter. This marks the last n iterations to look for an improvement over the iterations that came before n. If the best score of the entire run is within those last n iterations the run will continue (until other stopping criteria are met), otherwise the run will stop.
+    - `tol_abs`: Optional float-paramter. The score must have improved at least this absolute tolerance in the last n iterations over the best score in the iterations before n. This is an absolute value, so 0.1 means an imporvement of 0.8 -> 0.9 is acceptable but 0.81 -> 0.9 would stop the run.
+    - `tol_rel`: Optional float-paramter. The score must have imporved at least this relative tolerance (in percentage) in the last n iterations over the best score in the iterations before n. This is a relative value, so 10 means an imporvement of 0.8 -> 0.88 is acceptable but 0.8 -> 0.87 would stop the run.
+
+  - random_state = None
   - Possible parameter types: (int, None)
   - Random state for random processes in the random, numpy and scipy module.
 
+
 - memory = True
   - Possible parameter types: (bool)
-  - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time).
+  - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time). If there are multiple jobs for the same objective function then the memory dictionary is automatically shared between the different processes.
 
 - memory_warm_start = None
   - Possible parameter types: (pandas dataframe, None)
@@ -521,6 +533,7 @@ hyper.run()
           </tr>
         </tbody>
       </table>
+  
   
 - progress_board = None
   - Possible parameter types: (initialized ProgressBoard object, None)
