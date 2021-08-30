@@ -11,6 +11,9 @@ import streamlit as st
 from streamlit_backend import StreamlitBackend
 
 
+sys.setrecursionlimit(10000)
+
+
 def main():
     try:
         st.set_page_config(page_title="Hyperactive Progress Board", layout="wide")
@@ -48,12 +51,7 @@ def main():
 
         last_best = backend.create_info(progress_id)
 
-        # _, col2 = st.beta_columns([0.1, 0.9])
         if last_best is not None:
-            # last_best = last_best.assign(hack="").set_index("hack")
-            # st.write(" ")
-            # col2.header("Up to 5 best scores information")
-            # st.table(last_best)
             plotly_table = backend.table_plotly(last_best)
             st.plotly_chart(plotly_table, use_container_width=True)
 
