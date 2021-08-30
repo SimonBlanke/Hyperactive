@@ -123,7 +123,6 @@ class StreamlitBackend:
             color="score",
             color_continuous_scale=color_scale,
         )
-        fig.update_layout(width=1200, height=540)
 
         return fig
 
