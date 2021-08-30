@@ -71,8 +71,6 @@ class Hyperactive(HyperactiveResults):
 
         for _ in range(n_jobs):
             nth_process = len(self.process_infos)
-            print("\n nth_process \n", nth_process)
-
             memory = self._create_shared_memory(memory, objective_function, optimizer)
 
             self.process_infos[nth_process] = {
