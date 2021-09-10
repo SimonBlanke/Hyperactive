@@ -1055,7 +1055,7 @@ warnings.warn = warn
 
 ## Citing Hyperactive
 
-    @Misc{hyperactive2019,
+    @Misc{hyperactive2021,
       author =   {{Simon Blanke}},
       title =    {{Hyperactive}: An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.},
       howpublished = {\url{https://github.com/SimonBlanke}},
