@@ -114,15 +114,6 @@ class Hyperactive(HyperactiveResults):
                 print("Warning", error_msg)
                 # raise ValueError(error_msg)
 
-    def _init_progress_board(self, progress_board, search_id, search_space):
-        if progress_board:
-            data_c = progress_board.init_paths(search_id, search_space)
-
-            if progress_board.uuid not in self.progress_boards:
-                self.progress_boards[progress_board.uuid] = progress_board
-
-            return data_c
-
     def add_search(
         self,
         objective_function,
@@ -137,17 +128,13 @@ class Hyperactive(HyperactiveResults):
         random_state=None,
         memory=True,
         memory_warm_start=None,
-        progress_board=None,
     ):
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
-        progress_collector = self._init_progress_board(
-            progress_board, search_id, search_space
-        )
 
         self.check_list(search_space)
 
-        optimizer.init(search_space, initialize, progress_collector)
+        optimizer.init(search_space, initialize)
 
         self._add_search_processes(
             random_state,
@@ -179,23 +166,12 @@ class Hyperactive(HyperactiveResults):
                 n_iter=self.process_infos[nth_process]["n_iter"],
             )
 
-    def run(self, max_time=None, _test_st_backend=False):
+    def run(self, max_time=None):
         for nth_process in self.process_infos.keys():
             self.process_infos[nth_process]["max_time"] = max_time
-
-        # open progress board
-        if not _test_st_backend:
-            for progress_board in self.progress_boards.values():
-                progress_board.open_dashboard()
 
         self.results_list = run_search(
             self.process_infos, self.distribution, self.n_processes
         )
-
-        # delete lock files
-        if not _test_st_backend:
-            for progress_board in self.progress_boards.values():
-                for search_id in progress_board.search_ids:
-                    progress_board._io_.remove_lock(search_id)
 
         self._print_info()

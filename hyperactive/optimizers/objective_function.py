@@ -29,46 +29,12 @@ class ObjectiveFunction(DictClass):
         self.best_para = None
         self.best_score = -np.inf
 
-    def get_best(self, score, para):
-        self.nth_iter += 1
-
-        if score > self.best_score:
-            self.best_score = score
-            self.best_para = para
-            self.best = 1
-        else:
-            self.best = 0
-
-    def __call__(self, search_space, progress_collector):
+    def __call__(self, search_space):
         # wrapper for GFOs
         def _model(para):
             para = gfo2hyper(search_space, para)
             self.para_dict = para
             results = self.objective_function(self)
-
-            if progress_collector:
-                progress_dict = para
-
-                if isinstance(results, tuple):
-                    score = results[0]
-                    results_dict = results[1]
-                else:
-                    score = results
-                    results_dict = {}
-
-                # keep track on best score and para
-                self.get_best(score, para)
-
-                results_dict["score"] = score
-
-                progress_dict.update(results_dict)
-                progress_dict["score_best"] = self.best_score
-                progress_dict["nth_iter"] = self.nth_iter
-                progress_dict["best"] = self.best
-
-                progress_dict["nth_process"] = self.optimizer.nth_process
-
-                progress_collector.append(progress_dict)
 
             return results
 
