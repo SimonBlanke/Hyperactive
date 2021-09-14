@@ -90,25 +90,6 @@ class _BaseOptimizer_(TrafoClass):
 
         self.conv = self._optimizer.conv
 
-    def check_LTM(self, memory):
-        try:
-            memory.study_id
-            memory.model_id
-        except:
-            self.memory = memory
-        else:
-            self.init_ltm(memory)
-
-    def init_ltm(self, memory):
-        self.ltm = copy.deepcopy(memory)
-        self.ltm.init_study(
-            self.objective_function, self.search_space, self.nth_process
-        )
-        self.memory_warm_start = self.ltm.load()
-        self.memory = True
-
-        print("\n self.memory_warm_start \n", self.memory_warm_start)
-
     def search(
         self,
         objective_function,
@@ -133,8 +114,6 @@ class _BaseOptimizer_(TrafoClass):
             objective_function, self._optimizer, nth_process
         )
 
-        # ltm init
-        self.check_LTM(memory)
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
         gfo_objective_function = gfo_wrapper_model(
@@ -156,9 +135,3 @@ class _BaseOptimizer_(TrafoClass):
 
         self._convert_results2hyper()
         self.p_bar = self._optimizer.p_bar
-
-        # ltm save after finish
-        """
-        if inspect.isclass(type(memory)):
-            self.ltm.save_on_finish(self.results)
-        """
