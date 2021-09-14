@@ -70,9 +70,6 @@ class ObjectiveFunction(DictClass):
 
                 progress_collector.append(progress_dict)
 
-            # ltm save after iteration
-            # self.ltm.ltm_obj_func_wrapper(results, para, nth_process)
-
             return results
 
         _model.__name__ = self.objective_function.__name__
