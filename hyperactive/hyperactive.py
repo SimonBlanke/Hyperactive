@@ -71,7 +71,10 @@ class Hyperactive(HyperactiveResults):
 
         for _ in range(n_jobs):
             nth_process = len(self.process_infos)
-            memory = self._create_shared_memory(memory, objective_function, optimizer)
+            if memory == "share":
+                memory = self._create_shared_memory(
+                    memory, objective_function, optimizer
+                )
 
             self.process_infos[nth_process] = {
                 "random_state": random_state,
@@ -126,7 +129,7 @@ class Hyperactive(HyperactiveResults):
         max_score=None,
         early_stopping=None,
         random_state=None,
-        memory=True,
+        memory="share",
         memory_warm_start=None,
     ):
         optimizer = self._default_opt(optimizer)

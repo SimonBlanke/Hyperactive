@@ -487,9 +487,9 @@ hyper.run()
   - Random state for random processes in the random, numpy and scipy module.
 
 
-- memory = True
-  - Possible parameter types: (bool)
-  - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time). If there are multiple jobs for the same objective function then the memory dictionary is automatically shared between the different processes.
+- memory = "share"
+  - Possible parameter types: ("share", bool)
+  - Whether or not to use the "memory"-feature. True enables the memory for each process separately, "share" enables the memory and shares it between processes with the same objective function. False disables the memory-feature entirely. In the hyperactive backend the memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time). If there are multiple jobs for the same objective function then the memory dictionary is automatically shared between the different processes.
 
 - memory_warm_start = None
   - Possible parameter types: (pandas dataframe, None)
