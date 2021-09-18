@@ -74,7 +74,7 @@ def test_shared_memory_0():
         search_space,
         n_iter=100,
         n_jobs=1,
-        memory=True,
+        memory="share",
     )
     hyper.run()
     d_time_1 = time.time() - c_time
@@ -86,7 +86,7 @@ def test_shared_memory_0():
         search_space,
         n_iter=100,
         n_jobs=4,
-        memory=True,
+        memory="share",
     )
     hyper.run()
     d_time_2 = time.time() - c_time
@@ -252,7 +252,7 @@ def test_shared_memory_warm_start_0():
     hyper.run()
     d_time_1 = time.time() - c_time
 
-    search_data0 = hyper.results(model)
+    search_data0 = hyper.search_data(model)
 
     c_time = time.time()
     hyper = Hyperactive(n_processes=1)
@@ -286,7 +286,7 @@ def test_shared_memory_warm_start_1():
     hyper.run()
     d_time_1 = time.time() - c_time
 
-    search_data0 = hyper.results(model)
+    search_data0 = hyper.search_data(model)
 
     c_time = time.time()
     hyper = Hyperactive(n_processes=1)
@@ -320,7 +320,7 @@ def test_shared_memory_warm_start_2():
     hyper.run()
     d_time_1 = time.time() - c_time
 
-    search_data0 = hyper.results(model)
+    search_data0 = hyper.search_data(model)
 
     c_time = time.time()
     hyper = Hyperactive(n_processes=1)
@@ -399,7 +399,7 @@ def test_shared_memory_warm_start_3():
     hyper.run()
     d_time_1 = time.time() - c_time
 
-    search_data0 = hyper.results(model1)
+    search_data0 = hyper.search_data(model1)
 
     c_time = time.time()
     hyper = Hyperactive(n_processes=1)
