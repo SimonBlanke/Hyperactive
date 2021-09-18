@@ -49,7 +49,7 @@ def test_trafo_0(search_space):
     hyper.add_search(objective_function_0, search_space, n_iter=25)
     hyper.run()
 
-    for value in hyper.results(objective_function_0)["x1"].values:
+    for value in hyper.search_data(objective_function_0)["x1"].values:
         if value not in search_space["x1"]:
             assert False
 

@@ -15,11 +15,13 @@ def test_search_space_0():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
     assert hyper.best_para(objective_function)["x1"] in search_space["x1"]
 
 
@@ -34,11 +36,13 @@ def test_search_space_1():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
     assert hyper.best_para(objective_function)["x1"] in search_space["x1"]
 
 
@@ -54,11 +58,13 @@ def test_search_space_2():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
     assert hyper.best_para(objective_function)["str1"] in search_space["str1"]
 
 
@@ -83,14 +89,14 @@ def test_search_space_3():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
-    assert (
-        hyper.best_para(objective_function)["func1"] in search_space["func1"]
-    )
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
+    assert hyper.best_para(objective_function)["func1"] in search_space["func1"]
 
 
 def test_search_space_4():
@@ -114,14 +120,14 @@ def test_search_space_4():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
-    assert (
-        hyper.best_para(objective_function)["class1"] in search_space["class1"]
-    )
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
+    assert hyper.best_para(objective_function)["class1"] in search_space["class1"]
 
 
 def test_search_space_5():
@@ -148,14 +154,14 @@ def test_search_space_5():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
-    assert (
-        hyper.best_para(objective_function)["class1"] in search_space["class1"]
-    )
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
+    assert hyper.best_para(objective_function)["class1"] in search_space["class1"]
 
 
 def test_search_space_6():
@@ -170,11 +176,11 @@ def test_search_space_6():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=15,
+        objective_function,
+        search_space,
+        n_iter=15,
     )
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
-    assert (
-        hyper.best_para(objective_function)["list1"] in search_space["list1"]
-    )
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
+    assert hyper.best_para(objective_function)["list1"] in search_space["list1"]

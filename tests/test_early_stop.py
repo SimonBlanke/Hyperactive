@@ -4,8 +4,9 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
-from hyperactive import (
-    Hyperactive,
+
+from hyperactive import Hyperactive
+from hyperactive.optimizers import (
     RandomSearchOptimizer,
     HillClimbingOptimizer,
 )
@@ -99,7 +100,7 @@ def test_early_stop_3():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -160,7 +161,7 @@ def test_early_stop_4():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -213,7 +214,7 @@ def test_early_stop_5():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -274,7 +275,7 @@ def test_early_stop_6():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -327,7 +328,7 @@ def test_early_stop_7():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)

@@ -19,7 +19,7 @@ def test_attributes_results_0():
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
 
-    assert isinstance(hyper.results(objective_function), pd.DataFrame)
+    assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
 
 
 def test_attributes_results_1():
@@ -27,9 +27,7 @@ def test_attributes_results_1():
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
 
-    assert set(search_space.keys()) < set(
-        hyper.results(objective_function).columns
-    )
+    assert set(search_space.keys()) < set(hyper.search_data(objective_function).columns)
 
 
 def test_attributes_results_2():
@@ -37,7 +35,7 @@ def test_attributes_results_2():
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
 
-    assert "x1" in list(hyper.results(objective_function).columns)
+    assert "x1" in list(hyper.search_data(objective_function).columns)
 
 
 def test_attributes_results_3():
@@ -45,7 +43,7 @@ def test_attributes_results_3():
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
 
-    assert "score" in list(hyper.results(objective_function).columns)
+    assert "score" in list(hyper.search_data(objective_function).columns)
 
 
 def test_attributes_results_4():
@@ -58,7 +56,7 @@ def test_attributes_results_4():
     )
     hyper.run()
 
-    assert 0 in list(hyper.results(objective_function)["x1"].values)
+    assert 0 in list(hyper.search_data(objective_function)["x1"].values)
 
 
 def test_attributes_results_5():
@@ -73,10 +71,10 @@ def test_attributes_results_5():
 
     print(
         "\n x1_results \n",
-        list(hyper.results(objective_function)["x1"].values),
+        list(hyper.search_data(objective_function)["x1"].values),
     )
 
-    assert 10 in list(hyper.results(objective_function)["x1"].values)
+    assert 10 in list(hyper.search_data(objective_function)["x1"].values)
 
 
 def test_attributes_results_6():
@@ -98,7 +96,7 @@ def test_attributes_results_6():
     )
     hyper.run()
 
-    x1_results = list(hyper.results(objective_function)["x1"].values)
+    x1_results = list(hyper.search_data(objective_function)["x1"].values)
 
     print("\n x1_results \n", x1_results)
 

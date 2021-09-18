@@ -90,7 +90,7 @@ class HyperactiveResults:
 
         raise ValueError("objective function name not recognized")
 
-    def results(self, id_):
+    def search_data(self, id_):
         results_ = self._get_one_result(id_, "search_data")
 
         if results_ is not None:

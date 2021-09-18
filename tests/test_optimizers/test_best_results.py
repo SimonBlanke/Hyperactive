@@ -104,5 +104,5 @@ def test_best_results_1(Optimizer, search_space, objective):
     hyper.run()
 
     assert hyper.best_para(objective_function)["x1"] in list(
-        hyper.results(objective_function)["x1"]
+        hyper.search_data(objective_function)["x1"]
     )

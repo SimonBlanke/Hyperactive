@@ -30,7 +30,7 @@ def test_data_collector_0():
     hyper.add_search(objective_function, search_space, n_iter=50)
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
 
     data_c = DataCollector("./search_data.csv")
     data_c.save(search_data)
@@ -56,7 +56,7 @@ def test_data_collector_1():
     hyper.add_search(objective_function, search_space, n_iter=50)
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
 
     data_c = DataCollector(path)
     data_c.save(search_data, replace_existing=True)
@@ -91,7 +91,7 @@ def test_data_collector_2():
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=50, memory=False)
     hyper.run()
-    search_data = hyper.results(objective_function)[["x1", "score"]]
+    search_data = hyper.search_data(objective_function)[["x1", "score"]]
 
     search_data_ = data_c.load()
 
@@ -133,7 +133,7 @@ def test_data_collector_3():
         initialize={"random": 1},
     )
     hyper.run()
-    search_data = hyper.results(objective_function_3)
+    search_data = hyper.search_data(objective_function_3)
 
     search_data_ = data_c.load()
 

@@ -102,7 +102,10 @@ search_space_para = (
 
 path_para = (
     "path",
-    [("./"), (None),],
+    [
+        ("./"),
+        (None),
+    ],
 )
 
 """
@@ -120,7 +123,7 @@ def test_ltm_0(search_space, path):
     hyper.run()
 
     memory = LongTermMemory(model_name, path=path)
-    results1 = hyper.results(objective_function)
+    results1 = hyper.search_data(objective_function)
     memory.save(results1, objective_function)
 
     results2 = memory.load()
@@ -383,4 +386,3 @@ def test_ltm_list():
                 break
 
         assert assert_
-

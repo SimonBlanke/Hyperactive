@@ -113,7 +113,7 @@ def test_memory_warm_start_0(search_space):
     hyper0.add_search(objective_function, search_space, n_iter=20)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(

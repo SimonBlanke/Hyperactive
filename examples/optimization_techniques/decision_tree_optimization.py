@@ -24,7 +24,7 @@ hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=100)
 hyper.run()
 
-search_data = hyper.results(model)
+search_data = hyper.search_data(model)
 
 optimizer = DecisionTreeOptimizer(
     tree_regressor="random_forest",

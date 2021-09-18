@@ -787,7 +787,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .results(objective_function)</b></summary>
+<summary><b> .search_data(objective_function)</b></summary>
 
 - objective_function
   - (callable)
