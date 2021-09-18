@@ -37,7 +37,6 @@ test-search_space:
 
 test_:
 	python -m pytest -x -p no:warnings -rfEX tests/; \
-	python ./tests/test_dashboards/_test_progress_board.py \
 
 
 test: clean-progress_board test_ clean-progress_board
