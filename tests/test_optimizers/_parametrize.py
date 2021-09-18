@@ -1,4 +1,4 @@
-from hyperactive import (
+from hyperactive.optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
     RepulsingHillClimbingOptimizer,
