@@ -57,6 +57,7 @@ class Hyperactive:
         self,
         random_state,
         objective_function,
+        search_space,
         optimizer,
         n_iter,
         n_jobs,
@@ -81,6 +82,7 @@ class Hyperactive:
                 "verbosity": self.verbosity,
                 "nth_process": nth_process,
                 "objective_function": objective_function,
+                "search_space": search_space,
                 "optimizer": optimizer,
                 "n_iter": n_iter,
                 "max_score": max_score,
@@ -142,6 +144,7 @@ class Hyperactive:
         self._add_search_processes(
             random_state,
             objective_function,
+            search_space,
             optimizer,
             n_iter,
             n_jobs,

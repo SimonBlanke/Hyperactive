@@ -27,6 +27,8 @@ class Results:
 
             process_infos = self.process_infos[nth_process]
             objective_function_ = process_infos["objective_function"]
+            search_space_ = process_infos["search_space"]
+            params = list(search_space_.keys())
 
             if objective_function_ != objective_function:
                 continue
@@ -44,6 +46,7 @@ class Results:
             "best_para": best_para,
             "best_score": best_score,
             "search_data": search_data,
+            "params": params,
         }
 
     def _sort_results_search_id(self, search_id):
@@ -56,7 +59,7 @@ class Results:
 
             best_score = results_["best_score"]
             best_para = results_["best_para"]
-            search_data = results_["results"]
+            search_data = results_["search_data"]
 
             self.search_id2results[search_id] = {
                 "best_para": best_para,
@@ -75,7 +78,11 @@ class Results:
             if id_ not in self.objFunc2results:
                 self._sort_results_objFunc(id_)
 
-            return self.objFunc2results[id_][result_name]
+            search_data = self.objFunc2results[id_][result_name]
+            params = self.objFunc2results[id_]["params"]
+
+            search_data_mul = self._create_mult_idx_search_data(search_data, params)
+            return search_data_mul
 
     def best_para(self, id_):
         best_para_ = self._get_result(id_, "best_para")
@@ -92,6 +99,25 @@ class Results:
             return best_score_
 
         raise ValueError("objective function name not recognized")
+
+    def _create_mult_idx_search_data(self, search_data, params):
+        level_0 = []
+        level_1 = []
+        for para in params:
+            level_0.append("search_space")
+            level_1.append(para)
+        columns = list(search_data.columns)
+        results_cols = [x for x in columns if x not in params]
+
+        for results_col in results_cols:
+            level_0.append("results")
+            level_1.append(results_col)
+
+        arrays = [level_0, level_1]
+        mult_idx_tup = list(zip(*arrays))
+
+        index = pd.MultiIndex.from_tuples(mult_idx_tup, names=["type", "info"])
+        return pd.DataFrame(search_data.values, columns=index)
 
     def search_data(self, id_):
         results_ = self._get_result(id_, "search_data")
