@@ -7,8 +7,11 @@ import numpy as np
 import pandas as pd
 
 
-class HyperactiveResults:
-    def __init__(self, *args, **kwargs):
+class Results:
+    def __init__(self, results_list, process_infos):
+        self.results_list = results_list
+        self.process_infos = process_infos
+
         self.objFunc2results = {}
         self.search_id2results = {}
 
@@ -61,7 +64,7 @@ class HyperactiveResults:
                 "search_data": search_data,
             }
 
-    def _get_one_result(self, id_, result_name):
+    def _get_result(self, id_, result_name):
         if isinstance(id_, str):
             if id_ not in self.search_id2results:
                 self._sort_results_search_id(id_)
@@ -75,7 +78,7 @@ class HyperactiveResults:
             return self.objFunc2results[id_][result_name]
 
     def best_para(self, id_):
-        best_para_ = self._get_one_result(id_, "best_para")
+        best_para_ = self._get_result(id_, "best_para")
 
         if best_para_ is not None:
             return best_para_
@@ -83,7 +86,7 @@ class HyperactiveResults:
         raise ValueError("objective function name not recognized")
 
     def best_score(self, id_):
-        best_score_ = self._get_one_result(id_, "best_score")
+        best_score_ = self._get_result(id_, "best_score")
 
         if best_score_ != -np.inf:
             return best_score_
@@ -91,7 +94,7 @@ class HyperactiveResults:
         raise ValueError("objective function name not recognized")
 
     def search_data(self, id_):
-        results_ = self._get_one_result(id_, "search_data")
+        results_ = self._get_result(id_, "search_data")
 
         if results_ is not None:
             return results_

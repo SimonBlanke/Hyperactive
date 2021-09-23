@@ -10,10 +10,10 @@ from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
 from .print_info import print_info
 
-from .hyperactive_results import HyperactiveResults
+from .results import Results
 
 
-class Hyperactive(HyperactiveResults):
+class Hyperactive:
     def __init__(
         self,
         verbosity=["progress_bar", "print_results", "print_times"],
@@ -177,4 +177,15 @@ class Hyperactive(HyperactiveResults):
             self.process_infos, self.distribution, self.n_processes
         )
 
+        self.results_ = Results(self.results_list, self.process_infos)
+
         self._print_info()
+
+    def best_para(self, id_):
+        return self.results_.best_para(id_)
+
+    def best_score(self, id_):
+        return self.results_.best_score(id_)
+
+    def search_data(self, id_):
+        return self.results_.search_data(id_)
