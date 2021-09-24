@@ -4,7 +4,6 @@
 
 
 def _process_(
-    nth_process,
     objective_function,
     optimizer,
     n_iter,
@@ -13,7 +12,6 @@ def _process_(
     max_time,
     max_score,
     early_stopping,
-    random_state,
     verbosity,
     **kwargs
 ):
@@ -31,12 +29,10 @@ def _process_(
         memory=memory,
         memory_warm_start=memory_warm_start,
         verbosity=verbosity_gfo,
-        random_state=random_state,
-        nth_process=nth_process,
     )
 
     return {
-        "nth_process": nth_process,
+        "nth_process": optimizer.nth_process,
         "best_para": optimizer.best_para,
         "best_score": optimizer.best_score,
         "best_iter": optimizer.p_bar._best_since_iter,

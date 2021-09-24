@@ -55,14 +55,15 @@ class Hyperactive:
 
     def _add_search_processes(
         self,
-        random_state,
         objective_function,
         search_space,
         optimizer,
         n_iter,
         n_jobs,
+        initialize,
         max_score,
         early_stopping,
+        random_state,
         memory,
         memory_warm_start,
         search_id,
@@ -77,10 +78,10 @@ class Hyperactive:
                     memory, objective_function, optimizer
                 )
 
+            optimizer.init(search_space, initialize, random_state, nth_process)
+
             self.process_infos[nth_process] = {
-                "random_state": random_state,
                 "verbosity": self.verbosity,
-                "nth_process": nth_process,
                 "objective_function": objective_function,
                 "search_space": search_space,
                 "optimizer": optimizer,
@@ -139,17 +140,16 @@ class Hyperactive:
 
         self.check_list(search_space)
 
-        optimizer.init(search_space, initialize)
-
         self._add_search_processes(
-            random_state,
             objective_function,
             search_space,
             optimizer,
             n_iter,
             n_jobs,
+            initialize,
             max_score,
             early_stopping,
+            random_state,
             memory,
             memory_warm_start,
             search_id,

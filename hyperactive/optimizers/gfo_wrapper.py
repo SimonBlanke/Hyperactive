@@ -51,11 +51,11 @@ class TrafoClass:
             self.best_para = None
 
         self.best_score = self._optimizer.best_score
-        self.positions = self._optimizer.results
+        self.positions = self._optimizer.search_data
 
         self.results = self._positions2results(self.positions)
 
-        results_dd = self._optimizer.results.drop_duplicates(
+        results_dd = self._optimizer.search_data.drop_duplicates(
             subset=self.trafo.para_names, keep="first"
         )
         self.memory_values_df = results_dd[
@@ -68,9 +68,11 @@ class _BaseOptimizer_(TrafoClass):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(self, search_space, initialize):
+    def init(self, search_space, initialize, random_state, nth_process):
         self.search_space = search_space
         self.initialize = initialize
+        self.random_state = random_state
+        self.nth_process = nth_process
 
         self.trafo = HyperGradientTrafo(search_space)
 
@@ -84,7 +86,11 @@ class _BaseOptimizer_(TrafoClass):
             )
 
         self._optimizer = self._OptimizerClass(
-            search_space_positions, initialize, **self.opt_params
+            search_space=search_space_positions,
+            initialize=initialize,
+            random_state=random_state,
+            nth_process=nth_process,
+            **self.opt_params
         )
 
         self.conv = self._optimizer.conv
@@ -103,14 +109,11 @@ class _BaseOptimizer_(TrafoClass):
             "print_results": True,
             "print_times": True,
         },
-        random_state=None,
-        nth_process=None,
     ):
         self.objective_function = objective_function
-        self.nth_process = nth_process
 
         gfo_wrapper_model = ObjectiveFunction(
-            objective_function, self._optimizer, nth_process
+            objective_function, self._optimizer, self.nth_process
         )
 
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
@@ -126,8 +129,6 @@ class _BaseOptimizer_(TrafoClass):
             memory=memory,
             memory_warm_start=memory_warm_start,
             verbosity=verbosity,
-            random_state=random_state,
-            nth_process=nth_process,
         )
 
         self._convert_results2hyper()
