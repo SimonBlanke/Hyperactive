@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from multiprocessing import Pool
+import multiprocessing as mp
 from joblib import Parallel, delayed
 
 
@@ -15,7 +15,7 @@ def single_process(process_func, search_processes_infos):
 def multiprocessing_wrapper(
     process_func, search_processes_paras, n_processes, **kwargs
 ):
-    pool = Pool(n_processes, **kwargs)
+    pool = mp.Pool(n_processes, **kwargs)
     results = pool.map(process_func, search_processes_paras)
 
     return results

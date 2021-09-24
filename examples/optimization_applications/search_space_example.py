@@ -1,9 +1,9 @@
 """
-Hyperactive is very versatile, because of it can handle not just numerical or 
+Hyperactive is very versatile, because it can handle not just numerical or 
 string variables in the search space, but also functions. This enables many 
 possibilities for more complex optimization applications. Neural architecture search,
 feature engineering, ensemble optimization and many other applications are 
-only possible or much easier, if you can put functions in the search space.
+only possible or much easier if you can put functions in the search space.
 """
 
 from hyperactive import Hyperactive
@@ -44,7 +44,7 @@ search_space = {
 
 
 def objective_function(para):
-    # score must be a single number
+    # score must be a number
     score = 1
     return score
 

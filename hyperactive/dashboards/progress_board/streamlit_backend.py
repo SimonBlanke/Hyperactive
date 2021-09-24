@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
+import plotly.graph_objects as go
 
 try:
     from progress_io import ProgressIO
@@ -21,20 +22,24 @@ color_scale = px.colors.sequential.Jet
 
 
 class StreamlitBackend:
-    def __init__(self, search_ids):
-        self.search_ids = search_ids
-        self.search_id_dict = {}
+    def __init__(self, progress_ids):
+        self.progress_ids = progress_ids
+        self.progress_id_dict = {}
 
-        _io_ = ProgressIO("./")
+        self._io_ = ProgressIO()
 
-        for search_id in search_ids:
-            self.search_id_dict[search_id] = {}
+        for progress_id in progress_ids:
+            self.progress_id_dict[progress_id] = {}
 
-            self.search_id_dict[search_id]["prog_d"] = _io_.load_progress(search_id)
-            self.search_id_dict[search_id]["filt_f"] = _io_.load_filter(search_id)
+            self.progress_id_dict[progress_id]["prog_d"] = self._io_.load_progress(
+                progress_id
+            )
+            self.progress_id_dict[progress_id]["filt_f"] = self._io_.load_filter(
+                progress_id
+            )
 
-    def get_progress_data(self, search_id):
-        progress_data = self.search_id_dict[search_id]["prog_d"]
+    def get_progress_data(self, progress_id):
+        progress_data = self.progress_id_dict[progress_id]["prog_d"]
 
         if progress_data is None:
             return
@@ -95,11 +100,11 @@ class StreamlitBackend:
 
         return df
 
-    def plotly(self, progress_data, search_id):
+    def plotly(self, progress_data, progress_id):
         if progress_data is None or len(progress_data) <= 1:
             return None
 
-        filter_df = self.search_id_dict[search_id]["filt_f"]
+        filter_df = self.progress_id_dict[progress_id]["filt_f"]
 
         progress_data = progress_data.drop(
             ["nth_iter", "score_best", "nth_process", "best"], axis=1
@@ -118,31 +123,65 @@ class StreamlitBackend:
             color="score",
             color_continuous_scale=color_scale,
         )
-        fig.update_layout(autosize=False, width=1200, height=540)
 
         return fig
 
-    def create_plots(self, search_id):
-        progress_data = self.get_progress_data(search_id)
+    def table_plotly(self, search_data):
+        df_len = len(search_data)
+
+        headerColor = "#b5beff"
+        rowEvenColor = "#e8e8e8"
+        rowOddColor = "white"
+
+        fig = go.Figure(
+            data=[
+                go.Table(
+                    header=dict(
+                        values=list(search_data.columns),
+                        fill_color=headerColor,
+                        align="center",
+                        font_size=18,
+                        height=30,
+                    ),
+                    cells=dict(
+                        values=[search_data[col] for col in search_data.columns],
+                        # fill_color="lavender",
+                        fill_color=[
+                            [
+                                rowOddColor,
+                                rowEvenColor,
+                            ]
+                            * int((df_len / 2) + 1)
+                        ],
+                        align=["center"],
+                        font_size=14,
+                        height=30,
+                    ),
+                )
+            ]
+        )
+        fig.update_layout(height=550)
+        return fig
+
+    def create_plots(self, progress_id):
+        progress_data = self.get_progress_data(progress_id)
 
         pyplot_fig = self.pyplot(progress_data)
-        plotly_fig = self.plotly(progress_data, search_id)
+        plotly_fig = self.plotly(progress_data, progress_id)
 
         return pyplot_fig, plotly_fig
 
-    def create_info(self, search_id):
-        progress_data = self.get_progress_data(search_id)
+    def create_info(self, progress_id):
+        progress_data = self.get_progress_data(progress_id)
         if progress_data is None or len(progress_data) <= 1:
             return None
 
-        progress_data_best = progress_data[progress_data["best"] == 1]
-
-        progress_data_best = progress_data_best.drop(
+        progress_data_best = progress_data.drop(
             ["nth_iter", "score_best", "nth_process", "best"], axis=1
         )
 
         progress_data_best = progress_data_best.sort_values("score")
-        last_best = progress_data_best.tail(5)
+        last_best = progress_data_best.tail(10)
         last_best = last_best.rename(
             columns={
                 "score": "best 5 scores",

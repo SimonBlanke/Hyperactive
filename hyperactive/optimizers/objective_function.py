@@ -25,7 +25,7 @@ class ObjectiveFunction(DictClass):
         self.nth_process = nth_process
 
         self.best = 0
-        self.nth_iter = -1
+        self.nth_iter = 0
         self.best_para = None
         self.best_score = -np.inf
 

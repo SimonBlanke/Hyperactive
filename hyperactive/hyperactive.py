@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-import multiprocessing
+import multiprocessing as mp
 from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
@@ -17,12 +17,7 @@ class Hyperactive(HyperactiveResults):
     def __init__(
         self,
         verbosity=["progress_bar", "print_results", "print_times"],
-        distribution={
-            "multiprocessing": {
-                "initializer": tqdm.set_lock,
-                "initargs": (tqdm.get_lock(),),
-            }
-        },
+        distribution="multiprocessing",
         n_processes="auto",
     ):
         super().__init__()
@@ -38,6 +33,26 @@ class Hyperactive(HyperactiveResults):
 
         self.progress_boards = {}
 
+    def _create_shared_memory(self, memory, objective_function, optimizer):
+        if memory is not False:
+            if len(self.process_infos) == 0:
+                manager = mp.Manager()
+                memory = manager.dict()
+
+            for process_info in self.process_infos.values():
+                same_obj_func = process_info["objective_function"] == objective_function
+                same_ss_length = len(process_info["optimizer"].search_space) == len(
+                    optimizer.search_space
+                )
+
+                if same_obj_func and same_ss_length:
+                    memory = process_info["memory"]
+                else:
+                    manager = mp.Manager()
+                    memory = manager.dict()
+
+        return memory
+
     def _add_search_processes(
         self,
         random_state,
@@ -46,15 +61,17 @@ class Hyperactive(HyperactiveResults):
         n_iter,
         n_jobs,
         max_score,
+        early_stopping,
         memory,
         memory_warm_start,
         search_id,
     ):
         if n_jobs == -1:
-            n_jobs = multiprocessing.cpu_count()
+            n_jobs = mp.cpu_count()
 
         for _ in range(n_jobs):
             nth_process = len(self.process_infos)
+            memory = self._create_shared_memory(memory, objective_function, optimizer)
 
             self.process_infos[nth_process] = {
                 "random_state": random_state,
@@ -64,32 +81,24 @@ class Hyperactive(HyperactiveResults):
                 "optimizer": optimizer,
                 "n_iter": n_iter,
                 "max_score": max_score,
+                "early_stopping": early_stopping,
                 "memory": memory,
                 "memory_warm_start": memory_warm_start,
                 "search_id": search_id,
             }
 
-    def _default_opt(self, optimizer):
+    @staticmethod
+    def _default_opt(optimizer):
         if isinstance(optimizer, str):
             if optimizer == "default":
                 optimizer = RandomSearchOptimizer()
         return optimizer
 
-    def _default_search_id(self, search_id, objective_function):
+    @staticmethod
+    def _default_search_id(search_id, objective_function):
         if not search_id:
             search_id = objective_function.__name__
         return search_id
-
-    def _init_progress_board(self, progress_board, search_id, search_space):
-        data_c = None
-
-        if progress_board:
-            data_c = progress_board.init_paths(search_id, search_space)
-
-            if progress_board.uuid not in self.progress_boards:
-                self.progress_boards[progress_board.uuid] = progress_board
-
-        return data_c
 
     @staticmethod
     def check_list(search_space):
@@ -101,10 +110,18 @@ class Hyperactive(HyperactiveResults):
                     key
                 )
             )
-
             if not isinstance(search_dim, list):
                 print("Warning", error_msg)
                 # raise ValueError(error_msg)
+
+    def _init_progress_board(self, progress_board, search_id, search_space):
+        if progress_board:
+            data_c = progress_board.init_paths(search_id, search_space)
+
+            if progress_board.uuid not in self.progress_boards:
+                self.progress_boards[progress_board.uuid] = progress_board
+
+            return data_c
 
     def add_search(
         self,
@@ -116,6 +133,7 @@ class Hyperactive(HyperactiveResults):
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
         max_score=None,
+        early_stopping=None,
         random_state=None,
         memory=True,
         memory_warm_start=None,
@@ -138,24 +156,13 @@ class Hyperactive(HyperactiveResults):
             n_iter,
             n_jobs,
             max_score,
+            early_stopping,
             memory,
             memory_warm_start,
             search_id,
         )
 
-    def run(self, max_time=None, _test_st_backend=False):
-        for nth_process in self.process_infos.keys():
-            self.process_infos[nth_process]["max_time"] = max_time
-
-        # open progress board
-        if not _test_st_backend:
-            for progress_board in self.progress_boards.values():
-                progress_board.open_dashboard()
-
-        self.results_list = run_search(
-            self.process_infos, self.distribution, self.n_processes
-        )
-
+    def _print_info(self):
         for results in self.results_list:
             nth_process = results["nth_process"]
 
@@ -171,3 +178,24 @@ class Hyperactive(HyperactiveResults):
                 iter_times=results["iter_times"],
                 n_iter=self.process_infos[nth_process]["n_iter"],
             )
+
+    def run(self, max_time=None, _test_st_backend=False):
+        for nth_process in self.process_infos.keys():
+            self.process_infos[nth_process]["max_time"] = max_time
+
+        # open progress board
+        if not _test_st_backend:
+            for progress_board in self.progress_boards.values():
+                progress_board.open_dashboard()
+
+        self.results_list = run_search(
+            self.process_infos, self.distribution, self.n_processes
+        )
+
+        # delete lock files
+        if not _test_st_backend:
+            for progress_board in self.progress_boards.values():
+                for search_id in progress_board.search_ids:
+                    progress_board._io_.remove_lock(search_id)
+
+        self._print_info()

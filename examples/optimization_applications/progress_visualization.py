@@ -1,3 +1,9 @@
+"""
+Optimization runs are often like a black box. The information provided in the command line is often sparse.
+The Hyperactive ProgressBoard enables the visualization of the optimization progress during the run. I tried
+to make its usage as convenient as possible. You only have to initialize the ProgressBoard class and pass it to 
+.add_search(...). Hyperactive will do the rest!
+"""
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.datasets import load_boston
@@ -58,7 +64,7 @@ searches.
 # progress_board2 = ProgressBoard()
 """
 uncomment the line above and pass progress_board2 
-to one .add_search(...) to open two browser tabs at the same time
+to one .add_search(...) to open an additional browser tabs at the same time
 """
 
 
@@ -76,7 +82,7 @@ hyper.add_search(
     search_space_rfr,
     n_iter=200,
     n_jobs=4,
-    progress_board=progress_board1,
+    progress_board=progress_board1, # optionally put progress_board2 here
 )
-# a terminal will open, which opens a dashboard in your browser
+# an additional terminal will open, which opens a dashboard in your browser
 hyper.run()

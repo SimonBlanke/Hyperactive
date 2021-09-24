@@ -35,6 +35,7 @@ class Converter:
 
         return value
 
+    """
     def positions2values(self, positions):
         values = []
         positions_np = np.array(positions)
@@ -46,6 +47,7 @@ class Converter:
 
         values = [list(t) for t in zip(*values)]
         return values
+    """
 
     def para2value(self, para):
         value = []
@@ -54,6 +56,7 @@ class Converter:
 
         return value
 
+    """
     def _memory2dataframe(self, memory_dict):
         positions = [np.array(pos).astype(int) for pos in list(memory_dict.keys())]
         scores = list(memory_dict.values())
@@ -62,6 +65,7 @@ class Converter:
         memory_positions["score"] = scores
 
         return memory_positions
+    """
 
 
 class HyperGradientTrafo(Converter):
