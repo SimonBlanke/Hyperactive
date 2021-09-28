@@ -73,12 +73,12 @@ class Hyperactive:
 
         for _ in range(n_jobs):
             nth_process = len(self.process_infos)
+            optimizer.init(search_space, initialize, random_state, nth_process)
+
             if memory == "share":
                 memory = self._create_shared_memory(
                     memory, objective_function, optimizer
                 )
-
-            optimizer.init(search_space, initialize, random_state, nth_process)
 
             self.process_infos[nth_process] = {
                 "verbosity": self.verbosity,
