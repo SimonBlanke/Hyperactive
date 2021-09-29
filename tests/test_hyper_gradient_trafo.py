@@ -67,7 +67,7 @@ X, y = data.data, data.target
 
 def objective_function_1(opt):
     dtc = DecisionTreeClassifier(min_samples_split=opt["min_samples_split"])
-    scores = cross_val_score(dtc, X, y, cv=5)
+    scores = cross_val_score(dtc, X, y, cv=10)
 
     return scores.mean()
 
@@ -119,7 +119,7 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
     hyper.add_search(
         objective_function_1,
         search_space,
-        n_iter=25,
+        n_iter=15,
         random_state=random_state,
         initialize={"random": 1},
     )
@@ -131,7 +131,7 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
     hyper.add_search(
         objective_function_1,
         search_space,
-        n_iter=25,
+        n_iter=15,
         random_state=random_state,
         initialize={"random": 1},
         memory_warm_start=memory_warm_start,
@@ -139,7 +139,7 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
     hyper.run()
     d_time_1 = time.time() - c_time_1
 
-    assert d_time_1 < d_time_0 * 0.8
+    assert d_time_1 < d_time_0 * 0.3
 
 
 # ----------------- # Test if wrong memory warm starts do not work as intended
