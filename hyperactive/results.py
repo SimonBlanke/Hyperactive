@@ -79,10 +79,8 @@ class Results:
                 self._sort_results_objFunc(id_)
 
             search_data = self.objFunc2results[id_][result_name]
-            params = self.objFunc2results[id_]["params"]
 
-            search_data_mul = self._create_mult_idx_search_data(search_data, params)
-            return search_data_mul
+            return search_data
 
     def best_para(self, id_):
         best_para_ = self._get_result(id_, "best_para")
@@ -120,9 +118,12 @@ class Results:
         return pd.DataFrame(search_data.values, columns=index)
 
     def search_data(self, id_):
-        results_ = self._get_result(id_, "search_data")
+        search_data = self._get_result(id_, "search_data")
 
-        if results_ is not None:
-            return results_
+        params = self.objFunc2results[id_]["params"]
+        search_data_mul = self._create_mult_idx_search_data(search_data, params)
+
+        if search_data_mul is not None:
+            return search_data_mul
 
         raise ValueError("objective function name not recognized")
