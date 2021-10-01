@@ -59,7 +59,7 @@ class Results:
 
             best_score = results_["best_score"]
             best_para = results_["best_para"]
-            search_data = results_["search_data"]
+            search_data = results_["results"]
 
             self.search_id2results[search_id] = {
                 "best_para": best_para,
@@ -121,9 +121,9 @@ class Results:
         search_data = self._get_result(id_, "search_data")
 
         params = self.objFunc2results[id_]["params"]
-        search_data_mul = self._create_mult_idx_search_data(search_data, params)
+        # search_data = self._create_mult_idx_search_data(search_data, params)
 
-        if search_data_mul is not None:
-            return search_data_mul
+        if search_data is not None:
+            return search_data
 
         raise ValueError("objective function name not recognized")

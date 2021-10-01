@@ -66,7 +66,7 @@ def test_best_results_0(Optimizer, search_space, objective):
     initialize = {"vertices": 2}
 
     opt = Optimizer()
-    opt.init(search_space, initialize)
+    opt.init(search_space, initialize, random_state=0, nth_process=0)
     opt.search(objective_function, n_iter=10)
 
     assert opt.best_score == objective_function(opt.best_para)
