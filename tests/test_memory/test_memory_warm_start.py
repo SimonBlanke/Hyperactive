@@ -13,7 +13,7 @@ search_space_0 = {
 }
 
 search_space_1 = {
-    "x1": list(range(0, 100, 1)),
+    "x1": list(range(0, 10, 1)),
     "x2": list(range(-5, 5, 1)),
     "x3": list(range(-5, 5, 1)),
 }
@@ -120,3 +120,34 @@ def test_memory_warm_start_0(search_space):
         objective_function, search_space, n_iter=20, memory_warm_start=search_data0
     )
     hyper1.run()
+
+
+def objective_function(opt):
+    score = -opt["x1"] * opt["x1"]
+    time.sleep(0.001)
+    return score
+
+
+@pytest.mark.parametrize("search_space", search_space_list)
+def test_memory_warm_start_1(search_space):
+
+    c_time = time.time()
+    hyper0 = Hyperactive()
+    hyper0.add_search(objective_function, search_space, n_iter=1000, memory=False)
+    hyper0.run()
+    d_time_1 = time.time() - c_time
+
+    search_data0 = hyper0.results(objective_function)
+
+    c_time = time.time()
+    hyper1 = Hyperactive()
+    hyper1.add_search(
+        objective_function, search_space, n_iter=1000, memory_warm_start=search_data0
+    )
+    hyper1.run()
+    d_time_2 = time.time() - c_time
+
+    print("\n d_time_1 ", d_time_1)
+    print("\n d_time_2 ", d_time_2)
+
+    assert d_time_1 * 0.5 > d_time_2
