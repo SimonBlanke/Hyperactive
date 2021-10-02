@@ -13,9 +13,9 @@ search_space_0 = {
 }
 
 search_space_1 = {
-    "x1": list(range(0, 10, 1)),
-    "x2": list(range(-5, 5, 1)),
-    "x3": list(range(-5, 5, 1)),
+    "x1": list(range(0, 5, 1)),
+    "x2": list(range(-3, 3, 1)),
+    "x3": list(range(-3, 3, 1)),
 }
 
 search_space_2 = {
@@ -133,7 +133,7 @@ def test_memory_warm_start_1(search_space):
 
     c_time = time.time()
     hyper0 = Hyperactive()
-    hyper0.add_search(objective_function, search_space, n_iter=1000, memory=False)
+    hyper0.add_search(objective_function, search_space, n_iter=2000, memory=False)
     hyper0.run()
     d_time_1 = time.time() - c_time
 
@@ -142,7 +142,7 @@ def test_memory_warm_start_1(search_space):
     c_time = time.time()
     hyper1 = Hyperactive()
     hyper1.add_search(
-        objective_function, search_space, n_iter=1000, memory_warm_start=search_data0
+        objective_function, search_space, n_iter=2000, memory_warm_start=search_data0
     )
     hyper1.run()
     d_time_2 = time.time() - c_time
