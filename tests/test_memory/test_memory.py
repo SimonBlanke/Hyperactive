@@ -25,9 +25,7 @@ def test_memory_timeSave_0():
     X, y = data.data, data.target
 
     def objective_function(opt):
-        dtc = DecisionTreeClassifier(
-            min_samples_split=opt["min_samples_split"]
-        )
+        dtc = DecisionTreeClassifier(min_samples_split=opt["min_samples_split"])
         scores = cross_val_score(dtc, X, y, cv=5)
 
         return scores.mean()
@@ -44,9 +42,7 @@ def test_memory_timeSave_0():
 
     c_time2 = time.time()
     hyper = Hyperactive()
-    hyper.add_search(
-        objective_function, search_space, n_iter=100, memory=False
-    )
+    hyper.add_search(objective_function, search_space, n_iter=100, memory=False)
     hyper.run()
     diff_time2 = time.time() - c_time2
 
@@ -59,7 +55,7 @@ def test_memory_timeSave_1():
 
     def objective_function(opt):
         dtc = DecisionTreeClassifier(max_depth=opt["max_depth"])
-        scores = cross_val_score(dtc, X, y, cv=5)
+        scores = cross_val_score(dtc, X, y, cv=10)
 
         return scores.mean()
 
@@ -78,7 +74,7 @@ def test_memory_timeSave_1():
     hyper.run()
     diff_time1 = time.time() - c_time1
 
-    assert diff_time1 < 1
+    assert diff_time1 < 0.3
 
 
 def test_memory_warm_start():
@@ -128,7 +124,9 @@ def test_memory_warm_start_manual():
     X, y = data.data, data.target
 
     def objective_function(opt):
-        dtc = GradientBoostingClassifier(n_estimators=opt["n_estimators"],)
+        dtc = GradientBoostingClassifier(
+            n_estimators=opt["n_estimators"],
+        )
         scores = cross_val_score(dtc, X, y, cv=5)
 
         return scores.mean()
@@ -156,7 +154,6 @@ def test_memory_warm_start_manual():
         memory_warm_start=memory_warm_start,
     )
     hyper0.run()
-    diff_time = time.time() - c_time
+    diff_time_2 = time.time() - c_time
 
-    assert diff_time_1 > diff_time * 0.3
-
+    assert diff_time_1 * 0.5 > diff_time_2
