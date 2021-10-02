@@ -37,7 +37,7 @@ class Results:
                 best_score = results_["best_score"]
                 best_para = results_["best_para"]
 
-            results_list.append(results_["results"])
+            results_list.append(results_["search_data"])
 
         if len(results_list) > 0:
             search_data = pd.concat(results_list)
@@ -59,7 +59,7 @@ class Results:
 
             best_score = results_["best_score"]
             best_para = results_["best_para"]
-            search_data = results_["results"]
+            search_data = results_["search_data"]
 
             self.search_id2results[search_id] = {
                 "best_para": best_para,
@@ -108,7 +108,7 @@ class Results:
         results_cols = [x for x in columns if x not in params]
 
         for results_col in results_cols:
-            level_0.append("results")
+            level_0.append("search_data")
             level_1.append(results_col)
 
         arrays = [level_0, level_1]

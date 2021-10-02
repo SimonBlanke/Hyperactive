@@ -53,7 +53,7 @@ class TrafoClass:
         self.best_score = self._optimizer.best_score
         self.positions = self._optimizer.search_data
 
-        self.results = self._positions2results(self.positions)
+        self.search_data = self._positions2results(self.positions)
 
         results_dd = self._optimizer.search_data.drop_duplicates(
             subset=self.trafo.para_names, keep="first"

@@ -39,6 +39,6 @@ def _process_(
         "eval_times": optimizer.eval_time,
         "iter_times": optimizer.iter_time,
         "positions": optimizer.positions,
-        "results": optimizer.results,
+        "search_data": optimizer.search_data,
         "memory_values_df": optimizer.memory_values_df,
     }
