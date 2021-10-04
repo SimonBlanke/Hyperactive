@@ -54,27 +54,30 @@ def test_memory_timeSave_1():
     X, y = data.data, data.target
 
     def objective_function(opt):
-        dtc = DecisionTreeClassifier(max_depth=opt["max_depth"])
-        scores = cross_val_score(dtc, X, y, cv=10)
-
-        return scores.mean()
+        time.sleep(0.001)
+        return 1
 
     search_space = {
-        "max_depth": list(np.arange(1, 101)),
+        "x1": list(np.arange(1, 30)),
     }
 
-    results = pd.DataFrame(np.arange(1, 101), columns=["max_depth"])
+    results = pd.DataFrame(np.arange(1, 30), columns=["x1"])
     results["score"] = 0
 
     c_time1 = time.time()
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=300, memory_warm_start=results
+        objective_function,
+        search_space,
+        n_iter=1000,
+        memory_warm_start=results,
     )
     hyper.run()
     diff_time1 = time.time() - c_time1
 
-    assert diff_time1 < 0.3
+    print("diff_time1", diff_time1)
+
+    assert diff_time1 < 1
 
 
 def test_memory_warm_start():
