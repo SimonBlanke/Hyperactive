@@ -18,7 +18,7 @@ from gradient_free_optimizers import (
     EvolutionStrategyOptimizer as _EvolutionStrategyOptimizer,
     BayesianOptimizer as _BayesianOptimizer,
     TreeStructuredParzenEstimators as _TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer as _DecisionTreeOptimizer,
+    ForestOptimizer as _ForestOptimizer,
     EnsembleOptimizer as _EnsembleOptimizer,
 )
 
@@ -95,10 +95,10 @@ class TreeStructuredParzenEstimators(_BaseOptimizer_):
         self._OptimizerClass = _TreeStructuredParzenEstimators
 
 
-class DecisionTreeOptimizer(_BaseOptimizer_):
+class ForestOptimizer(_BaseOptimizer_):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _DecisionTreeOptimizer
+        self._OptimizerClass = _ForestOptimizer
 
 
 class EnsembleOptimizer(_BaseOptimizer_):

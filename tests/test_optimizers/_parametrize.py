@@ -11,7 +11,7 @@ from hyperactive.optimizers import (
     EvolutionStrategyOptimizer,
     BayesianOptimizer,
     TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer,
+    ForestOptimizer,
     EnsembleOptimizer,
 )
 
@@ -31,7 +31,7 @@ optimizers = (
         (EvolutionStrategyOptimizer),
         (BayesianOptimizer),
         (TreeStructuredParzenEstimators),
-        (DecisionTreeOptimizer),
+        (ForestOptimizer),
         (EnsembleOptimizer),
     ],
 )

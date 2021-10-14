@@ -2,7 +2,7 @@ from sklearn.datasets import load_iris
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 
-from hyperactive import Hyperactive, DecisionTreeOptimizer
+from hyperactive import Hyperactive, ForestOptimizer
 
 data = load_iris()
 X, y = data.data, data.target
@@ -26,7 +26,7 @@ hyper.run()
 
 search_data = hyper.search_data(model)
 
-optimizer = DecisionTreeOptimizer(
+optimizer = ForestOptimizer(
     tree_regressor="random_forest",
     xi=0.02,
     warm_start_smbo=search_data,
