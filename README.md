@@ -52,9 +52,6 @@
 <br>
 <br>
 
-
-<br>
-
 ---
 
 <div align="center"><a name="menu"></a>
@@ -82,7 +79,7 @@
 ## Overview
 
 <h3 align="center">
-Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows listings of the capabilities of Hyperactive, where each of the items links to an example:
+Hyperactive features a collection of optimization algorithms that can be used for a variety of optimization problems. The following table shows examples of its capabilities:
 </h3>
 
 
@@ -201,22 +198,19 @@ Hyperactive features a collection of optimization algorithms that can be used fo
 The examples above are not necessarily done with realistic datasets or training procedures. 
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
-
-
-
 <br>
 
 
 ### Hyperactive is very easy to use:
 
 <table>
+<tbody>
 <tr>
 <th> Regular training </th>
 <th> Hyperactive </th>
 </tr>
 <tr>
 <td>
-<sub>
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -239,13 +233,10 @@ score = cross_val_score(gbr, X, y, cv=3).mean()
 
 
 
-
 ```
 
-</sub>
 </td>
 <td>
-<sup>
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -268,9 +259,9 @@ hyper.add_search(model, search_space, n_iter=50)
 hyper.run()
 ```
 
-</sub>
 </td>
 </tr>
+</tbody>
 </table>
 
 
@@ -924,7 +915,7 @@ hyper.run()
 
 
 <details>
-<summary><b>Next Features</b></summary>
+<summary><b>Upcoming Features</b></summary>
   
   - [ ] "long term memory" for search-data storage and usage
   - [ ] Data collector tool to use inside the objective function
