@@ -68,15 +68,34 @@ class _BaseOptimizer_(TrafoClass):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(self, search_space, initialize, random_state, nth_process):
+    def setup_search(
+        self,
+        objective_function,
+        search_space,
+        n_iter,
+        initialize,
+        max_score,
+        early_stopping,
+        random_state,
+        memory,
+        memory_warm_start,
+    ):
+        self.objective_function = objective_function
         self.search_space = search_space
+        self.n_iter = n_iter
         self.initialize = initialize
+        self.max_score = max_score
+        self.early_stopping = early_stopping
         self.random_state = random_state
+        self.memory = memory
+        self.memory_warm_start = memory_warm_start
+
+    def _setup_process(self, nth_process):
         self.nth_process = nth_process
 
-        self.trafo = HyperGradientTrafo(search_space)
+        self.trafo = HyperGradientTrafo(self.search_space)
 
-        initialize = self.trafo.trafo_initialize(initialize)
+        initialize = self.trafo.trafo_initialize(self.initialize)
         search_space_positions = self.trafo.search_space_positions
 
         # trafo warm start for smbo from values into positions
@@ -88,7 +107,7 @@ class _BaseOptimizer_(TrafoClass):
         self._optimizer = self._OptimizerClass(
             search_space=search_space_positions,
             initialize=initialize,
-            random_state=random_state,
+            random_state=self.random_state,
             nth_process=nth_process,
             **self.opt_params
         )
@@ -97,36 +116,30 @@ class _BaseOptimizer_(TrafoClass):
 
     def search(
         self,
-        objective_function,
-        n_iter,
-        max_time=None,
-        max_score=None,
-        early_stopping=None,
-        memory=True,
-        memory_warm_start=None,
+        nth_process,
         verbosity={
             "progress_bar": True,
             "print_results": True,
             "print_times": True,
         },
     ):
-        self.objective_function = objective_function
+        self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(
-            objective_function, self._optimizer, self.nth_process
+            self.objective_function, self._optimizer, self.nth_process
         )
 
-        memory_warm_start = self._convert_args2gfo(memory_warm_start)
+        memory_warm_start = self._convert_args2gfo(self.memory_warm_start)
 
         gfo_objective_function = gfo_wrapper_model(self.search_space)
 
         self._optimizer.search(
             objective_function=gfo_objective_function,
-            n_iter=n_iter,
-            max_time=max_time,
-            max_score=max_score,
-            early_stopping=early_stopping,
-            memory=memory,
+            n_iter=self.n_iter,
+            max_time=self.max_time,
+            max_score=self.max_score,
+            early_stopping=self.early_stopping,
+            memory=self.memory,
             memory_warm_start=memory_warm_start,
             verbosity=verbosity,
         )
