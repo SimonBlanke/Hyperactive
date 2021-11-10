@@ -28,70 +28,23 @@ class Hyperactive:
         self.distribution = distribution
         self.n_processes = n_processes
 
-        self.search_ids = []
-        self.process_infos = {}
+        self.opt_pros = {}
 
-        self.progress_boards = {}
-
-    def _create_shared_memory(self, memory, objective_function, optimizer):
-        if memory is not False:
-            if len(self.process_infos) == 0:
+    def _create_shared_memory(self, new_opt):
+        if new_opt.memory is not False:
+            if len(self.opt_pros) == 0:
                 manager = mp.Manager()
-                memory = manager.dict()
+                new_opt.memory = manager.dict()
 
-            for process_info in self.process_infos.values():
-                same_obj_func = process_info["objective_function"] == objective_function
-                same_ss_length = len(process_info["optimizer"].search_space) == len(
-                    optimizer.search_space
-                )
+            for opt in self.opt_pros.values():
+                same_obj_func = opt.objective_function == new_opt.objective_function
+                same_ss_length = len(opt.search_space) == len(new_opt.search_space)
 
                 if same_obj_func and same_ss_length:
-                    memory = process_info["memory"]
+                    new_opt.memory = opt.memory  # get same manager.dict
                 else:
-                    manager = mp.Manager()
-                    memory = manager.dict()
-
-        return memory
-
-    def _add_search_processes(
-        self,
-        objective_function,
-        search_space,
-        optimizer,
-        n_iter,
-        n_jobs,
-        initialize,
-        max_score,
-        early_stopping,
-        random_state,
-        memory,
-        memory_warm_start,
-        search_id,
-    ):
-        if n_jobs == -1:
-            n_jobs = mp.cpu_count()
-
-        for _ in range(n_jobs):
-            nth_process = len(self.process_infos)
-            optimizer.init(search_space, initialize, random_state, nth_process)
-
-            if memory == "share":
-                memory = self._create_shared_memory(
-                    memory, objective_function, optimizer
-                )
-
-            self.process_infos[nth_process] = {
-                "verbosity": self.verbosity,
-                "objective_function": objective_function,
-                "search_space": search_space,
-                "optimizer": optimizer,
-                "n_iter": n_iter,
-                "max_score": max_score,
-                "early_stopping": early_stopping,
-                "memory": memory,
-                "memory_warm_start": memory_warm_start,
-                "search_id": search_id,
-            }
+                    manager = mp.Manager()  # get new manager.dict
+                    new_opt.memory = manager.dict()
 
     @staticmethod
     def _default_opt(optimizer):
@@ -135,52 +88,58 @@ class Hyperactive:
         memory="share",
         memory_warm_start=None,
     ):
+        self.check_list(search_space)
+
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
 
-        self.check_list(search_space)
-
-        self._add_search_processes(
+        optimizer.setup_search(
             objective_function,
             search_space,
-            optimizer,
             n_iter,
-            n_jobs,
             initialize,
             max_score,
             early_stopping,
             random_state,
             memory,
             memory_warm_start,
-            search_id,
+            self.verbosity,
         )
+
+        if memory == "share":
+            self._create_shared_memory(optimizer)
+
+        if n_jobs == -1:
+            n_jobs = mp.cpu_count()
+
+        for _ in range(n_jobs):
+            nth_process = len(self.opt_pros)
+            self.opt_pros[nth_process] = optimizer
 
     def _print_info(self):
         for results in self.results_list:
             nth_process = results["nth_process"]
 
             print_info(
-                verbosity=self.process_infos[nth_process]["verbosity"],
-                objective_function=self.process_infos[nth_process][
-                    "objective_function"
-                ],
+                verbosity=self.opt_pros[nth_process].verbosity,
+                objective_function=self.opt_pros[nth_process].objective_function,
                 best_score=results["best_score"],
                 best_para=results["best_para"],
                 best_iter=results["best_iter"],
                 eval_times=results["eval_times"],
                 iter_times=results["iter_times"],
-                n_iter=self.process_infos[nth_process]["n_iter"],
+                n_iter=self.opt_pros[nth_process].n_iter,
             )
 
     def run(self, max_time=None):
-        for nth_process in self.process_infos.keys():
-            self.process_infos[nth_process]["max_time"] = max_time
+        for opt in self.opt_pros.values():
+            opt.max_time = max_time
 
         self.results_list = run_search(
-            self.process_infos, self.distribution, self.n_processes
+            self.opt_pros, self.distribution, self.n_processes
         )
 
-        self.results_ = Results(self.results_list, self.process_infos)
+        self.results_ = Results(self.results_list, self.opt_pros)
 
         self._print_info()
 

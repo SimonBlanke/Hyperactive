@@ -79,6 +79,7 @@ class _BaseOptimizer_(TrafoClass):
         random_state,
         memory,
         memory_warm_start,
+        verbosity,
     ):
         self.objective_function = objective_function
         self.search_space = search_space
@@ -89,6 +90,12 @@ class _BaseOptimizer_(TrafoClass):
         self.random_state = random_state
         self.memory = memory
         self.memory_warm_start = memory_warm_start
+        self.verbosity = verbosity
+
+        if "progress_bar" in self.verbosity:
+            self.verbosity = ["progress_bar"]
+        else:
+            self.verbosity = []
 
     def _setup_process(self, nth_process):
         self.nth_process = nth_process
@@ -114,15 +121,7 @@ class _BaseOptimizer_(TrafoClass):
 
         self.conv = self._optimizer.conv
 
-    def search(
-        self,
-        nth_process,
-        verbosity={
-            "progress_bar": True,
-            "print_results": True,
-            "print_times": True,
-        },
-    ):
+    def search(self, nth_process):
         self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(
@@ -141,7 +140,7 @@ class _BaseOptimizer_(TrafoClass):
             early_stopping=self.early_stopping,
             memory=self.memory,
             memory_warm_start=memory_warm_start,
-            verbosity=verbosity,
+            verbosity=self.verbosity,
         )
 
         self._convert_results2hyper()

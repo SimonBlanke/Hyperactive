@@ -63,10 +63,29 @@ def test_best_results_0(Optimizer, search_space, objective):
     search_space = search_space
     objective_function = objective
 
+    n_iter = 10
     initialize = {"vertices": 2}
+    max_score = None
+    early_stopping = None
+    random_state = None
+    memory = None
+    memory_warm_start = None
+    verbosity = ["progress_bar", "print_results", "print_times"]
 
     opt = Optimizer()
-    opt.init(search_space, initialize, random_state=0, nth_process=0)
-    opt.search(objective_function, n_iter=10)
+    opt.setup_search(
+        objective_function,
+        search_space,
+        n_iter,
+        initialize,
+        max_score,
+        early_stopping,
+        random_state,
+        memory,
+        memory_warm_start,
+        verbosity,
+    )
+    opt.max_time = None
+    opt.search(nth_process=0)
 
     assert opt.best_score == objective_function(opt.best_para)

@@ -8,9 +8,9 @@ import pandas as pd
 
 
 class Results:
-    def __init__(self, results_list, process_infos):
+    def __init__(self, results_list, opt_pros):
         self.results_list = results_list
-        self.process_infos = process_infos
+        self.opt_pros = opt_pros
 
         self.objFunc2results = {}
         self.search_id2results = {}
@@ -25,9 +25,9 @@ class Results:
         for results_ in self.results_list:
             nth_process = results_["nth_process"]
 
-            process_infos = self.process_infos[nth_process]
-            objective_function_ = process_infos["objective_function"]
-            search_space_ = process_infos["search_space"]
+            opt = self.opt_pros[nth_process]
+            objective_function_ = opt.objective_function
+            search_space_ = opt.search_space
             params = list(search_space_.keys())
 
             if objective_function_ != objective_function:

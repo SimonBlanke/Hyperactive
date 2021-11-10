@@ -111,9 +111,9 @@ def test_joblib_1():
         n_jobs = len(search_processes_paras)
 
         jobs = [
-            delayed(process_func)(**info_dict) for info_dict in search_processes_paras
+            delayed(process_func)(*info_dict) for info_dict in search_processes_paras
         ]
-        results = Parallel(n_jobs=n_jobs, **kwargs)(jobs)
+        results = Parallel(n_jobs=n_jobs, *kwargs)(jobs)
 
         return results
 

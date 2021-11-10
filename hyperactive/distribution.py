@@ -6,23 +6,21 @@ import pathos.multiprocessing as mp
 from joblib import Parallel, delayed
 
 
-def single_process(process_func, search_processes_infos):
-    results = [process_func(**info) for info in search_processes_infos]
+def single_process(process_func, process_infos):
+    results = [process_func(*info) for info in process_infos]
 
     return results
 
 
-def multiprocessing_wrapper(
-    process_func, search_processes_paras, n_processes, **kwargs
-):
-    pool = mp.Pool(n_processes, **kwargs)
-    results = pool.map(process_func, search_processes_paras)
+def multiprocessing_wrapper(process_func, process_infos, n_processes):
+    pool = mp.Pool(n_processes)
+    results = pool.map(process_func, process_infos)
 
     return results
 
 
-def joblib_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
-    jobs = [delayed(process_func)(**info_dict) for info_dict in search_processes_paras]
-    results = Parallel(n_jobs=n_processes, **kwargs)(jobs)
+def joblib_wrapper(process_func, process_infos, n_processes):
+    jobs = [delayed(process_func)(*info_dict) for info_dict in process_infos]
+    results = Parallel(n_jobs=n_processes)(jobs)
 
     return results
