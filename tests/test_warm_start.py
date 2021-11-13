@@ -123,3 +123,40 @@ def test_warm_start_0(search_space):
         initialize={"warm_start": [search_data0]},
     )
     hyper1.run()
+
+
+@pytest.mark.parametrize("search_space", search_space_list)
+def test_warm_start_1(search_space):
+    hyper0 = Hyperactive()
+    hyper0.add_search(objective_function, search_space, n_iter=20, n_jobs=2)
+    hyper0.run()
+
+    search_data0 = hyper0.best_para(objective_function)
+
+    hyper1 = Hyperactive()
+    hyper1.add_search(
+        objective_function,
+        search_space,
+        n_iter=20,
+        initialize={"warm_start": [search_data0]},
+    )
+    hyper1.run()
+
+
+@pytest.mark.parametrize("search_space", search_space_list)
+def test_warm_start_2(search_space):
+    hyper0 = Hyperactive()
+    hyper0.add_search(objective_function, search_space, n_iter=20, n_jobs=2)
+    hyper0.run()
+
+    search_data0 = hyper0.best_para(objective_function)
+
+    hyper1 = Hyperactive()
+    hyper1.add_search(
+        objective_function,
+        search_space,
+        n_iter=20,
+        initialize={"warm_start": [search_data0]},
+        n_jobs=3,
+    )
+    hyper1.run()
