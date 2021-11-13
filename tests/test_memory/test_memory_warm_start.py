@@ -150,4 +150,4 @@ def test_memory_warm_start_1(search_space):
     print("\n d_time_1 ", d_time_1)
     print("\n d_time_2 ", d_time_2)
 
-    assert d_time_1 * 0.5 > d_time_2
+    assert d_time_1 * 0.75 > d_time_2
