@@ -2,15 +2,33 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numbers
 import numpy as np
 import pandas as pd
 
 
-class Converter:
-    def __init__(self, search_space: dict) -> None:
+class HyperGradientTrafo:
+    def __init__(self, search_space):
         self.search_space = search_space
-        self.para_names = list(self.search_space.keys())
+        self.paras_n = list(self.search_space.keys())
+
+        self.search_space_values = list(self.search_space.values())
+
+        search_space_positions = {}
+        for key in search_space.keys():
+            search_space_positions[key] = np.array(range(len(search_space[key])))
+        self.search_space_positions = search_space_positions
+
+        self.data_types = {}
+        for para in search_space.keys():
+            space_dim = np.array(list(self.search_space[para]))
+            try:
+                np.subtract(space_dim, space_dim)
+            except:
+                _type_ = "object"
+            else:
+                _type_ = "number"
+
+            self.data_types[para] = _type_
 
     def value2position(self, value: list) -> list:
         position = []
@@ -22,10 +40,17 @@ class Converter:
 
     def value2para(self, value: list) -> dict:
         para = {}
-        for key, p_ in zip(self.para_names, value):
+        for key, p_ in zip(self.paras_n, value):
             para[key] = p_
 
         return para
+
+    def para2value(self, para: dict) -> list:
+        value = []
+        for para_name in self.paras_n:
+            value.append(para[para_name])
+
+        return value
 
     def position2value(self, position):
         value = []
@@ -35,87 +60,27 @@ class Converter:
 
         return value
 
-    """
-    def positions2values(self, positions: list) -> list:
-        values = []
-        positions_np = np.array(positions)
+    def trafo_para(self, para_hyper):
+        para_gfo = {}
+        for para in self.paras_n:
+            value_hyper = para_hyper[para]
+            space_dim = list(self.search_space[para])
 
-        for n, space_dim in enumerate(self.search_space_values):
-            pos_1d = positions_np[:, n]
-            value_ = np.take(space_dim, pos_1d, axis=0)
-            values.append(value_)
-
-        values = [list(t) for t in zip(*values)]
-        return values
-    """
-
-    def para2value(self, para: dict) -> list:
-        value = []
-        for para_name in self.para_names:
-            value.append(para[para_name])
-
-        return value
-
-    """
-    def _memory2dataframe(self, memory_dict: dict) -> pd.DataFrame:
-        positions = [np.array(pos).astype(int) for pos in list(memory_dict.keys())]
-        scores = list(memory_dict.values())
-
-        memory_positions = pd.DataFrame(positions, columns=self.para_names)
-        memory_positions["score"] = scores
-
-        return memory_positions
-    """
-
-
-class HyperGradientTrafo(Converter):
-    def __init__(self, search_space):
-        super().__init__(search_space)
-        self.search_space_values = list(self.search_space.values())
-
-        search_space_positions = {}
-        for key in search_space.keys():
-            search_space_positions[key] = np.array(range(len(search_space[key])))
-        self.search_space_positions = search_space_positions
-
-        """
-        self.search_space_ltm = {}
-        self.data_types = {}
-        for para_name in search_space.keys():
-            value0 = search_space[para_name][0]
-
-            if isinstance(value0, numbers.Number):
-                type0 = "number"
-                search_dim_ltm = search_space[para_name]
-            elif isinstance(value0, str):
-                type0 = "string"
-                search_dim_ltm = search_space[para_name]
-
-            elif callable(value0):
-                type0 = "function"
-
-                search_dim_ltm = []
-                for func in list(search_space[para_name]):
-                    search_dim_ltm.append(func.__name__)
-
+            if self.data_types[para] == "number":
+                value_gfo = np.abs(value_hyper - np.array(space_dim)).argmin()
             else:
-                type0 = None
-                search_dim_ltm = search_space[para_name]
+                value_gfo = space_dim.index(value_hyper)
 
-            self.data_types[para_name] = type0
-            self.search_space_ltm[para_name] = search_dim_ltm
-        """
+            para_gfo[para] = value_gfo
+        return para_gfo
 
     def trafo_initialize(self, initialize):
         if "warm_start" in list(initialize.keys()):
-            warm_start = initialize["warm_start"]
+            warm_start_l = initialize["warm_start"]
             warm_start_gfo = []
-            for warm_start_ in warm_start:
-                value = self.para2value(warm_start_)
-                position = self.value2position(value)
-                pos_para = self.value2para(position)
-
-                warm_start_gfo.append(pos_para)
+            for warm_start in warm_start_l:
+                para_gfo = self.trafo_para(warm_start)
+                warm_start_gfo.append(para_gfo)
 
             initialize["warm_start"] = warm_start_gfo
 
@@ -142,17 +107,12 @@ class HyperGradientTrafo(Converter):
             return results
 
         df_positions_dict = {}
-        for para_name in self.para_names:
+        for para_name in self.paras_n:
             result_dim_values = list(results[para_name].values)
             search_dim = self.search_space[para_name]
 
             # if self.data_types[para_name] == "function":
             #     result_dim_values = [value.__name__ for value in result_dim_values]
-
-            # print("\n para_name", para_name)
-
-            # print(" result_dim_values", result_dim_values)
-            # print(" search_dim", search_dim)
 
             list1_positions = self.get_list_positions(result_dim_values, search_dim)
 

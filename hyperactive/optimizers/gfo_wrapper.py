@@ -56,11 +56,11 @@ class TrafoClass:
         self.results = self._positions2results(self.positions)
 
         results_dd = self._optimizer.results.drop_duplicates(
-            subset=self.trafo.para_names, keep="first"
+            subset=self.trafo.paras_n, keep="first"
         )
-        self.memory_values_df = results_dd[
-            self.trafo.para_names + ["score"]
-        ].reset_index(drop=True)
+        self.memory_values_df = results_dd[self.trafo.paras_n + ["score"]].reset_index(
+            drop=True
+        )
 
 
 class _BaseOptimizer_(TrafoClass):
