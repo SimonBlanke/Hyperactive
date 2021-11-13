@@ -106,6 +106,8 @@ class HyperGradientTrafo:
         if results is None:
             return results
 
+        results.reset_index(inplace=True)
+
         df_positions_dict = {}
         for para_name in self.paras_n:
             result_dim_values = list(results[para_name].values)
@@ -121,6 +123,7 @@ class HyperGradientTrafo:
             df_positions_dict[para_name] = list1_positions
 
         results_new = pd.DataFrame(df_positions_dict)
+
         results_new["score"] = results["score"]
         results_new.dropna(how="any", inplace=True)
 
