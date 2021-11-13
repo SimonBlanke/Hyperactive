@@ -12,7 +12,7 @@ finp = Parameters()
 
 
 def ret_df():
-    return df
+    pass
 
 
 def func_minl(opts):
