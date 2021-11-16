@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import multiprocessing as mp
+import pathos.multiprocessing as mp
 from joblib import Parallel, delayed
 
 

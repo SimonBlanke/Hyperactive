@@ -11,6 +11,7 @@ from .run_search import run_search
 from .print_info import print_info
 
 from .hyperactive_results import HyperactiveResults
+from .search_space import SearchSpace
 
 
 class Hyperactive(HyperactiveResults):
@@ -100,20 +101,6 @@ class Hyperactive(HyperactiveResults):
             search_id = objective_function.__name__
         return search_id
 
-    @staticmethod
-    def check_list(search_space):
-        for key in search_space.keys():
-            search_dim = search_space[key]
-
-            error_msg = (
-                "Value in '{}' of search space dictionary must be of type list".format(
-                    key
-                )
-            )
-            if not isinstance(search_dim, list):
-                print("Warning", error_msg)
-                # raise ValueError(error_msg)
-
     def _init_progress_board(self, progress_board, search_id, search_space):
         if progress_board:
             data_c = progress_board.init_paths(search_id, search_space)
@@ -145,7 +132,7 @@ class Hyperactive(HyperactiveResults):
             progress_board, search_id, search_space
         )
 
-        self.check_list(search_space)
+        SearchSpace(search_space)
 
         optimizer.init(search_space, initialize, progress_collector)
 
