@@ -35,15 +35,15 @@ class Hyperactive(HyperactiveResults):
         self.progress_boards = {}
 
     def _create_shared_memory(self, memory, objective_function, optimizer):
-        if memory is not False:
+        if memory == "share":
             if len(self.process_infos) == 0:
                 manager = mp.Manager()
                 memory = manager.dict()
 
             for process_info in self.process_infos.values():
                 same_obj_func = process_info["objective_function"] == objective_function
-                same_ss_length = len(process_info["optimizer"].search_space) == len(
-                    optimizer.search_space
+                same_ss_length = len(process_info["optimizer"].s_space()) == len(
+                    optimizer.s_space()
                 )
 
                 if same_obj_func and same_ss_length:
@@ -132,9 +132,8 @@ class Hyperactive(HyperactiveResults):
             progress_board, search_id, search_space
         )
 
-        SearchSpace(search_space)
-
-        optimizer.init(search_space, initialize, progress_collector)
+        s_space = SearchSpace(search_space)
+        optimizer.init(s_space, initialize, progress_collector)
 
         self._add_search_processes(
             random_state,

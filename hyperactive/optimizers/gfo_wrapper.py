@@ -25,7 +25,7 @@ class TrafoClass:
         results_dict = {}
 
         for para_name in self.conv.para_names:
-            values_list = self.search_space[para_name]
+            values_list = self.s_space[para_name]
             pos_ = positions[para_name].values
             values_ = [values_list[idx] for idx in pos_]
             results_dict[para_name] = values_
@@ -56,11 +56,11 @@ class TrafoClass:
         self.results = self._positions2results(self.positions)
 
         results_dd = self._optimizer.results.drop_duplicates(
-            subset=self.trafo.paras_n, keep="first"
+            subset=self.s_space.dim_keys, keep="first"
         )
-        self.memory_values_df = results_dd[self.trafo.paras_n + ["score"]].reset_index(
-            drop=True
-        )
+        self.memory_values_df = results_dd[
+            self.s_space.dim_keys + ["score"]
+        ].reset_index(drop=True)
 
 
 class _BaseOptimizer_(TrafoClass):
@@ -68,21 +68,23 @@ class _BaseOptimizer_(TrafoClass):
         super().__init__()
         self.opt_params = opt_params
 
-    def init(self, search_space, initialize, progress_collector):
-        self.search_space = search_space
+    def init(self, s_space, initialize, progress_collector):
+        self.s_space = s_space
         self.initialize = initialize
         self.progress_collector = progress_collector
 
-        self.trafo = HyperGradientTrafo(search_space)
+        self.trafo = HyperGradientTrafo(s_space)
 
         initialize = self.trafo.trafo_initialize(initialize)
-        search_space_positions = self.trafo.search_space_positions
+        search_space_positions = s_space.positions
 
         # trafo warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
             self.opt_params["warm_start_smbo"] = self.trafo.trafo_memory_warm_start(
                 self.opt_params["warm_start_smbo"]
             )
+
+        print("\n initialize \n", initialize)
 
         self._optimizer = self._OptimizerClass(
             search_space_positions, initialize, **self.opt_params
@@ -117,7 +119,7 @@ class _BaseOptimizer_(TrafoClass):
         memory_warm_start = self._convert_args2gfo(memory_warm_start)
 
         gfo_objective_function = gfo_wrapper_model(
-            self.search_space, self.progress_collector
+            self.s_space(), self.progress_collector
         )
 
         self._optimizer.search(
