@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 
 from ._parametrize import optimizers
+from hyperactive.search_space import SearchSpace
 
 
 def objective_function(opt):
@@ -63,10 +64,12 @@ def test_best_results_0(Optimizer, search_space, objective):
     search_space = search_space
     objective_function = objective
 
+    s_space = SearchSpace(search_space)
+
     initialize = {"vertices": 2}
 
     opt = Optimizer()
-    opt.init(search_space, initialize, None)
+    opt.init(s_space, initialize, None)
     opt.search(objective_function, n_iter=10)
 
     assert opt.best_score == objective_function(opt.best_para)
