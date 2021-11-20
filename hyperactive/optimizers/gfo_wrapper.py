@@ -84,8 +84,6 @@ class _BaseOptimizer_(TrafoClass):
                 self.opt_params["warm_start_smbo"]
             )
 
-        print("\n initialize \n", initialize)
-
         self._optimizer = self._OptimizerClass(
             search_space_positions, initialize, **self.opt_params
         )
