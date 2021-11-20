@@ -99,11 +99,11 @@ class SearchSpace(DictClass):
             is_func = self.is_function(dim_value)
 
             if not is_str and not is_func:
-                err_msg = "\n The value '{}' in the search space must be number, string or function \n".format(
+                msg = "\n The value '{}' in the search space must be number, string or function \n".format(
                     dim_value
                 )
-                print("Warning: ", err_msg)
-                # raise ValueError(err_msg)
+                print("Warning: ", msg)
+                # raise ValueError(msg)
 
     def check_non_num_values(self):
         for dim_key in self.dim_keys:
@@ -111,11 +111,12 @@ class SearchSpace(DictClass):
 
             try:
                 np.subtract(dim_values, dim_values)
-
-                if dim_values.ndim != 1:
-                    msg = "Array in '{}' must be one dimensional".format(dim_key)
-                    print("Warning: ", msg)
-                    raise ValueError
-
             except:
                 self._string_or_object(dim_values)
+            else:
+                if dim_values.ndim != 1:
+                    msg = "Array-like object in '{}' must be one dimensional".format(
+                        dim_key
+                    )
+                    print("Warning: ", msg)
+                    # raise ValueError(msg)
