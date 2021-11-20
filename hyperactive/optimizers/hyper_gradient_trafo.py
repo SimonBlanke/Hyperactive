@@ -95,18 +95,15 @@ class HyperGradientTrafo:
         list_positions = []
 
         for value2 in list1_values:
-            pos_appended = False
-            for value1 in search_dim:
-
-                if value1 == value2:
-                    list_positions.append(search_dim.index(value1))
-                    pos_appended = True
-                    break
-
-            if not pos_appended:
-                list_positions.append(None)
+            try:
+                list_positions.append(search_dim.index(value2))
+            except:
+                raise ValueError
 
         return list_positions
+
+    def values2positions(self, values, search_dim):
+        return np.array(search_dim).searchsorted(values)
 
     def trafo_memory_warm_start(self, results):
         if results is None:
@@ -131,7 +128,9 @@ class HyperGradientTrafo:
 
                 result_dim_values = result_dim_values_tmp
 
-            list1_positions = self.get_list_positions(result_dim_values, search_dim)
+                list1_positions = self.get_list_positions(result_dim_values, search_dim)
+            else:
+                list1_positions = self.values2positions(result_dim_values, search_dim)
 
             # remove None
             # list1_positions_ = [x for x in list1_positions if x is not None]
