@@ -41,7 +41,10 @@ class Hyperactive(HyperactiveResults):
                 memory = manager.dict()
 
             for process_info in self.process_infos.values():
-                same_obj_func = process_info["objective_function"] == objective_function
+                same_obj_func = (
+                    process_info["objective_function"].__name__
+                    == objective_function.__name__
+                )
                 same_ss_length = len(process_info["optimizer"].s_space()) == len(
                     optimizer.s_space()
                 )

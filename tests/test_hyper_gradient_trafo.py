@@ -115,7 +115,7 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
     search_space = search_space
     memory_warm_start = memory_warm_start
 
-    c_time_0 = time.time()
+    c_time_0 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(
         objective_function_1,
@@ -125,9 +125,9 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
         initialize={"random": 1},
     )
     hyper.run()
-    d_time_0 = time.time() - c_time_0
+    d_time_0 = time.perf_counter() - c_time_0
 
-    c_time_1 = time.time()
+    c_time_1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(
         objective_function_1,
@@ -138,7 +138,7 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
         memory_warm_start=memory_warm_start,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time_1
+    d_time_1 = time.perf_counter() - c_time_1
 
     assert d_time_1 < d_time_0 * 0.5
 
@@ -187,7 +187,7 @@ def test_trafo_2(random_state, search_space, memory_warm_start):
     search_space = search_space
     memory_warm_start = memory_warm_start
 
-    c_time_0 = time.time()
+    c_time_0 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(
         objective_function_1,
@@ -197,9 +197,9 @@ def test_trafo_2(random_state, search_space, memory_warm_start):
         initialize={"random": 1},
     )
     hyper.run()
-    d_time_0 = time.time() - c_time_0
+    d_time_0 = time.perf_counter() - c_time_0
 
-    c_time_1 = time.time()
+    c_time_1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(
         objective_function_1,
@@ -210,7 +210,7 @@ def test_trafo_2(random_state, search_space, memory_warm_start):
         memory_warm_start=memory_warm_start,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time_1
+    d_time_1 = time.perf_counter() - c_time_1
 
     assert not (d_time_1 < d_time_0 * 0.8)
 """

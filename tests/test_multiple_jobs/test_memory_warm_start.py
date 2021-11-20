@@ -218,17 +218,17 @@ def objective_function(opt):
 def test_memory_warm_start_0(search_space):
     n_iter = 1500
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper0 = Hyperactive(distribution="pathos")
     hyper0.add_search(
         objective_function, search_space, n_iter=n_iter, n_jobs=2, memory=True
     )
     hyper0.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     search_data0 = hyper0.results(objective_function)
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper1 = Hyperactive()
     hyper1.add_search(
         objective_function,
@@ -238,7 +238,7 @@ def test_memory_warm_start_0(search_space):
         memory=True,
     )
     hyper1.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
 
     d_time_frac = d_time_1 / d_time_2
 
@@ -252,15 +252,15 @@ def test_memory_warm_start_0(search_space):
 def test_memory_warm_start_1(search_space):
     n_iter = 1500
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper0 = Hyperactive()
     hyper0.add_search(objective_function, search_space, n_iter=n_iter, memory=True)
     hyper0.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     search_data0 = hyper0.results(objective_function)
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper1 = Hyperactive(distribution="pathos")
     hyper1.add_search(
         objective_function,
@@ -271,7 +271,7 @@ def test_memory_warm_start_1(search_space):
         memory_warm_start=search_data0,
     )
     hyper1.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
 
     d_time_frac = d_time_1 / d_time_2
 
@@ -285,17 +285,17 @@ def test_memory_warm_start_1(search_space):
 def test_memory_warm_start_1(search_space):
     n_iter = 1500
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper0 = Hyperactive(distribution="pathos")
     hyper0.add_search(
         objective_function, search_space, n_iter=n_iter, n_jobs=2, memory=True
     )
     hyper0.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     search_data0 = hyper0.results(objective_function)
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper1 = Hyperactive(distribution="pathos")
     hyper1.add_search(
         objective_function,
@@ -306,7 +306,7 @@ def test_memory_warm_start_1(search_space):
         memory_warm_start=search_data0,
     )
     hyper1.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
 
     d_time_frac = d_time_1 / d_time_2
 

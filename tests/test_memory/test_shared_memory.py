@@ -36,7 +36,7 @@ search_space = {
 
 
 def test_shared_memory_0():
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -46,10 +46,10 @@ def test_shared_memory_0():
         memory="share",
     )
     hyper.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     n_jobs = 4
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -59,7 +59,7 @@ def test_shared_memory_0():
         memory="share",
     )
     hyper.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
     d_time_2 = d_time_2 / n_jobs
 
     print("\n d_time_1 \n", d_time_1)
@@ -67,11 +67,12 @@ def test_shared_memory_0():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 1.5
+    assert d_time > 1.4
+    assert False
 
 
 def test_shared_memory_1():
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -81,10 +82,10 @@ def test_shared_memory_1():
         memory=True,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     n_jobs = 4
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -94,7 +95,7 @@ def test_shared_memory_1():
         memory=True,
     )
     hyper.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
     d_time_2 = d_time_2 / n_jobs
 
     print("\n d_time_1 \n", d_time_1)
@@ -102,12 +103,12 @@ def test_shared_memory_1():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 0.9
-    assert d_time < 1.1
+    assert d_time > 0.85
+    assert d_time < 1.15
 
 
 def test_shared_memory_2():
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -116,9 +117,9 @@ def test_shared_memory_2():
         n_jobs=1,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -149,7 +150,7 @@ def test_shared_memory_2():
         memory="share",
     )
     hyper.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
     d_time_2 = d_time_2 / 4
 
     print("\n d_time_1 \n", d_time_1)
@@ -157,11 +158,12 @@ def test_shared_memory_2():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 1.5
+    assert d_time > 1.2
+    assert False
 
 
 def test_shared_memory_3():
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -170,9 +172,9 @@ def test_shared_memory_3():
         n_jobs=1,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -203,7 +205,7 @@ def test_shared_memory_3():
         memory=True,
     )
     hyper.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
     d_time_2 = d_time_2 / 4
 
     print("\n d_time_1 \n", d_time_1)
@@ -211,12 +213,12 @@ def test_shared_memory_3():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 0.9
-    assert d_time < 1.1
+    assert d_time > 0.85
+    assert d_time < 1.15
 
 
 def test_shared_memory_warm_start_0():
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -225,11 +227,11 @@ def test_shared_memory_warm_start_0():
         n_jobs=1,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     search_data0 = hyper.results(model)
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -240,7 +242,7 @@ def test_shared_memory_warm_start_0():
         memory="share",
     )
     hyper.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
     d_time_2 = d_time_2 / 4
 
     print("\n d_time_1 \n", d_time_1)
@@ -248,11 +250,11 @@ def test_shared_memory_warm_start_0():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 1.5
+    assert d_time > 1.4
 
 
 def test_shared_memory_warm_start_1():
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -261,11 +263,11 @@ def test_shared_memory_warm_start_1():
         n_jobs=1,
     )
     hyper.run()
-    d_time_1 = time.time() - c_time
+    d_time_1 = time.perf_counter() - c_time
 
     search_data0 = hyper.results(model)
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
     hyper.add_search(
         model,
@@ -276,7 +278,7 @@ def test_shared_memory_warm_start_1():
         memory=True,
     )
     hyper.run()
-    d_time_2 = time.time() - c_time
+    d_time_2 = time.perf_counter() - c_time
     d_time_2 = d_time_2 / 4
 
     print("\n d_time_1 \n", d_time_1)
@@ -284,4 +286,4 @@ def test_shared_memory_warm_start_1():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 2.5
+    assert d_time > 2.3
