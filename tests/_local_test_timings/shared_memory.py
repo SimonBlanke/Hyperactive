@@ -68,7 +68,6 @@ def test_shared_memory_0():
     d_time = d_time_1 / d_time_2
 
     assert d_time > 1.4
-    assert False
 
 
 def test_shared_memory_1():
@@ -159,7 +158,6 @@ def test_shared_memory_2():
     d_time = d_time_1 / d_time_2
 
     assert d_time > 1.2
-    assert False
 
 
 def test_shared_memory_3():
