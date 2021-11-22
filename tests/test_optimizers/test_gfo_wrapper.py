@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 
 from ._parametrize import optimizers
+from hyperactive.search_space import SearchSpace
 
 
 def objective_function(opt):
@@ -64,6 +65,8 @@ def test_best_results_0(Optimizer, search_space, objective):
     objective_function = objective
 
     n_iter = 10
+    s_space = SearchSpace(search_space)
+
     initialize = {"vertices": 2}
     max_score = None
     early_stopping = None
@@ -73,9 +76,10 @@ def test_best_results_0(Optimizer, search_space, objective):
     verbosity = ["progress_bar", "print_results", "print_times"]
 
     opt = Optimizer()
+
     opt.setup_search(
         objective_function,
-        search_space,
+        s_space,
         n_iter,
         initialize,
         max_score,

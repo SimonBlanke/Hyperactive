@@ -25,7 +25,7 @@ class TrafoClass:
         results_dict = {}
 
         for para_name in self.conv.para_names:
-            values_list = self.search_space[para_name]
+            values_list = self.s_space[para_name]
             pos_ = positions[para_name].values
             values_ = [values_list[idx] for idx in pos_]
             results_dict[para_name] = values_
@@ -56,10 +56,10 @@ class TrafoClass:
         self.search_data = self._positions2results(self.positions)
 
         results_dd = self._optimizer.search_data.drop_duplicates(
-            subset=self.trafo.para_names, keep="first"
+            subset=self.s_space.dim_keys, keep="first"
         )
         self.memory_values_df = results_dd[
-            self.trafo.para_names + ["score"]
+            self.s_space.dim_keys + ["score"]
         ].reset_index(drop=True)
 
 
@@ -71,7 +71,7 @@ class _BaseOptimizer_(TrafoClass):
     def setup_search(
         self,
         objective_function,
-        search_space,
+        s_space,
         n_iter,
         initialize,
         max_score,
@@ -82,8 +82,9 @@ class _BaseOptimizer_(TrafoClass):
         verbosity,
     ):
         self.objective_function = objective_function
-        self.search_space = search_space
+        self.s_space = s_space
         self.n_iter = n_iter
+
         self.initialize = initialize
         self.max_score = max_score
         self.early_stopping = early_stopping
@@ -100,10 +101,10 @@ class _BaseOptimizer_(TrafoClass):
     def _setup_process(self, nth_process):
         self.nth_process = nth_process
 
-        self.trafo = HyperGradientTrafo(self.search_space)
+        self.trafo = HyperGradientTrafo(self.s_space)
 
         initialize = self.trafo.trafo_initialize(self.initialize)
-        search_space_positions = self.trafo.search_space_positions
+        search_space_positions = self.s_space.positions
 
         # trafo warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
@@ -130,7 +131,7 @@ class _BaseOptimizer_(TrafoClass):
 
         memory_warm_start = self._convert_args2gfo(self.memory_warm_start)
 
-        gfo_objective_function = gfo_wrapper_model(self.search_space)
+        gfo_objective_function = gfo_wrapper_model(self.s_space())
 
         self._optimizer.search(
             objective_function=gfo_objective_function,

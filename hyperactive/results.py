@@ -27,7 +27,7 @@ class Results:
 
             opt = self.opt_pros[nth_process]
             objective_function_ = opt.objective_function
-            search_space_ = opt.search_space
+            search_space_ = opt.s_space()
             params = list(search_space_.keys())
 
             if objective_function_ != objective_function:

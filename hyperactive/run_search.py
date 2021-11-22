@@ -3,12 +3,11 @@
 # License: MIT License
 
 
-import multiprocessing
-
 from .distribution import (
     single_process,
     joblib_wrapper,
     multiprocessing_wrapper,
+    pathos_wrapper,
 )
 from .process import _process_
 
@@ -20,6 +19,7 @@ def proxy(args):
 dist_dict = {
     "joblib": (joblib_wrapper, _process_),
     "multiprocessing": (multiprocessing_wrapper, proxy),
+    "pathos": (pathos_wrapper, proxy),
 }
 
 

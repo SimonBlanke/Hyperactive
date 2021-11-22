@@ -2,7 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import pathos.multiprocessing as mp
+import multiprocessing as mp
+import pathos.multiprocessing as pmp
 from joblib import Parallel, delayed
 
 
@@ -19,8 +20,15 @@ def multiprocessing_wrapper(process_func, process_infos, n_processes):
     return results
 
 
-def joblib_wrapper(process_func, process_infos, n_processes):
-    jobs = [delayed(process_func)(*info_dict) for info_dict in process_infos]
-    results = Parallel(n_jobs=n_processes)(jobs)
+def pathos_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
+    pool = pmp.Pool(n_processes, **kwargs)
+    results = pool.map(process_func, search_processes_paras)
+
+    return results
+
+
+def joblib_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
+    jobs = [delayed(process_func)(*info_dict) for info_dict in search_processes_paras]
+    results = Parallel(n_jobs=n_processes, **kwargs)(jobs)
 
     return results

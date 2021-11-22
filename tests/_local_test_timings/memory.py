@@ -34,17 +34,17 @@ def test_memory_timeSave_0():
         "min_samples_split": np.arange(2, 20),
     }
 
-    c_time1 = time.time()
+    c_time1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
-    diff_time1 = time.time() - c_time1
+    diff_time1 = time.perf_counter() - c_time1
 
-    c_time2 = time.time()
+    c_time2 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=100, memory=False)
     hyper.run()
-    diff_time2 = time.time() - c_time2
+    diff_time2 = time.perf_counter() - c_time2
 
     assert diff_time1 < diff_time2 * 0.8
 
@@ -64,7 +64,7 @@ def test_memory_timeSave_1():
     results = pd.DataFrame(np.arange(1, 30), columns=["x1"])
     results["score"] = 0
 
-    c_time1 = time.time()
+    c_time1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -73,7 +73,7 @@ def test_memory_timeSave_1():
         memory_warm_start=results,
     )
     hyper.run()
-    diff_time1 = time.time() - c_time1
+    diff_time1 = time.perf_counter() - c_time1
 
     print("diff_time1", diff_time1)
 
@@ -98,13 +98,13 @@ def test_memory_warm_start():
         "min_samples_split": list(np.arange(2, 20)),
     }
 
-    c_time1 = time.time()
+    c_time1 = time.perf_counter()
     hyper0 = Hyperactive()
     hyper0.add_search(objective_function, search_space, n_iter=300)
     hyper0.run()
-    diff_time1 = time.time() - c_time1
+    diff_time1 = time.perf_counter() - c_time1
 
-    c_time2 = time.time()
+    c_time2 = time.perf_counter()
 
     results0 = hyper0.search_data(objective_function)
 
@@ -117,7 +117,7 @@ def test_memory_warm_start():
     )
     hyper1.run()
 
-    diff_time2 = time.time() - c_time2
+    diff_time2 = time.perf_counter() - c_time2
 
     assert diff_time2 < diff_time1 * 0.5
 
@@ -138,17 +138,17 @@ def test_memory_warm_start_manual():
         "n_estimators": list(np.arange(500, 502)),
     }
 
-    c_time_1 = time.time()
+    c_time_1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=1)
     hyper.run()
-    diff_time_1 = time.time() - c_time_1
+    diff_time_1 = time.perf_counter() - c_time_1
 
     memory_warm_start = pd.DataFrame(
         [[500, 0.9], [501, 0.91]], columns=["n_estimators", "score"]
     )
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper0 = Hyperactive()
     hyper0.add_search(
         objective_function,
@@ -157,6 +157,6 @@ def test_memory_warm_start_manual():
         memory_warm_start=memory_warm_start,
     )
     hyper0.run()
-    diff_time_2 = time.time() - c_time
+    diff_time_2 = time.perf_counter() - c_time
 
     assert diff_time_1 * 0.5 > diff_time_2

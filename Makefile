@@ -39,13 +39,15 @@ test_:
 	python -m pytest -x -p no:warnings -rfEX tests/; \
 
 
-test: clean-progress_board test_ clean-progress_board
+test-timings:
+	cd tests/_local_test_timings; \
+		pytest -x *.py -p no:warnings
 
 
-test-local:
-	cd tests/local; \
-		pytest _test_packages.py -p no:warnings; \
-		pytest _test_performance.py -p no:warnings
+test-local: test-timings
+
+test:  test-local test_ 
+
 
 test-examples:
 	cd tests; \

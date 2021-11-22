@@ -68,7 +68,7 @@ def test_max_score_1():
 
     max_score = -9999
 
-    c_time = time.time()
+    c_time = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -78,7 +78,7 @@ def test_max_score_1():
         max_score=max_score,
     )
     hyper.run()
-    diff_time = time.time() - c_time
+    diff_time = time.perf_counter() - c_time
 
     print("\n Results head \n", hyper.search_data(objective_function).head())
     print("\n Results tail \n", hyper.search_data(objective_function).tail())

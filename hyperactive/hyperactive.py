@@ -11,6 +11,7 @@ from .run_search import run_search
 from .print_info import print_info
 
 from .results import Results
+from .search_space import SearchSpace
 
 
 class Hyperactive:
@@ -31,14 +32,18 @@ class Hyperactive:
         self.opt_pros = {}
 
     def _create_shared_memory(self, new_opt):
-        if new_opt.memory is not False:
+        if new_opt.memory == "share":
             if len(self.opt_pros) == 0:
+
                 manager = mp.Manager()
                 new_opt.memory = manager.dict()
 
             for opt in self.opt_pros.values():
-                same_obj_func = opt.objective_function == new_opt.objective_function
-                same_ss_length = len(opt.search_space) == len(new_opt.search_space)
+                same_obj_func = (
+                    opt.objective_function.__name__
+                    == new_opt.objective_function.__name__
+                )
+                same_ss_length = len(opt.s_space()) == len(new_opt.s_space())
 
                 if same_obj_func and same_ss_length:
                     new_opt.memory = opt.memory  # get same manager.dict
@@ -92,10 +97,11 @@ class Hyperactive:
 
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
+        s_space = SearchSpace(search_space)
 
         optimizer.setup_search(
             objective_function,
-            search_space,
+            s_space,
             n_iter,
             initialize,
             max_score,
