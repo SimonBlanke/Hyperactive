@@ -47,6 +47,7 @@ class SearchSpace(DictClass):
             dim_values = np.array(list(self.search_space[dim_key]))
             try:
                 np.subtract(dim_values, dim_values)
+                np.array(dim_values).searchsorted(dim_values)
             except:
                 _type_ = "object"
             else:
@@ -93,14 +94,14 @@ class SearchSpace(DictClass):
         else:
             return True
 
-    def _string_or_object(self, dim_values):
+    def _string_or_object(self, dim_key, dim_values):
         for dim_value in dim_values:
             is_str = isinstance(dim_value, str)
             is_func = self.is_function(dim_value)
 
             if not is_str and not is_func:
-                msg = "\n The value '{}' in the search space must be number, string or function \n".format(
-                    dim_value
+                msg = "\n The value '{}' of type '{}' in the search space dimension '{}' must be number, string or function \n".format(
+                    dim_value, type(dim_value), dim_key
                 )
                 print("Warning: ", msg)
                 # raise ValueError(msg)
@@ -111,8 +112,9 @@ class SearchSpace(DictClass):
 
             try:
                 np.subtract(dim_values, dim_values)
+                np.array(dim_values).searchsorted(dim_values)
             except:
-                self._string_or_object(dim_values)
+                self._string_or_object(dim_key, dim_values)
             else:
                 if dim_values.ndim != 1:
                     msg = "Array-like object in '{}' must be one dimensional".format(
