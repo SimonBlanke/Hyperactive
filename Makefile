@@ -41,7 +41,7 @@ test_:
 
 test-timings:
 	cd tests/_local_test_timings; \
-		pytest *.py -p no:warnings
+		pytest *.py -x -p no:warnings
 
 
 test-local: test-timings
