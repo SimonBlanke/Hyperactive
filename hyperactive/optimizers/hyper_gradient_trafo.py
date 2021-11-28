@@ -73,8 +73,9 @@ class HyperGradientTrafo:
                 if value_hyper in space_dim:
                     value_gfo = space_dim.index(value_hyper)
                 else:
-                    print("Warning: ", value_hyper, " was not found in ", para)
-                    continue
+                    raise ValueError(
+                        "'{}' was not found in '{}'".format(value_hyper, para)
+                    )
 
             para_gfo[para] = value_gfo
         return para_gfo
