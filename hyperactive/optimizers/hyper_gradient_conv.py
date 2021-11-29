@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 
-class HyperGradientTrafo:
+class HyperGradientConv:
     def __init__(self, s_space):
         self.s_space = s_space
 
@@ -59,7 +59,7 @@ class HyperGradientTrafo:
         except:
             return value
 
-    def trafo_para(self, para_hyper):
+    def conv_para(self, para_hyper):
         para_gfo = {}
         for para in self.s_space.dim_keys:
             value_hyper = para_hyper[para]
@@ -80,12 +80,12 @@ class HyperGradientTrafo:
             para_gfo[para] = value_gfo
         return para_gfo
 
-    def trafo_initialize(self, initialize):
+    def conv_initialize(self, initialize):
         if "warm_start" in list(initialize.keys()):
             warm_start_l = initialize["warm_start"]
             warm_start_gfo = []
             for warm_start in warm_start_l:
-                para_gfo = self.trafo_para(warm_start)
+                para_gfo = self.conv_para(warm_start)
                 warm_start_gfo.append(para_gfo)
 
             initialize["warm_start"] = warm_start_gfo
@@ -106,7 +106,7 @@ class HyperGradientTrafo:
     def values2positions(self, values, search_dim):
         return np.array(search_dim).searchsorted(values)
 
-    def trafo_memory_warm_start(self, results):
+    def conv_memory_warm_start(self, results):
         if results is None:
             return results
 

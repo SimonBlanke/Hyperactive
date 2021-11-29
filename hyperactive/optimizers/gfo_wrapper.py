@@ -9,7 +9,7 @@ import pandas as pd
 
 
 from .objective_function import ObjectiveFunction
-from .hyper_gradient_trafo import HyperGradientTrafo
+from .hyper_gradient_conv import HyperGradientConv
 
 
 class TrafoClass:
@@ -17,7 +17,7 @@ class TrafoClass:
         pass
 
     def _convert_args2gfo(self, memory_warm_start):
-        memory_warm_start = self.trafo.trafo_memory_warm_start(memory_warm_start)
+        memory_warm_start = self.hg_conv.conv_memory_warm_start(memory_warm_start)
 
         return memory_warm_start
 
@@ -42,9 +42,9 @@ class TrafoClass:
         self.iter_time = np.array(self._optimizer.iter_times).sum()
 
         if self._optimizer.best_para is not None:
-            value = self.trafo.para2value(self._optimizer.best_para)
-            position = self.trafo.position2value(value)
-            best_para = self.trafo.value2para(position)
+            value = self.hg_conv.para2value(self._optimizer.best_para)
+            position = self.hg_conv.position2value(value)
+            best_para = self.hg_conv.value2para(position)
 
             self.best_para = best_para
         else:
@@ -101,14 +101,14 @@ class _BaseOptimizer_(TrafoClass):
     def _setup_process(self, nth_process):
         self.nth_process = nth_process
 
-        self.trafo = HyperGradientTrafo(self.s_space)
+        self.hg_conv = HyperGradientConv(self.s_space)
 
-        initialize = self.trafo.trafo_initialize(self.initialize)
+        initialize = self.hg_conv.conv_initialize(self.initialize)
         search_space_positions = self.s_space.positions
 
-        # trafo warm start for smbo from values into positions
+        # conv warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = self.trafo.trafo_memory_warm_start(
+            self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
                 self.opt_params["warm_start_smbo"]
             )
 
