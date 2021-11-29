@@ -9,7 +9,7 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": np.arange(-100, 101, 1),
+    "x1": list(np.arange(-100, 101, 1)),
 }
 
 

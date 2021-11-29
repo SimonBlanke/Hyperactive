@@ -8,8 +8,8 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": np.arange(-1000, 1000, 0.1),
-    "x2": np.arange(-1000, 1000, 0.1),
+    "x1": list(np.arange(-1000, 1000, 0.1)),
+    "x2": list(np.arange(-1000, 1000, 0.1)),
 }
 
 

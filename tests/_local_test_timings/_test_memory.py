@@ -31,7 +31,7 @@ def test_memory_timeSave_0():
         return scores.mean()
 
     search_space = {
-        "min_samples_split": np.arange(2, 20),
+        "min_samples_split": list(range(2, 20)),
     }
 
     c_time1 = time.perf_counter()

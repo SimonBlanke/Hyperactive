@@ -17,7 +17,7 @@ def objective_function(para):
 
 
 search_space = {
-    "x1": np.arange(0, 100000, 0.1),
+    "x1": list(np.arange(0, 100000, 0.1)),
 }
 
 
@@ -27,7 +27,7 @@ def test_max_score_0():
         return score
 
     search_space = {
-        "x1": np.arange(0, 100, 0.1),
+        "x1": list(np.arange(0, 100, 0.1)),
     }
 
     max_score = -9999
@@ -63,7 +63,7 @@ def test_max_score_1():
         return score
 
     search_space = {
-        "x1": np.arange(0, 100, 0.1),
+        "x1": list(np.arange(0, 100, 0.1)),
     }
 
     max_score = -9999

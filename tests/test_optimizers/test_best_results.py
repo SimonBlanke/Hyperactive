@@ -21,17 +21,17 @@ def objective_function_p5(opt):
     return score
 
 
-search_space_0 = {"x1": np.arange(-100, 101, 1)}
-search_space_1 = {"x1": np.arange(0, 101, 1)}
-search_space_2 = {"x1": np.arange(-100, 1, 1)}
+search_space_0 = {"x1": list(np.arange(-100, 101, 1))}
+search_space_1 = {"x1": list(np.arange(0, 101, 1))}
+search_space_2 = {"x1": list(np.arange(-100, 1, 1))}
 
-search_space_3 = {"x1": np.arange(-10, 11, 0.1)}
-search_space_4 = {"x1": np.arange(0, 11, 0.1)}
-search_space_5 = {"x1": np.arange(-10, 1, 0.1)}
+search_space_3 = {"x1": list(np.arange(-10, 11, 0.1))}
+search_space_4 = {"x1": list(np.arange(0, 11, 0.1))}
+search_space_5 = {"x1": list(np.arange(-10, 1, 0.1))}
 
-search_space_6 = {"x1": np.arange(-0.0000000003, 0.0000000003, 0.0000000001)}
-search_space_7 = {"x1": np.arange(0, 0.0000000003, 0.0000000001)}
-search_space_8 = {"x1": np.arange(-0.0000000003, 0, 0.0000000001)}
+search_space_6 = {"x1": list(np.arange(-0.0000000003, 0.0000000003, 0.0000000001))}
+search_space_7 = {"x1": list(np.arange(0, 0.0000000003, 0.0000000001))}
+search_space_8 = {"x1": list(np.arange(-0.0000000003, 0, 0.0000000001))}
 
 objective_para = (
     "objective",

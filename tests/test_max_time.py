@@ -17,7 +17,7 @@ def objective_function(para):
 
 
 search_space = {
-    "x1": np.arange(0, 100000, 0.1),
+    "x1": list(np.arange(0, 100000, 0.1)),
 }
 
 

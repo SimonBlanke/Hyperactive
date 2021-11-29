@@ -143,13 +143,22 @@ def test_search_space_5():
         def __init__(self):
             pass
 
+    def class_f1():
+        return class1
+
+    def class_f2():
+        return class2
+
+    def class_f3():
+        return class3
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
 
     search_space = {
         "x1": list(range(0, 100, 1)),
-        "class1": [class1(), class2(), class3()],
+        "class1": [class_f1, class_f2, class_f3],
     }
 
     hyper = Hyperactive()
@@ -169,9 +178,15 @@ def test_search_space_6():
         score = -opt["x1"] * opt["x1"]
         return score
 
+    def list_f1():
+        return [0, 1]
+
+    def list_f2():
+        return [1, 0]
+
     search_space = {
         "x1": list(range(0, 100, 1)),
-        "list1": [[1, 1, 1], [1, 2, 1], [1, 1, 2]],
+        "list1": [list_f1, list_f2],
     }
 
     hyper = Hyperactive()

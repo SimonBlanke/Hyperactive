@@ -10,7 +10,7 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": np.arange(0, 100, 1),
+    "x1": list(np.arange(0, 100, 1)),
 }
 
 
@@ -83,7 +83,7 @@ def test_attributes_results_6():
         return score
 
     search_space = {
-        "x1": np.arange(0, 10, 1),
+        "x1": list(np.arange(0, 10, 1)),
     }
 
     hyper = Hyperactive()

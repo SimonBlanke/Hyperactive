@@ -8,7 +8,7 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": np.arange(-100, 101, 1),
+    "x1": list(np.arange(-100, 101, 1)),
 }
 
 
@@ -21,7 +21,10 @@ def test_initialize_warm_start_0():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=1, initialize=initialize,
+        objective_function,
+        search_space,
+        n_iter=1,
+        initialize=initialize,
     )
     hyper.run()
 
@@ -30,7 +33,7 @@ def test_initialize_warm_start_0():
 
 def test_initialize_warm_start_1():
     search_space = {
-        "x1": np.arange(-10, 10, 1),
+        "x1": list(np.arange(-10, 10, 1)),
     }
     init = {
         "x1": -10,
@@ -40,7 +43,10 @@ def test_initialize_warm_start_1():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=1, initialize=initialize,
+        objective_function,
+        search_space,
+        n_iter=1,
+        initialize=initialize,
     )
     hyper.run()
 
@@ -52,7 +58,10 @@ def test_initialize_vertices():
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=2, initialize=initialize,
+        objective_function,
+        search_space,
+        n_iter=2,
+        initialize=initialize,
     )
     hyper.run()
 
@@ -61,13 +70,16 @@ def test_initialize_vertices():
 
 def test_initialize_grid_0():
     search_space = {
-        "x1": np.arange(-1, 2, 1),
+        "x1": list(np.arange(-1, 2, 1)),
     }
     initialize = {"grid": 1}
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=1, initialize=initialize,
+        objective_function,
+        search_space,
+        n_iter=1,
+        initialize=initialize,
     )
     hyper.run()
 
@@ -76,14 +88,17 @@ def test_initialize_grid_0():
 
 def test_initialize_grid_1():
     search_space = {
-        "x1": np.arange(-2, 3, 1),
+        "x1": list(np.arange(-2, 3, 1)),
     }
 
     initialize = {"grid": 1}
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=1, initialize=initialize,
+        objective_function,
+        search_space,
+        n_iter=1,
+        initialize=initialize,
     )
     hyper.run()
 
@@ -92,14 +107,16 @@ def test_initialize_grid_1():
 
 def test_initialize_all_0():
     search_space = {
-        "x1": np.arange(-2, 3, 1),
+        "x1": list(np.arange(-2, 3, 1)),
     }
 
     initialize = {"grid": 100, "vertices": 100, "random": 100}
 
     hyper = Hyperactive()
     hyper.add_search(
-        objective_function, search_space, n_iter=300, initialize=initialize,
+        objective_function,
+        search_space,
+        n_iter=300,
+        initialize=initialize,
     )
     hyper.run()
-
