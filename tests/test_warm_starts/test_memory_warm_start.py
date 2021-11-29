@@ -60,7 +60,7 @@ def test_memory_warm_start_0():
     hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
@@ -77,7 +77,7 @@ def test_memory_warm_start_1():
     hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
@@ -94,7 +94,7 @@ def test_memory_warm_start_2():
     hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive(distribution="pathos")
     hyper1.add_search(
@@ -112,7 +112,7 @@ def test_memory_warm_start_3():
     hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive(distribution="pathos")
     hyper1.add_search(

@@ -5,9 +5,12 @@ import pandas as pd
 
 from hyperactive import (
     Hyperactive,
+)
+
+from hyperactive.optimizers import (
     BayesianOptimizer,
     TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer,
+    ForestOptimizer,
 )
 
 
@@ -63,7 +66,7 @@ def objective_function(opt):
 smbo_opts = [
     BayesianOptimizer,
     TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer,
+    ForestOptimizer,
 ]
 
 
@@ -73,7 +76,7 @@ def test_warm_start_smbo_0(smbo_opt):
     hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive()
@@ -87,7 +90,7 @@ def test_warm_start_smbo_1(smbo_opt):
     hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive()
@@ -101,7 +104,7 @@ def test_warm_start_smbo_2(smbo_opt):
     hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive(distribution="pathos")
@@ -117,7 +120,7 @@ def test_warm_start_smbo_3(smbo_opt):
     hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive(distribution="pathos")
