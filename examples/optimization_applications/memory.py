@@ -1,4 +1,4 @@
-'''
+"""
 Hyperactive saves all positions it explores in a memory dictionary. If it encounters 
 this positions again Hyperactive will just read the score from the memory dictionary 
 instead of reevaluating the objective function. If there is a machine-/deep-learning
@@ -9,14 +9,14 @@ of retraining an entire machine learning model.
 You can also pass the search data to the "memory_warm_start"-parameter of the next 
 optimization run. This way the next optimization run has the memory of the 
 previous run, which (again) saves you a lot of computation time.
-'''
+"""
 import time
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 

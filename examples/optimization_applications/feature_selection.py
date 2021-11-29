@@ -11,12 +11,12 @@ where selected. This can be used to select the subset of features in "x_new".
 
 import numpy as np
 import itertools
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsRegressor
 from hyperactive import Hyperactive, EvolutionStrategyOptimizer
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 
@@ -26,7 +26,7 @@ def get_feature_indices(opt):
     for key in opt.keys():
         if "feature" not in key:
             continue
-        if opt[key] is False:
+        if opt[key] == 0:
             continue
 
         nth_feature = int(key.rsplit(".", 1)[1])
@@ -50,22 +50,22 @@ def model(opt):
     return score
 
 
-# each feature is used for training (True) or not used for training (False)
+# each feature is used for training (1) or not used for training (0)
 search_space = {
     "n_neighbors": list(range(1, 100)),
-    "feature.0": [True, False],
-    "feature.1": [True, False],
-    "feature.2": [True, False],
-    "feature.3": [True, False],
-    "feature.4": [True, False],
-    "feature.5": [True, False],
-    "feature.6": [True, False],
-    "feature.7": [True, False],
-    "feature.8": [True, False],
-    "feature.9": [True, False],
-    "feature.10": [True, False],
-    "feature.11": [True, False],
-    "feature.12": [True, False],
+    "feature.0": [1, 0],
+    "feature.1": [1, 0],
+    "feature.2": [1, 0],
+    "feature.3": [1, 0],
+    "feature.4": [1, 0],
+    "feature.5": [1, 0],
+    "feature.6": [1, 0],
+    "feature.7": [1, 0],
+    "feature.8": [1, 0],
+    "feature.9": [1, 0],
+    "feature.10": [1, 0],
+    "feature.11": [1, 0],
+    "feature.12": [1, 0],
 }
 
 

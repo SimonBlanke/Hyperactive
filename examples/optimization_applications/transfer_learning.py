@@ -28,9 +28,7 @@ def cnn(opt):
     nn.add(Dense(10))
     nn.add(Activation("softmax"))
 
-    nn.compile(
-        optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
-    )
+    nn.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
     nn.fit(X_train, y_train, epochs=5, batch_size=256)
 
     _, score = nn.evaluate(x=X_test, y=y_test)

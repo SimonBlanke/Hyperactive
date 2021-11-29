@@ -46,7 +46,7 @@ from hyperactive import Hyperactive
 data = load_breast_cancer()
 X, y = data.data, data.target
 
-# define models that are later used in search space
+# define models that are used in search space
 gbc = GradientBoostingClassifier()
 rfc = RandomForestClassifier()
 etc = ExtraTreesClassifier()
@@ -62,12 +62,12 @@ rc = RidgeClassifier()
 
 
 def stacking(opt):
-    stack_lvl_0 = StackingClassifier(
-        classifiers=opt["lvl_0"], meta_classifier=opt["top"]
-    )
-    stack_lvl_1 = StackingClassifier(
-        classifiers=opt["lvl_1"], meta_classifier=stack_lvl_0
-    )
+    lvl_1_ = opt["lvl_1"]()
+    lvl_0_ = opt["lvl_0"]()
+    top_ = opt["top"]()
+
+    stack_lvl_0 = StackingClassifier(classifiers=lvl_0_, meta_classifier=top_)
+    stack_lvl_1 = StackingClassifier(classifiers=lvl_1_, meta_classifier=stack_lvl_0)
     scores = cross_val_score(stack_lvl_1, X, y, cv=3)
 
     return scores.mean()
@@ -89,10 +89,35 @@ def get_combinations(models, comb_len=2):
                 continue
 
             comb_list.append(list(subset))
-    return comb_list
+
+    comb_list_f = []
+    for comb_ in comb_list:
+
+        def _func_():
+            return comb_
+
+        _func_.__name__ = str(i) + "___" + str(comb_)
+        comb_list_f.append(_func_)
+
+    return comb_list_f
 
 
-top = [lr, dtc, gnb, rc]
+def lr_f():
+    return lr
+
+
+def dtc_f():
+    return dtc
+
+
+def gnb_f():
+    return gnb
+
+
+def rc_f():
+    return rc
+
+
 models_0 = [gpc, dtc, mlp, gnb, knn]
 models_1 = [gbc, rfc, etc]
 
@@ -100,11 +125,17 @@ stack_lvl_0_clfs = get_combinations(models_0)
 stack_lvl_1_clfs = get_combinations(models_1)
 
 
+print("\n stack_lvl_0_clfs \n", stack_lvl_0_clfs, "\n")
+
+
 search_space = {
     "lvl_1": stack_lvl_1_clfs,
     "lvl_0": stack_lvl_0_clfs,
-    "top": top,
+    "top": [lr_f, dtc_f, gnb_f, rc_f],
 }
+
+"""
 hyper = Hyperactive()
-hyper.add_search(stacking, search_space, n_iter=20)
+hyper.add_search(stacking, search_space, n_iter=3)
 hyper.run()
+"""

@@ -11,30 +11,63 @@ from sklearn.ensemble import (
 )
 from sklearn.neural_network import MLPRegressor
 
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 
 def model(opt):
-    gbr = opt["regressor"]()
-    scores = cross_val_score(gbr, X, y, cv=5)
+    model_class = opt["regressor"]()
+    model = model_class()
+    scores = cross_val_score(model, X, y, cv=5)
 
     return scores.mean()
 
 
+def SVR_f():
+    return SVR
+
+
+def KNeighborsRegressor_f():
+    return KNeighborsRegressor
+
+
+def GaussianProcessRegressor_f():
+    return GaussianProcessRegressor
+
+
+def DecisionTreeRegressor_f():
+    return DecisionTreeRegressor
+
+
+def GradientBoostingRegressor_f():
+    return GradientBoostingRegressor
+
+
+def RandomForestRegressor_f():
+    return RandomForestRegressor
+
+
+def ExtraTreesRegressor_f():
+    return ExtraTreesRegressor
+
+
+def MLPRegressor_f():
+    return MLPRegressor
+
+
 search_space = {
     "regressor": [
-        SVR,
-        KNeighborsRegressor,
-        GaussianProcessRegressor,
-        DecisionTreeRegressor,
-        GradientBoostingRegressor,
-        RandomForestRegressor,
-        ExtraTreesRegressor,
-        MLPRegressor,
+        SVR_f,
+        KNeighborsRegressor_f,
+        GaussianProcessRegressor_f,
+        DecisionTreeRegressor_f,
+        GradientBoostingRegressor_f,
+        RandomForestRegressor_f,
+        ExtraTreesRegressor_f,
+        MLPRegressor_f,
     ],
 }
 
