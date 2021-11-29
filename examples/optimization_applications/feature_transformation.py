@@ -25,9 +25,9 @@ def get_feature_list(opt):
 
         nth_feature = int(key.rsplit(".", 1)[1])
 
-        if opt[key] is False:
+        if opt[key] == 0:
             continue
-        elif opt[key] is True:
+        elif opt[key] == 1:
             feature = X[:, nth_feature]
             feature_list.append(feature)
         else:
@@ -48,15 +48,35 @@ def model(opt):
     return score
 
 
-# features can be used (True), not used (False) or transformed for training
+def log_f(*args, **kwargs):
+    return np.log(*args, **kwargs)
+
+
+def square_f(*args, **kwargs):
+    return np.square(*args, **kwargs)
+
+
+def sqrt_f(*args, **kwargs):
+    return np.sqrt(*args, **kwargs)
+
+
+def sin_f(*args, **kwargs):
+    return np.sin(*args, **kwargs)
+
+
+def cos_f(*args, **kwargs):
+    return np.cos(*args, **kwargs)
+
+
+# features can be used (1), not used (0) or transformed for training
 features_search_space = [
-    True,
-    False,
-    np.log,
-    np.square,
-    np.sqrt,
-    np.sin,
-    np.cos,
+    1,
+    0,
+    log_f,
+    square_f,
+    sqrt_f,
+    sin_f,
+    cos_f,
 ]
 
 search_space = {

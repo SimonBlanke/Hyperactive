@@ -33,7 +33,7 @@ search_space = {
     "max_depth": list(range(2, 12)),
     "min_samples_split": list(range(2, 25)),
     "min_samples_leaf": list(range(1, 25)),
-    "criterion": ["friedman_mse", "mse", "mae"],
+    "criterion": ["friedman_mse", "squared_error", "absolute_error"],
     "subsample": list(np.arange(0.1, 3, 0.1)),
 }
 

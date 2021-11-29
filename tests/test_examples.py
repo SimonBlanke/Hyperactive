@@ -8,6 +8,7 @@ files1 = glob.glob("../examples/*.py")
 
 files = files0 + files1
 
+
 for file_path in files:
     file_name = str(file_path.rsplit("/", maxsplit=1)[1])
 
@@ -18,4 +19,4 @@ for file_path in files:
         print("\033[0;31;40m Error in", file_name)
     else:
         print("\033[0;32;40m", file_name, "is correct")
-
+print("\n")

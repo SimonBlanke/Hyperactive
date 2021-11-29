@@ -12,7 +12,8 @@ X, y = data.data, data.target
 
 def model(opt):
     model = GradientBoostingClassifier(
-        n_estimators=opt["n_estimators"], max_depth=opt["max_depth"],
+        n_estimators=opt["n_estimators"],
+        max_depth=opt["max_depth"],
     )
 
     X_pca = opt["decomposition"](X, opt)
@@ -36,10 +37,10 @@ def none(X_, opt):
 
 search_space = {
     "decomposition": [pca, none],
-    "k": range(2, 30),
-    "n_components": range(1, 11),
-    "n_estimators": range(10, 100, 3),
-    "max_depth": range(2, 12),
+    "k": list(range(2, 30)),
+    "n_components": list(range(1, 11)),
+    "n_estimators": list(range(10, 100, 3)),
+    "max_depth": list(range(2, 12)),
 }
 
 

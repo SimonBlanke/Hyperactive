@@ -13,10 +13,10 @@ previous run, which (again) saves you a lot of computation time.
 import time
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 

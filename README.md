@@ -331,36 +331,12 @@ hyper.run()
   - The verbosity list determines what part of the optimization information will be printed in the command line.
 
 - distribution = "multiprocessing"
-  - Possible parameter types: (str, dict, callable)
-  - Access the parallel processing in three ways:
-    - Via a str "multiprocessing" or "joblib" to choose one of the two.
-    - Via a dictionary with one key "multiprocessing" or "joblib" and a value that is the input argument of Pool and Parallel. The default argument is a good example of this.
-    - Via your own parallel processing function that will be used instead of those for multiprocessing and joblib. The wrapper-function must work similar to the following two functions:
-    
-    Multiprocessing:
-    ```python
-    def multiprocessing_wrapper(process_func, search_processes_paras, **kwargs):
-      n_jobs = len(search_processes_paras)
-
-      pool = Pool(n_jobs, **kwargs)
-      results = pool.map(process_func, search_processes_paras)
-
-      return results
-    ```
-    
-    Joblib:
-    ```python
-    def joblib_wrapper(process_func, search_processes_paras, **kwargs):
-        n_jobs = len(search_processes_paras)
-
-        jobs = [
-            delayed(process_func)(**info_dict)
-            for info_dict in search_processes_paras
-        ]
-        results = Parallel(n_jobs=n_jobs, **kwargs)(jobs)
-
-        return results
-      ```
+  - Possible parameter types: ("multiprocessing", "joblib", "pathos")
+  - Determine, which distribution service you want to use. Each library uses different packages to pickle objects:
+    - multiprocessing uses pickle
+    - joblib uses dill
+    - pathos uses cloudpickle
+  
       
 - n_processes = "auto",   
   - Possible parameter types: (str, int)
@@ -1005,7 +981,7 @@ Reduce the search space size to resolve this error.
 
 <br>
 
-Setting distribution to "joblib" may fix this problem:
+This is because you have classes and/or non-top-level objects in the search space. Pickle (used by multiprocessing) cannot serialize them. Setting distribution to "joblib" or "pathos" may fix this problem:
 ```python
 hyper = Hyperactive(distribution="joblib")
 ```
@@ -1020,7 +996,7 @@ hyper = Hyperactive(distribution="joblib")
 
 Very often warnings from sklearn or numpy. Those warnings do not correlate with bad performance from Hyperactive. Your code will most likely run fine. Those warnings are very difficult to silence.
 
-Put this at the very top of your script:
+It should help to put this at the very top of your script:
 ```python
 def warn(*args, **kwargs):
     pass
