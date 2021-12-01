@@ -6,14 +6,14 @@ to make its usage as convenient as possible. You only have to initialize the Pro
 """
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 
 from hyperactive import Hyperactive
 
 # import the ProgressBoard
 from hyperactive.dashboards import ProgressBoard
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 
@@ -82,7 +82,7 @@ hyper.add_search(
     search_space_rfr,
     n_iter=200,
     n_jobs=4,
-    progress_board=progress_board1, # optionally put progress_board2 here
+    progress_board=progress_board1,  # optionally put progress_board2 here
 )
 # an additional terminal will open, which opens a dashboard in your browser
 hyper.run()

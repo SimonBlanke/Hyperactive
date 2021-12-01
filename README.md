@@ -215,10 +215,10 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 
@@ -241,10 +241,10 @@ score = cross_val_score(gbr, X, y, cv=3).mean()
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 def model(opt):
@@ -287,10 +287,10 @@ pip install hyperactive
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 # define the model in a function
@@ -669,13 +669,13 @@ The following script provides an example:
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 
 from hyperactive import Hyperactive
 # import the ProgressBoard
 from hyperactive.dashboards import ProgressBoard
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 

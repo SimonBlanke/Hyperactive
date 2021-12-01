@@ -8,12 +8,12 @@ with the numpy functions in the search space.
 
 import numpy as np
 import itertools
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsRegressor
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 

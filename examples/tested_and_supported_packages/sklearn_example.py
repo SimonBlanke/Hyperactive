@@ -1,9 +1,9 @@
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_wine
 from hyperactive import Hyperactive
 
-data = load_boston()
+data = load_wine()
 X, y = data.data, data.target
 
 
