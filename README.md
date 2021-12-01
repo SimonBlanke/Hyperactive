@@ -150,6 +150,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
               <li><a href="./examples/tested_and_supported_packages/multiprocessing_example.py">Multiprocessing</a></li>
               <li><a href="./examples/tested_and_supported_packages/joblib_example.py">Joblib</a></li>
+              <li>Pathos</li>
           </ul>
       </td>
       <td>
@@ -651,70 +652,6 @@ You can read more about each optimization-strategy and its parameters in the [Op
 
 
 </details>
-
-
-<details>
-<summary><b> Progress Board</b></summary>
-
-The progress board enables the visualization of search data during the optimization run. This will help you to understand what is happening during the optimization and give an overview of the explored parameter sets and scores. 
-
-
-- filter_file
-  - Possible parameter types: (None, True)
-  - If the filter_file-parameter is True Hyperactive will create a file in the current directory, which allows the filtering of parameters or the score by setting an upper or lower bound.
-
-
-The following script provides an example:
-
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_wine
-
-from hyperactive import Hyperactive
-# import the ProgressBoard
-from hyperactive.dashboards import ProgressBoard
-
-data = load_wine()
-X, y = data.data, data.target
-
-
-def model(opt):
-    gbr = GradientBoostingRegressor(
-        n_estimators=opt["n_estimators"],
-        max_depth=opt["max_depth"],
-        min_samples_split=opt["min_samples_split"],
-    )
-    scores = cross_val_score(gbr, X, y, cv=3)
-
-    return scores.mean()
-
-
-search_space = {
-    "n_estimators": list(range(50, 150, 5)),
-    "max_depth": list(range(2, 12)),
-    "min_samples_split": list(range(2, 22)),
-}
-
-# create an instance of the ProgressBoard
-progress_board = ProgressBoard()
-
-hyper = Hyperactive()
-
-# pass the instance of the ProgressBoard to .add_search(...)
-hyper.add_search(
-    model,
-    search_space,
-    n_iter=120,
-    progress_board=progress_board,
-)
-
-# a terminal will open, which opens a dashboard in your browser
-hyper.run()
-```
-
-</details>
-
 
 
 
