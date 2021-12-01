@@ -179,7 +179,7 @@ def test_ltm_0(objective_function, search_space, path):
         objective_function, search_space, n_iter=10, initialize={"random": 1}
     )
     hyper.run()
-    results1 = hyper.results(objective_function)
+    results1 = hyper.search_data(objective_function)
 
     memory = LongTermMemory(model_name, path=path)
     memory.save(results1, objective_function)
@@ -216,7 +216,7 @@ def test_ltm_1(objective_function, search_space, path):
         long_term_memory=memory,
     )
     hyper1.run()
-    results1 = hyper1.results(objective_function)
+    results1 = hyper1.search_data(objective_function)
 
     hyper2 = Hyperactive()
     hyper2.add_search(
@@ -227,7 +227,7 @@ def test_ltm_1(objective_function, search_space, path):
         long_term_memory=memory,
     )
     hyper2.run()
-    results2 = hyper2.results(objective_function)
+    results2 = hyper2.search_data(objective_function)
     memory.remove_model_data()
 
     print("\n results1 \n", results1)

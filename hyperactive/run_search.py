@@ -12,8 +12,8 @@ from .distribution import (
 from .process import _process_
 
 
-def proxy(kwargs):
-    return _process_(**kwargs)
+def proxy(args):
+    return _process_(*args)
 
 
 dist_dict = {
@@ -37,8 +37,12 @@ def _get_distribution(distribution):
         return dist_dict[distribution], {}
 
 
-def run_search(search_processes_infos, distribution, n_processes):
-    process_infos = list(search_processes_infos.values())
+def run_search(opt_pros, distribution, n_processes):
+    opts = list(opt_pros.values())
+
+    processes = list(opt_pros.keys())
+    optimizers = list(opt_pros.values())
+    process_infos = list(zip(processes, optimizers))
 
     if n_processes == "auto":
         n_processes = len(process_infos)
@@ -48,8 +52,6 @@ def run_search(search_processes_infos, distribution, n_processes):
     else:
         (distribution, process_func), dist_paras = _get_distribution(distribution)
 
-        results_list = distribution(
-            process_func, process_infos, n_processes, **dist_paras
-        )
+        results_list = distribution(process_func, process_infos, n_processes)
 
     return results_list

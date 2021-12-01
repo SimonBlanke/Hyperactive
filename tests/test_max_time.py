@@ -3,8 +3,9 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
-from hyperactive import (
-    Hyperactive,
+
+from hyperactive import Hyperactive
+from hyperactive.optimizers import (
     RandomSearchOptimizer,
     HillClimbingOptimizer,
 )
@@ -16,7 +17,7 @@ def objective_function(para):
 
 
 search_space = {
-    "x1": np.arange(0, 100000, 0.1),
+    "x1": list(np.arange(0, 100000, 0.1)),
 }
 
 

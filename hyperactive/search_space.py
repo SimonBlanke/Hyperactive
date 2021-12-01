@@ -82,8 +82,7 @@ class SearchSpace(DictClass):
                 dim_key
             )
             if not isinstance(search_dim, list):
-                print("Warning: ", err_msg)
-                # raise ValueError(err_msg)
+                raise ValueError(err_msg)
 
     @staticmethod
     def is_function(value):
@@ -103,8 +102,7 @@ class SearchSpace(DictClass):
                 msg = "\n The value '{}' of type '{}' in the search space dimension '{}' must be number, string or function \n".format(
                     dim_value, type(dim_value), dim_key
                 )
-                print("Warning: ", msg)
-                # raise ValueError(msg)
+                raise ValueError(msg)
 
     def check_non_num_values(self):
         for dim_key in self.dim_keys:
@@ -120,5 +118,4 @@ class SearchSpace(DictClass):
                     msg = "Array-like object in '{}' must be one dimensional".format(
                         dim_key
                     )
-                    print("Warning: ", msg)
-                    # raise ValueError(msg)
+                    raise ValueError(msg)

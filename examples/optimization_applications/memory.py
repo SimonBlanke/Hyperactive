@@ -43,7 +43,7 @@ d_time1 = time.time() - c_time1
 print("Optimization time 1:", round(d_time1, 2))
 
 # Hyperactive collects the search data
-search_data = hyper.results(model)
+search_data = hyper.search_data(model)
 
 # You can pass the search data to memory_warm_start to save time
 c_time2 = time.time()

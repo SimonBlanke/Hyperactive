@@ -24,7 +24,7 @@ hyper = Hyperactive()
 hyper.add_search(model1, search_space, n_iter=500, memory=True)
 hyper.run()
 
-search_data = hyper.results(model1)
+search_data = hyper.search_data(model1)
 # save the search data of a model for later use
 search_data.to_csv("./model1.csv", index=False)
 

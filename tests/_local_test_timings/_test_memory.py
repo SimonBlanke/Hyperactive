@@ -31,7 +31,7 @@ def test_memory_timeSave_0():
         return scores.mean()
 
     search_space = {
-        "min_samples_split": np.arange(2, 20),
+        "min_samples_split": list(range(2, 20)),
     }
 
     c_time1 = time.perf_counter()
@@ -106,7 +106,7 @@ def test_memory_warm_start():
 
     c_time2 = time.perf_counter()
 
-    results0 = hyper0.results(objective_function)
+    results0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(

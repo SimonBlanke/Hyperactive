@@ -8,8 +8,8 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": np.arange(-1000, 1000, 0.1),
-    "x2": np.arange(-1000, 1000, 0.1),
+    "x1": list(np.arange(-1000, 1000, 0.1)),
+    "x2": list(np.arange(-1000, 1000, 0.1)),
 }
 
 
@@ -30,7 +30,7 @@ def test_random_state_n_jobs_0():
     )
     hyper.run()
 
-    results = hyper.results(objective_function)
+    results = hyper.search_data(objective_function)
 
     no_dup = results.drop_duplicates(subset=list(search_space.keys()))
     print("no_dup", no_dup)
@@ -56,7 +56,7 @@ def test_random_state_n_jobs_1():
     )
     hyper.run()
 
-    results = hyper.results(objective_function)
+    results = hyper.search_data(objective_function)
 
     no_dup = results.drop_duplicates(subset=list(search_space.keys()))
     print("no_dup", no_dup)
@@ -79,7 +79,7 @@ def test_random_state_n_jobs_2():
     )
     hyper.run()
 
-    results = hyper.results(objective_function)
+    results = hyper.search_data(objective_function)
 
     no_dup = results.drop_duplicates(subset=list(search_space.keys()))
     print("no_dup", no_dup)

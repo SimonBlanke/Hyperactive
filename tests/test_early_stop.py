@@ -4,8 +4,9 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
-from hyperactive import (
-    Hyperactive,
+
+from hyperactive import Hyperactive
+from hyperactive.optimizers import (
     RandomSearchOptimizer,
     HillClimbingOptimizer,
 )
@@ -17,7 +18,7 @@ def objective_function(para):
 
 
 search_space = {
-    "x1": np.arange(0, 100000, 0.1),
+    "x1": list(np.arange(0, 100000, 0.1)),
 }
 
 
@@ -81,7 +82,7 @@ def test_early_stop_3():
         return score
 
     search_space = {
-        "x1": np.arange(0, 100, 0.1),
+        "x1": list(np.arange(0, 100, 0.1)),
     }
 
     n_iter_no_change = 5
@@ -99,7 +100,7 @@ def test_early_stop_3():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -113,7 +114,7 @@ def test_early_stop_4():
         return para["x1"]
 
     search_space = {
-        "x1": np.arange(0, 100, 0.1),
+        "x1": list(np.arange(0, 100, 0.1)),
     }
 
     n_iter_no_change = 5
@@ -160,7 +161,7 @@ def test_early_stop_4():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -174,7 +175,7 @@ def test_early_stop_5():
         return para["x1"]
 
     search_space = {
-        "x1": np.arange(0, 100, 0.01),
+        "x1": list(np.arange(0, 100, 0.01)),
     }
 
     n_iter_no_change = 5
@@ -213,7 +214,7 @@ def test_early_stop_5():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -227,7 +228,7 @@ def test_early_stop_6():
         return para["x1"]
 
     search_space = {
-        "x1": np.arange(0, 100, 0.01),
+        "x1": list(np.arange(0, 100, 0.01)),
     }
 
     n_iter_no_change = 5
@@ -274,7 +275,7 @@ def test_early_stop_6():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)
@@ -288,7 +289,7 @@ def test_early_stop_7():
         return para["x1"]
 
     search_space = {
-        "x1": np.arange(0, 100, 0.01),
+        "x1": list(np.arange(0, 100, 0.01)),
     }
 
     n_iter_no_change = 5
@@ -327,7 +328,7 @@ def test_early_stop_7():
     )
     hyper.run()
 
-    search_data = hyper.results(objective_function)
+    search_data = hyper.search_data(objective_function)
     n_performed_iter = len(search_data)
 
     print("\n n_performed_iter \n", n_performed_iter)

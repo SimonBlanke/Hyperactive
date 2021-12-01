@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-
 from .optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
@@ -17,13 +16,12 @@ from .optimizers import (
     EvolutionStrategyOptimizer,
     BayesianOptimizer,
     TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer,
+    ForestOptimizer,
     EnsembleOptimizer,
 )
 
 
 __all__ = [
-
     "HillClimbingOptimizer",
     "StochasticHillClimbingOptimizer",
     "RepulsingHillClimbingOptimizer",
@@ -36,6 +34,6 @@ __all__ = [
     "EvolutionStrategyOptimizer",
     "BayesianOptimizer",
     "TreeStructuredParzenEstimators",
-    "DecisionTreeOptimizer",
+    "ForestOptimizer",
     "EnsembleOptimizer",
 ]

@@ -59,6 +59,6 @@ hyper = Hyperactive()
 hyper.add_search(objective_function, search_space, n_iter=20)
 hyper.run()
 
-search_data = hyper.results(objective_function)
+search_data = hyper.search_data(objective_function)
 
 print("\n Search Data: \n", search_data)

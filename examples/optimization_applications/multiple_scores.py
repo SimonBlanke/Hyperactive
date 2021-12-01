@@ -48,4 +48,4 @@ hyper.add_search(model, search_space, n_iter=20)
 hyper.run()
 
 # The variables from the dict are collected in the results.
-print("\n Results \n", hyper.results(model))
+print("\n Results \n", hyper.search_data(model))

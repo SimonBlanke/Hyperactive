@@ -1,4 +1,4 @@
-from hyperactive import (
+from hyperactive.optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
     RepulsingHillClimbingOptimizer,
@@ -11,7 +11,7 @@ from hyperactive import (
     EvolutionStrategyOptimizer,
     BayesianOptimizer,
     TreeStructuredParzenEstimators,
-    DecisionTreeOptimizer,
+    ForestOptimizer,
     EnsembleOptimizer,
 )
 
@@ -31,7 +31,7 @@ optimizers = (
         (EvolutionStrategyOptimizer),
         (BayesianOptimizer),
         (TreeStructuredParzenEstimators),
-        (DecisionTreeOptimizer),
+        (ForestOptimizer),
         (EnsembleOptimizer),
     ],
 )

@@ -221,7 +221,7 @@ def test_memory_warm_start_0(search_space):
     hyper0.add_search(objective_function, search_space, n_iter=20)
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
@@ -242,7 +242,7 @@ def test_memory_warm_start_1(search_space):
     )
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
@@ -266,7 +266,7 @@ def test_memory_warm_start_2(search_space):
     )
     hyper0.run()
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
@@ -291,7 +291,7 @@ def test_memory_warm_start_0(search_space):
     hyper0.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     c_time = time.perf_counter()
     hyper1 = Hyperactive()
@@ -320,7 +320,7 @@ def test_memory_warm_start_1(search_space):
     hyper0.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     c_time = time.perf_counter()
     hyper1 = Hyperactive(distribution="joblib")
@@ -356,7 +356,7 @@ def test_memory_warm_start_2(search_space):
     hyper0.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     c_time = time.perf_counter()
     hyper1 = Hyperactive()
@@ -388,7 +388,7 @@ def test_memory_warm_start_4(search_space):
     hyper0.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     c_time = time.perf_counter()
     hyper1 = Hyperactive()
@@ -420,7 +420,7 @@ def test_memory_warm_start_5(search_space):
     hyper0.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper0.results(objective_function)
+    search_data0 = hyper0.search_data(objective_function)
 
     c_time = time.perf_counter()
     hyper1 = Hyperactive()

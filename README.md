@@ -126,7 +126,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
-            <li><a href="./examples/optimization_techniques/decision_tree_optimization.py">Decision Tree Optimizer</a>
+            <li><a href="./examples/optimization_techniques/forest_optimization.py">Decision Tree Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
           </ul>
       </td>
@@ -380,7 +380,7 @@ hyper.run()
     - EvolutionStrategyOptimizer
     - BayesianOptimizer
     - TreeStructuredParzenEstimators
-    - DecisionTreeOptimizer
+    - ForestOptimizer
     - EnsembleOptimizer
     
   - Example:
@@ -645,7 +645,7 @@ You can read more about each optimization-strategy and its parameters in the [Op
 - EvolutionStrategyOptimizer
 - BayesianOptimizer
 - TreeStructuredParzenEstimators
-- DecisionTreeOptimizer
+- ForestOptimizer
 
 </details>
 
@@ -754,7 +754,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .results(objective_function)</b></summary>
+<summary><b> .search_data(objective_function)</b></summary>
 
 - objective_function
   - (callable)

@@ -28,7 +28,7 @@ hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=100)
 hyper.run()
 
-search_data = hyper.results(model)
+search_data = hyper.search_data(model)
 
 
 optimizer = BayesianOptimizer(xi=0.03, warm_start_smbo=search_data, rand_rest_p=0.1)

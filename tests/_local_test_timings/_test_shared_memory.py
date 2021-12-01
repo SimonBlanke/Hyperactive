@@ -102,8 +102,8 @@ def test_shared_memory_1():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 0.85
-    assert d_time < 1.15
+    assert d_time > 0.7
+    assert d_time < 1.3
 
 
 def test_shared_memory_2():
@@ -157,7 +157,7 @@ def test_shared_memory_2():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 1.2
+    assert d_time > 1.4
 
 
 def test_shared_memory_3():
@@ -211,8 +211,8 @@ def test_shared_memory_3():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 0.85
-    assert d_time < 1.15
+    assert d_time > 0.7
+    assert d_time < 1.3
 
 
 def test_shared_memory_warm_start_0():
@@ -227,7 +227,7 @@ def test_shared_memory_warm_start_0():
     hyper.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper.results(model)
+    search_data0 = hyper.search_data(model)
 
     c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)
@@ -263,7 +263,7 @@ def test_shared_memory_warm_start_1():
     hyper.run()
     d_time_1 = time.perf_counter() - c_time
 
-    search_data0 = hyper.results(model)
+    search_data0 = hyper.search_data(model)
 
     c_time = time.perf_counter()
     hyper = Hyperactive(n_processes=1)

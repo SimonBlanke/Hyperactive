@@ -44,7 +44,7 @@ for i in range(25):
     hyper.add_search(model, search_space, n_iter=10)
     hyper.run()
 
-    search_data = hyper.results(model)
+    search_data = hyper.search_data(model)
 
     search_data["size_X"] = X.size
     search_data["itemsize_X"] = X.itemsize
