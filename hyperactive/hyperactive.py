@@ -8,9 +8,9 @@ from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
-from .print_info import print_info
 
 from .results import Results
+from .print_results import PrintResults
 from .search_space import SearchSpace
 
 
@@ -123,19 +123,11 @@ class Hyperactive:
             self.opt_pros[nth_process] = optimizer
 
     def _print_info(self):
+        print_res = PrintResults(self.opt_pros, self.verbosity)
+
         for results in self.results_list:
             nth_process = results["nth_process"]
-
-            print_info(
-                verbosity=self.opt_pros[nth_process].verbosity,
-                objective_function=self.opt_pros[nth_process].objective_function,
-                best_score=results["best_score"],
-                best_para=results["best_para"],
-                best_iter=results["best_iter"],
-                eval_times=results["eval_times"],
-                iter_times=results["iter_times"],
-                n_iter=self.opt_pros[nth_process].n_iter,
-            )
+            print_res.print_process(results, nth_process)
 
     def run(self, max_time=None):
         for opt in self.opt_pros.values():
