@@ -11,12 +11,12 @@ where selected. This can be used to select the subset of features in "x_new".
 
 import numpy as np
 import itertools
-from sklearn.datasets import load_wine
+from sklearn.datasets import load_diabetes
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsRegressor
 from hyperactive import Hyperactive, EvolutionStrategyOptimizer
 
-data = load_wine()
+data = load_diabetes()
 X, y = data.data, data.target
 
 

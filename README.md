@@ -41,7 +41,7 @@
 
 - makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
-- [visualizes](./examples/optimization_applications/progress_visualization.py) your collected data
+- [visualizes](https://github.com/SimonBlanke/ProgressBoard) your collected data
 
 - saves your [computation time](./examples/optimization_applications/memory.py)
 
@@ -216,10 +216,10 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import load_wine
+from sklearn.datasets import fetch_california_housing
 
 
-data = load_wine()
+data = fetch_california_housing()
 X, y = data.data, data.target
 
 
@@ -242,10 +242,10 @@ score = cross_val_score(gbr, X, y, cv=3).mean()
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import load_wine
+from sklearn.datasets import fetch_california_housing
 from hyperactive import Hyperactive
 
-data = load_wine()
+data = fetch_california_housing()
 X, y = data.data, data.target
 
 def model(opt):
@@ -288,10 +288,10 @@ pip install hyperactive
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_wine
+from sklearn.datasets import fetch_california_housing
 from hyperactive import Hyperactive
 
-data = load_wine()
+data = fetch_california_housing()
 X, y = data.data, data.target
 
 # define the model in a function

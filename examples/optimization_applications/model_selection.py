@@ -11,10 +11,10 @@ from sklearn.ensemble import (
 )
 from sklearn.neural_network import MLPRegressor
 
-from sklearn.datasets import load_wine
+from sklearn.datasets import fetch_california_housing
 from hyperactive import Hyperactive
 
-data = load_wine()
+data = fetch_california_housing()
 X, y = data.data, data.target
 
 

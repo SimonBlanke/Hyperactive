@@ -1,4 +1,4 @@
-from sklearn.datasets import load_wine
+from sklearn.datasets import fetch_california_housing
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import cross_val_score
 
@@ -6,7 +6,7 @@ from hyperactive import Hyperactive
 
 
 def test_issue_29():
-    data = load_wine()
+    data = fetch_california_housing()
     X, y = data.data, data.target
 
     def model(para):
