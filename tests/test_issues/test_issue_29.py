@@ -1,4 +1,4 @@
-from sklearn.datasets import fetch_california_housing
+from sklearn.datasets import load_diabetes
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import cross_val_score
 
@@ -6,7 +6,7 @@ from hyperactive import Hyperactive
 
 
 def test_issue_29():
-    data = fetch_california_housing()
+    data = load_diabetes()
     X, y = data.data, data.target
 
     def model(para):
