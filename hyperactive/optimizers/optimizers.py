@@ -9,10 +9,14 @@ from gradient_free_optimizers import (
     HillClimbingOptimizer as _HillClimbingOptimizer,
     StochasticHillClimbingOptimizer as _StochasticHillClimbingOptimizer,
     RepulsingHillClimbingOptimizer as _RepulsingHillClimbingOptimizer,
+    SimulatedAnnealingOptimizer as _SimulatedAnnealingOptimizer,
+    DownhillSimplexOptimizer as _DownhillSimplexOptimizer,
     RandomSearchOptimizer as _RandomSearchOptimizer,
+    GridSearchOptimizer as _GridSearchOptimizer,
     RandomRestartHillClimbingOptimizer as _RandomRestartHillClimbingOptimizer,
     RandomAnnealingOptimizer as _RandomAnnealingOptimizer,
-    SimulatedAnnealingOptimizer as _SimulatedAnnealingOptimizer,
+    PowellsMethod as _PowellsMethod,
+    PatternSearch as _PatternSearch,
     ParallelTemperingOptimizer as _ParallelTemperingOptimizer,
     ParticleSwarmOptimizer as _ParticleSwarmOptimizer,
     EvolutionStrategyOptimizer as _EvolutionStrategyOptimizer,
@@ -41,10 +45,28 @@ class RepulsingHillClimbingOptimizer(_BaseOptimizer_):
         self._OptimizerClass = _RepulsingHillClimbingOptimizer
 
 
+class SimulatedAnnealingOptimizer(_BaseOptimizer_):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _SimulatedAnnealingOptimizer
+
+
+class DownhillSimplexOptimizer(_BaseOptimizer_):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _DownhillSimplexOptimizer
+
+
 class RandomSearchOptimizer(_BaseOptimizer_):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self._OptimizerClass = _RandomSearchOptimizer
+
+
+class GridSearchOptimizer(_BaseOptimizer_):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _GridSearchOptimizer
 
 
 class RandomRestartHillClimbingOptimizer(_BaseOptimizer_):
@@ -59,10 +81,16 @@ class RandomAnnealingOptimizer(_BaseOptimizer_):
         self._OptimizerClass = _RandomAnnealingOptimizer
 
 
-class SimulatedAnnealingOptimizer(_BaseOptimizer_):
+class PowellsMethod(_BaseOptimizer_):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _SimulatedAnnealingOptimizer
+        self._OptimizerClass = _PowellsMethod
+
+
+class PatternSearch(_BaseOptimizer_):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _PatternSearch
 
 
 class ParallelTemperingOptimizer(_BaseOptimizer_):
