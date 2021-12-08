@@ -1,7 +1,10 @@
 import numpy as np
-from hyperactive import Hyperactive, BayesianOptimizer
+from hyperactive import Hyperactive
+from hyperactive.optimizers import BayesianOptimizer
+
 
 from gradient_free_optimizers import RandomRestartHillClimbingOptimizer
+
 
 def meta_opt(opt_para):
     scores = []
@@ -11,7 +14,7 @@ def meta_opt(opt_para):
         def ackley_function(para):
             x = para["x"]
             y = para["y"]
-            loss1 = - 20 * np.exp(-0.2 * np.sqrt(0.5 * (x * x + y * y)))
+            loss1 = -20 * np.exp(-0.2 * np.sqrt(0.5 * (x * x + y * y)))
             loss2 = -np.exp(0.5 * (np.cos(2 * np.pi * x) + np.cos(2 * np.pi * y)))
             loss3 = np.exp(1)
             loss4 = 20
@@ -29,6 +32,7 @@ def meta_opt(opt_para):
 
         opt = RandomRestartHillClimbingOptimizer(
             search_space,
+            random_state=i,
             epsilon=opt_para["epsilon"],
             n_neighbours=opt_para["n_neighbours"],
             n_iter_restart=opt_para["n_iter_restart"],
@@ -36,7 +40,6 @@ def meta_opt(opt_para):
         opt.search(
             ackley_function,
             n_iter=100,
-            random_state=i,
             verbosity=False,
         )
 

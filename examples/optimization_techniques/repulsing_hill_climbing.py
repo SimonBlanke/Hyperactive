@@ -2,7 +2,9 @@ from sklearn.datasets import load_iris
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 
-from hyperactive import Hyperactive, RepulsingHillClimbingOptimizer
+from hyperactive import Hyperactive
+from hyperactive.optimizers import RepulsingHillClimbingOptimizer
+
 
 data = load_iris()
 X, y = data.data, data.target

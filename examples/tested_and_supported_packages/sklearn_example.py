@@ -1,9 +1,9 @@
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import fetch_california_housing
+from sklearn.datasets import load_diabetes
 from hyperactive import Hyperactive
 
-data = fetch_california_housing()
+data = load_diabetes()
 X, y = data.data, data.target
 
 

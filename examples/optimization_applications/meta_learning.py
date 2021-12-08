@@ -59,7 +59,7 @@ for i in range(25):
 
 meta_data = pd.concat(search_data_list)
 
-X_meta = meta_data.drop(["score", "eval_time", "iter_time"], axis=1)
+X_meta = meta_data.drop(["score"], axis=1)
 y_meta = meta_data["score"]
 
 

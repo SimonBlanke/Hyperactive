@@ -91,9 +91,6 @@ search_space = {
     "feature.7": features_search_space,
     "feature.8": features_search_space,
     "feature.9": features_search_space,
-    "feature.10": features_search_space,
-    "feature.11": features_search_space,
-    "feature.12": features_search_space,
 }
 
 

@@ -6,7 +6,9 @@ from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neural_network import MLPRegressor
 
-from hyperactive import Hyperactive, EnsembleOptimizer
+from hyperactive import Hyperactive
+from hyperactive.optimizers import EnsembleOptimizer
+
 
 data = load_iris()
 X, y = data.data, data.target

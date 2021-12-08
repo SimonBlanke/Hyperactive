@@ -11,10 +11,10 @@ from sklearn.ensemble import (
 )
 from sklearn.neural_network import MLPRegressor
 
-from sklearn.datasets import fetch_california_housing
+from sklearn.datasets import load_diabetes
 from hyperactive import Hyperactive
 
-data = fetch_california_housing()
+data = load_diabetes()
 X, y = data.data, data.target
 
 

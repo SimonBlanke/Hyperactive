@@ -14,7 +14,9 @@ import itertools
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsRegressor
-from hyperactive import Hyperactive, EvolutionStrategyOptimizer
+from hyperactive import Hyperactive
+from hyperactive.optimizers import EvolutionStrategyOptimizer
+
 
 data = load_diabetes()
 X, y = data.data, data.target
@@ -63,9 +65,6 @@ search_space = {
     "feature.7": [1, 0],
     "feature.8": [1, 0],
     "feature.9": [1, 0],
-    "feature.10": [1, 0],
-    "feature.11": [1, 0],
-    "feature.12": [1, 0],
 }
 
 
