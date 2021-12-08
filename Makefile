@@ -36,7 +36,7 @@ test-search_space:
 	done
 
 test_:
-	python -m pytest -x -p no:warnings -rfEX tests/; \
+	python -m pytest -x -p no:warnings tests/; \
 
 
 test-timings:
@@ -51,7 +51,7 @@ test:  test-local test_
 
 test-examples:
 	cd tests; \
-		python test_examples.py
+		python _test_examples.py
 
 test-extensive: test test-local test-examples
 
