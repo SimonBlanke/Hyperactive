@@ -2,12 +2,14 @@ import os, sys, glob
 import subprocess
 from subprocess import DEVNULL, STDOUT
 
+here = os.path.dirname(os.path.abspath(__file__))
 
-files0 = glob.glob("../examples/*/*.py")
-files1 = glob.glob("../examples/*.py")
+files0 = glob.glob(here+"/../examples/*/*.py")
+files1 = glob.glob(here+"/../examples/*.py")
 
 files = files0 + files1
 
+print("run files:", files)
 
 for file_path in files:
     file_name = str(file_path.rsplit("/", maxsplit=1)[1])
