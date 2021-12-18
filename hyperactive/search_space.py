@@ -111,11 +111,6 @@ class SearchSpace(DictClass):
             is_func = self.is_function(dim_value)
             is_number = self.is_number(dim_value)
 
-            print("\n dim_value", dim_value)
-            print(" is_str", is_str)
-            print(" is_func", is_func)
-            print(" is_number", is_number)
-
             if not is_str and not is_func and not is_number:
                 msg = "\n The value '{}' of type '{}' in the search space dimension '{}' must be number, string or function \n".format(
                     dim_value, type(dim_value), dim_key
