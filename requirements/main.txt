@@ -1,6 +1,6 @@
 numpy >=1.18.1
 tqdm >=4.48.0
 pandas
-gradient-free-optimizers >=1.0.0
+gradient-free-optimizers >=1.0.0, <2.0.0
 pathos
 joblib
