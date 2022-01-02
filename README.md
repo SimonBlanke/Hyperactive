@@ -108,12 +108,16 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
+            <li>Downhill Simplex Optimizer</li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/random_search.py">Random Search</a></li>
+            <li>Grid Search Optimizer</li>
             <li><a href="./examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
+            <li>Powell's Method</li>
+            <li>Pattern Search</li>
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
@@ -631,15 +635,18 @@ The functions contain the numpy arrays and returns them. This way you can use th
 <details>
 <summary><b> Optimizer Classes</b></summary>
 
-Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts additional paramters.
-You can read more about each optimization-strategy and its parameters in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
+Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts **only optimizer-specific-paramters** (no random_state, initialize, ... ). So the optimizer API is different from Gradient-Free-Optimizers. A more detailed explanation of the optimization-algorithms and the optimizer-specific-paramters can be found in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
 
 - HillClimbingOptimizer
 - RepulsingHillClimbingOptimizer
 - SimulatedAnnealingOptimizer
+- DownhillSimplexOptimizer
 - RandomSearchOptimizer
+- GridSearchOptimizer
 - RandomRestartHillClimbingOptimizer
 - RandomAnnealingOptimizer
+- PowellsMethod
+- PatternSearch
 - ParallelTemperingOptimizer
 - ParticleSwarmOptimizer
 - EvolutionStrategyOptimizer
