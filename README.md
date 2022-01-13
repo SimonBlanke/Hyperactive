@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" height="240"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" height="250"></a>
 </p>
 
 <br>
@@ -129,7 +129,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
-            <li><a href="./examples/optimization_techniques/forest_optimization.py">Decision Tree Optimizer</a>
+            <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
           </ul>
       </td>
@@ -832,14 +832,21 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+<details>
+<summary><b>v4.0.0</b> :heavy_check_mark:</summary>
+
+  - [x] small adjustments to API
+  - [x] preparation for future add ons (long-term-memory, meta-learn, ...) from separate repositories
+  - [x] separate progress board into separate repository
+
+</details>
 
 <details>
 <summary><b>Upcoming Features</b></summary>
-  
+   
   - [ ] "long term memory" for search-data storage and usage
-  - [ ] Data collector tool to use inside the objective function
   - [ ] Dashboard for visualization of stored search-data
-  - [ ] Data collector tool to store data (from inside the objective function) into csv- or sql-files
+  - [ ] Data collector tool to store data (from inside the objective function) into csv-files
 
 
 </details>
