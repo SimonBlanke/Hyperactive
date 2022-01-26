@@ -74,6 +74,7 @@ class _BaseOptimizer_(TrafoClass):
         s_space,
         n_iter,
         initialize,
+        pass_through,
         max_score,
         early_stopping,
         random_state,
@@ -86,6 +87,7 @@ class _BaseOptimizer_(TrafoClass):
         self.n_iter = n_iter
 
         self.initialize = initialize
+        self.pass_through = pass_through
         self.max_score = max_score
         self.early_stopping = early_stopping
         self.random_state = random_state
@@ -128,6 +130,7 @@ class _BaseOptimizer_(TrafoClass):
         gfo_wrapper_model = ObjectiveFunction(
             self.objective_function, self._optimizer, self.nth_process
         )
+        gfo_wrapper_model.pass_through = self.pass_through
 
         memory_warm_start = self._convert_args2gfo(self.memory_warm_start)
 

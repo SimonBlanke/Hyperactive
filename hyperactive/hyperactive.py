@@ -78,6 +78,13 @@ class Hyperactive:
                 print("Warning", error_msg)
                 # raise ValueError(error_msg)
 
+    @staticmethod
+    def pass_through_warning(pass_through):
+        if len(pass_through) != 0:
+            print(
+                "\n ---> Warning: The 'pass_through'-parameter is an experimental feature \n"
+            )
+
     def add_search(
         self,
         objective_function,
@@ -87,6 +94,7 @@ class Hyperactive:
         optimizer="default",
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
+        pass_through={},
         max_score=None,
         early_stopping=None,
         random_state=None,
@@ -94,6 +102,8 @@ class Hyperactive:
         memory_warm_start=None,
     ):
         self.check_list(search_space)
+
+        self.pass_through_warning(pass_through)
 
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
@@ -104,6 +114,7 @@ class Hyperactive:
             s_space,
             n_iter,
             initialize,
+            pass_through,
             max_score,
             early_stopping,
             random_state,
