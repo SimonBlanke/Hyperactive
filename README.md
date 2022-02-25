@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" height="240"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" height="250"></a>
 </p>
 
 <br>
@@ -108,12 +108,16 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
+            <li>Downhill Simplex Optimizer</li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/random_search.py">Random Search</a></li>
+            <li>Grid Search Optimizer</li>
             <li><a href="./examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
+            <li>Powell's Method</li>
+            <li>Pattern Search</li>
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
@@ -125,7 +129,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
-            <li><a href="./examples/optimization_techniques/forest_optimization.py">Decision Tree Optimizer</a>
+            <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
           </ul>
       </td>
@@ -366,22 +370,25 @@ hyper.run()
 
 - optimizer = "default"
   - Possible parameter types: ("default", initialized optimizer object)
-  - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The following classes can be imported and used:
+  - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The imported optimization classes from hyperactive are different from gfo. They only accept optimizer-specific-parameters. The following classes can be imported and used:
   
     - HillClimbingOptimizer
     - StochasticHillClimbingOptimizer
     - RepulsingHillClimbingOptimizer
+    - SimulatedAnnealingOptimizer
+    - DownhillSimplexOptimizer
     - RandomSearchOptimizer
+    - GridSearchOptimizer
     - RandomRestartHillClimbingOptimizer
     - RandomAnnealingOptimizer
-    - SimulatedAnnealingOptimizer
+    - PowellsMethod
+    - PatternSearch
     - ParallelTemperingOptimizer
     - ParticleSwarmOptimizer
     - EvolutionStrategyOptimizer
     - BayesianOptimizer
     - TreeStructuredParzenEstimators
     - ForestOptimizer
-    - EnsembleOptimizer
     
   - Example:
     ```python
@@ -405,7 +412,7 @@ hyper.run()
   - Possible parameter types: (dict)
   - The initialization dictionary automatically determines a number of parameters that will be evaluated in the first n iterations (n is the sum of the values in initialize). The initialize keywords are the following:
     - grid
-      - Initializes positions in a grid like pattern. Positions that cannot be put into a grid are randomly positioned.
+      - Initializes positions in a grid like pattern. Positions that cannot be put into a grid are randomly positioned. For very high dimensional search spaces (>30) this pattern becomes random.
     - vertices
       - Initializes positions at the vertices of the search space. Positions that cannot be put into a new vertex are randomly positioned.
 
@@ -533,7 +540,7 @@ Each iteration consists of two steps:
  - The optimization step: decides what position in the search space (parameter set) to evaluate next 
  - The evaluation step: calls the objective function, which returns the score for the given position in the search space
   
-The objective function has one argument that is often called "para", "params" or "opt".
+The objective function has one argument that is often called "para", "params", "opt" or "access".
 This argument is your access to the parameter set that the optimizer has selected in the
 corresponding iteration. 
 
@@ -608,11 +615,11 @@ If you want to put other types of variables (like numpy arrays, pandas dataframe
 
 ```python
 def array1():
-  return np.array([0, 1, 2])
+  return np.array([1, 2, 3])
   
 
 def array2():
-  return np.array([0, 1, 2])
+  return np.array([3, 2, 1])
 
 
 search_space = {
@@ -631,24 +638,44 @@ The functions contain the numpy arrays and returns them. This way you can use th
 <details>
 <summary><b> Optimizer Classes</b></summary>
 
-Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts additional paramters.
-You can read more about each optimization-strategy and its parameters in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
+Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts **only optimizer-specific-paramters** (no random_state, initialize, ... ):
+  
+  ```python
+  optimizer = HillClimbingOptimizer(epsilon=0.1, distribution="laplace", n_neighbours=4)
+  ```
+  
+  for the default parameters you can just write:
+  
+  ```python
+  optimizer = HillClimbingOptimizer()
+  ```
+  
+  and pass it to Hyperactive:
+  
+  ```python
+  hyper = Hyperactive()
+  hyper.add_search(model, search_space, optimizer=optimizer, n_iter=100)
+  hyper.run()
+  ```
+  
+  So the optimizer-classes are **different** from Gradient-Free-Optimizers. A more detailed explanation of the optimization-algorithms and the optimizer-specific-paramters can be found in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
 
 - HillClimbingOptimizer
 - RepulsingHillClimbingOptimizer
 - SimulatedAnnealingOptimizer
+- DownhillSimplexOptimizer
 - RandomSearchOptimizer
+- GridSearchOptimizer
 - RandomRestartHillClimbingOptimizer
 - RandomAnnealingOptimizer
+- PowellsMethod
+- PatternSearch
 - ParallelTemperingOptimizer
 - ParticleSwarmOptimizer
 - EvolutionStrategyOptimizer
 - BayesianOptimizer
 - TreeStructuredParzenEstimators
 - ForestOptimizer
-
-</details>
-
 
 </details>
 
@@ -825,14 +852,21 @@ You can read more about each optimization-strategy and its parameters in the [Op
 
 </details>
 
+<details>
+<summary><b>v4.0.0</b> :heavy_check_mark:</summary>
+
+  - [x] small adjustments to API
+  - [x] preparation for future add ons (long-term-memory, meta-learn, ...) from separate repositories
+  - [x] separate progress board into separate repository
+
+</details>
 
 <details>
 <summary><b>Upcoming Features</b></summary>
-  
+   
   - [ ] "long term memory" for search-data storage and usage
-  - [ ] Data collector tool to use inside the objective function
   - [ ] Dashboard for visualization of stored search-data
-  - [ ] Data collector tool to store data (from inside the objective function) into csv- or sql-files
+  - [ ] Data collector tool to store data (from inside the objective function) into csv-files
 
 
 </details>
@@ -890,6 +924,10 @@ A combination between simulated annealing and random search.
   Or you could continue using the old version and use an old repository branch as documentation.
   You can do that by selecting the corresponding branch. (top right of the repository. The default is "master" or "main")
   So if your major version is older (e.g. v2.1.0) you can select the 2.x.x branch to get the old repository for that version.
+  
+- <b>Provide example code for error reproduction </b>
+  To understand and fix the issue I need an example code to reproduce the error.
+  I must be able to just copy the code into a py-file and execute it to reproduce the error.
   
 </details>
 
