@@ -722,7 +722,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 - objective_function
   - (callable)
 - returns: Pandas dataframe 
-- The dataframe contains score, parameter information, iteration times and evaluation times of the given objective_function found in the previous optimization run.
+- The dataframe contains score and parameter information of the given objective_function found in the optimization run.
 
     example:
 
@@ -733,8 +733,6 @@ Each of the following optimizer classes can be initialized and passed to the "ad
           <td class="cell">x1</td>
           <td class="cell">x2</td>
           <td class="cell">x...</td>
-          <td class="cell">eval_times</td>
-          <td class="cell">iter_times</td>
         </tr>
       </thead>
       <tbody class="table-body">
@@ -743,28 +741,20 @@ Each of the following optimizer classes can be initialized and passed to the "ad
           <td class="cell">0.1</td>
           <td class="cell">0.2</td>
           <td class="cell">...</td>
-          <td class="cell">0.953</td>
-          <td class="cell">1.123</td>
         </tr>
         <tr class="row">
           <td class="cell">0.823</td>
           <td class="cell">0.3</td>
           <td class="cell">0.1</td>
           <td class="cell">...</td>
-          <td class="cell">0.948</td>
-          <td class="cell">1.101</td>
         </tr>
         <tr class="row">
           <td class="cell">...</td>
           <td class="cell">...</td>
           <td class="cell">...</td>
           <td class="cell">...</td>
-          <td class="cell">...</td>
-          <td class="cell">...</td>
         </tr>
         <tr class="row">
-          <td class="cell">...</td>
-          <td class="cell">...</td>
           <td class="cell">...</td>
           <td class="cell">...</td>
           <td class="cell">...</td>
