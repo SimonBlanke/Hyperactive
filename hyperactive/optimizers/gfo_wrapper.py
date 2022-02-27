@@ -38,8 +38,8 @@ class TrafoClass:
         return results
 
     def _convert_results2hyper(self):
-        self.eval_time = np.array(self._optimizer.eval_times).sum()
-        self.iter_time = np.array(self._optimizer.iter_times).sum()
+        self.eval_times = np.array(self._optimizer.eval_times).sum()
+        self.iter_times = np.array(self._optimizer.iter_times).sum()
 
         if self._optimizer.best_para is not None:
             value = self.hg_conv.para2value(self._optimizer.best_para)
