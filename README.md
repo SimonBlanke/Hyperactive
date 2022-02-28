@@ -846,6 +846,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <summary><b>v4.0.0</b> :heavy_check_mark:</summary>
 
   - [x] small adjustments to API
+  - [x] move optimization strategies into sub-module "optimizers"
   - [x] preparation for future add ons (long-term-memory, meta-learn, ...) from separate repositories
   - [x] separate progress board into separate repository
 
