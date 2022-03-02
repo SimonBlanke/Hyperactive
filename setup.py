@@ -19,9 +19,6 @@ def find_version(*filepath):
         raise RuntimeError("Unable to find version string.")
 
 
-extras_require = {"dashboard": open("./requirements/dashboard.txt").readlines()}
-
-
 setup(
     name="hyperactive",
     version=find_version("hyperactive/__init__.py"),
@@ -55,6 +52,5 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=open("./requirements/main.txt").readlines(),
-    extras_require=extras_require,
+    install_requires=open("./requirements.txt").readlines(),
 )
