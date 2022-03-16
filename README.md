@@ -442,8 +442,38 @@ hyper.run()
     )
     hyper.run()
     ```
+
+
+- pass_through = {}
+  - Possible parameter types: (dict)
+  - The pass_through accepts a dictionary that contains information that will be passed to the objective-function argument. This information will not change during the optimization run, unless the user does so by himself (within the objective-function).
   
-  
+    Example:
+    ```python
+    ... 
+    def objective_function(para):
+        para.pass_through["stuff1"] # <--- this variable is 1
+        para.pass_through["stuff2"] # <--- this variable is 2
+
+        score = -para["x1"] * para["x1"]
+        return score
+
+    pass_through = {
+      "stuff1": 1,
+      "stuff2": 2,
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        model,
+        search_space,
+        n_iter=30,
+        pass_through=pass_through,
+    )
+    hyper.run()
+    ```
+
+
 - max_score = None
   - Possible parameter types: (float, None)
   - Maximum score until the optimization stops. The score will be checked after each completed iteration.
