@@ -882,6 +882,15 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
+<summary><b>v4.1.0</b> :heavy_check_mark:</summary>
+
+  - [x] add python 3.9 to testing
+  - [x] add pass_through-parameter
+  - [x] add v1 GFO optimization algorithms
+
+</details>
+
+<details>
 <summary><b>Upcoming Features</b></summary>
    
   - [ ] "long term memory" for search-data storage and usage
