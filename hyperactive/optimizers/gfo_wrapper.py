@@ -76,6 +76,7 @@ class _BaseOptimizer_(TrafoClass):
         initialize,
         pass_through,
         callbacks,
+        catch,
         max_score,
         early_stopping,
         random_state,
@@ -90,6 +91,7 @@ class _BaseOptimizer_(TrafoClass):
         self.initialize = initialize
         self.pass_through = pass_through
         self.callbacks = callbacks
+        self.catch = catch
         self.max_score = max_score
         self.early_stopping = early_stopping
         self.random_state = random_state
@@ -133,6 +135,7 @@ class _BaseOptimizer_(TrafoClass):
             objective_function=self.objective_function,
             optimizer=self._optimizer,
             callbacks=self.callbacks,
+            catch=self.catch,
             nth_process=self.nth_process,
         )
         gfo_wrapper_model.pass_through = self.pass_through

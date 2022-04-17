@@ -17,12 +17,13 @@ def gfo2hyper(search_space, para):
 
 
 class ObjectiveFunction(DictClass):
-    def __init__(self, objective_function, optimizer, callbacks, nth_process):
+    def __init__(self, objective_function, optimizer, callbacks, catch, nth_process):
         super().__init__()
 
         self.objective_function = objective_function
         self.optimizer = optimizer
         self.callbacks = callbacks
+        self.catch = catch
         self.nth_process = nth_process
 
         self.best = 0
@@ -40,9 +41,12 @@ class ObjectiveFunction(DictClass):
             para = gfo2hyper(search_space, para)
             self.para_dict = para
 
-            self.run_callbacks("before")
-            results = self.objective_function(self)
-            self.run_callbacks("after")
+            try:
+                self.run_callbacks("before")
+                results = self.objective_function(self)
+                self.run_callbacks("after")
+            except tuple(self.catch.keys()) as e:
+                results = self.catch[e.__class__]
 
             return results
 

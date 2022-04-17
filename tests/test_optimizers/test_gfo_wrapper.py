@@ -70,6 +70,7 @@ def test_best_results_0(Optimizer, search_space, objective):
     initialize = {"vertices": 2}
     pass_through = {}
     callbacks = None
+    catch = None
     max_score = None
     early_stopping = None
     random_state = None
@@ -86,6 +87,7 @@ def test_best_results_0(Optimizer, search_space, objective):
         initialize=initialize,
         pass_through=pass_through,
         callbacks=callbacks,
+        catch=catch,
         max_score=max_score,
         early_stopping=early_stopping,
         random_state=random_state,
