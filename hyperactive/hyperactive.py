@@ -88,6 +88,7 @@ class Hyperactive:
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
         pass_through={},
+        callbacks=None,
         max_score=None,
         early_stopping=None,
         random_state=None,
@@ -101,17 +102,18 @@ class Hyperactive:
         s_space = SearchSpace(search_space)
 
         optimizer.setup_search(
-            objective_function,
-            s_space,
-            n_iter,
-            initialize,
-            pass_through,
-            max_score,
-            early_stopping,
-            random_state,
-            memory,
-            memory_warm_start,
-            self.verbosity,
+            objective_function=objective_function,
+            s_space=s_space,
+            n_iter=n_iter,
+            initialize=initialize,
+            pass_through=pass_through,
+            callbacks=callbacks,
+            max_score=max_score,
+            early_stopping=early_stopping,
+            random_state=random_state,
+            memory=memory,
+            memory_warm_start=memory_warm_start,
+            verbosity=self.verbosity,
         )
 
         if memory == "share":
