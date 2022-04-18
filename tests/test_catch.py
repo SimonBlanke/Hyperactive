@@ -12,7 +12,7 @@ search_space = {
 }
 
 
-def test_callback_0():
+def test_catch_0():
     def objective_function(access):
         x = y
 
@@ -28,7 +28,7 @@ def test_callback_0():
     hyper.run()
 
 
-def test_callback_1():
+def test_catch_1():
     def objective_function(access):
         a = 1 + "str"
 
@@ -44,7 +44,7 @@ def test_callback_1():
     hyper.run()
 
 
-def test_callback_2():
+def test_catch_2():
     def objective_function(access):
         math.sqrt(-10)
 
@@ -60,7 +60,7 @@ def test_callback_2():
     hyper.run()
 
 
-def test_callback_3():
+def test_catch_3():
     def objective_function(access):
         x = 1 / 0
 
@@ -76,7 +76,7 @@ def test_callback_3():
     hyper.run()
 
 
-def test_callback_all():
+def test_catch_all():
     def objective_function(access):
         x = y
         a = 1 + "str"
