@@ -88,7 +88,7 @@ class Hyperactive:
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
         pass_through={},
-        callbacks=None,
+        callbacks={},
         catch={},
         max_score=None,
         early_stopping=None,
