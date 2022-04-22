@@ -474,6 +474,14 @@ hyper.run()
     ```
 
 
+- callbacks = {}
+  - Possible parameter types: (dict)
+
+
+- catch = {}
+  - Possible parameter types: (dict)
+
+
 - max_score = None
   - Possible parameter types: (float, None)
   - Maximum score until the optimization stops. The score will be checked after each completed iteration.
