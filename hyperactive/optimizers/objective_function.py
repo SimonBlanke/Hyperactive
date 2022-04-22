@@ -26,10 +26,7 @@ class ObjectiveFunction(DictClass):
         self.catch = catch
         self.nth_process = nth_process
 
-        self.best = 0
         self.nth_iter = 0
-        self.best_para = None
-        self.best_score = -np.inf
 
     def run_callbacks(self, type_):
         if self.callbacks and type_ in self.callbacks:
@@ -38,6 +35,7 @@ class ObjectiveFunction(DictClass):
     def __call__(self, search_space):
         # wrapper for GFOs
         def _model(para):
+            self.nth_iter = len(self.optimizer.pos_l)
             para = gfo2hyper(search_space, para)
             self.para_dict = para
 
