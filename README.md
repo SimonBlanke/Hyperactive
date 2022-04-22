@@ -892,12 +892,21 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
+<summary><b>v4.2.0</b> </summary>
+
+  - [x] add callbacks-parameter
+  - [x] add catch-parameter
+
+</details>
+
+
+<details>
 <summary><b>Upcoming Features</b></summary>
    
-  - [ ] "long term memory" for search-data storage and usage
-  - [ ] Dashboard for visualization of stored search-data
   - [ ] Data collector tool to store data (from inside the objective function) into csv-files
-
+  - [ ] Experiment-tracking for search-data storage and usage
+  - [ ] Dashboard for visualization of stored search-data
+  - [ ] Meta-Learning tool for hyperparameter optimization
 
 </details>
 
