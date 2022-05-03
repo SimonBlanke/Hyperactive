@@ -350,7 +350,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, max_score, random_state, memory, memory_warm_start, progress_board)</b></summary>
+<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, pass_through, callbacks, catch, max_score, early_stopping, random_state, memory, memory_warm_start, progress_board)</b></summary>
 
 
 - objective_function
@@ -476,10 +476,56 @@ hyper.run()
 
 - callbacks = {}
   - Possible parameter types: (dict)
+  - The callbacks enables you to pass functions to hyperactive that are called every iteration during the optimization run. The function has access to the same argument as the objective-function. You can decide if the functions are called before or after the objective-function is evaluated via the keys of the callbacks-dictionary. The values of the dictionary are lists of the callback-functions. The following example should show they way to use callbacks: 
+
+
+    Example:
+    ```python
+    ...
+
+    def callback_1(access):
+      # do some stuff
+
+    def callback_2(access):
+      # do some stuff
+
+    def callback_3(access):
+      # do some stuff
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=100,
+        callbacks={
+          "after": [callback_1, callback_2],
+          "before": [callback_3]
+          },
+    )
+    hyper.run()
+    ```
 
 
 - catch = {}
   - Possible parameter types: (dict)
+  - The catch parameter provides a way to handle exceptions that occur during the evaluation of the objective-function or the callbacks. It is a dictionary that accepts the exception class as a key and the score that is returned instead as the value. This way you can handle multiple types of exceptions and return different scores for each. 
+  In the case of an exception it often makes sense to return `np.nan` as a score. You can see an example of this in the following code-snippet:
+
+    Example:
+    ```python
+    ...
+    
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=100,
+        catch={
+          ValueError: np.nan,
+          },
+    )
+    hyper.run()
+    ```
 
 
 - max_score = None
