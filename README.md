@@ -801,12 +801,12 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 
 <details>
-<summary><b> .search_data(objective_function)</b></summary>
+<summary><b> .search_data(objective_function, times=False)</b></summary>
 
 - objective_function
   - (callable)
 - returns: Pandas dataframe 
-- The dataframe contains score and parameter information of the given objective_function found in the optimization run.
+- The dataframe contains score and parameter information of the given objective_function found in the optimization run. If the parameter `times` is set to True the evaluation- and iteration- times are added to the dataframe. 
 
     example:
 
@@ -950,6 +950,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
   - [x] add callbacks-parameter
   - [x] add catch-parameter
+  - [x] add option to add eval- and iter- times to search-data
 
 </details>
 
