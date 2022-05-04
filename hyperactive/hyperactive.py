@@ -153,5 +153,14 @@ class Hyperactive:
     def best_score(self, id_):
         return self.results_.best_score(id_)
 
-    def search_data(self, id_):
-        return self.results_.search_data(id_)
+    def search_data(self, id_, times=False):
+        search_data_ = self.results_.search_data(id_)
+
+        if times == False:
+            search_data_.drop(
+                labels=["eval_times", "iter_times"],
+                axis=1,
+                inplace=True,
+                errors="ignore",
+            )
+        return search_data_

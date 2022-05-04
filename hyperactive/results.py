@@ -20,7 +20,7 @@ class Results:
         best_para = None
         search_data = None
 
-        results_list = []
+        search_data_list = []
 
         for results_ in self.results_list:
             nth_process = results_["nth_process"]
@@ -37,10 +37,14 @@ class Results:
                 best_score = results_["best_score"]
                 best_para = results_["best_para"]
 
-            results_list.append(results_["search_data"])
+            search_data = results_["search_data"]
+            search_data["eval_times"] = results_["eval_times"]
+            search_data["iter_times"] = results_["iter_times"]
 
-        if len(results_list) > 0:
-            search_data = pd.concat(results_list)
+            search_data_list.append(search_data)
+
+        if len(search_data_list) > 0:
+            search_data = pd.concat(search_data_list)
 
         self.objFunc2results[objective_function] = {
             "best_para": best_para,
