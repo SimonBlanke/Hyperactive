@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 import pandas as pd
 
@@ -101,6 +102,72 @@ def test_attributes_results_6():
     print("\n x1_results \n", x1_results)
 
     assert len(set(x1_results)) < len(x1_results)
+
+
+def test_attributes_results_7():
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
+        return score
+
+    search_space = {
+        "x1": list(np.arange(0, 10, 1)),
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=20,
+    )
+    hyper.run()
+
+    search_data = hyper.search_data(objective_function)
+    with pytest.raises(Exception) as e_info:
+        search_data["eval_times"]
+
+
+def test_attributes_results_8():
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
+        return score
+
+    search_space = {
+        "x1": list(np.arange(0, 10, 1)),
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=20,
+    )
+    hyper.run()
+
+    search_data = hyper.search_data(objective_function)
+    with pytest.raises(Exception) as e_info:
+        search_data["iter_times"]
+
+
+def test_attributes_results_9():
+    def objective_function(opt):
+        score = -opt["x1"] * opt["x1"]
+        return score
+
+    search_space = {
+        "x1": list(np.arange(0, 10, 1)),
+    }
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=20,
+    )
+    hyper.run()
+
+    search_data = hyper.search_data(objective_function, times=True)
+    search_data["iter_times"]
+    search_data["eval_times"]
 
 
 """
