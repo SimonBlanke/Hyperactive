@@ -946,7 +946,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
-<summary><b>v4.2.0</b> </summary>
+<summary><b>v4.2.0</b> :heavy_check_mark:</summary>
 
   - [x] add callbacks-parameter
   - [x] add catch-parameter
