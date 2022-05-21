@@ -70,7 +70,8 @@
 <br>
 
 ## What's new?
-  - ### New implementation of the [Hyperactive ProgressBoard](https://github.com/SimonBlanke/ProgressBoard)
+  - ### 19.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
+  - ### 29.01.2022 New implementation of the [Hyperactive ProgressBoard](https://github.com/SimonBlanke/ProgressBoard)
 
 
 <br>
