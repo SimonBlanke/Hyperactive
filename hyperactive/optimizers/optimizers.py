@@ -26,11 +26,6 @@ from gradient_free_optimizers import (
     EnsembleOptimizer as _EnsembleOptimizer,
 )
 
-from .exp_opt_wrapper import try_import_experimental_opt
-
-
-try_import_experimental_opt()
-
 
 class HillClimbingOptimizer(_BaseOptimizer_):
     def __init__(self, **opt_params):
