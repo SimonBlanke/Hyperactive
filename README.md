@@ -70,7 +70,8 @@
 <br>
 
 ## What's new?
-  - ### New implementation of the [Hyperactive ProgressBoard](https://github.com/SimonBlanke/ProgressBoard)
+  - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
+  - ### 28.01.2022 New implementation of the [Hyperactive ProgressBoard](https://github.com/SimonBlanke/ProgressBoard)
 
 
 <br>
@@ -1077,6 +1078,23 @@ warnings.warn = warn
 
 </details>
 
+
+<details>
+<summary> Warning: Not enough initial positions for population size </summary>
+
+<br>
+  
+This warning occurs because Hyperactive needs more initial positions to choose from to generate a population for the optimization algorithm:
+The number of initial positions is determined by the `initialize`-parameter in the `add_search`-method.
+```python
+# This is how it looks per default
+initialize = {"grid": 4, "random": 2, "vertices": 4}
+  
+# You could set it to this for a maximum population of 20
+initialize = {"grid": 4, "random": 12, "vertices": 4}
+```
+  
+</details>
 
 
 
