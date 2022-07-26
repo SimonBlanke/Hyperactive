@@ -11,7 +11,7 @@ from .hyper_gradient_conv import HyperGradientConv
 from .base_optimizer import BaseOptimizer
 
 
-class _BaseOptimizer_(BaseOptimizer):
+class HyperOptimizer(BaseOptimizer):
     def __init__(self, **opt_params):
         super().__init__()
         self.opt_params = opt_params
@@ -69,14 +69,6 @@ class _BaseOptimizer_(BaseOptimizer):
         self.positions = self.opt_algo.search_data
 
         self.search_data = self.hg_conv.positions2results(self.positions)
-
-        print(
-            "\n convert_results2hyper self.search_data \n",
-            self.search_data,
-            "\n",
-            self.search_data.dtypes,
-            "\n",
-        )
 
         results_dd = self.opt_algo.search_data.drop_duplicates(
             subset=self.s_space.dim_keys, keep="first"
@@ -137,7 +129,6 @@ class _BaseOptimizer_(BaseOptimizer):
         )
 
         self.convert_results2hyper()
-        self.p_bar = self.opt_algo.p_bar
 
         self._add_result_attributes(
             self.best_para,
