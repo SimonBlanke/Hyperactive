@@ -53,4 +53,6 @@ setup(
         "Intended Audience :: Science/Research",
     ],
     install_requires=open("./requirements.txt").readlines(),
+    python_requires=">=3.5",
+    extras_require={"distribution": ["pathos", "joblib"]},
 )
