@@ -959,8 +959,8 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <summary><b>v4.3.0</b> </summary>
 
   - [ ] add new features from GFO
-    - [ ] add Spiral Optimization
-    - [ ] add Lipschitz Optimizer
+    - [x] add Spiral Optimization
+    - [x] add Lipschitz Optimizer
     - [ ] print the random seed for reproducibility
 
 </details>
