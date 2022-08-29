@@ -19,8 +19,10 @@ from gradient_free_optimizers import (
     PatternSearch as _PatternSearch,
     ParallelTemperingOptimizer as _ParallelTemperingOptimizer,
     ParticleSwarmOptimizer as _ParticleSwarmOptimizer,
+    SpiralOptimization as _SpiralOptimization_,
     EvolutionStrategyOptimizer as _EvolutionStrategyOptimizer,
     BayesianOptimizer as _BayesianOptimizer,
+    LipschitzOptimizer as _LipschitzOptimizer_,
     TreeStructuredParzenEstimators as _TreeStructuredParzenEstimators,
     ForestOptimizer as _ForestOptimizer,
     EnsembleOptimizer as _EnsembleOptimizer,
@@ -105,6 +107,12 @@ class ParticleSwarmOptimizer(HyperOptimizer):
         self._OptimizerClass = _ParticleSwarmOptimizer
 
 
+class SpiralOptimization(HyperOptimizer):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _SpiralOptimization_
+
+
 class EvolutionStrategyOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
@@ -115,6 +123,12 @@ class BayesianOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self._OptimizerClass = _BayesianOptimizer
+
+
+class LipschitzOptimizer(HyperOptimizer):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _LipschitzOptimizer_
 
 
 class TreeStructuredParzenEstimators(HyperOptimizer):
