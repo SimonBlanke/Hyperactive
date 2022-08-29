@@ -65,7 +65,9 @@ class PrintResults:
 
         return para_names_align
 
-    def _print_results(self, objective_function, best_score, best_para, best_iter):
+    def _print_results(
+        self, objective_function, best_score, best_para, best_iter, random_seed
+    ):
         print("\nResults: '{}'".format(objective_function.__name__), " ")
         if best_para is None:
             print(indent, "Best score:", best_score, " ")
@@ -92,6 +94,8 @@ class PrintResults:
             print(indent, "Best iteration:", best_iter, " ")
 
         print(" ")
+        print(indent, "Random seed:", random_seed, " ")
+        print(" ")
 
     def print_process(self, results, nth_process):
         verbosity = self.verbosity
@@ -101,13 +105,17 @@ class PrintResults:
         best_iter = results["best_iter"]
         eval_times = results["eval_times"]
         iter_times = results["iter_times"]
+        random_seed = results["random_seed"]
+
         n_iter = self.opt_pros[nth_process].n_iter
 
         eval_time = np.array(eval_times).sum()
         iter_time = np.array(iter_times).sum()
 
         if "print_results" in verbosity:
-            self._print_results(objective_function, best_score, best_para, best_iter)
+            self._print_results(
+                objective_function, best_score, best_para, best_iter, random_seed
+            )
 
         if "print_times" in verbosity:
             self._print_times(eval_time, iter_time, n_iter)
