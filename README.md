@@ -41,8 +41,6 @@
 
 - makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
-- [visualizes](https://github.com/SimonBlanke/ProgressBoard) your collected data
-
 - saves your [computation time](./examples/optimization_applications/memory.py)
 
 - supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
@@ -71,8 +69,6 @@
 
 ## What's new?
   - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
-  - ### 28.01.2022 New implementation of the [Hyperactive ProgressBoard](https://github.com/SimonBlanke/ProgressBoard)
-
 
 <br>
 
@@ -184,10 +180,6 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_applications/meta_data_collection.py">Search Data Collection</a></li>
             <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
             <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
-          </ul>
-        <a><b>Visualization:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/progress_visualization.py">Optimization progress visualization  </a></li>
           </ul>
         <a><b>Miscellaneous:</b></a>
           <ul>
@@ -637,7 +629,7 @@ corresponding iteration.
 def objective_function(opt):
     # get x1 and x2 from the argument "opt"
     x1 = opt["x1"]
-    x2 = opt["x1"]
+    x2 = opt["x2"]
 
     # calculate the score with the parameter set
     score = -(x1 * x1 + x2 * x2)
@@ -651,7 +643,7 @@ The objective function always needs a score, which shows how "good" or "bad" the
 ```python
 def objective_function(opt):
     x1 = opt["x1"]
-    x2 = opt["x1"]
+    x2 = opt["x2"]
 
     score = -(x1 * x1 + x2 * x2)
 
