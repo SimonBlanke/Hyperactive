@@ -625,7 +625,7 @@ corresponding iteration.
 def objective_function(opt):
     # get x1 and x2 from the argument "opt"
     x1 = opt["x1"]
-    x2 = opt["x1"]
+    x2 = opt["x2"]
 
     # calculate the score with the parameter set
     score = -(x1 * x1 + x2 * x2)
@@ -639,7 +639,7 @@ The objective function always needs a score, which shows how "good" or "bad" the
 ```python
 def objective_function(opt):
     x1 = opt["x1"]
-    x2 = opt["x1"]
+    x2 = opt["x2"]
 
     score = -(x1 * x1 + x2 * x2)
 
