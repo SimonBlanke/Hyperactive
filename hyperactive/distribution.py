@@ -19,10 +19,7 @@ def multiprocessing_wrapper(process_func, process_infos, n_processes):
 
 
 def pathos_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
-    try:
-        import pathos.multiprocessing as pmp
-    except ImportError:
-        pass
+    import pathos.multiprocessing as pmp
 
     pool = pmp.Pool(n_processes, **kwargs)
     results = pool.map(process_func, search_processes_paras)
@@ -31,10 +28,7 @@ def pathos_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
 
 
 def joblib_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
-    try:
-        from joblib import Parallel, delayed
-    except ImportError:
-        pass
+    from joblib import Parallel, delayed
 
     jobs = [delayed(process_func)(*info_dict) for info_dict in search_processes_paras]
     results = Parallel(n_jobs=n_processes, **kwargs)(jobs)
@@ -43,11 +37,8 @@ def joblib_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
 
 
 def ray_wrapper(process_func, process_infos, n_processes, **kwargs):
-    try:
-        import ray
-        from ray.util.multiprocessing import Pool
-    except ImportError:
-        pass
+    import ray
+    from ray.util.multiprocessing import Pool
 
     # ray.init(log_to_driver=False)
     pool = Pool(n_processes)
