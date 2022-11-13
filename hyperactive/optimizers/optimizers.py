@@ -23,6 +23,7 @@ from gradient_free_optimizers import (
     EvolutionStrategyOptimizer as _EvolutionStrategyOptimizer,
     BayesianOptimizer as _BayesianOptimizer,
     LipschitzOptimizer as _LipschitzOptimizer_,
+    DirectAlgorithm as _DirectAlgorithm_,
     TreeStructuredParzenEstimators as _TreeStructuredParzenEstimators,
     ForestOptimizer as _ForestOptimizer,
     EnsembleOptimizer as _EnsembleOptimizer,
@@ -129,6 +130,12 @@ class LipschitzOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self._OptimizerClass = _LipschitzOptimizer_
+
+
+class DirectAlgorithm(HyperOptimizer):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self._OptimizerClass = _DirectAlgorithm_
 
 
 class TreeStructuredParzenEstimators(HyperOptimizer):
