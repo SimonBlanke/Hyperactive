@@ -107,7 +107,7 @@ def test_warm_start_smbo_2(smbo_opt):
     search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
-    hyper1 = Hyperactive(distribution="pathos")
+    hyper1 = Hyperactive(distribution="joblib")
     hyper1.add_search(
         objective_function, search_space, n_iter=15, n_jobs=2, optimizer=smbo_opt_
     )
@@ -123,7 +123,7 @@ def test_warm_start_smbo_3(smbo_opt):
     search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
-    hyper1 = Hyperactive(distribution="pathos")
+    hyper1 = Hyperactive(distribution="joblib")
     hyper1.add_search(
         objective_function, search_space, n_iter=15, n_jobs=2, optimizer=smbo_opt_
     )
