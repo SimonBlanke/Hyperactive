@@ -34,14 +34,3 @@ def joblib_wrapper(process_func, search_processes_paras, n_processes, **kwargs):
     results = Parallel(n_jobs=n_processes, **kwargs)(jobs)
 
     return results
-
-
-def ray_wrapper(process_func, process_infos, n_processes, **kwargs):
-    import ray
-    from ray.util.multiprocessing import Pool
-
-    # ray.init(log_to_driver=False)
-    pool = Pool(n_processes)
-    results = pool.map(process_func, process_infos)
-
-    return results
