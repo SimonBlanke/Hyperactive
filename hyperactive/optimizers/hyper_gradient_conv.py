@@ -96,15 +96,28 @@ class HyperGradientConv:
         list_positions = []
 
         for value2 in list1_values:
-            try:
-                list_positions.append(search_dim.index(value2))
-            except:
-                raise ValueError
+            list_positions.append(search_dim.index(value2))
 
         return list_positions
 
     def values2positions(self, values, search_dim):
         return np.array(search_dim).searchsorted(values)
+
+    def positions2results(self, positions):
+        results_dict = {}
+
+        for para_name in self.s_space.dim_keys:
+            values_list = self.s_space[para_name]
+            pos_ = positions[para_name].values
+            values_ = [values_list[idx] for idx in pos_]
+            results_dict[para_name] = values_
+
+        results = pd.DataFrame.from_dict(results_dict)
+
+        diff_list = np.setdiff1d(positions.columns, results.columns)
+        results[diff_list] = positions[diff_list]
+
+        return results
 
     def conv_memory_warm_start(self, results):
         if results is None:

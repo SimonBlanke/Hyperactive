@@ -120,11 +120,13 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
             <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
+            <li>Spiral Optimization</li>
             <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
+            <li>Lipschitz Optimization</li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
@@ -378,8 +380,10 @@ hyper.run()
     - PatternSearch
     - ParallelTemperingOptimizer
     - ParticleSwarmOptimizer
+    - SpiralOptimization
     - EvolutionStrategyOptimizer
     - BayesianOptimizer
+    - LipschitzOptimizer
     - TreeStructuredParzenEstimators
     - ForestOptimizer
     
