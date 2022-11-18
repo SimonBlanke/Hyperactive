@@ -128,7 +128,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
             <li>Lipschitz Optimization</li>
-            <li>DirectAlgorithm</li>
+            <li>Direct Algorithm</li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
@@ -978,8 +978,6 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [ ] Meta-Learning tool for hyperparameter optimization
 
 </details>
-
-
 
 
 
