@@ -68,6 +68,7 @@
 <br>
 
 ## What's new?
+  - ### 18.11.2022 v4.3.0 with three new optimization algorithms (Spiral Optimization, Lipschitz Optimizer, DIRECT Optimizer)
   - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
 
 <br>
@@ -127,6 +128,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
             <li>Lipschitz Optimization</li>
+            <li>DirectAlgorithm</li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
@@ -345,7 +347,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, pass_through, callbacks, catch, max_score, early_stopping, random_state, memory, memory_warm_start, progress_board)</b></summary>
+<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, pass_through, callbacks, catch, max_score, early_stopping, random_state, memory, memory_warm_start)</b></summary>
 
 
 - objective_function
@@ -384,6 +386,7 @@ hyper.run()
     - EvolutionStrategyOptimizer
     - BayesianOptimizer
     - LipschitzOptimizer
+    - DirectAlgorithm
     - TreeStructuredParzenEstimators
     - ForestOptimizer
     
@@ -590,11 +593,6 @@ hyper.run()
       </table>
   
   
-- progress_board = None
-  - Possible parameter types: (initialized ProgressBoard object, None)
-  - Initialize the ProgressBoard class and pass the object to the progress_board-parameter. 
-
-
 </details>
 
 
@@ -952,15 +950,24 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
-<summary><b>v4.3.0</b> </summary>
+<summary><b>v4.3.0</b> :heavy_check_mark:</summary>
 
-  - [ ] add new features from GFO
+  - [x] add new features from GFO
     - [x] add Spiral Optimization
     - [x] add Lipschitz Optimizer
     - [x] add DIRECT Optimizer
-    - [ ] print the random seed for reproducibility
+    - [x] print the random seed for reproducibility
 
 </details>
+
+<details>
+<summary><b>v4.4.0</b> </summary>
+
+  - [ ] ...
+
+</details>
+
+
 
 <details>
 <summary><b>Upcoming Features</b></summary>
