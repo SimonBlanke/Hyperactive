@@ -17,6 +17,7 @@ class BaseOptimizer:
         positions,
         search_data,
         memory_values_df,
+        random_seed,
     ):
         self.best_para = best_para
         self.best_score = best_score
@@ -26,3 +27,4 @@ class BaseOptimizer:
         self.positions = positions
         self.search_data = search_data
         self.memory_values_df = memory_values_df
+        self.random_seed = random_seed

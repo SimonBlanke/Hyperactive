@@ -8,7 +8,6 @@ from .distribution import (
     joblib_wrapper,
     multiprocessing_wrapper,
     pathos_wrapper,
-    ray_wrapper,
 )
 from .process import _process_
 
@@ -21,7 +20,6 @@ dist_dict = {
     "joblib": (joblib_wrapper, _process_),
     "multiprocessing": (multiprocessing_wrapper, proxy),
     "pathos": (pathos_wrapper, proxy),
-    "ray": (ray_wrapper, proxy),
 }
 
 

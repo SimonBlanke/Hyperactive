@@ -19,8 +19,9 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.5", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@master
@@ -35,6 +36,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest coveralls codecov pytest-cov
         python -m pip install .
+        python -m pip install .[distribution]
                 
     - name: Test with pytest
       run: |

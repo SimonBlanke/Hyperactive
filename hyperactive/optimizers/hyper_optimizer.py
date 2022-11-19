@@ -139,4 +139,5 @@ class HyperOptimizer(BaseOptimizer):
             self.positions,
             self.search_data,
             self.memory_values_df,
+            self.opt_algo.random_seed,
         )

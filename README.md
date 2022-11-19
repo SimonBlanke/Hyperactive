@@ -41,8 +41,6 @@
 
 - makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
-- [visualizes](https://github.com/SimonBlanke/ProgressBoard) your collected data
-
 - saves your [computation time](./examples/optimization_applications/memory.py)
 
 - supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
@@ -70,9 +68,8 @@
 <br>
 
 ## What's new?
+  - ### 18.11.2022 v4.3.0 with three new optimization algorithms (Spiral Optimization, Lipschitz Optimizer, DIRECT Optimizer)
   - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
-  - ### 28.01.2022 New implementation of the [Hyperactive ProgressBoard](https://github.com/SimonBlanke/ProgressBoard)
-
 
 <br>
 
@@ -124,11 +121,14 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
             <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
+            <li>Spiral Optimization</li>
             <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
+            <li>Lipschitz Optimization</li>
+            <li>Direct Algorithm</li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
@@ -182,10 +182,6 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_applications/meta_data_collection.py">Search Data Collection</a></li>
             <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
             <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
-          </ul>
-        <a><b>Visualization:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/progress_visualization.py">Optimization progress visualization  </a></li>
           </ul>
         <a><b>Miscellaneous:</b></a>
           <ul>
@@ -351,7 +347,7 @@ hyper.run()
 
 
 <details>
-<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, pass_through, callbacks, catch, max_score, early_stopping, random_state, memory, memory_warm_start, progress_board)</b></summary>
+<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, pass_through, callbacks, catch, max_score, early_stopping, random_state, memory, memory_warm_start)</b></summary>
 
 
 - objective_function
@@ -386,8 +382,11 @@ hyper.run()
     - PatternSearch
     - ParallelTemperingOptimizer
     - ParticleSwarmOptimizer
+    - SpiralOptimization
     - EvolutionStrategyOptimizer
     - BayesianOptimizer
+    - LipschitzOptimizer
+    - DirectAlgorithm
     - TreeStructuredParzenEstimators
     - ForestOptimizer
     
@@ -594,11 +593,6 @@ hyper.run()
       </table>
   
   
-- progress_board = None
-  - Possible parameter types: (initialized ProgressBoard object, None)
-  - Initialize the ProgressBoard class and pass the object to the progress_board-parameter. 
-
-
 </details>
 
 
@@ -633,7 +627,7 @@ corresponding iteration.
 def objective_function(opt):
     # get x1 and x2 from the argument "opt"
     x1 = opt["x1"]
-    x2 = opt["x1"]
+    x2 = opt["x2"]
 
     # calculate the score with the parameter set
     score = -(x1 * x1 + x2 * x2)
@@ -647,7 +641,7 @@ The objective function always needs a score, which shows how "good" or "bad" the
 ```python
 def objective_function(opt):
     x1 = opt["x1"]
-    x2 = opt["x1"]
+    x2 = opt["x2"]
 
     score = -(x1 * x1 + x2 * x2)
 
@@ -955,9 +949,28 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+<details>
+<summary><b>v4.3.0</b> :heavy_check_mark:</summary>
+
+  - [x] add new features from GFO
+    - [x] add Spiral Optimization
+    - [x] add Lipschitz Optimizer
+    - [x] add DIRECT Optimizer
+    - [x] print the random seed for reproducibility
+
+</details>
 
 <details>
-<summary><b>Upcoming Features</b></summary>
+<summary><b>v4.4.0</b> </summary>
+
+  - [ ] add Optimization-Strategies
+
+</details>
+
+
+
+<details>
+<summary><b>Ideas for the Future</b></summary>
    
   - [ ] Data collector tool to store data (from inside the objective function) into csv-files
   - [ ] Experiment-tracking for search-data storage and usage
@@ -965,8 +978,6 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [ ] Meta-Learning tool for hyperparameter optimization
 
 </details>
-
-
 
 
 

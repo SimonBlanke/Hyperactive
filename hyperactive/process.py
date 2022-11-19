@@ -16,4 +16,5 @@ def _process_(nth_process, optimizer):
         "positions": optimizer.positions,
         "search_data": optimizer.search_data,
         "memory_values_df": optimizer.memory_values_df,
+        "random_seed": optimizer.random_seed,
     }

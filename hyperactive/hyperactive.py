@@ -4,7 +4,6 @@
 
 
 import multiprocessing as mp
-from tqdm import tqdm
 
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
