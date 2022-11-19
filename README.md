@@ -963,14 +963,14 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <details>
 <summary><b>v4.4.0</b> </summary>
 
-  - [ ] ...
+  - [ ] add Optimization-Strategies
 
 </details>
 
 
 
 <details>
-<summary><b>Upcoming Features</b></summary>
+<summary><b>Ideas for the Future</b></summary>
    
   - [ ] Data collector tool to store data (from inside the objective function) into csv-files
   - [ ] Experiment-tracking for search-data storage and usage
