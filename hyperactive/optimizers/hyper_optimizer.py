@@ -8,10 +8,10 @@ import pandas as pd
 
 from .objective_function import ObjectiveFunction
 from .hyper_gradient_conv import HyperGradientConv
-from .base_optimizer import BaseOptimizer
+from .optimizer_attributes import OptimizerAttributes
 
 
-class HyperOptimizer(BaseOptimizer):
+class HyperOptimizer(OptimizerAttributes):
     def __init__(self, **opt_params):
         super().__init__()
         self.opt_params = opt_params
@@ -136,8 +136,6 @@ class HyperOptimizer(BaseOptimizer):
             self.opt_algo.p_bar._best_since_iter,
             self.eval_times,
             self.iter_times,
-            self.positions,
             self.search_data,
-            self.memory_values_df,
             self.opt_algo.random_seed,
         )

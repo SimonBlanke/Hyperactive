@@ -3,9 +3,15 @@
 # License: MIT License
 
 
-class BaseOptimizer:
+class OptimizerAttributes:
     def __init__(self):
-        pass
+        self.best_para = None
+        self.best_score = None
+        self.best_since_iter = None
+        self.eval_times = None
+        self.iter_times = None
+        self.search_data = None
+        self.random_seed = None
 
     def _add_result_attributes(
         self,
@@ -14,9 +20,7 @@ class BaseOptimizer:
         best_since_iter,
         eval_times,
         iter_times,
-        positions,
         search_data,
-        memory_values_df,
         random_seed,
     ):
         self.best_para = best_para
@@ -24,7 +28,5 @@ class BaseOptimizer:
         self.best_since_iter = best_since_iter
         self.eval_times = eval_times
         self.iter_times = iter_times
-        self.positions = positions
         self.search_data = search_data
-        self.memory_values_df = memory_values_df
         self.random_seed = random_seed
