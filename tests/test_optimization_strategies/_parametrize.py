@@ -77,3 +77,38 @@ optimizers_strat = (
         (EnsembleOptimizer),
     ],
 )
+
+
+optimizers_non_smbo = (
+    "Optimizer_non_smbo",
+    [
+        (HillClimbingOptimizer),
+        (StochasticHillClimbingOptimizer),
+        (RepulsingHillClimbingOptimizer),
+        (SimulatedAnnealingOptimizer),
+        (DownhillSimplexOptimizer),
+        (RandomSearchOptimizer),
+        (GridSearchOptimizer),
+        (RandomRestartHillClimbingOptimizer),
+        (RandomAnnealingOptimizer),
+        (PowellsMethod),
+        (PatternSearch),
+        (ParallelTemperingOptimizer),
+        (ParticleSwarmOptimizer),
+        (SpiralOptimization),
+        (EvolutionStrategyOptimizer),
+    ],
+)
+
+
+optimizers_smbo = (
+    "Optimizer_smbo",
+    [
+        (BayesianOptimizer),
+        (LipschitzOptimizer),
+        (DirectAlgorithm),
+        (TreeStructuredParzenEstimators),
+        (ForestOptimizer),
+        (EnsembleOptimizer),
+    ],
+)
