@@ -53,11 +53,11 @@ class HyperOptimizer(OptimizerAttributes):
             self.verbosity = []
 
     def convert_results2hyper(self):
-        self.eval_times = np.array(self.opt_algo.eval_times).sum()
-        self.iter_times = np.array(self.opt_algo.iter_times).sum()
+        self.eval_times = np.array(self.gfo_optimizer.eval_times).sum()
+        self.iter_times = np.array(self.gfo_optimizer.iter_times).sum()
 
-        if self.opt_algo.best_para is not None:
-            value = self.hg_conv.para2value(self.opt_algo.best_para)
+        if self.gfo_optimizer.best_para is not None:
+            value = self.hg_conv.para2value(self.gfo_optimizer.best_para)
             position = self.hg_conv.position2value(value)
             best_para = self.hg_conv.value2para(position)
 
@@ -65,12 +65,12 @@ class HyperOptimizer(OptimizerAttributes):
         else:
             self.best_para = None
 
-        self.best_score = self.opt_algo.best_score
-        self.positions = self.opt_algo.search_data
+        self.best_score = self.gfo_optimizer.best_score
+        self.positions = self.gfo_optimizer.search_data
 
         self.search_data = self.hg_conv.positions2results(self.positions)
 
-        results_dd = self.opt_algo.search_data.drop_duplicates(
+        results_dd = self.gfo_optimizer.search_data.drop_duplicates(
             subset=self.s_space.dim_keys, keep="first"
         )
         self.memory_values_df = results_dd[
@@ -91,7 +91,7 @@ class HyperOptimizer(OptimizerAttributes):
                 self.opt_params["warm_start_smbo"]
             )
 
-        self.opt_algo = self._OptimizerClass(
+        self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,
             initialize=initialize,
             random_state=self.random_state,
@@ -99,14 +99,14 @@ class HyperOptimizer(OptimizerAttributes):
             **self.opt_params
         )
 
-        self.conv = self.opt_algo.conv
+        self.conv = self.gfo_optimizer.conv
 
     def search(self, nth_process):
         self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(
             objective_function=self.objective_function,
-            optimizer=self.opt_algo,
+            optimizer=self.gfo_optimizer,
             callbacks=self.callbacks,
             catch=self.catch,
             nth_process=self.nth_process,
@@ -117,7 +117,7 @@ class HyperOptimizer(OptimizerAttributes):
 
         gfo_objective_function = gfo_wrapper_model(self.s_space())
 
-        self.opt_algo.search(
+        self.gfo_optimizer.search(
             objective_function=gfo_objective_function,
             n_iter=self.n_iter,
             max_time=self.max_time,
@@ -133,9 +133,9 @@ class HyperOptimizer(OptimizerAttributes):
         self._add_result_attributes(
             self.best_para,
             self.best_score,
-            self.opt_algo.p_bar._best_since_iter,
+            self.gfo_optimizer.p_bar._best_since_iter,
             self.eval_times,
             self.iter_times,
             self.search_data,
-            self.opt_algo.random_seed,
+            self.gfo_optimizer.random_seed,
         )

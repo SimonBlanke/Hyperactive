@@ -33,124 +33,124 @@ from gradient_free_optimizers import (
 class HillClimbingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _HillClimbingOptimizer
+        self.optimizer_class = _HillClimbingOptimizer
 
 
 class StochasticHillClimbingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _StochasticHillClimbingOptimizer
+        self.optimizer_class = _StochasticHillClimbingOptimizer
 
 
 class RepulsingHillClimbingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _RepulsingHillClimbingOptimizer
+        self.optimizer_class = _RepulsingHillClimbingOptimizer
 
 
 class SimulatedAnnealingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _SimulatedAnnealingOptimizer
+        self.optimizer_class = _SimulatedAnnealingOptimizer
 
 
 class DownhillSimplexOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _DownhillSimplexOptimizer
+        self.optimizer_class = _DownhillSimplexOptimizer
 
 
 class RandomSearchOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _RandomSearchOptimizer
+        self.optimizer_class = _RandomSearchOptimizer
 
 
 class GridSearchOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _GridSearchOptimizer
+        self.optimizer_class = _GridSearchOptimizer
 
 
 class RandomRestartHillClimbingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _RandomRestartHillClimbingOptimizer
+        self.optimizer_class = _RandomRestartHillClimbingOptimizer
 
 
 class RandomAnnealingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _RandomAnnealingOptimizer
+        self.optimizer_class = _RandomAnnealingOptimizer
 
 
 class PowellsMethod(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _PowellsMethod
+        self.optimizer_class = _PowellsMethod
 
 
 class PatternSearch(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _PatternSearch
+        self.optimizer_class = _PatternSearch
 
 
 class ParallelTemperingOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _ParallelTemperingOptimizer
+        self.optimizer_class = _ParallelTemperingOptimizer
 
 
 class ParticleSwarmOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _ParticleSwarmOptimizer
+        self.optimizer_class = _ParticleSwarmOptimizer
 
 
 class SpiralOptimization(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _SpiralOptimization_
+        self.optimizer_class = _SpiralOptimization_
 
 
 class EvolutionStrategyOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _EvolutionStrategyOptimizer
+        self.optimizer_class = _EvolutionStrategyOptimizer
 
 
 class BayesianOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _BayesianOptimizer
+        self.optimizer_class = _BayesianOptimizer
 
 
 class LipschitzOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _LipschitzOptimizer_
+        self.optimizer_class = _LipschitzOptimizer_
 
 
 class DirectAlgorithm(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _DirectAlgorithm_
+        self.optimizer_class = _DirectAlgorithm_
 
 
 class TreeStructuredParzenEstimators(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _TreeStructuredParzenEstimators
+        self.optimizer_class = _TreeStructuredParzenEstimators
 
 
 class ForestOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _ForestOptimizer
+        self.optimizer_class = _ForestOptimizer
 
 
 class EnsembleOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
-        self._OptimizerClass = _EnsembleOptimizer
+        self.optimizer_class = _EnsembleOptimizer
