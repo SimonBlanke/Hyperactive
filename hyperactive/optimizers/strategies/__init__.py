@@ -3,9 +3,9 @@
 # License: MIT License
 
 
-from .optimization_strategy import OptimizationStrategy
+from .optimization_strategy import CustomOptimizationStrategy
 
 
 __all__ = [
-    "OptimizationStrategy",
+    "CustomOptimizationStrategy",
 ]
