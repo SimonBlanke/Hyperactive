@@ -121,19 +121,3 @@ class BaseOptimizationStrategy(OptimizerAttributes):
             print("\n self.best_para \n", self.best_para)
             print(" self.best_score \n", self.best_score)
             print(" self.search_data \n", self.search_data)
-
-
-class OptimizationStrategy(BaseOptimizationStrategy):
-    def __init__(self):
-        super().__init__()
-
-        self.optimizer_setup_l = []
-        self.duration_sum = 0
-
-    def add_optimizer(self, optimizer, duration=1):
-        self.duration_sum += duration
-        optimizer_setup = {
-            "optimizer": optimizer,
-            "duration": duration,
-        }
-        self.optimizer_setup_l.append(optimizer_setup)
