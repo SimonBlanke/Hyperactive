@@ -109,8 +109,8 @@ def test_strategy_combinations_2(Optimizer, Optimizer_strat):
 
     assert len(search_data) == n_iter
 
-    assert len(optimizer1.search_data) == 1
-    assert len(optimizer2.search_data) == 9
+    assert len(optimizer1.search_data) == 9
+    assert len(optimizer2.search_data) == 1
 
     assert optimizer1.best_score <= optimizer2.best_score
 
