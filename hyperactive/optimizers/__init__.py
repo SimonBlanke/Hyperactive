@@ -24,7 +24,6 @@ from .optimizers import (
     DirectAlgorithm,
     TreeStructuredParzenEstimators,
     ForestOptimizer,
-    EnsembleOptimizer,
 )
 
 
@@ -49,5 +48,4 @@ __all__ = [
     "DirectAlgorithm",
     "TreeStructuredParzenEstimators",
     "ForestOptimizer",
-    "EnsembleOptimizer",
 ]

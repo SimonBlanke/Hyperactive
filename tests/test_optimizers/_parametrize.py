@@ -19,7 +19,6 @@ from hyperactive.optimizers import (
     DirectAlgorithm,
     TreeStructuredParzenEstimators,
     ForestOptimizer,
-    EnsembleOptimizer,
 )
 
 
@@ -46,6 +45,5 @@ optimizers = (
         (DirectAlgorithm),
         (TreeStructuredParzenEstimators),
         (ForestOptimizer),
-        (EnsembleOptimizer),
     ],
 )
