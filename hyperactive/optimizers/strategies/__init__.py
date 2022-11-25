@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .optimization_strategy import CustomOptimizationStrategy
+from .custom_optimization_strategy import CustomOptimizationStrategy
 
 
 __all__ = [

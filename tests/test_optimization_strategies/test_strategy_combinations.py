@@ -3,7 +3,7 @@ import numpy as np
 
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategy import OptimizationStrategy
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers, optimizers_strat
 
@@ -25,7 +25,7 @@ def test_strategy_combinations_0(Optimizer, Optimizer_strat):
     optimizer1 = Optimizer()
     optimizer2 = Optimizer_strat()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=0.5)
     opt_strat.add_optimizer(optimizer2, duration=0.5)
 
@@ -57,7 +57,7 @@ def test_strategy_combinations_1(Optimizer, Optimizer_strat):
     optimizer1 = Optimizer()
     optimizer2 = Optimizer_strat()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=0.1)
     opt_strat.add_optimizer(optimizer2, duration=0.9)
 
@@ -89,7 +89,7 @@ def test_strategy_combinations_2(Optimizer, Optimizer_strat):
     optimizer1 = Optimizer()
     optimizer2 = Optimizer_strat()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=0.9)
     opt_strat.add_optimizer(optimizer2, duration=0.1)
 
@@ -122,7 +122,7 @@ def test_strategy_combinations_3(Optimizer, Optimizer_strat):
     optimizer2 = Optimizer_strat()
     optimizer3 = Optimizer_strat()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=10)
     opt_strat.add_optimizer(optimizer2, duration=20)
     opt_strat.add_optimizer(optimizer3, duration=30)

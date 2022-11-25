@@ -4,7 +4,7 @@ import numpy as np
 
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategy import OptimizationStrategy
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import GridSearchOptimizer
 
 from ._parametrize import optimizers_non_smbo
@@ -25,7 +25,7 @@ def test_memory_Warm_start_0():
     optimizer1 = GridSearchOptimizer()
     optimizer2 = GridSearchOptimizer()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=0.2)
     opt_strat.add_optimizer(optimizer2, duration=0.8)
 
@@ -63,7 +63,7 @@ def test_memory_Warm_start_1():
     optimizer1 = GridSearchOptimizer()
     optimizer2 = GridSearchOptimizer()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=0.2)
     opt_strat.add_optimizer(optimizer2, duration=0.8)
 
@@ -107,7 +107,7 @@ def test_memory_Warm_start_2(Optimizer_non_smbo):
     optimizer1 = GridSearchOptimizer()
     optimizer2 = Optimizer_non_smbo()
 
-    opt_strat = OptimizationStrategy()
+    opt_strat = CustomOptimizationStrategy()
     opt_strat.add_optimizer(optimizer1, duration=0.5)
     opt_strat.add_optimizer(optimizer2, duration=0.5)
 
