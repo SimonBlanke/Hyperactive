@@ -80,6 +80,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
             else:
                 memory_warm_start = self.memory_warm_start
 
+            """
             print("\n hyper_opt \n", hyper_opt.__dict__, "\n")
             print("\n optimizer_class \n", hyper_opt.optimizer_class.__dict__, "\n")
             if (
@@ -89,7 +90,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
                 hyper_opt.optimizer_class.opt_params[
                     "warm_start_smbo"
                 ] = self.search_data
-
+            """
             hyper_opt.setup_search(
                 objective_function=self.objective_function,
                 s_space=self.s_space,
