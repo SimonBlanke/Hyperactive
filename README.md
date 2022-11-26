@@ -288,31 +288,34 @@ pip install hyperactive
 ```python
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import fetch_california_housing
+from sklearn.datasets import load_diabetes
 from hyperactive import Hyperactive
 
-data = fetch_california_housing()
+data = load_diabetes()
 X, y = data.data, data.target
 
 # define the model in a function
 def model(opt):
     # pass the suggested parameter to the machine learning model
     gbr = GradientBoostingRegressor(
-        n_estimators=opt["n_estimators"]
+        n_estimators=opt["n_estimators"], max_depth=opt["max_depth"]
     )
-    scores = cross_val_score(gbr, X, y, cv=3)
+    scores = cross_val_score(gbr, X, y, cv=4)
 
-    # return a single numerical value, which gets maximized
+    # return a single numerical value
     return scores.mean()
 
-
 # search space determines the ranges of parameters you want the optimizer to search through
-search_space = {"n_estimators": list(range(10, 200, 5))}
+search_space = {
+    "n_estimators": list(range(10, 150, 5)),
+    "max_depth": list(range(2, 12)),
+}
 
 # start the optimization run
 hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=50)
 hyper.run()
+
 ```
 
 <br>
