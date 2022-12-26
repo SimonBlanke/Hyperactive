@@ -153,3 +153,43 @@ def test_pass_through_1(pass_through_setup):
     hyper.run()
 
     assert hyper.opt_pros[0].pass_through != pass_through
+
+
+@pytest.mark.parametrize(*pass_through_setups)
+def test_pass_through_2(pass_through_setup):
+    objective_function = pass_through_setup[0]
+    pass_through = pass_through_setup[1]
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=100,
+        n_jobs=2,
+        pass_through=pass_through,
+    )
+    pass_through = copy.deepcopy(pass_through)
+
+    hyper.run()
+
+    assert hyper.opt_pros[0].pass_through != pass_through
+
+
+@pytest.mark.parametrize(*pass_through_setups)
+def test_pass_through_3(pass_through_setup):
+    objective_function = pass_through_setup[0]
+    pass_through = pass_through_setup[1]
+
+    hyper = Hyperactive()
+    hyper.add_search(
+        objective_function,
+        search_space,
+        n_iter=100,
+        n_jobs=4,
+        pass_through=pass_through,
+    )
+    pass_through = copy.deepcopy(pass_through)
+
+    hyper.run()
+
+    assert hyper.opt_pros[0].pass_through != pass_through
