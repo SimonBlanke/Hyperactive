@@ -2,6 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import pandas as pd
+
 
 class OptimizerAttributes:
     def __init__(self):
@@ -54,9 +56,8 @@ class OptimizerAttributes:
         if self.search_data is None:
             self.search_data = search_data
         else:
-            self.search_data = self.search_data.append(
-                search_data,
-                ignore_index=True,
+            self.search_data = pd.concat(
+                [self.search_data, search_data], ignore_index=True
             )
 
         if self.random_seed is None:
