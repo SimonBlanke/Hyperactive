@@ -3,7 +3,6 @@
 # License: MIT License
 
 
-import numpy as np
 from .dictionary import DictClass
 
 
