@@ -3,9 +3,8 @@
 # License: MIT License
 
 import numpy as np
-import pandas as pd
 
-
+from .progress_bar import TqdmWrapper
 from .objective_function import ObjectiveFunction
 from .hyper_gradient_conv import HyperGradientConv
 from .optimizer_attributes import OptimizerAttributes
@@ -101,7 +100,7 @@ class HyperOptimizer(OptimizerAttributes):
 
         self.conv = self.gfo_optimizer.conv
 
-    def search(self, nth_process):
+    def search(self, nth_process, p_bar):
         self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(
@@ -117,16 +116,26 @@ class HyperOptimizer(OptimizerAttributes):
 
         gfo_objective_function = gfo_wrapper_model(self.s_space())
 
-        self.gfo_optimizer.search(
-            objective_function=gfo_objective_function,
-            n_iter=self.n_iter,
-            max_time=self.max_time,
-            max_score=self.max_score,
-            early_stopping=self.early_stopping,
-            memory=self.memory,
-            memory_warm_start=memory_warm_start,
-            verbosity=self.verbosity,
+        self.gfo_optimizer.init_search(
+            gfo_objective_function,
+            self.n_iter,
+            self.max_time,
+            self.max_score,
+            self.early_stopping,
+            self.memory,
+            memory_warm_start,
+            False,
         )
+        for nth_iter in range(self.n_iter):
+
+            self.gfo_optimizer.search_step(nth_iter)
+            if self.gfo_optimizer.stop.check():
+                break
+
+            p_bar.update(1)
+            p_bar.refresh()
+
+        self.gfo_optimizer.finish_search()
 
         self.convert_results2hyper()
 
