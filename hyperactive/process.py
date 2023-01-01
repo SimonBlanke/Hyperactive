@@ -3,8 +3,22 @@
 # License: MIT License
 
 
+from tqdm import tqdm
+
+
 def _process_(nth_process, optimizer):
-    optimizer.search(nth_process)
+    p_bar = tqdm(
+        position=nth_process,
+        total=optimizer.n_iter,
+        ascii=" ─",
+        colour="Yellow",
+    )
+
+    optimizer.search(nth_process, p_bar)
+
+    p_bar.colour = "GREEN"
+    p_bar.refresh()
+    p_bar.close()
 
     return {
         "nth_process": nth_process,
