@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+
 from .optimizer_attributes import OptimizerAttributes
 
 
@@ -43,7 +44,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         self._max_time = None
 
         if "progress_bar" in self.verbosity:
-            self.verbosity = ["progress_bar"]
+            self.verbosity = []
         else:
             self.verbosity = []
 
@@ -58,9 +59,8 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         for optimizer_setup in self.optimizer_setup_l:
             optimizer_setup["optimizer"].max_time = value
 
-    def search(self, nth_process):
+    def search(self, nth_process, p_bar):
         for optimizer_setup in self.optimizer_setup_l:
-            print("\n")
             hyper_opt = optimizer_setup["optimizer"]
             duration = optimizer_setup["duration"]
 
@@ -91,6 +91,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
                     "warm_start_smbo"
                 ] = self.search_data
             """
+
             hyper_opt.setup_search(
                 objective_function=self.objective_function,
                 s_space=self.s_space,
@@ -107,7 +108,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
                 verbosity=self.verbosity,
             )
 
-            hyper_opt.search(nth_process)
+            hyper_opt.search(nth_process, p_bar)
 
             self._add_result_attributes(
                 hyper_opt.best_para,
@@ -118,7 +119,3 @@ class BaseOptimizationStrategy(OptimizerAttributes):
                 hyper_opt.search_data,
                 hyper_opt.gfo_optimizer.random_seed,
             )
-
-            print("\n self.best_para \n", self.best_para)
-            print(" self.best_score \n", self.best_score)
-            print(" self.search_data \n", self.search_data)
