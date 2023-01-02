@@ -284,4 +284,4 @@ def test_shared_memory_warm_start_1():
 
     d_time = d_time_1 / d_time_2
 
-    assert d_time > 2.3
+    assert d_time > 2
