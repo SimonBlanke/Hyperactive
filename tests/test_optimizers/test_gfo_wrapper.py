@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 
+from tqdm import tqdm
 from ._parametrize import optimizers
 from hyperactive.search_space import SearchSpace
 
@@ -60,7 +61,7 @@ search_space_para = (
 @pytest.mark.parametrize(*objective_para)
 @pytest.mark.parametrize(*search_space_para)
 @pytest.mark.parametrize(*optimizers)
-def test_best_results_0(Optimizer, search_space, objective):
+def test_gfo_opt_wrapper_0(Optimizer, search_space, objective):
     search_space = search_space
     objective_function = objective
 
@@ -96,6 +97,6 @@ def test_best_results_0(Optimizer, search_space, objective):
         verbosity=verbosity,
     )
     opt.max_time = None
-    opt.search(nth_process=0)
+    opt.search(nth_process=0, p_bar=tqdm(total=n_iter))
 
     assert opt.best_score == objective_function(opt.best_para)
