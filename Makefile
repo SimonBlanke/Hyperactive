@@ -46,7 +46,7 @@ test-timings:
 
 test-local: test-timings
 
-test:  test-local test_ 
+test:  test_ test-local
 
 
 test-examples:
