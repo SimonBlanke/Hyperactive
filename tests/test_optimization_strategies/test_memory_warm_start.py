@@ -59,7 +59,7 @@ def test_memory_Warm_start_0():
 
     print("\n d_time", d_time)
 
-    assert 0.5 < d_time < 1.5
+    assert 0.8 < d_time < 1.8
 
 
 def test_memory_Warm_start_1():
