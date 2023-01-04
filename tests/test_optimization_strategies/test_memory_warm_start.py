@@ -46,6 +46,9 @@ def test_memory_Warm_start_0():
     d_time = time.time() - c_time
 
     search_data = hyper.search_data(objective_function)
+    
+    optimizer1 = hyper.opt_pros[0].optimizer_setup_l[0]["optimizer"]
+    optimizer2 = hyper.opt_pros[0].optimizer_setup_l[1]["optimizer"]
 
     assert len(search_data) == n_iter
 
@@ -88,6 +91,9 @@ def test_memory_Warm_start_1():
     d_time = time.time() - c_time
 
     search_data = hyper.search_data(objective_function)
+
+    optimizer1 = hyper.opt_pros[0].optimizer_setup_l[0]["optimizer"]
+    optimizer2 = hyper.opt_pros[0].optimizer_setup_l[1]["optimizer"]
 
     assert len(search_data) == n_iter
 
@@ -132,6 +138,9 @@ def test_memory_Warm_start_2(Optimizer_non_smbo):
     d_time = time.time() - c_time
 
     search_data = hyper.search_data(objective_function)
+
+    optimizer1 = hyper.opt_pros[0].optimizer_setup_l[0]["optimizer"]
+    optimizer2 = hyper.opt_pros[0].optimizer_setup_l[1]["optimizer"]
 
     assert len(search_data) == n_iter
 
