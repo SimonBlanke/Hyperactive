@@ -3,6 +3,7 @@
 # License: MIT License
 
 
+import copy
 import multiprocessing as mp
 
 from .optimizers import RandomSearchOptimizer
@@ -55,7 +56,7 @@ class Hyperactive:
         if isinstance(optimizer, str):
             if optimizer == "default":
                 optimizer = RandomSearchOptimizer()
-        return optimizer
+        return copy.deepcopy(optimizer)
 
     @staticmethod
     def _default_search_id(search_id, objective_function):
