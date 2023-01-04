@@ -87,7 +87,7 @@ class Hyperactive:
         optimizer="default",
         n_jobs=1,
         initialize={"grid": 4, "random": 2, "vertices": 4},
-        pass_through={},
+        pass_through=None,
         callbacks={},
         catch={},
         max_score=None,
@@ -97,6 +97,9 @@ class Hyperactive:
         memory_warm_start=None,
     ):
         self.check_list(search_space)
+
+        if pass_through is None:
+            pass_through = dict()
 
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
