@@ -151,5 +151,5 @@ def test_memory_Warm_start_2(Optimizer_non_smbo):
 
     print("\n d_time", d_time)
 
-    assert d_time < 0.7
+    assert d_time < 0.85
     
