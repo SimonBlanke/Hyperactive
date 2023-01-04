@@ -548,7 +548,7 @@ hyper.run()
   - Random state for random processes in the random, numpy and scipy module.
 
 
-- memory = True
+- memory = "share"
   - Possible parameter types: (bool, "share")
   - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time). If memory is set to "share" and there are multiple jobs for the same objective function then the memory dictionary is automatically shared between the different processes.
 
