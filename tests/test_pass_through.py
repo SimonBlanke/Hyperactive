@@ -11,11 +11,11 @@ search_space = {
 }
 
 
-def test_func():
+def _test_func():
     pass
 
 
-def test_func_1():
+def _test_func_1():
     pass
 
 
@@ -47,7 +47,7 @@ def objective_function_2(opt):
 
 
 def objective_function_3(opt):
-    if opt.pass_through["stuff"] != test_func:
+    if opt.pass_through["stuff"] != _test_func:
         print("\n pass_through:", opt.pass_through["stuff"])
         assert False
 
@@ -58,7 +58,7 @@ def objective_function_3(opt):
 pass_through_0 = {"stuff": 1}
 pass_through_1 = {"stuff": 0.001}
 pass_through_2 = {"stuff": [1, 2, 3]}
-pass_through_3 = {"stuff": test_func}
+pass_through_3 = {"stuff": _test_func}
 
 
 pass_through_setup_0 = (objective_function_0, pass_through_0)
@@ -93,6 +93,8 @@ def test_pass_through_0(pass_through_setup):
 
 
 def objective_function_0(opt):
+    if opt.nth_iter > 1:
+        assert opt.pass_through["stuff"] == 2
     opt.pass_through["stuff"] = 2
 
     score = -opt["x1"] * opt["x1"]
@@ -100,6 +102,8 @@ def objective_function_0(opt):
 
 
 def objective_function_1(opt):
+    if opt.nth_iter > 1:
+        assert opt.pass_through["stuff"] == 0.002
     opt.pass_through["stuff"] = 0.002
 
     score = -opt["x1"] * opt["x1"]
@@ -107,6 +111,8 @@ def objective_function_1(opt):
 
 
 def objective_function_2(opt):
+    if opt.nth_iter > 1:
+        assert 4 in opt.pass_through["stuff"]
     opt.pass_through["stuff"].append(4)
 
     score = -opt["x1"] * opt["x1"]
@@ -114,7 +120,9 @@ def objective_function_2(opt):
 
 
 def objective_function_3(opt):
-    opt.pass_through["stuff"] = test_func_1
+    if opt.nth_iter > 1:
+        assert opt.pass_through["stuff"] == _test_func_1
+    opt.pass_through["stuff"] = _test_func_1
 
     score = -opt["x1"] * opt["x1"]
     return score
@@ -152,8 +160,6 @@ def test_pass_through_1(pass_through_setup):
 
     hyper.run()
 
-    assert hyper.opt_pros[0].pass_through != pass_through
-
 
 @pytest.mark.parametrize(*pass_through_setups)
 def test_pass_through_2(pass_through_setup):
@@ -172,8 +178,6 @@ def test_pass_through_2(pass_through_setup):
 
     hyper.run()
 
-    assert hyper.opt_pros[0].pass_through != pass_through
-
 
 @pytest.mark.parametrize(*pass_through_setups)
 def test_pass_through_3(pass_through_setup):
@@ -191,5 +195,3 @@ def test_pass_through_3(pass_through_setup):
     pass_through = copy.deepcopy(pass_through)
 
     hyper.run()
-
-    assert hyper.opt_pros[0].pass_through != pass_through
