@@ -4,7 +4,6 @@
 
 import numpy as np
 
-from .progress_bar import TqdmWrapper
 from .objective_function import ObjectiveFunction
 from .hyper_gradient_conv import HyperGradientConv
 from .optimizer_attributes import OptimizerAttributes
