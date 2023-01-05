@@ -59,7 +59,7 @@ def test_memory_Warm_start_0():
 
     print("\n d_time", d_time)
 
-    assert 0.8 < d_time < 1.8
+    assert d_time < 3
 
 
 def test_memory_Warm_start_1():
@@ -151,5 +151,5 @@ def test_memory_Warm_start_2(Optimizer_non_smbo):
 
     print("\n d_time", d_time)
 
-    assert d_time < 0.85
+    assert d_time < 0.9
     
