@@ -66,6 +66,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
 
             n_iter = round(self.n_iter * duration / self.duration_sum)
 
+            # initialize
             if self.best_para is not None:
                 initialize = {}
                 if "warm_start" in initialize:
@@ -75,22 +76,18 @@ class BaseOptimizationStrategy(OptimizerAttributes):
             else:
                 initialize = dict(self.initialize)
 
+            # memory_warm_start
             if self.search_data is not None:
                 memory_warm_start = self.search_data
             else:
                 memory_warm_start = self.memory_warm_start
 
-            """
-            print("\n hyper_opt \n", hyper_opt.__dict__, "\n")
-            print("\n optimizer_class \n", hyper_opt.optimizer_class.__dict__, "\n")
+            # warm_start_smbo
             if (
                 hyper_opt.optimizer_class.optimizer_type == "sequential"
                 and self.search_data is not None
             ):
-                hyper_opt.optimizer_class.opt_params[
-                    "warm_start_smbo"
-                ] = self.search_data
-            """
+                hyper_opt.opt_params["warm_start_smbo"] = self.search_data
 
             hyper_opt.setup_search(
                 objective_function=self.objective_function,
