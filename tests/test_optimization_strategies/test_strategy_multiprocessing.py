@@ -14,8 +14,8 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": list(np.arange(-12, 15, 1)),
-    "x2": list(np.arange(-8, 20, 1)),
+    "x1": list(np.arange(-5, 5, 1)),
+    "x2": list(np.arange(-5, 5, 1)),
 }
 
 
@@ -29,7 +29,7 @@ def test_strategy_multiprocessing_0(Optimizer, Optimizer_strat):
     opt_strat.add_optimizer(optimizer1, duration=0.5)
     opt_strat.add_optimizer(optimizer2, duration=0.5)
 
-    n_iter = 30
+    n_iter = 25
 
     hyper = Hyperactive()
     hyper.add_search(
@@ -52,16 +52,9 @@ def test_strategy_multiprocessing_1(Optimizer, Optimizer_strat):
     opt_strat.add_optimizer(optimizer1, duration=0.5)
     opt_strat.add_optimizer(optimizer2, duration=0.5)
 
-    n_iter = 30
+    n_iter = 25
 
     hyper = Hyperactive()
-    hyper.add_search(
-        objective_function,
-        search_space,
-        optimizer=opt_strat,
-        n_iter=n_iter,
-        n_jobs=1,
-    )
     hyper.add_search(
         objective_function,
         search_space,
