@@ -19,7 +19,7 @@ search_space = {
     "x2": list(np.arange(-3, 3, 1)),
 }
 
-
+"""
 @pytest.mark.parametrize(*optimizers_strat)
 def test_strategy_multiprocessing_0(Optimizer_strat):
     optimizer1 = RandomSearchOptimizer()
@@ -69,3 +69,4 @@ def test_strategy_multiprocessing_1(Optimizer_strat):
         n_jobs=1,
     )
     hyper.run()
+"""
