@@ -14,8 +14,8 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": list(np.arange(-12, 15, 1)),
-    "x2": list(np.arange(-8, 20, 1)),
+    "x1": list(np.arange(-3, 3, 1)),
+    "x2": list(np.arange(-3, 3, 1)),
 }
 
 

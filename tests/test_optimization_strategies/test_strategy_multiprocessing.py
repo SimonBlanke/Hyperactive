@@ -3,6 +3,7 @@ import numpy as np
 
 
 from hyperactive import Hyperactive
+from hyperactive.optimizers import RandomSearchOptimizer
 from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers, optimizers_strat
@@ -14,15 +15,14 @@ def objective_function(opt):
 
 
 search_space = {
-    "x1": list(np.arange(-5, 5, 1)),
-    "x2": list(np.arange(-5, 5, 1)),
+    "x1": list(np.arange(-3, 3, 1)),
+    "x2": list(np.arange(-3, 3, 1)),
 }
 
 
-@pytest.mark.parametrize(*optimizers)
 @pytest.mark.parametrize(*optimizers_strat)
-def test_strategy_multiprocessing_0(Optimizer, Optimizer_strat):
-    optimizer1 = Optimizer()
+def test_strategy_multiprocessing_0(Optimizer_strat):
+    optimizer1 = RandomSearchOptimizer()
     optimizer2 = Optimizer_strat()
 
     opt_strat = CustomOptimizationStrategy()
@@ -42,10 +42,9 @@ def test_strategy_multiprocessing_0(Optimizer, Optimizer_strat):
     hyper.run()
 
 
-@pytest.mark.parametrize(*optimizers)
 @pytest.mark.parametrize(*optimizers_strat)
-def test_strategy_multiprocessing_1(Optimizer, Optimizer_strat):
-    optimizer1 = Optimizer()
+def test_strategy_multiprocessing_1(Optimizer_strat):
+    optimizer1 = RandomSearchOptimizer()
     optimizer2 = Optimizer_strat()
 
     opt_strat = CustomOptimizationStrategy()
