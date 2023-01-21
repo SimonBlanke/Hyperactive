@@ -967,6 +967,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <summary><b>v4.4.0</b> </summary>
 
   - [ ] add Optimization-Strategies
+  - [ ] redesign progress-bar
 
 </details>
 
