@@ -68,6 +68,7 @@
 <br>
 
 ## What's new?
+  - ### 01.03.2023 v4.4.0 add new feature: "Optimization Strategies"
   - ### 18.11.2022 v4.3.0 with three new optimization algorithms (Spiral Optimization, Lipschitz Optimizer, DIRECT Optimizer)
   - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
 
@@ -964,12 +965,13 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
-<summary><b>v4.4.0</b> </summary>
+<summary><b>v4.4.0</b> :heavy_check_mark: </summary>
 
   - [ ] add Optimization-Strategies
   - [ ] redesign progress-bar
 
 </details>
+
 
 
 
