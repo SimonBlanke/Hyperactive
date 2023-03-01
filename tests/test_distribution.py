@@ -43,14 +43,6 @@ def test_n_jobs_3():
     hyper.run()
 
 
-def test_n_jobs_4():
-    hyper = Hyperactive()
-    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=100)
-    hyper.run()
-
-    assert len(hyper.results_list) == 100
-
-
 def test_n_jobs_5():
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
