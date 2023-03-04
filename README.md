@@ -220,6 +220,8 @@ The following packages are designed to support Hyperactive and expand its use ca
 | [Search-Data-Collector](https://github.com/SimonBlanke/search-data-collector) | Simple tool to save search-data during or after the optimization run into csv-files. |
 | [Search-Data-Explorer](https://github.com/SimonBlanke/search-data-explorer)   | Visualize search-data with plotly inside a streamlit dashboard.
 
+If you want news about Hyperactive and related projects you can follow me on [twitter](https://twitter.com/blanke_simon).
+
 
 <br>
 
