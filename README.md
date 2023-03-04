@@ -213,12 +213,19 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 
 ## Sideprojects and Tools
 
+The following packages are designed to support Hyperactive and expand its use cases. 
+
 | Package                                                                       | Description                                                                          |
 |-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | [Search-Data-Collector](https://github.com/SimonBlanke/search-data-collector) | Simple tool to save search-data during or after the optimization run into csv-files. |
 | [Search-Data-Explorer](https://github.com/SimonBlanke/search-data-explorer)   | Visualize search-data with plotly inside a streamlit dashboard.
 
 
+<br>
+
+## Notebooks and Tutorials
+
+- [Introduction to Hyperactive](https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb)
 
 
 <br>
