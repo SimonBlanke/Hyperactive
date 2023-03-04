@@ -219,14 +219,6 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 | [Search-Data-Explorer](https://github.com/SimonBlanke/search-data-explorer)   | Visualize search-data with plotly inside a streamlit dashboard.
 
 
-<br>
-
-## Notebooks and Tutorials
-
-| Command    | Description                                    |
-|------------|------------------------------------------------|
-| git status | List all new or modified files                 |
-| git diff   | Show file differences that haven't been staged |
 
 
 <br>
