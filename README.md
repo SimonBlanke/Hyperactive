@@ -46,8 +46,16 @@
 - supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
 
 
+
+
 <br>
 <br>
+<br>
+
+
+As its name suggests Hyperactive started as a hyperparameter optimization package, but it has been generalized to solve expensive gradient-free optimization problems. It uses the [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) package as an optimization-backend and expands on it with additional features and tools.
+
+
 <br>
 
 ---
@@ -200,73 +208,6 @@ Hyperactive features a collection of optimization algorithms that can be used fo
 The examples above are not necessarily done with realistic datasets or training procedures. 
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
-<br>
-
-
-### Hyperactive is very easy to use:
-
-<table>
-<tbody>
-<tr>
-<th> Regular training </th>
-<th> Hyperactive </th>
-</tr>
-<tr>
-<td>
-
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import fetch_california_housing
-
-
-data = fetch_california_housing()
-X, y = data.data, data.target
-
-
-gbr = DecisionTreeRegressor(max_depth=10)
-score = cross_val_score(gbr, X, y, cv=3).mean()
-
-
-
-
-
-
-
-
-
-```
-
-</td>
-<td>
-
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.datasets import fetch_california_housing
-from hyperactive import Hyperactive
-
-data = fetch_california_housing()
-X, y = data.data, data.target
-
-def model(opt):
-    gbr = DecisionTreeRegressor(max_depth=opt["max_depth"])
-    return cross_val_score(gbr, X, y, cv=3).mean()
-
-
-search_space = {"max_depth": list(range(3, 25))}
-
-hyper = Hyperactive()
-hyper.add_search(model, search_space, n_iter=50)
-hyper.run()
-```
-
-</td>
-</tr>
-</tbody>
-</table>
-
-
 
 <br>
 
@@ -281,6 +222,8 @@ The most recent version of Hyperactive is available on PyPi:
 ```console
 pip install hyperactive
 ```
+
+
 
 <br>
 
@@ -850,9 +793,11 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 
 
+
 <br>
 
 ## Roadmap
+
 
 <details>
 <summary><b>v2.0.0</b> :heavy_check_mark:</summary>
@@ -972,15 +917,27 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+<details>
+<summary><b>v4.5.0</b> </summary>
+
+  - [ ] add early stopping feature to custom optimization strategies
+  - [ ] add "prune_search_space"-method to custom optimization strategy class
+  - [ ] display additional outputs from objective-function in results in command-line
+  - [ ] add type hints to hyperactive-api
+  
+</details>
+
+
+
+
+
 
 
 
 <details>
 <summary><b>Ideas for the Future</b></summary>
    
-  - [ ] Data collector tool to store data (from inside the objective function) into csv-files
   - [ ] Experiment-tracking for search-data storage and usage
-  - [ ] Dashboard for visualization of stored search-data
   - [ ] Meta-Learning tool for hyperparameter optimization
 
 </details>
