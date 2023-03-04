@@ -211,6 +211,26 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 
 <br>
 
+## Sideprojects and Tools
+
+| Package                                                                       | Description                                                                          |
+|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| [Search-Data-Collector](https://github.com/SimonBlanke/search-data-collector) | Simple tool to save search-data during or after the optimization run into csv-files. |
+| [Search-Data-Explorer](https://github.com/SimonBlanke/search-data-explorer)   | Visualize search-data with plotly inside a streamlit dashboard.
+
+
+<br>
+
+## Notebooks and Tutorials
+
+| Command    | Description                                    |
+|------------|------------------------------------------------|
+| git status | List all new or modified files                 |
+| git diff   | Show file differences that haven't been staged |
+
+
+<br>
+
 ## Installation
 
 The most recent version of Hyperactive is available on PyPi:
