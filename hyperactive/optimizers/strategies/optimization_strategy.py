@@ -63,6 +63,12 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         for optimizer_setup in self.optimizer_setup_l:
             hyper_opt = optimizer_setup["optimizer"]
             duration = optimizer_setup["duration"]
+            opt_strat_early_stopping = optimizer_setup["early_stopping"]
+
+            if opt_strat_early_stopping:
+                early_stopping = opt_strat_early_stopping
+            else:
+                early_stopping = self.early_stopping
 
             n_iter = round(self.n_iter * duration / self.duration_sum)
 
@@ -98,7 +104,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
                 callbacks=self.callbacks,
                 catch=self.catch,
                 max_score=self.max_score,
-                early_stopping=self.early_stopping,
+                early_stopping=early_stopping,
                 random_state=self.random_state,
                 memory=self.memory,
                 memory_warm_start=memory_warm_start,
