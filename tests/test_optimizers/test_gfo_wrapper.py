@@ -3,7 +3,9 @@ import numpy as np
 
 from tqdm import tqdm
 from ._parametrize import optimizers
-from hyperactive.search_space import SearchSpace
+from git_workspace.open_source.Hyperactive.hyperactive.search_space.search_space import (
+    SearchSpace,
+)
 
 
 def objective_function(opt):

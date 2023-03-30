@@ -5,7 +5,7 @@
 import numpy as np
 
 from .objective_function import ObjectiveFunction
-from .hyper_gradient_conv import HyperGradientConv
+from ..search_space.hyper_gradient_conv import HyperGradientConv
 from .optimizer_attributes import OptimizerAttributes
 
 

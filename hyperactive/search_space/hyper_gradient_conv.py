@@ -107,7 +107,7 @@ class HyperGradientConv:
         results_dict = {}
 
         for para_name in self.s_space.dim_keys:
-            values_list = self.s_space[para_name]
+            values_list = self.s_space.search_space[para_name]
             pos_ = positions[para_name].values
             values_ = [values_list[idx] for idx in pos_]
             results_dict[para_name] = values_

@@ -5,23 +5,8 @@
 import numpy as np
 
 
-class DictClass:
+class SearchSpace:
     def __init__(self, search_space):
-        self.search_space = search_space
-
-    def __getitem__(self, key):
-        return self.search_space[key]
-
-    def keys(self):
-        return self.search_space.keys()
-
-    def values(self):
-        return self.search_space.values()
-
-
-class SearchSpace(DictClass):
-    def __init__(self, search_space):
-        super().__init__(search_space)
         self.search_space = search_space
         self._c_search_space = None
 

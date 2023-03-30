@@ -11,7 +11,7 @@ from .run_search import run_search
 
 from .results import Results
 from .print_results import PrintResults
-from .search_space import SearchSpace
+from .search_space.search_space import SearchSpace
 
 
 class Hyperactive:
@@ -34,7 +34,6 @@ class Hyperactive:
     def _create_shared_memory(self, new_opt):
         if new_opt.memory == "share":
             if len(self.opt_pros) == 0:
-
                 manager = mp.Manager()
                 new_opt.memory = manager.dict()
 
