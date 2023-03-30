@@ -88,7 +88,6 @@ class HyperOptimizer(OptimizerAttributes):
             self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
                 self.opt_params["warm_start_smbo"]
             )
-
         self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,
             initialize=initialize,
@@ -113,7 +112,7 @@ class HyperOptimizer(OptimizerAttributes):
 
         memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
 
-        gfo_objective_function = gfo_wrapper_model(self.s_space())
+        gfo_objective_function = gfo_wrapper_model(self.s_space.search_space)
 
         self.gfo_optimizer.init_search(
             gfo_objective_function,

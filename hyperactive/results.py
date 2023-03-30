@@ -27,8 +27,6 @@ class Results:
 
             opt = self.opt_pros[nth_process]
             objective_function_ = opt.objective_function
-            search_space_ = opt.s_space()
-            params = list(search_space_.keys())
 
             if objective_function_ != objective_function:
                 continue
@@ -50,7 +48,7 @@ class Results:
             "best_para": best_para,
             "best_score": best_score,
             "search_data": search_data,
-            "params": params,
+            "params": opt.s_space.params,
         }
 
     def _get_result(self, id_, result_name):
@@ -79,8 +77,6 @@ class Results:
 
     def search_data(self, id_):
         search_data = self._get_result(id_, "search_data")
-
-        params = self.objFunc2results[id_]["params"]
 
         if search_data is not None:
             return search_data

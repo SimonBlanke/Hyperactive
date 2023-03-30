@@ -23,13 +23,31 @@ class SearchSpace(DictClass):
     def __init__(self, search_space):
         super().__init__(search_space)
         self.search_space = search_space
+        self._c_search_space = None
 
-        self.dim_keys = list(search_space.keys())
+        self.params = list(search_space.keys())
+
+        self.c_search_space = search_space
+
+    @property
+    def c_search_space(self):
+        return self._c_search_space
+
+    @c_search_space.setter
+    def c_search_space(self, new_search_space):
+        self._c_search_space = new_search_space
+
+        self.dim_keys = list(self.search_space.keys())
         self.values_l = list(self.search_space.values())
 
         positions = {}
-        for key in search_space.keys():
-            positions[key] = np.array(range(len(search_space[key])))
+        for key in new_search_space.keys():
+            ss_dim_values = self.search_space[key]
+            c_dim_values = new_search_space[key]
+
+            positions[key] = [
+                ss_dim_values.index(i) for i in c_dim_values if i in ss_dim_values
+            ]
         self.positions = positions
 
         self.check_list()
@@ -38,13 +56,10 @@ class SearchSpace(DictClass):
         self.data_types = self.dim_types()
         self.func2str = self._create_num_str_ss()
 
-    def __call__(self):
-        return self.search_space
-
     def dim_types(self):
         data_types = {}
         for dim_key in self.dim_keys:
-            dim_values = np.array(list(self.search_space[dim_key]))
+            dim_values = np.array(list(self._c_search_space[dim_key]))
             try:
                 np.subtract(dim_values, dim_values)
                 np.array(dim_values).searchsorted(dim_values)
@@ -60,11 +75,11 @@ class SearchSpace(DictClass):
         func2str = {}
         for dim_key in self.dim_keys:
             if self.data_types[dim_key] == "number":
-                func2str[dim_key] = self.search_space[dim_key]
+                func2str[dim_key] = self._c_search_space[dim_key]
             else:
                 func2str[dim_key] = []
 
-                dim_values = self.search_space[dim_key]
+                dim_values = self._c_search_space[dim_key]
                 for value in dim_values:
                     try:
                         func_name = value.__name__
@@ -76,7 +91,7 @@ class SearchSpace(DictClass):
 
     def check_list(self):
         for dim_key in self.dim_keys:
-            search_dim = self.search_space[dim_key]
+            search_dim = self._c_search_space[dim_key]
 
             err_msg = "\n Value in '{}' of search space dictionary must be of type list \n".format(
                 dim_key
@@ -119,7 +134,7 @@ class SearchSpace(DictClass):
 
     def check_non_num_values(self):
         for dim_key in self.dim_keys:
-            dim_values = np.array(list(self.search_space[dim_key]))
+            dim_values = np.array(list(self._c_search_space[dim_key]))
 
             try:
                 np.subtract(dim_values, dim_values)

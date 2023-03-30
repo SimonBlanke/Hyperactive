@@ -23,5 +23,5 @@ class CustomOptimizationStrategy(BaseOptimizationStrategy):
             "optimizer.layer." + str(len(self.optimizer_setup_d))
         ] = optimizer_setup
 
-    def prune_search_space(self, margin=0.1):
+    def prune_search_space(self, margin=0.01):
         self.optimizer_setup_d["search-space-pruning.layer"] = {"margin": margin}
