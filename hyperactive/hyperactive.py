@@ -5,6 +5,9 @@
 
 import copy
 import multiprocessing as mp
+import pandas as pd
+
+from typing import Union, List, Dict, Type
 
 from .optimizers import RandomSearchOptimizer
 from .run_search import run_search
@@ -17,9 +20,9 @@ from .search_space.search_space import SearchSpace
 class Hyperactive:
     def __init__(
         self,
-        verbosity=["progress_bar", "print_results", "print_times"],
-        distribution="multiprocessing",
-        n_processes="auto",
+        verbosity: list = ["progress_bar", "print_results", "print_times"],
+        distribution: str = "multiprocessing",
+        n_processes: Union[str, int] = "auto",
     ):
         super().__init__()
         if verbosity is False:
@@ -79,21 +82,21 @@ class Hyperactive:
 
     def add_search(
         self,
-        objective_function,
-        search_space,
-        n_iter,
+        objective_function: callable,
+        search_space: Dict[str, list],
+        n_iter: int,
         search_id=None,
-        optimizer="default",
-        n_jobs=1,
-        initialize={"grid": 4, "random": 2, "vertices": 4},
-        pass_through=None,
-        callbacks={},
-        catch={},
-        max_score=None,
-        early_stopping=None,
-        random_state=None,
-        memory="share",
-        memory_warm_start=None,
+        optimizer: Union[str, type(RandomSearchOptimizer)] = "default",
+        n_jobs: int = 1,
+        initialize: Dict[str, int] = {"grid": 4, "random": 2, "vertices": 4},
+        pass_through: Dict = None,
+        callbacks: Dict[str, callable] = {},
+        catch: Dict = {},
+        max_score: float = None,
+        early_stopping: Dict = None,
+        random_state: int = None,
+        memory: Union[str, bool] = "share",
+        memory_warm_start: pd.DataFrame = None,
     ):
         self.check_list(search_space)
 
@@ -140,7 +143,7 @@ class Hyperactive:
             nth_process = results["nth_process"]
             print_res.print_process(results, nth_process)
 
-    def run(self, max_time=None):
+    def run(self, max_time: float = None):
         for opt in self.opt_pros.values():
             opt.max_time = max_time
 
