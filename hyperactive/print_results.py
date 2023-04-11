@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+import logging
 import numpy as np
 
 indent = "  "
@@ -127,35 +128,42 @@ class PrintResults:
 
         search_data = results["search_data"]
 
-        best_sample = search_data.iloc[search_data["score"].idxmax()]
+        try:
+            best_sample = search_data.iloc[search_data["score"].idxmax()]
 
-        best_score = best_sample["score"]
-        best_values = best_sample[list(search_space.keys())]
-        best_para = dict(zip(list(search_space.keys()), best_values))
-        best_additional_results_df = best_sample.drop(
-            ["score"] + list(search_space.keys())
-        )
-        best_additional_results = best_additional_results_df.to_dict()
-
-        best_iter = results["best_iter"]
-        eval_times = results["eval_times"]
-        iter_times = results["iter_times"]
-        random_seed = results["random_seed"]
-
-        n_iter = self.opt_pros[nth_process].n_iter
-
-        eval_time = np.array(eval_times).sum()
-        iter_time = np.array(iter_times).sum()
-
-        if "print_results" in verbosity:
-            self._print_results(
-                objective_function,
-                best_score,
-                best_para,
-                best_iter,
-                best_additional_results,
-                random_seed,
+        except TypeError:
+            logging.warning(
+                "Warning: Cannot index by location index with a non-integer key"
             )
 
-        if "print_times" in verbosity:
-            self._print_times(eval_time, iter_time, n_iter)
+        else:
+            best_score = best_sample["score"]
+            best_values = best_sample[list(search_space.keys())]
+            best_para = dict(zip(list(search_space.keys()), best_values))
+            best_additional_results_df = best_sample.drop(
+                ["score"] + list(search_space.keys())
+            )
+            best_additional_results = best_additional_results_df.to_dict()
+
+            best_iter = results["best_iter"]
+            eval_times = results["eval_times"]
+            iter_times = results["iter_times"]
+            random_seed = results["random_seed"]
+
+            n_iter = self.opt_pros[nth_process].n_iter
+
+            eval_time = np.array(eval_times).sum()
+            iter_time = np.array(iter_times).sum()
+
+            if "print_results" in verbosity:
+                self._print_results(
+                    objective_function,
+                    best_score,
+                    best_para,
+                    best_iter,
+                    best_additional_results,
+                    random_seed,
+                )
+
+            if "print_times" in verbosity:
+                self._print_times(eval_time, iter_time, n_iter)
