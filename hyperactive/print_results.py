@@ -13,7 +13,6 @@ class PrintResults:
         self.verbosity = verbosity
 
     def _print_times(self, eval_time, iter_time, n_iter):
-
         opt_time = iter_time - eval_time
         iterPerSec = n_iter / iter_time
 
@@ -66,7 +65,13 @@ class PrintResults:
         return para_names_align
 
     def _print_results(
-        self, objective_function, best_score, best_para, best_iter, random_seed
+        self,
+        objective_function,
+        best_score,
+        best_para,
+        best_iter,
+        best_additional_results,
+        random_seed,
     ):
         print("\nResults: '{}'".format(objective_function.__name__), " ")
         if best_para is None:
@@ -75,22 +80,40 @@ class PrintResults:
             print(indent, "Best iteration:", best_iter, " ")
 
         else:
-            para_names = list(best_para.keys())
-            para_names_align = self.align_para_names(para_names)
-
             print(indent, "Best score:", best_score, " ")
-            print(indent, "Best parameter set:")
 
-            for para_key in best_para.keys():
-                added_spaces = para_names_align[para_key]
-                print(
-                    indent,
-                    indent,
-                    "'{}'".format(para_key),
-                    "{}:".format(added_spaces),
-                    best_para[para_key],
-                    " ",
-                )
+            if best_additional_results:
+                print(indent, "Best additional results:")
+                add_results_names = list(best_additional_results.keys())
+                add_results_names_align = self.align_para_names(add_results_names)
+
+                for best_additional_result in best_additional_results.keys():
+                    added_spaces = add_results_names_align[best_additional_result]
+                    print(
+                        indent,
+                        indent,
+                        "'{}'".format(best_additional_result),
+                        "{}:".format(added_spaces),
+                        best_additional_results[best_additional_result],
+                        " ",
+                    )
+
+            if best_para:
+                print(indent, "Best parameter set:")
+                para_names = list(best_para.keys())
+                para_names_align = self.align_para_names(para_names)
+
+                for para_key in best_para.keys():
+                    added_spaces = para_names_align[para_key]
+                    print(
+                        indent,
+                        indent,
+                        "'{}'".format(para_key),
+                        "{}:".format(added_spaces),
+                        best_para[para_key],
+                        " ",
+                    )
+
             print(indent, "Best iteration:", best_iter, " ")
 
         print(" ")
@@ -100,8 +123,20 @@ class PrintResults:
     def print_process(self, results, nth_process):
         verbosity = self.verbosity
         objective_function = self.opt_pros[nth_process].objective_function
-        best_score = results["best_score"]
-        best_para = results["best_para"]
+        search_space = self.opt_pros[nth_process].s_space.search_space
+
+        search_data = results["search_data"]
+
+        best_sample = search_data.iloc[search_data["score"].idxmax()]
+
+        best_score = best_sample["score"]
+        best_values = best_sample[list(search_space.keys())]
+        best_para = dict(zip(list(search_space.keys()), best_values))
+        best_additional_results_df = best_sample.drop(
+            ["score"] + list(search_space.keys())
+        )
+        best_additional_results = best_additional_results_df.to_dict()
+
         best_iter = results["best_iter"]
         eval_times = results["eval_times"]
         iter_times = results["iter_times"]
@@ -114,7 +149,12 @@ class PrintResults:
 
         if "print_results" in verbosity:
             self._print_results(
-                objective_function, best_score, best_para, best_iter, random_seed
+                objective_function,
+                best_score,
+                best_para,
+                best_iter,
+                best_additional_results,
+                random_seed,
             )
 
         if "print_times" in verbosity:
