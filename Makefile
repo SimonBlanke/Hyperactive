@@ -36,7 +36,7 @@ test-search_space:
 	done
 
 test_:
-	python -m pytest -x -p no:warnings tests/; \
+	python -m pytest -x -p no:warnings --full-trace tests/; \
 
 
 test-timings:
