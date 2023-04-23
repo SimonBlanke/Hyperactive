@@ -14,6 +14,13 @@ class SearchSpace:
 
         self.c_search_space = search_space
 
+        self.positions = dict(
+            zip(
+                list(search_space.keys()),
+                [np.arange(len(array)) for array in search_space.values()],
+            )
+        )
+
     @property
     def c_search_space(self):
         return self._c_search_space
@@ -25,16 +32,18 @@ class SearchSpace:
         self.dim_keys = list(self.search_space.keys())
         self.values_l = list(self.search_space.values())
 
+        """
         positions = {}
         for key in new_search_space.keys():
             ss_dim_values = self.search_space[key]
             c_dim_values = new_search_space[key]
 
             positions[key] = [
-                ss_dim_values.index(i) for i in c_dim_values if i in ss_dim_values
+                np.abs(i - np.array(ss_dim_values)).argmin() for i in c_dim_values
             ]
-        self.positions = positions
 
+        self.positions = positions
+        """
         self.check_list()
         self.check_non_num_values()
 

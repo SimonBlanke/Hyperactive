@@ -45,7 +45,9 @@ class Hyperactive:
                     opt.objective_function.__name__
                     == new_opt.objective_function.__name__
                 )
-                same_ss_length = len(opt.s_space()) == len(new_opt.s_space())
+                same_ss_length = len(opt.s_space.search_space) == len(
+                    new_opt.s_space.search_space
+                )
 
                 if same_obj_func and same_ss_length:
                     new_opt.memory = opt.memory  # get same manager.dict
