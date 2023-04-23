@@ -44,8 +44,12 @@ def test_strategy_combinations_0(Optimizer):
 
     search_data = hyper.search_data(objective_function)
 
-    optimizer1 = hyper.opt_pros[0].optimizer_setup_l[0]["optimizer"]
-    optimizer2 = hyper.opt_pros[0].optimizer_setup_l[1]["optimizer"]
+    optimizer1 = hyper.opt_pros[0].optimizer_setup_d["optimizer.layer.0"][
+        "opt-algorithm"
+    ]
+    optimizer2 = hyper.opt_pros[0].optimizer_setup_d["optimizer.layer.0"][
+        "opt-algorithm"
+    ]
 
     assert len(search_data) == n_iter
 
