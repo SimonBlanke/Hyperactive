@@ -3,7 +3,7 @@ import numpy as np
 
 from tqdm import tqdm
 from ._parametrize import optimizers
-from git_workspace.open_source.Hyperactive.hyperactive.search_space.search_space import (
+from hyperactive.search_space.search_space import (
     SearchSpace,
 )
 
