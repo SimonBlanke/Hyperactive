@@ -32,10 +32,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flake8 pytest coveralls
+          python -m pip install flake8 pytest pytest-cov coveralls
           python -m pip install .
           python -m pip install .[distribution]
 
       - name: Test with pytest
         run: |
-          python -m pytest tests -p no:warnings
+          python -m pytest tests -p no:warnings --cov=hyperactive tests/
+
+      - name: Publish to coveralls.io
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ github.token }}
