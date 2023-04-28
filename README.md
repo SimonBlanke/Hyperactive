@@ -949,33 +949,13 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 
-
-
-
-
-
-
 <details>
-<summary><b>Ideas for the Future</b></summary>
-   
-  - [ ] Experiment-tracking for search-data storage and usage
-  - [ ] Meta-Learning tool for hyperparameter optimization
+<summary><b>v4.6.0</b> </summary>
 
+  - [ ] add support for constrained optimization
+  
 </details>
 
-
-
-<br>
-
-
-## Experimental algorithms
-
-The following algorithms are of my own design and, to my knowledge, do not yet exist in the technical literature.
-If any of these algorithms already exist I would like you to share it with me in an issue.
-
-#### Random Annealing
-
-A combination between simulated annealing and random search.
 
 
 <br>
