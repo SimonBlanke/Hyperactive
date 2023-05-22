@@ -126,28 +126,30 @@ class HyperOptimizer(OptimizerAttributes):
             False,
         )
         for nth_iter in range(self.n_iter):
-            p_bar.set_description(
-                "["
-                + str(nth_process)
-                + "] "
-                + str(self.objective_function.__name__)
-                + " ("
-                + self.optimizer_class.name
-                + ")",
-            )
+            if p_bar:
+                p_bar.set_description(
+                    "["
+                    + str(nth_process)
+                    + "] "
+                    + str(self.objective_function.__name__)
+                    + " ("
+                    + self.optimizer_class.name
+                    + ")",
+                )
 
             self.gfo_optimizer.search_step(nth_iter)
             if self.gfo_optimizer.stop.check():
                 break
 
-            p_bar.set_postfix(
-                best_score=str(gfo_wrapper_model.optimizer.score_best),
-                best_pos=str(gfo_wrapper_model.optimizer.pos_best),
-                best_iter=str(gfo_wrapper_model.optimizer.p_bar._best_since_iter),
-            )
+            if p_bar:
+                p_bar.set_postfix(
+                    best_score=str(gfo_wrapper_model.optimizer.score_best),
+                    best_pos=str(gfo_wrapper_model.optimizer.pos_best),
+                    best_iter=str(gfo_wrapper_model.optimizer.p_bar._best_since_iter),
+                )
 
-            p_bar.update(1)
-            p_bar.refresh()
+                p_bar.update(1)
+                p_bar.refresh()
 
         self.gfo_optimizer.finish_search()
 
