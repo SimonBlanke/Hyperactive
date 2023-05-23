@@ -136,8 +136,9 @@ class Hyperactive:
     def _print_info(self):
         print_res = PrintResults(self.opt_pros, self.verbosity)
 
-        for _ in range(len(self.opt_pros)):
-            print("")
+        if self.verbosity:
+            for _ in range(len(self.opt_pros)):
+                print("")
 
         for results in self.results_list:
             nth_process = results["nth_process"]
