@@ -941,16 +941,16 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <details>
 <summary><b>v4.5.0</b> </summary>
 
-  - [ ] add support for constrained optimization
+  - [ ] add early stopping feature to custom optimization strategies
+  - [ ] display additional outputs from objective-function in results in command-line
+  - [ ] add type hints to hyperactive-api
   
 </details>
 
 <details>
 <summary><b>v4.6.0</b> </summary>
 
-  - [ ] add early stopping feature to custom optimization strategies
-  - [ ] display additional outputs from objective-function in results in command-line
-  - [ ] add type hints to hyperactive-api
+  - [ ] add support for constrained optimization
   
 </details>
 
