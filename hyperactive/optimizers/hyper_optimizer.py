@@ -20,6 +20,7 @@ class HyperOptimizer(OptimizerAttributes):
         s_space,
         n_iter,
         initialize,
+        constraints,
         pass_through,
         callbacks,
         catch,
@@ -35,6 +36,7 @@ class HyperOptimizer(OptimizerAttributes):
         self.n_iter = n_iter
 
         self.initialize = initialize
+        self.constraints = constraints
         self.pass_through = pass_through
         self.callbacks = callbacks
         self.catch = catch
@@ -92,6 +94,7 @@ class HyperOptimizer(OptimizerAttributes):
         self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,
             initialize=initialize,
+            constraints=self.constraints,
             random_state=self.random_state,
             nth_process=nth_process,
             **self.opt_params
