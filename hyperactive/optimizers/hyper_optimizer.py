@@ -7,6 +7,7 @@ import numpy as np
 from .objective_function import ObjectiveFunction
 from .hyper_gradient_conv import HyperGradientConv
 from .optimizer_attributes import OptimizerAttributes
+from .constraint import Constraint
 
 
 class HyperOptimizer(OptimizerAttributes):
@@ -91,10 +92,12 @@ class HyperOptimizer(OptimizerAttributes):
                 self.opt_params["warm_start_smbo"]
             )
 
+        gfo_constraints = [Constraint(constraint) for constraint in self.constraints]
+
         self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,
             initialize=initialize,
-            constraints=self.constraints,
+            constraints=gfo_constraints,
             random_state=self.random_state,
             nth_process=nth_process,
             **self.opt_params
