@@ -16,6 +16,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         s_space,
         n_iter,
         initialize,
+        constraints,
         pass_through,
         callbacks,
         catch,
@@ -31,6 +32,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         self.n_iter = n_iter
 
         self.initialize = initialize
+        self.constraints = constraints
         self.pass_through = pass_through
         self.callbacks = callbacks
         self.catch = catch
