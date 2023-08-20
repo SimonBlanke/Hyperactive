@@ -13,17 +13,10 @@ def gfo2hyper(search_space, para):
 
 
 class Constraint:
-    def __init__(self, constraint):
+    def __init__(self, constraint, search_space):
         self.constraint = constraint
+        self.search_space = search_space
 
-    def __call__(self, search_space):
-        # wrapper for GFOs
-        def _constr(para):
-            print("\n para", para)
-            para = gfo2hyper(search_space, para)
-            print(" para", para)
-
-            return self.constraint(para)
-
-        _constr.__name__ = self.constraint.__name__
-        return _constr
+    def __call__(self, para):
+        para = gfo2hyper(self.search_space, para)
+        return self.constraint(para)
