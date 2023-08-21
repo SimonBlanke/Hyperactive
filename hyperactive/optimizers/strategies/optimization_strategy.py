@@ -102,6 +102,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
                 s_space=self.s_space,
                 n_iter=n_iter,
                 initialize=initialize,
+                constraints=self.constraints,
                 pass_through=self.pass_through,
                 callbacks=self.callbacks,
                 catch=self.catch,
