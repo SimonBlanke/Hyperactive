@@ -92,12 +92,9 @@ class HyperOptimizer(OptimizerAttributes):
                 self.opt_params["warm_start_smbo"]
             )
 
-        if self.constraints:
-            gfo_constraints = [
-                Constraint(constraint, self.s_space) for constraint in self.constraints
-            ]
-        else:
-            gfo_constraints = []
+        gfo_constraints = [
+            Constraint(constraint, self.s_space) for constraint in self.constraints
+        ]
 
         self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,

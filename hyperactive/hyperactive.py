@@ -91,8 +91,8 @@ class Hyperactive:
         initialize: Dict[str, int] = {"grid": 4, "random": 2, "vertices": 4},
         constraints: List[callable] = None,
         pass_through: Dict = None,
-        callbacks: Dict[str, callable] = {},
-        catch: Dict = {},
+        callbacks: Dict[str, callable] = None,
+        catch: Dict = None,
         max_score: float = None,
         early_stopping: Dict = None,
         random_state: int = None,
@@ -101,8 +101,16 @@ class Hyperactive:
     ):
         self.check_list(search_space)
 
+        if constraints is None:
+            constraints = []
         if pass_through is None:
-            pass_through = dict()
+            pass_through = {}
+        if callbacks is None:
+            callbacks = {}
+        if catch is None:
+            catch = {}
+        if early_stopping is None:
+            early_stopping = {}
 
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
