@@ -69,6 +69,7 @@ def test_gfo_opt_wrapper_0(Optimizer, search_space, objective):
     s_space = SearchSpace(search_space)
 
     initialize = {"vertices": 2}
+    constraints = []
     pass_through = {}
     callbacks = None
     catch = None
@@ -86,6 +87,7 @@ def test_gfo_opt_wrapper_0(Optimizer, search_space, objective):
         s_space=s_space,
         n_iter=n_iter,
         initialize=initialize,
+        constraints=constraints,
         pass_through=pass_through,
         callbacks=callbacks,
         catch=catch,
