@@ -933,26 +933,31 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <details>
 <summary><b>v4.4.0</b> :heavy_check_mark: </summary>
 
-  - [ ] add Optimization-Strategies
-  - [ ] redesign progress-bar
+  - [x] add Optimization-Strategies
+  - [x] redesign progress-bar
 
 </details>
 
 <details>
 <summary><b>v4.5.0</b> </summary>
 
-  - [ ] add early stopping feature to custom optimization strategies
-  - [ ] add "prune_search_space"-method to custom optimization strategy class
-  - [ ] display additional outputs from objective-function in results in command-line
-  - [ ] add type hints to hyperactive-api
+  - [x] add early stopping feature to custom optimization strategies
+  - [x] display additional outputs from objective-function in results in command-line
+  - [x] add type hints to hyperactive-api
   
 </details>
-
 
 <details>
 <summary><b>v4.6.0</b> </summary>
 
   - [ ] add support for constrained optimization
+  
+</details>
+
+<details>
+<summary><b>v4.7.0</b> </summary>
+
+  - [ ] add "prune_search_space"-method to custom optimization strategy class
   
 </details>
 

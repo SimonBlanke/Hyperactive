@@ -88,7 +88,7 @@ class Hyperactive:
         search_space: Dict[str, list],
         n_iter: int,
         search_id=None,
-        optimizer: Union[str, type(RandomSearchOptimizer)] = "default",
+        optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
         n_jobs: int = 1,
         initialize: Dict[str, int] = {"grid": 4, "random": 2, "vertices": 4},
         pass_through: Dict = None,
