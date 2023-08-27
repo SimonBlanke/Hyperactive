@@ -76,9 +76,9 @@ As its name suggests Hyperactive started as a hyperparameter optimization packag
 <br>
 
 ## What's new?
+  - ### 27.08.2023 v4.5.0 add early-stopping for Optimization Strategies
   - ### 01.03.2023 v4.4.0 add new feature: "Optimization Strategies"
   - ### 18.11.2022 v4.3.0 with three new optimization algorithms (Spiral Optimization, Lipschitz Optimizer, DIRECT Optimizer)
-  - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
 
 <br>
 
@@ -939,7 +939,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
-<summary><b>v4.5.0</b> </summary>
+<summary><b>v4.5.0</b> :heavy_check_mark: </summary>
 
   - [x] add early stopping feature to custom optimization strategies
   - [x] display additional outputs from objective-function in results in command-line
