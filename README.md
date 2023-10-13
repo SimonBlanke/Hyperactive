@@ -64,7 +64,7 @@ As its name suggests Hyperactive started as a hyperparameter optimization packag
   <h3>
     <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#hyperactive-api-reference">API reference</a> •
+    <a href="https://simonblanke.github.io/hyperactive-documentation/4.5/">API reference</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
