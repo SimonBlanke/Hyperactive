@@ -76,9 +76,9 @@ As its name suggests Hyperactive started as a hyperparameter optimization packag
 <br>
 
 ## What's new?
+  - ### 27.08.2023 v4.5.0 add early-stopping for Optimization Strategies
   - ### 01.03.2023 v4.4.0 add new feature: "Optimization Strategies"
   - ### 18.11.2022 v4.3.0 with three new optimization algorithms (Spiral Optimization, Lipschitz Optimizer, DIRECT Optimizer)
-  - ### 04.05.2022 v4.2.0 with support of handling Exceptions and Callbacks
 
 <br>
 
@@ -115,29 +115,29 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
-            <li>Downhill Simplex Optimizer</li>
+            <li><a href="./examples/optimization_techniques/downhill_simplex.py">Downhill Simplex Optimizer</a></li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/random_search.py">Random Search</a></li>
-            <li>Grid Search Optimizer</li>
+            <li><a href="./examples/optimization_techniques/grid_search.py">Grid Search</a></li>
             <li><a href="./examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
             <li><a href="./examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
-            <li>Powell's Method</li>
-            <li>Pattern Search</li>
+            <li><a href="./examples/optimization_techniques/pattern_search.py">Powell's Method</a></li>
+            <li><a href="./examples/optimization_techniques/powells_method.py">Pattern Search</a></li>
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
             <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
-            <li>Spiral Optimization</li>
+            <li><a href="./examples/optimization_techniques/spiral_optimization.py">Spiral Optimization</li>
             <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
-            <li>Lipschitz Optimization</li>
-            <li>Direct Algorithm</li>
+            <li><a href="./examples/optimization_techniques/lipschitz_optimization.py">Lipschitz Optimization</a></li>
+            <li><a href="./examples/optimization_techniques/direct_algorithm.py">Direct Algorithm</a></li>
             <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
             <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
@@ -939,7 +939,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
-<summary><b>v4.5.0</b> </summary>
+<summary><b>v4.5.0</b> :heavy_check_mark: </summary>
 
   - [x] add early stopping feature to custom optimization strategies
   - [x] display additional outputs from objective-function in results in command-line

@@ -9,8 +9,19 @@ from hyperactive.optimizers import RandomSearchOptimizer
 from ._parametrize import optimizers
 
 
+n_iter_no_change_parametr = (
+    "n_iter_no_change",
+    [
+        (5),
+        (10),
+        (15),
+    ],
+)
+
+
+@pytest.mark.parametrize(*n_iter_no_change_parametr)
 @pytest.mark.parametrize(*optimizers)
-def test_strategy_early_stopping_0(Optimizer):
+def test_strategy_early_stopping_0(Optimizer, n_iter_no_change):
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
@@ -19,7 +30,7 @@ def test_strategy_early_stopping_0(Optimizer):
         "x1": list(np.arange(0, 100, 0.1)),
     }
 
-    n_iter_no_change = 5
+    # n_iter_no_change = 5
     early_stopping = {
         "n_iter_no_change": n_iter_no_change,
     }
@@ -28,8 +39,8 @@ def test_strategy_early_stopping_0(Optimizer):
     optimizer2 = RandomSearchOptimizer()
 
     opt_strat = CustomOptimizationStrategy()
-    opt_strat.add_optimizer(optimizer1, duration=0.5, early_stopping=early_stopping)
-    opt_strat.add_optimizer(optimizer2, duration=0.5)
+    opt_strat.add_optimizer(optimizer1, duration=0.9, early_stopping=early_stopping)
+    opt_strat.add_optimizer(optimizer2, duration=0.1)
 
     n_iter = 30
 

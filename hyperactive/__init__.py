@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-__version__ = "4.4.3"
+__version__ = "4.5.0"
 __license__ = "MIT"
 
 
