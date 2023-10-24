@@ -76,9 +76,9 @@ As its name suggests Hyperactive started as a hyperparameter optimization packag
 <br>
 
 ## What's new?
-  - ### 27.08.2023 v4.5.0 add early-stopping for Optimization Strategies
-  - ### 01.03.2023 v4.4.0 add new feature: "Optimization Strategies"
-  - ### 18.11.2022 v4.3.0 with three new optimization algorithms (Spiral Optimization, Lipschitz Optimizer, DIRECT Optimizer)
+  - ### 24.10.2023 - v4.6 - add support for constrained optimization
+  - ### 27.08.2023 - v4.5 - add early-stopping for Optimization Strategies
+  - ### 01.03.2023 - v4.4 - add new feature: "Optimization Strategies"
 
 <br>
 
