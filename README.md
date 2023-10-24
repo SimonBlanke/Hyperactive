@@ -948,7 +948,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 <details>
-<summary><b>v4.6.0</b> </summary>
+<summary><b>v4.6.0</b> :heavy_check_mark: </summary>
 
   - [ ] add support for constrained optimization
   
