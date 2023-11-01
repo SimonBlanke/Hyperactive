@@ -171,7 +171,6 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           <ul>
             <li><a href="./examples/optimization_applications/feature_transformation.py">Feature Transformation</a></li>
             <li><a href="./examples/optimization_applications/feature_selection.py">Feature Selection</a></li>
-            <li>Feature Construction</li>
           </ul>
         <a><b>Machine Learning:</b></a>
           <ul>
@@ -198,6 +197,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li>Fit Gaussian Curves</li>
             <li><a href="./examples/optimization_applications/multiple_scores.py">Managing multiple objectives</a></li>
             <li><a href="./examples/optimization_applications/search_space_example.py">Managing objects in search space</a></li>
+            <li><a href="./examples/optimization_applications/constrained_optimization.py">Constrained Optimization</a></li>
             <li><a href="./examples/optimization_applications/memory.py">Memorize evaluations</a></li>
           </ul>
       </td>
