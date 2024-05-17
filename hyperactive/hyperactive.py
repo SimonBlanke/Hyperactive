@@ -34,24 +34,28 @@ class Hyperactive:
 
         self.opt_pros = {}
 
-    def _create_shared_memory(self, new_opt):
-        if new_opt.memory == "share":
-            if len(self.opt_pros) == 0:
-                manager = mp.Manager()
-                new_opt.memory = manager.dict()
+    def _create_shared_memory(self):
+        _bundle_opt_processes = {}
 
-            for opt in self.opt_pros.values():
-                same_obj_func = (
-                    opt.objective_function.__name__
-                    == new_opt.objective_function.__name__
-                )
-                same_ss_length = len(opt.s_space()) == len(new_opt.s_space())
+        for opt_pros in self.opt_pros.values():
+            if opt_pros.memory != "share":
+                continue
+            name = opt_pros.objective_function.__name__
 
-                if same_obj_func and same_ss_length:
-                    new_opt.memory = opt.memory  # get same manager.dict
-                else:
+            if name not in _bundle_opt_processes:
+                _bundle_opt_processes[name] = [opt_pros]
+            else:
+                _bundle_opt_processes[name].append(opt_pros)
+
+        for opt_pros_l in _bundle_opt_processes.values():
+            for idx, opt_pros in enumerate(opt_pros_l):
+                ss_equal = len(opt_pros.s_space()) == len(opt_pros_l[0].s_space())
+
+                if idx == 0 or not ss_equal:
                     manager = mp.Manager()  # get new manager.dict
-                    new_opt.memory = manager.dict()
+                    opt_pros.memory = manager.dict()
+                else:
+                    opt_pros.memory = opt_pros_l[0].memory  # get same manager.dict
 
     @staticmethod
     def _default_opt(optimizer):
@@ -133,9 +137,6 @@ class Hyperactive:
             verbosity=self.verbosity,
         )
 
-        if memory == "share":
-            self._create_shared_memory(optimizer)
-
         if n_jobs == -1:
             n_jobs = mp.cpu_count()
 
@@ -155,6 +156,8 @@ class Hyperactive:
             print_res.print_process(results, nth_process)
 
     def run(self, max_time: float = None):
+        self._create_shared_memory()
+
         for opt in self.opt_pros.values():
             opt.max_time = max_time
 
