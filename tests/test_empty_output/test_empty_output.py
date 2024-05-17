@@ -19,5 +19,5 @@ def test_empty_output():
     print("\n verbose_str \n", verbose_str, "\n")
     print("\n non_verbose_str \n", non_verbose_str, "\n")
 
-    assert verbose_str
+    assert "Results:" in verbose_str
     assert not non_verbose_str
