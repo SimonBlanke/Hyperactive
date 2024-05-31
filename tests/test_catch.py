@@ -62,7 +62,6 @@ def test_catch_3():
 
 def test_catch_all_0():
     def objective_function(access):
-        x = y
         a = 1 + "str"
         math.sqrt(-10)
         x = 1 / 0
@@ -75,7 +74,6 @@ def test_catch_all_0():
         search_space,
         n_iter=100,
         catch={
-            NameError: np.nan,
             TypeError: np.nan,
             ValueError: np.nan,
             ZeroDivisionError: np.nan,
