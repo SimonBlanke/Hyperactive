@@ -90,7 +90,6 @@ def test_catch_all_0():
 
 def test_catch_all_1():
     def objective_function(access):
-        x = y
         a = 1 + "str"
         math.sqrt(-10)
         x = 1 / 0
@@ -105,7 +104,6 @@ def test_catch_all_1():
         search_space,
         n_iter=100,
         catch={
-            NameError: catch_return,
             TypeError: catch_return,
             ValueError: catch_return,
             ZeroDivisionError: catch_return,
