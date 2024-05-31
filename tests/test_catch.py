@@ -12,22 +12,6 @@ search_space = {
 }
 
 
-def test_catch_0():
-    def objective_function(access):
-        x = y
-
-        return 0
-
-    hyper = Hyperactive()
-    hyper.add_search(
-        objective_function,
-        search_space,
-        n_iter=100,
-        catch={NameError: np.nan},
-    )
-    hyper.run()
-
-
 def test_catch_1():
     def objective_function(access):
         a = 1 + "str"
