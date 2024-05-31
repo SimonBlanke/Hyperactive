@@ -1,3 +1,12 @@
+install-requirements:
+	python -m pip install -r ./requirements/requirements.in
+
+install-test-requirements:
+	python -m pip install -r ./requirements/requirements-test.in
+
+install-build-requirements:
+	python -m pip install -r ./requirements/requirements-build.in
+
 clean: clean-pyc clean-ipynb clean-catboost clean-build clean-test
 
 clean-progress_board:
@@ -35,10 +44,12 @@ test-search_space:
 			pytest -q test_search_spaces.py; \
 	done
 
-test_:
+test-pytest:
 	python -m pytest -x -p no:warnings tests/; \
 
-
+tox-test:
+	tox -- -x -p no:warnings -rfEX tests/ \
+	
 test-timings:
 	cd tests/_local_test_timings; \
 		pytest *.py -x -p no:warnings
@@ -46,7 +57,7 @@ test-timings:
 
 test-local: test-timings
 
-test:  test_ test-local
+test:  test-pytest test-local
 
 
 test-examples:
