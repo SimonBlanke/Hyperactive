@@ -826,6 +826,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] Change API
 </details>
 
+
 <details>
 <summary><b>v2.1.0</b> :heavy_check_mark:</summary>
 
@@ -833,6 +834,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] Warm start sequence based optimizers with long term memory
   - [x] Gaussian process regressors from various packages (gpy, sklearn, GPflow, ...) via wrapper
 </details>
+
 
 <details>
 <summary><b>v2.2.0</b> :heavy_check_mark:</summary>
@@ -847,6 +849,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
       - [x] return best parameter for best model
 </details>
 
+
 <details>
 <summary><b>v2.3.0</b> :heavy_check_mark:</summary>
 
@@ -854,6 +857,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] Decision Tree Optimizer
   - [x] add "max_sample_size" and "skip_retrain" parameter for sbom to decrease optimization time
 </details>
+
 
 <details>
 <summary><b>v3.0.0</b> :heavy_check_mark:</summary>
@@ -869,12 +873,14 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+
 <details>
 <summary><b>v3.1.0</b> :heavy_check_mark:</summary>
 
   - [x] Decouple number of runs from active processes (Thanks to [PartiallyTyped](https://github.com/PartiallyTyped))
 
 </details>
+
 
 <details>
 <summary><b>v3.2.0</b> :heavy_check_mark:</summary>
@@ -883,6 +889,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+
 <details>
 <summary><b>v3.3.0</b> :heavy_check_mark:</summary>
 
@@ -890,6 +897,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] Shared memory dictionary between processes with the same objective function
 
 </details>
+
 
 <details>
 <summary><b>v4.0.0</b> :heavy_check_mark:</summary>
@@ -901,6 +909,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+
 <details>
 <summary><b>v4.1.0</b> :heavy_check_mark:</summary>
 
@@ -910,6 +919,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+
 <details>
 <summary><b>v4.2.0</b> :heavy_check_mark:</summary>
 
@@ -918,6 +928,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] add option to add eval- and iter- times to search-data
 
 </details>
+
 
 <details>
 <summary><b>v4.3.0</b> :heavy_check_mark:</summary>
@@ -930,6 +941,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 </details>
 
+
 <details>
 <summary><b>v4.4.0</b> :heavy_check_mark: </summary>
 
@@ -937,6 +949,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] redesign progress-bar
 
 </details>
+
 
 <details>
 <summary><b>v4.5.0</b> :heavy_check_mark: </summary>
@@ -947,6 +960,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   
 </details>
 
+
 <details>
 <summary><b>v4.6.0</b> :heavy_check_mark: </summary>
 
@@ -954,9 +968,11 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   
 </details>
 
-<details>
-<summary><b>v4.7.0</b> </summary>
 
+<details>
+<summary><b>Future releases</b> </summary>
+
+  - [ ] new optimization algorithms from [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) will always be added to Hyperactive
   - [ ] add "prune_search_space"-method to custom optimization strategy class
   
 </details>
