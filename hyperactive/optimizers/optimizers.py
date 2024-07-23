@@ -20,7 +20,9 @@ from gradient_free_optimizers import (
     ParallelTemperingOptimizer as _ParallelTemperingOptimizer,
     ParticleSwarmOptimizer as _ParticleSwarmOptimizer,
     SpiralOptimization as _SpiralOptimization_,
+    GeneticAlgorithmOptimizer as _GeneticAlgorithmOptimizer,
     EvolutionStrategyOptimizer as _EvolutionStrategyOptimizer,
+    DifferentialEvolutionOptimizer as _DifferentialEvolutionOptimizer,
     BayesianOptimizer as _BayesianOptimizer,
     LipschitzOptimizer as _LipschitzOptimizer_,
     DirectAlgorithm as _DirectAlgorithm_,
@@ -114,10 +116,22 @@ class SpiralOptimization(HyperOptimizer):
         self.optimizer_class = _SpiralOptimization_
 
 
+class GeneticAlgorithmOptimizer(HyperOptimizer):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self.optimizer_class = _GeneticAlgorithmOptimizer
+
+
 class EvolutionStrategyOptimizer(HyperOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self.optimizer_class = _EvolutionStrategyOptimizer
+
+
+class DifferentialEvolutionOptimizer(HyperOptimizer):
+    def __init__(self, **opt_params):
+        super().__init__(**opt_params)
+        self.optimizer_class = _DifferentialEvolutionOptimizer
 
 
 class BayesianOptimizer(HyperOptimizer):
