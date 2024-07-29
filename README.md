@@ -131,7 +131,9 @@ Hyperactive features a collection of optimization algorithms that can be used fo
             <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
             <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
             <li><a href="./examples/optimization_techniques/spiral_optimization.py">Spiral Optimization</li>
+            <li>Genetic Algorithm</a></li>
             <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
+            <li>Differential Evolution</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
@@ -351,7 +353,9 @@ hyper.run()
     - ParallelTemperingOptimizer
     - ParticleSwarmOptimizer
     - SpiralOptimization
+    - GeneticAlgorithmOptimizer
     - EvolutionStrategyOptimizer
+    - DifferentialEvolutionOptimizer
     - BayesianOptimizer
     - LipschitzOptimizer
     - DirectAlgorithm
@@ -719,7 +723,9 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 - PatternSearch
 - ParallelTemperingOptimizer
 - ParticleSwarmOptimizer
+- GeneticAlgorithmOptimizer
 - EvolutionStrategyOptimizer
+- DifferentialEvolutionOptimizer
 - BayesianOptimizer
 - TreeStructuredParzenEstimators
 - ForestOptimizer
@@ -967,6 +973,16 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] add support for constrained optimization
   
 </details>
+
+
+<details>
+<summary><b>v4.7.0</b> :heavy_check_mark: </summary>
+
+  - [x] add Genetic algorithm optimizer
+  - [x] add Differential evolution optimizer
+
+</details>
+
 
 
 <details>
