@@ -75,7 +75,7 @@ install: build
 	pip install dist/*.whl
 
 uninstall:
-	pip uninstall -y surfaces
+	pip uninstall -y hyperactive
 	rm -fr build dist *.egg-info
 
 install-requirements:
