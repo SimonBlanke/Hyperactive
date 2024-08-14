@@ -30,8 +30,15 @@ def test_issue_25():
 
         # append parameter dictionary to pandas dataframe
         search_data = pd.read_csv(path, na_values="nan")
-        search_data_new = pd.DataFrame(parameter_dict, columns=para_names, index=[0])
-        search_data = search_data.append(search_data_new)
+        search_data_new = pd.DataFrame(
+            parameter_dict, columns=para_names, index=[0]
+        )
+
+        # search_data = search_data.append(search_data_new)
+        search_data = pd.concat(
+            [search_data, search_data_new], ignore_index=True
+        )
+
         search_data.to_csv(path, index=False, na_rep="nan")
 
         return score
@@ -47,6 +54,9 @@ def test_issue_25():
     """
     hyper1 = Hyperactive()
     hyper1.add_search(
-        objective_function, search_space, n_iter=50, memory_warm_start=search_data_0
+        objective_function,
+        search_space,
+        n_iter=50,
+        memory_warm_start=search_data_0,
     )
     hyper1.run()
