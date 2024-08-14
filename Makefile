@@ -1,12 +1,3 @@
-install-requirements:
-	python -m pip install -r ./requirements/requirements.in
-
-install-test-requirements:
-	python -m pip install -r ./requirements/requirements-test.in
-
-install-build-requirements:
-	python -m pip install -r ./requirements/requirements-build.in
-
 clean: clean-pyc clean-ipynb clean-catboost clean-build clean-test
 
 clean-progress_board:
@@ -77,14 +68,28 @@ dist:
 	python setup.py bdist_wheel
 	ls -l dist
 
-install:
-	pip install .
+build:
+	python -m build
 
-develop:
+install: build
+	pip install dist/*.whl
+
+uninstall:
+	pip uninstall -y surfaces
+	rm -fr build dist *.egg-info
+
+install-requirements:
+	python -m pip install -r ./requirements/requirements.in
+
+install-test-requirements:
+	python -m pip install -r ./requirements/requirements-test.in
+
+install-build-requirements:
+	python -m pip install -r ./requirements/requirements-build.in
+
+install-editable:
 	pip install -e .
 
-reinstall:
-	pip uninstall -y hyperactive
-	rm -fr build dist hyperactive.egg-info
-	python setup.py bdist_wheel
-	pip install dist/*
+reinstall: uninstall install
+
+reinstall-editable: uninstall install-editable
