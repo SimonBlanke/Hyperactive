@@ -2,7 +2,9 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-__version__ = "4.7.0"
+import importlib.metadata
+
+__version__ = importlib.metadata.version("hyperactive")
 __license__ = "MIT"
 
 
