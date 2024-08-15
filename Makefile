@@ -78,14 +78,11 @@ uninstall:
 	pip uninstall -y hyperactive
 	rm -fr build dist *.egg-info
 
-install-requirements:
-	python -m pip install -r ./requirements/requirements.in
-
 install-test-requirements:
-	python -m pip install -r ./requirements/requirements-test.in
+	python -m pip install .[test]
 
 install-build-requirements:
-	python -m pip install -r ./requirements/requirements-build.in
+	python -m pip install .[build]
 
 install-editable:
 	pip install -e .
