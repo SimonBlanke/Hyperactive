@@ -42,9 +42,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install build
           
+          make install
           make install-build-requirements
           make install-test-requirements
-          make install
 
           python -m pip install "numpy ${{ matrix.numpy-pandas-version }}"
           python -m pip install "pandas ${{ matrix.numpy-pandas-version }}"
