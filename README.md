@@ -6,6 +6,12 @@
 
 ---
 
+<h2 align="center">An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
+
+<br>
+
+
+
 <table>
   <tbody>
     <tr align="left" valign="center">
@@ -72,14 +78,10 @@
   </tbody>
 </table>
 
-
-
-
-
-
-<h2 align="center">An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
-
 <br>
+
+
+
 
 <img src="./docs/images/bayes_convex.gif" align="right" width="500">
 
