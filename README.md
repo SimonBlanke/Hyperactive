@@ -6,30 +6,82 @@
 
 ---
 
-<p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-            <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
-          </a>
-  <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
-    <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master&logo=codecov" alt="img not loaded: try F5 :)">
-  </a>
-  <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
-  <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
-  </a>
-  <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
-  <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-  </a>
-  <a href="https://pypi.org/project/hyperactive/">
-  <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white" alt="img not loaded: try F5 :)">
-  </a>
-  <a href="https://pypi.org/project/hyperactive/">
-  <img src="https://img.shields.io/pypi/pyversions/hyperactive.svg?style=flat-square&logo=Python&logoColor=white" alt="img not loaded: try F5 :)">
-  </a>
-</p>
-
 <h2 align="center">An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
 
 <br>
+
+
+
+<table>
+  <tbody>
+    <tr align="left" valign="center">
+      <td>
+        <strong>Master status:</strong>
+      </td>
+      <td>
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_ubuntu.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_windows.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_macos.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+    <tr align="left" valign="center">
+      <td>
+        <strong>Dev status:</strong>
+      </td>
+      <td>
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_ubuntu.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_windows.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
+          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_macos.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
+          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/dev" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+    <tr align="left" valign="center">
+      <td>
+         <strong>Code quality:</strong>
+      </td>
+      <td>
+        <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
+        <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
+        </a>
+        <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
+        <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+    <tr align="left" valign="center">
+      <td>
+        <strong>Latest versions:</strong>
+      </td>
+      <td>
+        <a href="https://pypi.org/project/gradient_free_optimizers/">
+          <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white&color=blue" alt="img not loaded: try F5 :)">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+
+
 
 <img src="./docs/images/bayes_convex.gif" align="right" width="500">
 
