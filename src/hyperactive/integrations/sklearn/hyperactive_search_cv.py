@@ -3,9 +3,10 @@
 # License: MIT License
 
 
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import check_scoring
 from sklearn.utils.validation import indexable, _check_method_params
+
 
 from hyperactive import Hyperactive
 
@@ -38,6 +39,16 @@ class HyperactiveSearchCV(BaseEstimator):
         self.refit = refit
         self.cv = cv
 
+    def _refit(
+        self,
+        X,
+        y=None,
+        **fit_params,
+    ):
+        self.best_estimator_ = clone(self.estimator)
+        self.best_estimator_.fit(X, y, **fit_params)
+        return self
+
     def fit(self, X, y, **params):
         X, y = indexable(X, y)
         X, y = self._validate_data(X, y)
@@ -62,4 +73,10 @@ class HyperactiveSearchCV(BaseEstimator):
         )
         hyper.run()
 
+        if self.refit:
+            self._refit(X, y, **params)
+
         return self
+
+    def score(self, X, y=None, **params):
+        return self.scorer_(self.best_estimator_, X, y, **params)
