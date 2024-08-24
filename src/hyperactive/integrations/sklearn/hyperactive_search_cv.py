@@ -11,9 +11,10 @@ from sklearn.utils.validation import indexable, _check_method_params
 from hyperactive import Hyperactive
 
 from .objective_function_adapter import ObjectiveFunctionAdapter
+from .best_estimator import BestEstimator
 
 
-class HyperactiveSearchCV(BaseEstimator):
+class HyperactiveSearchCV(BaseEstimator, BestEstimator):
     _required_parameters = ["estimator", "optimizer", "params_config"]
 
     def __init__(
