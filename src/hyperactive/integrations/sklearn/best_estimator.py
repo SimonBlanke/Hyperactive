@@ -53,19 +53,6 @@ class BestEstimator:
         return self.best_estimator_.inverse_transform(X)
 
     @property
-    def n_features_in_(self):
-        try:
-            check_is_fitted(self)
-        except NotFittedError as nfe:
-            raise AttributeError(
-                "{} object has no n_features_in_ attribute.".format(
-                    self.__class__.__name__
-                )
-            ) from nfe
-
-        return self.best_estimator_.n_features_in_
-
-    @property
     def classes_(self):
         _estimator_has("classes_")(self)
         return self.best_estimator_.classes_
