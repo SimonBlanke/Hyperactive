@@ -127,12 +127,6 @@ As its name suggests Hyperactive started as a hyperparameter optimization packag
 
 <br>
 
-## What's new?
-  - ### 24.10.2023 - v4.6 - add support for constrained optimization
-  - ### 27.08.2023 - v4.5 - add early-stopping for Optimization Strategies
-  - ### 01.03.2023 - v4.4 - add new feature: "Optimization Strategies"
-
-<br>
 
 ## Overview
 
