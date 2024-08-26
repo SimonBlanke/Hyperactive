@@ -44,6 +44,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+integrations = [
+  "scikit-learn",
+]
 build = [
   "setuptools",
   "build",
@@ -55,6 +58,12 @@ test = [
   "pytest-cov",
   "pathos",
 ]
+all_extras = [
+  "hyperactive[build]",
+  "hyperactive[test]",
+  "hyperactive[integrations]",
+]
+
 
 [project.urls]
 "Homepage" = "https://github.com/SimonBlanke/Hyperactive"
