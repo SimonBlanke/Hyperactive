@@ -84,6 +84,9 @@ install-test-requirements:
 install-build-requirements:
 	python -m pip install .[build]
 
+install-all-extras:
+	python -m pip install .[all_extras]
+
 install-editable:
 	pip install -e .
 
