@@ -127,12 +127,6 @@ As its name suggests Hyperactive started as a hyperparameter optimization packag
 
 <br>
 
-## What's new?
-  - ### 24.10.2023 - v4.6 - add support for constrained optimization
-  - ### 27.08.2023 - v4.5 - add early-stopping for Optimization Strategies
-  - ### 01.03.2023 - v4.4 - add new feature: "Optimization Strategies"
-
-<br>
 
 ## Overview
 
@@ -1046,6 +1040,15 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] change project structure to src-layout
 
 </details>
+
+
+<details>
+<summary><b>v4.9.0</b> </summary>
+
+  - [ ] add sklearn integration
+
+</details>
+
 
 
 
