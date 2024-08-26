@@ -1048,6 +1048,15 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 </details>
 
 
+<details>
+<summary><b>v4.9.0</b> </summary>
+
+  - [ ] add sklearn integration
+
+</details>
+
+
+
 
 
 <details>
