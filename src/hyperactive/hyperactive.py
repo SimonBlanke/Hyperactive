@@ -18,6 +18,22 @@ from .search_space import SearchSpace
 
 
 class Hyperactive:
+    """
+    Initialize the Hyperactive class to manage optimization processes.
+
+    Parameters:
+    - verbosity: List of verbosity levels (default: ["progress_bar", "print_results", "print_times"])
+    - distribution: String indicating the distribution method (default: "multiprocessing")
+    - n_processes: Number of processes to run in parallel or "auto" to determine automatically (default: "auto")
+
+    Methods:
+    - add_search: Add a new optimization search process with specified parameters
+    - run: Execute the optimization searches
+    - best_para: Get the best parameters for a specific search
+    - best_score: Get the best score for a specific search
+    - search_data: Get the search data for a specific search
+    """
+
     def __init__(
         self,
         verbosity: list = ["progress_bar", "print_results", "print_times"],
@@ -42,20 +58,23 @@ class Hyperactive:
                 continue
             name = opt_pros.objective_function.__name__
 
-            if name not in _bundle_opt_processes:
-                _bundle_opt_processes[name] = [opt_pros]
-            else:
-                _bundle_opt_processes[name].append(opt_pros)
+            _bundle_opt_processes.setdefault(name, []).append(opt_pros)
 
         for opt_pros_l in _bundle_opt_processes.values():
-            for idx, opt_pros in enumerate(opt_pros_l):
-                ss_equal = len(opt_pros.s_space()) == len(opt_pros_l[0].s_space())
-
-                if idx == 0 or not ss_equal:
-                    manager = mp.Manager()  # get new manager.dict
-                    opt_pros.memory = manager.dict()
-                else:
-                    opt_pros.memory = opt_pros_l[0].memory  # get same manager.dict
+            # Check if the lengths of the search spaces of all optimizers in the list are the same.
+            if (
+                len(set(len(opt_pros.s_space()) for opt_pros in opt_pros_l))
+                == 1
+            ):
+                manager = mp.Manager()  # get new manager.dict
+                shared_memory = manager.dict()
+                for opt_pros in opt_pros_l:
+                    opt_pros.memory = shared_memory
+            else:
+                for opt_pros in opt_pros_l:
+                    opt_pros.memory = opt_pros_l[
+                        0
+                    ].memory  # get same manager.dict
 
     @staticmethod
     def _default_opt(optimizer):
@@ -75,10 +94,8 @@ class Hyperactive:
         for key in search_space.keys():
             search_dim = search_space[key]
 
-            error_msg = (
-                "Value in '{}' of search space dictionary must be of type list".format(
-                    key
-                )
+            error_msg = "Value in '{}' of search space dictionary must be of type list".format(
+                key
             )
             if not isinstance(search_dim, list):
                 print("Warning", error_msg)
