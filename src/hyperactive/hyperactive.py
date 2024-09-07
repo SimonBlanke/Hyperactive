@@ -120,18 +120,16 @@ class Hyperactive:
         memory: Union[str, bool] = "share",
         memory_warm_start: pd.DataFrame = None,
     ):
+        """
+        Set up and initialize a search process for optimizing an objective function over a given search space.
+        """
         self.check_list(search_space)
 
-        if constraints is None:
-            constraints = []
-        if pass_through is None:
-            pass_through = {}
-        if callbacks is None:
-            callbacks = {}
-        if catch is None:
-            catch = {}
-        if early_stopping is None:
-            early_stopping = {}
+        constraints = constraints or []
+        pass_through = pass_through or {}
+        callbacks = callbacks or {}
+        catch = catch or {}
+        early_stopping = early_stopping or {}
 
         optimizer = self._default_opt(optimizer)
         search_id = self._default_search_id(search_id, objective_function)
@@ -154,8 +152,7 @@ class Hyperactive:
             verbosity=self.verbosity,
         )
 
-        if n_jobs == -1:
-            n_jobs = mp.cpu_count()
+        n_jobs = mp.cpu_count() if n_jobs == -1 else n_jobs
 
         for _ in range(n_jobs):
             nth_process = len(self.opt_pros)
