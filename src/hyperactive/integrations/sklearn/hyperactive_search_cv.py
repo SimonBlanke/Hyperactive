@@ -62,6 +62,7 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         )
         objective_function_adapter.add_dataset(X, y)
         objective_function_adapter.add_validation(self.scorer_, self.cv)
+        objective_function = objective_function_adapter.objective_function
 
         hyper = Hyperactive(verbosity=False)
         hyper.add_search(
@@ -73,6 +74,10 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
             random_state=self.random_state,
         )
         hyper.run()
+
+        self.best_params_ = hyper.best_para(objective_function)
+        self.best_score_ = hyper.best_score(objective_function)
+        self.search_data_ = hyper.search_data(objective_function)
 
         if self.refit:
             self._refit(X, y, **params)
