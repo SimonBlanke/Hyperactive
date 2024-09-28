@@ -55,7 +55,7 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator, Checks):
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
-    @Checks.is_fit_successful
+    @Checks.verify_fit
     def fit(self, X, y, **fit_params):
         X, y = indexable(X, y)
         X, y = self._validate_data(X, y)
