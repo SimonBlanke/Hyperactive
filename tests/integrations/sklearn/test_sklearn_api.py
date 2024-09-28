@@ -6,6 +6,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.isotonic import IsotonicRegression
 from sklearn.decomposition import PCA
 from sklearn.datasets import make_blobs
+from sklearn.exceptions import NotFittedError
 
 from sklearn.utils.validation import check_is_fitted
 
@@ -40,6 +41,24 @@ def test_fit():
     search.fit(X, y)
 
     check_is_fitted(search)
+
+
+def test_not_fitted():
+    search = HyperactiveSearchCV(svc, opt, svc_params)
+    assert not search.fit_successful
+
+    with pytest.raises(NotFittedError):
+        check_is_fitted(search)
+
+    assert not search.fit_successful
+
+
+def test_false_params():
+    search = HyperactiveSearchCV(svc, opt, nb_params)
+    with pytest.raises(ValueError):
+        search.fit(X, y)
+
+    assert not search.fit_successful
 
 
 def test_score():
