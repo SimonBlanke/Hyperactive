@@ -2,6 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+from typing import Union, List, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import check_scoring
@@ -13,6 +14,7 @@ from hyperactive import Hyperactive
 from .objective_function_adapter import ObjectiveFunctionAdapter
 from .best_estimator import BestEstimator
 from .checks import Checks
+from ...optimizers import RandomSearchOptimizer
 
 
 class HyperactiveSearchCV(BaseEstimator, BestEstimator, Checks):
@@ -21,8 +23,8 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator, Checks):
     def __init__(
         self,
         estimator,
-        optimizer,
         params_config,
+        optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
         n_iter=100,
         *,
         scoring=None,
@@ -34,8 +36,8 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator, Checks):
         super().__init__()
 
         self.estimator = estimator
-        self.optimizer = optimizer
         self.params_config = params_config
+        self.optimizer = optimizer
         self.n_iter = n_iter
         self.scoring = scoring
         self.n_jobs = n_jobs
