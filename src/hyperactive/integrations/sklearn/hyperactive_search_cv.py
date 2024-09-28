@@ -21,6 +21,36 @@ from ...optimizers import RandomSearchOptimizer
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
+    """
+    HyperactiveSearchCV class for hyperparameter tuning using cross-validation with sklearn estimators.
+
+    Parameters:
+    - estimator: SklearnBaseEstimator
+        The estimator to be tuned.
+    - params_config: Dict[str, list]
+        Dictionary containing the hyperparameter search space.
+    - optimizer: Union[str, Type[RandomSearchOptimizer]], optional
+        The optimizer to be used for hyperparameter search, default is "default".
+    - n_iter: int, optional
+        Number of parameter settings that are sampled, default is 100.
+    - scoring: Callable | str | None, optional
+        Scoring method to evaluate the predictions on the test set.
+    - n_jobs: int, optional
+        Number of jobs to run in parallel, default is 1.
+    - random_state: int | None, optional
+        Random seed for reproducibility.
+    - refit: bool, optional
+        Refit the best estimator with the entire dataset, default is True.
+    - cv: int | "BaseCrossValidator" | Iterable | None, optional
+        Determines the cross-validation splitting strategy.
+
+    Methods:
+    - fit(X, y, **fit_params)
+        Fit the estimator and tune hyperparameters.
+    - score(X, y, **params)
+        Return the score of the best estimator on the input data.
+    """
+
     _required_parameters = ["estimator", "optimizer", "params_config"]
 
     def __init__(
