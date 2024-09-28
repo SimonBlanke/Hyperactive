@@ -4,7 +4,8 @@ import numpy as np
 from sklearn import svm, datasets
 from sklearn.naive_bayes import GaussianNB
 from sklearn.decomposition import PCA
-
+from sklearn.datasets import make_blobs
+from sklearn.exceptions import NotFittedError
 
 from sklearn.utils.validation import check_is_fitted
 
@@ -20,22 +21,45 @@ svc = svm.SVC()
 pca = PCA()
 
 
-parameters_svc = {"kernel": ["linear", "rbf"], "C": [1, 10]}
-parameters_nb = {"var_smoothing": [1e-7, 1e-8, 1e-9]}
-parameters_pca = {"n_components": [2, 3, 4]}
+nb_params = {
+    "var_smoothing": [1e-9, 1e-8],
+}
+svc_params = {"kernel": ["linear", "rbf"], "C": [1, 10]}
+pca_params = {
+    "n_components": [2, 3],
+}
+
 
 opt = RandomSearchOptimizer()
 
 
 def test_fit():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     check_is_fitted(search)
 
 
+def test_not_fitted():
+    search = HyperactiveSearchCV(svc, svc_params, opt)
+    assert not search.fit_successful
+
+    with pytest.raises(NotFittedError):
+        check_is_fitted(search)
+
+    assert not search.fit_successful
+
+
+def test_false_params():
+    search = HyperactiveSearchCV(svc, nb_params, opt)
+    with pytest.raises(ValueError):
+        search.fit(X, y)
+
+    assert not search.fit_successful
+
+
 def test_score():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
     score = search.score(X, y)
 
@@ -43,14 +67,14 @@ def test_score():
 
 
 def test_classes_():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     assert [0, 1, 2] == list(search.classes_)
 
 
 def test_score_samples():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     with pytest.raises(AttributeError):
@@ -58,7 +82,7 @@ def test_score_samples():
 
 
 def test_predict():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
     result = search.predict(X)
 
@@ -66,13 +90,13 @@ def test_predict():
 
 
 def test_predict_proba():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     with pytest.raises(AttributeError):
         search.predict_proba(X)
 
-    search = HyperactiveSearchCV(nb, opt, parameters_nb)
+    search = HyperactiveSearchCV(nb, nb_params, opt)
     search.fit(X, y)
     result = search.predict(X)
 
@@ -80,13 +104,13 @@ def test_predict_proba():
 
 
 def test_predict_log_proba():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     with pytest.raises(AttributeError):
         search.predict_log_proba(X)
 
-    search = HyperactiveSearchCV(nb, opt, parameters_nb)
+    search = HyperactiveSearchCV(nb, nb_params, opt)
     search.fit(X, y)
     result = search.predict_log_proba(X)
 
@@ -94,7 +118,7 @@ def test_predict_log_proba():
 
 
 def test_decision_function():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
     result = search.decision_function(X)
 
@@ -102,13 +126,13 @@ def test_decision_function():
 
 
 def test_transform():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     with pytest.raises(AttributeError):
         search.transform(X)
 
-    search = HyperactiveSearchCV(pca, opt, parameters_pca)
+    search = HyperactiveSearchCV(pca, pca_params, opt)
     search.fit(X, y)
     result = search.transform(X)
 
@@ -116,13 +140,13 @@ def test_transform():
 
 
 def test_inverse_transform():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     with pytest.raises(AttributeError):
         search.inverse_transform(X)
 
-    search = HyperactiveSearchCV(pca, opt, parameters_pca)
+    search = HyperactiveSearchCV(pca, pca_params, opt)
     search.fit(X, y)
     result = search.inverse_transform(search.transform(X))
 
@@ -130,7 +154,7 @@ def test_inverse_transform():
 
 
 def test_best_params_and_score():
-    search = HyperactiveSearchCV(svc, opt, parameters_svc)
+    search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
     best_params = search.best_params_

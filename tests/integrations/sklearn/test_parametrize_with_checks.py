@@ -11,6 +11,6 @@ parameters = {"kernel": ["linear", "rbf"], "C": [1, 10]}
 opt = RandomSearchOptimizer()
 
 
-@parametrize_with_checks([HyperactiveSearchCV(svc, opt, parameters)])
+@parametrize_with_checks([HyperactiveSearchCV(svc, parameters, opt)])
 def test_estimators(estimator, check):
     check(estimator)

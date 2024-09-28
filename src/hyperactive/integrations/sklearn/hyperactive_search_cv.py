@@ -2,37 +2,75 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+from collections.abc import Iterable, Callable
+from typing import Union, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import check_scoring
 from sklearn.utils.validation import indexable, _check_method_params
 
+from sklearn.base import BaseEstimator as SklearnBaseEstimator
+from sklearn.model_selection import BaseCrossValidator
 
 from hyperactive import Hyperactive
 
 from .objective_function_adapter import ObjectiveFunctionAdapter
-from .best_estimator import BestEstimator
+from .best_estimator import BestEstimator as _BestEstimator_
+from .checks import Checks
+from ...optimizers import RandomSearchOptimizer
 
 
-class HyperactiveSearchCV(BaseEstimator, BestEstimator):
+class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
+    """
+    HyperactiveSearchCV class for hyperparameter tuning using cross-validation with sklearn estimators.
+
+    Parameters:
+    - estimator: SklearnBaseEstimator
+        The estimator to be tuned.
+    - params_config: Dict[str, list]
+        Dictionary containing the hyperparameter search space.
+    - optimizer: Union[str, Type[RandomSearchOptimizer]], optional
+        The optimizer to be used for hyperparameter search, default is "default".
+    - n_iter: int, optional
+        Number of parameter settings that are sampled, default is 100.
+    - scoring: Callable | str | None, optional
+        Scoring method to evaluate the predictions on the test set.
+    - n_jobs: int, optional
+        Number of jobs to run in parallel, default is 1.
+    - random_state: int | None, optional
+        Random seed for reproducibility.
+    - refit: bool, optional
+        Refit the best estimator with the entire dataset, default is True.
+    - cv: int | "BaseCrossValidator" | Iterable | None, optional
+        Determines the cross-validation splitting strategy.
+
+    Methods:
+    - fit(X, y, **fit_params)
+        Fit the estimator and tune hyperparameters.
+    - score(X, y, **params)
+        Return the score of the best estimator on the input data.
+    """
+
     _required_parameters = ["estimator", "optimizer", "params_config"]
 
     def __init__(
         self,
-        estimator,
-        optimizer,
-        params_config,
-        n_iter=100,
+        estimator: "SklearnBaseEstimator",
+        params_config: Dict[str, list],
+        optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
+        n_iter: int = 100,
         *,
-        scoring=None,
-        n_jobs=1,
-        random_state=None,
-        refit=True,
+        scoring: Callable | str | None = None,
+        n_jobs: int = 1,
+        random_state: int | None = None,
+        refit: bool = True,
         cv=None,
     ):
+        super().__init__()
+
         self.estimator = estimator
-        self.optimizer = optimizer
         self.params_config = params_config
+        self.optimizer = optimizer
         self.n_iter = n_iter
         self.scoring = scoring
         self.n_jobs = n_jobs
@@ -48,11 +86,12 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
+    @Checks.verify_fit
     def fit(self, X, y, **fit_params):
         X, y = indexable(X, y)
         X, y = self._validate_data(X, y)
 
-        params = _check_method_params(X, params=fit_params)
+        fit_params = _check_method_params(X, params=fit_params)
         self.scorer_ = check_scoring(self.estimator, scoring=self.scoring)
 
         objective_function_adapter = ObjectiveFunctionAdapter(
@@ -75,6 +114,10 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         self.best_params_ = hyper.best_para(objective_function)
         self.best_score_ = hyper.best_score(objective_function)
 
+        self.best_params_ = hyper.best_para(objective_function)
+        self.best_score_ = hyper.best_score(objective_function)
+        self.search_data_ = hyper.search_data(objective_function)
+
         if self.refit:
             self._refit(X, y, **fit_params)
 
@@ -82,3 +125,7 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
 
     def score(self, X, y=None, **params):
         return self.scorer_(self.best_estimator_, X, y, **params)
+
+    @property
+    def fit_successful(self):
+        self._fit_successful
