@@ -12,9 +12,10 @@ from hyperactive import Hyperactive
 
 from .objective_function_adapter import ObjectiveFunctionAdapter
 from .best_estimator import BestEstimator
+from .checks import Checks
 
 
-class HyperactiveSearchCV(BaseEstimator, BestEstimator):
+class HyperactiveSearchCV(BaseEstimator, BestEstimator, Checks):
     _required_parameters = ["estimator", "optimizer", "params_config"]
 
     def __init__(
@@ -30,6 +31,8 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         refit=True,
         cv=None,
     ):
+        super().__init__()
+
         self.estimator = estimator
         self.optimizer = optimizer
         self.params_config = params_config
@@ -52,6 +55,7 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
+    @Checks.is_fit_successful
     def fit(self, X, y, **fit_params):
         X, y = indexable(X, y)
         X, y = self._validate_data(X, y)
