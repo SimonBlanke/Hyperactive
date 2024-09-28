@@ -2,36 +2,39 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from typing import Union, List, Dict, Type
+from collections.abc import Iterable, Callable
+from typing import Union, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import check_scoring
 from sklearn.utils.validation import indexable, _check_method_params
 
+from sklearn.base import BaseEstimator as SklearnBaseEstimator
+from sklearn.model_selection import BaseCrossValidator
 
 from hyperactive import Hyperactive
 
 from .objective_function_adapter import ObjectiveFunctionAdapter
-from .best_estimator import BestEstimator
+from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
 
 
-class HyperactiveSearchCV(BaseEstimator, BestEstimator, Checks):
+class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
     _required_parameters = ["estimator", "optimizer", "params_config"]
 
     def __init__(
         self,
-        estimator,
-        params_config,
+        estimator: "SklearnBaseEstimator",
+        params_config: Dict[str, list],
         optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
-        n_iter=100,
+        n_iter: int = 100,
         *,
-        scoring=None,
-        n_jobs=1,
-        random_state=None,
-        refit=True,
-        cv=None,
+        scoring: Callable | str | None = None,
+        n_jobs: int = 1,
+        random_state: int | None = None,
+        refit: bool = True,
+        cv: int | "BaseCrossValidator" | Iterable | None = None,
     ):
         super().__init__()
 
