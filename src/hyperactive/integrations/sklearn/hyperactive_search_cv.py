@@ -46,15 +46,17 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         y=None,
         **fit_params,
     ):
-        self.best_estimator_ = clone(self.estimator)
+        self.best_estimator_ = clone(self.estimator).set_params(
+            **self.best_params_
+        )
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
-    def fit(self, X, y, **params):
+    def fit(self, X, y, **fit_params):
         X, y = indexable(X, y)
         X, y = self._validate_data(X, y)
 
-        params = _check_method_params(X, params=params)
+        fit_params = _check_method_params(X, params=fit_params)
         self.scorer_ = check_scoring(self.estimator, scoring=self.scoring)
 
         objective_function_adapter = ObjectiveFunctionAdapter(
@@ -80,7 +82,7 @@ class HyperactiveSearchCV(BaseEstimator, BestEstimator):
         self.search_data_ = hyper.search_data(objective_function)
 
         if self.refit:
-            self._refit(X, y, **params)
+            self._refit(X, y, **fit_params)
 
         return self
 
