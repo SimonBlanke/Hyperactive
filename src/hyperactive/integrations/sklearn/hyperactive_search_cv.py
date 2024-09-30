@@ -88,6 +88,22 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
 
     @Checks.verify_fit
     def fit(self, X, y, **fit_params):
+        """
+        Fit the estimator using the provided training data.
+
+        Parameters:
+        - X: array-like or sparse matrix, shape (n_samples, n_features)
+            The training input samples.
+        - y: array-like, shape (n_samples,) or (n_samples, n_outputs)
+            The target values.
+        - **fit_params: dict of string -> object
+            Additional fit parameters.
+
+        Returns:
+        - self: object
+            Returns the instance itself.
+        """
+
         X, y = indexable(X, y)
         X, y = self._validate_data(X, y)
 
@@ -124,6 +140,22 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         return self
 
     def score(self, X, y=None, **params):
+        """
+        Calculate the score of the best estimator on the input data.
+
+        Parameters:
+        - X: array-like or sparse matrix of shape (n_samples, n_features)
+            The input samples.
+        - y: array-like of shape (n_samples,), default=None
+            The target values.
+        - **params: dict
+            Additional parameters to be passed to the scoring function.
+
+        Returns:
+        - float
+            The score of the best estimator on the input data.
+        """
+
         return self.scorer_(self.best_estimator_, X, y, **params)
 
     @property
