@@ -121,8 +121,27 @@ class Hyperactive:
         memory_warm_start: pd.DataFrame = None,
     ):
         """
-        Set up and initialize a search process for optimizing an objective function over a given search space.
+        Add a new optimization search process with specified parameters.
+
+        Parameters:
+        - objective_function: The objective function to optimize.
+        - search_space: Dictionary defining the search space for optimization.
+        - n_iter: Number of iterations for the optimization process.
+        - search_id: Identifier for the search process (default: None).
+        - optimizer: The optimizer to use for the search process (default: "default").
+        - n_jobs: Number of parallel jobs to run (default: 1).
+        - initialize: Dictionary specifying initialization parameters (default: {"grid": 4, "random": 2, "vertices": 4}).
+        - constraints: List of constraint functions (default: None).
+        - pass_through: Dictionary of additional parameters to pass through (default: None).
+        - callbacks: Dictionary of callback functions (default: None).
+        - catch: Dictionary of exceptions to catch during optimization (default: None).
+        - max_score: Maximum score to achieve (default: None).
+        - early_stopping: Dictionary specifying early stopping criteria (default: None).
+        - random_state: Seed for random number generation (default: None).
+        - memory: Option to share memory between processes (default: "share").
+        - memory_warm_start: DataFrame containing warm start memory (default: None).
         """
+
         self.check_list(search_space)
 
         constraints = constraints or []
@@ -170,6 +189,13 @@ class Hyperactive:
             print_res.print_process(results, nth_process)
 
     def run(self, max_time: float = None):
+        """
+        Run the optimization process with an optional maximum time limit.
+
+        Args:
+            max_time (float, optional): Maximum time limit for the optimization process. Defaults to None.
+        """
+
         self._create_shared_memory()
 
         for opt in self.opt_pros.values():
@@ -184,12 +210,43 @@ class Hyperactive:
         self._print_info()
 
     def best_para(self, id_):
+        """
+        Retrieve the best parameters for a specific ID from the results.
+
+        Parameters:
+        - id_ (int): The ID of the parameters to retrieve.
+
+        Returns:
+        - Union[Dict[str, Union[int, float]], None]: The best parameters for the specified ID if found, otherwise None.
+
+        Raises:
+        - ValueError: If the objective function name is not recognized.
+        """
+
         return self.results_.best_para(id_)
 
     def best_score(self, id_):
+        """
+        Return the best score for a specific ID from the results.
+
+        Parameters:
+        - id_ (int): The ID for which the best score is requested.
+        """
+
         return self.results_.best_score(id_)
 
     def search_data(self, id_, times=False):
+        """
+        Retrieve search data for a specific ID from the results. Optionally exclude evaluation and iteration times if 'times' is set to False.
+
+        Parameters:
+        - id_ (int): The ID of the search data to retrieve.
+        - times (bool, optional): Whether to exclude evaluation and iteration times. Defaults to False.
+
+        Returns:
+        - pd.DataFrame: The search data for the specified ID.
+        """
+
         search_data_ = self.results_.search_data(id_)
 
         if times == False:
