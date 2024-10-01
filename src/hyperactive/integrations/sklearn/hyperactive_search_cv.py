@@ -60,9 +60,9 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
         n_iter: int = 100,
         *,
-        scoring: Callable | str | None = None,
+        scoring: Union[Callable, str, None] = None,
         n_jobs: int = 1,
-        random_state: int | None = None,
+        random_state: Union[int, None] = None,
         refit: bool = True,
         cv=None,
     ):
