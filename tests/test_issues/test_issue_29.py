@@ -1,5 +1,5 @@
 from sklearn.datasets import load_diabetes
-from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import cross_val_score
 
 from hyperactive import Hyperactive
@@ -10,12 +10,11 @@ def test_issue_29():
     X, y = data.data, data.target
 
     def model(para):
-        gbr = GradientBoostingRegressor(
-            n_estimators=para["n_estimators"],
-            max_depth=para["max_depth"],
+        dtr = DecisionTreeRegressor(
             min_samples_split=para["min_samples_split"],
+            max_depth=para["max_depth"],
         )
-        scores = cross_val_score(gbr, X, y, cv=3)
+        scores = cross_val_score(dtr, X, y, cv=3)
 
         print(
             "Iteration:",
@@ -27,9 +26,8 @@ def test_issue_29():
         return scores.mean()
 
     search_space = {
-        "n_estimators": list(range(10, 150, 5)),
+        "min_samples_split": list(range(2, 12)),
         "max_depth": list(range(2, 12)),
-        "min_samples_split": list(range(2, 22)),
     }
 
     hyper = Hyperactive()

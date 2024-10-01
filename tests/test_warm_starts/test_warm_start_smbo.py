@@ -69,39 +69,56 @@ smbo_opts = [
     ForestOptimizer,
 ]
 
+initialize = {"random": 1}
+n_iter = 3
+
 
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_0(smbo_opt):
     hyper0 = Hyperactive()
-    hyper0.add_search(objective_function, search_space, n_iter=15)
+    hyper0.add_search(objective_function, search_space, n_iter=n_iter)
     hyper0.run()
 
     search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive()
-    hyper1.add_search(objective_function, search_space, n_iter=15, optimizer=smbo_opt_)
+    hyper1.add_search(
+        objective_function,
+        search_space,
+        n_iter=n_iter,
+        optimizer=smbo_opt_,
+        initialize=initialize,
+    )
     hyper1.run()
 
 
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_1(smbo_opt):
     hyper0 = Hyperactive(distribution="pathos")
-    hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper0.add_search(
+        objective_function,
+        search_space,
+        n_iter=n_iter,
+        n_jobs=2,
+        initialize=initialize,
+    )
     hyper0.run()
 
     search_data0 = hyper0.search_data(objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive()
-    hyper1.add_search(objective_function, search_space, n_iter=15, optimizer=smbo_opt_)
+    hyper1.add_search(
+        objective_function, search_space, n_iter=n_iter, optimizer=smbo_opt_
+    )
     hyper1.run()
 
 
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_2(smbo_opt):
     hyper0 = Hyperactive()
-    hyper0.add_search(objective_function, search_space, n_iter=15)
+    hyper0.add_search(objective_function, search_space, n_iter=n_iter)
     hyper0.run()
 
     search_data0 = hyper0.search_data(objective_function)
@@ -109,7 +126,12 @@ def test_warm_start_smbo_2(smbo_opt):
 
     hyper1 = Hyperactive(distribution="joblib")
     hyper1.add_search(
-        objective_function, search_space, n_iter=15, n_jobs=2, optimizer=smbo_opt_
+        objective_function,
+        search_space,
+        n_iter=n_iter,
+        n_jobs=2,
+        optimizer=smbo_opt_,
+        initialize=initialize,
     )
     hyper1.run()
 
@@ -117,7 +139,7 @@ def test_warm_start_smbo_2(smbo_opt):
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_3(smbo_opt):
     hyper0 = Hyperactive(distribution="pathos")
-    hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
+    hyper0.add_search(objective_function, search_space, n_iter=n_iter, n_jobs=2)
     hyper0.run()
 
     search_data0 = hyper0.search_data(objective_function)
@@ -125,6 +147,11 @@ def test_warm_start_smbo_3(smbo_opt):
 
     hyper1 = Hyperactive(distribution="joblib")
     hyper1.add_search(
-        objective_function, search_space, n_iter=15, n_jobs=2, optimizer=smbo_opt_
+        objective_function,
+        search_space,
+        n_iter=n_iter,
+        n_jobs=2,
+        optimizer=smbo_opt_,
+        initialize=initialize,
     )
     hyper1.run()

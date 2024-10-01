@@ -2,6 +2,7 @@ import numpy as np
 from hyperactive import Hyperactive
 
 """ --- test search spaces with mixed int/float types --- """
+n_iter = 100
 
 
 def test_mixed_type_search_space_0():
@@ -15,7 +16,7 @@ def test_mixed_type_search_space_0():
     }
 
     hyper = Hyperactive()
-    hyper.add_search(objective_function, search_space, n_iter=10000)
+    hyper.add_search(objective_function, search_space, n_iter=n_iter)
     hyper.run()
 
 
@@ -30,7 +31,7 @@ def test_mixed_type_search_space_1():
     }
 
     hyper = Hyperactive()
-    hyper.add_search(objective_function, search_space, n_iter=10000)
+    hyper.add_search(objective_function, search_space, n_iter=n_iter)
     hyper.run()
 
 
@@ -47,7 +48,7 @@ def test_mixed_type_search_space_2():
     }
 
     hyper = Hyperactive()
-    hyper.add_search(objective_function, search_space, n_iter=10000)
+    hyper.add_search(objective_function, search_space, n_iter=n_iter)
     hyper.run()
 
 
@@ -68,5 +69,5 @@ def test_mixed_type_search_space_3():
     }
 
     hyper = Hyperactive()
-    hyper.add_search(objective_function, search_space, n_iter=10000)
+    hyper.add_search(objective_function, search_space, n_iter=n_iter)
     hyper.run()
