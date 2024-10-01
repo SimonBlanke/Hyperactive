@@ -2,8 +2,8 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from tqdm import tqdm
 from sys import platform
+from tqdm import tqdm
 
 if platform.startswith("linux"):
     initializer = tqdm.set_lock
@@ -14,27 +14,25 @@ else:
 
 
 def single_process(process_func, process_infos):
-    results = [process_func(*info) for info in process_infos]
-
-    return results
+    return [process_func(*info) for info in process_infos]
 
 
 def multiprocessing_wrapper(process_func, process_infos, n_processes):
     import multiprocessing as mp
 
-    pool = mp.Pool(n_processes, initializer=initializer, initargs=initargs)
-    results = pool.map(process_func, process_infos)
-
-    return results
+    with mp.Pool(
+        n_processes, initializer=initializer, initargs=initargs
+    ) as pool:
+        return pool.map(process_func, process_infos)
 
 
 def pathos_wrapper(process_func, search_processes_paras, n_processes):
     import pathos.multiprocessing as pmp
 
-    pool = pmp.Pool(n_processes, initializer=initializer, initargs=initargs)
-    results = pool.map(process_func, search_processes_paras)
-
-    return results
+    with pmp.Pool(
+        n_processes, initializer=initializer, initargs=initargs
+    ) as pool:
+        return pool.map(process_func, search_processes_paras)
 
 
 def joblib_wrapper(process_func, search_processes_paras, n_processes):
@@ -44,6 +42,4 @@ def joblib_wrapper(process_func, search_processes_paras, n_processes):
         delayed(process_func)(*info_dict)
         for info_dict in search_processes_paras
     ]
-    results = Parallel(n_jobs=n_processes)(jobs)
-
-    return results
+    return Parallel(n_jobs=n_processes)(jobs)
