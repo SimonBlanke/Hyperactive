@@ -36,7 +36,7 @@ test-search_space:
 	done
 
 test-pytest:
-	python -m pytest -x -p no:warnings tests/; \
+	python -m pytest --durations=10 -x -p  no:warnings tests/; \
 
 tox-test:
 	tox -- -x -p no:warnings -rfEX tests/ \
