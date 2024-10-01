@@ -10,7 +10,7 @@ if platform.startswith("linux"):
     initargs = (tqdm.get_lock(),)
 else:
     initializer = None
-    initargs = None
+    initargs = ()
 
 
 def single_process(process_func, process_infos):
