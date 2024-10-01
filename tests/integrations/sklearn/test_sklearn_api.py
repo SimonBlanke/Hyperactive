@@ -162,3 +162,15 @@ def test_best_params_and_score():
 
     assert "kernel" in best_params and "C" in best_params
     assert isinstance(best_score, float)
+
+
+def test_search_data():
+    n_iter = 50
+    search = HyperactiveSearchCV(svc, svc_params, opt, n_iter=n_iter)
+    search.fit(X, y)
+
+    search_data = search.search_data_
+    columns = search_data.columns
+
+    assert len(search_data) == n_iter
+    assert "kernel" in columns and "C" in columns
