@@ -59,31 +59,24 @@ class HyperGradientConv:
                     value_gfo = space_dim.index(value_hyper)
                 else:
                     raise ValueError(
-                        "'{}' was not found in '{}'".format(value_hyper, para)
+                        f"'{value_hyper}' was not found in '{para}'"
                     )
 
             para_gfo[para] = value_gfo
         return para_gfo
 
     def conv_initialize(self, initialize):
-        if "warm_start" in list(initialize.keys()):
+        if "warm_start" in initialize:
             warm_start_l = initialize["warm_start"]
-            warm_start_gfo = []
-            for warm_start in warm_start_l:
-                para_gfo = self.conv_para(warm_start)
-                warm_start_gfo.append(para_gfo)
-
+            warm_start_gfo = [
+                self.conv_para(warm_start) for warm_start in warm_start_l
+            ]
             initialize["warm_start"] = warm_start_gfo
 
         return initialize
 
     def get_list_positions(self, list1_values, search_dim):
-        list_positions = []
-
-        for value2 in list1_values:
-            list_positions.append(search_dim.index(value2))
-
-        return list_positions
+        return [search_dim.index(value2) for value2 in list1_values]
 
     def values2positions(self, values, search_dim):
         return np.array(search_dim).searchsorted(values)
@@ -116,16 +109,9 @@ class HyperGradientConv:
             search_dim = self.s_space.func2str[dim_key]
 
             if self.s_space.data_types[dim_key] == "object":
-                result_dim_values_tmp = []
-                for value in result_dim_values:
-                    try:
-                        value = value.__name__
-                    except:
-                        pass
-
-                    result_dim_values_tmp.append(value)
-
-                result_dim_values = result_dim_values_tmp
+                result_dim_values = [
+                    self.value_func2str(value) for value in result_dim_values
+                ]
 
                 list1_positions = self.get_list_positions(
                     result_dim_values, search_dim
@@ -135,8 +121,6 @@ class HyperGradientConv:
                     result_dim_values, search_dim
                 )
 
-            # remove None
-            # list1_positions_ = [x for x in list1_positions if x is not None]
             df_positions_dict[dim_key] = list1_positions
 
         results_new = pd.DataFrame(df_positions_dict)
