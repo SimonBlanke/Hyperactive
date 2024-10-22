@@ -86,6 +86,15 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
+    def _check_data(self, X, y):
+        X, y = indexable(X, y)
+        if hasattr(self, "_validate_data"):
+            validate_data = self._validate_data
+        else:
+            from sklearn.utils.validation import validate_data
+
+        return validate_data(X, y)
+
     @Checks.verify_fit
     def fit(self, X, y, **fit_params):
         """
@@ -104,8 +113,7 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
             Returns the instance itself.
         """
 
-        X, y = indexable(X, y)
-        X, y = self._validate_data(X, y)
+        X, y = self._check_data(X, y)
 
         fit_params = _check_method_params(X, params=fit_params)
         self.scorer_ = check_scoring(self.estimator, scoring=self.scoring)
@@ -127,8 +135,6 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
             random_state=self.random_state,
         )
         hyper.run()
-        self.best_params_ = hyper.best_para(objective_function)
-        self.best_score_ = hyper.best_score(objective_function)
 
         self.best_params_ = hyper.best_para(objective_function)
         self.best_score_ = hyper.best_score(objective_function)
