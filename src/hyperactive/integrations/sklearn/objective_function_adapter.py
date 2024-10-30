@@ -3,6 +3,7 @@
 # License: MIT License
 
 
+from sklearn import clone
 from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
 
@@ -20,8 +21,12 @@ class ObjectiveFunctionAdapter:
         self.cv = cv
 
     def objective_function(self, params):
+
+        estimator = clone(self.estimator)
+        estimator.set_params(**params)
+
         cv_results = cross_validate(
-            self.estimator,
+            estimator,
             self.X,
             self.y,
             cv=self.cv,
