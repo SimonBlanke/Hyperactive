@@ -6,7 +6,7 @@ from sklearn.utils.validation import _num_samples
 
 from hyperactive.base import BaseExperiment
 
-class BaseExperiment(BaseExperiment):
+class SklearnCvExperiment(BaseExperiment):
 
     def __init__(self, estimator, scoring, cv, X, y):
         self.estimator = estimator
