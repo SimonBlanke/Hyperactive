@@ -38,13 +38,9 @@ test-search_space:
 test-pytest:
 	python -m pytest --durations=10 -x -p  no:warnings tests/; \
 
-tox-test:
-	tox -- -x -p no:warnings -rfEX tests/ \
-	
 test-timings:
 	cd tests/_local_test_timings; \
 		pytest *.py -x -p no:warnings
-
 
 test-local: test-timings
 
