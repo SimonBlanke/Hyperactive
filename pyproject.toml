@@ -44,7 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 sklearn-integration = [
-  "scikit-learn == 1.5.2",
+  "scikit-learn == 1.6.0",
 ]
 build = [
   "setuptools",
