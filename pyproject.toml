@@ -44,7 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 sklearn-integration = [
-  "scikit-learn == 1.5.2",
+  "scikit-learn == 1.6.0",
 ]
 build = [
   "setuptools",
@@ -52,7 +52,7 @@ build = [
   "wheel",
 ]
 test = [
-  "pytest == 8.3.3",
+  "pytest == 8.3.4",
   "flake8",
   "pytest-cov",
   "pathos",
