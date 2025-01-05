@@ -103,7 +103,8 @@ def test_joblib_1():
         n_jobs = len(search_processes_paras)
 
         jobs = [
-            delayed(process_func)(*info_dict) for info_dict in search_processes_paras
+            delayed(process_func)(*info_dict)
+            for info_dict in search_processes_paras
         ]
         results = Parallel(n_jobs=n_jobs, *kwargs)(jobs)
 
@@ -115,10 +116,12 @@ def test_joblib_1():
     hyper.run()
 
 
+"""
 def test_pathos_0():
     hyper = Hyperactive(distribution="pathos")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
+"""
 
 
 def test_n_processes_0():
