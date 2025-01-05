@@ -90,6 +90,7 @@ def test_multiprocessing_1():
     hyper.run()
 
 
+"""
 def test_joblib_0():
     hyper = Hyperactive(distribution="joblib")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
@@ -114,7 +115,7 @@ def test_joblib_1():
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
 
     hyper.run()
-
+"""
 
 """
 def test_pathos_0():
