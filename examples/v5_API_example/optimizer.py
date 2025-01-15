@@ -35,6 +35,7 @@ optimizer2 = RandomRestartHillClimbingOptimizer(n_iter=50, n_jobs=2)
 optimizer1.add_search(experiment, search_space)
 optimizer2.add_search(experiment, search_space)
 
+# not sure about this way of combining optimizers. Might not be intuitive what the plus means.
 hyper = optimizer1 + optimizer2
 
 hyper.run(max_time=5)
