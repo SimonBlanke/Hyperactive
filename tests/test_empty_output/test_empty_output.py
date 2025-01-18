@@ -7,8 +7,8 @@ non_verbose_file = os.path.join(here, "non_verbose.py")
 
 
 def test_empty_output():
-    output_verbose = subprocess.Popen(
-        [sys.executable, "-u", "test_script.py"],
+    output_verbose = subprocess.run(
+        [sys.executable, "-u", verbose_file],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
