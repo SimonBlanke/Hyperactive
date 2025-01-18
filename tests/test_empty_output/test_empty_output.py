@@ -28,23 +28,14 @@ def _run_subprocess(script):
 
 
 def test_empty_output():
-    output_verbose = subprocess.run(
-        [sys.executable, "-u", verbose_file],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        bufsize=1,  # Line buffered
-        env={**os.environ, "PYTHONUNBUFFERED": "1"},
-    )
-    output_non_verbose = subprocess.run(
-        ["python", non_verbose_file], stdout=subprocess.PIPE
-    )
-
     stdout_verb, stderr_verb = _run_subprocess(verbose_file)
     stdout_non_verb, stderr_non_verb = _run_subprocess(non_verbose_file)
 
     print("\n stdout_verb \n", stdout_verb, "\n")
     print("\n stderr_verb \n", stderr_verb, "\n")
+
+    print("\n stdout_non_verb \n", stdout_non_verb, "\n")
+    print("\n stderr_non_verb \n", stderr_non_verb, "\n")
 
     assert "Results:" in stdout_verb
     assert not stdout_non_verb
