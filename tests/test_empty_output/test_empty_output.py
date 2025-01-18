@@ -1,5 +1,4 @@
-import os
-import subprocess
+import os, sys, subprocess
 
 here = os.path.dirname(os.path.abspath(__file__))
 
@@ -8,8 +7,8 @@ non_verbose_file = os.path.join(here, "non_verbose.py")
 
 
 def test_empty_output():
-    output_verbose = subprocess.run(
-        ["python", "-u", verbose_file],
+    output_verbose = subprocess.Popen(
+        [sys.executable, "-u", "test_script.py"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
