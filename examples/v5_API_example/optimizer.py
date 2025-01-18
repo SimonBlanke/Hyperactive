@@ -2,13 +2,14 @@ import numpy as np
 from sklearn.datasets import load_diabetes
 from sklearn.tree import DecisionTreeRegressor
 
+
+from hyperactive.base.search_space_optional import SearchSpace
 from hyperactive.optimizers import (
     HillClimbingOptimizer,
     RandomRestartHillClimbingOptimizer,
 )
 
 from .experiments.test_function import SklearnExperiment
-from .search_space_optional import SearchSpace
 
 
 data = load_diabetes()
