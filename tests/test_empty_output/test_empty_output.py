@@ -9,7 +9,7 @@ non_verbose_file = os.path.join(here, "non_verbose.py")
 
 def test_empty_output():
     output_verbose = subprocess.run(
-        ["python", verbose_file],
+        ["python", "-u", verbose_file],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
