@@ -1,6 +1,6 @@
 import numpy as np
 
-from hyperactive import BaseExperiment
+from hyperactive.base import BaseExperiment
 
 
 class SphereFunction(BaseExperiment):

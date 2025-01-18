@@ -2,7 +2,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import GradientBoostingRegressor
 
 
-from hyperactive import BaseExperiment
+from hyperactive.base import BaseExperiment
 
 
 class SklearnExperiment(BaseExperiment):
