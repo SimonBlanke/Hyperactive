@@ -13,6 +13,8 @@ def test_empty_output():
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
+        bufsize=1,  # Line buffered
+        env={**os.environ, "PYTHONUNBUFFERED": "1"},
     )
     output_non_verbose = subprocess.run(
         ["python", non_verbose_file], stdout=subprocess.PIPE
@@ -26,4 +28,3 @@ def test_empty_output():
 
     assert "Results:" in verbose_str
     assert not non_verbose_str
-    assert False
