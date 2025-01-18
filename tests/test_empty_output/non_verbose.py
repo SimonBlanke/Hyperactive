@@ -22,5 +22,5 @@ search_space = {
 
 
 hyper = Hyperactive(verbosity=False)
-hyper.add_search(ackley_function, search_space, n_iter=30)
+hyper.add_search(ackley_function, search_space, n_iter=30, memory=True)
 hyper.run()

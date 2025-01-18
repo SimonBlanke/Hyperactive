@@ -54,21 +54,19 @@ class HyperOptimizer(OptimizerAttributes):
             self.verbosity = []
 
     def convert_results2hyper(self):
-        self.eval_times = np.array(self.gfo_optimizer.eval_times).sum()
-        self.iter_times = np.array(self.gfo_optimizer.iter_times).sum()
+        self.eval_times = sum(self.gfo_optimizer.eval_times)
+        self.iter_times = sum(self.gfo_optimizer.iter_times)
 
         if self.gfo_optimizer.best_para is not None:
             value = self.hg_conv.para2value(self.gfo_optimizer.best_para)
             position = self.hg_conv.position2value(value)
             best_para = self.hg_conv.value2para(position)
-
             self.best_para = best_para
         else:
             self.best_para = None
 
         self.best_score = self.gfo_optimizer.best_score
         self.positions = self.gfo_optimizer.search_data
-
         self.search_data = self.hg_conv.positions2results(self.positions)
 
         results_dd = self.gfo_optimizer.search_data.drop_duplicates(
@@ -88,12 +86,15 @@ class HyperOptimizer(OptimizerAttributes):
 
         # conv warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
-                self.opt_params["warm_start_smbo"]
+            self.opt_params["warm_start_smbo"] = (
+                self.hg_conv.conv_memory_warm_start(
+                    self.opt_params["warm_start_smbo"]
+                )
             )
 
         gfo_constraints = [
-            Constraint(constraint, self.s_space) for constraint in self.constraints
+            Constraint(constraint, self.s_space)
+            for constraint in self.constraints
         ]
 
         self.gfo_optimizer = self.optimizer_class(
@@ -102,7 +103,7 @@ class HyperOptimizer(OptimizerAttributes):
             constraints=gfo_constraints,
             random_state=self.random_state,
             nth_process=nth_process,
-            **self.opt_params
+            **self.opt_params,
         )
 
         self.conv = self.gfo_optimizer.conv
@@ -119,7 +120,9 @@ class HyperOptimizer(OptimizerAttributes):
         )
         gfo_wrapper_model.pass_through = self.pass_through
 
-        memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
+        memory_warm_start = self.hg_conv.conv_memory_warm_start(
+            self.memory_warm_start
+        )
 
         gfo_objective_function = gfo_wrapper_model(self.s_space())
 
@@ -153,7 +156,9 @@ class HyperOptimizer(OptimizerAttributes):
                 p_bar.set_postfix(
                     best_score=str(gfo_wrapper_model.optimizer.score_best),
                     best_pos=str(gfo_wrapper_model.optimizer.pos_best),
-                    best_iter=str(gfo_wrapper_model.optimizer.p_bar._best_since_iter),
+                    best_iter=str(
+                        gfo_wrapper_model.optimizer.p_bar._best_since_iter
+                    ),
                 )
 
                 p_bar.update(1)

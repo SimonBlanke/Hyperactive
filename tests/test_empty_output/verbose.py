@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 from hyperactive import Hyperactive
 
@@ -22,5 +23,7 @@ search_space = {
 
 
 hyper = Hyperactive()
-hyper.add_search(ackley_function, search_space, n_iter=30)
+hyper.add_search(ackley_function, search_space, n_iter=30, memory=True)
 hyper.run()
+
+sys.stdout.flush()
