@@ -6,6 +6,7 @@ The search-space can have specifc properties, that can be computed from the para
 The search-space can have a certain size, has n dimensions, some of which are numeric, some of which are categorical.
 """
 
+from typing import Union, List, Dict, Type
 from collections.abc import MutableMapping
 
 from ._properties import calculate_properties

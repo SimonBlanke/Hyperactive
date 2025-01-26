@@ -37,7 +37,6 @@ class ObjectiveFunction(DictClass):
             self.para_dict = para
 
             try:
-                print("try eval")
                 self.run_callbacks("before")
                 results = self.objective_function(self)
                 self.run_callbacks("after")

@@ -6,141 +6,142 @@ import copy
 import multiprocessing as mp
 import pandas as pd
 
-from .objective_function import ObjectiveFunction
-from .hyper_gradient_conv import HyperGradientConv
-from .optimizer_attributes import OptimizerAttributes
-from .constraint import Constraint
 from .backend_stuff.search_space import SearchSpace
-from .optimizer_attributes import OptimizerAttributes
-
+from .backend_stuff.run_search import run_search
+from .hyper_optimizer import HyperOptimizer
+from .backend_stuff.results import Results
+from .backend_stuff.print_results import PrintResults
 
 from skbase.base import BaseObject
 
 
-class BaseOptimizer(BaseObject, OptimizerAttributes):
+class BaseOptimizer(BaseObject):
     """Base class for optimizer."""
 
-    def __init__(self, **opt_params):
+    opt_pros = {}
+
+    def __init__(self, optimizer_class, opt_params):
         super().__init__()
         self.opt_params = opt_params
+        self.hyper_optimizer = HyperOptimizer(optimizer_class, opt_params)
 
-    def convert_results2hyper(self):
-        self.eval_times = sum(self.gfo_optimizer.eval_times)
-        self.iter_times = sum(self.gfo_optimizer.iter_times)
+    @staticmethod
+    def _default_search_id(search_id, objective_function):
+        if not search_id:
+            search_id = objective_function.__name__
+        return search_id
 
-        if self.gfo_optimizer.best_para is not None:
-            value = self.hg_conv.para2value(self.gfo_optimizer.best_para)
-            position = self.hg_conv.position2value(value)
-            best_para = self.hg_conv.value2para(position)
-            self.best_para = best_para
-        else:
-            self.best_para = None
+    @staticmethod
+    def check_list(search_space):
+        for key in search_space.keys():
+            search_dim = search_space[key]
 
-        self.best_score = self.gfo_optimizer.best_score
-        self.positions = self.gfo_optimizer.search_data
-        self.search_data = self.hg_conv.positions2results(self.positions)
-
-        results_dd = self.gfo_optimizer.search_data.drop_duplicates(
-            subset=self.s_space.dim_keys, keep="first"
-        )
-        self.memory_values_df = results_dd[
-            self.s_space.dim_keys + ["score"]
-        ].reset_index(drop=True)
-
-    def _setup_process(self):
-        self.hg_conv = HyperGradientConv(self.s_space)
-
-        search_space_positions = self.s_space.positions
-
-        # conv warm start for smbo from values into positions
-        if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = (
-                self.hg_conv.conv_memory_warm_start(
-                    self.opt_params["warm_start_smbo"]
-                )
+            error_msg = "Value in '{}' of search space dictionary must be of type list".format(
+                key
             )
-
-        self.gfo_optimizer = self.optimizer_class(
-            search_space=search_space_positions,
-            **self.opt_params,
-        )
-
-        self.conv = self.gfo_optimizer.conv
+            if not isinstance(search_dim, list):
+                print("Warning", error_msg)
+                # raise ValueError(error_msg)
 
     def add_search(
         self,
-        experiment,
-        search_config: dict,
+        experiment: callable,
+        search_space: Dict[str, list],
         n_iter: int,
         search_id=None,
         n_jobs: int = 1,
+        verbosity: list = ["progress_bar", "print_results", "print_times"],
         initialize: Dict[str, int] = {"grid": 4, "random": 2, "vertices": 4},
+        constraints: List[callable] = None,
+        pass_through: Dict = None,
+        callbacks: Dict[str, callable] = None,
+        catch: Dict = None,
+        max_score: float = None,
+        early_stopping: Dict = None,
+        random_state: int = None,
+        memory: Union[str, bool] = "share",
+        memory_warm_start: pd.DataFrame = None,
     ):
-        """Add a new optimization search process with specified parameters.
-
-        Parameters
-        ----------
-        experiment : BaseExperiment
-            The experiment to optimize parameters for.
-        search_config : dict with str keys
-            The search configuration dictionary.
         """
-        self.experiment = experiment
-        self.search_config = search_config
-        self.n_iter = n_iter
-        self.search_id = search_id
-        self.n_jobs = n_jobs
-        self.initialize = initialize
+        Add a new optimization search process with specified parameters.
 
-        search_id = self._default_search_id(search_id, experiment._score)
-        s_space = SearchSpace(search_config.search_space)
+        Parameters:
+        - objective_function: The objective function to optimize.
+        - search_space: Dictionary defining the search space for optimization.
+        - n_iter: Number of iterations for the optimization process.
+        - search_id: Identifier for the search process (default: None).
+        - n_jobs: Number of parallel jobs to run (default: 1).
+        - initialize: Dictionary specifying initialization parameters (default: {"grid": 4, "random": 2, "vertices": 4}).
+        - constraints: List of constraint functions (default: None).
+        - pass_through: Dictionary of additional parameters to pass through (default: None).
+        - callbacks: Dictionary of callback functions (default: None).
+        - catch: Dictionary of exceptions to catch during optimization (default: None).
+        - max_score: Maximum score to achieve (default: None).
+        - early_stopping: Dictionary specifying early stopping criteria (default: None).
+        - random_state: Seed for random number generation (default: None).
+        - memory: Option to share memory between processes (default: "share").
+        - memory_warm_start: DataFrame containing warm start memory (default: None).
+        """
+
+        objective_function = experiment._score
+
+        self.check_list(search_space)
+
+        constraints = constraints or []
+        pass_through = pass_through or {}
+        callbacks = callbacks or {}
+        catch = catch or {}
+        early_stopping = early_stopping or {}
+
+        search_id = self._default_search_id(search_id, objective_function)
+        s_space = SearchSpace(search_space)
+        self.verbosity = verbosity
+
+        self.hyper_optimizer.setup_search(
+            objective_function=objective_function,
+            s_space=s_space,
+            n_iter=n_iter,
+            initialize=initialize,
+            constraints=constraints,
+            pass_through=pass_through,
+            callbacks=callbacks,
+            catch=catch,
+            max_score=max_score,
+            early_stopping=early_stopping,
+            random_state=random_state,
+            memory=memory,
+            memory_warm_start=memory_warm_start,
+            verbosity=verbosity,
+        )
 
         n_jobs = mp.cpu_count() if n_jobs == -1 else n_jobs
 
         for _ in range(n_jobs):
             nth_process = len(self.opt_pros)
-            self.opt_pros[nth_process] = optimizer
+            self.opt_pros[nth_process] = self.hyper_optimizer
+
+    def _print_info(self):
+        print_res = PrintResults(self.opt_pros, self.verbosity)
+
+        if self.verbosity:
+            for _ in range(len(self.opt_pros)):
+                print("")
+
+        for results in self.results_list:
+            nth_process = results["nth_process"]
+            print_res.print_process(results, nth_process)
 
     def run(
         self,
         max_time=None,
-        max_score=None,
-        early_stopping=None,
+        distribution: str = "multiprocessing",
+        n_processes: Union[str, int] = "auto",
     ):
-        self._setup_process()
+        for opt in self.opt_pros.values():
+            opt.max_time = max_time
 
-        gfo_wrapper_model = ObjectiveFunction(
-            objective_function=self.experiment._score,
-            callbacks=[],
-            catch={},
-        )
+        self.results_list = run_search(self.opt_pros, distribution, n_processes)
 
-        gfo_objective_function = gfo_wrapper_model(self.s_space())
+        self.results_ = Results(self.results_list, self.opt_pros)
 
-        self.gfo_optimizer.init_search(
-            gfo_objective_function,
-            self.n_iter,
-            max_time,
-            max_score,
-            early_stopping,
-            False,
-        )
-        for nth_iter in range(self.n_iter):
-            print("iterate")
-            self.gfo_optimizer.search_step(nth_iter)
-            if self.gfo_optimizer.stop.check():
-                break
-
-        self.gfo_optimizer.finish_search()
-
-        self.convert_results2hyper()
-
-        self._add_result_attributes(
-            self.best_para,
-            self.best_score,
-            self.gfo_optimizer.p_bar._best_since_iter,
-            self.eval_times,
-            self.iter_times,
-            self.search_data,
-            self.gfo_optimizer.random_seed,
-        )
+        self._print_info()

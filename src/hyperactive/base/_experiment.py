@@ -1,5 +1,6 @@
 """Base class for experiment."""
 
+from typing import Union, List, Dict, Type
 from skbase.base import BaseObject
 
 

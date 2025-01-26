@@ -11,8 +11,9 @@ from .constraint import Constraint
 
 
 class HyperOptimizer(OptimizerAttributes):
-    def __init__(self, **opt_params):
+    def __init__(self, optimizer_class, opt_params):
         super().__init__()
+        self.optimizer_class = optimizer_class
         self.opt_params = opt_params
 
     def setup_search(
@@ -113,10 +114,8 @@ class HyperOptimizer(OptimizerAttributes):
 
         gfo_wrapper_model = ObjectiveFunction(
             objective_function=self.objective_function,
-            optimizer=self.gfo_optimizer,
             callbacks=self.callbacks,
             catch=self.catch,
-            nth_process=self.nth_process,
         )
         gfo_wrapper_model.pass_through = self.pass_through
 
@@ -154,11 +153,9 @@ class HyperOptimizer(OptimizerAttributes):
 
             if p_bar:
                 p_bar.set_postfix(
-                    best_score=str(gfo_wrapper_model.optimizer.score_best),
-                    best_pos=str(gfo_wrapper_model.optimizer.pos_best),
-                    best_iter=str(
-                        gfo_wrapper_model.optimizer.p_bar._best_since_iter
-                    ),
+                    best_score=str(self.gfo_optimizer.score_best),
+                    best_pos=str(self.gfo_optimizer.pos_best),
+                    best_iter=str(self.gfo_optimizer.p_bar._best_since_iter),
                 )
 
                 p_bar.update(1)
