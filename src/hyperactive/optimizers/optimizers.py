@@ -4,6 +4,7 @@
 
 
 from .hyper_optimizer import HyperOptimizer
+from ._optimizer_api import BaseOptimizer
 
 from gradient_free_optimizers import (
     HillClimbingOptimizer as _HillClimbingOptimizer,
@@ -32,7 +33,7 @@ from gradient_free_optimizers import (
 )
 
 
-class HillClimbingOptimizer(HyperOptimizer):
+class HillClimbingOptimizer(BaseOptimizer):
     def __init__(self, **opt_params):
         super().__init__(**opt_params)
         self.optimizer_class = _HillClimbingOptimizer

@@ -16,14 +16,12 @@ def gfo2hyper(search_space, para):
 
 
 class ObjectiveFunction(DictClass):
-    def __init__(self, objective_function, optimizer, callbacks, catch, nth_process):
+    def __init__(self, objective_function, callbacks, catch):
         super().__init__()
 
         self.objective_function = objective_function
-        self.optimizer = optimizer
         self.callbacks = callbacks
         self.catch = catch
-        self.nth_process = nth_process
 
         self.nth_iter = 0
 
@@ -34,11 +32,12 @@ class ObjectiveFunction(DictClass):
     def __call__(self, search_space):
         # wrapper for GFOs
         def _model(para):
-            self.nth_iter = len(self.optimizer.pos_l)
+            # self.nth_iter = len(self.optimizer.pos_l)
             para = gfo2hyper(search_space, para)
             self.para_dict = para
 
             try:
+                print("try eval")
                 self.run_callbacks("before")
                 results = self.objective_function(self)
                 self.run_callbacks("after")

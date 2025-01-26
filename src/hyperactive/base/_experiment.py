@@ -6,8 +6,15 @@ from skbase.base import BaseObject
 class BaseExperiment(BaseObject):
     """Base class for experiment."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        callbacks: Dict[str, callable] = None,
+        catch: Dict = None,
+    ):
         super().__init__()
+
+        self.callbacks = callbacks
+        self.catch = catch
 
     def __call__(self, **kwargs):
         """Score parameters, with kwargs call."""
