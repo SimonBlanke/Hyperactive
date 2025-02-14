@@ -26,7 +26,7 @@ class Results:
             nth_process = results_["nth_process"]
 
             opt = self.opt_pros[nth_process]
-            objective_function_ = opt.objective_function
+            objective_function_ = opt.experiment.objective_function
             search_space_ = opt.s_space()
             params = list(search_space_.keys())
 
