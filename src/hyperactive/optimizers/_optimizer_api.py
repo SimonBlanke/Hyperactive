@@ -54,8 +54,6 @@ class BaseOptimizer(BaseObject):
         initialize: Dict[str, int] = {"grid": 4, "random": 2, "vertices": 4},
         constraints: List[callable] = None,
         pass_through: Dict = None,
-        callbacks: Dict[str, callable] = None,
-        catch: Dict = None,
         max_score: float = None,
         early_stopping: Dict = None,
         random_state: int = None,
@@ -89,8 +87,6 @@ class BaseOptimizer(BaseObject):
 
         constraints = constraints or []
         pass_through = pass_through or {}
-        callbacks = callbacks or {}
-        catch = catch or {}
         early_stopping = early_stopping or {}
 
         search_id = self._default_search_id(search_id, objective_function)
@@ -104,8 +100,8 @@ class BaseOptimizer(BaseObject):
             initialize=initialize,
             constraints=constraints,
             pass_through=pass_through,
-            callbacks=callbacks,
-            catch=catch,
+            callbacks=experiment.callbacks,
+            catch=experiment.catch,
             max_score=max_score,
             early_stopping=early_stopping,
             random_state=random_state,
