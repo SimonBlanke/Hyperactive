@@ -141,3 +141,52 @@ class BaseOptimizer(BaseObject):
         self.results_ = Results(self.results_list, self.opt_pros)
 
         self._print_info()
+
+    def best_para(self, id_):
+        """
+        Retrieve the best parameters for a specific ID from the results.
+
+        Parameters:
+        - id_ (int): The ID of the parameters to retrieve.
+
+        Returns:
+        - Union[Dict[str, Union[int, float]], None]: The best parameters for the specified ID if found, otherwise None.
+
+        Raises:
+        - ValueError: If the objective function name is not recognized.
+        """
+
+        return self.results_.best_para(id_)
+
+    def best_score(self, id_):
+        """
+        Return the best score for a specific ID from the results.
+
+        Parameters:
+        - id_ (int): The ID for which the best score is requested.
+        """
+
+        return self.results_.best_score(id_)
+
+    def search_data(self, id_, times=False):
+        """
+        Retrieve search data for a specific ID from the results. Optionally exclude evaluation and iteration times if 'times' is set to False.
+
+        Parameters:
+        - id_ (int): The ID of the search data to retrieve.
+        - times (bool, optional): Whether to exclude evaluation and iteration times. Defaults to False.
+
+        Returns:
+        - pd.DataFrame: The search data for the specified ID.
+        """
+
+        search_data_ = self.results_.search_data(id_.objective_function)
+
+        if times == False:
+            search_data_.drop(
+                labels=["eval_times", "iter_times"],
+                axis=1,
+                inplace=True,
+                errors="ignore",
+            )
+        return search_data_
