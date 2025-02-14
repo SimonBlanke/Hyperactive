@@ -14,8 +14,8 @@ class BaseExperiment(BaseObject):
     ):
         super().__init__()
 
-        self.callbacks = callbacks
-        self.catch = catch
+        self.callbacks = callbacks or {}
+        self.catch = catch or {}
 
     def __call__(self, **kwargs):
         """Score parameters, with kwargs call."""
