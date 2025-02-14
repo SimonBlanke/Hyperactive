@@ -64,7 +64,7 @@ class BaseOptimizer(BaseObject):
         Add a new optimization search process with specified parameters.
 
         Parameters:
-        - objective_function: The objective function to optimize.
+        - experiment: Experiment class containing the objective-function to optimize.
         - search_space: Dictionary defining the search space for optimization.
         - n_iter: Number of iterations for the optimization process.
         - search_id: Identifier for the search process (default: None).
@@ -81,20 +81,20 @@ class BaseOptimizer(BaseObject):
         - memory_warm_start: DataFrame containing warm start memory (default: None).
         """
 
-        objective_function = experiment._score
-
         self.check_list(search_space)
 
         constraints = constraints or []
         pass_through = pass_through or {}
         early_stopping = early_stopping or {}
 
-        search_id = self._default_search_id(search_id, objective_function)
+        search_id = self._default_search_id(
+            search_id, experiment.objective_function
+        )
         s_space = SearchSpace(search_space)
         self.verbosity = verbosity
 
         self.hyper_optimizer.setup_search(
-            objective_function=objective_function,
+            experiment=experiment,
             s_space=s_space,
             n_iter=n_iter,
             initialize=initialize,

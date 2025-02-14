@@ -18,7 +18,7 @@ class HyperOptimizer(OptimizerAttributes):
 
     def setup_search(
         self,
-        objective_function,
+        experiment,
         s_space,
         n_iter,
         initialize,
@@ -33,7 +33,7 @@ class HyperOptimizer(OptimizerAttributes):
         memory_warm_start,
         verbosity,
     ):
-        self.objective_function = objective_function
+        self.experiment = experiment
         self.s_space = s_space
         self.n_iter = n_iter
 
@@ -113,7 +113,7 @@ class HyperOptimizer(OptimizerAttributes):
         self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(
-            objective_function=self.objective_function,
+            objective_function=self.experiment.objective_function,
             callbacks=self.callbacks,
             catch=self.catch,
         )
@@ -141,7 +141,7 @@ class HyperOptimizer(OptimizerAttributes):
                     "["
                     + str(nth_process)
                     + "] "
-                    + str(self.objective_function.__name__)
+                    + str(self.experiment.__class__.__name__)
                     + " ("
                     + self.optimizer_class.name
                     + ")",

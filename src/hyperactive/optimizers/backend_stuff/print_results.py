@@ -86,10 +86,14 @@ class PrintResults:
             if best_additional_results:
                 print(indent, "Best additional results:")
                 add_results_names = list(best_additional_results.keys())
-                add_results_names_align = self.align_para_names(add_results_names)
+                add_results_names_align = self.align_para_names(
+                    add_results_names
+                )
 
                 for best_additional_result in best_additional_results.keys():
-                    added_spaces = add_results_names_align[best_additional_result]
+                    added_spaces = add_results_names_align[
+                        best_additional_result
+                    ]
                     print(
                         indent,
                         indent,
@@ -123,7 +127,9 @@ class PrintResults:
 
     def print_process(self, results, nth_process):
         verbosity = self.verbosity
-        objective_function = self.opt_pros[nth_process].objective_function
+        objective_function = self.opt_pros[
+            nth_process
+        ].experiment.objective_function
         search_space = self.opt_pros[nth_process].s_space.search_space
 
         search_data = results["search_data"]
