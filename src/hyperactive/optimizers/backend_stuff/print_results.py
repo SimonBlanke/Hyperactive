@@ -67,14 +67,14 @@ class PrintResults:
 
     def _print_results(
         self,
-        objective_function,
+        experiment,
         best_score,
         best_para,
         best_iter,
         best_additional_results,
         random_seed,
     ):
-        print("\nResults: '{}'".format(objective_function.__name__), " ")
+        print("\nResults: '{}'".format(experiment.__class__.__name__), " ")
         if best_para is None:
             print(indent, "Best score:", best_score, " ")
             print(indent, "Best parameter set:", best_para, " ")
@@ -127,9 +127,7 @@ class PrintResults:
 
     def print_process(self, results, nth_process):
         verbosity = self.verbosity
-        objective_function = self.opt_pros[
-            nth_process
-        ].experiment.objective_function
+        experiment = self.opt_pros[nth_process].experiment
         search_space = self.opt_pros[nth_process].s_space.search_space
 
         search_data = results["search_data"]
@@ -163,7 +161,7 @@ class PrintResults:
 
             if "print_results" in verbosity:
                 self._print_results(
-                    objective_function,
+                    experiment,
                     best_score,
                     best_para,
                     best_iter,
