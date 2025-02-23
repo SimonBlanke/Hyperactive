@@ -1,16 +1,14 @@
 """Base class for optimizer."""
 
-import numpy as np
-from typing import Union, List, Dict, Type
-import copy
+from typing import Union, List, Dict
 import multiprocessing as mp
 import pandas as pd
 
 from .backend_stuff.search_space import SearchSpace
-from .backend_stuff.run_search import run_search
 from .hyper_optimizer import HyperOptimizer
-from .backend_stuff.results import Results
-from .backend_stuff.print_results import PrintResults
+
+
+from ..composite_optimizer import CompositeOptimizer
 
 from skbase.base import BaseObject
 
@@ -18,12 +16,14 @@ from skbase.base import BaseObject
 class BaseOptimizer(BaseObject):
     """Base class for optimizer."""
 
-    opt_pros = {}
+    opt_pros: dict
 
     def __init__(self, optimizer_class, opt_params):
         super().__init__()
         self.opt_params = opt_params
         self.hyper_optimizer = HyperOptimizer(optimizer_class, opt_params)
+
+        self.opt_pros = {}
 
     @staticmethod
     def _default_search_id(search_id, objective_function):
@@ -116,16 +116,8 @@ class BaseOptimizer(BaseObject):
             nth_process = len(self.opt_pros)
             self.opt_pros[nth_process] = self.hyper_optimizer
 
-    def _print_info(self):
-        print_res = PrintResults(self.opt_pros, self.verbosity)
-
-        if self.verbosity:
-            for _ in range(len(self.opt_pros)):
-                print("")
-
-        for results in self.results_list:
-            nth_process = results["nth_process"]
-            print_res.print_process(results, nth_process)
+    def __add__(self, optimizer_instance):
+        return CompositeOptimizer(self, optimizer_instance)
 
     def run(
         self,
@@ -133,14 +125,8 @@ class BaseOptimizer(BaseObject):
         distribution: str = "multiprocessing",
         n_processes: Union[str, int] = "auto",
     ):
-        for opt in self.opt_pros.values():
-            opt.max_time = max_time
-
-        self.results_list = run_search(self.opt_pros, distribution, n_processes)
-
-        self.results_ = Results(self.results_list, self.opt_pros)
-
-        self._print_info()
+        self.comp_opt = CompositeOptimizer(self)
+        self.comp_opt.run(max_time, distribution, n_processes, self.verbosity)
 
     def best_para(self, id_):
         """
@@ -156,7 +142,7 @@ class BaseOptimizer(BaseObject):
         - ValueError: If the objective function name is not recognized.
         """
 
-        return self.results_.best_para(id_)
+        return self.comp_opt.results_.best_para(id_)
 
     def best_score(self, id_):
         """
@@ -166,7 +152,7 @@ class BaseOptimizer(BaseObject):
         - id_ (int): The ID for which the best score is requested.
         """
 
-        return self.results_.best_score(id_)
+        return self.comp_opt.results_.best_score(id_)
 
     def search_data(self, id_, times=False):
         """
@@ -180,7 +166,9 @@ class BaseOptimizer(BaseObject):
         - pd.DataFrame: The search data for the specified ID.
         """
 
-        search_data_ = self.results_.search_data(id_.objective_function)
+        search_data_ = self.comp_opt.results_.search_data(
+            id_.objective_function
+        )
 
         if times == False:
             search_data_.drop(
