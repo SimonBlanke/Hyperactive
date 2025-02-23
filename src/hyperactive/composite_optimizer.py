@@ -6,7 +6,11 @@ from .optimizers.backend_stuff.print_results import PrintResults
 
 class CompositeOptimizer:
     def __init__(self, *optimizers):
-        self.optimizers = optimizers
+        self.optimizers = list(optimizers)
+
+    def __add__(self, optimizer_instance):
+        self.optimizers.append(optimizer_instance)
+        return self
 
     def run(
         self,
