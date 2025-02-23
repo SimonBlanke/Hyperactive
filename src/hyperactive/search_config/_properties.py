@@ -23,6 +23,5 @@ def calculate_properties(func):
         self.n_dim = n_dim(self._search_space)
         self.dim_names = dim_names(self._search_space)
         self.position_space = position_space(self._search_space)
-        print(" ---> search-space updated!")
 
     return wrapper
