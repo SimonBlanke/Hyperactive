@@ -50,7 +50,9 @@ def run_search(opt_pros, distribution, n_processes):
     if n_processes == 1:
         results_list = single_process(_process_, process_infos)
     else:
-        (distribution, process_func), dist_paras = _get_distribution(distribution)
+        (distribution, process_func), dist_paras = _get_distribution(
+            distribution
+        )
 
         results_list = distribution(process_func, process_infos, n_processes)
 
