@@ -5,7 +5,7 @@ import multiprocessing as mp
 import pandas as pd
 
 from .backend_stuff.search_space import SearchSpace
-from .hyper_optimizer import HyperOptimizer
+from .search import Search
 
 
 from ..composite_optimizer import CompositeOptimizer
@@ -16,14 +16,18 @@ from skbase.base import BaseObject
 class BaseOptimizer(BaseObject):
     """Base class for optimizer."""
 
+    n_search: int
+    searches: list
     opt_pros: dict
 
     def __init__(self, optimizer_class, opt_params):
         super().__init__()
-        self.opt_params = opt_params
-        self.hyper_optimizer = HyperOptimizer(optimizer_class, opt_params)
 
-        self.opt_pros = {}
+        self.optimizer_class = optimizer_class
+        self.opt_params = opt_params
+
+        self.n_search = 0
+        self.searches = []
 
     @staticmethod
     def _default_search_id(search_id, objective_function):
@@ -81,6 +85,8 @@ class BaseOptimizer(BaseObject):
         - memory_warm_start: DataFrame containing warm start memory (default: None).
         """
 
+        self.n_search += 1
+
         self.check_list(search_space)
 
         constraints = constraints or []
@@ -93,28 +99,31 @@ class BaseOptimizer(BaseObject):
         s_space = SearchSpace(search_space)
         self.verbosity = verbosity
 
-        self.hyper_optimizer.setup_search(
-            experiment=experiment,
-            s_space=s_space,
-            n_iter=n_iter,
-            initialize=initialize,
-            constraints=constraints,
-            pass_through=pass_through,
-            callbacks=experiment.callbacks,
-            catch=experiment.catch,
-            max_score=max_score,
-            early_stopping=early_stopping,
-            random_state=random_state,
-            memory=memory,
-            memory_warm_start=memory_warm_start,
-            verbosity=verbosity,
-        )
-
         n_jobs = mp.cpu_count() if n_jobs == -1 else n_jobs
 
         for _ in range(n_jobs):
-            nth_process = len(self.opt_pros)
-            self.opt_pros[nth_process] = self.hyper_optimizer
+            search = Search(self.optimizer_class, self.opt_params)
+            search.setup(
+                experiment=experiment,
+                s_space=s_space,
+                n_iter=n_iter,
+                initialize=initialize,
+                constraints=constraints,
+                pass_through=pass_through,
+                callbacks=experiment.callbacks,
+                catch=experiment.catch,
+                max_score=max_score,
+                early_stopping=early_stopping,
+                random_state=random_state,
+                memory=memory,
+                memory_warm_start=memory_warm_start,
+                verbosity=verbosity,
+            )
+            self.searches.append(search)
+
+    @property
+    def nth_search(self):
+        return len(self.composite_opt.optimizers)
 
     def __add__(self, optimizer_instance):
         return CompositeOptimizer(self, optimizer_instance)

@@ -5,6 +5,8 @@ from .optimizers.backend_stuff.print_results import PrintResults
 
 
 class CompositeOptimizer:
+    optimizers: list
+
     def __init__(self, *optimizers):
         self.optimizers = list(optimizers)
 
@@ -21,26 +23,26 @@ class CompositeOptimizer:
     ):
         self.verbosity = verbosity
 
-        self.all_opt_pros = {}
+        self.collected_searches = []
         for optimizer in self.optimizers:
-            self.all_opt_pros.update(optimizer.opt_pros)
+            self.collected_searches += optimizer.searches
 
-        for opt in self.all_opt_pros.values():
-            opt.max_time = max_time
+        for nth_process, search in enumerate(self.collected_searches):
+            search.pass_args(max_time, nth_process)
 
         self.results_list = run_search(
-            self.all_opt_pros, distribution, n_processes
+            self.collected_searches, distribution, n_processes
         )
 
-        self.results_ = Results(self.results_list, self.all_opt_pros)
+        self.results_ = Results(self.results_list, self.collected_searches)
 
         self._print_info()
 
     def _print_info(self):
-        print_res = PrintResults(self.all_opt_pros, self.verbosity)
+        print_res = PrintResults(self.collected_searches, self.verbosity)
 
         if self.verbosity:
-            for _ in range(len(self.all_opt_pros)):
+            for _ in range(len(self.collected_searches)):
                 print("")
 
         for results in self.results_list:

@@ -37,23 +37,19 @@ def _get_distribution(distribution):
         return dist_dict[distribution], {}
 
 
-def run_search(opt_pros, distribution, n_processes):
-    opts = list(opt_pros.values())
-
-    processes = list(opt_pros.keys())
-    optimizers = list(opt_pros.values())
-    process_infos = list(zip(processes, optimizers))
-
+def run_search(searches, distribution, n_processes):
     if n_processes == "auto":
-        n_processes = len(process_infos)
+        n_processes = len(searches)
+
+    searches_tuple = [(search,) for search in searches]
 
     if n_processes == 1:
-        results_list = single_process(_process_, process_infos)
+        results_list = single_process(_process_, searches)
     else:
         (distribution, process_func), dist_paras = _get_distribution(
             distribution
         )
 
-        results_list = distribution(process_func, process_infos, n_processes)
+        results_list = distribution(process_func, searches_tuple, n_processes)
 
     return results_list

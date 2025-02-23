@@ -20,6 +20,8 @@ def single_process(process_func, process_infos):
 def multiprocessing_wrapper(process_func, process_infos, n_processes):
     import multiprocessing as mp
 
+    process_infos = tuple(process_infos)
+
     with mp.Pool(
         n_processes, initializer=initializer, initargs=initargs
     ) as pool:

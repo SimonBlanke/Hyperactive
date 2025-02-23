@@ -2,21 +2,22 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
-
 from .objective_function import ObjectiveFunction
 from .hyper_gradient_conv import HyperGradientConv
 from .optimizer_attributes import OptimizerAttributes
 from .constraint import Constraint
 
 
-class HyperOptimizer(OptimizerAttributes):
+class Search(OptimizerAttributes):
+    max_time: float
+    nth_process: int
+
     def __init__(self, optimizer_class, opt_params):
         super().__init__()
         self.optimizer_class = optimizer_class
         self.opt_params = opt_params
 
-    def setup_search(
+    def setup(
         self,
         experiment,
         s_space,
@@ -54,6 +55,10 @@ class HyperOptimizer(OptimizerAttributes):
         else:
             self.verbosity = []
 
+    def pass_args(self, max_time, nth_process):
+        self.max_time = max_time
+        self.nth_process = nth_process
+
     def convert_results2hyper(self):
         self.eval_times = sum(self.gfo_optimizer.eval_times)
         self.iter_times = sum(self.gfo_optimizer.iter_times)
@@ -77,9 +82,7 @@ class HyperOptimizer(OptimizerAttributes):
             self.s_space.dim_keys + ["score"]
         ].reset_index(drop=True)
 
-    def _setup_process(self, nth_process):
-        self.nth_process = nth_process
-
+    def _setup_process(self):
         self.hg_conv = HyperGradientConv(self.s_space)
 
         initialize = self.hg_conv.conv_initialize(self.initialize)
@@ -103,14 +106,14 @@ class HyperOptimizer(OptimizerAttributes):
             initialize=initialize,
             constraints=gfo_constraints,
             random_state=self.random_state,
-            nth_process=nth_process,
+            nth_process=self.nth_process,
             **self.opt_params,
         )
 
         self.conv = self.gfo_optimizer.conv
 
-    def search(self, nth_process, p_bar):
-        self._setup_process(nth_process)
+    def _search(self, p_bar):
+        self._setup_process()
 
         gfo_wrapper_model = ObjectiveFunction(
             objective_function=self.experiment.objective_function,
@@ -139,7 +142,7 @@ class HyperOptimizer(OptimizerAttributes):
             if p_bar:
                 p_bar.set_description(
                     "["
-                    + str(nth_process)
+                    + str(self.nth_process)
                     + "] "
                     + str(self.experiment.__class__.__name__)
                     + " ("

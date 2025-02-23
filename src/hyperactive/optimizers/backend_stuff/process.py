@@ -6,10 +6,10 @@
 from tqdm import tqdm
 
 
-def _process_(nth_process, optimizer):
+def _process_(optimizer):
     if "progress_bar" in optimizer.verbosity:
         p_bar = tqdm(
-            position=nth_process,
+            position=optimizer.nth_process,
             total=optimizer.n_iter,
             ascii=" ─",
             colour="Yellow",
@@ -17,7 +17,7 @@ def _process_(nth_process, optimizer):
     else:
         p_bar = None
 
-    optimizer.search(nth_process, p_bar)
+    optimizer._search(p_bar)
 
     if p_bar:
         p_bar.colour = "GREEN"
@@ -25,7 +25,7 @@ def _process_(nth_process, optimizer):
         p_bar.close()
 
     return {
-        "nth_process": nth_process,
+        "nth_process": optimizer.nth_process,
         "best_para": optimizer.best_para,
         "best_score": optimizer.best_score,
         "best_iter": optimizer.best_since_iter,
