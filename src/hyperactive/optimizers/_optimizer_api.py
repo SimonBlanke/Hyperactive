@@ -110,8 +110,6 @@ class BaseOptimizer(BaseObject):
                 initialize=initialize,
                 constraints=constraints,
                 pass_through=pass_through,
-                callbacks=experiment.callbacks,
-                catch=experiment.catch,
                 max_score=max_score,
                 early_stopping=early_stopping,
                 random_state=random_state,

@@ -25,8 +25,6 @@ class Search(OptimizerAttributes):
         initialize,
         constraints,
         pass_through,
-        callbacks,
-        catch,
         max_score,
         early_stopping,
         random_state,
@@ -41,8 +39,6 @@ class Search(OptimizerAttributes):
         self.initialize = initialize
         self.constraints = constraints
         self.pass_through = pass_through
-        self.callbacks = callbacks
-        self.catch = catch
         self.max_score = max_score
         self.early_stopping = early_stopping
         self.random_state = random_state
@@ -116,9 +112,7 @@ class Search(OptimizerAttributes):
         self._setup_process()
 
         gfo_wrapper_model = ObjectiveFunction(
-            objective_function=self.experiment.objective_function,
-            callbacks=self.callbacks,
-            catch=self.catch,
+            experiment=self.experiment,
         )
         gfo_wrapper_model.pass_through = self.pass_through
 

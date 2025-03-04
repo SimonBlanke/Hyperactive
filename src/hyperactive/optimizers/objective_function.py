@@ -16,12 +16,12 @@ def gfo2hyper(search_space, para):
 
 
 class ObjectiveFunction(DictClass):
-    def __init__(self, objective_function, callbacks, catch):
+    def __init__(self, experiment):
         super().__init__()
 
-        self.objective_function = objective_function
-        self.callbacks = callbacks
-        self.catch = catch
+        self.objective_function = experiment.objective_function
+        self.callbacks = experiment.callbacks
+        self.catch = experiment.catch
 
         self.nth_iter = 0
 
