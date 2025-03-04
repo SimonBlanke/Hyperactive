@@ -1,0 +1,79 @@
+"""Base class for experiment."""
+
+from typing import Union, List, Dict, Type
+from skbase.base import BaseObject
+
+
+class BaseExperiment(BaseObject):
+    """Base class for experiment."""
+
+    def __init__(
+        self,
+        callbacks: Dict[str, callable] = None,
+        catch: Dict = None,
+    ):
+        super().__init__()
+
+        self.callbacks = callbacks or {}
+        self.catch = catch or {}
+
+    def __call__(self, **kwargs):
+        """Score parameters, with kwargs call."""
+        return self.score(kwargs)
+
+    def paramnames(self):
+        """Return the parameter names of the search.
+
+        Returns
+        -------
+        list of str
+            The parameter names of the search parameters.
+        """
+        return self._paramnames()
+
+    def _paramnames(self):
+        """Return the parameter names of the search.
+
+        Returns
+        -------
+        list of str
+            The parameter names of the search parameters.
+        """
+        raise NotImplementedError
+
+    def score(self, **params):
+        """Score the parameters.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to score.
+
+        Returns
+        -------
+        float
+            The score of the parameters.
+        dict
+            Additional metadata about the search.
+        """
+        paramnames = self.paramnames()
+        if not set(paramnames) == set(params.keys()):
+            raise ValueError("Parameters do not match.")
+        return self._score(**params)
+
+    def _score(self, **params):
+        """Score the parameters.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to score.
+
+        Returns
+        -------
+        float
+            The score of the parameters.
+        dict
+            Additional metadata about the search.
+        """
+        raise NotImplementedError
