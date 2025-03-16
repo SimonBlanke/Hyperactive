@@ -14,7 +14,7 @@ else:
 
 
 def single_process(process_func, process_infos):
-    return [process_func(*info) for info in process_infos]
+    return [process_func(info) for info in process_infos]
 
 
 def multiprocessing_wrapper(process_func, process_infos, n_processes):
