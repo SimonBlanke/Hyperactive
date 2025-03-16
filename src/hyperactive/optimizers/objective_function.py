@@ -20,8 +20,8 @@ class ObjectiveFunction(DictClass):
         super().__init__()
 
         self.objective_function = experiment.objective_function
-        self.callbacks = experiment.callbacks
-        self.catch = experiment.catch
+        self.callbacks = experiment._callbacks
+        self.catch = experiment._catch
 
         self.nth_iter = 0
 
