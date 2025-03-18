@@ -79,10 +79,11 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         self.cv = cv
 
     def _refit(self, X, y=None, **fit_params):
-        self.best_estimator_ = clone(self.estimator).set_params(
-            **clone(self.best_params_, safe=False)
-        )
+        # Directly set parameters to the best estimator without unnecessary cloning
+        self.best_estimator_ = clone(self.estimator)
+        self.best_estimator_.set_params(**self.best_params_)
 
+        # Fit the best estimator with the entire dataset
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
