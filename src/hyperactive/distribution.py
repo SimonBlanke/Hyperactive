@@ -20,26 +20,20 @@ def single_process(process_func, process_infos):
 def multiprocessing_wrapper(process_func, process_infos, n_processes):
     import multiprocessing as mp
 
-    with mp.Pool(
-        n_processes, initializer=initializer, initargs=initargs
-    ) as pool:
+    with mp.Pool(n_processes, initializer=initializer, initargs=initargs) as pool:
         return pool.map(process_func, process_infos)
 
 
 def pathos_wrapper(process_func, search_processes_paras, n_processes):
     import pathos.multiprocessing as pmp
 
-    with pmp.Pool(
-        n_processes, initializer=initializer, initargs=initargs
-    ) as pool:
+    with pmp.Pool(n_processes, initializer=initializer, initargs=initargs) as pool:
         return pool.map(process_func, search_processes_paras)
 
 
 def joblib_wrapper(process_func, search_processes_paras, n_processes):
     from joblib import Parallel, delayed
 
-    jobs = [
-        delayed(process_func)(*info_dict)
-        for info_dict in search_processes_paras
-    ]
-    return Parallel(n_jobs=n_processes)(jobs)
+    return Parallel(n_jobs=n_processes)(
+        delayed(process_func)(*info_dict) for info_dict in search_processes_paras
+    )
