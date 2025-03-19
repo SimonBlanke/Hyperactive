@@ -26,10 +26,13 @@ dist_dict = {
 def _get_distribution(distribution):
     if callable(distribution):
         return (distribution, _process_), {}
+
     elif isinstance(distribution, dict):
         dist_key = next(iter(distribution))
         dist_paras = distribution[dist_key]
+
         return dist_dict[dist_key], dist_paras
+
     elif isinstance(distribution, str):
         return dist_dict[distribution], {}
 
@@ -44,6 +47,7 @@ def run_search(opt_pros, distribution, n_processes):
         results_list = single_process(_process_, process_infos)
     else:
         (distribution, process_func), dist_paras = _get_distribution(distribution)
+
         results_list = distribution(process_func, process_infos, n_processes)
 
     return results_list
