@@ -24,12 +24,12 @@ dist_dict = {
 
 
 def _get_distribution(distribution):
-    if hasattr(distribution, "__call__"):
+    if callable(distribution):
         return (distribution, _process_), {}
 
     elif isinstance(distribution, dict):
-        dist_key = list(distribution.keys())[0]
-        dist_paras = list(distribution.values())[0]
+        dist_key = next(iter(distribution))
+        dist_paras = distribution[dist_key]
 
         return dist_dict[dist_key], dist_paras
 
@@ -38,11 +38,7 @@ def _get_distribution(distribution):
 
 
 def run_search(opt_pros, distribution, n_processes):
-    opts = list(opt_pros.values())
-
-    processes = list(opt_pros.keys())
-    optimizers = list(opt_pros.values())
-    process_infos = list(zip(processes, optimizers))
+    process_infos = list(opt_pros.items())
 
     if n_processes == "auto":
         n_processes = len(process_infos)
