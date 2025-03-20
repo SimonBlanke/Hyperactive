@@ -38,8 +38,6 @@ def pathos_wrapper(process_func, search_processes_paras, n_processes):
 def joblib_wrapper(process_func, search_processes_paras, n_processes):
     from joblib import Parallel, delayed
 
-    jobs = [
-        delayed(process_func)(*info_dict)
-        for info_dict in search_processes_paras
-    ]
-    return Parallel(n_jobs=n_processes)(jobs)
+    return Parallel(n_jobs=n_processes)(
+        delayed(process_func)(*info_dict) for info_dict in search_processes_paras
+    )
