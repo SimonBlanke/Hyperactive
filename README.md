@@ -89,7 +89,7 @@
 
 - is [very easy](#hyperactive-is-very-easy-to-use) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
 
-- provides intelligent [optimization algorithms](#overview), support for all mayor [machine-learning frameworks](#overview) and many interesting [applications](#overview)
+- provides intelligent [optimization algorithms](#overview), support for all major [machine-learning frameworks](#overview) and many interesting [applications](#overview)
 
 - makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
 
