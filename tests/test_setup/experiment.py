@@ -1,6 +1,6 @@
 import numpy as np
 
-from hyperactive.base import BaseExperiment
+from hyperactive.experiment import BaseExperiment
 
 
 class SphereFunction(BaseExperiment):
@@ -8,4 +8,4 @@ class SphereFunction(BaseExperiment):
         self.n_dim = n_dim
 
     def objective_function(self, params):
-        return np.sum(params["x0"] ** 2 + params["x1"] ** 2) 
+        return np.sum(params["x0"] ** 2 + params["x1"] ** 2)
