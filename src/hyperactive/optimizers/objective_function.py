@@ -20,14 +20,9 @@ class ObjectiveFunction(DictClass):
         super().__init__()
 
         self.objective_function = experiment.objective_function
-        self.callbacks = experiment._callbacks
         self.catch = experiment._catch
 
         self.nth_iter = 0
-
-    def run_callbacks(self, type_):
-        if self.callbacks and type_ in self.callbacks:
-            [callback(self) for callback in self.callbacks[type_]]
 
     def __call__(self, search_space):
         # wrapper for GFOs
@@ -37,9 +32,7 @@ class ObjectiveFunction(DictClass):
             self.para_dict = para
 
             try:
-                self.run_callbacks("before")
                 results = self.objective_function(self)
-                self.run_callbacks("after")
             except tuple(self.catch.keys()) as e:
                 results = self.catch[e.__class__]
 

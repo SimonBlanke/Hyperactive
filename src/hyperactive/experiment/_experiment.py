@@ -4,23 +4,17 @@ from typing import Union, List, Dict, Type
 from skbase.base import BaseObject
 
 
-
-
-
 class BaseExperiment(BaseObject):
     """Base class for experiment."""
-    
+
     def __init__(
         self,
-        callbacks: Dict[str, callable] = None,
         catch: Dict = None,
     ):
         super().__init__()
 
-        self.callbacks = callbacks
         self.catch = catch
 
-        self._callbacks = callbacks or {}
         self._catch = catch or {}
 
     def __call__(self, **kwargs):
