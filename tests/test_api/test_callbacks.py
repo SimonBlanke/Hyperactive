@@ -12,6 +12,8 @@ search_config = SearchConfig(
     x0=list(np.arange(-10, 10, 1)),
 )
 
+n_iter = 20
+
 
 def test_callback_0():
     class Experiment(BaseExperiment):
@@ -34,7 +36,7 @@ def test_callback_0():
     hyper.add_search(
         experiment,
         search_config,
-        n_iter=20,
+        n_iter=n_iter,
     )
     hyper.run()
 
@@ -59,7 +61,7 @@ def test_callback_1():
     hyper.add_search(
         experiment,
         search_config,
-        n_iter=100,
+        n_iter=n_iter,
     )
     hyper.run()
 
@@ -86,7 +88,7 @@ def test_callback_2():
     hyper.add_search(
         experiment,
         search_config,
-        n_iter=100,
+        n_iter=n_iter,
     )
     hyper.run()
 
@@ -95,7 +97,7 @@ def test_callback_3():
     class Experiment(BaseExperiment):
 
         def callback_1(self, access):
-            access.pass_through["stuff1"] = 1
+            self.test_var = 1
 
         def setup(self, test_var):
             self.test_var = test_var
@@ -116,6 +118,6 @@ def test_callback_3():
     hyper.add_search(
         experiment,
         search_config,
-        n_iter=100,
+        n_iter=n_iter,
     )
     hyper.run()

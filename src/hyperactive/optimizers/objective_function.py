@@ -22,12 +22,12 @@ class ObjectiveFunction(DictClass):
         self.objective_function = experiment.objective_function
         self.catch = experiment._catch
 
-        self.nth_iter = 0
+        self.nth_iter = -1
 
     def __call__(self, search_space):
         # wrapper for GFOs
         def _model(para):
-            # self.nth_iter = len(self.optimizer.pos_l)
+            self.nth_iter += 1
             para = gfo2hyper(search_space, para)
             self.para_dict = para
 
