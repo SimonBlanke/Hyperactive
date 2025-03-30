@@ -89,3 +89,33 @@ def test_callback_2():
         n_iter=100,
     )
     hyper.run()
+
+
+def test_callback_3():
+    class Experiment(BaseExperiment):
+
+        def callback_1(self, access):
+            access.pass_through["stuff1"] = 1
+
+        def setup(self, test_var):
+            self.test_var = test_var
+
+        @add_callback(after=[callback_1])
+        def objective_function(self, access):
+            if access.nth_iter == 0:
+                assert self.test_var == 0
+            else:
+                assert self.test_var == 1
+
+            return 0
+
+    experiment = Experiment()
+    experiment.setup(0)
+
+    hyper = HillClimbingOptimizer()
+    hyper.add_search(
+        experiment,
+        search_config,
+        n_iter=100,
+    )
+    hyper.run()
