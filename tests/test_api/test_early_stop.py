@@ -18,7 +18,7 @@ search_space = {
     "x0": list(np.arange(0, 100000, 0.1)),
 }
 search_config = SearchConfig(
-    x0=list(np.arange(-10, 10, 1)),
+    x0=list(np.arange(0, 100000, 0.1)),
 )
 
 
