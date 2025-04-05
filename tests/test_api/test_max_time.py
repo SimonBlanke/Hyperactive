@@ -1,7 +1,7 @@
 import time
 import numpy as np
 from hyperactive.optimizers import HillClimbingOptimizer
-from hyperactive.experiment import BaseExperiment, add_catch
+from hyperactive.experiment import BaseExperiment
 from hyperactive.search_config import SearchConfig
 
 

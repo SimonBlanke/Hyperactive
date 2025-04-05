@@ -5,7 +5,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
 from hyperactive.optimizers import HillClimbingOptimizer, RandomSearchOptimizer
-from hyperactive.experiment import BaseExperiment, add_catch
+from hyperactive.experiment import BaseExperiment
 from hyperactive.search_config import SearchConfig
 
 
