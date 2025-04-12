@@ -21,14 +21,15 @@ class CompositeOptimizer:
         n_processes: Union[str, int] = "auto",
         verbosity: list = ["progress_bar", "print_results", "print_times"],
     ):
-        self.verbosity = verbosity
+        if not verbosity:
+            verbosity = []
 
         self.collected_searches = []
         for optimizer in self.optimizers:
             self.collected_searches += optimizer.searches
 
         for nth_process, search in enumerate(self.collected_searches):
-            search.pass_args(max_time, nth_process)
+            search.pass_args(max_time, nth_process, verbosity)
 
         self.results_list = run_search(
             self.collected_searches, distribution, n_processes
@@ -36,12 +37,12 @@ class CompositeOptimizer:
 
         self.results_ = Results(self.results_list, self.collected_searches)
 
-        self._print_info()
+        self._print_info(verbosity)
 
-    def _print_info(self):
-        print_res = PrintResults(self.collected_searches, self.verbosity)
+    def _print_info(self, verbosity):
+        print_res = PrintResults(self.collected_searches, verbosity)
 
-        if self.verbosity:
+        if verbosity:
             for _ in range(len(self.collected_searches)):
                 print("")
 

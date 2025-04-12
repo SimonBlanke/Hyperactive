@@ -56,7 +56,6 @@ class BaseOptimizer(BaseObject):
         n_iter: int,
         search_id=None,
         n_jobs: int = 1,
-        verbosity: list = ["progress_bar", "print_results", "print_times"],
         initialize: Dict[str, int] = {"grid": 4, "random": 2, "vertices": 4},
         constraints: List[callable] = None,
         pass_through: Dict = None,
@@ -97,7 +96,6 @@ class BaseOptimizer(BaseObject):
 
         search_id = self._default_search_id(search_id, experiment.objective_function)
         s_space = SearchSpace(search_space)
-        self.verbosity = verbosity
 
         n_jobs = mp.cpu_count() if n_jobs == -1 else n_jobs
 
@@ -115,7 +113,6 @@ class BaseOptimizer(BaseObject):
                 random_state=random_state,
                 memory=memory,
                 memory_warm_start=memory_warm_start,
-                verbosity=verbosity,
             )
             self.searches.append(search)
 
@@ -131,9 +128,10 @@ class BaseOptimizer(BaseObject):
         max_time=None,
         distribution: str = "multiprocessing",
         n_processes: Union[str, int] = "auto",
+        verbosity: list = ["progress_bar", "print_results", "print_times"],
     ):
         self.comp_opt = CompositeOptimizer(self)
-        self.comp_opt.run(max_time, distribution, n_processes, self.verbosity)
+        self.comp_opt.run(max_time, distribution, n_processes, verbosity)
 
     def best_para(self, experiment):
         """

@@ -30,7 +30,6 @@ class Search(OptimizerAttributes):
         random_state,
         memory,
         memory_warm_start,
-        verbosity,
     ):
         self.experiment = experiment
         self.s_space = s_space
@@ -44,16 +43,15 @@ class Search(OptimizerAttributes):
         self.random_state = random_state
         self.memory = memory
         self.memory_warm_start = memory_warm_start
-        self.verbosity = verbosity
 
-        if "progress_bar" in self.verbosity:
+    def pass_args(self, max_time, nth_process, verbosity):
+        self.max_time = max_time
+        self.nth_process = nth_process
+
+        if "progress_bar" in verbosity:
             self.verbosity = ["progress_bar"]
         else:
             self.verbosity = []
-
-    def pass_args(self, max_time, nth_process):
-        self.max_time = max_time
-        self.nth_process = nth_process
 
     def convert_results2hyper(self):
         self.eval_times = sum(self.gfo_optimizer.eval_times)
@@ -86,15 +84,12 @@ class Search(OptimizerAttributes):
 
         # conv warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = (
-                self.hg_conv.conv_memory_warm_start(
-                    self.opt_params["warm_start_smbo"]
-                )
+            self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
+                self.opt_params["warm_start_smbo"]
             )
 
         gfo_constraints = [
-            Constraint(constraint, self.s_space)
-            for constraint in self.constraints
+            Constraint(constraint, self.s_space) for constraint in self.constraints
         ]
 
         self.gfo_optimizer = self.optimizer_class(
@@ -116,9 +111,7 @@ class Search(OptimizerAttributes):
         )
         gfo_wrapper_model.pass_through = self.pass_through
 
-        memory_warm_start = self.hg_conv.conv_memory_warm_start(
-            self.memory_warm_start
-        )
+        memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
 
         gfo_objective_function = gfo_wrapper_model(self.s_space())
 
