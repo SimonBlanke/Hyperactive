@@ -1,5 +1,8 @@
 import numpy as np
-from hyperactive import Hyperactive
+
+from hyperactive.optimizers import HillClimbingOptimizer
+from hyperactive.experiment import BaseExperiment
+from hyperactive.search_config import SearchConfig
 
 
 class Experiment(BaseExperiment):
@@ -15,6 +18,6 @@ search_config = SearchConfig(
 )
 
 
-hyper = Hyperactive()
+hyper = HillClimbingOptimizer()
 hyper.add_search(experiment, search_config, n_iter=30, memory=True)
 hyper.run(verbosity=False)

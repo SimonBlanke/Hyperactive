@@ -28,14 +28,19 @@ def _run_subprocess(script):
 
 
 def test_empty_output():
-    stdout_verb, stderr_verb = _run_subprocess(verbose_file)
     stdout_non_verb, stderr_non_verb = _run_subprocess(non_verbose_file)
-
-    print("\n stdout_verb \n", stdout_verb, "\n")
-    print("\n stderr_verb \n", stderr_verb, "\n")
 
     print("\n stdout_non_verb \n", stdout_non_verb, "\n")
     print("\n stderr_non_verb \n", stderr_non_verb, "\n")
 
-    assert "Results:" in stdout_verb
     assert not stdout_non_verb
+    assert not stderr_non_verb
+
+
+def test_output():
+    stdout_verb, stderr_verb = _run_subprocess(verbose_file)
+
+    print("\n stdout_verb \n", stdout_verb, "\n")
+    print("\n stderr_verb \n", stderr_verb, "\n")
+
+    assert "Results:" in stdout_verb
