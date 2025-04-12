@@ -39,7 +39,7 @@ def test_random_state_n_jobs_0():
 
     results = hyper.search_data(experiment)
 
-    no_dup = results.drop_duplicates(subset=list(search_space.keys()))
+    no_dup = results.drop_duplicates(subset=list(search_config.keys()))
     print("no_dup", no_dup)
     print("results", results)
 
@@ -65,7 +65,7 @@ def test_random_state_n_jobs_1():
 
     results = hyper.search_data(experiment)
 
-    no_dup = results.drop_duplicates(subset=list(search_space.keys()))
+    no_dup = results.drop_duplicates(subset=list(search_config.keys()))
     print("no_dup", no_dup)
     print("results", results)
 
@@ -88,7 +88,7 @@ def test_random_state_n_jobs_2():
 
     results = hyper.search_data(experiment)
 
-    no_dup = results.drop_duplicates(subset=list(search_space.keys()))
+    no_dup = results.drop_duplicates(subset=list(search_config.keys()))
     print("no_dup", no_dup)
     print("results", results)
 
