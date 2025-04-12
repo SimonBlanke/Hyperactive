@@ -1,7 +1,7 @@
 from typing import Union
-from .optimizers.backend_stuff.run_search import run_search
-from .optimizers.backend_stuff.results import Results
-from .optimizers.backend_stuff.print_results import PrintResults
+from .optimizers.backend_stuff._distribution import run_search
+from .optimizers.backend_stuff._results import Results
+from .optimizers.backend_stuff._print_results import PrintResults
 
 
 class CompositeOptimizer:

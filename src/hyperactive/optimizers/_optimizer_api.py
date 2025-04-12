@@ -5,10 +5,10 @@ import multiprocessing as mp
 import pandas as pd
 
 from .backend_stuff.search_space import SearchSpace
-from .search import Search
+from ._search import Search
 
 
-from ..composite_optimizer import CompositeOptimizer
+from .._composite_optimizer import CompositeOptimizer
 
 from skbase.base import BaseObject
 

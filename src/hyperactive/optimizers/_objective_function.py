@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .dictionary import DictClass
+from ._dictionary import DictClass
 
 
 def gfo2hyper(search_space, para):

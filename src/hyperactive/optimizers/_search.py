@@ -2,10 +2,10 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from .objective_function import ObjectiveFunction
-from .hyper_gradient_conv import HyperGradientConv
-from .optimizer_attributes import OptimizerAttributes
-from .constraint import Constraint
+from ._objective_function import ObjectiveFunction
+from ._hyper_gradient_conv import HyperGradientConv
+from ._optimizer_attributes import OptimizerAttributes
+from ._constraint import Constraint
 
 
 class Search(OptimizerAttributes):

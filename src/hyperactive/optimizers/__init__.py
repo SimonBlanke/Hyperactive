@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from .optimizers import (
+from ._optimizers import (
     HillClimbingOptimizer,
     StochasticHillClimbingOptimizer,
     RepulsingHillClimbingOptimizer,
