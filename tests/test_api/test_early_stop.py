@@ -102,25 +102,28 @@ def test_early_stop_3():
 
 
 def test_early_stop_4():
-    def objective_function(para):
-        return para["x0"]
+    class Experiment(BaseExperiment):
+        def objective_function(self, para):
+            return para["x0"]
 
-    search_space = {
-        "x0": list(np.arange(0, 100, 0.1)),
-    }
+    experiment = Experiment()
+
+    search_config = SearchConfig(
+        x0=list(np.arange(0, 100, 0.01)),
+    )
 
     n_iter_no_change = 5
     early_stopping = {
         "n_iter_no_change": 5,
-        "tol_abs": 0.1,
+        "tol_abs": 1,
         "tol_rel": None,
     }
 
     start1 = {"x0": 0}
-    start2 = {"x0": 0.1}
-    start3 = {"x0": 0.2}
-    start4 = {"x0": 0.3}
-    start5 = {"x0": 0.4}
+    start2 = {"x0": 1}
+    start3 = {"x0": 2}
+    start4 = {"x0": 3}
+    start5 = {"x0": 4}
 
     warm_start_l = [
         start1,
@@ -163,23 +166,26 @@ def test_early_stop_4():
 
 
 def test_early_stop_5():
-    def objective_function(para):
-        return para["x0"]
+    class Experiment(BaseExperiment):
+        def objective_function(self, para):
+            return para["x0"]
 
-    search_space = {
-        "x0": list(np.arange(0, 100, 0.01)),
-    }
+    experiment = Experiment()
+
+    search_config = SearchConfig(
+        x0=list(np.arange(0, 100, 0.01)),
+    )
 
     n_iter_no_change = 5
     early_stopping = {
         "n_iter_no_change": n_iter_no_change,
-        "tol_abs": 0.1,
+        "tol_abs": 10,
         "tol_rel": None,
     }
 
     start1 = {"x0": 0}
-    start2 = {"x0": 0.09}
-    start3 = {"x0": 0.20}
+    start2 = {"x0": 9}
+    start3 = {"x0": 20}
 
     warm_start_l = [
         start1,
@@ -216,12 +222,15 @@ def test_early_stop_5():
 
 
 def test_early_stop_6():
-    def objective_function(para):
-        return para["x0"]
+    class Experiment(BaseExperiment):
+        def objective_function(self, para):
+            return para["x0"]
 
-    search_space = {
-        "x0": list(np.arange(0, 100, 0.01)),
-    }
+    experiment = Experiment()
+
+    search_config = SearchConfig(
+        x0=list(np.arange(0, 100, 0.01)),
+    )
 
     n_iter_no_change = 5
     early_stopping = {
@@ -280,9 +289,11 @@ def test_early_stop_7():
     def objective_function(para):
         return para["x0"]
 
-    search_space = {
-        "x0": list(np.arange(0, 100, 0.01)),
-    }
+    experiment = Experiment()
+
+    search_config = SearchConfig(
+        x0=list(np.arange(0, 100, 0.01)),
+    )
 
     n_iter_no_change = 5
     early_stopping = {
