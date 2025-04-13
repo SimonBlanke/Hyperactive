@@ -1,10 +1,11 @@
 """Base class for experiment."""
 
+from abc import ABC, abstractmethod
 from typing import Union, List, Dict, Type
 from skbase.base import BaseObject
 
 
-class BaseExperiment(BaseObject):
+class BaseExperiment(ABC, BaseObject):
     """Base class for experiment."""
 
     def __init__(
@@ -77,3 +78,7 @@ class BaseExperiment(BaseObject):
             Additional metadata about the search.
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def objective_function(self, params):
+        pass
