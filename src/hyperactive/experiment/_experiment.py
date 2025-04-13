@@ -79,6 +79,13 @@ class BaseExperiment(ABC, BaseObject):
         """
         raise NotImplementedError
 
+    def backend_adapter(self, backend_adapter, s_space):
+        gfo_wrapper_model = backend_adapter(
+            experiment=self,
+        )
+
+        self.gfo_objective_function = gfo_wrapper_model(s_space())
+
     @abstractmethod
     def objective_function(self, params):
         pass

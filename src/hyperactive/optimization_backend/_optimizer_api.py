@@ -4,11 +4,11 @@ from typing import Union, List, Dict
 import multiprocessing as mp
 import pandas as pd
 
-from .backend_stuff.search_space import SearchSpace
-from ._search import Search
+from ..optimizers.search_space import SearchSpace
+from ..optimizers._search import Search
 
 
-from .._composite_optimizer import CompositeOptimizer
+from ._composite_optimizer import CompositeOptimizer
 
 from skbase.base import BaseObject
 

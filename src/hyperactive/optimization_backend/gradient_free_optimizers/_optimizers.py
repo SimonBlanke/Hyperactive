@@ -3,7 +3,7 @@
 # License: MIT License
 
 
-from ._optimizer_api import BaseOptimizer
+from .._optimizer_api import BaseOptimizer
 
 from gradient_free_optimizers import (
     HillClimbingOptimizer as _HillClimbingOptimizer,

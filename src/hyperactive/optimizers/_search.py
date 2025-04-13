@@ -2,10 +2,15 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from ._objective_function import ObjectiveFunction
-from ._hyper_gradient_conv import HyperGradientConv
 from ._optimizer_attributes import OptimizerAttributes
 from ._constraint import Constraint
+
+from ..optimization_backend.gradient_free_optimizers._objective_function import (
+    ObjectiveFunction,
+)
+from ..optimization_backend.gradient_free_optimizers._hyper_gradient_conv import (
+    HyperGradientConv,
+)
 
 
 class Search(OptimizerAttributes):
@@ -106,17 +111,12 @@ class Search(OptimizerAttributes):
     def _search(self, p_bar):
         self._setup_process()
 
-        gfo_wrapper_model = ObjectiveFunction(
-            experiment=self.experiment,
-        )
-        gfo_wrapper_model.pass_through = self.pass_through
-
         memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
 
-        gfo_objective_function = gfo_wrapper_model(self.s_space())
+        self.experiment.backend_adapter(ObjectiveFunction, self.s_space)
 
         self.gfo_optimizer.init_search(
-            gfo_objective_function,
+            self.experiment.gfo_objective_function,
             self.n_iter,
             self.max_time,
             self.max_score,
