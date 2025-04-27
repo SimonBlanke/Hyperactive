@@ -25,6 +25,10 @@ class Runner:
             for constraint in search_info.constraints
         ]
 
+        memory_warm_start = self.hg_conv.conv_memory_warm_start(
+            search_info.memory_warm_start
+        )
+
         self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,
             initialize=initialize,
@@ -41,7 +45,7 @@ class Runner:
             search_info.max_score,
             search_info.early_stopping,
             search_info.memory,
-            search_info.memory_warm_start,
+            memory_warm_start,
             False,
         )
         for nth_iter in range(search_info.n_iter):

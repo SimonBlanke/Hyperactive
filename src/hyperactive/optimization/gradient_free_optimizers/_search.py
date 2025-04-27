@@ -5,11 +5,11 @@
 from ._optimizer_attributes import OptimizerAttributes
 from ._constraint import Constraint
 
-from .gradient_free_optimizers.adapter._hyper_gradient_conv import (
+from .adapter._hyper_gradient_conv import (
     HyperGradientConv,
 )
-from .gradient_free_optimizers.adapter import Adapter
-from .gradient_free_optimizers._runner import Runner
+from .adapter import Adapter
+from ._runner import Runner
 
 
 class Search(OptimizerAttributes):
@@ -49,68 +49,10 @@ class Search(OptimizerAttributes):
         else:
             self.verbosity = []
 
-    def _setup_process(self):
-        self.hg_conv = HyperGradientConv(self.s_space)
-
-        """
-        self.gfo_optimizer = self.optimizer_class(
-            search_space=search_space_positions,
-            initialize=initialize,
-            constraints=gfo_constraints,
-            random_state=self.random_state,
-            nth_process=self.nth_process,
-            **self.opt_params,
-        )
-        """
-        # self.conv = self.gfo_optimizer.conv
-
     def _search(self, p_bar):
-        self._setup_process()
-
-        memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
-
         self.experiment.backend_adapter(self.adapter.objective_function, self.s_space)
 
         self.runner.run_search(self.search_info, self.nth_process, self.max_time, p_bar)
-        """
-        self.gfo_optimizer.init_search(
-            self.experiment.gfo_objective_function,
-            self.n_iter,
-            self.max_time,
-            self.max_score,
-            self.early_stopping,
-            self.memory,
-            memory_warm_start,
-            False,
-        )
-        for nth_iter in range(self.n_iter):
-            if p_bar:
-                p_bar.set_description(
-                    "["
-                    + str(self.nth_process)
-                    + "] "
-                    + str(self.experiment.__class__.__name__)
-                    + " ("
-                    + self.optimizer_class.name
-                    + ")",
-                )
-
-            self.gfo_optimizer.search_step(nth_iter)
-            if self.gfo_optimizer.stop.check():
-                break
-
-            if p_bar:
-                p_bar.set_postfix(
-                    best_score=str(self.gfo_optimizer.score_best),
-                    best_pos=str(self.gfo_optimizer.pos_best),
-                    best_iter=str(self.gfo_optimizer.p_bar._best_since_iter),
-                )
-
-                p_bar.update(1)
-                p_bar.refresh()
-
-        self.gfo_optimizer.finish_search()
-        """
 
         self.runner.convert_results2hyper()
 

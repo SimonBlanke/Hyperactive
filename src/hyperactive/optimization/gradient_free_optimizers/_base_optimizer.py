@@ -12,10 +12,10 @@ from ._search_info import SearchInfo
 
 from ._composite_optimizer import CompositeOptimizer
 
-from skbase.base import BaseObject
+from .._abstract_optimizer import AbstractOptimizer
 
 
-class BaseOptimizer(BaseObject):
+class BaseOptimizer(AbstractOptimizer):
     """Base class for optimizer."""
 
     n_search: int
