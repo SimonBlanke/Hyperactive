@@ -5,12 +5,11 @@
 from ._optimizer_attributes import OptimizerAttributes
 from ._constraint import Constraint
 
-from .gradient_free_optimizers._objective_function import (
-    ObjectiveFunction,
-)
-from .gradient_free_optimizers._hyper_gradient_conv import (
+from .gradient_free_optimizers.adapter._hyper_gradient_conv import (
     HyperGradientConv,
 )
+from .gradient_free_optimizers.adapter import Adapter
+from .gradient_free_optimizers._runner import Runner
 
 
 class Search(OptimizerAttributes):
@@ -22,32 +21,24 @@ class Search(OptimizerAttributes):
         self.optimizer_class = optimizer_class
         self.opt_params = opt_params
 
-    def setup(
-        self,
-        experiment,
-        s_space,
-        n_iter,
-        initialize,
-        constraints,
-        pass_through,
-        max_score,
-        early_stopping,
-        random_state,
-        memory,
-        memory_warm_start,
-    ):
-        self.experiment = experiment
-        self.s_space = s_space
-        self.n_iter = n_iter
+        self.runner = Runner(optimizer_class, opt_params)
 
-        self.initialize = initialize
-        self.constraints = constraints
-        self.pass_through = pass_through
-        self.max_score = max_score
-        self.early_stopping = early_stopping
-        self.random_state = random_state
-        self.memory = memory
-        self.memory_warm_start = memory_warm_start
+    def setup(self, search_info):
+        self.search_info = search_info
+
+        self.adapter = Adapter(search_info)
+
+        self.experiment = search_info.experiment
+        self.s_space = search_info.s_space
+        self.n_iter = search_info.n_iter
+
+        self.initialize = search_info.initialize
+        self.constraints = search_info.constraints
+        self.max_score = search_info.max_score
+        self.early_stopping = search_info.early_stopping
+        self.random_state = search_info.random_state
+        self.memory = search_info.memory
+        self.memory_warm_start = search_info.memory_warm_start
 
     def pass_args(self, max_time, nth_process, verbosity):
         self.max_time = max_time
@@ -58,45 +49,10 @@ class Search(OptimizerAttributes):
         else:
             self.verbosity = []
 
-    def convert_results2hyper(self):
-        self.eval_times = sum(self.gfo_optimizer.eval_times)
-        self.iter_times = sum(self.gfo_optimizer.iter_times)
-
-        if self.gfo_optimizer.best_para is not None:
-            value = self.hg_conv.para2value(self.gfo_optimizer.best_para)
-            position = self.hg_conv.position2value(value)
-            best_para = self.hg_conv.value2para(position)
-            self.best_para = best_para
-        else:
-            self.best_para = None
-
-        self.best_score = self.gfo_optimizer.best_score
-        self.positions = self.gfo_optimizer.search_data
-        self.search_data = self.hg_conv.positions2results(self.positions)
-
-        results_dd = self.gfo_optimizer.search_data.drop_duplicates(
-            subset=self.s_space.dim_keys, keep="first"
-        )
-        self.memory_values_df = results_dd[
-            self.s_space.dim_keys + ["score"]
-        ].reset_index(drop=True)
-
     def _setup_process(self):
         self.hg_conv = HyperGradientConv(self.s_space)
 
-        initialize = self.hg_conv.conv_initialize(self.initialize)
-        search_space_positions = self.s_space.positions
-
-        # conv warm start for smbo from values into positions
-        if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
-                self.opt_params["warm_start_smbo"]
-            )
-
-        gfo_constraints = [
-            Constraint(constraint, self.s_space) for constraint in self.constraints
-        ]
-
+        """
         self.gfo_optimizer = self.optimizer_class(
             search_space=search_space_positions,
             initialize=initialize,
@@ -105,16 +61,18 @@ class Search(OptimizerAttributes):
             nth_process=self.nth_process,
             **self.opt_params,
         )
-
-        self.conv = self.gfo_optimizer.conv
+        """
+        # self.conv = self.gfo_optimizer.conv
 
     def _search(self, p_bar):
         self._setup_process()
 
         memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
 
-        self.experiment.backend_adapter(ObjectiveFunction, self.s_space)
+        self.experiment.backend_adapter(self.adapter.objective_function, self.s_space)
 
+        self.runner.run_search(self.search_info, self.nth_process, self.max_time, p_bar)
+        """
         self.gfo_optimizer.init_search(
             self.experiment.gfo_objective_function,
             self.n_iter,
@@ -152,15 +110,16 @@ class Search(OptimizerAttributes):
                 p_bar.refresh()
 
         self.gfo_optimizer.finish_search()
+        """
 
-        self.convert_results2hyper()
+        self.runner.convert_results2hyper()
 
         self._add_result_attributes(
-            self.best_para,
-            self.best_score,
-            self.gfo_optimizer.p_bar._best_since_iter,
-            self.eval_times,
-            self.iter_times,
-            self.search_data,
-            self.gfo_optimizer.random_seed,
+            self.runner.best_para,
+            self.runner.best_score,
+            self.runner.gfo_optimizer.p_bar._best_since_iter,
+            self.runner.eval_times,
+            self.runner.iter_times,
+            self.runner.search_data,
+            self.runner.gfo_optimizer.random_seed,
         )

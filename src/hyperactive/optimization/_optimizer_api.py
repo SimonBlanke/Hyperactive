@@ -7,6 +7,8 @@ import pandas as pd
 from .search_space import SearchSpace
 from ._search import Search
 
+from ._search_info import SearchInfo
+
 
 from ._composite_optimizer import CompositeOptimizer
 
@@ -99,21 +101,22 @@ class BaseOptimizer(BaseObject):
 
         n_jobs = mp.cpu_count() if n_jobs == -1 else n_jobs
 
+        search_info = SearchInfo(
+            experiment,
+            s_space,
+            n_iter,
+            initialize,
+            constraints,
+            max_score,
+            early_stopping,
+            random_state,
+            memory,
+            memory_warm_start,
+        )
+
         for _ in range(n_jobs):
             search = Search(self.optimizer_class, self.opt_params)
-            search.setup(
-                experiment=experiment,
-                s_space=s_space,
-                n_iter=n_iter,
-                initialize=initialize,
-                constraints=constraints,
-                pass_through=pass_through,
-                max_score=max_score,
-                early_stopping=early_stopping,
-                random_state=random_state,
-                memory=memory,
-                memory_warm_start=memory_warm_start,
-            )
+            search.setup(search_info)
             self.searches.append(search)
 
     @property
@@ -130,6 +133,7 @@ class BaseOptimizer(BaseObject):
         n_processes: Union[str, int] = "auto",
         verbosity: list = ["progress_bar", "print_results", "print_times"],
     ):
+
         self.comp_opt = CompositeOptimizer(self)
         self.comp_opt.run(max_time, distribution, n_processes, verbosity)
 

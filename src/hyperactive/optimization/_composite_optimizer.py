@@ -3,6 +3,8 @@ from ._distribution import run_search
 from ._results import Results
 from ._print_results import PrintResults
 
+from ._run_info import RunInfo
+
 
 class CompositeOptimizer:
     optimizers: list
@@ -23,6 +25,13 @@ class CompositeOptimizer:
     ):
         if not verbosity:
             verbosity = []
+
+        run_info = RunInfo(
+            max_time,
+            distribution,
+            n_processes,
+            verbosity,
+        )
 
         self.collected_searches = []
         for optimizer in self.optimizers:
