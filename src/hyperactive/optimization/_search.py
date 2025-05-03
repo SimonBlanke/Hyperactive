@@ -5,10 +5,10 @@
 from ._optimizer_attributes import OptimizerAttributes
 from ._constraint import Constraint
 
-from .gradient_free_optimizers._objective_function import (
+from ..optimization_backend.gradient_free_optimizers._objective_function import (
     ObjectiveFunction,
 )
-from .gradient_free_optimizers._hyper_gradient_conv import (
+from ..optimization_backend.gradient_free_optimizers._hyper_gradient_conv import (
     HyperGradientConv,
 )
 

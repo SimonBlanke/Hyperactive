@@ -4,8 +4,8 @@ from typing import Union, List, Dict
 import multiprocessing as mp
 import pandas as pd
 
-from .search_space import SearchSpace
-from ._search import Search
+from ..optimizers.search_space import SearchSpace
+from ..optimizers._search import Search
 
 
 from ._composite_optimizer import CompositeOptimizer
