@@ -17,10 +17,10 @@ class Parabola(BaseExperiment):
     """
 
     def __init__(self, a=1.0, b=0.0, c=0.0):
-        super().__init__()
         self.a = a
         self.b = b
         self.c = c
+        super().__init__()
 
     def _paramnames(self):
         return ["x", "y"]
