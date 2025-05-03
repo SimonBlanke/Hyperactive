@@ -7,6 +7,34 @@ from sklearn.utils.validation import _num_samples
 from hyperactive.base import BaseExperiment
 
 class SklearnCvExperiment(BaseExperiment):
+    """Experiment adapter for sklearn cross-validation experiments.
+
+    This class is used to perform cross-validation experiments using a given
+    sklearn estimator. It allows for hyperparameter tuning and evaluation of
+    the model's performance using cross-validation.
+
+    The score returned is the mean of the cross-validation scores,
+    of applying cross-validation to ``estimator`` with the parameters given in
+    ``score`` ``params``.
+
+    The cross-validation performed is specified by the ``cv`` parameter,
+    and the scoring metric is specified by the ``scoring`` parameter.
+    The ``X`` and ``y`` parameters are the input data and target values,
+    which are used in fit/predict cross-validation.
+
+    Parameters
+    ----------
+    estimator : sklearn estimator
+        The estimator to be used for the experiment.
+    scoring : callable or str
+        sklearn scoring function or metric to evaluate the model's performance.
+    cv : int or cross-validation generator
+        The number of folds or cross-validation strategy to be used.
+    X : array-like, shape (n_samples, n_features)
+            The input data for the model.
+    y : array-like, shape (n_samples,) or (n_samples, n_outputs)
+        The target values for the model.
+    """
 
     def __init__(self, estimator, scoring, cv, X, y):
         self.estimator = estimator

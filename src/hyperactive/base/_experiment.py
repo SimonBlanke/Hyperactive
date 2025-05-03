@@ -11,7 +11,8 @@ class BaseExperiment(BaseObject):
 
     def __call__(self, **kwargs):
         """Score parameters, with kwargs call."""
-        return self.score(kwargs)
+        score, _ = self.score(**kwargs)
+        return score
 
     def paramnames(self):
         """Return the parameter names of the search.
@@ -49,7 +50,7 @@ class BaseExperiment(BaseObject):
             Additional metadata about the search.
         """
         paramnames = self.paramnames()
-        if not set(paramnames) == set(params.keys()):
+        if not set(params.keys()) <= set(paramnames):
             raise ValueError("Parameters do not match.")
         return self._score(**params)
 
