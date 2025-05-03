@@ -125,7 +125,7 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
             X=X,
             y=y,
         )
-        objective_function = experiment.score
+        objective_function = experiment
 
         hyper = Hyperactive(verbosity=False)
         hyper.add_search(
