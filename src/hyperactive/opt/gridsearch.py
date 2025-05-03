@@ -31,6 +31,8 @@ class GridSearch(BaseOptimizer):
     def __init__(self, error_score=np.nan):
         self.error_score = error_score
         super().__init__()
+        self._searches = []
+        self._experiments = []
 
     def _check_param_grid(self, param_grid):
         """_check_param_grid from sklearn 1.0.2, before it was removed."""
@@ -72,10 +74,10 @@ class GridSearch(BaseOptimizer):
             The search space to explore. A dictionary with parameter
             names as keys and a numpy array as values.
         """
-        self._searches.append(experiment, search_config)
+        self._searches.append(search_config)
         self._experiments.append(experiment)
 
-    def run(self, evaluate_candidates):
+    def run(self):
         """Run the optimization search process."""
         param_grid = self._searches[0]["param_grid"]
         experiment = self._experiments[0]
