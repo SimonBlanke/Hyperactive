@@ -2,58 +2,53 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from ._optimizer_attributes import OptimizerAttributes
-from ._constraint import Constraint
+import numpy as np
 
-from ..optimization_backend.gradient_free_optimizers._objective_function import (
-    ObjectiveFunction,
-)
-from ..optimization_backend.gradient_free_optimizers._hyper_gradient_conv import (
-    HyperGradientConv,
-)
+from .objective_function import ObjectiveFunction
+from .hyper_gradient_conv import HyperGradientConv
+from .optimizer_attributes import OptimizerAttributes
+from .constraint import Constraint
 
 
-class Search(OptimizerAttributes):
-    max_time: float
-    nth_process: int
-
-    def __init__(self, optimizer_class, opt_params):
+class HyperOptimizer(OptimizerAttributes):
+    def __init__(self, **opt_params):
         super().__init__()
-        self.optimizer_class = optimizer_class
         self.opt_params = opt_params
 
-    def setup(
+    def setup_search(
         self,
-        experiment,
+        objective_function,
         s_space,
         n_iter,
         initialize,
         constraints,
         pass_through,
+        callbacks,
+        catch,
         max_score,
         early_stopping,
         random_state,
         memory,
         memory_warm_start,
+        verbosity,
     ):
-        self.experiment = experiment
+        self.objective_function = objective_function
         self.s_space = s_space
         self.n_iter = n_iter
 
         self.initialize = initialize
         self.constraints = constraints
         self.pass_through = pass_through
+        self.callbacks = callbacks
+        self.catch = catch
         self.max_score = max_score
         self.early_stopping = early_stopping
         self.random_state = random_state
         self.memory = memory
         self.memory_warm_start = memory_warm_start
+        self.verbosity = verbosity
 
-    def pass_args(self, max_time, nth_process, verbosity):
-        self.max_time = max_time
-        self.nth_process = nth_process
-
-        if "progress_bar" in verbosity:
+        if "progress_bar" in self.verbosity:
             self.verbosity = ["progress_bar"]
         else:
             self.verbosity = []
@@ -81,7 +76,9 @@ class Search(OptimizerAttributes):
             self.s_space.dim_keys + ["score"]
         ].reset_index(drop=True)
 
-    def _setup_process(self):
+    def _setup_process(self, nth_process):
+        self.nth_process = nth_process
+
         self.hg_conv = HyperGradientConv(self.s_space)
 
         initialize = self.hg_conv.conv_initialize(self.initialize)
@@ -89,12 +86,15 @@ class Search(OptimizerAttributes):
 
         # conv warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
-                self.opt_params["warm_start_smbo"]
+            self.opt_params["warm_start_smbo"] = (
+                self.hg_conv.conv_memory_warm_start(
+                    self.opt_params["warm_start_smbo"]
+                )
             )
 
         gfo_constraints = [
-            Constraint(constraint, self.s_space) for constraint in self.constraints
+            Constraint(constraint, self.s_space)
+            for constraint in self.constraints
         ]
 
         self.gfo_optimizer = self.optimizer_class(
@@ -102,21 +102,32 @@ class Search(OptimizerAttributes):
             initialize=initialize,
             constraints=gfo_constraints,
             random_state=self.random_state,
-            nth_process=self.nth_process,
+            nth_process=nth_process,
             **self.opt_params,
         )
 
         self.conv = self.gfo_optimizer.conv
 
-    def _search(self, p_bar):
-        self._setup_process()
+    def search(self, nth_process, p_bar):
+        self._setup_process(nth_process)
 
-        memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
+        gfo_wrapper_model = ObjectiveFunction(
+            objective_function=self.objective_function,
+            optimizer=self.gfo_optimizer,
+            callbacks=self.callbacks,
+            catch=self.catch,
+            nth_process=self.nth_process,
+        )
+        gfo_wrapper_model.pass_through = self.pass_through
 
-        self.experiment.backend_adapter(ObjectiveFunction, self.s_space)
+        memory_warm_start = self.hg_conv.conv_memory_warm_start(
+            self.memory_warm_start
+        )
+
+        gfo_objective_function = gfo_wrapper_model(self.s_space())
 
         self.gfo_optimizer.init_search(
-            self.experiment.gfo_objective_function,
+            gfo_objective_function,
             self.n_iter,
             self.max_time,
             self.max_score,
@@ -129,9 +140,9 @@ class Search(OptimizerAttributes):
             if p_bar:
                 p_bar.set_description(
                     "["
-                    + str(self.nth_process)
+                    + str(nth_process)
                     + "] "
-                    + str(self.experiment.__class__.__name__)
+                    + str(self.objective_function.__name__)
                     + " ("
                     + self.optimizer_class.name
                     + ")",
@@ -143,9 +154,11 @@ class Search(OptimizerAttributes):
 
             if p_bar:
                 p_bar.set_postfix(
-                    best_score=str(self.gfo_optimizer.score_best),
-                    best_pos=str(self.gfo_optimizer.pos_best),
-                    best_iter=str(self.gfo_optimizer.p_bar._best_since_iter),
+                    best_score=str(gfo_wrapper_model.optimizer.score_best),
+                    best_pos=str(gfo_wrapper_model.optimizer.pos_best),
+                    best_iter=str(
+                        gfo_wrapper_model.optimizer.p_bar._best_since_iter
+                    ),
                 )
 
                 p_bar.update(1)
