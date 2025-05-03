@@ -14,6 +14,10 @@ class BaseExperiment(BaseObject):
         score, _ = self.score(**kwargs)
         return score
 
+    @property
+    def __name__(self):
+        return type(self).__name__
+
     def paramnames(self):
         """Return the parameter names of the search.
 
