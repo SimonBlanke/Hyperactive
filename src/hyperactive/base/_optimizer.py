@@ -6,10 +6,15 @@ from skbase.base import BaseObject
 class BaseOptimizer(BaseObject):
     """Base class for optimizer."""
 
+    _search_config_names = []
+
     def __init__(self):
         super().__init__()
+        assert hasattr(self, "experiment"), "Optimizer must have an experiment."
+        search_config = self.get_params()
+        self._experiment = search_config.pop("experiment", None)
 
-    def add_search(self, experiment, search_config: dict):
+    def add_search(self, experiment, **search_config):
         """Add a new optimization search process with specified parameters.
 
         Parameters
@@ -19,15 +24,45 @@ class BaseOptimizer(BaseObject):
         search_config : dict with str keys
             The search configuration dictionary.
         """
-        self.experiment = experiment
-        self.search_config = search_config
+        self._experiment = experiment
+        if not hasattr(self, "_search_config_update"):
+            self._search_config_update = search_config
+        else:
+            self._search_config_update.update(search_config)
 
-    def run(self, max_time=None):
+    def get_search_config(self):
+        """Get the search configuration.
+
+        Returns
+        -------
+        dict with str keys
+            The search configuration dictionary.
+        """
+        search_config = self.get_params(deep=False)
+        search_config.pop("experiment", None)
+        if hasattr(self, "_search_config_update"):
+            search_config.update(self._search_config_update)
+        return search_config
+
+    def get_experiment(self):
+        """Get the experiment.
+
+        Returns
+        -------
+        BaseExperiment
+            The experiment to optimize parameters for.
+        """
+        return self._experiment
+
+    def run(self):
         """Run the optimization search process.
 
-        Parameters
-        ----------
-        max_time : float
-            The maximum time used for the optimization process.
+        Returns
+        -------
+        best_params : dict
+            The best parameters found during the optimization process.
         """
-        raise NotImplementedError
+        experiment = self.get_experiment()
+        search_config = self.get_search_config()
+
+        return self._run(experiment, **search_config)

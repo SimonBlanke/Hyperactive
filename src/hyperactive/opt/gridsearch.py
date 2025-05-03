@@ -14,25 +14,27 @@ class GridSearch(BaseOptimizer):
 
     Parameters
     ----------
-    random_state : None, int, default=None
-        If None, create a new random state. If int, create a new random state
-        seeded with the value.
-    rand_rest_p : float, default=0.1
-        The probability of a random iteration during the the search process.
-    epsilon : float, default=0.01
-        The step-size for the climbing.
-    distribution : str, default="uniform"
-        The type of distribution to sample from.
-    n_neighbours : int, default=10
-        The number of neighbours to sample and evaluate before moving to the best
-        of those neighbours.
+    experiment : BaseExperiment, optional
+        The experiment to optimize parameters for.
+        Optional, can be passed later in ``add_search``.
+    error_score : float, default=np.nan
+        The score to assign if an error occurs during the evaluation of a parameter set.
+    param_grid : dict[str, list]
+        The search space to explore. A dictionary with parameter
+        names as keys and a numpy array as values.
     """
 
-    def __init__(self, error_score=np.nan):
+    def __init__(
+        self,
+        experiment=None,
+        error_score=np.nan,
+        param_grid=None,
+    ):
+        self.experiment = experiment
+        self.param_grid = param_grid
         self.error_score = error_score
+
         super().__init__()
-        self._searches = []
-        self._experiments = []
 
     def _check_param_grid(self, param_grid):
         """_check_param_grid from sklearn 1.0.2, before it was removed."""
@@ -58,34 +60,19 @@ class GridSearch(BaseOptimizer):
                         "to be a non-empty sequence."
                     )
 
-    def add_search(self, experiment, search_config: dict):
-        """Add a new optimization search process with specified parameters.
-
-        Parameters
-        ---------
-        experiment : BaseExperiment
-            The experiment to optimize parameters for.
-        search_config : dict with str keys
-            The search configuration dictionary, keys as below.
-
-        search_config has the following keys:
-
-        param_grid : dict[str, list]
-            The search space to explore. A dictionary with parameter
-            names as keys and a numpy array as values.
-        """
-        self._searches.append(search_config)
-        self._experiments.append(experiment)
-
-    def run(self):
+    def _run(self, experiment, param_grid, error_score):
         """Run the optimization search process."""
-        param_grid = self._searches[0]["param_grid"]
-        experiment = self._experiments[0]
-
         self._check_param_grid(param_grid)
         candidate_params = list(ParameterGrid(param_grid))
 
-        scores = [experiment(**candidate_param) for candidate_param in candidate_params]
+        scores = []
+        for candidate_param in candidate_params:
+            try:
+                score = experiment(**candidate_param)
+            except Exception:  # noqa: B904
+                # Catch all exceptions and assign error_score
+                score = error_score
+            scores.append(score)
 
         best_index = np.argmin(scores)
         best_params = candidate_params[best_index]
