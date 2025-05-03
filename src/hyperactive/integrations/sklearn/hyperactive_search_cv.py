@@ -14,7 +14,6 @@ from sklearn.model_selection import BaseCrossValidator
 
 from hyperactive import Hyperactive
 
-from .objective_function_adapter import ObjectiveFunctionAdapter
 from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
