@@ -33,7 +33,7 @@ class BaseExperiment(BaseObject):
         """
         raise NotImplementedError
 
-    dev score(self, **params):
+    def score(self, **params):
         """Score the parameters.
 
         Parameters
@@ -53,7 +53,7 @@ class BaseExperiment(BaseObject):
             raise ValueError("Parameters do not match.")
         return self._score(**params)
 
-    dev _score(self, **params):
+    def _score(self, **params):
         """Score the parameters.
 
         Parameters
