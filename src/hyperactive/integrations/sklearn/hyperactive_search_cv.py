@@ -18,7 +18,7 @@ from .objective_function_adapter import ObjectiveFunctionAdapter
 from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
-from hyperactive.integrations.sklearn.sklearn_cv_experiment import SklearnCvExperiment
+from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
