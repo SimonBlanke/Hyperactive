@@ -53,7 +53,7 @@ class SklearnCvExperiment(BaseExperiment):
         """
         return list(self.estimator.get_params().keys())
 
-    def _score(self, **params):
+    def _score(self, params):
         """Score the parameters.
 
         Parameters

@@ -11,7 +11,7 @@ class BaseExperiment(BaseObject):
 
     def __call__(self, **kwargs):
         """Score parameters, with kwargs call."""
-        score, _ = self.score(**kwargs)
+        score, _ = self.score(kwargs)
         return score
 
     @property
@@ -38,7 +38,7 @@ class BaseExperiment(BaseObject):
         """
         raise NotImplementedError
 
-    def score(self, **params):
+    def score(self, params):
         """Score the parameters.
 
         Parameters
@@ -56,9 +56,9 @@ class BaseExperiment(BaseObject):
         paramnames = self.paramnames()
         if not set(params.keys()) <= set(paramnames):
             raise ValueError("Parameters do not match.")
-        return self._score(**params)
+        return self._score(params)
 
-    def _score(self, **params):
+    def _score(self, params):
         """Score the parameters.
 
         Parameters
