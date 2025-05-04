@@ -82,13 +82,7 @@ class HillClimbing(BaseOptimizer):
         search_config["initialize"] = self._initialize
 
     def _run(self, experiment, **search_config):
-        """Run the optimization search process.
-
-        Parameters
-        ----------
-        max_time : float
-            The maximum time used for the optimization process.
-        """
+        """Run the optimization search process."""
         n_iter = search_config.pop("n_iter", 100)
         max_time = search_config.pop("max_time", None)
 
