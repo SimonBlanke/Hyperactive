@@ -52,7 +52,11 @@ jobs:
       - name: Test with pytest
         run: |
           python -m pytest tests --cov=hyperactive --cov-report=term-missing --cov-report=xml -p no:warnings
-          
+
+      - name: Test with pytest
+        run: |
+          python -m pytest hyperactive -p no:warnings
+
       - name: Coverage Summary Report
         uses:  irongut/CodeCoverageSummary@v1.3.0
         with:
