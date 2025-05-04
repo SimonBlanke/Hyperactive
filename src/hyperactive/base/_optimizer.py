@@ -22,7 +22,7 @@ class BaseOptimizer(BaseObject):
         experiment : BaseExperiment
             The experiment to optimize parameters for.
         search_config : dict with str keys
-            The search configuration dictionary.
+            Key/value pairs may be any subset of the parameters of the class.
         """
         self._experiment = experiment
         if not hasattr(self, "_search_config_update"):

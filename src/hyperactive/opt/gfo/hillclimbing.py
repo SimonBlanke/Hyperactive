@@ -70,28 +70,6 @@ class HillClimbing(BaseOptimizer):
         else:
             self._initialize = initialize
 
-    def add_search(self, experiment, **search_config):
-        """Add a new optimization search process with specified parameters.
-
-        Parameters
-        ---------
-        experiment : BaseExperiment
-            The experiment to optimize parameters for.
-        search_space : dict[str, list]
-            The search space to explore. A dictionary with parameter
-            names as keys and a numpy array as values.
-        initialize : dict[str, int], default={"grid": 4, "random": 2, "vertices": 4}
-            The method to generate initial positions. A dictionary with
-            the following key literals and the corresponding value type:
-            {"grid": int, "vertices": int, "random": int, "warm_start": list[dict]}
-        constraints : list[callable], default=[]
-            A list of constraints, where each constraint is a callable.
-            The callable returns `True` or `False` dependend on the input parameters.
-        n_iter : int, default=100
-            The number of iterations to run the optimizer.
-        """
-        super().add_search(experiment, **search_config)
-
     def get_search_config(self):
         """Get the search configuration.
 
