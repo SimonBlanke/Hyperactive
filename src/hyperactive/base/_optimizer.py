@@ -6,7 +6,9 @@ from skbase.base import BaseObject
 class BaseOptimizer(BaseObject):
     """Base class for optimizer."""
 
-    _search_config_names = []
+    _tags = {
+        "object_type": "optimizer",
+    }
 
     def __init__(self):
         super().__init__()

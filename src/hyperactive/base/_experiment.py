@@ -6,6 +6,10 @@ from skbase.base import BaseObject
 class BaseExperiment(BaseObject):
     """Base class for experiment."""
 
+    _tags = {
+        "object_type": "experiment",
+    }
+
     def __init__(self):
         super().__init__()
 
