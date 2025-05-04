@@ -12,13 +12,13 @@ class SphereFunction(BaseExperiment):
 
     Parameters
     ----------
-    const (float)
+    const : float, optional, default=0
         A constant offset added to the sum of squares.
     n_dim : int, optional, default=2
         The number of dimensions for the Sphere function. The default is 2.
     """
 
-    def __init__(self, const, n_dim=2):
+    def __init__(self, const=0, n_dim=2):
         self.const = const
         self.n_dim = n_dim
 

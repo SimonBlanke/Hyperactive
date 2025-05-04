@@ -34,6 +34,26 @@ class SklearnCvExperiment(BaseExperiment):
             The input data for the model.
     y : array-like, shape (n_samples,) or (n_samples, n_outputs)
         The target values for the model.
+
+    Example
+    -------
+    >>> from hyperactive.experiment.integrations import SklearnCvExperiment
+    >>> from sklearn.datasets import load_iris
+    >>> from sklearn.svm import SVC
+    >>> from sklearn.metrics import accuracy_score
+    >>> from sklearn.model_selection import KFold
+    >>>
+    >>> X, y = load_iris(return_X_y=True)
+    >>>
+    >>> sklearn_exp = SklearnCvExperiment(
+    ...    estimator=SVC(),
+    ...     scoring=accuracy_score,
+    ...     cv=KFold(n_splits=3, shuffle=True),
+    ...     X=X,
+    ...     y=y,
+    ... )
+    >>> params = {"C": 1.0, "kernel": "linear"}
+    >>> score, add_info = sklearn_exp._score(params)
     """
 
     def __init__(self, estimator, scoring, cv, X, y):
@@ -85,3 +105,60 @@ class SklearnCvExperiment(BaseExperiment):
         }
 
         return cv_results["test_score"].mean(), add_info_d
+
+    @classmethod
+    def get_test_params(cls, parameter_set="default"):
+        """Return testing parameter settings for the skbase object.
+
+        ``get_test_params`` is a unified interface point to store
+        parameter settings for testing purposes. This function is also
+        used in ``create_test_instance`` and ``create_test_instances_and_names``
+        to construct test instances.
+
+        ``get_test_params`` should return a single ``dict``, or a ``list`` of ``dict``.
+
+        Each ``dict`` is a parameter configuration for testing,
+        and can be used to construct an "interesting" test instance.
+        A call to ``cls(**params)`` should
+        be valid for all dictionaries ``params`` in the return of ``get_test_params``.
+
+        The ``get_test_params`` need not return fixed lists of dictionaries,
+        it can also return dynamic or stochastic parameter settings.
+
+        Parameters
+        ----------
+        parameter_set : str, default="default"
+            Name of the set of test parameters to return, for use in tests. If no
+            special parameters are defined for a value, will return `"default"` set.
+
+        Returns
+        -------
+        params : dict or list of dict, default = {}
+            Parameters to create testing instances of the class
+            Each dict are parameters to construct an "interesting" test instance, i.e.,
+            `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
+            `create_test_instance` uses the first (or only) dictionary in `params`
+        """
+        from sklearn.datasets import load_diabetes, load_iris
+        from sklearn.svm import SVC, SVR
+        from sklearn.metrics import accuracy_score, mean_absolute_error
+        from sklearn.model_selection import KFold
+
+        X, y = load_iris(return_X_y=True)
+        params_classif = {
+            "estimator": SVC(),
+            "scoring": accuracy_score,
+            "cv": KFold(n_splits=3, shuffle=True),
+            "X": X,
+            "y": y,
+        }
+
+        X, y = load_diabetes(return_X_y=True)
+        params_regress = {
+            "estimator": SVR(),
+            "scoring": mean_absolute_error,
+            "cv": KFold(n_splits=2, shuffle=True),
+            "X": X,
+            "y": y,
+        }
+        return [params_classif, params_regress]
