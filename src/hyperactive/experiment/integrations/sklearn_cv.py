@@ -162,3 +162,23 @@ class SklearnCvExperiment(BaseExperiment):
             "y": y,
         }
         return [params_classif, params_regress]
+
+    @classmethod
+    def _get_score_params(self):
+        """Return settings for the score function.
+
+        Returns a list, the i-th element corresponds to self.get_test_params()[i].
+        It should be a valid call for self.score.
+
+        Returns
+        -------
+        list of dict
+            The parameters to be used for scoring.
+        """
+        score_params_classif = {
+            "params": {"C": 1.0, "kernel": "linear"},
+        }
+        score_params_regress = {
+            "params": {"C": 1.0, "kernel": "linear"},
+        }
+        return [score_params_classif, score_params_regress]

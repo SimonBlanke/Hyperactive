@@ -70,3 +70,19 @@ class AckleyFunction(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         return [{"A": 0}, {"A": 20}, {"A": -42}]
+
+    @classmethod
+    def _get_score_params(self):
+        """Return settings for the score function.
+
+        Returns a list, the i-th element corresponds to self.get_test_params()[i].
+        It should be a valid call for self.score.
+
+        Returns
+        -------
+        list of dict
+            The parameters to be used for scoring.
+        """
+        params0 = {"x0": 0, "x1": 0}
+        params1 = {"x0": 1, "x1": 1}
+        return [params0, params1]
