@@ -28,4 +28,4 @@ class SphereFunction(BaseExperiment):
         return [f"x{i}" for i in range(self.n_dim)]
 
     def _score(self, params):
-        return np.sum(np.array(params) ** 2) + self.const
+        return np.sum(np.array(params) ** 2) + self.const, {}

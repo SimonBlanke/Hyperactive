@@ -34,4 +34,4 @@ class AckleyFunction(BaseExperiment):
         loss3 = np.exp(1)
         loss4 = self.A
 
-        return -(loss1 + loss2 + loss3 + loss4)
+        return -(loss1 + loss2 + loss3 + loss4), {}
