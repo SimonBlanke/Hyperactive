@@ -130,6 +130,16 @@ class ExperimentFixtureGenerator(BaseFixtureGenerator):
 class TestAllExperiments(ExperimentFixtureGenerator):
     """Module level tests for all experiment classes."""
 
+    def test_paramnames(self, object_class):
+        """Test that paramnames returns the correct parameter names."""
+        paramnames = object_class.paramnames()
+        obj_params = object_class._get_score_params()
+
+        for obj_param in obj_params:
+            assert set(obj_param.keys()) <= set(paramnames), (
+                f"Parameter names do not match: {paramnames} != {obj_param}"
+            )
+
     def test_score_function(self, object_class):
         """Test that substituting into score works as intended."""
         inst_params = object_class.get_test_params()
