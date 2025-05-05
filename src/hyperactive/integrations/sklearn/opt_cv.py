@@ -24,15 +24,20 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         The optimizer to be used for hyperparameter search.
     estimator : sklearn estimator
         The estimator to be used for the experiment.
-    cv : int or cross-validation generator, default = KFold(n_splits=3, shuffle=True)
-        The number of folds or cross-validation strategy to be used.
-        If int, the cross-validation used is KFold(n_splits=cv, shuffle=True).
     scoring : callable or str, default = accuracy_score or mean_squared_error
         sklearn scoring function or metric to evaluate the model's performance.
         Default is determined by the type of estimator:
         ``accuracy_score`` for classifiers, and
         ``mean_squared_error`` for regressors, as per sklearn convention
         through the default ``score`` method of the estimator.
+    refit: bool, optional, default = True
+        Whether to refit the best estimator with the entire dataset.
+        If True, the best estimator is refit with the entire dataset after
+        the optimization process.
+        If False, does not refit, and predict is not available.
+    cv : int or cross-validation generator, default = KFold(n_splits=3, shuffle=True)
+        The number of folds or cross-validation strategy to be used.
+        If int, the cross-validation used is KFold(n_splits=cv, shuffle=True).
 
     Example
     -------
@@ -69,6 +74,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         optimizer,
         *,
         scoring: Union[Callable, str, None] = None,
+        refit: bool = True,
         cv=None,
     ):
         super().__init__()
@@ -76,6 +82,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         self.estimator = estimator
         self.optimizer = optimizer
         self.scoring = scoring
+        self.refit = refit
         self.cv = cv
 
     def _refit(self, X, y=None, **fit_params):
