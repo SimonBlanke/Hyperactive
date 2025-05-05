@@ -22,8 +22,6 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         The estimator to be tuned.
     optimizer : hyperactive BaseOptimizer
         The optimizer to be used for hyperparameter search.
-    estimator : sklearn estimator
-        The estimator to be used for the experiment.
     scoring : callable or str, default = accuracy_score or mean_squared_error
         sklearn scoring function or metric to evaluate the model's performance.
         Default is determined by the type of estimator:
