@@ -32,7 +32,7 @@ Testing - required for automated test framework and check_estimator usage:
 # todo: uncomment the following line, enter authors' GitHub IDs
 # __author__ = [authorGitHubID, anotherAuthorGitHubID]
 
-from hyperactive.base import BaseExperiment
+from hyperactive.base import BaseOptimizer
 
 # todo: add any necessary imports here
 
@@ -41,7 +41,7 @@ from hyperactive.base import BaseExperiment
 # import soft dependencies only inside methods of the class, not at the top of the file
 
 
-class MyOptimizer(BaseExperiment):
+class MyOptimizer(BaseOptimizer):
     """Custom optimizer. todo: write docstring.
 
     todo: describe your custom optimizer here
