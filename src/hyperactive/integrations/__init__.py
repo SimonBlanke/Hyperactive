@@ -1,6 +1,8 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
+from hyperactive.integrations.sklearn import HyperactiveSearchCV, OptCV
 
-from .sklearn import HyperactiveSearchCV
+__all__ = [
+    "HyperactiveSearchCV",
+    "OptCV",
+]
