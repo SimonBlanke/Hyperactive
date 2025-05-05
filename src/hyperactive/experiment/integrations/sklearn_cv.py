@@ -206,4 +206,5 @@ class SklearnCvExperiment(BaseExperiment):
         """
         score_params_classif = {"C": 1.0, "kernel": "linear"}
         score_params_regress = {"C": 1.0, "kernel": "linear"}
-        return [score_params_classif, score_params_regress]
+        score_params_defaults = {"C": 1.0, "kernel": "linear"}
+        return [score_params_classif, score_params_regress, score_params_defaults]
