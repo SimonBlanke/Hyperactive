@@ -52,7 +52,7 @@ class SklearnCvExperiment(BaseExperiment):
     >>> X, y = load_iris(return_X_y=True)
     >>>
     >>> sklearn_exp = SklearnCvExperiment(
-    ...    estimator=SVC(),
+    ...     estimator=SVC(),
     ...     scoring=accuracy_score,
     ...     cv=KFold(n_splits=3, shuffle=True),
     ...     X=X,
@@ -63,7 +63,7 @@ class SklearnCvExperiment(BaseExperiment):
 
     For default choices of ``scoring`` and ``cv``:
     >>> sklearn_exp = SklearnCvExperiment(
-    ...    estimator=SVC(),
+    ...     estimator=SVC(),
     ...     X=X,
     ...     y=y,
     ... )
