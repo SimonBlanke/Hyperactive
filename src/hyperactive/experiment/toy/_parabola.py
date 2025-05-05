@@ -4,7 +4,15 @@ from hyperactive.base import BaseExperiment
 
 
 class Parabola(BaseExperiment):
-    """2D parabola.
+    """2D parabola, common benchmark for optimization algorithms.
+
+    Parabola parameterized by the formula:
+
+    .. math::
+        f(x, y) = a * (x^2 + y^2) + b * x + c * y
+
+    where :math:`a`, :math:`b`, and :math:`c` are coefficients which can
+    be set as parameters.
 
     Parameters
     ----------
@@ -14,7 +22,22 @@ class Parabola(BaseExperiment):
         Coefficient of the parabola.
     c : float, default=0.0
         Coefficient of the parabola.
+
+    Example
+    -------
+    >>> from hyperactive.experiment.toy import Parabola
+    >>> parabola = Parabola(a=1.0, b=0.0, c=0.0)
+    >>> params = {"x": 1, "y": 2}
+    >>> score, add_info = parabola.score(params)
+    Quick call without metadata return or dictionary:
+    >>> score = parabola(x=1, y=2)
     """
+
+    _tags = {
+        "property:randomness": "deterministic",  # random or deterministic
+        # if deterministic, two calls of score will result in the same value
+        # random = two calls may result in different values; same as "stochastic"
+    }
 
     def __init__(self, a=1.0, b=0.0, c=0.0):
         self.a = a

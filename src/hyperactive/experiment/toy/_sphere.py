@@ -4,11 +4,18 @@ from hyperactive.base import BaseExperiment
 
 
 class SphereFunction(BaseExperiment):
-    """A simple Sphere function.
+    """Simple Sphere function, common benchmark for optimization algorithms.
 
-    This is a common test function for optimization
-    algorithms. The function is defined as the sum of the squares of
-    its input parameters plus a constant.
+    Sphere function parameterized by the formula:
+
+    .. math::
+        f(x_1, x_2, \ldots, x_n) = \sum_{i=1}^n x_i^2 + c
+
+    where :math:`c` is a constant offset added to the sum of squares,
+    and :math:`n` is the number of dimensions.
+    Both :math:`c` (= `const`) and :math:`n` (= `n_dim`) can be set as parameters.
+
+    This function is a common test function for optimization algorithms.
 
     Parameters
     ----------
@@ -16,7 +23,27 @@ class SphereFunction(BaseExperiment):
         A constant offset added to the sum of squares.
     n_dim : int, optional, default=2
         The number of dimensions for the Sphere function. The default is 2.
+
+    Example
+    -------
+    >>> from hyperactive.experiment.toy import SphereFunction
+    >>> sphere = SphereFunction(const=0, n_dim=3)
+    >>> params = {"x0": 1, "x1": 2, "x2": 3}
+    >>> score, add_info = sphere.score(params)
+
+    Quick call without metadata return or dictionary:
+    >>> score = sphere(x0=1, x1=2, x2=3)
+
+    Different number of dimensions changes the parameter names:
+    >>> sphere4D = SphereFunction(const=0, n_dim=4)
+    >>> score4D = sphere4D(x0=1, x1=2, x2=3, x3=4)
     """
+
+    _tags = {
+        "property:randomness": "deterministic",  # random or deterministic
+        # if deterministic, two calls of score will result in the same value
+        # random = two calls may result in different values; same as "stochastic"
+    }
 
     def __init__(self, const=0, n_dim=2):
         self.const = const

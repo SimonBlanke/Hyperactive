@@ -8,6 +8,7 @@ class AckleyFunction(BaseExperiment):
 
     The Ackley function is a non-convex function used to test optimization algorithms.
     It is defined as:
+
     .. math::
         f(x, y) = -A \cdot \exp(-0.2 \sqrt{0.5 (x^2 + y^2)}) - \exp(0.5 (\cos(2 \pi x) + \cos(2 \pi y))) + \exp(1) + A
 
@@ -16,7 +17,22 @@ class AckleyFunction(BaseExperiment):
     ----------
     A : float
         Amplitude constant used in the calculation of the Ackley function.
+
+    Example
+    -------
+    >>> from hyperactive.experiment.toy import AckleyFunction
+    >>> ackley = AckleyFunction(A=20)
+    >>> params = {"x0": 1, "x1": 2}
+    >>> score, add_info = ackley.score(params)
+    Quick call without metadata return or dictionary:
+    >>> score = ackley(x0=1, x1=2)
     """  # noqa: E501
+
+    _tags = {
+        "property:randomness": "deterministic",  # random or deterministic
+        # if deterministic, two calls of score will result in the same value
+        # random = two calls may result in different values; same as "stochastic"
+    }
 
     def __init__(self, A):
         self.A = A
