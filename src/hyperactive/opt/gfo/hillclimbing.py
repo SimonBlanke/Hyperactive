@@ -37,6 +37,41 @@ class HillClimbing(BaseOptimizer):
         The callable returns `True` or `False` dependend on the input parameters.
     n_iter : int, default=100
         The number of iterations to run the optimizer.
+
+    Examples
+    --------
+    Hill climbing applied to scikit-learn parameter tuning:
+
+    1. defining the experiment to optimize:
+    >>> from hyperactive.experiment.integrations import SklearnCvExperiment
+    >>> from sklearn.datasets import load_iris
+    >>> from sklearn.svm import SVC
+    >>>
+    >>> X, y = load_iris(return_X_y=True)
+    >>>
+    >>> sklearn_exp = SklearnCvExperiment(
+    ...     estimator=SVC(),
+    ...     X=X,
+    ...     y=y,
+    ... )
+
+    2. setting up the grid search optimizer:
+    >>> from hyperactive.opt import HillClimbing
+    >>> 
+    >>> hillclimbing_config = {
+    ...     "search_space": {
+    ...         "C": [0.01, 0.1, 1, 10],
+    ...         "gamma": [0.0001, 0.01, 0.1, 1, 10],
+    ...     },
+    ...     "n_iter": 100,
+    ... }
+    >>> hillclimbing = HillClimbing(sklearn_exp, **hillclimbing_config)
+
+    3. running the grid search:
+    >>> best_params = hillclimbing.run()
+
+    Best parameters can also be accessed via the attributes:
+    >>> best_params = hillclimbing.best_params_
     """
 
     def __init__(
