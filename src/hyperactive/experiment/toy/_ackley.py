@@ -13,6 +13,7 @@ class AckleyFunction(BaseExperiment):
         f(x, y) = -A \cdot \exp(-0.2 \sqrt{0.5 (x^2 + y^2)}) - \exp(0.5 (\cos(2 \pi x) + \cos(2 \pi y))) + \exp(1) + A
 
     where A is a constant.
+
     Parameters
     ----------
     A : float
