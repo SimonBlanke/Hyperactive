@@ -19,7 +19,7 @@ class HillClimbing(BaseOptimizer):
         The probability of a random iteration during the the search process.
     epsilon : float, default=0.01
         The step-size for the climbing.
-    distribution : str, default="uniform"
+    distribution : str, default="normal"
         The type of distribution to sample from.
     n_neighbours : int, default=10
         The number of neighbours to sample and evaluate before moving to the best
@@ -81,7 +81,7 @@ class HillClimbing(BaseOptimizer):
         random_state=None,
         rand_rest_p=0.1,
         epsilon=0.01,
-        distribution="uniform",
+        distribution="normal",
         n_neighbours=10,
         search_space=None,
         initialize=None,
