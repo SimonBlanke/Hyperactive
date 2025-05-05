@@ -59,7 +59,8 @@ class Sphere(BaseExperiment):
         return [f"x{i}" for i in range(self.n_dim)]
 
     def _score(self, params):
-        return np.sum(np.array(params) ** 2) + self.const, {}
+        params_vec = np.array([params[f"x{i}"] for i in range(self.n_dim)])
+        return np.sum(params_vec ** 2) + self.const, {}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

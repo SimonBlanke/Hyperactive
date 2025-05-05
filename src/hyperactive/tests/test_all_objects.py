@@ -199,7 +199,7 @@ class OptimizerFixtureGenerator(BaseFixtureGenerator):
     object_type_filter = "optimizer"
 
 
-class TestAllOptimizers(ExperimentFixtureGenerator):
+class TestAllOptimizers(OptimizerFixtureGenerator):
     """Module level tests for all optimizer classes."""
 
     def test_opt_run(self, object_instance):
