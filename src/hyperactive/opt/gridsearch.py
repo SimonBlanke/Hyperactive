@@ -1,10 +1,11 @@
 """Grid search optimizer."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from collections.abc import Sequence
 
 import numpy as np
 
-from sklearn.model_selection import ParameterGrid, ParameterSampler, check_cv
+from sklearn.model_selection import ParameterGrid
 
 from hyperactive.base import BaseOptimizer
 

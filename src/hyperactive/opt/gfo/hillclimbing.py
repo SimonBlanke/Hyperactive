@@ -1,4 +1,5 @@
 """Hill climbing optimizer from gfo."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from gradient_free_optimizers import HillClimbingOptimizer
 from hyperactive.base import BaseOptimizer

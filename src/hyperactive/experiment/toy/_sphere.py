@@ -1,3 +1,6 @@
+"""Sphere function, a common benchmark for optimization algorithms."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
+
 import numpy as np
 
 from hyperactive.base import BaseExperiment

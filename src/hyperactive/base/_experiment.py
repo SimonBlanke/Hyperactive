@@ -1,4 +1,5 @@
 """Base class for experiment."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
 from skbase.base import BaseObject

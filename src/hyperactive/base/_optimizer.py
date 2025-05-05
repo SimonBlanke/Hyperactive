@@ -1,4 +1,5 @@
 """Base class for optimizer."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from skbase.base import BaseObject
 

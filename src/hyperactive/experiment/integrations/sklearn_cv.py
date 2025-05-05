@@ -1,4 +1,5 @@
 """Experiment adapter for sklearn cross-validation experiments."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from sklearn import clone
 from sklearn.metrics import check_scoring
@@ -107,6 +108,7 @@ class SklearnCvExperiment(BaseExperiment):
                 from sklearn.metrics import make_scorer
 
                 self._scoring = make_scorer(scoring)
+        self.scorer_ = self._scoring
 
     def _paramnames(self):
         """Return the parameter names of the search.

@@ -1,4 +1,5 @@
-"""2D parabola."""
+"""2D parabola function, common benchmark for optimization algorithms."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.base import BaseExperiment
 
