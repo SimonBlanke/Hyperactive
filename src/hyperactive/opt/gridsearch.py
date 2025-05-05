@@ -22,6 +22,38 @@ class GridSearch(BaseOptimizer):
     param_grid : dict[str, list]
         The search space to explore. A dictionary with parameter
         names as keys and a numpy array as values.
+
+    Example
+    -------
+    Grid search applied to scikit-learn parameter tuning:
+
+    1. defining the experiment to optimize:
+    >>> from hyperactive.experiment import Experiment
+    >>> from hyperactive.experiment.integrations import SklearnCvExperiment
+    >>> from sklearn.datasets import load_iris
+    >>> from sklearn.svm import SVC
+    >>>
+    >>> X, y = load_iris(return_X_y=True)
+    >>>
+    >>> sklearn_exp = SklearnCvExperiment(
+    ...     estimator=SVC(),
+    ...     X=X,
+    ...     y=y,
+    ... )
+
+    2. setting up the grid search optimizer:
+    >>> from hyperactive import GridSearch
+    >>> param_grid = {
+    ...     "C": [0.01, 0.1, 1, 10],
+    ...     "gamma": [0.0001, 0.01, 0.1, 1, 10],
+    ... }
+    ... grid_search = GridSearch(sklearn_exp, param_grid=param_grid)
+
+    3. running the grid search:
+    >>> best_params = grid_search.run()
+
+    Best parameters can also be accessed via the attributes:
+    >>> best_params = grid_search.best_params_
     """
 
     def __init__(
