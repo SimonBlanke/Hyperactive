@@ -2,6 +2,7 @@
 
 from gradient_free_optimizers import HillClimbingOptimizer
 from hyperactive.base import BaseOptimizer
+from skbase.utils.stdout_mute import StdoutMute
 
 
 class HillClimbing(BaseOptimizer):
@@ -37,6 +38,8 @@ class HillClimbing(BaseOptimizer):
         The callable returns `True` or `False` dependend on the input parameters.
     n_iter : int, default=100
         The number of iterations to run the optimizer.
+    verbose : bool, default=False
+        If True, print the progress of the optimization process.
 
     Examples
     --------
@@ -87,6 +90,7 @@ class HillClimbing(BaseOptimizer):
         initialize=None,
         constraints=None,
         n_iter=100,
+        verbose=False,
     ):
         self.random_state = random_state
         self.rand_rest_p = rand_rest_p
@@ -98,6 +102,7 @@ class HillClimbing(BaseOptimizer):
         self.constraints = constraints
         self.n_iter = n_iter
         self.experiment = experiment
+        self.verbose = verbose
 
         super().__init__()
 
@@ -125,11 +130,12 @@ class HillClimbing(BaseOptimizer):
 
         hcopt = HillClimbingOptimizer(**search_config)
 
-        hcopt.search(
-            objective_function=experiment.score,
-            n_iter=n_iter,
-            max_time=max_time,
-        )
-        self.best_params_ = hcopt.best_params()
+        with StdoutMute(active=not self.verbose):
+            hcopt.search(
+                objective_function=experiment.score,
+                n_iter=n_iter,
+                max_time=max_time,
+            )
+        self.best_params_ = hcopt.best_para
 
         return self.best_params_
