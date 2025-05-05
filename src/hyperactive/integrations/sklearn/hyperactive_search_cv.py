@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from collections.abc import Iterable, Callable
+from collections.abc import Callable
 from typing import Union, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
@@ -10,7 +10,6 @@ from sklearn.metrics import check_scoring
 from sklearn.utils.validation import indexable, _check_method_params
 
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
-from sklearn.model_selection import BaseCrossValidator
 
 from hyperactive import Hyperactive
 
