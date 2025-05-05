@@ -12,7 +12,7 @@ parameters = {"kernel": ["linear", "rbf"], "C": [1, 10]}
 opt = RandomSearchOptimizer()
 hyperactivecv = HyperactiveSearchCV(svc, parameters, opt)
 
-optcv = OptCV(estimator=svc, optimizer=GridSearch(parameters))
+optcv = OptCV(estimator=svc, optimizer=GridSearch(param_grid=parameters))
 
 ESTIMATORS = [hyperactivecv, optcv]
 
