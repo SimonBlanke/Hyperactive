@@ -29,6 +29,7 @@ class Parabola(BaseExperiment):
     >>> parabola = Parabola(a=1.0, b=0.0, c=0.0)
     >>> params = {"x": 1, "y": 2}
     >>> score, add_info = parabola.score(params)
+
     Quick call without metadata return or dictionary:
     >>> score = parabola(x=1, y=2)
     """

@@ -24,6 +24,7 @@ class AckleyFunction(BaseExperiment):
     >>> ackley = AckleyFunction(A=20)
     >>> params = {"x0": 1, "x1": 2}
     >>> score, add_info = ackley.score(params)
+
     Quick call without metadata return or dictionary:
     >>> score = ackley(x0=1, x1=2)
     """  # noqa: E501
