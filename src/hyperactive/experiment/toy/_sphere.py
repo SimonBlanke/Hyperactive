@@ -65,6 +65,7 @@ class SphereFunction(BaseExperiment):
         """
         params0 = {}
         params1 = {"ndim": 3, "const": 1.0}
+        return [params0, params1]
 
     @classmethod
     def _get_score_params(self):

@@ -146,10 +146,12 @@ class TestAllExperiments(ExperimentFixtureGenerator):
 
     def test_paramnames(self, object_class):
         """Test that paramnames returns the correct parameter names."""
-        paramnames = object_class.paramnames()
+        inst_params = object_class.get_test_params()
         obj_params = object_class._get_score_params()
 
-        for obj_param in obj_params:
+        for inst, obj_param in zip(inst_params, obj_params):
+            obj_inst = object_class(**inst)
+            paramnames = obj_inst.paramnames()
             assert set(obj_param.keys()) <= set(paramnames), (
                 f"Parameter names do not match: {paramnames} != {obj_param}"
             )

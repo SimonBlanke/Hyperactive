@@ -30,3 +30,19 @@ class Parabola(BaseExperiment):
         y = params["y"]
 
         return self.a * (x**2 + y**2) + self.b * x + self.c * y, {}
+
+    @classmethod
+    def _get_score_params(self):
+        """Return settings for the score function.
+
+        Returns a list, the i-th element corresponds to self.get_test_params()[i].
+        It should be a valid call for self.score.
+
+        Returns
+        -------
+        list of dict
+            The parameters to be used for scoring.
+        """
+        params0 = {"x": 0, "y": 0}
+        params1 = {"x": 1, "y": 1}
+        return [params0, params1]
