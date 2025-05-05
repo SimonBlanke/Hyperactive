@@ -1,5 +1,6 @@
 """Base class for experiment."""
 
+import numpy as np
 from skbase.base import BaseObject
 
 
@@ -64,7 +65,9 @@ class BaseExperiment(BaseObject):
         paramnames = self.paramnames()
         if not set(params.keys()) <= set(paramnames):
             raise ValueError("Parameters do not match.")
-        return self._score(params)
+        res, metadata = self._score(params)
+        res = np.float64(res)
+        return res, metadata
 
     def _score(self, params):
         """Score the parameters.
