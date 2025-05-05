@@ -110,7 +110,6 @@ class GridSearch(BaseOptimizer):
         best_params = candidate_params[best_index]
 
         self.best_index_ = best_index
-        self.best_params_ = best_params
         self.best_score_ = scores[best_index]
 
         return best_params

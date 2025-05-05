@@ -11,7 +11,7 @@ class BaseExperiment(BaseObject):
     _tags = {
         "object_type": "experiment",
         "python_dependencies": None,
-        "property:randomness": "random",  # randomized or deterministic
+        "property:randomness": "random",  # random or deterministic
         # if deterministic, two calls of score will result in the same value
         # random = two calls may result in different values; same as "stochastic"
     }

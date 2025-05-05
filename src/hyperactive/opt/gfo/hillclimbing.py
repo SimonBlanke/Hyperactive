@@ -130,7 +130,21 @@ class HillClimbing(BaseOptimizer):
         return search_config
 
     def _run(self, experiment, **search_config):
-        """Run the optimization search process."""
+        """Run the optimization search process.
+
+        Parameters
+        ----------
+        experiment : BaseExperiment
+            The experiment to optimize parameters for.
+        search_config : dict with str keys
+            identical to return of ``get_search_config``.
+
+        Returns
+        -------
+        dict with str keys
+            The best parameters found during the search.
+            Must have keys a subset or identical to experiment.paramnames().
+        """
         n_iter = search_config.pop("n_iter", 100)
         max_time = search_config.pop("max_time", None)
 
@@ -142,9 +156,8 @@ class HillClimbing(BaseOptimizer):
                 n_iter=n_iter,
                 max_time=max_time,
             )
-        self.best_params_ = hcopt.best_para
-
-        return self.best_params_
+        best_params = hcopt.best_para
+        return best_params
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

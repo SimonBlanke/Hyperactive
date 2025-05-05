@@ -69,4 +69,6 @@ class BaseOptimizer(BaseObject):
         experiment = self.get_experiment()
         search_config = self.get_search_config()
 
-        return self._run(experiment, **search_config)
+        best_params = self._run(experiment, **search_config)
+        self.best_params_ = best_params
+        return best_params
