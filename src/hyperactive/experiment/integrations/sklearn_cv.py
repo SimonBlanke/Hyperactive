@@ -1,6 +1,7 @@
 """Experiment adapter for sklearn cross-validation experiments."""
 
 from sklearn import clone
+from sklearn.metrics import check_scoring
 from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
 
@@ -26,14 +27,19 @@ class SklearnCvExperiment(BaseExperiment):
     ----------
     estimator : sklearn estimator
         The estimator to be used for the experiment.
-    scoring : callable or str
-        sklearn scoring function or metric to evaluate the model's performance.
-    cv : int or cross-validation generator
-        The number of folds or cross-validation strategy to be used.
     X : array-like, shape (n_samples, n_features)
             The input data for the model.
     y : array-like, shape (n_samples,) or (n_samples, n_outputs)
         The target values for the model.
+    cv : int or cross-validation generator, default = KFold(n_splits=3, shuffle=True)
+        The number of folds or cross-validation strategy to be used.
+        If int, the cross-validation used is KFold(n_splits=cv, shuffle=True).
+    scoring : callable or str, default = accuracy_score or mean_squared_error
+        sklearn scoring function or metric to evaluate the model's performance.
+        Default is determined by the type of estimator:
+        ``accuracy_score`` for classifiers, and
+        ``mean_squared_error`` for regressors, as per sklearn convention
+        through the default ``score`` method of the estimator.
 
     Example
     -------
@@ -56,7 +62,7 @@ class SklearnCvExperiment(BaseExperiment):
     >>> score, add_info = sklearn_exp._score(params)
     """
 
-    def __init__(self, estimator, scoring, cv, X, y):
+    def __init__(self, estimator, X, y, scoring, cv):
         self.estimator = estimator
         self.X = X
         self.y = y
@@ -64,6 +70,19 @@ class SklearnCvExperiment(BaseExperiment):
         self.cv = cv
 
         super().__init__()
+
+        if cv is None:
+            from sklearn.model_selection import KFold
+
+            self._cv = KFold(n_splits=3, shuffle=True)
+        elif isinstance(cv, int):
+            from sklearn.model_selection import KFold
+
+            self._cv = KFold(n_splits=cv, shuffle=True)
+        else:
+            self._cv = cv
+
+        self._scoring = check_scoring(estimator=estimator, scoring=scoring)
 
     def _paramnames(self):
         """Return the parameter names of the search.
@@ -97,7 +116,7 @@ class SklearnCvExperiment(BaseExperiment):
             estimator,
             self.X,
             self.y,
-            cv=self.cv,
+            cv=self._cv,
         )
 
         add_info_d = {
@@ -159,11 +178,19 @@ class SklearnCvExperiment(BaseExperiment):
         params_regress = {
             "estimator": SVR(),
             "scoring": mean_absolute_error,
-            "cv": KFold(n_splits=2, shuffle=True),
+            "cv": 2,
             "X": X,
             "y": y,
         }
-        return [params_classif, params_regress]
+
+        X, y = load_diabetes(return_X_y=True)
+        params_all_default = {
+            "estimator": SVR(),
+            "X": X,
+            "y": y,
+        }
+
+        return [params_classif, params_regress, params_all_default]
 
     @classmethod
     def _get_score_params(self):
