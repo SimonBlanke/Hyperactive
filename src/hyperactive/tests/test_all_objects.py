@@ -209,6 +209,11 @@ class TestAllOptimizers(OptimizerFixtureGenerator):
             raise ValueError(
                 "Optimizer must have an 'experiment' parameter."
             )
+        # check that experiment occurs last in __init__ signature
+        if not object_instance.__init__.__code__.co_varnames[-1] == "experiment":
+            raise ValueError(
+                "'experiment' parameter in optimizer __init__ must be last argument."
+            )
         if not hasattr(object_instance, "experiment"):
             raise ValueError(
                 "Optimizer test cases must have 'experiment' parameter defined."
