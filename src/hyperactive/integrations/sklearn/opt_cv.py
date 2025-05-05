@@ -14,7 +14,7 @@ from hyperactive.integrations.sklearn.checks import Checks
 
 
 class OptCV(BaseEstimator, _BestEstimator_, Checks):
-    """Tuning via any optimizer in the hyperactive API
+    """Tuning via any optimizer in the hyperactive API.
 
     Parameters
     ----------
@@ -33,6 +33,32 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         ``accuracy_score`` for classifiers, and
         ``mean_squared_error`` for regressors, as per sklearn convention
         through the default ``score`` method of the estimator.
+
+    Example
+    -------
+    Tuning sklearn SVC via grid search
+
+    1. defining the tuned estimator:
+    >>> from sklearn.svm import SVC
+    >>> from hyperactive.integrations.sklearn import OptCV
+    >>> from hyperactive.opt import GridSearch
+    >>>
+    >>> param_grid = {"kernel": ["linear", "rbf"], "C": [1, 10]}
+    >>> tuned_svc = OptCV(SVC(), GridSearch(param_grid))
+
+    2. fitting the tuned estimator:
+    >>> from sklearn.datasets import load_iris
+    >>> from sklearn.model_selection import train_test_split
+    >>> X, y = load_iris(return_X_y=True)
+    >>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    >>>
+    >>> tuned_svc.fit(X_train, y_train)
+    OptCV(...)
+    >>> y_pred = tuned_svc.predict(X_test)
+
+    3. obtaining best parameters and best estimator
+    >>> best_params = tuned_svc.best_params_
+    >>> best_estimator = tuned_svc.best_estimator_
     """
 
     _required_parameters = ["estimator", "optimizer"]
@@ -105,6 +131,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         best_params = optimizer.run()
 
         self.best_params_ = best_params
+        self.best_estimator_ = clone(self.estimator).set_params(**best_params)
 
         if self.refit:
             self._refit(X, y, **fit_params)
