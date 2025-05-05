@@ -17,11 +17,11 @@ class GridSearch(BaseOptimizer):
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later in ``add_search``.
-    error_score : float, default=np.nan
-        The score to assign if an error occurs during the evaluation of a parameter set.
     param_grid : dict[str, list]
         The search space to explore. A dictionary with parameter
         names as keys and a numpy array as values.
+    error_score : float, default=np.nan
+        The score to assign if an error occurs during the evaluation of a parameter set.
 
     Example
     -------
@@ -59,8 +59,8 @@ class GridSearch(BaseOptimizer):
     def __init__(
         self,
         experiment=None,
-        error_score=np.nan,
         param_grid=None,
+        error_score=np.nan,
     ):
         self.experiment = experiment
         self.param_grid = param_grid
