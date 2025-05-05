@@ -94,7 +94,19 @@ class SklearnCvExperiment(BaseExperiment):
         else:
             self._cv = cv
 
-        self._scoring = check_scoring(estimator=estimator, scoring=scoring)
+        # check if scoring is a scorer by checking for "estimator" in signature
+        if scoring is None:
+            self._scoring = check_scoring(self.estimator)
+        # check using inspect.signature for "estimator" in signature
+        elif callable(scoring):
+            from inspect import signature
+
+            if "estimator" in signature(scoring).parameters:
+                self._scoring = scoring
+            else:
+                from sklearn.metrics import make_scorer
+
+                self._scoring = make_scorer(scoring)
 
     def _paramnames(self):
         """Return the parameter names of the search.
@@ -128,6 +140,7 @@ class SklearnCvExperiment(BaseExperiment):
             estimator,
             self.X,
             self.y,
+            scoring=self._scoring,
             cv=self._cv,
         )
 
