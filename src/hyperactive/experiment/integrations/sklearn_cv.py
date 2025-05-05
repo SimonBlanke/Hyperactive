@@ -63,6 +63,8 @@ class SklearnCvExperiment(BaseExperiment):
         self.scoring = scoring
         self.cv = cv
 
+        super().__init__()
+
     def _paramnames(self):
         """Return the parameter names of the search.
 
