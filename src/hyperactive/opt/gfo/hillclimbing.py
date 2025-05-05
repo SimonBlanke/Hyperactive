@@ -11,9 +11,17 @@ class HillClimbing(BaseOptimizer):
 
     Parameters
     ----------
-    experiment : BaseExperiment, optional
-        The experiment to optimize parameters for.
+    search_space : dict[str, list]
+        The search space to explore. A dictionary with parameter
+        names as keys and a numpy array as values.
         Optional, can be passed later in ``add_search``.
+    initialize : dict[str, int], default={"grid": 4, "random": 2, "vertices": 4}
+        The method to generate initial positions. A dictionary with
+        the following key literals and the corresponding value type:
+        {"grid": int, "vertices": int, "random": int, "warm_start": list[dict]}
+    constraints : list[callable], default=[]
+        A list of constraints, where each constraint is a callable.
+        The callable returns `True` or `False` dependend on the input parameters.
     random_state : None, int, default=None
         If None, create a new random state. If int, create a new random state
         seeded with the value.
@@ -26,21 +34,13 @@ class HillClimbing(BaseOptimizer):
     n_neighbours : int, default=10
         The number of neighbours to sample and evaluate before moving to the best
         of those neighbours.
-    search_space : dict[str, list]
-        The search space to explore. A dictionary with parameter
-        names as keys and a numpy array as values.
-        Optional, can be passed later in ``add_search``.
-    initialize : dict[str, int], default={"grid": 4, "random": 2, "vertices": 4}
-        The method to generate initial positions. A dictionary with
-        the following key literals and the corresponding value type:
-        {"grid": int, "vertices": int, "random": int, "warm_start": list[dict]}
-    constraints : list[callable], default=[]
-        A list of constraints, where each constraint is a callable.
-        The callable returns `True` or `False` dependend on the input parameters.
     n_iter : int, default=100
         The number of iterations to run the optimizer.
     verbose : bool, default=False
         If True, print the progress of the optimization process.
+    experiment : BaseExperiment, optional
+        The experiment to optimize parameters for.
+        Optional, can be passed later in ``add_search``.
 
     Examples
     --------
@@ -85,17 +85,17 @@ class HillClimbing(BaseOptimizer):
 
     def __init__(
         self,
-        experiment=None,
+        search_space=None,
+        initialize=None,
+        constraints=None,
         random_state=None,
         rand_rest_p=0.1,
         epsilon=0.01,
         distribution="normal",
         n_neighbours=10,
-        search_space=None,
-        initialize=None,
-        constraints=None,
         n_iter=100,
         verbose=False,
+        experiment=None,
     ):
         self.random_state = random_state
         self.rand_rest_p = rand_rest_p
