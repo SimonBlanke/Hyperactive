@@ -10,23 +10,31 @@ class Ackley(BaseExperiment):
     It is defined as:
 
     .. math::
-        f(x, y) = -A \cdot \exp(-0.2 \sqrt{0.5 (x^2 + y^2)}) - \exp(0.5 (\cos(2 \pi x) + \cos(2 \pi y))) + \exp(1) + A
+        f(x) = -a \cdot \exp(-\frac{b}{\sqrt{d}\left\|x\right\|}) - \exp(\frac{1}{d} \sum_{i=1}^d\cos (c x_i) ) + a + \exp(1)
 
-    where A is a constant.
+    where :math:`a` (= `a`), :math:`b` (= `b`), and :math:`c` (= `c`) are constants,
+    :math:`d` (= `d`) is the number of dimensions of the real input vector :math:`x`,
+    and :math:`\left\|x\right\|` is the Euclidean norm of the vector :math:`x`.
 
-    The function arguments :math:`x` and :math:`y`
+    The components of the function argument :math:`x`
     are the input variables of the `score` method,
-    and are set as `x0` and `x1` respectively.
+    and are set as `x0`, `x1`, ..., `x[d]` respectively.
 
     Parameters
     ----------
-    A : float
+    a : float, optional, default=20
         Amplitude constant used in the calculation of the Ackley function.
+    b : float, optional, default=0.2
+        Decay constant used in the calculation of the Ackley function.
+    c : float, optional, default=2*pi
+        Frequency constant used in the calculation of the Ackley function.
+    d : int, optional, default=2
+        Number of dimensions for the Ackley function. The default is 2.
 
     Example
     -------
     >>> from hyperactive.experiment.toy import Ackley
-    >>> ackley = Ackley(A=20)
+    >>> ackley = Ackley(a=20)
     >>> params = {"x0": 1, "x1": 2}
     >>> score, add_info = ackley.score(params)
 
@@ -40,23 +48,27 @@ class Ackley(BaseExperiment):
         # random = two calls may result in different values; same as "stochastic"
     }
 
-    def __init__(self, A):
-        self.A = A
+    def __init__(self, a=20, b=0.2, c=2 * np.pi, d=2):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
         super().__init__()
 
     def _paramnames(self):
-        return ["x0", "x1"]
+        return [f"x{i}" for i in range(self.d)]
 
     def _score(self, params):
-        x = params["x0"]
-        y = params["x1"]
+        x_vec = np.array([params[f"x{i}"] for i in range(self.d)])
 
-        loss1 = -self.A * np.exp(-0.2 * np.sqrt(0.5 * (x * x + y * y)))
-        loss2 = -np.exp(0.5 * (np.cos(2 * np.pi * x) + np.cos(2 * np.pi * y)))
+        loss1 = -self.a * np.exp(-self.b * np.sqrt(np.sum(x_vec**2) / self.d))
+        loss2 = -np.exp(np.sum(np.cos(self.c * x_vec)) / self.d)
         loss3 = np.exp(1)
-        loss4 = self.A
+        loss4 = self.a
 
-        return -(loss1 + loss2 + loss3 + loss4), {}
+        loss = loss1 + loss2 + loss3 + loss4
+
+        return loss, {}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -91,7 +103,7 @@ class Ackley(BaseExperiment):
             `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
-        return [{"A": 0}, {"A": 20}, {"A": -42}]
+        return [{"a": 0}, {"a": 20, "d": 42}, {"a": -42, "b": 0.5, "c": 1, "d": 10}]
 
     @classmethod
     def _get_score_params(self):
@@ -106,5 +118,6 @@ class Ackley(BaseExperiment):
             The parameters to be used for scoring.
         """
         params0 = {"x0": 0, "x1": 0}
-        params1 = {"x0": 1, "x1": 1}
-        return [params0, params1]
+        params1 = {f"x{i}": i + 3 for i in range(42)}
+        params2 = {f"x{i}": i**2 for i in range(10)}
+        return [params0, params1, params2]
