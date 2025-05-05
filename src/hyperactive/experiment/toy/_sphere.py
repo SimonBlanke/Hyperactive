@@ -3,7 +3,7 @@ import numpy as np
 from hyperactive.base import BaseExperiment
 
 
-class SphereFunction(BaseExperiment):
+class Sphere(BaseExperiment):
     """Simple Sphere function, common benchmark for optimization algorithms.
 
     Sphere function parameterized by the formula:
@@ -14,6 +14,10 @@ class SphereFunction(BaseExperiment):
     where :math:`c` is a constant offset added to the sum of squares,
     and :math:`n` is the number of dimensions.
     Both :math:`c` (= `const`) and :math:`n` (= `n_dim`) can be set as parameters.
+
+    The function arguments :math:`x_1`, :math:`x_2`, ..., :math:`x_n`
+    are the input variables of the `score` method,
+    and are set as `x0`, `x1`, ..., `x[n]` respectively.
 
     This function is a common test function for optimization algorithms.
 
@@ -26,8 +30,8 @@ class SphereFunction(BaseExperiment):
 
     Example
     -------
-    >>> from hyperactive.experiment.toy import SphereFunction
-    >>> sphere = SphereFunction(const=0, n_dim=3)
+    >>> from hyperactive.experiment.toy import Sphere
+    >>> sphere = Sphere(const=0, n_dim=3)
     >>> params = {"x0": 1, "x1": 2, "x2": 3}
     >>> score, add_info = sphere.score(params)
 
@@ -35,7 +39,7 @@ class SphereFunction(BaseExperiment):
     >>> score = sphere(x0=1, x1=2, x2=3)
 
     Different number of dimensions changes the parameter names:
-    >>> sphere4D = SphereFunction(const=0, n_dim=4)
+    >>> sphere4D = Sphere(const=0, n_dim=4)
     >>> score4D = sphere4D(x0=1, x1=2, x2=3, x3=4)
     """
 

@@ -3,7 +3,7 @@ import numpy as np
 from hyperactive.base import BaseExperiment
 
 
-class AckleyFunction(BaseExperiment):
+class Ackley(BaseExperiment):
     r"""Ackley function, common benchmark for optimization algorithms.
 
     The Ackley function is a non-convex function used to test optimization algorithms.
@@ -14,6 +14,10 @@ class AckleyFunction(BaseExperiment):
 
     where A is a constant.
 
+    The function arguments :math:`x` and :math:`y`
+    are the input variables of the `score` method,
+    and are set as `x0` and `x1` respectively.
+
     Parameters
     ----------
     A : float
@@ -21,8 +25,8 @@ class AckleyFunction(BaseExperiment):
 
     Example
     -------
-    >>> from hyperactive.experiment.toy import AckleyFunction
-    >>> ackley = AckleyFunction(A=20)
+    >>> from hyperactive.experiment.toy import Ackley
+    >>> ackley = Ackley(A=20)
     >>> params = {"x0": 1, "x1": 2}
     >>> score, add_info = ackley.score(params)
 

@@ -14,6 +14,10 @@ class Parabola(BaseExperiment):
     where :math:`a`, :math:`b`, and :math:`c` are coefficients which can
     be set as parameters.
 
+    The function arguments :math:`x` and :math:`y`
+    are the input variables of the `score` method,
+    and are set as `x` and `y` respectively.
+
     Parameters
     ----------
     a : float, default=1.0
