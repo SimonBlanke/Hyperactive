@@ -55,7 +55,7 @@ class HillClimbing(BaseOptimizer):
     ...     y=y,
     ... )
 
-    2. setting up the grid search optimizer:
+    2. setting up the hill climbing optimizer:
     >>> from hyperactive.opt import HillClimbing
     >>> 
     >>> hillclimbing_config = {
@@ -67,7 +67,7 @@ class HillClimbing(BaseOptimizer):
     ... }
     >>> hillclimbing = HillClimbing(sklearn_exp, **hillclimbing_config)
 
-    3. running the grid search:
+    3. running the hill climbing search:
     >>> best_params = hillclimbing.run()
 
     Best parameters can also be accessed via the attributes:
