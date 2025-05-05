@@ -70,7 +70,7 @@ class HillClimbing(BaseOptimizer):
     ...     },
     ...     "n_iter": 100,
     ... }
-    >>> hillclimbing = HillClimbing(sklearn_exp, **hillclimbing_config)
+    >>> hillclimbing = HillClimbing(experiment=sklearn_exp, **hillclimbing_config)
 
     3. running the hill climbing search:
     >>> best_params = hillclimbing.run()
