@@ -59,7 +59,19 @@ class SklearnCvExperiment(BaseExperiment):
     ...     y=y,
     ... )
     >>> params = {"C": 1.0, "kernel": "linear"}
-    >>> score, add_info = sklearn_exp._score(params)
+    >>> score, add_info = sklearn_exp.score(params)
+
+    For default choices of ``scoring`` and ``cv``:
+    >>> sklearn_exp = SklearnCvExperiment(
+    ...    estimator=SVC(),
+    ...     X=X,
+    ...     y=y,
+    ... )
+    >>> params = {"C": 1.0, "kernel": "linear"}
+    >>> score, add_info = sklearn_exp.score(params)
+
+    Quick call without metadata return or dictionary:
+    >>> score = sklearn_exp(C=1.0, kernel="linear")
     """
 
     def __init__(self, estimator, X, y, scoring, cv):
