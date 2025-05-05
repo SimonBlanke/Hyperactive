@@ -46,7 +46,7 @@ class GridSearch(BaseOptimizer):
     ...     "C": [0.01, 0.1, 1, 10],
     ...     "gamma": [0.0001, 0.01, 0.1, 1, 10],
     ... }
-    ... grid_search = GridSearch(sklearn_exp, param_grid=param_grid)
+    >>> grid_search = GridSearch(sklearn_exp, param_grid=param_grid)
 
     3. running the grid search:
     >>> best_params = grid_search.run()

@@ -115,6 +115,7 @@ class HillClimbing(BaseOptimizer):
         """
         search_config = super().get_search_config()
         search_config["initialize"] = self._initialize
+        return search_config
 
     def _run(self, experiment, **search_config):
         """Run the optimization search process."""
