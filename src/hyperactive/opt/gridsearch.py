@@ -28,7 +28,6 @@ class GridSearch(BaseOptimizer):
     Grid search applied to scikit-learn parameter tuning:
 
     1. defining the experiment to optimize:
-    >>> from hyperactive.experiment import Experiment
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
@@ -42,7 +41,7 @@ class GridSearch(BaseOptimizer):
     ... )
 
     2. setting up the grid search optimizer:
-    >>> from hyperactive import GridSearch
+    >>> from hyperactive.opt import GridSearch
     >>> param_grid = {
     ...     "C": [0.01, 0.1, 1, 10],
     ...     "gamma": [0.0001, 0.01, 0.1, 1, 10],
