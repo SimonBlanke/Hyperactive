@@ -78,6 +78,10 @@ class HillClimbing(BaseOptimizer):
     >>> best_params = hillclimbing.best_params_
     """
 
+    _tags = {
+        "python_dependencies": ["gradient-free-optimizers>=1.5.0"],
+    }
+
     def __init__(
         self,
         experiment=None,
@@ -121,6 +125,7 @@ class HillClimbing(BaseOptimizer):
         """
         search_config = super().get_search_config()
         search_config["initialize"] = self._initialize
+        del search_config["verbose"]
         return search_config
 
     def _run(self, experiment, **search_config):

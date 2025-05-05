@@ -8,6 +8,7 @@ class BaseOptimizer(BaseObject):
 
     _tags = {
         "object_type": "optimizer",
+        "python_dependencies": None,
     }
 
     def __init__(self):
