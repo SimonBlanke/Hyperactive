@@ -126,7 +126,7 @@ class HillClimbing(BaseOptimizer):
         hcopt = HillClimbingOptimizer(**search_config)
 
         hcopt.search(
-            objective_function=experiment,
+            objective_function=experiment.score,
             n_iter=n_iter,
             max_time=max_time,
         )
