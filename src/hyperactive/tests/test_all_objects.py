@@ -36,7 +36,7 @@ class PackageConfig:
 
     # list of valid tags
     # expected type: list of str, str are tag names
-    valid_tags = ["object_type"]
+    valid_tags = ["object_type", "property:randomness"]
 
 
 class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
@@ -172,4 +172,5 @@ class TestAllExperiments(ExperimentFixtureGenerator):
 
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
-            assert score == call_sc, f"Score does not match: {score} != {call_sc}"
+            if inst.get_tag("property:randomness") == "deterministic":
+                assert score == call_sc, f"Score does not match: {score} != {call_sc}"
