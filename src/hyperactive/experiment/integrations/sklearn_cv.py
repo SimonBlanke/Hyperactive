@@ -74,7 +74,7 @@ class SklearnCvExperiment(BaseExperiment):
     >>> score = sklearn_exp(C=1.0, kernel="linear")
     """
 
-    def __init__(self, estimator, X, y, scoring, cv):
+    def __init__(self, estimator, X, y, scoring=None, cv=None):
         self.estimator = estimator
         self.X = X
         self.y = y
