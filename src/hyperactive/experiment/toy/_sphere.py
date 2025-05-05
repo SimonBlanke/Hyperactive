@@ -95,7 +95,7 @@ class Sphere(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         params0 = {}
-        params1 = {"ndim": 3, "const": 1.0}
+        params1 = {"n_dim": 3, "const": 1.0}
         return [params0, params1]
 
     @classmethod
