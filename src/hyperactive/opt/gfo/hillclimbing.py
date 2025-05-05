@@ -57,11 +57,12 @@ class HillClimbing(BaseOptimizer):
 
     2. setting up the hill climbing optimizer:
     >>> from hyperactive.opt import HillClimbing
+    >>> import numpy as np
     >>> 
     >>> hillclimbing_config = {
     ...     "search_space": {
-    ...         "C": [0.01, 0.1, 1, 10],
-    ...         "gamma": [0.0001, 0.01, 0.1, 1, 10],
+    ...         "C": np.array([0.01, 0.1, 1, 10]),
+    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
     ...     },
     ...     "n_iter": 100,
     ... }
