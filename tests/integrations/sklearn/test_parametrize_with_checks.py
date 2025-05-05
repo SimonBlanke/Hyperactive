@@ -13,7 +13,7 @@ opt = RandomSearchOptimizer()
 hyperactivecv = HyperactiveSearchCV(svc, parameters, opt)
 
 cv = KFold(n_splits=2, shuffle=True, random_state=42)
-optcv = OptCV(estimator=svc, optimizer=GridSearch(param_grid=parameters, cv=cv))
+optcv = OptCV(estimator=svc, optimizer=GridSearch(param_grid=parameters), cv=cv)
 
 ESTIMATORS = [hyperactivecv, optcv]
 
