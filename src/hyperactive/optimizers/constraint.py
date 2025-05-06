@@ -5,9 +5,9 @@
 
 def gfo2hyper(search_space, para):
     values_dict = {}
-    for _, key in enumerate(search_space.keys()):
+    for key, values in search_space.items():
         pos_ = int(para[key])
-        values_dict[key] = search_space[key][pos_]
+        values_dict[key] = values[pos_]
 
     return values_dict
 
