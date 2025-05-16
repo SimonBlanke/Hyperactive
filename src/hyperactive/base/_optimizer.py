@@ -18,22 +18,6 @@ class BaseOptimizer(BaseObject):
         search_config = self.get_params()
         self._experiment = search_config.pop("experiment", None)
 
-    def add_search(self, experiment, **search_config):
-        """Add a new optimization search process with specified parameters.
-
-        Parameters
-        ----------
-        experiment : BaseExperiment
-            The experiment to optimize parameters for.
-        search_config : dict with str keys
-            Key/value pairs may be any subset of the parameters of the class.
-        """
-        self._experiment = experiment
-        if not hasattr(self, "_search_config_update"):
-            self._search_config_update = search_config
-        else:
-            self._search_config_update.update(search_config)
-
     def get_search_config(self):
         """Get the search configuration.
 
@@ -44,8 +28,6 @@ class BaseOptimizer(BaseObject):
         """
         search_config = self.get_params(deep=False)
         search_config.pop("experiment", None)
-        if hasattr(self, "_search_config_update"):
-            search_config.update(self._search_config_update)
         return search_config
 
     def get_experiment(self):
