@@ -1,7 +1,12 @@
+import sys, pytest
 import numpy as np
 import pandas as pd
 
 from hyperactive import Hyperactive
+
+
+if sys.platform.startswith("win"):
+    pytest.skip("skip these tests for windows", allow_module_level=True)
 
 
 def test_search_space_0():

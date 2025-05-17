@@ -1,6 +1,11 @@
 import numpy as np
+import sys, pytest
 from tqdm import tqdm
+
 from hyperactive import Hyperactive
+
+if sys.platform.startswith("win"):
+    pytest.skip("skip these tests for windows", allow_module_level=True)
 
 
 def objective_function(opt):

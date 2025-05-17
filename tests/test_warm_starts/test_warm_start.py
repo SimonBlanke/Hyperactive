@@ -1,9 +1,13 @@
 import time
-import pytest
+import pytest, sys
 import numpy as np
 import pandas as pd
 
 from hyperactive import Hyperactive
+
+
+if sys.platform.startswith("win"):
+    pytest.skip("skip these tests for windows", allow_module_level=True)
 
 
 def func1():
