@@ -39,3 +39,9 @@ def test_endtoend_hillclimbing()
 
     # 3. run the HillClimbing optimizer
     hill_climbing.run()
+
+    best_params = hill_climbing.best_params_
+    assert best_params is not None, "Best parameters should not be None"
+    assert isinstance(best_params, dict), "Best parameters should be a dictionary"
+    assert "C" in best_params, "Best parameters should contain 'C'"
+    assert "gamma" in best_params, "Best parameters should contain 'gamma'"
