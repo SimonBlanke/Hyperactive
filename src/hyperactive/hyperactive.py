@@ -245,6 +245,16 @@ class Hyperactive:
 
         Returns:
         - pd.DataFrame: The search data for the specified ID.
+
+        columns are
+
+            * "score" : float - The score of the search
+            * "n_columns" : int - The number of columns in the search space
+            * "metadata" : dict - The metadata returned by the search
+
+        each row is a search iteration
+
+        index is RangeIndex
         """
 
         search_data_ = self.results_.search_data(id_)

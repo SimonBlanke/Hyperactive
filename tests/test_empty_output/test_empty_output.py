@@ -1,4 +1,9 @@
-import os, sys, subprocess
+import os, sys, subprocess, pytest
+
+
+if sys.platform.startswith("win"):
+    pytest.skip("skip these tests for windows", allow_module_level=True)
+
 
 here = os.path.dirname(os.path.abspath(__file__))
 
