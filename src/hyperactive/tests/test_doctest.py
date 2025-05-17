@@ -9,16 +9,13 @@ from functools import lru_cache
 from hyperactive.tests._doctest import run_doctest
 
 EXCLUDE_MODULES_STARTING_WITH = ("all", "test")
+PKG_NAME = "hyperactive"
 
 
 def _all_functions(module_name):
     """Get all functions from a module, including submodules.
 
-    Excludes:
-
-    * modules starting with 'all' or 'test'.
-    * if the flag ``ONLY_CHANGED_MODULES`` is set, modules that have not changed,
-      compared to the ``main`` branch.
+    Excludes modules starting with 'all' or 'test'.
 
     Parameters
     ----------
@@ -30,7 +27,7 @@ def _all_functions(module_name):
     functions_list : list
         List of tuples (function_name, function_object).
     """
-    res = _all_functions_cached(module_name, only_changed_modules=ONLY_CHANGED_MODULES)
+    res = _all_functions_cached(module_name)
     # copy the result to avoid modifying the cached result
     return res.copy()
 
