@@ -108,7 +108,7 @@ class HyperOptimizer(OptimizerAttributes):
 
         self.conv = self.gfo_optimizer.conv
 
-    def search(self, nth_process, p_bar):
+    def search(self, nth_process, p_bar=None):
         self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(

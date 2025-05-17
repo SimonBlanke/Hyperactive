@@ -61,7 +61,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         for optimizer_setup in self.optimizer_setup_l:
             optimizer_setup["optimizer"].max_time = value
 
-    def search(self, nth_process, p_bar):
+    def search(self, nth_process, p_bar=None):
         for optimizer_setup in self.optimizer_setup_l:
             hyper_opt = optimizer_setup["optimizer"]
             duration = optimizer_setup["duration"]

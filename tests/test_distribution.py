@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm
 from hyperactive import Hyperactive
 
 
@@ -73,19 +72,6 @@ def test_n_jobs_7():
 
 def test_multiprocessing_0():
     hyper = Hyperactive(distribution="multiprocessing")
-    hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
-    hyper.run()
-
-
-def test_multiprocessing_1():
-    hyper = Hyperactive(
-        distribution={
-            "multiprocessing": {
-                "initializer": tqdm.set_lock,
-                "initargs": (tqdm.get_lock(),),
-            }
-        },
-    )
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
