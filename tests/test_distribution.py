@@ -1,5 +1,5 @@
 import numpy as np
-import pytest
+import sys, pytest
 from tqdm import tqdm
 
 from hyperactive import Hyperactive
