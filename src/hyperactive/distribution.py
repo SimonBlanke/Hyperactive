@@ -3,14 +3,9 @@
 # License: MIT License
 
 from sys import platform
-from tqdm import tqdm
 
-if platform.startswith("linux"):
-    initializer = tqdm.set_lock
-    initargs = (tqdm.get_lock(),)
-else:
-    initializer = None
-    initargs = ()
+initializer = None
+initargs = ()
 
 
 def single_process(process_func, process_infos):
