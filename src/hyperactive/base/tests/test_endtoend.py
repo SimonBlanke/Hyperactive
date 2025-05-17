@@ -5,7 +5,7 @@ API unit tests are in TestAllOptimizers and TestAllExperiments.
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 
-def test_endtoend_hillclimbing()
+def test_endtoend_hillclimbing():
     """Test end-to-end usage of HillClimbing optimizer with an experiment."""
     # 1. define the experiment
     from hyperactive.experiment.integrations import SklearnCvExperiment
