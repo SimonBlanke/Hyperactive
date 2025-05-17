@@ -2,7 +2,7 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-from collections.abc import Iterable, Callable
+from collections.abc import Callable
 from typing import Union, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
@@ -10,14 +10,13 @@ from sklearn.metrics import check_scoring
 from sklearn.utils.validation import indexable, _check_method_params
 
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
-from sklearn.model_selection import BaseCrossValidator
 
 from hyperactive import Hyperactive
 
-from .objective_function_adapter import ObjectiveFunctionAdapter
 from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
+from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
@@ -118,12 +117,14 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         fit_params = _check_method_params(X, params=fit_params)
         self.scorer_ = check_scoring(self.estimator, scoring=self.scoring)
 
-        objective_function_adapter = ObjectiveFunctionAdapter(
-            self.estimator,
+        experiment = SklearnCvExperiment(
+            estimator=self.estimator,
+            scoring=self.scorer_,
+            cv=self.cv,
+            X=X,
+            y=y,
         )
-        objective_function_adapter.add_dataset(X, y)
-        objective_function_adapter.add_validation(self.scorer_, self.cv)
-        objective_function = objective_function_adapter.objective_function
+        objective_function = experiment.score
 
         hyper = Hyperactive(verbosity=False)
         hyper.add_search(
