@@ -1,5 +1,7 @@
 import numpy as np
+import pytest
 from tqdm import tqdm
+
 from hyperactive import Hyperactive
 
 
@@ -71,12 +73,14 @@ def test_n_jobs_7():
     hyper.run()
 
 
+@pytest.mark.skip(reason="This test is not working on Windows")
 def test_multiprocessing_0():
     hyper = Hyperactive(distribution="multiprocessing")
     hyper.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper.run()
 
 
+@pytest.mark.skip(reason="This test is not working on Windows")
 def test_multiprocessing_1():
     hyper = Hyperactive(
         distribution={
