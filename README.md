@@ -11,76 +11,13 @@
 <br>
 
 
-
-<table>
-  <tbody>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Master status:</strong>
-      </td>
-      <td>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_ubuntu.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_windows.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_macos.yml/badge.svg?branch=master" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/master" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Dev status:</strong>
-      </td>
-      <td>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_ubuntu.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_windows.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://github.com/SimonBlanke/Hyperactive/actions">
-          <img src="https://github.com/SimonBlanke/Hyperactive/actions/workflows/tests_macos.yml/badge.svg?branch=dev" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://app.codecov.io/gh/SimonBlanke/Hyperactive">
-          <img src="https://img.shields.io/codecov/c/github/SimonBlanke/Hyperactive/dev" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr align="left" valign="center">
-      <td>
-         <strong>Code quality:</strong>
-      </td>
-      <td>
-        <a href="https://codeclimate.com/github/SimonBlanke/Hyperactive">
-        <img src="https://img.shields.io/codeclimate/maintainability/SimonBlanke/Hyperactive?style=flat-square&logo=code-climate" alt="img not loaded: try F5 :)">
-        </a>
-        <a href="https://scrutinizer-ci.com/g/SimonBlanke/Hyperactive/">
-        <img src="https://img.shields.io/scrutinizer/quality/g/SimonBlanke/Hyperactive?style=flat-square&logo=scrutinizer-ci" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-    <tr align="left" valign="center">
-      <td>
-        <strong>Latest versions:</strong>
-      </td>
-      <td>
-        <a href="https://pypi.org/project/gradient_free_optimizers/">
-          <img src="https://img.shields.io/pypi/v/Hyperactive?style=flat-square&logo=PyPi&logoColor=white&color=blue" alt="img not loaded: try F5 :)">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<br>
-
-
+|  | **[Documentation](https://www.hyperactive.net/en/stable/users.html)** · **[Tutorials](https://www.hyperactive.net/en/stable/examples.html)** · **[Release Notes](https://www.hyperactive.net/en/stable/changelog.html)** |
+|---|---|
+| **Open&#160;Source** | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) |
+| **Community** | [![!discord](https://img.shields.io/static/v1?logo=discord&label=discord&message=chat&color=lightgreen)](https://discord.com/invite/54ACzaFsn7) [![!slack](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/german-center-for-open-source-ai)  |
+| **CI/CD** | [![github-actions](https://img.shields.io/github/actions/workflow/status/hyperactive/hyperactive/wheels.yml?logo=github)](https://github.com/hyperactive/hyperactive/actions/workflows/wheels.yml) [![readthedocs](https://img.shields.io/readthedocs/hyperactive?logo=readthedocs)](https://www.hyperactive.net/en/latest/?badge=latest) [![platform](https://img.shields.io/conda/pn/conda-forge/hyperactive)](https://github.com/hyperactive/hyperactive) |
+| **Code** |  [![!pypi](https://img.shields.io/pypi/v/hyperactive?color=orange)](https://pypi.org/project/hyperactive/) [![!conda](https://img.shields.io/conda/vn/conda-forge/hyperactive)](https://anaconda.org/conda-forge/hyperactive) [![!python-versions](https://img.shields.io/pypi/pyversions/hyperactive)](https://www.python.org/) [![!black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  |
+| **Downloads** | ![PyPI - Downloads](https://img.shields.io/pypi/dw/hyperactive) ![PyPI - Downloads](https://img.shields.io/pypi/dm/hyperactive) [![Downloads](https://static.pepy.tech/personalized-badge/hyperactive?period=total&units=international_system&left_color=grey&right_color=blue&left_text=cumulative%20(pypi))](https://pepy.tech/project/hyperactive) |
 
 
 <img src="./docs/images/bayes_convex.gif" align="right" width="500">
