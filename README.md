@@ -11,7 +11,21 @@
 <br>
 
 
-|  | **[Documentation](https://www.hyperactive.net/en/stable/users.html)** · **[Tutorials](https://www.hyperactive.net/en/stable/examples.html)** · **[Release Notes](https://www.hyperactive.net/en/stable/changelog.html)** |
+<br>
+
+---
+
+<div align="center"><a name="menu"></a>
+  <h3>
+    <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
+    <a href="https://simonblanke.github.io/hyperactive-documentation/4.5/">API reference</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
+    <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
+  </h3>
+</div>
+
 |---|---|
 | **Open&#160;Source** | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) |
 | **Community** | [![!discord](https://img.shields.io/static/v1?logo=discord&label=discord&message=chat&color=lightgreen)](https://discord.com/invite/54ACzaFsn7) [![!slack](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/german-center-for-open-source-ai)  |
@@ -42,22 +56,6 @@
 
 
 As its name suggests Hyperactive started as a hyperparameter optimization package, but it has been generalized to solve expensive gradient-free optimization problems. It uses the [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) package as an optimization-backend and expands on it with additional features and tools.
-
-
-<br>
-
----
-
-<div align="center"><a name="menu"></a>
-  <h3>
-    <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
-    <a href="https://simonblanke.github.io/hyperactive-documentation/4.5/">API reference</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
-  </h3>
-</div>
 
 ---
 
