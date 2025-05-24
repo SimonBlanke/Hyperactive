@@ -10,6 +10,13 @@ class BaseOptimizer(BaseObject):
     _tags = {
         "object_type": "optimizer",
         "python_dependencies": None,
+        # properties of the optimizer
+        "info:name": None,  # str
+        "info:local_vs_global": "mixed",  # "local", "mixed", "global"
+        "info:explore_vs_exploit": "mixed",  # "explore", "exploit", "mixed"
+        "info:compute": "middle",  # "low", "middle", "high"
+        # see here for explanation of the tags:
+        # https://simonblanke.github.io/gradient-free-optimizers-documentation/1.5/optimizers/  # noqa: E501
     }
 
     def __init__(self):
@@ -17,6 +24,9 @@ class BaseOptimizer(BaseObject):
         assert hasattr(self, "experiment"), "Optimizer must have an experiment."
         search_config = self.get_params()
         self._experiment = search_config.pop("experiment", None)
+
+        if self.get_tag("info:name") is None:
+            self.set_tag("info:name", self.__class__.__name__)
 
     def get_search_config(self):
         """Get the search configuration.

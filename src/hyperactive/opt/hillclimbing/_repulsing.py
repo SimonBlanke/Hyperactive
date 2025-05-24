@@ -79,6 +79,13 @@ class RepulsingHillClimbing(_BaseGFOadapter):
     >>> best_params = hillclimbing.best_params_
     """
 
+    _tags = {
+        "info:name": "Repulsing Hill Climbing",
+        "info:local_vs_global": "mixed",  # "local", "mixed", "global"
+        "info:explore_vs_exploit": "exploit",  # "explore", "exploit", "mixed"
+        "info:compute": "low",  # "low", "middle", "high"
+    }
+
     def __init__(
         self,
         search_space=None,
