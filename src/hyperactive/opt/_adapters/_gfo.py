@@ -1,9 +1,10 @@
 """Adapter for gfo package."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-from gradient_free_optimizers import HillClimbingOptimizer
 from hyperactive.base import BaseOptimizer
 from skbase.utils.stdout_mute import StdoutMute
+
+__all__ = ["_BaseGFOadapter"]
 
 
 class _BaseGFOadapter(BaseOptimizer):
@@ -54,6 +55,35 @@ class _BaseGFOadapter(BaseOptimizer):
         search_config["initialize"] = self._initialize
         del search_config["verbose"]
         return search_config
+
+    def _run(self, experiment, **search_config):
+        """Run the optimization search process.
+        Parameters
+        ----------
+        experiment : BaseExperiment
+            The experiment to optimize parameters for.
+        search_config : dict with str keys
+            identical to return of ``get_search_config``.
+        Returns
+        -------
+        dict with str keys
+            The best parameters found during the search.
+            Must have keys a subset or identical to experiment.paramnames().
+        """
+        n_iter = search_config.pop("n_iter", 100)
+        max_time = search_config.pop("max_time", None)
+
+        gfo_cls = self._get_gfo_class()
+        hcopt = gfo_cls(**search_config)
+
+        with StdoutMute(active=not self.verbose):
+            hcopt.search(
+                objective_function=experiment.score,
+                n_iter=n_iter,
+                max_time=max_time,
+            )
+        best_params = hcopt.best_para
+        return best_params
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
