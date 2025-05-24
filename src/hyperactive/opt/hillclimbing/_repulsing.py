@@ -148,5 +148,5 @@ class RepulsingHillClimbing(_BaseGFOadapter):
             },
             "n_iter": 100,
         }
-        params.update(more_params)
+        params.append(more_params)
         return params
