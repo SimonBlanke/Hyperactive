@@ -128,7 +128,8 @@ class StochasticHillClimbing(_BaseGFOadapter):
 
         return StochasticHillClimbingOptimizer
 
-    def get_test_params(self):
+    @classmethod
+    def get_test_params(cls, parameter_set="default"):
         """Get the test parameters for the optimizer.
 
         Returns
