@@ -127,3 +127,25 @@ class RepulsingHillClimbing(_BaseGFOadapter):
         from gradient_free_optimizers import RepulsingHillClimbingOptimizer
 
         return RepulsingHillClimbingOptimizer
+
+    def get_test_params(self):
+        """Get the test parameters for the optimizer.
+
+        Returns
+        -------
+        dict with str keys
+            The test parameters dictionary.
+        """
+        import numpy as np
+
+        params = super().get_test_params()
+        more_params = {
+            "repulsion_factor": 7,
+            "search_space": {
+                "C": np.array([0.01, 0.1, 1, 10]),
+                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+            },
+            "n_iter": 100,
+        }
+        params.update(more_params)
+        return params
