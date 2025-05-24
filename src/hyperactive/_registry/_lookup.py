@@ -34,6 +34,16 @@ def all_objects(
     Not included are: the base classes themselves, classes defined in test
     modules.
 
+    To filter by object type, use the ``object_types`` parameter:
+
+    * ``"optimizer"``: optimizers, e.g., the Hill Climbing optimizer,
+      or the Particle Swarm optimizer
+    * ``"experiment"``: experiments, e.g., the Ackley function, or an ``sklearn``
+      cross-validation experiment
+    * if ``None``, no filter is applied and all objects are returned.
+
+    To filter by tag, use the ``filter_tags`` parameter.
+
     Parameters
     ----------
     object_types: str, list of str, optional (default=None)
