@@ -25,7 +25,7 @@ def _to_list(obj):
 def test_all_objects_by_scitype(object_type, return_names):
     """Check that all_objects return argument has correct type."""
     objects = all_objects(
-        object_type=object_type,
+        object_types=object_type,
         return_names=return_names,
     )
 
