@@ -248,3 +248,53 @@ class TestAllOptimizers(OptimizerFixtureGenerator):
         msg = "Optimizer best_params_ must equal the best_params returned by run."
         if not object_instance.best_params_ == best_params:
             raise ValueError(msg)
+
+    def test_gfo_integration(self, object_instance):
+        """Integration test for optimizer end-to-end, for GFO optimizers only.
+
+        Runs the optimizer on the sklearn tuning experiment.
+        """
+        from hyperactive.opt._adapters._gfo import _BaseGFOadapter
+        if not isinstance(object_instance, _BaseGFOadapter):
+            return None
+
+        optimizer = object_instance
+
+        # 1. define the experiment
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+        from sklearn.datasets import load_iris
+        from sklearn.svm import SVC
+        from sklearn.metrics import accuracy_score
+        from sklearn.model_selection import KFold
+
+        X, y = load_iris(return_X_y=True)
+
+        sklearn_exp = SklearnCvExperiment(
+            estimator=SVC(),
+            scoring=accuracy_score,
+            cv=KFold(n_splits=3, shuffle=True),
+            X=X,
+            y=y,
+        )
+
+        # 2. set up the optimizer
+        import numpy as np
+
+        _config = {
+            "search_space": {
+            "C": np.array([0.01, 0.1, 1, 10]),
+            "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+            },
+            "n_iter": 100,
+            "experiment": sklearn_exp,
+        }
+        optimizer = optimizer.clone().set_params(**_config)
+
+        # 3. run the HillClimbing optimizer
+        optimizer.run()
+
+        best_params = optimizer.best_params_
+        assert best_params is not None, "Best parameters should not be None"
+        assert isinstance(best_params, dict), "Best parameters should be a dictionary"
+        assert "C" in best_params, "Best parameters should contain 'C'"
+        assert "gamma" in best_params, "Best parameters should contain 'gamma'"
