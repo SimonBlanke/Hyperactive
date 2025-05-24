@@ -9,7 +9,6 @@ import pytest
 
 from hyperactive.registry import all_objects
 
-
 object_types = ["optimizer", "experiment"]
 
 
