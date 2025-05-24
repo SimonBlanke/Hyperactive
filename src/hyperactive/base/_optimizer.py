@@ -26,7 +26,7 @@ class BaseOptimizer(BaseObject):
         self._experiment = search_config.pop("experiment", None)
 
         if self.get_tag("info:name") is None:
-            self.set_tag("info:name", self.__class__.__name__)
+            self.set_tags(**{"info:name": self.__class__.__name__})
 
     def get_search_config(self):
         """Get the search configuration.
