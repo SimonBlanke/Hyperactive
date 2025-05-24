@@ -11,10 +11,11 @@ class _BaseGFOadapter(BaseOptimizer):
     """Adapter base class for gradient-free-optimizers.
 
     * default tag setting
-    * Handles defaults for "initialize"
-    * provides default get_search_config
-    * provides default get_test_params
-    * extension interface: _get_gfo_class
+    * default _run method
+    * default get_search_config
+    * default get_test_params
+    * Handles defaults for "initialize" parameter
+    * extension interface: _get_gfo_class, docstring, tags
     """
 
     _tags = {
