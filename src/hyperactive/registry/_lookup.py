@@ -147,7 +147,7 @@ def all_objects(
 
     Examples
     --------
-    >>> from hyperactive._registry import all_objects
+    >>> from hyperactive.registry import all_objects
     >>> # return a complete list of objects as pd.Dataframe
     >>> all_objects(as_dataframe=True)  # doctest: +SKIP
 
