@@ -40,6 +40,8 @@ class PackageConfig:
         # general tags
         "object_type",
         "python_dependencies",
+        "authors",
+        "maintainers",
         # experiments
         "property:randomness",
         # optimizers
