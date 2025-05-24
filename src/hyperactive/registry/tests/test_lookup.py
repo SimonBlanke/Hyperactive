@@ -41,7 +41,7 @@ def test_all_objects_by_scitype(object_type, return_names):
             obj_cls = obj[1]
             assert isinstance(name, str)
             assert hasattr(obj_cls, "__name__")
-            assert name == obj_cls[1].__name__
+            assert name == obj_cls.__name__
         else:
             obj_cls = obj
 
