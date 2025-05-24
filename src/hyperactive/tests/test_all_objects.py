@@ -43,7 +43,10 @@ class PackageConfig:
         # experiments
         "property:randomness",
         # optimizers
-        # none yet
+        "info:name",  # str
+        "info:local_vs_global",  # "local", "mixed", "global"
+        "info:explore_vs_exploit",  # "explore", "exploit", "mixed"
+        "info:compute",  # "low", "middle", "high"
     ]
 
 
