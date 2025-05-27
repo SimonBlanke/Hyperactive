@@ -1,7 +1,7 @@
 """Individual optimization algorithms."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-from hyperactive.opt.hillclimbing import (
+from hyperactive.opt.gfo import (
     HillClimbing,
     RepulsingHillClimbing,
     StochasticHillClimbing,
