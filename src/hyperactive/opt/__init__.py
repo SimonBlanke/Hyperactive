@@ -6,7 +6,7 @@ from hyperactive.opt.gfo import (
     RepulsingHillClimbing,
     StochasticHillClimbing,
 )
-from hyperactive.opt.gridsearch import GridSearch
+from hyperactive.opt.sk import GridSearch
 
 __all__ = [
     "GridSearch",
