@@ -11,7 +11,7 @@ from hyperactive.base import BaseOptimizer
 
 
 class GridSearch(BaseOptimizer):
-    """Grid search optimizer.
+    """Grid search optimizer, with backend selection and sklearn style parameter grid.
 
     Parameters
     ----------
