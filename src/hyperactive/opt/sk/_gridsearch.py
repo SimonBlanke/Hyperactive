@@ -11,7 +11,7 @@ from hyperactive.base import BaseOptimizer
 
 
 class GridSearch(BaseOptimizer):
-    """Grid search optimizer.
+    """Grid search optimizer, with backend selection and sklearn style parameter grid.
 
     Parameters
     ----------
@@ -22,7 +22,7 @@ class GridSearch(BaseOptimizer):
         The score to assign if an error occurs during the evaluation of a parameter set.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
-        Optional, can be passed later in ``add_search``.
+        Optional, can be passed later via ``set_params``.
 
     Example
     -------
