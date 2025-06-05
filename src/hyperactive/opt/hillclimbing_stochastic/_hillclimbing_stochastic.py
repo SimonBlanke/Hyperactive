@@ -60,7 +60,7 @@ class HillClimbingStochastic(_BaseGFOadapter):
     ... )
 
     2. setting up the hill climbing optimizer:
-    >>> from hyperactive.opt import StochasticHillClimbing
+    >>> from hyperactive.opt import HillClimbingStochastic
     >>> import numpy as np
     >>> 
     >>> hc_config = {
@@ -70,7 +70,7 @@ class HillClimbingStochastic(_BaseGFOadapter):
     ...     },
     ...     "n_iter": 100,
     ... }
-    >>> hillclimbing = StochasticHillClimbing(experiment=sklearn_exp, **hc_config)
+    >>> hillclimbing = HillClimbingStochastic(experiment=sklearn_exp, **hc_config)
 
     3. running the hill climbing search:
     >>> best_params = hillclimbing.run()
