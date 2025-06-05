@@ -44,7 +44,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
     1. defining the tuned estimator:
     >>> from sklearn.svm import SVC
     >>> from hyperactive.integrations.sklearn import OptCV
-    >>> from hyperactive.opt import GridSearch
+    >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
     >>> param_grid = {"kernel": ["linear", "rbf"], "C": [1, 10]}
     >>> tuned_svc = OptCV(SVC(), GridSearch(param_grid))

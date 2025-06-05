@@ -1,7 +1,7 @@
 from sklearn import svm
 
 from hyperactive.integrations import HyperactiveSearchCV, OptCV
-from hyperactive.opt import GridSearch
+from hyperactive.opt import GridSearchSk as GridSearch
 from hyperactive.optimizers import RandomSearchOptimizer
 
 from sklearn.model_selection import KFold

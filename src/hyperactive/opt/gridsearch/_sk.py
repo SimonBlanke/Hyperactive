@@ -10,7 +10,7 @@ from sklearn.model_selection import ParameterGrid
 from hyperactive.base import BaseOptimizer
 
 
-class GridSearch(BaseOptimizer):
+class GridSearchSk(BaseOptimizer):
     """Grid search optimizer, with backend selection and sklearn style parameter grid.
 
     Parameters
@@ -42,7 +42,7 @@ class GridSearch(BaseOptimizer):
     ... )
 
     2. setting up the grid search optimizer:
-    >>> from hyperactive.opt import GridSearch
+    >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>> param_grid = {
     ...     "C": [0.01, 0.1, 1, 10],
     ...     "gamma": [0.0001, 0.01, 0.1, 1, 10],

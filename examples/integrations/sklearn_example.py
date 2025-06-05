@@ -1,7 +1,6 @@
 from sklearn import svm, datasets
 
 from hyperactive.integrations import HyperactiveSearchCV
-from sklearn.model_selection import GridSearchCV
 from hyperactive.optimizers import RandomSearchOptimizer
 
 iris = datasets.load_iris()
