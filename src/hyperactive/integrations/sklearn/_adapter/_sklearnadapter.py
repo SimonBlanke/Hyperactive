@@ -18,12 +18,14 @@ class _SklearnAdapter:
 
     def _check_data(self, X, y):
         X, y = indexable(X, y)
+        if hasattr(X, "ndim") and X.ndim == 1:
+            X = X.reshape(-1, 1)
         if hasattr(self, "_validate_data"):
             validate_data = self._validate_data
         else:
             from sklearn.utils.validation import validate_data
 
-        return validate_data(X, y, ensure_2d=False)
+        return validate_data(X, y)
 
     @property
     def fit_successful(self):
