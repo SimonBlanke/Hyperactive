@@ -61,8 +61,6 @@ test = [
   "pathos",
 ]
 all_extras = [
-  "hyperactive[build]",
-  "hyperactive[test]",
   "hyperactive[integrations]",
 ]
 
