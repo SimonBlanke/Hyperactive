@@ -1,4 +1,5 @@
 """Adapter for gfo package."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.base import BaseOptimizer
@@ -40,9 +41,7 @@ class _BaseGFOadapter(BaseOptimizer):
         class
             The GFO class to use. One of the concrete GFO classes
         """
-        raise NotImplementedError(
-            "This method should be implemented in a subclass."
-        )
+        raise NotImplementedError("This method should be implemented in a subclass.")
 
     def get_search_config(self):
         """Get the search configuration.
@@ -143,5 +142,12 @@ class _BaseGFOadapter(BaseOptimizer):
             },
             "n_iter": 100,
         }
-        
-        return [params_sklearn, params_ackley]
+        params_ackley_list = {
+            "experiment": ackley_exp,
+            "search_space": {
+                "x0": list(np.linspace(-5, 5, 10)),
+                "x1": list(np.linspace(-5, 5, 10)),
+            },
+            "n_iter": 100,
+        }
+        return [params_sklearn, params_ackley, params_ackley_list]
