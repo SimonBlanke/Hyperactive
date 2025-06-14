@@ -17,9 +17,10 @@ from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
 from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
+from hyperactive.integrations.sklearn._adapter import _SklearnAdapter
 
 
-class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
+class HyperactiveSearchCV(_SklearnAdapter, BaseEstimator, _BestEstimator_, Checks):
     """
     HyperactiveSearchCV class for hyperparameter tuning using cross-validation with sklearn estimators.
 

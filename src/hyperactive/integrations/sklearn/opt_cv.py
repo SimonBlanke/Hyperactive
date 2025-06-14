@@ -10,10 +10,11 @@ from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
 from hyperactive.integrations.sklearn.best_estimator import (
     BestEstimator as _BestEstimator_
 )
+from hyperactive.integrations.sklearn._adapter import _SklearnAdapter
 from hyperactive.integrations.sklearn.checks import Checks
 
 
-class OptCV(BaseEstimator, _BestEstimator_, Checks):
+class OptCV(_SklearnAdapter, BaseEstimator, _BestEstimator_, Checks):
     """Tuning via any optimizer in the hyperactive API.
 
     Parameters
