@@ -18,6 +18,9 @@ class DictClass:
     def values(self):
         return self.search_space.values()
 
+    def items(self):
+        return self.search_space.items()
+
 
 class SearchSpace(DictClass):
     def __init__(self, search_space):

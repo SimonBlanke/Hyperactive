@@ -41,11 +41,13 @@ dependencies = [
   "tqdm >=4.48.0, <5.0.0",
   "pandas <3.0.0",
   "gradient-free-optimizers >=1.2.4, <2.0.0",
+  "scikit-base <1.0.0",
+  "scikit-learn <1.7.0",
 ]
 
 [project.optional-dependencies]
 sklearn-integration = [
-  "scikit-learn == 1.6.1",
+  "scikit-learn <1.7.0",
 ]
 build = [
   "setuptools",
