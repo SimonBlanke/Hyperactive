@@ -3,11 +3,14 @@
 # License: MIT License
 
 
-from tqdm import tqdm
-
-
 def _process_(nth_process, optimizer):
     if "progress_bar" in optimizer.verbosity:
+        from skbase.utils.dependencies import _check_soft_dependencies
+
+        _check_soft_dependencies("tqdm", obj="progress_bar verbosity")
+
+        from tqdm import tqdm
+
         p_bar = tqdm(
             position=nth_process,
             total=optimizer.n_iter,

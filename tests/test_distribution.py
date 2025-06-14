@@ -1,6 +1,6 @@
 import numpy as np
 import sys, pytest
-from tqdm import tqdm
+from skbase.utils.dependencies import _check_soft_dependencies
 
 from hyperactive import Hyperactive
 
@@ -82,7 +82,10 @@ def test_multiprocessing_0():
     hyper.run()
 
 
+@pytest.mark.skipif(not _check_soft_dependencies("tqdm"), severity="none")
 def test_multiprocessing_1():
+    from tqdm import tqdm
+
     hyper = Hyperactive(
         distribution={
             "multiprocessing": {
