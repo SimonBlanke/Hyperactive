@@ -4,6 +4,7 @@ from inspect import isclass
 import shutil
 
 from skbase.testing import BaseFixtureGenerator as _BaseFixtureGenerator
+from skbase.testing import QuickTester as _QuickTester
 from skbase.testing import TestAllObjects as _TestAllObjects
 
 from hyperactive._registry import all_objects
@@ -154,7 +155,7 @@ class ExperimentFixtureGenerator(BaseFixtureGenerator):
     object_type_filter = "experiment"
 
 
-class TestAllExperiments(ExperimentFixtureGenerator):
+class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
     """Module level tests for all experiment classes."""
 
     def test_paramnames(self, object_class):
@@ -204,7 +205,7 @@ class OptimizerFixtureGenerator(BaseFixtureGenerator):
     object_type_filter = "optimizer"
 
 
-class TestAllOptimizers(OptimizerFixtureGenerator):
+class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
     """Module level tests for all optimizer classes."""
 
     def test_opt_run(self, object_instance):
