@@ -46,7 +46,7 @@ dependencies = [
 
 [project.optional-dependencies]
 sklearn-integration = [
-  "scikit-learn == 1.6.1",
+  "scikit-learn < 1.7.0",
 ]
 build = [
   "setuptools",
@@ -60,8 +60,6 @@ test = [
   "pathos",
 ]
 all_extras = [
-  "hyperactive[build]",
-  "hyperactive[test]",
   "hyperactive[integrations]",
 ]
 
