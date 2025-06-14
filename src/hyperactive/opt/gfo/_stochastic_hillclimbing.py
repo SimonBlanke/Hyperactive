@@ -1,10 +1,11 @@
 """Hill climbing optimizer from gfo."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.opt._adapters._gfo import _BaseGFOadapter
 
 
-class HillClimbingStochastic(_BaseGFOadapter):
+class StochasticHillClimbing(_BaseGFOadapter):
     """Stochastic hill climbing optimizer.
 
     Parameters
@@ -62,7 +63,7 @@ class HillClimbingStochastic(_BaseGFOadapter):
     2. setting up the hill climbing optimizer:
     >>> from hyperactive.opt import HillClimbingStochastic
     >>> import numpy as np
-    >>> 
+    >>>
     >>> hc_config = {
     ...     "search_space": {
     ...         "C": np.array([0.01, 0.1, 1, 10]),

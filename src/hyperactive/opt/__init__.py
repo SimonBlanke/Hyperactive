@@ -5,8 +5,8 @@
 from hyperactive.opt.gridsearch import GridSearchSk
 from .gfo import (
     HillClimbing,
-    HillClimbingStochastic,
-    HillClimbingRepulsing,
+    StochasticHillClimbing,
+    RepulsingHillClimbing,
     SimulatedAnnealing,
     DownhillSimplexOptimizer,
     RandomSearch,
@@ -27,11 +27,12 @@ from .gfo import (
     ForestOptimizer,
 )
 
+
 __all__ = [
     "GridSearchSk",
     "HillClimbing",
-    "HillClimbingRepulsing",
-    "HillClimbingStochastic",
+    "RepulsingHillClimbing",
+    "StochasticHillClimbing",
     "SimulatedAnnealing",
     "DownhillSimplexOptimizer",
     "RandomSearch",

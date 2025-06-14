@@ -3,8 +3,8 @@
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from ._hillclimbing import HillClimbing
-from ._hillclimbing_stochastic import HillClimbingStochastic
-from ._hillclimbing_repulsing import HillClimbingRepulsing
+from ._stochastic_hillclimbing import StochasticHillClimbing
+from ._repulsing_hillclimbing import RepulsingHillClimbing
 from ._simulated_annealing import SimulatedAnnealing
 from ._downhill_simplex import DownhillSimplexOptimizer
 from ._random_search import RandomSearch
@@ -27,8 +27,8 @@ from ._forest_optimizer import ForestOptimizer
 
 __all__ = [
     "HillClimbing",
-    "HillClimbingRepulsing",
-    "HillClimbingStochastic",
+    "RepulsingHillClimbing",
+    "StochasticHillClimbing",
     "SimulatedAnnealing",
     "DownhillSimplexOptimizer",
     "RandomSearch",
