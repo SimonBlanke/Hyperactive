@@ -18,9 +18,6 @@ class _SklearnAdapter:
 
     def _check_data(self, X, y):
         X, y = indexable(X, y)
-        if X is not None:
-            if X.ndim == 1:
-                X = X.reshape(-1, 1)
         if hasattr(self, "_validate_data"):
             validate_data = self._validate_data
         else:
