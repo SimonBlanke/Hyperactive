@@ -5,7 +5,6 @@
 
 from sklearn.utils.metaestimators import available_if
 from sklearn.utils.deprecation import _deprecate_Xt_in_inverse_transform
-from sklearn.exceptions import NotFittedError
 from sklearn.utils.validation import check_is_fitted
 
 from .utils import _estimator_has
@@ -47,8 +46,7 @@ class BestEstimator:
         return self.best_estimator_.transform(X)
 
     @available_if(_estimator_has("inverse_transform"))
-    def inverse_transform(self, X=None, Xt=None):
-        X = _deprecate_Xt_in_inverse_transform(X, Xt)
+    def inverse_transform(self, X=None):
         check_is_fitted(self)
         return self.best_estimator_.inverse_transform(X)
 
