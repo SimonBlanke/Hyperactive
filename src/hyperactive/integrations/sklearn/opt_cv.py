@@ -10,10 +10,11 @@ from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
 from hyperactive.integrations.sklearn.best_estimator import (
     BestEstimator as _BestEstimator_
 )
+from hyperactive.integrations.sklearn._adapter import _SklearnAdapter
 from hyperactive.integrations.sklearn.checks import Checks
 
 
-class OptCV(BaseEstimator, _BestEstimator_, Checks):
+class OptCV(_SklearnAdapter, BaseEstimator, _BestEstimator_, Checks):
     """Tuning via any optimizer in the hyperactive API.
 
     Parameters
@@ -82,23 +83,6 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         self.scoring = scoring
         self.refit = refit
         self.cv = cv
-
-    def _refit(self, X, y=None, **fit_params):
-        self.best_estimator_ = clone(self.estimator).set_params(
-            **clone(self.best_params_, safe=False)
-        )
-
-        self.best_estimator_.fit(X, y, **fit_params)
-        return self
-
-    def _check_data(self, X, y):
-        X, y = indexable(X, y)
-        if hasattr(self, "_validate_data"):
-            validate_data = self._validate_data
-        else:
-            from sklearn.utils.validation import validate_data
-
-        return validate_data(X, y)
 
     @Checks.verify_fit
     def fit(self, X, y, **fit_params):
