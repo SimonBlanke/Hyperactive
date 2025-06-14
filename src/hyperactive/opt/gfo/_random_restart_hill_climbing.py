@@ -1,90 +1,36 @@
-"""Hill climbing optimizer from gfo."""
-# copyright: hyperactive developers, MIT License (see LICENSE file)
-
 from hyperactive.opt._adapters._gfo import _BaseGFOadapter
 
 
-class HillClimbingStochastic(_BaseGFOadapter):
-    """Stochastic hill climbing optimizer.
+class RandomRestartHillClimbing(_BaseGFOadapter):
+    """Random restart hill climbing optimizer.
 
     Parameters
     ----------
     search_space : dict[str, list]
         The search space to explore. A dictionary with parameter
         names as keys and a numpy array as values.
-        Optional, can be passed later via ``set_params``.
-    initialize : dict[str, int], default={"grid": 4, "random": 2, "vertices": 4}
+    initialize : dict[str, int]
         The method to generate initial positions. A dictionary with
         the following key literals and the corresponding value type:
         {"grid": int, "vertices": int, "random": int, "warm_start": list[dict]}
-    constraints : list[callable], default=[]
+    constraints : list[callable]
         A list of constraints, where each constraint is a callable.
         The callable returns `True` or `False` dependend on the input parameters.
-    random_state : None, int, default=None
+    random_state : None, int
         If None, create a new random state. If int, create a new random state
         seeded with the value.
-    rand_rest_p : float, default=0.1
+    rand_rest_p : float
         The probability of a random iteration during the the search process.
-    epsilon : float, default=0.01
+    epsilon : float
         The step-size for the climbing.
-    distribution : str, default="normal"
+    distribution : str
         The type of distribution to sample from.
-    n_neighbours : int, default=10
+    n_neighbours : int
         The number of neighbours to sample and evaluate before moving to the best
         of those neighbours.
-    p_accept : float, default=0.5
-        The probability of accepting a transition in the hill climbing process.
-    n_iter : int, default=100
-        The number of iterations to run the optimizer.
-    verbose : bool, default=False
-        If True, print the progress of the optimization process.
-    experiment : BaseExperiment, optional
-        The experiment to optimize parameters for.
-        Optional, can be passed later via ``set_params``.
-
-    Examples
-    --------
-    Hill climbing applied to scikit-learn parameter tuning:
-
-    1. defining the experiment to optimize:
-    >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from sklearn.datasets import load_iris
-    >>> from sklearn.svm import SVC
-    >>>
-    >>> X, y = load_iris(return_X_y=True)
-    >>>
-    >>> sklearn_exp = SklearnCvExperiment(
-    ...     estimator=SVC(),
-    ...     X=X,
-    ...     y=y,
-    ... )
-
-    2. setting up the hill climbing optimizer:
-    >>> from hyperactive.opt import HillClimbingStochastic
-    >>> import numpy as np
-    >>> 
-    >>> hc_config = {
-    ...     "search_space": {
-    ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
-    ...     },
-    ...     "n_iter": 100,
-    ... }
-    >>> hillclimbing = HillClimbingStochastic(experiment=sklearn_exp, **hc_config)
-
-    3. running the hill climbing search:
-    >>> best_params = hillclimbing.run()
-
-    Best parameters can also be accessed via the attributes:
-    >>> best_params = hillclimbing.best_params_
+    n_iter_restart : int
+        The number of iterations after which to restart at a random position.
     """
-
-    _tags = {
-        "info:name": "Hill Climbing",
-        "info:local_vs_global": "local",  # "local", "mixed", "global"
-        "info:explore_vs_exploit": "exploit",  # "explore", "exploit", "mixed"
-        "info:compute": "low",  # "low", "middle", "high"
-    }
 
     def __init__(
         self,
@@ -96,7 +42,7 @@ class HillClimbingStochastic(_BaseGFOadapter):
         epsilon=0.01,
         distribution="normal",
         n_neighbours=10,
-        p_accept=0.5,
+        n_iter_restart=0.5,
         n_iter=100,
         verbose=False,
         experiment=None,
@@ -106,10 +52,10 @@ class HillClimbingStochastic(_BaseGFOadapter):
         self.epsilon = epsilon
         self.distribution = distribution
         self.n_neighbours = n_neighbours
+        self.n_iter_restart = n_iter_restart
         self.search_space = search_space
         self.initialize = initialize
         self.constraints = constraints
-        self.p_accept = p_accept
         self.n_iter = n_iter
         self.experiment = experiment
         self.verbose = verbose
@@ -124,9 +70,9 @@ class HillClimbingStochastic(_BaseGFOadapter):
         class
             The GFO class to use. One of the concrete GFO classes
         """
-        from gradient_free_optimizers import StochasticHillClimbingOptimizer
+        from gradient_free_optimizers import RandomRestartHillClimbingOptimizer
 
-        return StochasticHillClimbingOptimizer
+        return RandomRestartHillClimbingOptimizer
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -143,7 +89,7 @@ class HillClimbingStochastic(_BaseGFOadapter):
         experiment = params[0]["experiment"]
         more_params = {
             "experiment": experiment,
-            "p_accept": 0.33,
+            "n_iter_restart": 2,
             "search_space": {
                 "C": np.array([0.01, 0.1, 1, 10]),
                 "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),

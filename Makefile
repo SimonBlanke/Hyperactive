@@ -36,7 +36,7 @@ test-search_space:
 	done
 
 test-pytest:
-	python -m pytest --durations=10 -x -p  no:warnings tests/; \
+	python -m pytest --durations=10 -x -p  no:warnings tests/ src/hyperactive/; \
 
 test-timings:
 	cd tests/_local_test_timings; \

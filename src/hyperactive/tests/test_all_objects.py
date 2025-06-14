@@ -4,6 +4,7 @@ from inspect import isclass
 import shutil
 
 from skbase.testing import BaseFixtureGenerator as _BaseFixtureGenerator
+from skbase.testing import QuickTester as _QuickTester
 from skbase.testing import TestAllObjects as _TestAllObjects
 
 from hyperactive._registry import all_objects
@@ -154,7 +155,7 @@ class ExperimentFixtureGenerator(BaseFixtureGenerator):
     object_type_filter = "experiment"
 
 
-class TestAllExperiments(ExperimentFixtureGenerator):
+class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
     """Module level tests for all experiment classes."""
 
     def test_paramnames(self, object_class):
@@ -165,9 +166,9 @@ class TestAllExperiments(ExperimentFixtureGenerator):
         for inst, obj_param in zip(inst_params, obj_params):
             obj_inst = object_class(**inst)
             paramnames = obj_inst.paramnames()
-            assert set(obj_param.keys()) <= set(paramnames), (
-                f"Parameter names do not match: {paramnames} != {obj_param}"
-            )
+            assert set(obj_param.keys()) <= set(
+                paramnames
+            ), f"Parameter names do not match: {paramnames} != {obj_param}"
 
     def test_score_function(self, object_class):
         """Test that substituting into score works as intended."""
@@ -204,16 +205,14 @@ class OptimizerFixtureGenerator(BaseFixtureGenerator):
     object_type_filter = "optimizer"
 
 
-class TestAllOptimizers(OptimizerFixtureGenerator):
+class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
     """Module level tests for all optimizer classes."""
 
     def test_opt_run(self, object_instance):
         """Test that run returns the expected result."""
         paramnames = object_instance.get_params().keys()
         if "experiment" not in paramnames:
-            raise ValueError(
-                "Optimizer must have an 'experiment' parameter."
-            )
+            raise ValueError("Optimizer must have an 'experiment' parameter.")
         # check that experiment occurs last in __init__ signature
         if not object_instance.__init__.__code__.co_varnames[-1] == "experiment":
             raise ValueError(
@@ -255,6 +254,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator):
         Runs the optimizer on the sklearn tuning experiment.
         """
         from hyperactive.opt._adapters._gfo import _BaseGFOadapter
+
         if not isinstance(object_instance, _BaseGFOadapter):
             return None
 
@@ -282,8 +282,8 @@ class TestAllOptimizers(OptimizerFixtureGenerator):
 
         _config = {
             "search_space": {
-            "C": np.array([0.01, 0.1, 1, 10]),
-            "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+                "C": np.array([0.01, 0.1, 1, 10]),
+                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
             },
             "n_iter": 100,
             "experiment": sklearn_exp,
