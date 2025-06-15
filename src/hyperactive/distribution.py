@@ -2,10 +2,13 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
+from skbase.utils.dependencies import _check_soft_dependencies
 from sys import platform
-from tqdm import tqdm
 
-if platform.startswith("linux"):
+if platform.startswith("linux") and _check_soft_dependencies("tqdm", severity="none"):
+    from tqdm import tqdm
+
+    # Use tqdm's lock for multiprocessing to avoid issues with progress bars
     initializer = tqdm.set_lock
     initargs = (tqdm.get_lock(),)
 else:
