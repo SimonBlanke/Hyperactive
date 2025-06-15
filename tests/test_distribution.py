@@ -82,7 +82,11 @@ def test_multiprocessing_0():
     hyper.run()
 
 
-@pytest.mark.skipif(not _check_soft_dependencies("tqdm"), severity="none")
+@pytest.mark.skipif(
+    not _check_soft_dependencies("tqdm"),
+    severity="none",
+    reason="if soft dependency tqdm is not installed, skip tqdm related tests",
+)
 def test_multiprocessing_1():
     from tqdm import tqdm
 
