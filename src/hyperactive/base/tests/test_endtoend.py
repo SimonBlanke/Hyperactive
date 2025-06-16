@@ -26,7 +26,7 @@ def test_endtoend_hillclimbing():
 
     # 2. set up the HillClimbing optimizer
     import numpy as np
-    from hyperactive.opt.gfo import HillClimbing
+    from hyperactive.opt import HillClimbing
 
     hillclimbing_config = {
         "search_space": {
