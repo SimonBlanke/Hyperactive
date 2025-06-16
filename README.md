@@ -29,7 +29,7 @@
 | **Open&#160;Source** | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GC.OS Sponsored](https://img.shields.io/badge/GC.OS-Sponsored%20Project-orange.svg?style=flat&colorA=0eac92&colorB=2077b4)](https://gc-os-ai.github.io/) |
 |---|---|
 | **Community** | [![!discord](https://img.shields.io/static/v1?logo=discord&label=discord&message=chat&color=lightgreen)](https://discord.com/invite/54ACzaFsn7) [![!slack](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/german-center-for-open-source-ai)  |
-| **CI/CD** | [![github-actions](https://img.shields.io/github/actions/workflow/status/hyperactive/hyperactive/wheels.yml?logo=github)](https://github.com/hyperactive/hyperactive/actions/workflows/wheels.yml) [![readthedocs](https://img.shields.io/readthedocs/hyperactive?logo=readthedocs)](https://www.hyperactive.net/en/latest/?badge=latest)
+| **CI/CD** | [![github-actions](https://img.shields.io/github/actions/workflow/status/hyperactive/hyperactive/test.yml?logo=github)](https://github.com/hyperactive/hyperactive/actions/workflows/test.yml) [![readthedocs](https://img.shields.io/readthedocs/hyperactive?logo=readthedocs)](https://www.hyperactive.net/en/latest/?badge=latest)
 | **Code** |  [![!pypi](https://img.shields.io/pypi/v/hyperactive?color=orange)](https://pypi.org/project/hyperactive/) [![!python-versions](https://img.shields.io/pypi/pyversions/hyperactive)](https://www.python.org/) [![!black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  |
 
 
