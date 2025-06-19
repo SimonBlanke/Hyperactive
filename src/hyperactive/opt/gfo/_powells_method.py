@@ -35,7 +35,43 @@ class PowellsMethod(_BaseGFOadapter):
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
-    """
+
+    Examples
+    --------
+    Basic usage of PowellsMethod with a scikit-learn experiment:
+
+    1. defining the experiment to optimize:
+    >>> from hyperactive.experiment.integrations import SklearnCvExperiment
+    >>> from sklearn.datasets import load_iris
+    >>> from sklearn.svm import SVC
+    >>>
+    >>> X, y = load_iris(return_X_y=True)
+    >>>
+    >>> sklearn_exp = SklearnCvExperiment(
+    ...     estimator=SVC(),
+    ...     X=X,
+    ...     y=y,
+    ... )
+
+    2. setting up the powellsMethod optimizer:
+    >>> from hyperactive.opt import PowellsMethod
+    >>> import numpy as np
+    >>>
+    >>> config = {
+    ...     "search_space": {
+    ...         "C": np.array([0.01, 0.1, 1, 10]),
+    ...         "gamma": : np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...     },
+    ...     "n_iter": 100,
+    ... }
+    >>> optimizer = PowellsMethod(experiment=sklearn_exp, **config)
+
+    3. running the optimization:
+    >>> best_params = optimizer.run()
+
+    Best parameters can also be accessed via:
+    >>> best_params = optimizer.best_params_
+ """
 
     def __init__(
         self,
