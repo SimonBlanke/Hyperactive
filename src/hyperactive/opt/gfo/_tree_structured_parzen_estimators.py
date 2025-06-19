@@ -26,7 +26,7 @@ class TreeStructuredParzenEstimators(_BaseGFOadapter):
         The warm start for SMBO.
     max_sample_size : int
         The maximum number of points to sample.
-    sampling : dict
+    sampling : dict0
         The sampling method to use.
     replacement : bool
         Whether to sample with replacement.
@@ -40,6 +40,13 @@ class TreeStructuredParzenEstimators(_BaseGFOadapter):
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
     """
+
+    _tags = {
+        "info:name": "Tree Structured Parzen Estimators",
+        "info:local_vs_global": "mixed",  # "local", "mixed", "global"
+        "info:explore_vs_exploit": "mixed",  # "explore", "exploit", "mixed"
+        "info:compute": "high",  # "low", "middle", "high"
+    }
 
     def __init__(
         self,
