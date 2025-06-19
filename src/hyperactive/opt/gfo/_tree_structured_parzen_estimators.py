@@ -75,7 +75,7 @@ class TreeStructuredParzenEstimators(_BaseGFOadapter):
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
- """
+    """
 
     _tags = {
         "info:name": "Tree Structured Parzen Estimators",

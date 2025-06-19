@@ -1,4 +1,5 @@
 """Hill climbing optimizer from gfo."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.opt._adapters._gfo import _BaseGFOadapter
@@ -60,7 +61,7 @@ class HillClimbing(_BaseGFOadapter):
     2. setting up the hill climbing optimizer:
     >>> from hyperactive.opt import HillClimbing
     >>> import numpy as np
-    >>> 
+    >>>
     >>> hillclimbing_config = {
     ...     "search_space": {
     ...         "C": np.array([0.01, 0.1, 1, 10]),

@@ -63,7 +63,14 @@ class RandomSearch(_BaseGFOadapter):
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
- """
+    """
+    _tags = {
+        "info:name": "Random Search",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "explore",
+        "info:compute": "low",
+    }
+
 
     def __init__(
         self,

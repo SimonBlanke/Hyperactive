@@ -75,7 +75,14 @@ class SimulatedAnnealing(_BaseGFOadapter):
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
- """
+    """
+    _tags = {
+        "info:name": "Simulated Annealing",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "explore",
+        "info:compute": "middle",
+    }
+
 
     def __init__(
         self,

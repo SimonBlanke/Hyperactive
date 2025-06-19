@@ -66,7 +66,14 @@ class RandomRestartHillClimbing(_BaseGFOadapter):
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
- """
+    """
+    _tags = {
+        "info:name": "Random Restart Hill Climbing",
+        "info:local_vs_global": "local",
+        "info:explore_vs_exploit": "mixed",
+        "info:compute": "middle",
+    }
+
 
     def __init__(
         self,

@@ -71,7 +71,14 @@ class PowellsMethod(_BaseGFOadapter):
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
- """
+    """
+    _tags = {
+        "info:name": "Powell’s Method",
+        "info:local_vs_global": "local",
+        "info:explore_vs_exploit": "exploit",
+        "info:compute": "low",
+    }
+
 
     def __init__(
         self,

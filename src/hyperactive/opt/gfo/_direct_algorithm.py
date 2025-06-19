@@ -72,7 +72,14 @@ class DirectAlgorithm(_BaseGFOadapter):
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
- """
+    """
+    _tags = {
+        "info:name": "DIRECT Algorithm",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "mixed",
+        "info:compute": "high",
+    }
+
 
     def __init__(
         self,
