@@ -40,10 +40,10 @@ class BaseOptimizer(BaseObject):
         search_config = self.get_params(deep=False)
         search_config.pop("experiment", None)
 
-        if search_config["sampling"] is None:
+        if "sampling" in search_config and search_config["sampling"] is None:
             search_config["sampling"] = {"random": 1000000}
 
-        if search_config["tree_para"] is None:
+        if "tree_para" in search_config and search_config["tree_para"] is None:
             search_config["tree_para"] = {"n_estimators": 100}
 
         return search_config
