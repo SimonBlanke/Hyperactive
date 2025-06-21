@@ -55,7 +55,7 @@ class RandomRestartHillClimbing(_BaseGFOadapter):
     >>> config = {
     ...     "search_space": {
     ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": : np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
     ...     },
     ...     "n_iter": 100,
     ... }
@@ -67,13 +67,13 @@ class RandomRestartHillClimbing(_BaseGFOadapter):
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
     """
+
     _tags = {
         "info:name": "Random Restart Hill Climbing",
         "info:local_vs_global": "local",
         "info:explore_vs_exploit": "mixed",
         "info:compute": "middle",
     }
-
 
     def __init__(
         self,

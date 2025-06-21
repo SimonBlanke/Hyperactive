@@ -61,7 +61,7 @@ class LipschitzOptimizer(_BaseGFOadapter):
     >>> config = {
     ...     "search_space": {
     ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": : np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
     ...     },
     ...     "n_iter": 100,
     ... }
