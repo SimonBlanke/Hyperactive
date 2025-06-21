@@ -54,7 +54,62 @@ class _BaseGFOadapter(BaseOptimizer):
         search_config = super().get_search_config()
         search_config["initialize"] = self._initialize
         del search_config["verbose"]
+
+        search_config = self._handle_gfo_defaults(search_config)
+
+        search_config["search_space"] = self._to_dict_np(search_config["search_space"])
+
         return search_config
+
+    def _handle_gfo_defaults(self, search_config):
+        """Handle default values for GFO search configuration.
+
+        Temporary measure until GFO handles defaults gracefully.
+
+        Parameters
+        ----------
+        search_config : dict with str keys
+            The search configuration dictionary to handle defaults for.
+
+        Returns
+        -------
+        search_config : dict with str keys
+            The search configuration dictionary with defaults handled.
+        """
+        if "sampling" in search_config and search_config["sampling"] is None:
+            search_config["sampling"] = {"random": 1000000}
+
+        if "tree_para" in search_config and search_config["tree_para"] is None:
+            search_config["tree_para"] = {"n_estimators": 100}
+
+        return search_config
+
+    def _to_dict_np(self, search_space):
+        """Coerce the search space to a format suitable for gfo optimizers.
+
+        gfo expects dicts of numpy arrays, not lists.
+        This method coerces lists or tuples in the search space to numpy arrays.
+
+        Parameters
+        ----------
+        search_space : dict with str keys and iterable values
+            The search space to coerce.
+
+        Returns
+        -------
+        dict with str keys and 1D numpy arrays as values
+            The coerced search space.
+        """
+        import numpy as np
+
+        def coerce_to_numpy(arr):
+            """Coerce a list or tuple to a numpy array."""
+            if not isinstance(arr, np.ndarray):
+                return np.array(arr)
+            return arr
+        
+        coerced_search_space = {k: coerce_to_numpy(v) for k, v in search_space.items()}
+        return coerced_search_space
 
     def _run(self, experiment, **search_config):
         """Run the optimization search process.
