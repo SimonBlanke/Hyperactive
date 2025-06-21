@@ -64,14 +64,14 @@ class StochasticHillClimbing(_BaseGFOadapter):
     >>> from hyperactive.opt import StochasticHillClimbing
     >>> import numpy as np
     >>>
-    >>> hc_config = {
+    >>> config = {
     ...     "search_space": {
-    ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...         "C": [0.01, 0.1, 1, 10],
+    ...         "gamma": [0.0001, 0.01, 0.1, 1, 10],
     ...     },
     ...     "n_iter": 100,
     ... }
-    >>> hillclimbing = StochasticHillClimbing(experiment=sklearn_exp, **hc_config)
+    >>> hillclimbing = StochasticHillClimbing(experiment=sklearn_exp, **config)
 
     3. running the hill climbing search:
     >>> best_params = hillclimbing.run()
@@ -146,8 +146,8 @@ class StochasticHillClimbing(_BaseGFOadapter):
             "experiment": experiment,
             "p_accept": 0.33,
             "search_space": {
-                "C": np.array([0.01, 0.1, 1, 10]),
-                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+                "C": [0.01, 0.1, 1, 10],
+                "gamma": [0.0001, 0.01, 0.1, 1, 10],
             },
             "n_iter": 100,
         }

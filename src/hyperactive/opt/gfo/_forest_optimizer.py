@@ -66,8 +66,8 @@ class ForestOptimizer(_BaseGFOadapter):
     >>>
     >>> config = {
     ...     "search_space": {
-    ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...         "C": [0.01, 0.1, 1, 10],
+    ...         "gamma": [0.0001, 0.01, 0.1, 1, 10],
     ...     },
     ...     "n_iter": 100,
     ... }
@@ -154,8 +154,8 @@ class ForestOptimizer(_BaseGFOadapter):
             "tree_para": {"n_estimators": 50},
             "xi": 0.33,
             "search_space": {
-                "C": np.array([0.01, 0.1, 1, 10]),
-                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+                "C": [0.01, 0.1, 1, 10],
+                "gamma": [0.0001, 0.01, 0.1, 1, 10],
             },
             "n_iter": 100,
         }
