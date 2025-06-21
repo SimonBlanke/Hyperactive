@@ -61,7 +61,7 @@ class RepulsingHillClimbing(_BaseGFOadapter):
     ... )
 
     2. setting up the hill climbing optimizer:
-    >>> from hyperactive.opt import HillClimbingRepulsing
+    >>> from hyperactive.opt import RepulsingHillClimbing
     >>> import numpy as np
     >>>
     >>> hc_config = {
@@ -71,7 +71,7 @@ class RepulsingHillClimbing(_BaseGFOadapter):
     ...     },
     ...     "n_iter": 100,
     ... }
-    >>> hillclimbing = HillClimbingRepulsing(experiment=sklearn_exp, **hc_config)
+    >>> hillclimbing = RepulsingHillClimbing(experiment=sklearn_exp, **hc_config)
 
     3. running the hill climbing search:
     >>> best_params = hillclimbing.run()
