@@ -99,7 +99,7 @@ class ForestOptimizer(_BaseGFOadapter):
         sampling=None,
         replacement=True,
         tree_regressor="extra_tree",
-        tree_para={"n_estimators": 100},
+        tree_para=None,
         xi=0.03,
         n_iter=100,
         verbose=False,
