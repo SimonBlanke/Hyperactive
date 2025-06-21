@@ -1,39 +1,32 @@
-"""Hill climbing optimizer from gfo."""
-# copyright: hyperactive developers, MIT License (see LICENSE file)
-
 from hyperactive.opt._adapters._gfo import _BaseGFOadapter
 
 
-class HillClimbingStochastic(_BaseGFOadapter):
-    """Stochastic hill climbing optimizer.
+class DifferentialEvolution(_BaseGFOadapter):
+    """Differential evolution optimizer.
 
     Parameters
     ----------
     search_space : dict[str, list]
         The search space to explore. A dictionary with parameter
         names as keys and a numpy array as values.
-        Optional, can be passed later via ``set_params``.
-    initialize : dict[str, int], default={"grid": 4, "random": 2, "vertices": 4}
+    initialize : dict[str, int]
         The method to generate initial positions. A dictionary with
         the following key literals and the corresponding value type:
         {"grid": int, "vertices": int, "random": int, "warm_start": list[dict]}
-    constraints : list[callable], default=[]
+    constraints : list[callable]
         A list of constraints, where each constraint is a callable.
         The callable returns `True` or `False` dependend on the input parameters.
-    random_state : None, int, default=None
+    random_state : None, int
         If None, create a new random state. If int, create a new random state
         seeded with the value.
-    rand_rest_p : float, default=0.1
+    rand_rest_p : float
         The probability of a random iteration during the the search process.
-    epsilon : float, default=0.01
-        The step-size for the climbing.
-    distribution : str, default="normal"
-        The type of distribution to sample from.
-    n_neighbours : int, default=10
-        The number of neighbours to sample and evaluate before moving to the best
-        of those neighbours.
-    p_accept : float, default=0.5
-        The probability of accepting a transition in the hill climbing process.
+    population  : int
+        The number of individuals in the population.
+    mutation_rate : float
+        The mutation rate.
+    crossover_rate : float
+        The crossover rate.
     n_iter : int, default=100
         The number of iterations to run the optimizer.
     verbose : bool, default=False
@@ -44,7 +37,7 @@ class HillClimbingStochastic(_BaseGFOadapter):
 
     Examples
     --------
-    Hill climbing applied to scikit-learn parameter tuning:
+    Basic usage of DifferentialEvolution with a scikit-learn experiment:
 
     1. defining the experiment to optimize:
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
@@ -59,31 +52,31 @@ class HillClimbingStochastic(_BaseGFOadapter):
     ...     y=y,
     ... )
 
-    2. setting up the hill climbing optimizer:
-    >>> from hyperactive.opt import HillClimbingStochastic
+    2. setting up the differentialEvolution optimizer:
+    >>> from hyperactive.opt import DifferentialEvolution
     >>> import numpy as np
-    >>> 
-    >>> hc_config = {
+    >>>
+    >>> config = {
     ...     "search_space": {
-    ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...         "C": [0.01, 0.1, 1, 10],
+    ...         "gamma": [0.0001, 0.01, 0.1, 1, 10],
     ...     },
     ...     "n_iter": 100,
     ... }
-    >>> hillclimbing = HillClimbingStochastic(experiment=sklearn_exp, **hc_config)
+    >>> optimizer = DifferentialEvolution(experiment=sklearn_exp, **config)
 
-    3. running the hill climbing search:
-    >>> best_params = hillclimbing.run()
+    3. running the optimization:
+    >>> best_params = optimizer.run()
 
-    Best parameters can also be accessed via the attributes:
-    >>> best_params = hillclimbing.best_params_
+    Best parameters can also be accessed via:
+    >>> best_params = optimizer.best_params_
     """
 
     _tags = {
-        "info:name": "Hill Climbing",
-        "info:local_vs_global": "local",  # "local", "mixed", "global"
-        "info:explore_vs_exploit": "exploit",  # "explore", "exploit", "mixed"
-        "info:compute": "low",  # "low", "middle", "high"
+        "info:name": "Differential Evolution",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "explore",
+        "info:compute": "middle",
     }
 
     def __init__(
@@ -93,23 +86,21 @@ class HillClimbingStochastic(_BaseGFOadapter):
         constraints=None,
         random_state=None,
         rand_rest_p=0.1,
-        epsilon=0.01,
-        distribution="normal",
-        n_neighbours=10,
-        p_accept=0.5,
+        population=10,
+        mutation_rate=0.9,
+        crossover_rate=0.9,
         n_iter=100,
         verbose=False,
         experiment=None,
     ):
         self.random_state = random_state
         self.rand_rest_p = rand_rest_p
-        self.epsilon = epsilon
-        self.distribution = distribution
-        self.n_neighbours = n_neighbours
+        self.population = population
+        self.mutation_rate = mutation_rate
+        self.crossover_rate = crossover_rate
         self.search_space = search_space
         self.initialize = initialize
         self.constraints = constraints
-        self.p_accept = p_accept
         self.n_iter = n_iter
         self.experiment = experiment
         self.verbose = verbose
@@ -124,9 +115,9 @@ class HillClimbingStochastic(_BaseGFOadapter):
         class
             The GFO class to use. One of the concrete GFO classes
         """
-        from gradient_free_optimizers import StochasticHillClimbingOptimizer
+        from gradient_free_optimizers import DifferentialEvolutionOptimizer
 
-        return StochasticHillClimbingOptimizer
+        return DifferentialEvolutionOptimizer
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -143,10 +134,12 @@ class HillClimbingStochastic(_BaseGFOadapter):
         experiment = params[0]["experiment"]
         more_params = {
             "experiment": experiment,
-            "p_accept": 0.33,
+            "population": 8,
+            "mutation_rate": 0.8,
+            "crossover_rate": 2,
             "search_space": {
-                "C": np.array([0.01, 0.1, 1, 10]),
-                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+                "C": [0.01, 0.1, 1, 10],
+                "gamma": [0.0001, 0.01, 0.1, 1, 10],
             },
             "n_iter": 100,
         }
