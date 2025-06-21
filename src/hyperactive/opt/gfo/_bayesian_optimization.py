@@ -77,13 +77,13 @@ class BayesianOptimizer(_BaseGFOadapter):
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
     """
+
     _tags = {
         "info:name": "Bayesian Optimization",
         "info:local_vs_global": "global",
         "info:explore_vs_exploit": "exploit",
         "info:compute": "high",
     }
-
 
     def __init__(
         self,
@@ -94,7 +94,7 @@ class BayesianOptimizer(_BaseGFOadapter):
         rand_rest_p=0.1,
         warm_start_smbo=None,
         max_sample_size=10000000,
-        sampling={"random": 1000000},
+        sampling=None,
         replacement=True,
         xi=0.03,
         n_iter=100,

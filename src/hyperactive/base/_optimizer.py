@@ -1,4 +1,5 @@
 """Base class for optimizer."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from skbase.base import BaseObject
@@ -38,6 +39,10 @@ class BaseOptimizer(BaseObject):
         """
         search_config = self.get_params(deep=False)
         search_config.pop("experiment", None)
+
+        if search_config["sampling"] is None:
+            search_config["sampling"] = {"random": 1000000}
+
         return search_config
 
     def get_experiment(self):

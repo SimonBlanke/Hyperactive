@@ -73,13 +73,13 @@ class LipschitzOptimizer(_BaseGFOadapter):
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
     """
+
     _tags = {
         "info:name": "Lipschitz Optimization",
         "info:local_vs_global": "global",
         "info:explore_vs_exploit": "mixed",
         "info:compute": "high",
     }
-
 
     def __init__(
         self,
@@ -90,7 +90,7 @@ class LipschitzOptimizer(_BaseGFOadapter):
         rand_rest_p=0.1,
         warm_start_smbo=None,
         max_sample_size=10000000,
-        sampling={"random": 1000000},
+        sampling=None,
         replacement=True,
         n_iter=100,
         verbose=False,

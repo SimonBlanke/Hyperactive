@@ -93,7 +93,7 @@ class TreeStructuredParzenEstimators(_BaseGFOadapter):
         rand_rest_p=0.1,
         warm_start_smbo=None,
         max_sample_size=10000000,
-        sampling={"random": 1000000},
+        sampling=None,
         replacement=True,
         gamma_tpe=0.2,
         n_iter=100,
