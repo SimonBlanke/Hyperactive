@@ -144,7 +144,7 @@ class TreeStructuredParzenEstimators(_BaseGFOadapter):
         more_params = {
             "experiment": experiment,
             "max_sample_size": 100,
-            "replacement": False,
+            "replacement": True,
             "gamma_tpe": 0.01,
             "search_space": {
                 "C": [0.01, 0.1, 1, 10],
