@@ -1,4 +1,5 @@
 """Ackley function, common benchmark for optimization algorithms."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
@@ -41,8 +42,6 @@ class Ackley(BaseExperiment):
     >>> params = {"x0": 1, "x1": 2}
     >>> score, add_info = ackley.score(params)
 
-    Quick call without metadata return or dictionary:
-    >>> score = ackley(x0=1, x1=2)
     """  # noqa: E501
 
     _tags = {
