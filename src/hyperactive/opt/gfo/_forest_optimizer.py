@@ -150,7 +150,7 @@ class ForestOptimizer(_BaseGFOadapter):
         experiment = params[0]["experiment"]
         more_params = {
             "experiment": experiment,
-            "replacement": False,
+            "replacement": True,
             "tree_para": {"n_estimators": 50},
             "xi": 0.33,
             "search_space": {
