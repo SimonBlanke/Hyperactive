@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
+from skbase.utils.dependencies import _check_soft_dependencies
 
-from tqdm import tqdm
 from ._parametrize import optimizers
 from hyperactive.search_space import SearchSpace
 
@@ -99,6 +99,14 @@ def test_gfo_opt_wrapper_0(Optimizer, search_space, objective):
         verbosity=verbosity,
     )
     opt.max_time = None
-    opt.search(nth_process=0, p_bar=tqdm(total=n_iter))
+
+    if _check_soft_dependencies("tqdm", severity="none"):
+        from tqdm import tqdm
+
+        p_bar_kwargs = {"p_bar": tqdm(total=n_iter)}
+    else:
+        p_bar_kwargs = {}
+
+    opt.search(nth_process=0, **p_bar_kwargs)
 
     assert opt.best_score == objective_function(opt.best_para)
