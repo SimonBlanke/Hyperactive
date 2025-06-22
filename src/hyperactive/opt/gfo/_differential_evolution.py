@@ -136,7 +136,7 @@ class DifferentialEvolution(_BaseGFOadapter):
             "experiment": experiment,
             "population": 8,
             "mutation_rate": 0.8,
-            "crossover_rate": 2,
+            "crossover_rate": 0.7,
             "search_space": {
                 "C": [0.01, 0.1, 1, 10],
                 "gamma": [0.0001, 0.01, 0.1, 1, 10],
