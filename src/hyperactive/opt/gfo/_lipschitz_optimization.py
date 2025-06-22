@@ -139,7 +139,7 @@ class LipschitzOptimizer(_BaseGFOadapter):
         more_params = {
             "experiment": experiment,
             "max_sample_size": 1000,
-            "replacement": False,
+            "replacement": True,
             "search_space": {
                 "C": [0.01, 0.1, 1, 10],
                 "gamma": [0.0001, 0.01, 0.1, 1, 10],
