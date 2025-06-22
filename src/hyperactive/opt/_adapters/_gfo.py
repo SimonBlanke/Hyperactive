@@ -2,7 +2,6 @@
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-import numpy as np
 from hyperactive.base import BaseOptimizer
 from skbase.utils.stdout_mute import StdoutMute
 
@@ -129,13 +128,6 @@ class _BaseGFOadapter(BaseOptimizer):
         n_iter = search_config.pop("n_iter", 100)
         max_time = search_config.pop("max_time", None)
 
-        # convert hyper search-space into gfo search-space
-        search_space_hyper = search_config["search_space"]
-        search_space_gfo = {}
-        for key in search_space_hyper.keys():
-            search_space_gfo[key] = np.array(range(len(search_space_hyper[key])))
-        search_config["search_space"] = search_space_gfo
-
         gfo_cls = self._get_gfo_class()
         hcopt = gfo_cls(**search_config)
 
@@ -188,8 +180,8 @@ class _BaseGFOadapter(BaseOptimizer):
         params_sklearn = {
             "experiment": sklearn_exp,
             "search_space": {
-                "C": [0.01, 0.1, 1, 10],
-                "gamma": [0.0001, 0.01, 0.1, 1, 10],
+                "C": np.array([0.01, 0.1, 1, 10]),
+                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
             },
             "n_iter": 100,
         }
