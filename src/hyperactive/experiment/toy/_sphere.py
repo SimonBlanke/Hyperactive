@@ -1,5 +1,4 @@
 """Sphere function, a common benchmark for optimization algorithms."""
-
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
@@ -39,6 +38,12 @@ class Sphere(BaseExperiment):
     >>> params = {"x0": 1, "x1": 2, "x2": 3}
     >>> score, add_info = sphere.score(params)
 
+    Quick call without metadata return or dictionary:
+    >>> score = sphere(x0=1, x1=2, x2=3)
+
+    Different number of dimensions changes the parameter names:
+    >>> sphere4D = Sphere(const=0, n_dim=4)
+    >>> score4D = sphere4D(x0=1, x1=2, x2=3, x3=4)
     """
 
     _tags = {
@@ -58,7 +63,7 @@ class Sphere(BaseExperiment):
 
     def _score(self, params):
         params_vec = np.array([params[f"x{i}"] for i in range(self.n_dim)])
-        return np.sum(params_vec**2) + self.const, {}
+        return np.sum(params_vec ** 2) + self.const, {}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

@@ -1,5 +1,4 @@
 """Base class for experiment."""
-
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
@@ -20,7 +19,7 @@ class BaseExperiment(BaseObject):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, kwargs):
+    def __call__(self, **kwargs):
         """Score parameters, with kwargs call."""
         score, _ = self.score(kwargs)
         return score

@@ -1,5 +1,4 @@
 """Experiment adapter for sklearn cross-validation experiments."""
-
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from sklearn import clone
@@ -8,7 +7,6 @@ from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
 
 from hyperactive.base import BaseExperiment
-
 
 class SklearnCvExperiment(BaseExperiment):
     """Experiment adapter for sklearn cross-validation experiments.
@@ -73,6 +71,8 @@ class SklearnCvExperiment(BaseExperiment):
     >>> params = {"C": 1.0, "kernel": "linear"}
     >>> score, add_info = sklearn_exp.score(params)
 
+    Quick call without metadata return or dictionary:
+    >>> score = sklearn_exp(C=1.0, kernel="linear")
     """
 
     def __init__(self, estimator, X, y, scoring=None, cv=None):

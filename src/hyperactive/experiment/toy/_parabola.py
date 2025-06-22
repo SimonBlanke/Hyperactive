@@ -1,5 +1,4 @@
 """2D parabola function, common benchmark for optimization algorithms."""
-
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.base import BaseExperiment
@@ -36,6 +35,8 @@ class Parabola(BaseExperiment):
     >>> params = {"x": 1, "y": 2}
     >>> score, add_info = parabola.score(params)
 
+    Quick call without metadata return or dictionary:
+    >>> score = parabola(x=1, y=2)
     """
 
     _tags = {
