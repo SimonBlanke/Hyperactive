@@ -6,6 +6,8 @@ import numpy as np
 from hyperactive.base import BaseOptimizer
 from skbase.utils.stdout_mute import StdoutMute
 
+from ._objective_function import ObjectiveFunction
+
 __all__ = ["_BaseGFOadapter"]
 
 
@@ -58,7 +60,10 @@ class _BaseGFOadapter(BaseOptimizer):
 
         search_config = self._handle_gfo_defaults(search_config)
 
-        search_config["search_space"] = self._to_dict_np(search_config["search_space"])
+        self.search_space_hyper = search_config["search_space"]
+        search_config["search_space"] = self._conv_search_space(
+            search_config["search_space"]
+        )
 
         return search_config
 
@@ -85,6 +90,18 @@ class _BaseGFOadapter(BaseOptimizer):
 
         return search_config
 
+    @staticmethod
+    def _conv_search_space(search_space):
+        # convert hyper search-space into gfo search-space
+        search_space_gfo = {}
+        for key in search_space.keys():
+            search_space_gfo[key] = np.array(range(len(search_space[key])))
+        return search_space_gfo
+
+    @staticmethod
+    def _conv_objective_function(objective_function, search_space):
+        return ObjectiveFunction(objective_function).convert(search_space)
+
     def _to_dict_np(self, search_space):
         """Coerce the search space to a format suitable for gfo optimizers.
 
@@ -108,7 +125,7 @@ class _BaseGFOadapter(BaseOptimizer):
             if not isinstance(arr, np.ndarray):
                 return np.array(arr)
             return arr
-        
+
         coerced_search_space = {k: coerce_to_numpy(v) for k, v in search_space.items()}
         return coerced_search_space
 
@@ -129,23 +146,18 @@ class _BaseGFOadapter(BaseOptimizer):
         n_iter = search_config.pop("n_iter", 100)
         max_time = search_config.pop("max_time", None)
 
-        # convert hyper search-space into gfo search-space
-        search_space_hyper = search_config["search_space"]
-        search_space_gfo = {}
-        for key in search_space_hyper.keys():
-            search_space_gfo[key] = np.array(range(len(search_space_hyper[key])))
-        search_config["search_space"] = search_space_gfo
-
         gfo_cls = self._get_gfo_class()
-        hcopt = gfo_cls(**search_config)
+        opt = gfo_cls(**search_config)
+
+        score = self._conv_objective_function(experiment, self.search_space_hyper)
 
         with StdoutMute(active=not self.verbose):
-            hcopt.search(
-                objective_function=experiment.score,
+            opt.search(
+                objective_function=score,
                 n_iter=n_iter,
                 max_time=max_time,
             )
-        best_params = hcopt.best_para
+        best_params = opt.best_para
         return best_params
 
     @classmethod
