@@ -129,15 +129,15 @@ class _BaseGFOadapter(BaseOptimizer):
         max_time = search_config.pop("max_time", None)
 
         gfo_cls = self._get_gfo_class()
-        hcopt = gfo_cls(**search_config)
+        gfopt = gfo_cls(**search_config)
 
         with StdoutMute(active=not self.verbose):
-            hcopt.search(
+            gfopt.search(
                 objective_function=experiment.score,
                 n_iter=n_iter,
                 max_time=max_time,
             )
-        best_params = hcopt.best_para
+        best_params = gfopt.best_para
         return best_params
 
     @classmethod
