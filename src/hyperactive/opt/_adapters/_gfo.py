@@ -1,4 +1,5 @@
 """Adapter for gfo package."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.base import BaseOptimizer
@@ -40,9 +41,7 @@ class _BaseGFOadapter(BaseOptimizer):
         class
             The GFO class to use. One of the concrete GFO classes
         """
-        raise NotImplementedError(
-            "This method should be implemented in a subclass."
-        )
+        raise NotImplementedError("This method should be implemented in a subclass.")
 
     def get_search_config(self):
         """Get the search configuration.
@@ -55,7 +54,62 @@ class _BaseGFOadapter(BaseOptimizer):
         search_config = super().get_search_config()
         search_config["initialize"] = self._initialize
         del search_config["verbose"]
+
+        search_config = self._handle_gfo_defaults(search_config)
+
+        search_config["search_space"] = self._to_dict_np(search_config["search_space"])
+
         return search_config
+
+    def _handle_gfo_defaults(self, search_config):
+        """Handle default values for GFO search configuration.
+
+        Temporary measure until GFO handles defaults gracefully.
+
+        Parameters
+        ----------
+        search_config : dict with str keys
+            The search configuration dictionary to handle defaults for.
+
+        Returns
+        -------
+        search_config : dict with str keys
+            The search configuration dictionary with defaults handled.
+        """
+        if "sampling" in search_config and search_config["sampling"] is None:
+            search_config["sampling"] = {"random": 1000000}
+
+        if "tree_para" in search_config and search_config["tree_para"] is None:
+            search_config["tree_para"] = {"n_estimators": 100}
+
+        return search_config
+
+    def _to_dict_np(self, search_space):
+        """Coerce the search space to a format suitable for gfo optimizers.
+
+        gfo expects dicts of numpy arrays, not lists.
+        This method coerces lists or tuples in the search space to numpy arrays.
+
+        Parameters
+        ----------
+        search_space : dict with str keys and iterable values
+            The search space to coerce.
+
+        Returns
+        -------
+        dict with str keys and 1D numpy arrays as values
+            The coerced search space.
+        """
+        import numpy as np
+
+        def coerce_to_numpy(arr):
+            """Coerce a list or tuple to a numpy array."""
+            if not isinstance(arr, np.ndarray):
+                return np.array(arr)
+            return arr
+        
+        coerced_search_space = {k: coerce_to_numpy(v) for k, v in search_space.items()}
+        return coerced_search_space
 
     def _run(self, experiment, **search_config):
         """Run the optimization search process.
@@ -75,15 +129,15 @@ class _BaseGFOadapter(BaseOptimizer):
         max_time = search_config.pop("max_time", None)
 
         gfo_cls = self._get_gfo_class()
-        hcopt = gfo_cls(**search_config)
+        gfopt = gfo_cls(**search_config)
 
         with StdoutMute(active=not self.verbose):
-            hcopt.search(
+            gfopt.search(
                 objective_function=experiment.score,
                 n_iter=n_iter,
                 max_time=max_time,
             )
-        best_params = hcopt.best_para
+        best_params = gfopt.best_para
         return best_params
 
     @classmethod
@@ -143,5 +197,12 @@ class _BaseGFOadapter(BaseOptimizer):
             },
             "n_iter": 100,
         }
-        
-        return [params_sklearn, params_ackley]
+        params_ackley_list = {
+            "experiment": ackley_exp,
+            "search_space": {
+                "x0": list(np.linspace(-5, 5, 10)),
+                "x1": list(np.linspace(-5, 5, 10)),
+            },
+            "n_iter": 100,
+        }
+        return [params_sklearn, params_ackley, params_ackley_list]

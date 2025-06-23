@@ -1,39 +1,33 @@
-"""Hill climbing optimizer from gfo."""
-# copyright: hyperactive developers, MIT License (see LICENSE file)
-
 from hyperactive.opt._adapters._gfo import _BaseGFOadapter
 
 
-class HillClimbingRepulsing(_BaseGFOadapter):
-    """Repulsing hill climbing optimizer.
+class PowellsMethod(_BaseGFOadapter):
+    """Powell's method optimizer.
 
     Parameters
     ----------
     search_space : dict[str, list]
         The search space to explore. A dictionary with parameter
         names as keys and a numpy array as values.
-        Optional, can be passed later via ``set_params``.
-    initialize : dict[str, int], default={"grid": 4, "random": 2, "vertices": 4}
+    initialize : dict[str, int]
         The method to generate initial positions. A dictionary with
         the following key literals and the corresponding value type:
         {"grid": int, "vertices": int, "random": int, "warm_start": list[dict]}
-    constraints : list[callable], default=[]
+    constraints : list[callable]
         A list of constraints, where each constraint is a callable.
         The callable returns `True` or `False` dependend on the input parameters.
-    random_state : None, int, default=None
+    random_state : None, int
         If None, create a new random state. If int, create a new random state
         seeded with the value.
-    rand_rest_p : float, default=0.1
-        The probability of a random iteration during the the search process.
-    epsilon : float, default=0.01
+    rand_rest_p : float
+        The probability of a random iteration during the search process.
+    epsilon : float
         The step-size for the climbing.
-    distribution : str, default="normal"
+    distribution : str
         The type of distribution to sample from.
-    n_neighbours : int, default=10
+    n_neighbours : int
         The number of neighbours to sample and evaluate before moving to the best
         of those neighbours.
-    repulsion_factor : float, default=5
-        The factor to control the repulsion of the hill climbing process.
     n_iter : int, default=100
         The number of iterations to run the optimizer.
     verbose : bool, default=False
@@ -44,7 +38,7 @@ class HillClimbingRepulsing(_BaseGFOadapter):
 
     Examples
     --------
-    Hill climbing applied to scikit-learn parameter tuning:
+    Basic usage of PowellsMethod with a scikit-learn experiment:
 
     1. defining the experiment to optimize:
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
@@ -59,31 +53,31 @@ class HillClimbingRepulsing(_BaseGFOadapter):
     ...     y=y,
     ... )
 
-    2. setting up the hill climbing optimizer:
-    >>> from hyperactive.opt import HillClimbingRepulsing
+    2. setting up the powellsMethod optimizer:
+    >>> from hyperactive.opt import PowellsMethod
     >>> import numpy as np
-    >>> 
-    >>> hc_config = {
+    >>>
+    >>> config = {
     ...     "search_space": {
-    ...         "C": np.array([0.01, 0.1, 1, 10]),
-    ...         "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+    ...         "C": [0.01, 0.1, 1, 10],
+    ...         "gamma": [0.0001, 0.01, 0.1, 1, 10],
     ...     },
     ...     "n_iter": 100,
     ... }
-    >>> hillclimbing = HillClimbingRepulsing(experiment=sklearn_exp, **hc_config)
+    >>> optimizer = PowellsMethod(experiment=sklearn_exp, **config)
 
-    3. running the hill climbing search:
-    >>> best_params = hillclimbing.run()
+    3. running the optimization:
+    >>> best_params = optimizer.run()
 
-    Best parameters can also be accessed via the attributes:
-    >>> best_params = hillclimbing.best_params_
+    Best parameters can also be accessed via:
+    >>> best_params = optimizer.best_params_
     """
 
     _tags = {
-        "info:name": "Repulsing Hill Climbing",
-        "info:local_vs_global": "mixed",  # "local", "mixed", "global"
-        "info:explore_vs_exploit": "exploit",  # "explore", "exploit", "mixed"
-        "info:compute": "low",  # "low", "middle", "high"
+        "info:name": "Powell’s Method",
+        "info:local_vs_global": "local",
+        "info:explore_vs_exploit": "exploit",
+        "info:compute": "low",
     }
 
     def __init__(
@@ -93,23 +87,17 @@ class HillClimbingRepulsing(_BaseGFOadapter):
         constraints=None,
         random_state=None,
         rand_rest_p=0.1,
-        epsilon=0.01,
-        distribution="normal",
-        n_neighbours=10,
-        repulsion_factor=5,
+        iters_p_dim=10,
         n_iter=100,
         verbose=False,
         experiment=None,
     ):
         self.random_state = random_state
         self.rand_rest_p = rand_rest_p
-        self.epsilon = epsilon
-        self.distribution = distribution
-        self.n_neighbours = n_neighbours
+        self.iters_p_dim = iters_p_dim
         self.search_space = search_space
         self.initialize = initialize
         self.constraints = constraints
-        self.repulsion_factor = repulsion_factor
         self.n_iter = n_iter
         self.experiment = experiment
         self.verbose = verbose
@@ -124,9 +112,9 @@ class HillClimbingRepulsing(_BaseGFOadapter):
         class
             The GFO class to use. One of the concrete GFO classes
         """
-        from gradient_free_optimizers import RepulsingHillClimbingOptimizer
+        from gradient_free_optimizers import PowellsMethod
 
-        return RepulsingHillClimbingOptimizer
+        return PowellsMethod
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -143,10 +131,10 @@ class HillClimbingRepulsing(_BaseGFOadapter):
         experiment = params[0]["experiment"]
         more_params = {
             "experiment": experiment,
-            "repulsion_factor": 7,
+            "iters_p_dim": 3,
             "search_space": {
-                "C": np.array([0.01, 0.1, 1, 10]),
-                "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+                "C": [0.01, 0.1, 1, 10],
+                "gamma": [0.0001, 0.01, 0.1, 1, 10],
             },
             "n_iter": 100,
         }
