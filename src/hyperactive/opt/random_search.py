@@ -54,3 +54,37 @@ class RandomSearchSk(BaseOptimizer):
         self.error_score = error_score
 
         super().__init__()
+
+    def _run(
+        self,
+        experiment,
+        param_distributions,
+        n_iter,
+        random_state,
+        error_score,
+    ):
+
+        sampler = ParameterSampler(
+            param_distributions=param_distributions,
+            n_iter=n_iter,
+            random_state=random_state,
+        )
+        candidate_params = list(sampler)
+
+        scores: list[float] = []
+        for candidate_param in candidate_params:
+            try:
+                score = experiment(**candidate_param)
+            except Exception:  # noqa: B904
+                score = error_score
+            scores.append(score)
+
+        best_index = int(np.argmin(scores))  # lower-is-better convention
+        best_params = candidate_params[best_index]
+
+        # public attributes for external consumers
+        self.best_index_ = best_index
+        self.best_score_ = float(scores[best_index])
+        self.best_params_ = best_params
+
+        return best_params
