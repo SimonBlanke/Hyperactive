@@ -58,9 +58,7 @@ def _safe_refit(estimator, X, y, fit_params):
         estimator.n_features_in_ = X.shape[1]
 
 
-# ------------------------------------------------------------------
-# A) Replacement for `_deprecate_Xt_in_inverse_transform`
-# ------------------------------------------------------------------
+# Replacement for `_deprecate_Xt_in_inverse_transform`
 if _SK_VERSION < version.parse("1.7"):
     # Still exists → re-export
     from sklearn.utils.deprecation import _deprecate_Xt_in_inverse_transform
@@ -87,10 +85,7 @@ else:
         return X
 
 
-# ------------------------------------------------------------------
-# B) Replacement for `_check_method_params`
-#    (still present in 1.7, but could be removed later)
-# ------------------------------------------------------------------
+# Replacement for `_check_method_params`
 try:
     from sklearn.utils.validation import _check_method_params  # noqa: F401
 except ImportError:  # fallback for future releases
