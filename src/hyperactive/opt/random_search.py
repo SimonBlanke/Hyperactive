@@ -55,6 +55,37 @@ class RandomSearchSk(BaseOptimizer):
 
         super().__init__()
 
+    @staticmethod
+    def _is_distribution(obj) -> bool:
+        """Return True if *obj* looks like a scipy frozen distribution."""
+        return callable(getattr(obj, "rvs", None))
+
+    def _check_param_distributions(self, param_distributions):
+        """Validate ``param_distributions`` similar to sklearn ≤1.0.x."""
+        if hasattr(param_distributions, "items"):
+            param_distributions = [param_distributions]
+
+        for p in param_distributions:
+            for name, v in p.items():
+                if self._is_distribution(v):
+                    # Assume scipy frozen distribution – nothing to check
+                    continue
+
+                if isinstance(v, np.ndarray) and v.ndim > 1:
+                    raise ValueError("Parameter array should be one-dimensional.")
+
+                if isinstance(v, str) or not isinstance(v, (np.ndarray, Sequence)):
+                    raise ValueError(
+                        f"Parameter distribution for ({name}) must be a list, numpy "
+                        f"array, or scipy.stats ``rv_frozen``, but got ({type(v)})."
+                        " Single values need to be wrapped in a sequence."
+                    )
+
+                if len(v) == 0:
+                    raise ValueError(
+                        f"Parameter values for ({name}) need to be a non-empty sequence."
+                    )
+
     def _run(
         self,
         experiment,
@@ -63,6 +94,8 @@ class RandomSearchSk(BaseOptimizer):
         random_state,
         error_score,
     ):
+        """Sample ``n_iter`` points and return the best parameter set."""
+        self._check_param_distributions(param_distributions)
 
         sampler = ParameterSampler(
             param_distributions=param_distributions,
