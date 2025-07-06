@@ -7,7 +7,7 @@ from typing import Union, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import check_scoring
-from sklearn.utils.validation import indexable, _check_method_params
+from sklearn.utils.validation import indexable
 
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
 
@@ -17,6 +17,8 @@ from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
 from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
+
+from ._compat import _check_method_params
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
@@ -85,7 +87,7 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         self.best_estimator_.fit(X, y, **fit_params)
         return self
 
-    def _check_data(self, X, y):
+    def _check_data_(self, X, y):
         X, y = indexable(X, y)
         if hasattr(self, "_validate_data"):
             validate_data = self._validate_data
@@ -93,6 +95,33 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
             from sklearn.utils.validation import validate_data
 
         return validate_data(X, y)
+
+    def _check_data(self, X, y):
+        """
+        Wrapper around scikit-learn’s input validation that:
+        • makes X 2-D (as required for estimators)
+        • lets y stay 1-D
+        The implementation follows scikit-learn 1.7+ guidelines and is
+        still accepted by 1.6, thanks to the validate_separately API
+        introduced in 1.3.
+        """
+        X, y = indexable(X, y)
+
+        if hasattr(self, "_validate_data"):
+            # Use BaseEstimator’s helper but ask it to treat X and y separately
+            return self._validate_data(
+                X,
+                y,
+                validate_separately=(
+                    {"ensure_2d": True},  # for X
+                    {"ensure_2d": False},  # for y
+                ),
+            )
+
+        # Fallback – should rarely be used
+        from sklearn.utils.validation import check_X_y
+
+        return check_X_y(X, y, ensure_2d=True)
 
     @Checks.verify_fit
     def fit(self, X, y, **fit_params):
@@ -143,6 +172,13 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
 
         if self.refit:
             self._refit(X, y, **fit_params)
+
+            # make the wrapper itself expose n_features_in_
+            if hasattr(self.best_estimator_, "n_features_in_"):
+                self.n_features_in_ = self.best_estimator_.n_features_in_
+        else:
+            # Even when `refit=False` we must satisfy the contract
+            self.n_features_in_ = X.shape[1]
 
         return self
 
