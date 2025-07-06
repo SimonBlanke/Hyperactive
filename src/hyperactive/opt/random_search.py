@@ -121,3 +121,37 @@ class RandomSearchSk(BaseOptimizer):
         self.best_params_ = best_params
 
         return best_params
+
+    @classmethod
+    def get_test_params(cls, parameter_set: str = "default"):
+        """Provide deterministic toy configurations for unit tests."""
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+        from hyperactive.experiment.toy import Ackley
+
+        # 1) ML example (Iris + SVC)
+        sklearn_exp = SklearnCvExperiment.create_test_instance()
+        param_dist_1 = {
+            "C": [0.01, 0.1, 1, 10],
+            "gamma": np.logspace(-4, 1, 6),
+        }
+        params_sklearn = {
+            "experiment": sklearn_exp,
+            "param_distributions": param_dist_1,
+            "n_iter": 5,
+            "random_state": 42,
+        }
+
+        # 2) continuous optimisation example (Ackley)
+        ackley_exp = Ackley.create_test_instance()
+        param_dist_2 = {
+            "x0": np.linspace(-5, 5, 50),
+            "x1": np.linspace(-5, 5, 50),
+        }
+        params_ackley = {
+            "experiment": ackley_exp,
+            "param_distributions": param_dist_2,
+            "n_iter": 20,
+            "random_state": 0,
+        }
+
+        return [params_sklearn, params_ackley]
