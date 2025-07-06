@@ -4,13 +4,14 @@ from collections.abc import Callable
 from typing import Union
 
 from sklearn.base import BaseEstimator, clone
-from sklearn.utils.validation import indexable, _check_method_params
 
 from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
 from hyperactive.integrations.sklearn.best_estimator import (
-    BestEstimator as _BestEstimator_
+    BestEstimator as _BestEstimator_,
 )
 from hyperactive.integrations.sklearn.checks import Checks
+
+from ._compat import _check_method_params, _safe_validate_X_y, _safe_refit
 
 
 class OptCV(BaseEstimator, _BestEstimator_, Checks):
@@ -92,13 +93,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         return self
 
     def _check_data(self, X, y):
-        X, y = indexable(X, y)
-        if hasattr(self, "_validate_data"):
-            validate_data = self._validate_data
-        else:
-            from sklearn.utils.validation import validate_data
-
-        return validate_data(X, y)
+        return _safe_validate_X_y(self, X, y)
 
     @Checks.verify_fit
     def fit(self, X, y, **fit_params):
@@ -138,8 +133,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         self.best_params_ = best_params
         self.best_estimator_ = clone(self.estimator).set_params(**best_params)
 
-        if self.refit:
-            self._refit(X, y, **fit_params)
+        _safe_refit(self, X, y, fit_params)
 
         return self
 

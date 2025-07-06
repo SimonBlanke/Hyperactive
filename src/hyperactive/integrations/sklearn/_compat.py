@@ -14,8 +14,48 @@ from typing import Dict, Any
 
 import sklearn
 from packaging import version
+from sklearn.utils.validation import indexable
 
 _SK_VERSION = version.parse(sklearn.__version__)
+
+
+def _safe_validate_X_y(estimator, X, y):
+    """
+    Version-independent replacement for naive validate_data(X, y).
+
+    • Ensures X is 2-D.
+    • Allows y to stay 1-D (required by scikit-learn >=1.7 checks).
+    • Uses BaseEstimator._validate_data when available so that
+      estimator tags and sample-weight checks keep working.
+    """
+    X, y = indexable(X, y)
+
+    if hasattr(estimator, "_validate_data"):
+        return estimator._validate_data(
+            X,
+            y,
+            validate_separately=(
+                {"ensure_2d": True},  # parameters for X
+                {"ensure_2d": False},  # parameters for y
+            ),
+        )
+
+    # Fallback for very old scikit-learn versions (<0.23)
+    from sklearn.utils.validation import check_X_y
+
+    return check_X_y(X, y, ensure_2d=True)
+
+
+def _safe_refit(estimator, X, y, fit_params):
+    if estimator.refit:
+        estimator._refit(X, y, **fit_params)
+
+        # make the wrapper itself expose n_features_in_
+        if hasattr(estimator.best_estimator_, "n_features_in_"):
+            estimator.n_features_in_ = estimator.best_estimator_.n_features_in_
+    else:
+        # Even when `refit=False` we must satisfy the contract
+        estimator.n_features_in_ = X.shape[1]
 
 
 # ------------------------------------------------------------------
