@@ -86,7 +86,7 @@ jobs:
           python -m pytest src/hyperactive -p no:warnings
 
   test-sklearn-versions:
-    name: test-sklearn-${{ matrix.sklearn-version }}
+    name: test-sklearn-${{ matrix.sklearn-version }} python-${{ matrix.python-version }}
     runs-on: ubuntu-latest
 
     strategy:
