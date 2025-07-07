@@ -6,6 +6,7 @@ import shutil
 from skbase.testing import BaseFixtureGenerator as _BaseFixtureGenerator
 from skbase.testing import QuickTester as _QuickTester
 from skbase.testing import TestAllObjects as _TestAllObjects
+from skbase.utils.dependencies import _check_estimator_deps
 
 from hyperactive._registry import all_objects
 from hyperactive.tests._config import EXCLUDE_ESTIMATORS, EXCLUDED_TESTS
@@ -120,11 +121,13 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
         if isclass(filter):
             obj_list = [obj for obj in obj_list if issubclass(obj, filter)]
 
+        def run_test_for_class(obj):
+            return _check_estimator_deps(obj, severity="none")
+
         # run_test_for_class selects the estimators to run
-        # based on whether they have changed, and whether they have all dependencies
-        # internally, uses the ONLY_CHANGED_MODULES flag,
+        # based on whether they have all dependencies
         # and checks the python env against python_dependencies tag
-        # obj_list = [obj for obj in obj_list if run_test_for_class(obj)]
+        obj_list = [obj for obj in obj_list if run_test_for_class(obj)]
 
         return obj_list
 

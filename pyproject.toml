@@ -62,6 +62,7 @@ test = [
 ]
 all_extras = [
   "hyperactive[integrations]",
+  "optuna<5",
 ]
 
 
