@@ -100,6 +100,5 @@ class OptunaOptimizer(BaseOptimizer):
         return [{
             "param_space": param_space,
             "n_trials": 10,
-            "direction": "minimize",
             "experiment": sklearn_exp,
         }]
