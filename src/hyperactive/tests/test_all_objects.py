@@ -194,7 +194,7 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
 
             if inst.get_tag("property:randomness") == "deterministic":
                 msg = f"Score and cost calls do not match: |{c_score}| != |{score}|"
-                assert abs(c_score) == score, msg
+                assert abs(c_score) == abs(score), msg
 
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
