@@ -192,7 +192,9 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
             assert isinstance(c_score, float), f"Score is not a float: {c_score}"
             assert isinstance(c_metadata, dict), f"Metadata is not a dict: {c_metadata}"
 
-            assert abs(c_score) == score
+            if inst.get_tag("property:randomness") == "deterministic":
+                msg = f"Score and cost calls do not match: |{c_score}| != |{score}|"
+                assert abs(c_score) == score, msg
 
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
