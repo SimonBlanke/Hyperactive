@@ -7,7 +7,7 @@ from typing import Union, Dict, Type
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.metrics import check_scoring
-from sklearn.utils.validation import indexable, _check_method_params
+
 
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
 
@@ -17,6 +17,8 @@ from .best_estimator import BestEstimator as _BestEstimator_
 from .checks import Checks
 from ...optimizers import RandomSearchOptimizer
 from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
+
+from ._compat import _check_method_params, _safe_validate_X_y, _safe_refit
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
@@ -86,13 +88,7 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         return self
 
     def _check_data(self, X, y):
-        X, y = indexable(X, y)
-        if hasattr(self, "_validate_data"):
-            validate_data = self._validate_data
-        else:
-            from sklearn.utils.validation import validate_data
-
-        return validate_data(X, y)
+        return _safe_validate_X_y(self, X, y)
 
     @Checks.verify_fit
     def fit(self, X, y, **fit_params):
@@ -141,8 +137,7 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         self.best_score_ = hyper.best_score(objective_function)
         self.search_data_ = hyper.search_data(objective_function)
 
-        if self.refit:
-            self._refit(X, y, **fit_params)
+        _safe_refit(self, X, y, fit_params)
 
         return self
 

@@ -4,11 +4,11 @@
 
 
 from sklearn.utils.metaestimators import available_if
-from sklearn.utils.deprecation import _deprecate_Xt_in_inverse_transform
 from sklearn.exceptions import NotFittedError
 from sklearn.utils.validation import check_is_fitted
 
 from .utils import _estimator_has
+from ._compat import _deprecate_Xt_in_inverse_transform
 
 
 # NOTE Implementations of following methods from:
