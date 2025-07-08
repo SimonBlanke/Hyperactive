@@ -45,6 +45,7 @@ class PackageConfig:
         "maintainers",
         # experiments
         "property:randomness",
+        "property:higher_or_lower_is_better",
         # optimizers
         "info:name",  # str
         "info:local_vs_global",  # "local", "mixed", "global"
@@ -184,10 +185,19 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
             assert isinstance(score, float), f"Score is not a float: {score}"
             assert isinstance(metadata, dict), f"Metadata is not a dict: {metadata}"
 
+            cost_res = inst.cost(obj)
+            msg = f"Cost function did not return a length two tuple: {res}"
+            assert isinstance(cost_res, tuple) and len(cost_res) == 2, msg
+            c_score, c_metadata = cost_res
+            assert isinstance(c_score, float), f"Score is not a float: {c_score}"
+            assert isinstance(c_metadata, dict), f"Metadata is not a dict: {c_metadata}"
+
+            assert abs(c_score) == score
+
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
             if inst.get_tag("property:randomness") == "deterministic":
-                assert score == call_sc, f"Score does not match: {score} != {call_sc}"
+                assert c_score == call_sc, f"Score does not match: {score} != {call_sc}"
 
 
 class OptimizerFixtureGenerator(BaseFixtureGenerator):

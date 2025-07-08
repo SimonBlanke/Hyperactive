@@ -14,14 +14,16 @@ class BaseExperiment(BaseObject):
         "property:randomness": "random",  # random or deterministic
         # if deterministic, two calls of score will result in the same value
         # random = two calls may result in different values; same as "stochastic"
+        "property:higher_or_lower_is_better": "lower",  # "higher", "lower", "mixed"
+        # whether higher or lower scores are better
     }
 
     def __init__(self):
         super().__init__()
 
     def __call__(self, **kwargs):
-        """Score parameters, with kwargs call."""
-        score, _ = self.score(kwargs)
+        """Score parameters, with kwargs call. Same as cost call."""
+        score, _ = self.cost(kwargs)
         return score
 
     @property
@@ -86,3 +88,36 @@ class BaseExperiment(BaseObject):
             Additional metadata about the search.
         """
         raise NotImplementedError
+
+    def cost(self, params):
+        """Score the parameters - with sign such that lower is better.
+
+        Same as ``score`` call except for the sign.
+
+        If the tag ``property:higher_or_lower_is_better`` is set to
+        ``"higher"``, the result is ``-self.score(params)``.
+
+        If the tag is set to ``"lower"``, the result is
+        identical to ``self.score(params)``.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to score.
+
+        Returns
+        -------
+        float
+            The score of the parameters.
+        dict
+            Additional metadata about the search.
+        """
+        hib = self.get_tag("property:higher_or_lower_is_better", "lower")
+        if hib == "higher":
+            sign = -1
+        elif hib == "lower":
+            sign = 1
+
+        score_res = self.score(params)
+
+        return sign * score_res[0], score_res[1]

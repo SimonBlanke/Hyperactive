@@ -133,7 +133,7 @@ class _BaseGFOadapter(BaseOptimizer):
 
         with StdoutMute(active=not self.verbose):
             gfopt.search(
-                objective_function=experiment.score,
+                objective_function=experiment.cost,
                 n_iter=n_iter,
                 max_time=max_time,
             )

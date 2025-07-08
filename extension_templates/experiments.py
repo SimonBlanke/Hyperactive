@@ -77,6 +77,10 @@ class MyExperiment(BaseExperiment):
         # valid values: "random", "deterministic"
         # if "deterministic", two calls of score must result in the same value
         #
+        "property:higher_or_lower_is_better": "lower",
+        # valid values: "higher", "lower", "mixed"
+        # whether higher or lower scores are better
+        #
         # --------------
         # packaging info
         # --------------
