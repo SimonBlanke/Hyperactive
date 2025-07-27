@@ -185,22 +185,22 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
             assert isinstance(score, float), f"Score is not a float: {score}"
             assert isinstance(metadata, dict), f"Metadata is not a dict: {metadata}"
 
-            cost_res = inst.cost(obj)
-            msg = f"Cost function did not return a length two tuple: {res}"
-            assert isinstance(cost_res, tuple) and len(cost_res) == 2, msg
-            c_score, c_metadata = cost_res
-            assert isinstance(c_score, float), f"Score is not a float: {c_score}"
-            assert isinstance(c_metadata, dict), f"Metadata is not a dict: {c_metadata}"
+            eval_res = inst.evaluate(obj)
+            msg = f"eval function did not return a length two tuple: {res}"
+            assert isinstance(eval_res, tuple) and len(eval_res) == 2, msg
+            e_score, e_metadata = eval_res
+            assert isinstance(e_score, float), f"Score is not a float: {e_score}"
+            assert isinstance(e_metadata, dict), f"Metadata is not a dict: {e_metadata}"
 
             if inst.get_tag("property:randomness") == "deterministic":
-                msg = f"Score and cost calls do not match: |{c_score}| != |{score}|"
-                assert abs(c_score) == abs(score), msg
+                msg = f"Score and eval calls do not match: |{e_score}| != |{score}|"
+                assert abs(e_score) == abs(score), msg
 
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
             if inst.get_tag("property:randomness") == "deterministic":
-                msg = f"Score does not match: {c_score} != {call_sc}"
-                assert c_score == call_sc, msg
+                msg = f"Score does not match: {e_score} != {call_sc}"
+                assert e_score == call_sc, msg
 
 
 class OptimizerFixtureGenerator(BaseFixtureGenerator):
