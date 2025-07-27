@@ -54,10 +54,21 @@ class BaseOptimizer(BaseObject):
     def run(self):
         """Run the optimization search process.
 
+        The optimization searches for the maximizer of the experiment's
+        ``score`` method.
+
+        Depending on the tag ``property:higher_or_lower_is_better`` being
+        set to ``higher`` or ``lower``, the ``run`` method will search for:
+
+        * the minimizer of the ``evaluate`` method if the tag is ``lower``
+        * the maximizer of the ``evaluate`` method if the tag is ``higher``
+
         Returns
         -------
         best_params : dict
             The best parameters found during the optimization process.
+            The dict ``best_params`` can be used in ``experiment.score`` or
+            ``experiment.evaluate`` directly.
         """
         experiment = self.get_experiment()
         search_config = self.get_search_config()
