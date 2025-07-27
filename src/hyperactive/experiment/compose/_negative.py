@@ -25,9 +25,11 @@ class Negative(BaseExperiment):
     ----------
     experiment : BaseExperiment
         The experiment to be negated. It should be an instance of ``BaseExperiment``.
+
     flip_score : bool, default=True
         Whether to flip the score of the experiment. If True, the score will be
         negated, i.e., the score will be ``-f`` where ``f`` is the original score.
+
     flip_orientation : bool, default=True
         Whether to flip the orientation of the optimization. If True,
         minimization and maximization will be swapped in the experiment.
