@@ -52,9 +52,9 @@ class BaseOptimizer(BaseObject):
         return self._experiment
 
     def run(self):
-        """Run the optimization search process.
+        """Run the optimization search process to maximize the experiment's score.
 
-        The optimization searches for the maximizer of the experiment's
+        The optimization searches for a maximizer of the experiment's
         ``score`` method.
 
         Depending on the tag ``property:higher_or_lower_is_better`` being
