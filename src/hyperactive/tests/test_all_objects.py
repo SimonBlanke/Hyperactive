@@ -192,15 +192,23 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
             assert isinstance(e_score, float), f"Score is not a float: {e_score}"
             assert isinstance(e_metadata, dict), f"Metadata is not a dict: {e_metadata}"
 
-            if inst.get_tag("property:randomness") == "deterministic":
+            det_tag = inst.get_tag("property:randomness", "random")
+
+            if det_tag == "deterministic":
                 msg = f"Score and eval calls do not match: |{e_score}| != |{score}|"
                 assert abs(e_score) == abs(score), msg
 
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
-            if inst.get_tag("property:randomness") == "deterministic":
+            if det_tag == "deterministic":
                 msg = f"Score does not match: {res} != {call_sc}"
                 assert e_score == call_sc, msg
+
+            sign_tag = inst.get_tag("property:higher_or_lower_is_better", "lower")
+            if sign_tag == "higher" and det_tag == "deterministic":
+                assert e_score == res
+            elif sign_tag == "lower" and det_tag == "deterministic":
+                assert e_score == -res
 
 
 class OptimizerFixtureGenerator(BaseFixtureGenerator):
