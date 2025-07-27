@@ -118,6 +118,8 @@ class BaseExperiment(BaseObject):
         elif hib == "lower":
             sign = -1
 
-        score_res = self.evaluate(params)
+        eval_res = self.evaluate(params)
+        value = eval_res[0]
+        metadata = eval_res[1]
 
-        return sign * score_res[0], score_res[1]
+        return sign * value, metadata
