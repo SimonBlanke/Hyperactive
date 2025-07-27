@@ -37,7 +37,7 @@ class Negative(BaseExperiment):
     Example
     -------
     >>> import numpy as np
-    >>> from hyperactive.toy.ackley import Ackley
+    >>> from hyperactive.experiment.toy import Ackley
     >>> from hyperactive.experiment.compose import Negative
     >>>
     >>> ackley_exp = Ackley(a=20, b=0.2, c=2 * np.pi, d=2)
