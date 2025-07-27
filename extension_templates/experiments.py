@@ -234,10 +234,11 @@ class MyExperiment(BaseExperiment):
 
     @classmethod
     def _get_score_params(self):
-        """Return settings for testing the score function. Used in tests only.
+        """Return settings for testing score/evaluate functions. Used in tests only.
 
-        Returns a list, the i-th element corresponds to self.get_test_params()[i].
-        It should be a valid call for self.score.
+        Returns a list, the i-th element should be valid arguments for
+        self.evaluate and self.score, of an instance constructed with
+        self.get_test_params()[i].
 
         Returns
         -------
@@ -245,7 +246,7 @@ class MyExperiment(BaseExperiment):
             The parameters to be used for scoring.
         """
         # dict keys should be same as paramnames return
-        # or subset, only if _score allows for subsets of parameters
+        # or subset, only if _evaluate allows for subsets of parameters
         score_params1 = {"score_param1": "foo", "score_param2": "bar"}
         score_params2 = {"score_param1": "baz", "score_param2": "qux"}
         return [score_params1, score_params2]

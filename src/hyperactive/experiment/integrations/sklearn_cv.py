@@ -228,10 +228,11 @@ class SklearnCvExperiment(BaseExperiment):
 
     @classmethod
     def _get_score_params(self):
-        """Return settings for testing the score function. Used in tests only.
+        """Return settings for testing score/evaluate functions. Used in tests only.
 
-        Returns a list, the i-th element corresponds to self.get_test_params()[i].
-        It should be a valid call for self.score.
+        Returns a list, the i-th element should be valid arguments for
+        self.evaluate and self.score, of an instance constructed with
+        self.get_test_params()[i].
 
         Returns
         -------
