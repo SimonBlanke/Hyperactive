@@ -43,6 +43,9 @@ class Parabola(BaseExperiment):
         "property:randomness": "deterministic",  # random or deterministic
         # if deterministic, two calls of score will result in the same value
         # random = two calls may result in different values; same as "stochastic"
+        "property:higher_or_lower_is_better": "lower",
+        # values are "higher", "lower", "mixed"
+        # whether higher or lower scores are better
     }
 
     def __init__(self, a=1.0, b=0.0, c=0.0):
@@ -54,7 +57,21 @@ class Parabola(BaseExperiment):
     def _paramnames(self):
         return ["x", "y"]
 
-    def _score(self, params):
+    def _evaluate(self, params):
+        """Evaluate the parameters.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to evaluate.
+
+        Returns
+        -------
+        float
+            The value of the parameters as per evaluation.
+        dict
+            Additional metadata about the search.
+        """
         x = params["x"]
         y = params["y"]
 

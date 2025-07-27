@@ -75,11 +75,11 @@ class MyExperiment(BaseExperiment):
         #
         "property:randomness": "random",
         # valid values: "random", "deterministic"
-        # if "deterministic", two calls of score must result in the same value
+        # if "deterministic", two calls of "evaluate" must result in the same value
         #
         "property:higher_or_lower_is_better": "lower",
         # valid values: "higher", "lower", "mixed"
-        # whether higher or lower scores are better
+        # whether higher or lower returns of "evaluate" are better
         #
         # --------------
         # packaging info
@@ -151,25 +151,25 @@ class MyExperiment(BaseExperiment):
         return ["score_param1", "score_param2"]
 
     # todo: implement this, mandatory
-    def _score(self, params):
-        """Score the parameters.
+    def _evaluate(self, params):
+        """Evaluate the parameters.
 
         Parameters
         ----------
         params : dict with string keys
-            Parameters to score.
+            Parameters to evaluate.
 
         Returns
         -------
         float
-            The score of the parameters.
+            The value of the parameters as per evaluation.
         dict
             Additional metadata about the search.
         """
         # params is a dictionary with keys being paramnames or subset thereof
         # IMPORTANT: avoid side effects to params!
         #
-        # the method may work if only a subste of the parameters in paramnames is passed
+        # the method may work if only a subset of the parameters in paramnames is passed
         # but this is not necessary
         value = 42  # must be numpy.float64
         metadata = {"some": "metadata"}  # can be any dict

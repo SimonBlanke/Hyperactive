@@ -50,6 +50,9 @@ class Sphere(BaseExperiment):
         "property:randomness": "deterministic",  # random or deterministic
         # if deterministic, two calls of score will result in the same value
         # random = two calls may result in different values; same as "stochastic"
+        "property:higher_or_lower_is_better": "lower",
+        # values are "higher", "lower", "mixed"
+        # whether higher or lower scores are better
     }
 
     def __init__(self, const=0, n_dim=2):
@@ -61,7 +64,21 @@ class Sphere(BaseExperiment):
     def _paramnames(self):
         return [f"x{i}" for i in range(self.n_dim)]
 
-    def _score(self, params):
+    def _evaluate(self, params):
+        """Evaluate the parameters.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to evaluate.
+
+        Returns
+        -------
+        float
+            The value of the parameters as per evaluation.
+        dict
+            Additional metadata about the search.
+        """
         params_vec = np.array([params[f"x{i}"] for i in range(self.n_dim)])
         return np.sum(params_vec ** 2) + self.const, {}
 

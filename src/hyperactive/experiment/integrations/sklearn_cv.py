@@ -127,18 +127,18 @@ class SklearnCvExperiment(BaseExperiment):
         """
         return list(self.estimator.get_params().keys())
 
-    def _score(self, params):
-        """Score the parameters.
+    def _evaluate(self, params):
+        """Evaluate the parameters.
 
         Parameters
         ----------
         params : dict with string keys
-            Parameters to score.
+            Parameters to evaluate.
 
         Returns
         -------
         float
-            The score of the parameters.
+            The value of the parameters as per evaluation.
         dict
             Additional metadata about the search.
         """
