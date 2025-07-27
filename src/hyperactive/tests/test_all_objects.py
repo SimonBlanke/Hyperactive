@@ -201,8 +201,8 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
             if det_tag == "deterministic":
-                msg = f"Score does not match: {e_score} != {call_sc}"
-                assert e_score == call_sc, msg
+                msg = f"Score does not match: {score} != {call_sc}"
+                assert score == call_sc, msg
 
             sign_tag = inst.get_tag("property:higher_or_lower_is_better", "higher")
             if sign_tag == "higher" and det_tag == "deterministic":
