@@ -245,7 +245,7 @@ class MyExperiment(BaseExperiment):
             The parameters to be used for scoring.
         """
         # dict keys should be same as paramnames return
-        # or subset, only if _score allows for subsets of parameters
+        # or subset, only if _evaluate allows for subsets of parameters
         score_params1 = {"score_param1": "foo", "score_param2": "bar"}
         score_params2 = {"score_param1": "baz", "score_param2": "qux"}
         return [score_params1, score_params2]
