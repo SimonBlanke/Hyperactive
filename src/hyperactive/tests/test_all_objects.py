@@ -204,7 +204,7 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
                 msg = f"Score does not match: {res} != {call_sc}"
                 assert e_score == call_sc, msg
 
-            sign_tag = inst.get_tag("property:higher_or_lower_is_better", "lower")
+            sign_tag = inst.get_tag("property:higher_or_lower_is_better", "higher")
             if sign_tag == "higher" and det_tag == "deterministic":
                 assert e_score == res
             elif sign_tag == "lower" and det_tag == "deterministic":
