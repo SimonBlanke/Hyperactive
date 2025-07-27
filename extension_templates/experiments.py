@@ -237,7 +237,7 @@ class MyExperiment(BaseExperiment):
         """Return settings for testing the score function. Used in tests only.
 
         Returns a list, the i-th element corresponds to self.get_test_params()[i].
-        It should be a valid call for self.score.
+        It should be a valid call for self.evaluate.
 
         Returns
         -------
