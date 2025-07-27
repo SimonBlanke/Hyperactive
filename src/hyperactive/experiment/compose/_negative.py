@@ -130,3 +130,19 @@ class Negative(BaseExperiment):
         params2 = {"experiment": ackley_exp, "flip_score": False}
 
         return [params0, params1, params2]
+
+    @classmethod
+    def _get_score_params(self):
+        """Return settings for testing score/evaluate functions. Used in tests only.
+
+        Returns a list, the i-th element should be valid arguments for
+        self.evaluate and self.score, of an instance constructed with
+        self.get_test_params()[i].
+
+        Returns
+        -------
+        list of dict
+            The parameters to be used for scoring.
+        """
+        params = {"x0": 0, "x1": 0}
+        return [params, params, params]
