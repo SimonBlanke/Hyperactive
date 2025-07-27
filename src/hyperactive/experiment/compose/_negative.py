@@ -121,7 +121,7 @@ class Negative(BaseExperiment):
             `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
-        from hyperactive.toy.ackley import Ackley
+        from hyperactive.experiment.toy import Ackley
 
         ackley_exp = Ackley(a=20, b=0.2, c=2, d=2)
 
