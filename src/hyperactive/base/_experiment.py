@@ -114,9 +114,9 @@ class BaseExperiment(BaseObject):
         """
         hib = self.get_tag("property:higher_or_lower_is_better", "lower")
         if hib == "higher":
-            sign = -1
-        elif hib == "lower":
             sign = 1
+        elif hib == "lower":
+            sign = -1
 
         score_res = self.evaluate(params)
 
