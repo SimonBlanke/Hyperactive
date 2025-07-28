@@ -49,6 +49,9 @@ class Ackley(BaseExperiment):
         "property:randomness": "deterministic",  # random or deterministic
         # if deterministic, two calls of score will result in the same value
         # random = two calls may result in different values; same as "stochastic"
+        "property:higher_or_lower_is_better": "lower",
+        # values are "higher", "lower", "mixed"
+        # whether higher or lower scores are better
     }
 
     def __init__(self, a=20, b=0.2, c=2 * np.pi, d=2):
@@ -61,7 +64,21 @@ class Ackley(BaseExperiment):
     def _paramnames(self):
         return [f"x{i}" for i in range(self.d)]
 
-    def _score(self, params):
+    def _evaluate(self, params):
+        """Evaluate the parameters.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to evaluate.
+
+        Returns
+        -------
+        float
+            The value of the parameters as per evaluation.
+        dict
+            Additional metadata about the search.
+        """
         x_vec = np.array([params[f"x{i}"] for i in range(self.d)])
 
         loss1 = -self.a * np.exp(-self.b * np.sqrt(np.sum(x_vec**2) / self.d))
@@ -110,10 +127,11 @@ class Ackley(BaseExperiment):
 
     @classmethod
     def _get_score_params(self):
-        """Return settings for testing the score function. Used in tests only.
+        """Return settings for testing score/evaluate functions. Used in tests only.
 
-        Returns a list, the i-th element corresponds to self.get_test_params()[i].
-        It should be a valid call for self.score.
+        Returns a list, the i-th element should be valid arguments for
+        self.evaluate and self.score, of an instance constructed with
+        self.get_test_params()[i].
 
         Returns
         -------
