@@ -75,7 +75,11 @@ class MyExperiment(BaseExperiment):
         #
         "property:randomness": "random",
         # valid values: "random", "deterministic"
-        # if "deterministic", two calls of score must result in the same value
+        # if "deterministic", two calls of "evaluate" must result in the same value
+        #
+        "property:higher_or_lower_is_better": "lower",
+        # valid values: "higher", "lower", "mixed"
+        # whether higher or lower returns of "evaluate" are better
         #
         # --------------
         # packaging info
@@ -147,25 +151,25 @@ class MyExperiment(BaseExperiment):
         return ["score_param1", "score_param2"]
 
     # todo: implement this, mandatory
-    def _score(self, params):
-        """Score the parameters.
+    def _evaluate(self, params):
+        """Evaluate the parameters.
 
         Parameters
         ----------
         params : dict with string keys
-            Parameters to score.
+            Parameters to evaluate.
 
         Returns
         -------
         float
-            The score of the parameters.
+            The value of the parameters as per evaluation.
         dict
             Additional metadata about the search.
         """
         # params is a dictionary with keys being paramnames or subset thereof
         # IMPORTANT: avoid side effects to params!
         #
-        # the method may work if only a subste of the parameters in paramnames is passed
+        # the method may work if only a subset of the parameters in paramnames is passed
         # but this is not necessary
         value = 42  # must be numpy.float64
         metadata = {"some": "metadata"}  # can be any dict
@@ -230,10 +234,11 @@ class MyExperiment(BaseExperiment):
 
     @classmethod
     def _get_score_params(self):
-        """Return settings for testing the score function. Used in tests only.
+        """Return settings for testing score/evaluate functions. Used in tests only.
 
-        Returns a list, the i-th element corresponds to self.get_test_params()[i].
-        It should be a valid call for self.score.
+        Returns a list, the i-th element should be valid arguments for
+        self.evaluate and self.score, of an instance constructed with
+        self.get_test_params()[i].
 
         Returns
         -------
@@ -241,7 +246,7 @@ class MyExperiment(BaseExperiment):
             The parameters to be used for scoring.
         """
         # dict keys should be same as paramnames return
-        # or subset, only if _score allows for subsets of parameters
+        # or subset, only if _evaluate allows for subsets of parameters
         score_params1 = {"score_param1": "foo", "score_param2": "bar"}
         score_params2 = {"score_param1": "baz", "score_param2": "qux"}
         return [score_params1, score_params2]

@@ -45,6 +45,7 @@ class PackageConfig:
         "maintainers",
         # experiments
         "property:randomness",
+        "property:higher_or_lower_is_better",
         # optimizers
         "info:name",  # str
         "info:local_vs_global",  # "local", "mixed", "global"
@@ -184,10 +185,30 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
             assert isinstance(score, float), f"Score is not a float: {score}"
             assert isinstance(metadata, dict), f"Metadata is not a dict: {metadata}"
 
+            eval_res = inst.evaluate(obj)
+            msg = f"eval function did not return a length two tuple: {res}"
+            assert isinstance(eval_res, tuple) and len(eval_res) == 2, msg
+            e_score, e_metadata = eval_res
+            assert isinstance(e_score, float), f"Score is not a float: {e_score}"
+            assert isinstance(e_metadata, dict), f"Metadata is not a dict: {e_metadata}"
+
+            det_tag = inst.get_tag("property:randomness", "random")
+
+            if det_tag == "deterministic":
+                msg = f"Score and eval calls do not match: |{e_score}| != |{score}|"
+                assert abs(e_score) == abs(score), msg
+
             call_sc = inst(**obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
-            if inst.get_tag("property:randomness") == "deterministic":
-                assert score == call_sc, f"Score does not match: {score} != {call_sc}"
+            if det_tag == "deterministic":
+                msg = f"Score does not match: {score} != {call_sc}"
+                assert score == call_sc, msg
+
+            sign_tag = inst.get_tag("property:higher_or_lower_is_better", "higher")
+            if sign_tag == "higher" and det_tag == "deterministic":
+                assert score == e_score
+            elif sign_tag == "lower" and det_tag == "deterministic":
+                assert score == -e_score
 
 
 class OptimizerFixtureGenerator(BaseFixtureGenerator):

@@ -3,6 +3,7 @@
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from hyperactive.opt.gridsearch import GridSearchSk
+from hyperactive.opt.random_search import RandomSearchSk
 from .gfo import (
     HillClimbing,
     StochasticHillClimbing,
@@ -30,6 +31,7 @@ from .gfo import (
 
 __all__ = [
     "GridSearchSk",
+    "RandomSearchSk",
     "HillClimbing",
     "RepulsingHillClimbing",
     "StochasticHillClimbing",
