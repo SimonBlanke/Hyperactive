@@ -30,8 +30,6 @@ class TPESampler(_BaseOptunaAdapter):
         Number of startup trials for TPE.
     n_ei_candidates : int, default=24
         Number of candidates for expected improvement.
-    gamma : float, default=0.1
-        Threshold for TPE algorithm.
     weights : callable, default=None
         Weight function for TPE.
     experiment : BaseExperiment, optional
@@ -76,13 +74,11 @@ class TPESampler(_BaseOptunaAdapter):
         max_score=None,
         n_startup_trials=10,
         n_ei_candidates=24,
-        gamma=0.1,
         weights=None,
         experiment=None,
     ):
         self.n_startup_trials = n_startup_trials
         self.n_ei_candidates = n_ei_candidates
-        self.gamma = gamma
         self.weights = weights
         
         super().__init__(
@@ -108,7 +104,6 @@ class TPESampler(_BaseOptunaAdapter):
         sampler_kwargs = {
             "n_startup_trials": self.n_startup_trials,
             "n_ei_candidates": self.n_ei_candidates,
-            "gamma": self.gamma,
         }
         
         if self.weights is not None:
@@ -126,6 +121,5 @@ class TPESampler(_BaseOptunaAdapter):
         params[0].update({
             "n_startup_trials": 5,
             "n_ei_candidates": 12,
-            "gamma": 0.2,
         })
         return params
