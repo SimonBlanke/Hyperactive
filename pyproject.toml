@@ -60,6 +60,11 @@ test = [
   "pytest-cov",
   "pathos",
 ]
+test_parallel_backends = [
+  "dask",
+  "joblib",
+  "ray",
+]
 all_extras = [
   "hyperactive[integrations]",
 ]
