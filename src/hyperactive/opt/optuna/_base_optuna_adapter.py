@@ -124,16 +124,14 @@ class _BaseOptunaAdapter(BaseOptimizer):
             The Optuna study object
         """
         if self.initialize is not None:
-            import optuna
-            
             if isinstance(self.initialize, dict) and "warm_start" in self.initialize:
                 warm_start_points = self.initialize["warm_start"]
                 if isinstance(warm_start_points, list):
+                    # For warm start, we manually add trials to the study history
+                    # instead of using suggest methods to avoid distribution conflicts
                     for point in warm_start_points:
-                        trial = study.ask()
-                        for key, value in point.items():
-                            trial.suggest_categorical(key, [value])
-                        study.tell(trial, self.experiment(**point))
+                        score = self.experiment(**point)
+                        study.enqueue_trial(point)
 
     def _run(self, experiment, param_space, n_trials, **kwargs):
         """Run the Optuna optimization.
