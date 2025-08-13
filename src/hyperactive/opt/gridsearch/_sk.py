@@ -229,10 +229,10 @@ class GridSearchSk(BaseOptimizer):
 
         parallel_fixtures = _get_parallel_test_fixtures()
 
-        for k, v in parallel_fixtures.items():
+        for x in parallel_fixtures:
             new_ackley = params_ackley.copy()
-            new_ackley["backend"] = k
-            new_ackley["backend_params"] = v
+            new_ackley["backend"] = x["backend"]
+            new_ackley["backend_params"] = x["backend_params"]
             params.append(new_ackley)
 
         return params
