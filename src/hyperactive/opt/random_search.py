@@ -219,8 +219,7 @@ class RandomSearchSk(BaseOptimizer):
 
         for x in parallel_fixtures:
             new_ackley = params_ackley.copy()
-            new_ackley["backend"] = x["backend"]
-            new_ackley["backend_params"] = x["backend_params"]
+            new_ackley.update(x)
             params.append(new_ackley)
 
         return params
