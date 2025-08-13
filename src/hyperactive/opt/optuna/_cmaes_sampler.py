@@ -101,6 +101,14 @@ class CmaEsSampler(_BaseOptunaAdapter):
         """
         import optuna
         
+        try:
+            import cmaes
+        except ImportError:
+            raise ImportError(
+                "CmaEsSampler requires the 'cmaes' package. "
+                "Install it with: pip install cmaes"
+            )
+        
         sampler_kwargs = {
             "sigma0": self.sigma0,
             "n_startup_trials": self.n_startup_trials,
