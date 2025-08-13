@@ -1,7 +1,6 @@
 """Individual Optuna optimization algorithms."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-from ._optuna import OptunaOptimizer
 from ._tpe_sampler import TPESampler
 from ._random_sampler import RandomSampler
 from ._cmaes_sampler import CmaEsSampler
@@ -12,7 +11,6 @@ from ._nsga_iii_sampler import NSGAIIISampler
 from ._qmc_sampler import QMCSampler
 
 __all__ = [
-    "OptunaOptimizer",
     "TPESampler",
     "RandomSampler", 
     "CmaEsSampler",
