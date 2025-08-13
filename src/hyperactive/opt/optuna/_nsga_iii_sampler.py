@@ -1,11 +1,11 @@
-"""Optuna optimizer interface."""
+"""NSGA-III multi-objective sampler optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from ._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class OptunaOptimizer(_BaseOptunaAdapter):
-    """Optuna optimizer interface with configurable samplers.
+class NSGAIIISampler(_BaseOptunaAdapter):
+    """NSGA-III multi-objective optimizer.
 
     Parameters
     ----------
@@ -26,18 +26,22 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    sampler : str, default="tpe"
-        The sampler type to use. Options: "tpe", "random", "cmaes", "gp", "grid", "nsga2", "nsga3", "qmc".
+    population_size : int, default=50
+        Population size for NSGA-III.
+    mutation_prob : float, default=0.1
+        Mutation probability for NSGA-III.
+    crossover_prob : float, default=0.9
+        Crossover probability for NSGA-III.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
-    **sampler_kwargs
-        Additional keyword arguments passed to the sampler.
 
-    Example
-    -------
+    Examples
+    --------
+    Basic usage of NSGAIIISampler with a scikit-learn experiment:
+
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.una import OptunaOptimizer
+    >>> from hyperactive.opt.optuna import NSGAIIISampler
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -46,15 +50,18 @@ class OptunaOptimizer(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = OptunaOptimizer(
+    >>> optimizer = NSGAIIISampler(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
+        "info:name": "NSGA-III Sampler",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "mixed",
+        "info:compute": "high",
         "python_dependencies": ["optuna"],
-        "info:name": "Optuna-based optimizer",
     }
 
     def __init__(
@@ -65,11 +72,15 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        sampler="tpe",
+        population_size=50,
+        mutation_prob=0.1,
+        crossover_prob=0.9,
         experiment=None,
-        **sampler_kwargs
     ):
-        self.sampler_type = sampler
+        self.population_size = population_size
+        self.mutation_prob = mutation_prob
+        self.crossover_prob = crossover_prob
+        
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -78,60 +89,36 @@ class OptunaOptimizer(_BaseOptunaAdapter):
             early_stopping=early_stopping,
             max_score=max_score,
             experiment=experiment,
-            **sampler_kwargs
         )
 
     def _get_sampler(self):
-        """Get the sampler based on the sampler type.
+        """Get the NSGA-III sampler.
 
         Returns
         -------
         sampler
-            The Optuna sampler instance
+            The Optuna NSGAIIISampler instance
         """
         import optuna
         
-        sampler_map = {
-            "tpe": optuna.samplers.TPESampler,
-            "random": optuna.samplers.RandomSampler,
-            "cmaes": optuna.samplers.CmaEsSampler,
-            "gp": optuna.samplers.GPSampler,
-            "grid": optuna.samplers.GridSampler,
-            "nsga2": optuna.samplers.NSGAIISampler,
-            "nsga3": optuna.samplers.NSGAIIISampler,
-            "qmc": optuna.samplers.QMCSampler,
+        sampler_kwargs = {
+            "population_size": self.population_size,
+            "mutation_prob": self.mutation_prob,
+            "crossover_prob": self.crossover_prob,
         }
         
-        if self.sampler_type not in sampler_map:
-            raise ValueError(f"Unknown sampler type: {self.sampler_type}")
-        
-        sampler_class = sampler_map[self.sampler_type]
-        
-        # Add random state if provided
-        sampler_kwargs = dict(self.sampler_kwargs)
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
         
-        return sampler_class(**sampler_kwargs)
+        return optuna.samplers.NSGAIIISampler(**sampler_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
-
-        from hyperactive.experiment.integrations import SklearnCvExperiment
-        from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
-
-        X, y = load_iris(return_X_y=True)
-        sklearn_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
-
-        param_space = {
-            "C": (0.01, 10),
-            "gamma": (0.0001, 10),
-        }
-
-        return [{
-            "param_space": param_space,
-            "n_trials": 10,
-            "experiment": sklearn_exp,
-        }]
+        params = super().get_test_params(parameter_set)
+        params[0].update({
+            "population_size": 20,
+            "mutation_prob": 0.2,
+            "crossover_prob": 0.8,
+        })
+        return params

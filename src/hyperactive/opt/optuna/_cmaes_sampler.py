@@ -1,11 +1,11 @@
-"""Optuna optimizer interface."""
+"""CMA-ES (Covariance Matrix Adaptation Evolution Strategy) sampler optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from ._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class OptunaOptimizer(_BaseOptunaAdapter):
-    """Optuna optimizer interface with configurable samplers.
+class CmaEsSampler(_BaseOptunaAdapter):
+    """CMA-ES (Covariance Matrix Adaptation Evolution Strategy) optimizer.
 
     Parameters
     ----------
@@ -26,18 +26,22 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    sampler : str, default="tpe"
-        The sampler type to use. Options: "tpe", "random", "cmaes", "gp", "grid", "nsga2", "nsga3", "qmc".
+    x0 : dict, default=None
+        Initial parameter values for CMA-ES.
+    sigma0 : float, default=1.0
+        Initial standard deviation for CMA-ES.
+    n_startup_trials : int, default=1
+        Number of startup trials for CMA-ES.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
-    **sampler_kwargs
-        Additional keyword arguments passed to the sampler.
 
-    Example
-    -------
+    Examples
+    --------
+    Basic usage of CmaEsSampler with a scikit-learn experiment:
+
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.una import OptunaOptimizer
+    >>> from hyperactive.opt.optuna import CmaEsSampler
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -46,15 +50,18 @@ class OptunaOptimizer(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = OptunaOptimizer(
+    >>> optimizer = CmaEsSampler(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
-        "python_dependencies": ["optuna"],
-        "info:name": "Optuna-based optimizer",
+        "info:name": "CMA-ES Sampler",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "mixed",
+        "info:compute": "high",
+        "python_dependencies": ["optuna", "cmaes"],
     }
 
     def __init__(
@@ -65,11 +72,15 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        sampler="tpe",
+        x0=None,
+        sigma0=1.0,
+        n_startup_trials=1,
         experiment=None,
-        **sampler_kwargs
     ):
-        self.sampler_type = sampler
+        self.x0 = x0
+        self.sigma0 = sigma0
+        self.n_startup_trials = n_startup_trials
+        
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -78,60 +89,37 @@ class OptunaOptimizer(_BaseOptunaAdapter):
             early_stopping=early_stopping,
             max_score=max_score,
             experiment=experiment,
-            **sampler_kwargs
         )
 
     def _get_sampler(self):
-        """Get the sampler based on the sampler type.
+        """Get the CMA-ES sampler.
 
         Returns
         -------
         sampler
-            The Optuna sampler instance
+            The Optuna CmaEsSampler instance
         """
         import optuna
         
-        sampler_map = {
-            "tpe": optuna.samplers.TPESampler,
-            "random": optuna.samplers.RandomSampler,
-            "cmaes": optuna.samplers.CmaEsSampler,
-            "gp": optuna.samplers.GPSampler,
-            "grid": optuna.samplers.GridSampler,
-            "nsga2": optuna.samplers.NSGAIISampler,
-            "nsga3": optuna.samplers.NSGAIIISampler,
-            "qmc": optuna.samplers.QMCSampler,
+        sampler_kwargs = {
+            "sigma0": self.sigma0,
+            "n_startup_trials": self.n_startup_trials,
         }
         
-        if self.sampler_type not in sampler_map:
-            raise ValueError(f"Unknown sampler type: {self.sampler_type}")
-        
-        sampler_class = sampler_map[self.sampler_type]
-        
-        # Add random state if provided
-        sampler_kwargs = dict(self.sampler_kwargs)
+        if self.x0 is not None:
+            sampler_kwargs["x0"] = self.x0
+            
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
         
-        return sampler_class(**sampler_kwargs)
+        return optuna.samplers.CmaEsSampler(**sampler_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
-
-        from hyperactive.experiment.integrations import SklearnCvExperiment
-        from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
-
-        X, y = load_iris(return_X_y=True)
-        sklearn_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
-
-        param_space = {
-            "C": (0.01, 10),
-            "gamma": (0.0001, 10),
-        }
-
-        return [{
-            "param_space": param_space,
-            "n_trials": 10,
-            "experiment": sklearn_exp,
-        }]
+        params = super().get_test_params(parameter_set)
+        params[0].update({
+            "sigma0": 0.5,
+            "n_startup_trials": 1,
+        })
+        return params

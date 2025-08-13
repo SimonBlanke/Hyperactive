@@ -1,11 +1,11 @@
-"""Optuna optimizer interface."""
+"""Random sampler optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from ._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class OptunaOptimizer(_BaseOptunaAdapter):
-    """Optuna optimizer interface with configurable samplers.
+class RandomSampler(_BaseOptunaAdapter):
+    """Random sampler optimizer.
 
     Parameters
     ----------
@@ -26,18 +26,16 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    sampler : str, default="tpe"
-        The sampler type to use. Options: "tpe", "random", "cmaes", "gp", "grid", "nsga2", "nsga3", "qmc".
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
-    **sampler_kwargs
-        Additional keyword arguments passed to the sampler.
 
-    Example
-    -------
+    Examples
+    --------
+    Basic usage of RandomSampler with a scikit-learn experiment:
+
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.una import OptunaOptimizer
+    >>> from hyperactive.opt.optuna import RandomSampler
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -46,15 +44,18 @@ class OptunaOptimizer(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = OptunaOptimizer(
+    >>> optimizer = RandomSampler(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
+        "info:name": "Random Sampler",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "explore",
+        "info:compute": "low",
         "python_dependencies": ["optuna"],
-        "info:name": "Optuna-based optimizer",
     }
 
     def __init__(
@@ -65,11 +66,8 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        sampler="tpe",
         experiment=None,
-        **sampler_kwargs
     ):
-        self.sampler_type = sampler
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -78,60 +76,20 @@ class OptunaOptimizer(_BaseOptunaAdapter):
             early_stopping=early_stopping,
             max_score=max_score,
             experiment=experiment,
-            **sampler_kwargs
         )
 
     def _get_sampler(self):
-        """Get the sampler based on the sampler type.
+        """Get the Random sampler.
 
         Returns
         -------
         sampler
-            The Optuna sampler instance
+            The Optuna RandomSampler instance
         """
         import optuna
         
-        sampler_map = {
-            "tpe": optuna.samplers.TPESampler,
-            "random": optuna.samplers.RandomSampler,
-            "cmaes": optuna.samplers.CmaEsSampler,
-            "gp": optuna.samplers.GPSampler,
-            "grid": optuna.samplers.GridSampler,
-            "nsga2": optuna.samplers.NSGAIISampler,
-            "nsga3": optuna.samplers.NSGAIIISampler,
-            "qmc": optuna.samplers.QMCSampler,
-        }
-        
-        if self.sampler_type not in sampler_map:
-            raise ValueError(f"Unknown sampler type: {self.sampler_type}")
-        
-        sampler_class = sampler_map[self.sampler_type]
-        
-        # Add random state if provided
-        sampler_kwargs = dict(self.sampler_kwargs)
+        sampler_kwargs = {}
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
         
-        return sampler_class(**sampler_kwargs)
-
-    @classmethod
-    def get_test_params(cls, parameter_set="default"):
-        """Return testing parameter settings for the optimizer."""
-
-        from hyperactive.experiment.integrations import SklearnCvExperiment
-        from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
-
-        X, y = load_iris(return_X_y=True)
-        sklearn_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
-
-        param_space = {
-            "C": (0.01, 10),
-            "gamma": (0.0001, 10),
-        }
-
-        return [{
-            "param_space": param_space,
-            "n_trials": 10,
-            "experiment": sklearn_exp,
-        }]
+        return optuna.samplers.RandomSampler(**sampler_kwargs)

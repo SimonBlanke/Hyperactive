@@ -1,11 +1,11 @@
-"""Optuna optimizer interface."""
+"""TPE (Tree-structured Parzen Estimator) sampler optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from ._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class OptunaOptimizer(_BaseOptunaAdapter):
-    """Optuna optimizer interface with configurable samplers.
+class TPESampler(_BaseOptunaAdapter):
+    """Tree-structured Parzen Estimator optimizer.
 
     Parameters
     ----------
@@ -26,18 +26,24 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    sampler : str, default="tpe"
-        The sampler type to use. Options: "tpe", "random", "cmaes", "gp", "grid", "nsga2", "nsga3", "qmc".
+    n_startup_trials : int, default=10
+        Number of startup trials for TPE.
+    n_ei_candidates : int, default=24
+        Number of candidates for expected improvement.
+    gamma : float, default=0.1
+        Threshold for TPE algorithm.
+    weights : callable, default=None
+        Weight function for TPE.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
-    **sampler_kwargs
-        Additional keyword arguments passed to the sampler.
 
-    Example
-    -------
+    Examples
+    --------
+    Basic usage of TPESampler with a scikit-learn experiment:
+
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.una import OptunaOptimizer
+    >>> from hyperactive.opt.optuna import TPESampler
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -46,15 +52,18 @@ class OptunaOptimizer(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = OptunaOptimizer(
+    >>> optimizer = TPESampler(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
+        "info:name": "Tree-structured Parzen Estimator",
+        "info:local_vs_global": "global",
+        "info:explore_vs_exploit": "exploit",
+        "info:compute": "middle",
         "python_dependencies": ["optuna"],
-        "info:name": "Optuna-based optimizer",
     }
 
     def __init__(
@@ -65,11 +74,17 @@ class OptunaOptimizer(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        sampler="tpe",
+        n_startup_trials=10,
+        n_ei_candidates=24,
+        gamma=0.1,
+        weights=None,
         experiment=None,
-        **sampler_kwargs
     ):
-        self.sampler_type = sampler
+        self.n_startup_trials = n_startup_trials
+        self.n_ei_candidates = n_ei_candidates
+        self.gamma = gamma
+        self.weights = weights
+        
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -78,60 +93,39 @@ class OptunaOptimizer(_BaseOptunaAdapter):
             early_stopping=early_stopping,
             max_score=max_score,
             experiment=experiment,
-            **sampler_kwargs
         )
 
     def _get_sampler(self):
-        """Get the sampler based on the sampler type.
+        """Get the TPE sampler.
 
         Returns
         -------
         sampler
-            The Optuna sampler instance
+            The Optuna TPESampler instance
         """
         import optuna
         
-        sampler_map = {
-            "tpe": optuna.samplers.TPESampler,
-            "random": optuna.samplers.RandomSampler,
-            "cmaes": optuna.samplers.CmaEsSampler,
-            "gp": optuna.samplers.GPSampler,
-            "grid": optuna.samplers.GridSampler,
-            "nsga2": optuna.samplers.NSGAIISampler,
-            "nsga3": optuna.samplers.NSGAIIISampler,
-            "qmc": optuna.samplers.QMCSampler,
+        sampler_kwargs = {
+            "n_startup_trials": self.n_startup_trials,
+            "n_ei_candidates": self.n_ei_candidates,
+            "gamma": self.gamma,
         }
         
-        if self.sampler_type not in sampler_map:
-            raise ValueError(f"Unknown sampler type: {self.sampler_type}")
-        
-        sampler_class = sampler_map[self.sampler_type]
-        
-        # Add random state if provided
-        sampler_kwargs = dict(self.sampler_kwargs)
+        if self.weights is not None:
+            sampler_kwargs["weights"] = self.weights
+            
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
         
-        return sampler_class(**sampler_kwargs)
+        return optuna.samplers.TPESampler(**sampler_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
-
-        from hyperactive.experiment.integrations import SklearnCvExperiment
-        from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
-
-        X, y = load_iris(return_X_y=True)
-        sklearn_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
-
-        param_space = {
-            "C": (0.01, 10),
-            "gamma": (0.0001, 10),
-        }
-
-        return [{
-            "param_space": param_space,
-            "n_trials": 10,
-            "experiment": sklearn_exp,
-        }]
+        params = super().get_test_params(parameter_set)
+        params[0].update({
+            "n_startup_trials": 5,
+            "n_ei_candidates": 12,
+            "gamma": 0.2,
+        })
+        return params
