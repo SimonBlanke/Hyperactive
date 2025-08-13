@@ -9,6 +9,8 @@ import numpy as np
 from sklearn.model_selection import ParameterSampler
 
 from hyperactive.base import BaseOptimizer
+from hyperactive.opt._common import _score_params
+from hyperactive.utils.parallel import parallelize
 
 
 class RandomSearchSk(BaseOptimizer):
@@ -19,12 +21,56 @@ class RandomSearchSk(BaseOptimizer):
     param_distributions : dict[str, list | scipy.stats.rv_frozen]
         Search space specification. Discrete lists are sampled uniformly;
         scipy distribution objects are sampled via their ``rvs`` method.
+
     n_iter : int, default=10
         Number of parameter sets to evaluate.
+
     random_state : int | np.random.RandomState | None, default=None
         Controls the pseudo-random generator for reproducibility.
+
     error_score : float, default=np.nan
         Score assigned when the experiment raises an exception.
+
+    backend : {"dask", "loky", "multiprocessing", "threading","ray"}, by default "None".
+        Runs parallel evaluate if specified and ``strategy`` is set as "refit".
+
+        - "None": executes loop sequentally, simple list comprehension
+        - "loky", "multiprocessing" and "threading": uses ``joblib.Parallel`` loops
+        - "joblib": custom and 3rd party ``joblib`` backends, e.g., ``spark``
+        - "dask": uses ``dask``, requires ``dask`` package in environment
+        - "ray": uses ``ray``, requires ``ray`` package in environment
+
+        Recommendation: Use "dask" or "loky" for parallel evaluate.
+        "threading" is unlikely to see speed ups due to the GIL and the serialization
+        backend (``cloudpickle``) for "dask" and "loky" is generally more robust
+        than the standard ``pickle`` library used in "multiprocessing".
+
+    backend_params : dict, optional
+        additional parameters passed to the backend as config.
+        Directly passed to ``utils.parallel.parallelize``.
+        Valid keys depend on the value of ``backend``:
+
+        - "None": no additional parameters, ``backend_params`` is ignored
+        - "loky", "multiprocessing" and "threading": default ``joblib`` backends
+          any valid keys for ``joblib.Parallel`` can be passed here, e.g., ``n_jobs``,
+          with the exception of ``backend`` which is directly controlled by ``backend``.
+          If ``n_jobs`` is not passed, it will default to ``-1``, other parameters
+          will default to ``joblib`` defaults.
+        - "joblib": custom and 3rd party ``joblib`` backends, e.g., ``spark``.
+          any valid keys for ``joblib.Parallel`` can be passed here, e.g., ``n_jobs``,
+          ``backend`` must be passed as a key of ``backend_params`` in this case.
+          If ``n_jobs`` is not passed, it will default to ``-1``, other parameters
+          will default to ``joblib`` defaults.
+        - "dask": any valid keys for ``dask.compute`` can be passed, e.g., ``scheduler``
+
+        - "ray": The following keys can be passed:
+
+            - "ray_remote_args": dictionary of valid keys for ``ray.init``
+            - "shutdown_ray": bool, default=True; False prevents ``ray`` from shutting
+                down after parallelization.
+            - "logger_name": str, default="ray"; name of the logger to use.
+            - "mute_warnings": bool, default=False; if True, suppresses warnings
+
     experiment : BaseExperiment, optional
         Callable returning a scalar score when invoked with keyword
         arguments matching a parameter set.
@@ -45,6 +91,8 @@ class RandomSearchSk(BaseOptimizer):
         n_iter=10,
         random_state=None,
         error_score=np.nan,
+        backend="None",
+        backend_params=None,
         experiment=None,
     ):
         self.experiment = experiment
@@ -52,6 +100,8 @@ class RandomSearchSk(BaseOptimizer):
         self.n_iter = n_iter
         self.random_state = random_state
         self.error_score = error_score
+        self.backend = backend
+        self.backend_params = backend_params
 
         super().__init__()
 
@@ -104,13 +154,18 @@ class RandomSearchSk(BaseOptimizer):
         )
         candidate_params = list(sampler)
 
-        scores: list[float] = []
-        for candidate_param in candidate_params:
-            try:
-                score = experiment(**candidate_param)
-            except Exception:  # noqa: B904
-                score = error_score
-            scores.append(score)
+        meta = {
+            "experiment": experiment,
+            "error_score": error_score,
+        }
+
+        scores = parallelize(
+            fun=_score_params,
+            iter=candidate_params,
+            meta=meta,
+            backend=self.backend,
+            backend_params=self.backend_params,
+        )
 
         best_index = int(np.argmin(scores))  # lower-is-better convention
         best_params = candidate_params[best_index]
@@ -154,4 +209,16 @@ class RandomSearchSk(BaseOptimizer):
             "random_state": 0,
         }
 
-        return [params_sklearn, params_ackley]
+        params = [params_sklearn, params_ackley]
+
+        from hyperactive.utils.parallel import _get_parallel_test_fixtures
+
+        parallel_fixtures = _get_parallel_test_fixtures()
+
+        for k, v in parallel_fixtures.items():
+            new_ackley = params_ackley.copy()
+            new_ackley["backend"] = k
+            new_ackley["backend_params"] = v
+            params.append(new_ackley)
+
+        return params

@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.model_selection import ParameterGrid
 
 from hyperactive.base import BaseOptimizer
+from hyperactive.opt._common import _score_params
 from hyperactive.utils.parallel import parallelize
 
 
@@ -235,16 +236,3 @@ class GridSearchSk(BaseOptimizer):
             params.append(new_ackley)
 
         return params
-
-
-def _score_params(params, meta):
-    """Function to score parameters, used in parallelization."""
-    meta = meta.copy()
-    experiment = meta["experiment"]
-    error_score = meta["error_score"]
-
-    try:
-        return experiment(**params)
-    except Exception:  # noqa: B904
-        # Catch all exceptions and assign error_score
-        return error_score
