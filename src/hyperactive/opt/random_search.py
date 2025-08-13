@@ -143,6 +143,8 @@ class RandomSearchSk(BaseOptimizer):
         n_iter,
         random_state,
         error_score,
+        backend,
+        backend_params,
     ):
         """Sample ``n_iter`` points and return the best parameter set."""
         self._check_param_distributions(param_distributions)
@@ -163,8 +165,8 @@ class RandomSearchSk(BaseOptimizer):
             fun=_score_params,
             iter=candidate_params,
             meta=meta,
-            backend=self.backend,
-            backend_params=self.backend_params,
+            backend=backend,
+            backend_params=backend_params,
         )
 
         best_index = int(np.argmin(scores))  # lower-is-better convention
