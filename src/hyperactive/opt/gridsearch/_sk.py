@@ -24,19 +24,14 @@ class GridSearchSk(BaseOptimizer):
     error_score : float, default=np.nan
         The score to assign if an error occurs during the evaluation of a parameter set.
 
-    backend : {"dask", "loky", "multiprocessing", "threading","ray"}, by default "None".
-        Runs parallel evaluate if specified and ``strategy`` is set as "refit".
+    backend : {"dask", "loky", "multiprocessing", "threading", "ray"}, default = "None".
+        Parallelization backend to use in the search process.
 
         - "None": executes loop sequentally, simple list comprehension
         - "loky", "multiprocessing" and "threading": uses ``joblib.Parallel`` loops
         - "joblib": custom and 3rd party ``joblib`` backends, e.g., ``spark``
         - "dask": uses ``dask``, requires ``dask`` package in environment
         - "ray": uses ``ray``, requires ``ray`` package in environment
-
-        Recommendation: Use "dask" or "loky" for parallel evaluate.
-        "threading" is unlikely to see speed ups due to the GIL and the serialization
-        backend (``cloudpickle``) for "dask" and "loky" is generally more robust
-        than the standard ``pickle`` library used in "multiprocessing".
 
     backend_params : dict, optional
         additional parameters passed to the backend as config.
