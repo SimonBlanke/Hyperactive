@@ -49,8 +49,9 @@ class BaseExperiment(BaseObject):
 
         Returns
         -------
-        list of str
+        list of str, or None
             The parameter names of the search parameters.
+            If not known or arbitrary, return None.
         """
         return None
 
