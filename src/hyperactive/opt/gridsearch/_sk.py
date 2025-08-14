@@ -4,7 +4,6 @@
 from collections.abc import Sequence
 
 import numpy as np
-
 from sklearn.model_selection import ParameterGrid
 
 from hyperactive.base import BaseOptimizer

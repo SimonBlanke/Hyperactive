@@ -4,7 +4,6 @@ import copy
 import os
 
 import pytest
-
 from skbase.utils.dependencies import _check_soft_dependencies
 
 from hyperactive.utils.parallel import _get_parallel_test_fixtures, parallelize
@@ -36,6 +35,7 @@ def test_ray_leaves_params_invariant():
 
 
 def square(x, **kwargs):
+    """Simple function to square a number."""
     return x**2
 
 
