@@ -43,25 +43,30 @@ class Hartmann(BaseExperiment):
         \end{pmatrix}
 
     In this function, the constants can be set as parameters,
-    and default to the above values if not specified.
+    and default to the above values and dimensions if not specified.
     The customizable constants are:
 
-    * ``alpha``: the vector of coefficients :math:`\alpha`
-    * ``A``: the matrix :math:`A`
-    * ``P``: the matrix :math:`P`
+    * ``alpha``: an :math:`m`-vector of coefficients :math:`\alpha`
+    * ``A``: a :math:`(m \times n)` shape matrix :math:`A`
+    * ``P``: a :math:`(m \times n)` position matrix :math:`P`
 
     The components of the function argument :math:`x`
     are the input variables of the `score` method,
-    and are set as `x0`, `x1`, ..., `x5` respectively.
+    and are set as `x0`, `x1`, ..., `x[n-1]` respectively.
 
     Parameters
     ----------
-    alpha : 1D array-like of length 4, optional, default=[1.0, 1.2, 3.0, 3.2]
+    alpha : 1D array-like of length m, optional, default=[1.0, 1.2, 3.0, 3.2]
         Coefficients of the Hartmann function.
-    A : 2D array-like of shape (4, 6), optional, default = as defined above
-        Coefficient matrix of the Hartmann function.
-    P : 2D array-like of shape (4, 6), optional, default = as defined above
-        Parameter matrix of the Hartmann function.
+    A : 2D array-like of shape (m, n), optional, default = as defined above
+        Shape matrix of the Hartmann function.
+    P : 2D array-like of shape (m, n), optional, default = as defined above
+        Position matrix of the Hartmann function.
+
+    References
+    ----------
+    [1] Hartmann, J.L. (1972). "Some Experiments in Global Optimization".
+        Naval Postgraduate School, Monterey, CA.
 
     Example
     -------
@@ -93,7 +98,7 @@ class Hartmann(BaseExperiment):
         if self.alpha is None:
             self._alpha = np.array([1.0, 1.2, 3.0, 3.2])
         else:
-            self._alpha = np.asarray(self.alpha)
+            self._alpha = np.asarray(alpha)
 
         if self.A is None:
             self._A = np.array([
@@ -103,7 +108,7 @@ class Hartmann(BaseExperiment):
                 [17, 8, 0.05, 10, 0.1, 14]
             ])
         else:
-            self._A = np.asarray(self.A)
+            self._A = np.asarray(A)
 
         if self.P is None:
             self._P = 1e-4 * np.array([
@@ -113,10 +118,11 @@ class Hartmann(BaseExperiment):
                 [4047, 8828, 8732, 5743, 1091, 381]
             ])
         else:
-            self._P = np.asarray(self.P)
+            self._P = np.asarray(P)
         
     def _paramnames(self):
-        return [f"x{i}" for i in range(6)]
+        n = self._A.shape[1]  # number of dimensions
+        return [f"x{i}" for i in range(n)]
 
     def _evaluate(self, params):
         """Evaluate the parameters.
@@ -193,7 +199,13 @@ class Hartmann(BaseExperiment):
                 [4047, 8828, 8732, 743, 1091, 381]
             ])
         }
-        return [params0, params1]
+        # different parameters with dimensions 2 x 3
+        params2 = {
+            "alpha": np.array([1.0, 2.0]),
+            "A": np.array([[10, 3, 17], [0.05, 10, 17]]),
+            "P": np.array([[1312, 1696, 5569], [2329, 4135, 8307]])
+        }
+        return [params0, params1, params2]
 
     @classmethod
     def _get_score_params(self):
@@ -216,4 +228,5 @@ class Hartmann(BaseExperiment):
             "x4": 0.5,
             "x5": 0.6
         }
-        return [params, params]
+        params2 = {"x0": 0.1, "x1": 0.2, "x2": 0.3}
+        return [params, params, params2]
