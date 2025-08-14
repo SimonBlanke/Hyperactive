@@ -13,7 +13,16 @@ class FunctionExperiment(BaseExperiment):
 
     Parameters
     ----------
-    func : callable of signature ``callable(dict) -> float``
+    func : callable
+        Function to evaluate parameters.
+
+        * if ``parametrization="dict"``, should accept a single argument
+          which is a dictionary with string keys, and return a float.
+        * if ``parametrization="kwargs"``, should accept keyword arguments
+          with string keys, and return a float.
+
+    parametrization : str, one of {"dict", "kwargs"}, default="dict"
+        The way parameters are passed to the function.
 
     Example
     -------
@@ -27,9 +36,26 @@ class FunctionExperiment(BaseExperiment):
     >>> score = para_exp(x=1, y=2)
     """  # noqa: E501
 
-    def __init__(self, func):
+    def __init__(self, func, parametrization="dict"):
         self.func = func
+        self.parametrization = parametrization
         super().__init__()
+
+    def _paramnames(self):
+        """Return the parameter names of the search.
+
+        Returns
+        -------
+        list of str
+            The parameter names of the search parameters.
+        """
+        if self.parametrization == "dict":
+            return None
+        elif self.parametrization == "kwargs":
+            import inspect
+
+            sig = inspect.signature(self.func)
+            return list(sig.parameters.keys())
 
     def _evaluate(self, params):
         """Evaluate the parameters.
@@ -46,7 +72,16 @@ class FunctionExperiment(BaseExperiment):
         dict
             Additional metadata about the search.
         """
-        loss = self.func(params)
+        if self.parametrization == "dict":
+            loss = self.func(params)
+        elif self.parametrization == "kwargs":
+            loss = self.func(**params)
+        else:
+            raise ValueError(
+                f"Error in FunctionExperiment, "
+                f"unknown parametrization {self.parametrization}. "
+                "Use 'dict' or 'kwargs'."
+            )
         return loss, {}
 
     @classmethod
@@ -84,7 +119,8 @@ class FunctionExperiment(BaseExperiment):
         """
         params0 = {"func": _func1}
         params1 = {"func": _func2}
-        return [params0, params1]
+        params2 = {"func": _func3, "parametrization": "kwargs"}
+        return [params0, params1, params2]
 
 
     @classmethod
@@ -102,7 +138,8 @@ class FunctionExperiment(BaseExperiment):
         """
         params0 = {"x": 0, "y": 0}
         params1 = {"x": 1, "y": 1, "z": 2}
-        return [params0, params1]
+        params2 = {"x": 3, "y": 4, "z": 5}
+        return [params0, params1, params2]
 
 
 def _func1(x):
@@ -113,3 +150,8 @@ def _func1(x):
 def _func2(x):
     """Another simple function to evaluate parameters."""
     return x["x"]**2 - x["y"]**2 + 10 * x["x"] + 5 * x["z"]
+
+
+def _func3(x, y):
+    """Yet another simple function to evaluate parameters."""
+    return x**2 + y**2 - 3 * x + 2 * y + 1
