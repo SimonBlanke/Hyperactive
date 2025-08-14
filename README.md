@@ -1,15 +1,17 @@
+
+## Welcome to hyperactive
+
 <p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" height="250"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" width="175" align="right"></a>
 </p>
 
-<br>
+**A unified interface for optimization algorithms and problems.**
 
----
-
-<h2 align="center">An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
-
-<br>
-
+* [easy sklearn-like interface](#hyperactive-is-very-easy-to-use), [versatile and configurable](./examples/optimization_applications/search_space_example.py)
+- zoo of [optimization algorithms](#overview), integrates with major [ML frameworks](#overview) such as `scikit-learn`
+- [memory-efficient](./examples/optimization_applications/memory.py) native implementations of [gradient-free optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers)
+- unified API to popular optimization algorithms such as `optuna`
+- supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
 
 <br>
 
@@ -19,6 +21,7 @@
   <h3>
     <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
+    <a href=https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb>Tutorial</a> •
     <a href="https://simonblanke.github.io/hyperactive-documentation/4.5/">API reference</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
@@ -32,35 +35,120 @@
 | **CI/CD** | [![github-actions](https://img.shields.io/github/actions/workflow/status/SimonBlanke/hyperactive/test.yml?logo=github)](https://github.com/SimonBlanke/hyperactive/actions/workflows/test.yml) [![readthedocs](https://img.shields.io/readthedocs/hyperactive?logo=readthedocs)](https://www.hyperactive.net/en/latest/?badge=latest)
 | **Code** |  [![!pypi](https://img.shields.io/pypi/v/hyperactive?color=orange)](https://pypi.org/project/hyperactive/) [![!python-versions](https://img.shields.io/pypi/pyversions/hyperactive)](https://www.python.org/) [![!black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  |
 
+## Installation
+
+```console
+pip install hyperactive
+```
+
+## :zap: Quickstart
+
+### Maximizing a custom function
+
+```python
+import numpy as np
+
+# function to be maximized
+def problem(opt):
+    x = opt["x"]
+    y = opt["y"]
+
+    return - x ** 2 + - y ** 2
+
+# discrete search space: dict of iterable, scikit-learn like grid space
+# (valid search space types depends on optimizer)
+grid = {
+    "x": np.arange(-1, 1, 0.01),
+    "y": np.arange(-1, 2, 0.1),
+}
+
+from hyperactive.opt import HillClimbing
+
+hillclimbing = HillClimbing(
+    experiment=problem,
+    search_space=grid,
+    n_iter=100,
+)
+
+# running the hill climbing search:
+best_params = hillclimbing.run()
+```
+
+### experiment abstraction - example: scikit-learn CV experiment
+
+"experiment" abstraction = parametrized optimization problem
+
+`hyperactive` provides a number of common experiments, e.g.,
+`scikit-learn` cross-validation experiments:
+
+```python
+from hyperactive.experiment.integrations import SklearnCvExperiment
+from sklearn.datasets import load_iris
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import KFold
+
+X, y = load_iris(return_X_y=True)
+
+# create experiment
+sklearn_exp = SklearnCvExperiment(
+    estimator=SVC(),
+    scoring=accuracy_score,
+    cv=KFold(n_splits=3, shuffle=True),
+    X=X,
+    y=y,
+)
+
+# experiments can be evaluated via "score
+params = {"C": 1.0, "kernel": "linear"}
+score, add_info = sklearn_exp.score(params)
+
+# they can be used in optimizers like above
+from hyperactive.opt import HillClimbing
+
+hillclimbing = HillClimbing(
+    experiment=problem,
+    search_space={
+        "C": np.logspace(0.01, 100, num=10),
+        "kernel": ["linear", "rbf"],
+    }
+    n_iter=100,
+)
+
+best_params = hillclimbing.run()
+```
+
+### full ML toolbox integration - example: scikit-learn
+
+Any `hyperactive` optimizer can be combined with the ML toolbox integrations!
+
+`OptCV` for tuning `scikit-learn` estimators with any `hyperactive` optimizer:
+
+```python
+# 1. defining the tuned estimator:
+from sklearn.svm import SVC
+from hyperactive.integrations.sklearn import OptCV
+from hyperactive.opt import HillClimbing
+
+param_grid = {"kernel": ["linear", "rbf"], "C": [1, 10]}
+tuned_svc = OptCV(SVC(), HillClimbing(param_grid))
+
+# 2. fitting the tuned estimator:
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+tuned_svc.fit(X_train, y_train)
+
+y_pred = tuned_svc.predict(X_test)
+
+# 3. obtaining best parameters and best estimator
+best_params = tuned_svc.best_params_
+best_estimator = tuned_svc.best_estimator_
+```
 
 <img src="./docs/images/bayes_convex.gif" align="right" width="500">
-
-## Hyperactive:
-
-- is [very easy](#hyperactive-is-very-easy-to-use) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
-
-- provides intelligent [optimization algorithms](#overview), support for all major [machine-learning frameworks](#overview) and many interesting [applications](#overview)
-
-- makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
-
-- saves your [computation time](./examples/optimization_applications/memory.py)
-
-- supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
-
-
-
-
-<br>
-<br>
-<br>
-
-
-As its name suggests Hyperactive started as a hyperparameter optimization package, but it has been generalized to solve expensive gradient-free optimization problems. It uses the [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) package as an optimization-backend and expands on it with additional features and tools.
-
----
-
-<br>
-
 
 ## Overview
 
@@ -207,63 +295,9 @@ If you want news about Hyperactive and related projects you can follow me on [tw
 
 <br>
 
-## Notebooks and Tutorials
-
-- [Introduction to Hyperactive](https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb)
-
-
-<br>
-
-## Installation
-
-The most recent version of Hyperactive is available on PyPi:
-
-[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&color=blue&logoColor=white)](https://pypi.org/project/hyperactive)
-[![PyPI version](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&logo=pypi&color=green&logoColor=white)](https://pypi.org/project/hyperactive/)
-[![PyPI version](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge&color=red)](https://pypi.org/project/hyperactive/)
-
-```console
-pip install hyperactive
-```
-
-
-
-<br>
 
 ## Example
 
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_diabetes
-from hyperactive import Hyperactive
-
-data = load_diabetes()
-X, y = data.data, data.target
-
-# define the model in a function
-def model(opt):
-    # pass the suggested parameter to the machine learning model
-    gbr = GradientBoostingRegressor(
-        n_estimators=opt["n_estimators"], max_depth=opt["max_depth"]
-    )
-    scores = cross_val_score(gbr, X, y, cv=4)
-
-    # return a single numerical value
-    return scores.mean()
-
-# search space determines the ranges of parameters you want the optimizer to search through
-search_space = {
-    "n_estimators": list(range(10, 150, 5)),
-    "max_depth": list(range(2, 12)),
-}
-
-# start the optimization run
-hyper = Hyperactive()
-hyper.add_search(model, search_space, n_iter=50)
-hyper.run()
-
-```
 
 <br>
 
@@ -341,19 +375,6 @@ hyper.run()
     - DirectAlgorithm
     - TreeStructuredParzenEstimators
     - ForestOptimizer
-    
-  - Example:
-    ```python
-    ...
-    
-    opt_hco = HillClimbingOptimizer(epsilon=0.08)
-    hyper = Hyperactive()
-    hyper.add_search(..., optimizer=opt_hco)
-    hyper.run()
-    
-    ...
-    ```
-
 
 - n_jobs = 1
   - Possible parameter types: (int)
@@ -376,7 +397,7 @@ hyper.run()
   
     Example:
     ```python
-    ... 
+
     search_space = {
         "x1": list(range(10, 150, 5)),
         "x2": list(range(2, 12)),
@@ -402,7 +423,7 @@ hyper.run()
   
     Example:
     ```python
-    ... 
+
     def objective_function(para):
         para.pass_through["stuff1"] # <--- this variable is 1
         para.pass_through["stuff2"] # <--- this variable is 2
@@ -433,7 +454,7 @@ hyper.run()
 
     Example:
     ```python
-    ...
+
 
     def callback_1(access):
       # do some stuff
@@ -465,7 +486,7 @@ hyper.run()
 
     Example:
     ```python
-    ...
+
     
     hyper = Hyperactive()
     hyper.add_search(
