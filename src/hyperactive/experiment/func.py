@@ -26,14 +26,20 @@ class FunctionExperiment(BaseExperiment):
 
     Example
     -------
+    >>> from hyperactive.experiment.func import FunctionExperiment
+
+    Parameterized by a dictionary:
     >>> def parabola(opt):
     ...     return opt["x"]**2 + opt["y"]**2
     >>> para_exp = FunctionExperiment(parabola)
     >>> params = {"x": 1, "y": 2}
     >>> score, add_info = para_exp.score(params)
 
-    Quick call without metadata return or dictionary:
-    >>> score = para_exp(x=1, y=2)
+    Parameterized by keyword arguments:
+    >>> def parabola_kwargs(x, y):
+    ...     return x**2 + y**2
+    >>> para_exp_kwargs = FunctionExperiment(parabola_kwargs, parametrization="kwargs")
+    >>> score, add_info = para_exp_kwargs.score({"x": 1, "y": 2})
     """  # noqa: E501
 
     def __init__(self, func, parametrization="dict"):
