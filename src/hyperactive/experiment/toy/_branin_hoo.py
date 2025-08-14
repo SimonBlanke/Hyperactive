@@ -42,8 +42,9 @@ class BraninHoo(BaseExperiment):
 
     References
     ----------
-    [1] Hartmann, J.L. (1972). "Some Experiments in Global Optimization".
-        Naval Postgraduate School, Monterey, CA.
+    [1] Branin, F.H. (1972). "Widely convergent method for finding
+        multiple solutions of simultaneous nonlinear equations." IBM Journal of
+        Research and Development, 16(1), 504-522.
 
     Example
     -------
