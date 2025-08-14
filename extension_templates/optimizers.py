@@ -142,7 +142,8 @@ class MyOptimizer(BaseOptimizer):
         return ["score_param1", "score_param2"]
 
     # optional: implement this to prepare arguments for _run
-    # the default is all parameters passed to __init__, except ex
+    # the default is all parameters passed to __init__, minus the experiment
+    # the result of this is passed to _run as search_config
     def get_search_config(self):
         """Get the search configuration.
 
@@ -153,12 +154,15 @@ class MyOptimizer(BaseOptimizer):
         """
         # the default
         search_config = super().get_search_config()
+        # example of adding a new parameter to the search config
+        # this is optional, but can be useful for clean separation or API interfacing
         search_config["one_more_param"] = 42
+        # this return is available in _run as search_config
         return search_config
 
     # todo: implement this, mandatory
     def _run(self, experiment, **search_config):
-        """Run the optimization search process.
+        """Run the optimization search process to maximize the experiment's score.
 
         Parameters
         ----------
@@ -173,6 +177,8 @@ class MyOptimizer(BaseOptimizer):
             The best parameters found during the search.
             Must have keys a subset or identical to experiment.paramnames().
         """
+        # important: the search logic should *maximize* the experiment's score
+        # this is the main method to implement, it should return the best parameters
         best_params = {"write_some_logic_to_get": "best_params"}
         return best_params
 

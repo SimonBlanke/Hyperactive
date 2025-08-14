@@ -108,7 +108,8 @@ random_state_para_0 = [
     (4),
 ]
 
-
+# ----------------- # Test if wrong memory warm starts do not work as intended
+""" test is possible in future gfo versions
 @pytest.mark.parametrize("random_state", random_state_para_0)
 @pytest.mark.parametrize("search_space, memory_warm_start", search_space_para_1)
 def test_trafo_1(random_state, search_space, memory_warm_start):
@@ -143,8 +144,7 @@ def test_trafo_1(random_state, search_space, memory_warm_start):
     assert d_time_1 < d_time_0 * 0.5
 
 
-# ----------------- # Test if wrong memory warm starts do not work as intended
-""" test is possible in future gfo versions
+
 search_space_0 = {
     "min_samples_split": list(np.arange(2, 12)),
 }

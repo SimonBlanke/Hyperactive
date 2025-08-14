@@ -43,6 +43,9 @@ class Parabola(BaseExperiment):
         "property:randomness": "deterministic",  # random or deterministic
         # if deterministic, two calls of score will result in the same value
         # random = two calls may result in different values; same as "stochastic"
+        "property:higher_or_lower_is_better": "lower",
+        # values are "higher", "lower", "mixed"
+        # whether higher or lower scores are better
     }
 
     def __init__(self, a=1.0, b=0.0, c=0.0):
@@ -54,7 +57,21 @@ class Parabola(BaseExperiment):
     def _paramnames(self):
         return ["x", "y"]
 
-    def _score(self, params):
+    def _evaluate(self, params):
+        """Evaluate the parameters.
+
+        Parameters
+        ----------
+        params : dict with string keys
+            Parameters to evaluate.
+
+        Returns
+        -------
+        float
+            The value of the parameters as per evaluation.
+        dict
+            Additional metadata about the search.
+        """
         x = params["x"]
         y = params["y"]
 
@@ -62,10 +79,11 @@ class Parabola(BaseExperiment):
 
     @classmethod
     def _get_score_params(self):
-        """Return settings for testing the score function. Used in tests only.
+        """Return settings for testing score/evaluate functions. Used in tests only.
 
-        Returns a list, the i-th element corresponds to self.get_test_params()[i].
-        It should be a valid call for self.score.
+        Returns a list, the i-th element should be valid arguments for
+        self.evaluate and self.score, of an instance constructed with
+        self.get_test_params()[i].
 
         Returns
         -------
