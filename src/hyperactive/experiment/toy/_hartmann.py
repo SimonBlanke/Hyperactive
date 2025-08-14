@@ -145,7 +145,7 @@ class Hartmann(BaseExperiment):
         dict
             Additional metadata about the search.
         """
-        x = np.array([params[f"x{i}"] for i in range(6)])
+        x = np.array([params[xi] for xi in self.paramnames()])
 
         alpha = self._alpha
         A = self._A
