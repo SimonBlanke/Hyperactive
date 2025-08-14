@@ -122,7 +122,6 @@ class FunctionExperiment(BaseExperiment):
         params2 = {"func": _func3, "parametrization": "kwargs"}
         return [params0, params1, params2]
 
-
     @classmethod
     def _get_score_params(self):
         """Return settings for testing score/evaluate functions. Used in tests only.
@@ -144,14 +143,14 @@ class FunctionExperiment(BaseExperiment):
 
 def _func1(x):
     """Simple function to evaluate parameters."""
-    return x["x"]**2 + x["y"]**2
+    return x["x"] ** 2 + x["y"] ** 2
 
 
 def _func2(x):
     """Another simple function to evaluate parameters."""
-    return x["x"]**2 - x["y"]**2 + 10 * x["x"] + 5 * x["z"]
+    return x["x"] ** 2 - x["y"] ** 2 + 10 * x["x"] + 5 * x["z"]
 
 
 def _func3(x, y):
     """Yet another simple function to evaluate parameters."""
-    return x**2 + y**2 - 3 * x + 2 * y + 1
+    return x ** 2 + y ** 2 - 3 * x + 2 * y + 1

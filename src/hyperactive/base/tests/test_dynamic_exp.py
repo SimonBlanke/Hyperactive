@@ -4,12 +4,14 @@
 
 def test_dynamic_exp():
     """Test that old function signature can be passed as experiment."""
+
     # 1. define the experiment
     def parabola(opt):
-        return opt["x"]**2 + opt["y"]**2
+        return opt["x"] ** 2 + opt["y"] ** 2
 
     # 2. set up the HillClimbing optimizer
     import numpy as np
+
     from hyperactive.opt import HillClimbing
 
     hillclimbing_config = {
