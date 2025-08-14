@@ -207,13 +207,13 @@ class Hartmann(BaseExperiment):
                     [2348, 1451, 322, 2883, 3047, 6650],
                     [4047, 8828, 8732, 743, 1091, 381],
                 ]
-            )
+            ),
         }
         # different parameters with dimensions 2 x 3
         params2 = {
             "alpha": np.array([1.0, 2.0]),
             "A": np.array([[10, 3, 17], [0.05, 10, 17]]),
-            "P": np.array([[1312, 1696, 5569], [2329, 4135, 8307]])
+            "P": np.array([[1312, 1696, 5569], [2329, 4135, 8307]]),
         }
         return [params0, params1, params2]
 
