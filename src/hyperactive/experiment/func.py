@@ -151,6 +151,6 @@ def _func2(x):
     return x["x"] ** 2 - x["y"] ** 2 + 10 * x["x"] + 5 * x["z"]
 
 
-def _func3(x, y):
+def _func3(x, y, z):
     """Yet another simple function to evaluate parameters."""
-    return x ** 2 + y ** 2 - 3 * x + 2 * y + 1
+    return x**2 + y**2 - 3 * x + 2 * y + 1
