@@ -9,8 +9,10 @@ from hyperactive.base import BaseExperiment
 class Hartmann(BaseExperiment):
     r"""Hartmann function, common benchmark for optimization algorithms.
 
-    The Hartmann function is a non-convex function used to test optimization algorithms.
-    It is defined as:
+    The Hartmann function is a non-convex function used to test optimization algorithms,
+    typically considered on the unit hypercube.
+
+    The Hartmann function is defined as:
 
     .. math::
 
