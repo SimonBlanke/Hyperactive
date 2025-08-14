@@ -15,8 +15,10 @@ def test_dynamic_exp():
     from hyperactive.opt import HillClimbing
 
     hillclimbing_config = {
-        "x": np.array([0, 1, 2]),
-        "y": np.array([0, 1, 2]),
+        "search_space": {
+            "x": np.array([0, 1, 2]),
+            "y": np.array([0, 1, 2]),
+        },
     }
     hill_climbing = HillClimbing(**hillclimbing_config, experiment=parabola)
 
