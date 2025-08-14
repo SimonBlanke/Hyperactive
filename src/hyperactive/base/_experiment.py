@@ -35,8 +35,12 @@ class BaseExperiment(BaseObject):
 
         Returns
         -------
-        list of str
+        list of str, or None
             The parameter names of the search parameters.
+
+            * If list of str, params in ``evaluate`` and ``score`` must match this list,
+              or a subset thereof.
+            * If None, arbitrary parameters can be passed to ``evaluate`` and ``score``.
         """
         return self._paramnames()
 
@@ -48,7 +52,7 @@ class BaseExperiment(BaseObject):
         list of str
             The parameter names of the search parameters.
         """
-        raise NotImplementedError
+        return None
 
     def evaluate(self, params):
         """Evaluate the parameters.
@@ -66,8 +70,11 @@ class BaseExperiment(BaseObject):
             Additional metadata about the search.
         """
         paramnames = self.paramnames()
-        if not set(params.keys()) <= set(paramnames):
-            raise ValueError("Parameters do not match.")
+        if paramnames is not None and not set(params.keys()) <= set(paramnames):
+            raise ValueError(
+                f"Parameters passed to {type(self)}.evaluate do not match: "
+                f"expected {paramnames}, got {list(params.keys())}."
+            )
         res, metadata = self._evaluate(params)
         res = np.float64(res)
         return res, metadata
