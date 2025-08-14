@@ -92,6 +92,14 @@ class GridSearchSk(BaseOptimizer):
 
     Best parameters can also be accessed via the attributes:
     >>> best_params = grid_search.best_params_
+
+    To parallelize the search, set the ``backend`` and ``backend_params``:
+    >>> grid_search = GridSearch(
+    ...     param_grid,
+    ...     backend="joblib",
+    ...     backend_params={"n_jobs": -1},
+    ...     experiment=sklearn_exp,
+    ... )
     """
 
     def __init__(
