@@ -3,11 +3,9 @@
 
 from hyperactive.base import BaseExperiment
 
-__all__ = ["_DynamicExperiment"]
 
-
-class _DynamicExperiment(BaseExperiment):
-    r"""Dynamic experiment to allow passing functions as parameters.
+class FunctionExperiment(BaseExperiment):
+    """Experiment that wraps a function.
 
     Takes a callable that evaluates parameters; exposes it as the ``evaluate`` method.
 
@@ -21,7 +19,7 @@ class _DynamicExperiment(BaseExperiment):
     -------
     >>> def parabola(opt):
     ...     return opt["x"]**2 + opt["y"]**2
-    >>> para_exp = _DynamicExperiment(parabola)
+    >>> para_exp = FunctionExperiment(parabola)
     >>> params = {"x": 1, "y": 2}
     >>> score, add_info = para_exp.score(params)
 

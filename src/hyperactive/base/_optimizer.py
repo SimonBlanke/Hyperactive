@@ -52,9 +52,9 @@ class BaseOptimizer(BaseObject):
         exp = self._experiment
         exp_is_baseobj = isinstance(exp, BaseObject)
         if not exp_is_baseobj or exp.get_tag("object_type") != "experiment":
-            from hyperactive.experiment._dynamic import _DynamicExperiment
+            from hyperactive.experiment.func import FunctionExperiment
 
-            exp = _DynamicExperiment(exp)  # callable adapted to BaseExperiment
+            exp = FunctionExperiment(exp)  # callable adapted to BaseExperiment
         return exp
 
     def run(self):
