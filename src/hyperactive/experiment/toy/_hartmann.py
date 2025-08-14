@@ -25,7 +25,7 @@ class Hartmann(BaseExperiment):
 
     .. math::
 
-        \alpha = (1.0, \; 1.2, \; 3.0, \; 3.2)^T
+        \alpha = (1.0, \; 1.2, \; 3.0, \; 3.2)
 
     .. math::
 
