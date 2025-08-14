@@ -15,6 +15,7 @@ from hyperactive.utils.parallel import _get_parallel_test_fixtures, parallelize
     reason="Execute tests for iff anything in the module has changed",
 )
 def test_ray_leaves_params_invariant():
+    """Test that the parallelize function leaves backend_params invariant."""
     def trial_function(params, meta):
         return params
 
@@ -40,6 +41,7 @@ def square(x, **kwargs):
 
 @pytest.mark.parametrize("fixture", _get_parallel_test_fixtures())
 def test_parallelize_simple_loop(fixture):
+    """Test that parallelize works with a simple function and fixture."""
     backend = fixture["backend"]
     backend_params = copy.deepcopy(fixture["backend_params"])
     params_before = copy.deepcopy(fixture["backend_params"])
