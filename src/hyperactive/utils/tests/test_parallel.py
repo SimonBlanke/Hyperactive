@@ -1,6 +1,7 @@
 # copied from sktime, BSD-3-Clause License (see LICENSE file)
 # to be moved to scikit-base in the future
 """Tests for parallelization utilities."""
+
 import copy
 import os
 
