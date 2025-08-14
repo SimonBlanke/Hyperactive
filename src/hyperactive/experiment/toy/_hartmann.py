@@ -12,6 +12,9 @@ class Hartmann(BaseExperiment):
     The Hartmann function is a non-convex function used to test optimization algorithms,
     typically considered on the unit hypercube.
 
+    It has six local minima and one global minimum :math:`f(x^*) = -3.32237` at
+    :math:`x^* = (0.20169, 0.15001, 0.476874, 0.275332, 0.311652, 0.6573)`.
+
     The Hartmann function is defined as:
 
     .. math::

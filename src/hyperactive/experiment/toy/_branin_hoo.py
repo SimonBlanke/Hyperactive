@@ -13,7 +13,7 @@ class BraninHoo(BaseExperiment):
     algorithms. It is considered on the square domain
     :math:`x \in [-5, 10], y \in [0, 15]`.
 
-    It has three minima with :math:`f(x^*) = 0.397887` at :math:`x* = (-\pi, 12.275)`,
+    It has three minima with :math:`f(x^*) = 0.397887` at :math:`x^* = (-\pi, 12.275)`,
     :math:`(\pi, 2.275)`, and :math:`(9.42478, 2.475)`.
 
     The Branin-Hoo function is defined as:
