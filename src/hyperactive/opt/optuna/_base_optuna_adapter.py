@@ -80,14 +80,15 @@ class _BaseOptunaAdapter(BaseOptimizer):
         for key, space in param_space.items():
             if hasattr(space, "suggest"):  # optuna distribution object
                 params[key] = trial._suggest(space, key)
-            elif isinstance(space, (tuple, list)) and len(space) == 2:
+            elif isinstance(space, tuple) and len(space) == 2:
+                # Tuples are treated as ranges (low, high)
                 low, high = space
-                # Decide type based on low/high type
                 if isinstance(low, int) and isinstance(high, int):
                     params[key] = trial.suggest_int(key, low, high)
                 else:
                     params[key] = trial.suggest_float(key, low, high, log=False)
             elif isinstance(space, list):
+                # Lists are treated as categorical choices
                 params[key] = trial.suggest_categorical(key, space)
             else:
                 raise ValueError(f"Invalid parameter space for key '{key}': {space}")
