@@ -1,7 +1,6 @@
 """Automated tests based on the skbase test suite template."""
 
 from inspect import isclass
-import shutil
 
 from skbase.testing import BaseFixtureGenerator as _BaseFixtureGenerator
 from skbase.testing import QuickTester as _QuickTester
@@ -283,11 +282,12 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         optimizer = object_instance
 
         # 1. define the experiment
-        from hyperactive.experiment.integrations import SklearnCvExperiment
         from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
         from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
+        from sklearn.svm import SVC
+
+        from hyperactive.experiment.integrations import SklearnCvExperiment
 
         X, y = load_iris(return_X_y=True)
 
