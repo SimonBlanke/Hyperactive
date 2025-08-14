@@ -177,7 +177,6 @@ class MyExperiment(BaseExperiment):
         metadata = {"some": "metadata"}  # can be any dict
         return value, metadata
 
-
     # todo: implement this for testing purposes!
     #   required to run local automated unit and integration testing of estimator
     #   method should return default parameters, so that a test instance can be created
