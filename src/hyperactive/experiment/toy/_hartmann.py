@@ -16,7 +16,7 @@ class Hartmann(BaseExperiment):
 
     .. math::
 
-        f(\mathbf{x}) = - \sum_{i=1}^{4} \alpha_i 
+        f(\mathbf{x}) = - \sum_{i=1}^{4} \alpha_i
         \exp \left( - \sum_{j=1}^{6} A_{ij} (x_j - P_{ij})^2 \right),
         \quad \text{where}
 
@@ -103,25 +103,29 @@ class Hartmann(BaseExperiment):
             self._alpha = np.asarray(alpha)
 
         if self.A is None:
-            self._A = np.array([
-                [10, 3, 17, 3.50, 1.7, 8],
-                [0.05, 10, 17, 0.1, 8, 14],
-                [3, 3.5, 1.7, 10, 17, 8],
-                [17, 8, 0.05, 10, 0.1, 14]
-            ])
+            self._A = np.array(
+                [
+                    [10, 3, 17, 3.50, 1.7, 8],
+                    [0.05, 10, 17, 0.1, 8, 14],
+                    [3, 3.5, 1.7, 10, 17, 8],
+                    [17, 8, 0.05, 10, 0.1, 14],
+                ]
+            )
         else:
             self._A = np.asarray(A)
 
         if self.P is None:
-            self._P = 1e-4 * np.array([
-                [1312, 1696, 5569, 124, 8283, 5886],
-                [2329, 4135, 8307, 3736, 1004, 9991],
-                [2348, 1451, 3522, 2883, 3047, 6650],
-                [4047, 8828, 8732, 5743, 1091, 381]
-            ])
+            self._P = 1e-4 * np.array(
+                [
+                    [1312, 1696, 5569, 124, 8283, 5886],
+                    [2329, 4135, 8307, 3736, 1004, 9991],
+                    [2348, 1451, 3522, 2883, 3047, 6650],
+                    [4047, 8828, 8732, 5743, 1091, 381],
+                ]
+            )
         else:
             self._P = np.asarray(P)
-        
+
     def _paramnames(self):
         n = self._A.shape[1]  # number of dimensions
         return [f"x{i}" for i in range(n)]
@@ -188,18 +192,22 @@ class Hartmann(BaseExperiment):
         # parameters different from the default
         params1 = {
             "alpha": np.array([4.0, 3.2, 2.0, 1.2]),
-            "A": np.array([
-                [42, 3, 17, 3.50, 1.7, 8],
-                [0.05, 10, 17, 0.1, 8, 14],
-                [3, 3.5, 1.7, 33, 17, 8],
-                [17, 8, 0.05, 10, 0.1, 14]
-            ]),
-            "P": np.array([
-                [1312, 196, 5569, 124, 8283, 5886],
-                [2329, 4135, 8307, 3736, 100, 9991],
-                [2348, 1451, 322, 2883, 3047, 6650],
-                [4047, 8828, 8732, 743, 1091, 381]
-            ])
+            "A": np.array(
+                [
+                    [42, 3, 17, 3.50, 1.7, 8],
+                    [0.05, 10, 17, 0.1, 8, 14],
+                    [3, 3.5, 1.7, 33, 17, 8],
+                    [17, 8, 0.05, 10, 0.1, 14],
+                ]
+            ),
+            "P": np.array(
+                [
+                    [1312, 196, 5569, 124, 8283, 5886],
+                    [2329, 4135, 8307, 3736, 100, 9991],
+                    [2348, 1451, 322, 2883, 3047, 6650],
+                    [4047, 8828, 8732, 743, 1091, 381],
+                ]
+            )
         }
         # different parameters with dimensions 2 x 3
         params2 = {
@@ -222,13 +230,6 @@ class Hartmann(BaseExperiment):
         list of dict
             The parameters to be used for scoring.
         """
-        params = {
-            "x0": 0.1,
-            "x1": 0.2,
-            "x2": 0.3,
-            "x3": 0.4,
-            "x4": 0.5,
-            "x5": 0.6
-        }
+        params = {"x0": 0.1, "x1": 0.2, "x2": 0.3, "x3": 0.4, "x4": 0.5, "x5": 0.6}
         params2 = {"x0": 0.1, "x1": 0.2, "x2": 0.3}
         return [params, params, params2]

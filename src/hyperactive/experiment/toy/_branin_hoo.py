@@ -69,13 +69,12 @@ class BraninHoo(BaseExperiment):
     def __init__(
         self,
         a=1.0,
-        b=5.1 / (4 * np.pi ** 2),
+        b=5.1 / (4 * np.pi**2),
         c=5 / np.pi,
         d=6.0,
         e=10.0,
         f=1 / (8 * np.pi),
     ):
-    
         self.a = a
         self.b = b
         self.c = c
