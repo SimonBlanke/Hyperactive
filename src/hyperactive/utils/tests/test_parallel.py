@@ -15,6 +15,7 @@ from hyperactive.utils.parallel import _get_parallel_test_fixtures, parallelize
 )
 def test_ray_leaves_params_invariant():
     """Test that the parallelize function leaves backend_params invariant."""
+
     def trial_function(params, meta):
         return params
 
@@ -35,7 +36,7 @@ def test_ray_leaves_params_invariant():
 
 
 def square(x, **kwargs):
-    """Simple function to square a number."""
+    """Square function, for testing."""
     return x**2
 
 

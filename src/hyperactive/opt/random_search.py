@@ -5,7 +5,6 @@
 from collections.abc import Sequence
 
 import numpy as np
-
 from sklearn.model_selection import ParameterSampler
 
 from hyperactive.base import BaseOptimizer
@@ -128,7 +127,8 @@ class RandomSearchSk(BaseOptimizer):
 
                 if len(v) == 0:
                     raise ValueError(
-                        f"Parameter values for ({name}) need to be a non-empty sequence."
+                        f"Parameter values for "
+                        f"({name}) need to be a non-empty sequence."
                     )
 
     def _run(
