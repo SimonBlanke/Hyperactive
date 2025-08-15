@@ -264,7 +264,7 @@ class SktimeForecastingExperiment(BaseExperiment):
 
         from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
 
-        y, X = load_longley(return_X_y=True)
+        y, X = load_longley()
         params1 = {
             "forecaster": NaiveForecaster(strategy="last"),
             "cv": ExpandingWindowSplitter(initial_window=12, step_length=6, fh=6),
