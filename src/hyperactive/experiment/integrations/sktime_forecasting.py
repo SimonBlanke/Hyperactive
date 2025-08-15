@@ -262,7 +262,7 @@ class SktimeForecastingExperiment(BaseExperiment):
             "y": y,
         }
 
-        from sktime.performance_metrics import MeanAbsolutePercentageError
+        from sktime.performance_metrics.forecating import MeanAbsolutePercentageError
 
         y, X = load_longley(return_X_y=True)
         params1 = {
