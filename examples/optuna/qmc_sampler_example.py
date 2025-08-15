@@ -58,164 +58,155 @@ def qmc_theory():
 
 def demonstrate_space_filling():
     """Demonstrate space-filling properties conceptually."""
-    print("Space-Filling Comparison:")
-    print()
-    print("Random Sampling:")
-    print("  • Can have clusters and gaps")
-    print("  • Uneven coverage especially with few samples")
-    print("  • Variance in coverage quality")
-    print("  • Some regions may be under-explored")
-    print()
-    print("Quasi-Monte Carlo (QMC):")
-    print("  • Systematic space filling")
-    print("  • Even coverage with fewer samples")
-    print("  • Consistent coverage quality")
-    print("  • All regions explored proportionally")
-    print()
-    print("Grid Sampling:")
-    print("  • Perfect regular coverage")
-    print("  • Exponential scaling with dimensions")
-    print("  • May miss optimal points between grid lines")
-    print()
-    print("→ QMC provides balanced approach between random and grid")
-    print()
+    # Space-Filling Comparison:
+    #
+    # Random Sampling:
+    #    Can have clusters and gaps
+    #    Uneven coverage especially with few samples
+    #    Variance in coverage quality
+    #    Some regions may be under-explored
+    #
+    # Quasi-Monte Carlo (QMC):
+    #    Systematic space filling
+    #    Even coverage with fewer samples
+    #    Consistent coverage quality
+    #    All regions explored proportionally
+    #
+    # Grid Sampling:
+    #    Perfect regular coverage
+    #    Exponential scaling with dimensions
+    #    May miss optimal points between grid lines
+    #
+    # → QMC provides balanced approach between random and grid
 
 
 def main():
-    print("=== QMCSampler Example ===")
-    print("Quasi-Monte Carlo Low-Discrepancy Sampling")
-    print()
-    
+    # === QMCSampler Example ===
+    # Quasi-Monte Carlo Low-Discrepancy Sampling
+
     qmc_theory()
     demonstrate_space_filling()
-    
+
     # Load dataset
     X, y = load_wine(return_X_y=True)
     print(f"Dataset: Wine classification ({X.shape[0]} samples, {X.shape[1]} features)")
-    
+
     # Create experiment
     estimator = LogisticRegression(random_state=42, max_iter=1000)
     experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=5)
-    
+
     # Define search space
     param_space = {
-        "C": (0.001, 100),              # Regularization strength
-        "l1_ratio": (0.0, 1.0),         # Elastic net mixing parameter
-        "solver": ["liblinear", "saga"], # Solver algorithm
+        "C": (0.001, 100),  # Regularization strength
+        "l1_ratio": (0.0, 1.0),  # Elastic net mixing parameter
+        "solver": ["liblinear", "saga"],  # Solver algorithm
         "penalty": ["l1", "l2", "elasticnet"],  # Regularization type
     }
-    
-    print("Search Space:")
-    for param, space in param_space.items():
-        print(f"  {param}: {space}")
-    print()
-    
+
+    # Search Space:
+    # C: (0.001, 100) - Regularization strength
+    # l1_ratio: (0.0, 1.0) - Elastic net mixing parameter
+    # solver: ['liblinear', 'saga'] - Solver algorithm
+    # penalty: ['l1', 'l2', 'elasticnet'] - Regularization type
+
     # Configure QMCSampler
     optimizer = QMCSampler(
         param_space=param_space,
         n_trials=32,  # Power of 2 often works well for QMC
         random_state=42,
         experiment=experiment,
-        qmc_type="sobol",    # Sobol or Halton sequences
-        scramble=True        # Randomized QMC (Owen scrambling)
+        qmc_type="sobol",  # Sobol or Halton sequences
+        scramble=True,  # Randomized QMC (Owen scrambling)
     )
-    
-    print("QMCSampler Configuration:")
-    print(f"  n_trials: {optimizer.n_trials} (power of 2 for better QMC properties)")
-    print(f"  qmc_type: '{optimizer.qmc_type}' sequence")
-    print(f"  scramble: {optimizer.scramble} (randomized QMC)")
-    print("  Deterministic low-discrepancy sampling")
-    print()
-    
-    print("QMC Sequence Types:")
-    print("• Sobol: Excellent for moderate dimensions, binary-based")
-    print("• Halton: Good for low dimensions, prime-based")
-    print("• Scrambling: Adds randomization while preserving uniformity")
-    print()
-    
+
+    # QMCSampler Configuration:
+    # n_trials: 32 (power of 2 for better QMC properties)
+    # qmc_type: 'sobol' sequence
+    # scramble: True (randomized QMC)
+    # Deterministic low-discrepancy sampling
+
+    # QMC Sequence Types:
+    #  Sobol: Excellent for moderate dimensions, binary-based
+    #  Halton: Good for low dimensions, prime-based
+    #  Scrambling: Adds randomization while preserving uniformity
+
     # Run optimization
-    print("Running QMC sampling optimization...")
+    # Running QMC sampling optimization...
     best_params = optimizer.run()
-    
+
     # Results
     print("\n=== Results ===")
     print(f"Best parameters: {best_params}")
     print(f"Best score: {optimizer.best_score_:.4f}")
     print()
-    
-    # QMC behavior analysis
-    print("QMC Sampling Analysis:")
-    print()
-    print("Sequence Properties:")
-    print("✓ Deterministic generation (reproducible with same seed)")
-    print("✓ Low-discrepancy (uniform distribution approximation)")
-    print("✓ Space-filling (systematic coverage of parameter space)")
-    print("✓ Stratification (even coverage of all regions)")
-    print("✓ No clustering or large gaps")
-    print()
-    
-    print("Sobol Sequence Characteristics:")
-    print("• Binary-based construction")
-    print("• Good equidistribution properties")
-    print("• Effective for dimensions up to ~40")
-    print("• Popular choice for QMC sampling")
-    print()
-    
-    if optimizer.scramble:
-        print("Scrambling Benefits:")
-        print("• Breaks regularity patterns")
-        print("• Provides Monte Carlo error estimates")
-        print("• Maintains low-discrepancy properties")
-        print("• Reduces correlation artifacts")
-        print()
-    
-    print("QMC vs Other Sampling Methods:")
-    print()
-    print("vs Pure Random Sampling:")
-    print("  + Better space coverage with fewer samples")
-    print("  + More consistent performance")
-    print("  + Faster convergence for integration-like problems")
-    print("  - No true randomness (if needed for some applications)")
-    print()
-    print("vs Grid Search:")
-    print("  + Works well in higher dimensions")
-    print("  + No exponential scaling")
-    print("  + Covers continuous spaces naturally")
-    print("  - No systematic guarantee of finding grid optimum")
-    print()
-    print("vs Adaptive Methods (TPE, GP):")
-    print("  + No assumptions about objective function")
-    print("  + Embarrassingly parallel")
-    print("  + Consistent performance regardless of function type")
-    print("  - No learning from previous evaluations")
-    print("  - May waste evaluations in clearly suboptimal regions")
-    print()
-    
-    print("Best Use Cases:")
-    print("• Design of experiments (DoE)")
-    print("• Initial exploration phase")
-    print("• Baseline for comparing adaptive methods")
-    print("• Integration and sampling problems")
-    print("• When function evaluations are parallelizable")
-    print("• Robustness testing across parameter space")
-    print()
-    
-    print("Implementation Considerations:")
-    print("• Use powers of 2 for n_trials with Sobol sequences")
-    print("• Consider scrambling for better statistical properties")
-    print("• Choose sequence type based on dimensionality:")
-    print("  - Sobol: Good general choice")
-    print("  - Halton: Better for low dimensions (< 6)")
-    print("• QMC works best with transformed uniform parameters")
-    print()
-    
-    print("Practical Recommendations:")
-    print("1. Use QMC for initial exploration (first 20-50 evaluations)")
-    print("2. Switch to adaptive methods (TPE/GP) for focused search")
-    print("3. Use for sensitivity analysis across full parameter space")
-    print("4. Good choice when unsure about objective function properties")
-    print("5. Ideal for parallel evaluation scenarios")
-    
+
+    # QMC behavior analysis:
+    #
+    # QMC Sampling Analysis:
+    #
+    # Sequence Properties:
+    #  Deterministic generation (reproducible with same seed)
+    #  Low-discrepancy (uniform distribution approximation)
+    #  Space-filling (systematic coverage of parameter space)
+    #  Stratification (even coverage of all regions)
+    #  No clustering or large gaps
+    #
+    # Sobol Sequence Characteristics:
+    #  Binary-based construction
+    #  Good equidistribution properties
+    #  Effective for dimensions up to ~40
+    #  Popular choice for QMC sampling
+    #
+    # Scrambling Benefits (when enabled):
+    #  Breaks regularity patterns
+    #  Provides Monte Carlo error estimates
+    #  Maintains low-discrepancy properties
+    #  Reduces correlation artifacts
+    #
+    # QMC vs Other Sampling Methods:
+    #
+    # vs Pure Random Sampling:
+    #   + Better space coverage with fewer samples
+    #   + More consistent performance
+    #   + Faster convergence for integration-like problems
+    #   - No true randomness (if needed for some applications)
+    #
+    # vs Grid Search:
+    #   + Works well in higher dimensions
+    #   + No exponential scaling
+    #   + Covers continuous spaces naturally
+    #   - No systematic guarantee of finding grid optimum
+    #
+    # vs Adaptive Methods (TPE, GP):
+    #   + No assumptions about objective function
+    #   + Embarrassingly parallel
+    #   + Consistent performance regardless of function type
+    #   - No learning from previous evaluations
+    #   - May waste evaluations in clearly suboptimal regions
+    #
+    # Best Use Cases:
+    #  Design of experiments (DoE)
+    #  Initial exploration phase
+    #  Baseline for comparing adaptive methods
+    #  Integration and sampling problems
+    #  When function evaluations are parallelizable
+    #  Robustness testing across parameter space
+    #
+    # Implementation Considerations:
+    #  Use powers of 2 for n_trials with Sobol sequences
+    #  Consider scrambling for better statistical properties
+    #  Choose sequence type based on dimensionality:
+    #   - Sobol: Good general choice
+    #   - Halton: Better for low dimensions (< 6)
+    #  QMC works best with transformed uniform parameters
+    #
+    # Practical Recommendations:
+    # 1. Use QMC for initial exploration (first 20-50 evaluations)
+    # 2. Switch to adaptive methods (TPE/GP) for focused search
+    # 3. Use for sensitivity analysis across full parameter space
+    # 4. Good choice when unsure about objective function properties
+    # 5. Ideal for parallel evaluation scenarios
+
     return best_params, optimizer.best_score_
 
 
