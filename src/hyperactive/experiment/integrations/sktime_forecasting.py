@@ -166,6 +166,15 @@ class SktimeForecastingExperiment(BaseExperiment):
 
         super().__init__()
 
+        if scoring is None:
+            from sktime.performance_metrics.forecasting import (
+                MeanAbsolutePercentageError
+            )
+
+            self._scoring = MeanAbsolutePercentageError(symmetric=True)
+        else:
+            self._scoring = scoring
+
         if scoring is None or scoring.get_tag("lower_is_better", False):
             higher_or_lower_better = "lower"
         else:
@@ -205,14 +214,14 @@ class SktimeForecastingExperiment(BaseExperiment):
             y=self.y,
             X=self.X,
             strategy=self.strategy,
-            scoring=self.scoring,
+            scoring=self._scoring,
             error_score=self.error_score,
             cv_X=self.cv_X,
             backend=self.backend,
             backend_params=self.backend_params,
         )
 
-        result_name = f"test_{self.scoring.name}"
+        result_name = f"test_{self._scoring.name}"
 
         res_float = results[result_name].mean()
 
