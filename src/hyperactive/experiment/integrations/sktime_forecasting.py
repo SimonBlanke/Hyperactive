@@ -109,7 +109,7 @@ class SktimeForecastingExperiment(BaseExperiment):
     >>> from hyperactive.experiment.integrations import SktimeForecastingExperiment
     >>> from sktime.datasets import load_airline
     >>> from sktime.forecasting.naive import NaiveForecaster
-    >>> from sktime.performance_metrics import MeanAbsolutePercentageError
+    >>> from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
     >>> from sktime.split import ExpandingWindowSplitter
     >>>
     >>> sktime_exp = SktimeForecastingExperiment(
@@ -180,7 +180,7 @@ class SktimeForecastingExperiment(BaseExperiment):
         list of str
             The parameter names of the search parameters.
         """
-        return list(self.estimator.get_params().keys())
+        return list(self.forecaster.get_params().keys())
 
     def _evaluate(self, params):
         """Evaluate the parameters.
