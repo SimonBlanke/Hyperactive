@@ -17,7 +17,7 @@ class SktimeForecastingExperiment(BaseExperiment):
     of applying ``sktime`` ``evaluate`` to ``estimator`` with the parameters given in
     ``score`` ``params``.
 
-    The  performed is specified by the ``cv`` parameter,
+    The backtesting performed is specified by the ``cv`` parameter,
     and the scoring metric is specified by the ``scoring`` parameter.
     The ``X`` and ``y`` parameters are the input data and target values,
     which are used in fit/predict cross-validation.
@@ -166,7 +166,7 @@ class SktimeForecastingExperiment(BaseExperiment):
 
         super().__init__()
 
-        if scoring.get_tag("lower_is_better", False):
+        if scoring is None or scoring.get_tag("lower_is_better", False):
             higher_or_lower_better = "lower"
         else:
             higher_or_lower_better = "higher"
