@@ -125,7 +125,7 @@ class SktimeForecastingExperiment(BaseExperiment):
 
     For default choices of ``scoring``:
     >>> sktime_exp = SktimeForecastingExperiment(
-    ...     estimator=NaiveForecaster(strategy="last"),
+    ...     forecaster=NaiveForecaster(strategy="last"),
     ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
     ...     y=y,
     ... )
@@ -278,7 +278,7 @@ class SktimeForecastingExperiment(BaseExperiment):
         y, X = load_longley()
         params1 = {
             "forecaster": NaiveForecaster(strategy="last"),
-            "cv": ExpandingWindowSplitter(initial_window=12, step_length=6, fh=6),
+            "cv": ExpandingWindowSplitter(initial_window=3, step_length=3, fh=1),
             "y": y,
             "X": X,
             "scoring": MeanAbsolutePercentageError(symmetric=False),
