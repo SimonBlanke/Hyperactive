@@ -2,12 +2,9 @@
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
-from sklearn import clone
-from sklearn.metrics import check_scoring
-from sklearn.model_selection import cross_validate
-from sklearn.utils.validation import _num_samples
 
 from hyperactive.base import BaseExperiment
+
 
 class SktimeForecastingExperiment(BaseExperiment):
     """Experiment adapter for time backtesting experiments.
