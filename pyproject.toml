@@ -59,6 +59,7 @@ test = [
   "flake8",
   "pytest-cov",
   "pathos",
+  "torch",
 ]
 all_extras = [
   "hyperactive[integrations]",
