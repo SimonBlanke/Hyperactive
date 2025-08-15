@@ -49,6 +49,9 @@ dependencies = [
 sklearn-integration = [
   "scikit-learn <1.8.0",
 ]
+sktime-integration = [
+  "sktime",
+]
 build = [
   "setuptools",
   "build",
