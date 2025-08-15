@@ -106,35 +106,31 @@ class SktimeForecastingExperiment(BaseExperiment):
 
     Example
     -------
-    >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from sklearn.datasets import load_iris
-    >>> from sklearn.svm import SVC
-    >>> from sklearn.metrics import accuracy_score
-    >>> from sklearn.model_selection import KFold
+    >>> from hyperactive.experiment.integrations import SktimeForecastingExperiment
+    >>> from sktime.datasets import load_airline
+    >>> from sktime.forecasting.naive import NaiveForecaster
+    >>> from sktime.performance_metrics import MeanAbsolutePercentageError
+    >>> from sktime.split import ExpandingWindowSplitter
     >>>
-    >>> X, y = load_iris(return_X_y=True)
-    >>>
-    >>> sklearn_exp = SklearnCvExperiment(
-    ...     estimator=SVC(),
-    ...     scoring=accuracy_score,
-    ...     cv=KFold(n_splits=3, shuffle=True),
-    ...     X=X,
+    >>> sktime_exp = SktimeForecastingExperiment(
+    ...     forecaster=NaiveForecaster(strategy="last"),
+    ...     scoring=MeanAbsolutePercentageError(),
+    ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
     ...     y=y,
     ... )
-    >>> params = {"C": 1.0, "kernel": "linear"}
-    >>> score, add_info = sklearn_exp.score(params)
+    >>> params = {"strategy": "mean"}
+    >>> score, add_info = sktime_exp.score(params)
 
     For default choices of ``scoring`` and ``cv``:
-    >>> sklearn_exp = SklearnCvExperiment(
-    ...     estimator=SVC(),
-    ...     X=X,
+    >>> sktime_exp = SklearnCvExperiment(
+    ...     estimator=NaiveForecaster(strategy="last"),
     ...     y=y,
     ... )
-    >>> params = {"C": 1.0, "kernel": "linear"}
-    >>> score, add_info = sklearn_exp.score(params)
+    >>> params = {"strategy": "mean"}
+    >>> score, add_info = sktime_exp.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sklearn_exp(C=1.0, kernel="linear")
+    >>> score = sktime_exp(strategy="mean")
     """
 
     _tags = {
