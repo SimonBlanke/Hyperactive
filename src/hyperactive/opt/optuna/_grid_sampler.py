@@ -118,17 +118,47 @@ class GridSampler(_BaseOptunaAdapter):
         from hyperactive.experiment.integrations import SklearnCvExperiment
         from sklearn.datasets import load_iris
         from sklearn.svm import SVC
+        from sklearn.neighbors import KNeighborsClassifier
 
         X, y = load_iris(return_X_y=True)
-        sklearn_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
-
-        param_space = {
+        
+        # Test case 1: Basic continuous parameters (converted to discrete)
+        svm_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
+        param_space_1 = {
             "C": [0.01, 0.1, 1, 10],
             "gamma": [0.0001, 0.01, 0.1, 1],
         }
-
-        return [{
-            "param_space": param_space,
-            "n_trials": 10,
-            "experiment": sklearn_exp,
-        }]
+        
+        # Test case 2: Mixed categorical and discrete parameters
+        knn_exp = SklearnCvExperiment(estimator=KNeighborsClassifier(), X=X, y=y)
+        param_space_2 = {
+            "n_neighbors": [1, 3, 5, 7],             # Discrete integers
+            "weights": ["uniform", "distance"],      # Categorical
+            "metric": ["euclidean", "manhattan"],    # Categorical  
+            "p": [1, 2],                             # Discrete for minkowski
+        }
+        
+        # Test case 3: Small exhaustive grid (tests complete enumeration)
+        param_space_3 = {
+            "C": [0.1, 1],                           # 2 values
+            "kernel": ["rbf", "linear"],             # 2 values  
+        }
+        # Total: 2 × 2 = 4 combinations, n_trials should cover all
+        
+        return [
+            {
+                "param_space": param_space_1,
+                "n_trials": 10,
+                "experiment": svm_exp,
+            },
+            {
+                "param_space": param_space_2, 
+                "n_trials": 15,
+                "experiment": knn_exp,
+            },
+            {
+                "param_space": param_space_3,
+                "n_trials": 4,  # Exact number for exhaustive search
+                "experiment": svm_exp,
+            }
+        ]

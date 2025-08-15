@@ -115,10 +115,37 @@ class NSGAIISampler(_BaseOptunaAdapter):
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+        from sklearn.datasets import load_iris
+        from sklearn.ensemble import RandomForestClassifier
+        
+        # Test case 1: Basic single-objective (inherits from base)
         params = super().get_test_params(parameter_set)
         params[0].update({
             "population_size": 20,
             "mutation_prob": 0.2,
             "crossover_prob": 0.8,
         })
+        
+        # Test case 2: Multi-objective with mixed parameter types
+        X, y = load_iris(return_X_y=True)
+        rf_exp = SklearnCvExperiment(estimator=RandomForestClassifier(random_state=42), X=X, y=y)
+        
+        mixed_param_space = {
+            "n_estimators": (10, 50),           # Continuous integer
+            "max_depth": [3, 5, 7, None],       # Mixed discrete/None
+            "criterion": ["gini", "entropy"],   # Categorical
+            "min_samples_split": (2, 10),       # Continuous integer
+            "bootstrap": [True, False],         # Boolean categorical
+        }
+        
+        params.append({
+            "param_space": mixed_param_space,
+            "n_trials": 15,  # Smaller for faster testing
+            "experiment": rf_exp,
+            "population_size": 8,   # Smaller population for testing
+            "mutation_prob": 0.1,
+            "crossover_prob": 0.9,
+        })
+        
         return params

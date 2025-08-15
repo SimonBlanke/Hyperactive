@@ -110,9 +110,47 @@ class QMCSampler(_BaseOptunaAdapter):
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+        from sklearn.datasets import load_iris
+        from sklearn.linear_model import LogisticRegression
+        
+        # Test case 1: Halton sequence without scrambling
         params = super().get_test_params(parameter_set)
         params[0].update({
             "qmc_type": "halton",
             "scramble": False,
         })
+        
+        # Test case 2: Sobol sequence with scrambling
+        X, y = load_iris(return_X_y=True)
+        lr_exp = SklearnCvExperiment(estimator=LogisticRegression(random_state=42, max_iter=1000), X=X, y=y)
+        
+        mixed_param_space = {
+            "C": (0.01, 100),                        # Continuous
+            "penalty": ["l1", "l2", "elasticnet"],   # Categorical
+            "l1_ratio": (0.0, 1.0),                  # Continuous ratio
+            "solver": ["liblinear", "saga"],         # Categorical
+        }
+        
+        params.append({
+            "param_space": mixed_param_space,
+            "n_trials": 16,  # Power of 2 for better QMC properties
+            "experiment": lr_exp,
+            "qmc_type": "sobol",  # Different sequence type
+            "scramble": True,     # With scrambling for randomization
+        })
+        
+        # Test case 3: Higher dimensional space (tests QMC scaling)
+        high_dim_space = {
+            f"param_{i}": (0.0, 1.0) for i in range(8)  # 8-dimensional continuous space
+        }
+        
+        params.append({
+            "param_space": high_dim_space,
+            "n_trials": 32,  # Power of 2, good for QMC
+            "experiment": lr_exp,
+            "qmc_type": "sobol",
+            "scramble": False,
+        })
+        
         return params

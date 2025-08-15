@@ -125,9 +125,52 @@ class CmaEsSampler(_BaseOptunaAdapter):
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+        from sklearn.datasets import make_regression
+        from sklearn.neural_network import MLPRegressor
+        
+        # Test case 1: Basic continuous parameters (from base)
         params = super().get_test_params(parameter_set)
         params[0].update({
             "sigma0": 0.5,
             "n_startup_trials": 1,
         })
+        
+        # Test case 2: Neural network with continuous parameters only
+        # (CMA-ES specific - only continuous parameters allowed)
+        X, y = make_regression(n_samples=50, n_features=5, noise=0.1, random_state=42)
+        mlp_exp = SklearnCvExperiment(
+            estimator=MLPRegressor(random_state=42, max_iter=100), 
+            X=X, y=y, cv=3
+        )
+        
+        continuous_param_space = {
+            "alpha": (1e-5, 1e-1),              # L2 regularization (continuous)
+            "learning_rate_init": (1e-4, 1e-1), # Learning rate (continuous)
+            "beta_1": (0.8, 0.99),              # Adam beta1 (continuous)
+            "beta_2": (0.9, 0.999),             # Adam beta2 (continuous)
+            # Note: No categorical parameters - CMA-ES doesn't support them
+        }
+        
+        params.append({
+            "param_space": continuous_param_space,
+            "n_trials": 8,  # Smaller for faster testing
+            "experiment": mlp_exp,
+            "sigma0": 0.3,          # Different sigma for diversity
+            "n_startup_trials": 2,  # More startup trials
+        })
+        
+        # Test case 3: High-dimensional continuous space (CMA-ES strength)
+        high_dim_continuous = {
+            f"x{i}": (-1.0, 1.0) for i in range(6)  # 6D continuous optimization
+        }
+        
+        params.append({
+            "param_space": high_dim_continuous,
+            "n_trials": 12,
+            "experiment": mlp_exp,
+            "sigma0": 0.7,          # Larger initial spread
+            "n_startup_trials": 3,
+        })
+        
         return params
