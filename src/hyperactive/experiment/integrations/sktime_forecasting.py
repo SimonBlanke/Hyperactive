@@ -124,7 +124,7 @@ class SktimeForecastingExperiment(BaseExperiment):
     >>> score, add_info = sktime_exp.score(params)
 
     For default choices of ``scoring``:
-    >>> sktime_exp = SklearnCvExperiment(
+    >>> sktime_exp = SktimeForecastingExperiment(
     ...     estimator=NaiveForecaster(strategy="last"),
     ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
     ...     y=y,
@@ -227,7 +227,7 @@ class SktimeForecastingExperiment(BaseExperiment):
 
         res_float = results[result_name].mean()
 
-        return res_float, results
+        return res_float, {"results": results}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
