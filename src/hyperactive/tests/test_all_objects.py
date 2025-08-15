@@ -121,11 +121,14 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
         if isclass(filter):
             obj_list = [obj for obj in obj_list if issubclass(obj, filter)]
 
-        # run_test_for_class selects the estimators to run
-        # based on whether they have changed, and whether they have all dependencies
-        # internally, uses the ONLY_CHANGED_MODULES flag,
-        # and checks the python env against python_dependencies tag
-        # obj_list = [obj for obj in obj_list if run_test_for_class(obj)]
+        # only run tests if all soft dependencies are present
+        def softdeps_present(obj):
+            """Check if the object has all dependencies present."""
+            from skbase.utils.dependencies import _check_estimator_deps
+
+            return _check_estimator_deps(obj, severity="none")
+
+        obj_list = [obj for obj in obj_list if softdeps_present(obj)]
 
         return obj_list
 
