@@ -121,9 +121,10 @@ class SktimeForecastingExperiment(BaseExperiment):
     >>> params = {"strategy": "mean"}
     >>> score, add_info = sktime_exp.score(params)
 
-    For default choices of ``scoring`` and ``cv``:
+    For default choices of ``scoring``:
     >>> sktime_exp = SklearnCvExperiment(
     ...     estimator=NaiveForecaster(strategy="last"),
+    ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
     ...     y=y,
     ... )
     >>> params = {"strategy": "mean"}
