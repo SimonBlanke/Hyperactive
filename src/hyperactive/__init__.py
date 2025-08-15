@@ -10,7 +10,6 @@ __license__ = "MIT"
 
 from .hyperactive import Hyperactive
 
-
 __all__ = [
     "Hyperactive",
 ]

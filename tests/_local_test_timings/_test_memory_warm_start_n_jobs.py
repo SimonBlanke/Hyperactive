@@ -1,7 +1,8 @@
 import time
-import pytest
+
 import numpy as np
 import pandas as pd
+import pytest
 
 from hyperactive import Hyperactive
 
@@ -10,7 +11,7 @@ size = 1000
 
 dim_full = list(range(0, size))
 dim_cat = list(range(round(size / 3)))
-dim_10 = list(range(round(size ** 0.1)))
+dim_10 = list(range(round(size**0.1)))
 
 search_space_0 = {
     "x1": dim_full,

@@ -1,11 +1,11 @@
 import time
-import pytest
-import numpy as np
 
+import numpy as np
+import pytest
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import GridSearchOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers_smbo
 

@@ -4,18 +4,16 @@
 
 
 from sklearn.utils.metaestimators import available_if
-from sklearn.exceptions import NotFittedError
 from sklearn.utils.validation import check_is_fitted
 
-from .utils import _estimator_has
 from ._compat import _deprecate_Xt_in_inverse_transform
+from .utils import _estimator_has
 
 
 # NOTE Implementations of following methods from:
 # https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/model_selection/_search.py
 # Tag: 1.5.1
 class BestEstimator:
-
     @available_if(_estimator_has("score_samples"))
     def score_samples(self, X):
         check_is_fitted(self)

@@ -5,15 +5,14 @@
 
 import copy
 import multiprocessing as mp
+from typing import Dict, List, Type, Union
+
 import pandas as pd
 
-from typing import Union, List, Dict, Type
-
 from .optimizers import RandomSearchOptimizer
-from .run_search import run_search
-
-from .results import Results
 from .print_results import PrintResults
+from .results import Results
+from .run_search import run_search
 from .search_space import SearchSpace
 
 
@@ -21,12 +20,14 @@ class Hyperactive:
     """
     Initialize the Hyperactive class to manage optimization processes.
 
-    Parameters:
+    Parameters
+    ----------
     - verbosity: List of verbosity levels (default: ["progress_bar", "print_results", "print_times"])
     - distribution: String indicating the distribution method (default: "multiprocessing")
     - n_processes: Number of processes to run in parallel or "auto" to determine automatically (default: "auto")
 
-    Methods:
+    Methods
+    -------
     - add_search: Add a new optimization search process with specified parameters
     - run: Execute the optimization searches
     - best_para: Get the best parameters for a specific search
@@ -62,19 +63,14 @@ class Hyperactive:
 
         for opt_pros_l in _bundle_opt_processes.values():
             # Check if the lengths of the search spaces of all optimizers in the list are the same.
-            if (
-                len(set(len(opt_pros.s_space()) for opt_pros in opt_pros_l))
-                == 1
-            ):
+            if len(set(len(opt_pros.s_space()) for opt_pros in opt_pros_l)) == 1:
                 manager = mp.Manager()  # get new manager.dict
                 shared_memory = manager.dict()
                 for opt_pros in opt_pros_l:
                     opt_pros.memory = shared_memory
             else:
                 for opt_pros in opt_pros_l:
-                    opt_pros.memory = opt_pros_l[
-                        0
-                    ].memory  # get same manager.dict
+                    opt_pros.memory = opt_pros_l[0].memory  # get same manager.dict
 
     @staticmethod
     def _default_opt(optimizer):
@@ -94,8 +90,8 @@ class Hyperactive:
         for key in search_space.keys():
             search_dim = search_space[key]
 
-            error_msg = "Value in '{}' of search space dictionary must be of type list".format(
-                key
+            error_msg = (
+                f"Value in '{key}' of search space dictionary must be of type list"
             )
             if not isinstance(search_dim, list):
                 print("Warning", error_msg)
@@ -123,7 +119,8 @@ class Hyperactive:
         """
         Add a new optimization search process with specified parameters.
 
-        Parameters:
+        Parameters
+        ----------
         - objective_function: The objective function to optimize.
         - search_space: Dictionary defining the search space for optimization.
         - n_iter: Number of iterations for the optimization process.
@@ -141,7 +138,6 @@ class Hyperactive:
         - memory: Option to share memory between processes (default: "share").
         - memory_warm_start: DataFrame containing warm start memory (default: None).
         """
-
         self.check_list(search_space)
 
         constraints = constraints or []
@@ -195,7 +191,6 @@ class Hyperactive:
         Args:
             max_time (float, optional): Maximum time limit for the optimization process. Defaults to None.
         """
-
         self._create_shared_memory()
 
         for opt in self.opt_pros.values():
@@ -213,37 +208,41 @@ class Hyperactive:
         """
         Retrieve the best parameters for a specific ID from the results.
 
-        Parameters:
+        Parameters
+        ----------
         - id_ (int): The ID of the parameters to retrieve.
 
-        Returns:
+        Returns
+        -------
         - Union[Dict[str, Union[int, float]], None]: The best parameters for the specified ID if found, otherwise None.
 
-        Raises:
+        Raises
+        ------
         - ValueError: If the objective function name is not recognized.
         """
-
         return self.results_.best_para(id_)
 
     def best_score(self, id_):
         """
         Return the best score for a specific ID from the results.
 
-        Parameters:
+        Parameters
+        ----------
         - id_ (int): The ID for which the best score is requested.
         """
-
         return self.results_.best_score(id_)
 
     def search_data(self, id_, times=False):
         """
         Retrieve search data for a specific ID from the results. Optionally exclude evaluation and iteration times if 'times' is set to False.
 
-        Parameters:
+        Parameters
+        ----------
         - id_ (int): The ID of the search data to retrieve.
         - times (bool, optional): Whether to exclude evaluation and iteration times. Defaults to False.
 
-        Returns:
+        Returns
+        -------
         - pd.DataFrame: The search data for the specified ID.
 
         columns are
@@ -256,7 +255,6 @@ class Hyperactive:
 
         index is RangeIndex
         """
-
         search_data_ = self.results_.search_data(id_)
 
         if times == False:

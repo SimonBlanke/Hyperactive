@@ -1,5 +1,8 @@
-import os, sys, subprocess, pytest
+import os
+import subprocess
+import sys
 
+import pytest
 
 if sys.platform.startswith("win"):
     pytest.skip("skip these tests for windows", allow_module_level=True)

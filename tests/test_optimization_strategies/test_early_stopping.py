@@ -1,13 +1,11 @@
-import pytest
 import numpy as np
-
+import pytest
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import RandomSearchOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers
-
 
 n_iter_no_change_parametr = (
     "n_iter_no_change",

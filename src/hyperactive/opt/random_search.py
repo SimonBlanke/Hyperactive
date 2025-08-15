@@ -5,7 +5,6 @@
 from collections.abc import Sequence
 
 import numpy as np
-
 from sklearn.model_selection import ParameterSampler
 
 from hyperactive.base import BaseOptimizer

@@ -1,9 +1,10 @@
-import pytest
 import numpy as np
-
+import pytest
 from tqdm import tqdm
-from ._parametrize import optimizers
+
 from hyperactive.search_space import SearchSpace
+
+from ._parametrize import optimizers
 
 
 def objective_function(opt):

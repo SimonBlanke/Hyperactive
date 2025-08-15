@@ -2,12 +2,11 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-import numpy as np
 
-from .objective_function import ObjectiveFunction
-from .hyper_gradient_conv import HyperGradientConv
-from .optimizer_attributes import OptimizerAttributes
 from .constraint import Constraint
+from .hyper_gradient_conv import HyperGradientConv
+from .objective_function import ObjectiveFunction
+from .optimizer_attributes import OptimizerAttributes
 
 
 class HyperOptimizer(OptimizerAttributes):
@@ -86,15 +85,12 @@ class HyperOptimizer(OptimizerAttributes):
 
         # conv warm start for smbo from values into positions
         if "warm_start_smbo" in self.opt_params:
-            self.opt_params["warm_start_smbo"] = (
-                self.hg_conv.conv_memory_warm_start(
-                    self.opt_params["warm_start_smbo"]
-                )
+            self.opt_params["warm_start_smbo"] = self.hg_conv.conv_memory_warm_start(
+                self.opt_params["warm_start_smbo"]
             )
 
         gfo_constraints = [
-            Constraint(constraint, self.s_space)
-            for constraint in self.constraints
+            Constraint(constraint, self.s_space) for constraint in self.constraints
         ]
 
         self.gfo_optimizer = self.optimizer_class(
@@ -120,9 +116,7 @@ class HyperOptimizer(OptimizerAttributes):
         )
         gfo_wrapper_model.pass_through = self.pass_through
 
-        memory_warm_start = self.hg_conv.conv_memory_warm_start(
-            self.memory_warm_start
-        )
+        memory_warm_start = self.hg_conv.conv_memory_warm_start(self.memory_warm_start)
 
         gfo_objective_function = gfo_wrapper_model(self.s_space())
 
@@ -156,9 +150,7 @@ class HyperOptimizer(OptimizerAttributes):
                 p_bar.set_postfix(
                     best_score=str(gfo_wrapper_model.optimizer.score_best),
                     best_pos=str(gfo_wrapper_model.optimizer.pos_best),
-                    best_iter=str(
-                        gfo_wrapper_model.optimizer.p_bar._best_since_iter
-                    ),
+                    best_iter=str(gfo_wrapper_model.optimizer.p_bar._best_since_iter),
                 )
 
                 p_bar.update(1)

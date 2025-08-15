@@ -1,4 +1,5 @@
 import numpy as np
+
 from hyperactive import Hyperactive
 
 """ --- test search spaces with mixed int/float types --- """

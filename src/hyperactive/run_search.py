@@ -4,10 +4,10 @@
 
 
 from .distribution import (
-    single_process,
     joblib_wrapper,
     multiprocessing_wrapper,
     pathos_wrapper,
+    single_process,
 )
 from .process import _process_
 

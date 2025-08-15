@@ -1,6 +1,6 @@
 import numpy as np
-from hyperactive import Hyperactive
 
+from hyperactive import Hyperactive
 
 search_space = {
     "x1": list(np.arange(0, 100, 1)),
@@ -9,7 +9,6 @@ search_space = {
 
 def test_argument_0():
     def objective_function(para):
-
         print("\npara.nth_iter", para.nth_iter)
         print("nth_iter_local", para.pass_through["nth_iter_local"])
 

@@ -1,8 +1,8 @@
 import numpy as np
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import HillClimbingOptimizer, RandomSearchOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 
 def test_constr_opt_0():

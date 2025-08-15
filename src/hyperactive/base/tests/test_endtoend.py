@@ -8,11 +8,12 @@ API unit tests are in TestAllOptimizers and TestAllExperiments.
 def test_endtoend_hillclimbing():
     """Test end-to-end usage of HillClimbing optimizer with an experiment."""
     # 1. define the experiment
-    from hyperactive.experiment.integrations import SklearnCvExperiment
     from sklearn.datasets import load_iris
-    from sklearn.svm import SVC
     from sklearn.metrics import accuracy_score
     from sklearn.model_selection import KFold
+    from sklearn.svm import SVC
+
+    from hyperactive.experiment.integrations import SklearnCvExperiment
 
     X, y = load_iris(return_X_y=True)
 
@@ -26,12 +27,13 @@ def test_endtoend_hillclimbing():
 
     # 2. set up the HillClimbing optimizer
     import numpy as np
+
     from hyperactive.opt import HillClimbing
 
     hillclimbing_config = {
         "search_space": {
-        "C": np.array([0.01, 0.1, 1, 10]),
-        "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
+            "C": np.array([0.01, 0.1, 1, 10]),
+            "gamma": np.array([0.0001, 0.01, 0.1, 1, 10]),
         },
         "n_iter": 100,
     }

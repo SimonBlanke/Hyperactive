@@ -5,7 +5,6 @@
 
 from .custom_optimization_strategy import CustomOptimizationStrategy
 
-
 __all__ = [
     "CustomOptimizationStrategy",
 ]

@@ -1,17 +1,13 @@
-import pytest
 import numpy as np
-
-from sklearn import svm, datasets
-from sklearn.naive_bayes import GaussianNB
+import pytest
+from sklearn import datasets, svm
 from sklearn.decomposition import PCA
-from sklearn.datasets import make_blobs
 from sklearn.exceptions import NotFittedError
-
+from sklearn.naive_bayes import GaussianNB
 from sklearn.utils.validation import check_is_fitted
 
 from hyperactive.integrations import HyperactiveSearchCV
 from hyperactive.optimizers import RandomSearchOptimizer
-
 
 iris = datasets.load_iris()
 X, y = iris.data, iris.target

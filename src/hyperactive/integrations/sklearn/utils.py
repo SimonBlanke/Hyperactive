@@ -3,12 +3,6 @@
 # License: MIT License
 
 
-from sklearn.utils.validation import (
-    indexable,
-    _check_method_params,
-    check_is_fitted,
-)
-
 # NOTE Implementations of following methods from:
 # https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/model_selection/_search.py
 # Tag: 1.5.1

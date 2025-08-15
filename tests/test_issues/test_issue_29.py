@@ -1,6 +1,6 @@
 from sklearn.datasets import load_diabetes
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeRegressor
 
 from hyperactive import Hyperactive
 

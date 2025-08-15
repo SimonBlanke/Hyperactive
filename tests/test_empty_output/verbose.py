@@ -1,5 +1,7 @@
 import sys
+
 import numpy as np
+
 from hyperactive import Hyperactive
 
 

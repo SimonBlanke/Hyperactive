@@ -1,5 +1,7 @@
+import sys
+
 import numpy as np
-import sys, pytest
+import pytest
 from tqdm import tqdm
 
 from hyperactive import Hyperactive

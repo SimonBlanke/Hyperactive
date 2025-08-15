@@ -1,10 +1,9 @@
 import copy
-import pytest
+
 import numpy as np
-import pandas as pd
+import pytest
 
 from hyperactive import Hyperactive
-
 
 search_space = {
     "x1": list(np.arange(0, 100, 1)),

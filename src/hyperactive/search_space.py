@@ -81,9 +81,7 @@ class SearchSpace(DictClass):
         for dim_key in self.dim_keys:
             search_dim = self.search_space[dim_key]
 
-            err_msg = "\n Value in '{}' of search space dictionary must be of type list \n".format(
-                dim_key
-            )
+            err_msg = f"\n Value in '{dim_key}' of search space dictionary must be of type list \n"
             if not isinstance(search_dim, list):
                 raise ValueError(err_msg)
 
@@ -115,9 +113,7 @@ class SearchSpace(DictClass):
             is_number = self.is_number(dim_value)
 
             if not is_str and not is_func and not is_number:
-                msg = "\n The value '{}' of type '{}' in the search space dimension '{}' must be number, string or function \n".format(
-                    dim_value, type(dim_value), dim_key
-                )
+                msg = f"\n The value '{dim_value}' of type '{type(dim_value)}' in the search space dimension '{dim_key}' must be number, string or function \n"
                 raise ValueError(msg)
 
     def check_non_num_values(self):
@@ -131,7 +127,5 @@ class SearchSpace(DictClass):
                 self._string_or_object(dim_key, dim_values)
             else:
                 if dim_values.ndim != 1:
-                    msg = "Array-like object in '{}' must be one dimensional".format(
-                        dim_key
-                    )
+                    msg = f"Array-like object in '{dim_key}' must be one dimensional"
                     raise ValueError(msg)

@@ -9,7 +9,7 @@ def search_space_setup(size=1000):
 
     pad_full = list(range(0, size))
     pad_cat = list(range(int(size / 3)))
-    pad_10 = list(range(int(size ** 0.1)))
+    pad_10 = list(range(int(size**0.1)))
 
     search_space_0 = {
         "x1": pad_full,

@@ -1,8 +1,8 @@
-import pytest
 import numpy as np
-
+import pytest
 
 from hyperactive import Hyperactive
+
 from ._parametrize import optimizers
 
 

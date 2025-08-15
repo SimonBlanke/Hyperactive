@@ -8,6 +8,7 @@ from sklearn.utils.validation import _num_samples
 
 from hyperactive.base import BaseExperiment
 
+
 class SklearnCvExperiment(BaseExperiment):
     """Experiment adapter for sklearn cross-validation experiments.
 
@@ -195,9 +196,9 @@ class SklearnCvExperiment(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         from sklearn.datasets import load_diabetes, load_iris
-        from sklearn.svm import SVC, SVR
         from sklearn.metrics import accuracy_score, mean_absolute_error
         from sklearn.model_selection import KFold
+        from sklearn.svm import SVC, SVR
 
         X, y = load_iris(return_X_y=True)
         params_classif = {
@@ -282,7 +283,6 @@ def _guess_sign_of_sklmetric(scorer):
         "roc_auc_score": True,
         "top_k_accuracy_score": True,
         "zero_one_loss": False,
-
         # Regression
         "d2_absolute_error_score": True,
         "d2_pinball_score": True,

@@ -10,7 +10,7 @@ License: MIT
 from __future__ import annotations
 
 import warnings
-from typing import Dict, Any
+from typing import Any, Dict
 
 import sklearn
 from packaging import version

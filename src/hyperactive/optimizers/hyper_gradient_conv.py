@@ -24,8 +24,7 @@ class HyperGradientConv:
 
     def position2value(self, position):
         return [
-            space_dim[pos]
-            for pos, space_dim in zip(position, self.s_space.values_l)
+            space_dim[pos] for pos, space_dim in zip(position, self.s_space.values_l)
         ]
 
     def para_func2str(self, para):
@@ -58,9 +57,7 @@ class HyperGradientConv:
                 if value_hyper in space_dim:
                     value_gfo = space_dim.index(value_hyper)
                 else:
-                    raise ValueError(
-                        f"'{value_hyper}' was not found in '{para}'"
-                    )
+                    raise ValueError(f"'{value_hyper}' was not found in '{para}'")
 
             para_gfo[para] = value_gfo
         return para_gfo
@@ -68,9 +65,7 @@ class HyperGradientConv:
     def conv_initialize(self, initialize):
         if "warm_start" in initialize:
             warm_start_l = initialize["warm_start"]
-            warm_start_gfo = [
-                self.conv_para(warm_start) for warm_start in warm_start_l
-            ]
+            warm_start_gfo = [self.conv_para(warm_start) for warm_start in warm_start_l]
             initialize["warm_start"] = warm_start_gfo
 
         return initialize
@@ -113,13 +108,9 @@ class HyperGradientConv:
                     self.value_func2str(value) for value in result_dim_values
                 ]
 
-                list1_positions = self.get_list_positions(
-                    result_dim_values, search_dim
-                )
+                list1_positions = self.get_list_positions(result_dim_values, search_dim)
             else:
-                list1_positions = self.values2positions(
-                    result_dim_values, search_dim
-                )
+                list1_positions = self.values2positions(result_dim_values, search_dim)
 
             df_positions_dict[dim_key] = list1_positions
 

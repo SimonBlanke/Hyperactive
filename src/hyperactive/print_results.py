@@ -3,6 +3,7 @@
 # License: MIT License
 
 import logging
+
 import numpy as np
 
 indent = "  "
@@ -23,7 +24,7 @@ class PrintResults:
             eval_time,
             "sec",
             indent,
-            "[{} %]".format(round(eval_time / iter_time * 100, 2)),
+            f"[{round(eval_time / iter_time * 100, 2)} %]",
         )
         print(
             indent,
@@ -31,7 +32,7 @@ class PrintResults:
             opt_time,
             "sec",
             indent,
-            "[{} %]".format(round(opt_time / iter_time * 100, 2)),
+            f"[{round(opt_time / iter_time * 100, 2)} %]",
         )
         if iterPerSec >= 1:
             print(
@@ -40,7 +41,7 @@ class PrintResults:
                 iter_time,
                 "sec",
                 indent,
-                "[{} iter/sec]".format(round(iterPerSec, 2)),
+                f"[{round(iterPerSec, 2)} iter/sec]",
             )
         else:
             secPerIter = iter_time / n_iter
@@ -50,7 +51,7 @@ class PrintResults:
                 iter_time,
                 "sec",
                 indent,
-                "[{} sec/iter]".format(round(secPerIter, 2)),
+                f"[{round(secPerIter, 2)} sec/iter]",
             )
         print(" ")
 
@@ -74,7 +75,7 @@ class PrintResults:
         best_additional_results,
         random_seed,
     ):
-        print("\nResults: '{}'".format(objective_function.__name__), " ")
+        print(f"\nResults: '{objective_function.__name__}'", " ")
         if best_para is None:
             print(indent, "Best score:", best_score, " ")
             print(indent, "Best parameter set:", best_para, " ")
@@ -93,8 +94,8 @@ class PrintResults:
                     print(
                         indent,
                         indent,
-                        "'{}'".format(best_additional_result),
-                        "{}:".format(added_spaces),
+                        f"'{best_additional_result}'",
+                        f"{added_spaces}:",
                         best_additional_results[best_additional_result],
                         " ",
                     )
@@ -109,8 +110,8 @@ class PrintResults:
                     print(
                         indent,
                         indent,
-                        "'{}'".format(para_key),
-                        "{}:".format(added_spaces),
+                        f"'{para_key}'",
+                        f"{added_spaces}:",
                         best_para[para_key],
                         " ",
                     )
