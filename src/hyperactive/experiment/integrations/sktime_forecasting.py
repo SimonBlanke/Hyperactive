@@ -170,7 +170,7 @@ class SktimeForecastingExperiment(BaseExperiment):
 
         if scoring is None:
             from sktime.performance_metrics.forecasting import (
-                MeanAbsolutePercentageError
+                MeanAbsolutePercentageError,
             )
 
             self._scoring = MeanAbsolutePercentageError(symmetric=True)
