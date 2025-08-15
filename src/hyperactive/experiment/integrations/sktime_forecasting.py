@@ -112,6 +112,8 @@ class SktimeForecastingExperiment(BaseExperiment):
     >>> from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
     >>> from sktime.split import ExpandingWindowSplitter
     >>>
+    >>> y = load_airline()
+    >>>
     >>> sktime_exp = SktimeForecastingExperiment(
     ...     forecaster=NaiveForecaster(strategy="last"),
     ...     scoring=MeanAbsolutePercentageError(),
