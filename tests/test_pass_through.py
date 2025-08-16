@@ -1,3 +1,5 @@
+"""Test module for pass through functionality."""
+
 import copy
 
 import numpy as np
@@ -19,6 +21,7 @@ def _test_func_1():
 
 
 def objective_function_0(opt):
+    """Test objective function for integer pass_through values."""
     if opt.pass_through["stuff"] != 1:
         print("\n pass_through:", opt.pass_through["stuff"])
         assert False
@@ -28,6 +31,7 @@ def objective_function_0(opt):
 
 
 def objective_function_1(opt):
+    """Test objective function for float pass_through values."""
     if opt.pass_through["stuff"] != 0.001:
         print("\n pass_through:", opt.pass_through["stuff"])
         assert False
@@ -37,6 +41,7 @@ def objective_function_1(opt):
 
 
 def objective_function_2(opt):
+    """Test objective function for list pass_through values."""
     if opt.pass_through["stuff"] != [1, 2, 3]:
         print("\n pass_through:", opt.pass_through["stuff"])
         assert False
@@ -46,6 +51,7 @@ def objective_function_2(opt):
 
 
 def objective_function_3(opt):
+    """Test objective function for function pass_through values."""
     if opt.pass_through["stuff"] != _test_func:
         print("\n pass_through:", opt.pass_through["stuff"])
         assert False
@@ -78,6 +84,7 @@ pass_through_setups = (
 
 @pytest.mark.parametrize(*pass_through_setups)
 def test_pass_through_0(pass_through_setup):
+    """Test basic pass_through functionality with different data types."""
     objective_function = pass_through_setup[0]
     pass_through = pass_through_setup[1]
 
@@ -92,6 +99,7 @@ def test_pass_through_0(pass_through_setup):
 
 
 def objective_function_0(opt):
+    """Test objective function for modifying integer pass_through values."""
     if opt.nth_iter > 1:
         assert opt.pass_through["stuff"] == 2
     opt.pass_through["stuff"] = 2
@@ -101,6 +109,7 @@ def objective_function_0(opt):
 
 
 def objective_function_1(opt):
+    """Test objective function for modifying float pass_through values."""
     if opt.nth_iter > 1:
         assert opt.pass_through["stuff"] == 0.002
     opt.pass_through["stuff"] = 0.002
@@ -110,6 +119,7 @@ def objective_function_1(opt):
 
 
 def objective_function_2(opt):
+    """Test objective function for modifying list pass_through values."""
     if opt.nth_iter > 1:
         assert 4 in opt.pass_through["stuff"]
     opt.pass_through["stuff"].append(4)
@@ -119,6 +129,7 @@ def objective_function_2(opt):
 
 
 def objective_function_3(opt):
+    """Test objective function for modifying function pass_through values."""
     if opt.nth_iter > 1:
         assert opt.pass_through["stuff"] == _test_func_1
     opt.pass_through["stuff"] = _test_func_1
@@ -145,6 +156,7 @@ pass_through_setups = (
 
 @pytest.mark.parametrize(*pass_through_setups)
 def test_pass_through_1(pass_through_setup):
+    """Test pass_through modification during optimization."""
     objective_function = pass_through_setup[0]
     pass_through = pass_through_setup[1]
 
@@ -162,6 +174,7 @@ def test_pass_through_1(pass_through_setup):
 
 @pytest.mark.parametrize(*pass_through_setups)
 def test_pass_through_2(pass_through_setup):
+    """Test pass_through modification with 2 parallel jobs."""
     objective_function = pass_through_setup[0]
     pass_through = pass_through_setup[1]
 
@@ -180,6 +193,7 @@ def test_pass_through_2(pass_through_setup):
 
 @pytest.mark.parametrize(*pass_through_setups)
 def test_pass_through_3(pass_through_setup):
+    """Test pass_through modification with 4 parallel jobs."""
     objective_function = pass_through_setup[0]
     pass_through = pass_through_setup[1]
 

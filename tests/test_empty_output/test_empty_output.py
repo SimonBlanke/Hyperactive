@@ -1,3 +1,5 @@
+"""Test module for empty output functionality."""
+
 import os
 import subprocess
 import sys
@@ -16,7 +18,7 @@ non_verbose_file = os.path.join(here, "non_verbose.py")
 
 def _run_subprocess(script):
     output = []
-    process = subprocess.Popen(
+    process = subprocess.Popen(  # noqa: S603
         [sys.executable, "-u", script],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -36,6 +38,7 @@ def _run_subprocess(script):
 
 
 def test_empty_output():
+    """Test that verbose and non-verbose modes produce expected output."""
     stdout_verb, stderr_verb = _run_subprocess(verbose_file)
     stdout_non_verb, stderr_non_verb = _run_subprocess(non_verbose_file)
 

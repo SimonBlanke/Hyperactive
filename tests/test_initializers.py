@@ -1,9 +1,12 @@
+"""Test module for initializer functionality."""
+
 import numpy as np
 
 from hyperactive import Hyperactive
 
 
 def objective_function(opt):
+    """Return simple quadratic objective function for testing."""
     score = -opt["x1"] * opt["x1"]
     return score
 
@@ -14,6 +17,7 @@ search_space = {
 
 
 def test_initialize_warm_start_0():
+    """Test warm start initialization with optimal point."""
     init = {
         "x1": 0,
     }
@@ -33,6 +37,7 @@ def test_initialize_warm_start_0():
 
 
 def test_initialize_warm_start_1():
+    """Test warm start initialization with boundary point."""
     search_space = {
         "x1": list(np.arange(-10, 10, 1)),
     }
@@ -55,6 +60,7 @@ def test_initialize_warm_start_1():
 
 
 def test_initialize_vertices():
+    """Test vertices initialization strategy."""
     initialize = {"vertices": 2}
 
     hyper = Hyperactive()
@@ -70,6 +76,7 @@ def test_initialize_vertices():
 
 
 def test_initialize_grid_0():
+    """Test grid initialization with optimal center point."""
     search_space = {
         "x1": list(np.arange(-1, 2, 1)),
     }
@@ -88,6 +95,7 @@ def test_initialize_grid_0():
 
 
 def test_initialize_grid_1():
+    """Test grid initialization with off-center optimal point."""
     search_space = {
         "x1": list(np.arange(-2, 3, 1)),
     }
@@ -107,6 +115,7 @@ def test_initialize_grid_1():
 
 
 def test_initialize_all_0():
+    """Test combination of all initialization strategies."""
     search_space = {
         "x1": list(np.arange(-2, 3, 1)),
     }

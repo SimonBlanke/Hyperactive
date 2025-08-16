@@ -1,3 +1,5 @@
+"""Test module for sklearn parametrize_with_checks integration."""
+
 from sklearn import svm
 from sklearn.model_selection import KFold
 from sklearn.utils.estimator_checks import parametrize_with_checks
@@ -19,4 +21,5 @@ ESTIMATORS = [hyperactivecv, optcv]
 
 @parametrize_with_checks(ESTIMATORS)
 def test_estimators(estimator, check):
+    """Test estimators with sklearn estimator checks."""
     check(estimator)

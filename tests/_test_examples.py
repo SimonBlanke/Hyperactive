@@ -17,7 +17,7 @@ for file_path in files:
 
     try:
         print("\033[0;33;40m Testing", file_name, end="...\r")
-        subprocess.check_call(["python", file_path], stdout=DEVNULL, stderr=STDOUT)
+        subprocess.check_call(["python", file_path], stdout=DEVNULL, stderr=STDOUT)  # noqa: S603, S607
     except subprocess.CalledProcessError:
         print("\033[0;31;40m Error in", file_name)
     else:

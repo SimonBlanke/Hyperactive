@@ -50,9 +50,6 @@ def test_memory_timeSave_0():
 
 
 def test_memory_timeSave_1():
-    data = load_breast_cancer()
-    X, y = data.data, data.target
-
     def objective_function(opt):
         time.sleep(0.001)
         return 1

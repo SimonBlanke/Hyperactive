@@ -1,3 +1,5 @@
+"""Test module for hyper gradient transformation functionality."""
+
 import time
 
 import numpy as np
@@ -8,6 +10,7 @@ from hyperactive import Hyperactive
 
 
 def objective_function_0(opt):
+    """Return simple quadratic objective function for testing."""
     score = -opt["x1"] * opt["x1"]
     return score
 
@@ -46,6 +49,7 @@ search_space_para_0 = [
 
 @pytest.mark.parametrize("search_space", search_space_para_0)
 def test_trafo_0(search_space):
+    """Test search space transformations with various ranges."""
     hyper = Hyperactive()
     hyper.add_search(objective_function_0, search_space, n_iter=25)
     hyper.run()
@@ -67,6 +71,7 @@ X, y = data.data, data.target
 
 
 def objective_function_1(opt):
+    """Decision tree objective function for testing with sklearn."""
     dtc = DecisionTreeClassifier(min_samples_split=opt["min_samples_split"])
     scores = cross_val_score(dtc, X, y, cv=10)
     time.sleep(0.1)

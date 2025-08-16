@@ -1,9 +1,12 @@
+"""Test module for random state functionality."""
+
 import numpy as np
 
 from hyperactive import Hyperactive
 
 
 def objective_function(opt):
+    """Two-dimensional quadratic objective function for random state testing."""
     score = -(opt["x1"] * opt["x1"] + opt["x2"] * opt["x2"])
     return score
 
@@ -18,6 +21,7 @@ err = 0.001
 
 
 def test_random_state_n_jobs_0():
+    """Test random state behavior with n_jobs=2."""
     n_jobs = 2
 
     hyper = Hyperactive()
@@ -44,6 +48,7 @@ def test_random_state_n_jobs_0():
 
 
 def test_random_state_n_jobs_1():
+    """Test random state behavior with n_jobs=3."""
     n_jobs = 3
 
     hyper = Hyperactive()
@@ -67,6 +72,7 @@ def test_random_state_n_jobs_1():
 
 
 def test_random_state_n_jobs_2():
+    """Test random state behavior with n_jobs=4."""
     n_jobs = 4
 
     hyper = Hyperactive()
@@ -90,6 +96,7 @@ def test_random_state_n_jobs_2():
 
 
 def test_random_state_0():
+    """Test reproducibility with same random state."""
     hyper0 = Hyperactive()
     hyper0.add_search(
         objective_function,
@@ -117,6 +124,7 @@ def test_random_state_0():
 
 
 def test_random_state_1():
+    """Test reproducibility with same random state (different value)."""
     hyper0 = Hyperactive()
     hyper0.add_search(
         objective_function,
@@ -144,6 +152,7 @@ def test_random_state_1():
 
 
 def test_random_state_2():
+    """Test different results with different random states."""
     hyper0 = Hyperactive()
     hyper0.add_search(
         objective_function,
@@ -171,6 +180,7 @@ def test_random_state_2():
 
 
 def test_no_random_state_0():
+    """Test non-reproducibility without fixed random state."""
     hyper0 = Hyperactive()
     hyper0.add_search(
         objective_function,

@@ -1,3 +1,4 @@
+# ruff: noqa: D100, D103
 import sys
 
 import numpy as np
@@ -16,37 +17,37 @@ if sys.platform.startswith("win"):
     pytest.skip("skip these tests for windows", allow_module_level=True)
 
 
-def func1():
+def _func1():
     pass
 
 
-def func2():
+def _func2():
     pass
 
 
-class class1:
+class _class1:
     def __init__(self):
         pass
 
 
-class class2:
+class _class2:
     def __init__(self):
         pass
 
 
-def class_f1():
-    return class1
+def _class_f1():
+    return _class1
 
 
-def class_f2():
-    return class2
+def _class_f2():
+    return _class2
 
 
-def numpy_f1():
+def _numpy_f1():
     return np.array([0, 1])
 
 
-def numpy_f2():
+def _numpy_f2():
     return np.array([1, 0])
 
 
@@ -54,13 +55,13 @@ search_space = {
     "x0": list(range(-3, 3)),
     "x1": list(np.arange(-1, 1, 0.001)),
     "string0": ["str0", "str1"],
-    "function0": [func1, func2],
-    "class0": [class_f1, class_f2],
-    "numpy0": [numpy_f1, numpy_f2],
+    "function0": [_func1, _func2],
+    "class0": [_class_f1, _class_f2],
+    "numpy0": [_numpy_f1, _numpy_f2],
 }
 
 
-def objective_function(opt):
+def _objective_function(opt):
     score = -opt["x1"] * opt["x1"]
     return score
 
@@ -78,15 +79,15 @@ n_iter = 3
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_0(smbo_opt):
     hyper0 = Hyperactive()
-    hyper0.add_search(objective_function, search_space, n_iter=n_iter)
+    hyper0.add_search(_objective_function, search_space, n_iter=n_iter)
     hyper0.run()
 
-    search_data0 = hyper0.search_data(objective_function)
+    search_data0 = hyper0.search_data(_objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
-        objective_function,
+        _objective_function,
         search_space,
         n_iter=n_iter,
         optimizer=smbo_opt_,
@@ -99,7 +100,7 @@ def test_warm_start_smbo_0(smbo_opt):
 def test_warm_start_smbo_1(smbo_opt):
     hyper0 = Hyperactive(distribution="pathos")
     hyper0.add_search(
-        objective_function,
+        _objective_function,
         search_space,
         n_iter=n_iter,
         n_jobs=2,
@@ -107,12 +108,12 @@ def test_warm_start_smbo_1(smbo_opt):
     )
     hyper0.run()
 
-    search_data0 = hyper0.search_data(objective_function)
+    search_data0 = hyper0.search_data(_objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive()
     hyper1.add_search(
-        objective_function, search_space, n_iter=n_iter, optimizer=smbo_opt_
+        _objective_function, search_space, n_iter=n_iter, optimizer=smbo_opt_
     )
     hyper1.run()
 
@@ -120,15 +121,15 @@ def test_warm_start_smbo_1(smbo_opt):
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_2(smbo_opt):
     hyper0 = Hyperactive()
-    hyper0.add_search(objective_function, search_space, n_iter=n_iter)
+    hyper0.add_search(_objective_function, search_space, n_iter=n_iter)
     hyper0.run()
 
-    search_data0 = hyper0.search_data(objective_function)
+    search_data0 = hyper0.search_data(_objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive(distribution="joblib")
     hyper1.add_search(
-        objective_function,
+        _objective_function,
         search_space,
         n_iter=n_iter,
         n_jobs=2,
@@ -141,15 +142,15 @@ def test_warm_start_smbo_2(smbo_opt):
 @pytest.mark.parametrize("smbo_opt", smbo_opts)
 def test_warm_start_smbo_3(smbo_opt):
     hyper0 = Hyperactive(distribution="pathos")
-    hyper0.add_search(objective_function, search_space, n_iter=n_iter, n_jobs=2)
+    hyper0.add_search(_objective_function, search_space, n_iter=n_iter, n_jobs=2)
     hyper0.run()
 
-    search_data0 = hyper0.search_data(objective_function)
+    search_data0 = hyper0.search_data(_objective_function)
     smbo_opt_ = smbo_opt(warm_start_smbo=search_data0)
 
     hyper1 = Hyperactive(distribution="joblib")
     hyper1.add_search(
-        objective_function,
+        _objective_function,
         search_space,
         n_iter=n_iter,
         n_jobs=2,

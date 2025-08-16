@@ -1,3 +1,5 @@
+"""Test module for issue #25 reproduction."""
+
 import numpy as np
 import pandas as pd
 
@@ -5,6 +7,7 @@ from hyperactive import Hyperactive
 
 
 def test_issue_25():
+    """Test issue 25 - memory warm start with CSV file persistence."""
     # set a path to save the dataframe
     path = "./search_data.csv"
     search_space = {

@@ -283,7 +283,7 @@ def test_memory_warm_start_1(search_space):
 
 
 @pytest.mark.parametrize("search_space", search_space_list)
-def test_memory_warm_start_1(search_space):
+def test_memory_warm_start_n_jobs(search_space):
     n_iter = 1500
 
     c_time = time.perf_counter()
