@@ -1,12 +1,4 @@
-import pytest
 import numpy as np
-
-
-from hyperactive import Hyperactive
-from hyperactive.optimizers import RandomSearchOptimizer
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
-
-from ._parametrize import optimizers, optimizers_strat
 
 
 def objective_function(opt):

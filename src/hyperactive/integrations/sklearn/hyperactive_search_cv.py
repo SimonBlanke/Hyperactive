@@ -1,36 +1,38 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Hyperactive cross-validation search for scikit-learn integration.
+
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 from collections.abc import Callable
-from typing import Union, Dict, Type
+from typing import Union
 
 from sklearn.base import BaseEstimator, clone
+from sklearn.base import BaseEstimator as SklearnBaseEstimator
 from sklearn.metrics import check_scoring
 
-
-from sklearn.base import BaseEstimator as SklearnBaseEstimator
-
 from hyperactive import Hyperactive
-
-from .best_estimator import BestEstimator as _BestEstimator_
-from .checks import Checks
-from ...optimizers import RandomSearchOptimizer
 from hyperactive.experiment.integrations.sklearn_cv import SklearnCvExperiment
 
-from ._compat import _check_method_params, _safe_validate_X_y, _safe_refit
+from ...optimizers import RandomSearchOptimizer
+from ._compat import _check_method_params, _safe_refit, _safe_validate_X_y
+from .best_estimator import BestEstimator as _BestEstimator_
+from .checks import Checks
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
-    """
-    HyperactiveSearchCV class for hyperparameter tuning using cross-validation with sklearn estimators.
+    """HyperactiveSearchCV class for hyperparameter tuning with sklearn.
 
-    Parameters:
+    This class provides a hyperparameter tuning interface compatible with sklearn.
+
+    Parameters
+    ----------
     - estimator: SklearnBaseEstimator
         The estimator to be tuned.
-    - params_config: Dict[str, list]
+    - params_config: dict[str, list]
         Dictionary containing the hyperparameter search space.
-    - optimizer: Union[str, Type[RandomSearchOptimizer]], optional
+    - optimizer: Union[str, type[RandomSearchOptimizer]], optional
         The optimizer to be used for hyperparameter search, default is "default".
     - n_iter: int, optional
         Number of parameter settings that are sampled, default is 100.
@@ -45,7 +47,8 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
     - cv: int | "BaseCrossValidator" | Iterable | None, optional
         Determines the cross-validation splitting strategy.
 
-    Methods:
+    Methods
+    -------
     - fit(X, y, **fit_params)
         Fit the estimator and tune hyperparameters.
     - score(X, y, **params)
@@ -57,8 +60,8 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
     def __init__(
         self,
         estimator: "SklearnBaseEstimator",
-        params_config: Dict[str, list],
-        optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
+        params_config: dict[str, list],
+        optimizer: Union[str, type[RandomSearchOptimizer]] = "default",
         n_iter: int = 100,
         *,
         scoring: Union[Callable, str, None] = None,
@@ -95,7 +98,8 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         """
         Fit the estimator using the provided training data.
 
-        Parameters:
+        Parameters
+        ----------
         - X: array-like or sparse matrix, shape (n_samples, n_features)
             The training input samples.
         - y: array-like, shape (n_samples,) or (n_samples, n_outputs)
@@ -103,11 +107,11 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         - **fit_params: dict of string -> object
             Additional fit parameters.
 
-        Returns:
+        Returns
+        -------
         - self: object
             Returns the instance itself.
         """
-
         X, y = self._check_data(X, y)
 
         fit_params = _check_method_params(X, params=fit_params)
@@ -145,7 +149,8 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         """
         Calculate the score of the best estimator on the input data.
 
-        Parameters:
+        Parameters
+        ----------
         - X: array-like or sparse matrix of shape (n_samples, n_features)
             The input samples.
         - y: array-like of shape (n_samples,), default=None
@@ -153,13 +158,14 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
         - **params: dict
             Additional parameters to be passed to the scoring function.
 
-        Returns:
+        Returns
+        -------
         - float
             The score of the best estimator on the input data.
         """
-
         return self.scorer_(self.best_estimator_, X, y, **params)
 
     @property
     def fit_successful(self):
+        """Fit Successful function."""
         self._fit_successful

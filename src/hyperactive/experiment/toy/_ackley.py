@@ -7,6 +7,8 @@ from hyperactive.base import BaseExperiment
 
 
 class Ackley(BaseExperiment):
+    """Ackley class."""
+
     r"""Ackley function, common benchmark for optimization algorithms.
 
     The Ackley function is a non-convex function used to test optimization algorithms.

@@ -1,11 +1,11 @@
 """
-Hyperactive is very versatile, because it can handle not just numerical or 
+Hyperactive is very versatile, because it can handle not just numerical or
 string variables in the search space, but also functions. If you want to
 search for the best list, numpy array, dataframed or class you can put them into a
 function that returns them as shown in the example below.
 
 This enables many possibilities for more complex optimization applications.
-Neural architecture search, feature engineering, ensemble optimization and many other applications are 
+Neural architecture search, feature engineering, ensemble optimization and many other applications are
 only possible or much easier if you can put functions in the search space.
 """
 
@@ -14,17 +14,17 @@ from hyperactive import Hyperactive
 
 def function_0():
     # do stuff in function0
-    return 
+    return
 
 
 def function_1():
     # do stuff in function1
-    return 
+    return
 
 
 def function_2():
     # do stuff in function2
-    return 
+    return
 
 
 def list1():

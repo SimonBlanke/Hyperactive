@@ -74,7 +74,7 @@ class PowellsMethod(_BaseGFOadapter):
     """
 
     _tags = {
-        "info:name": "Powell’s Method",
+        "info:name": "Powell's Method",
         "info:local_vs_global": "local",
         "info:explore_vs_exploit": "exploit",
         "info:compute": "low",
@@ -125,8 +125,6 @@ class PowellsMethod(_BaseGFOadapter):
         dict with str keys
             The test parameters dictionary.
         """
-        import numpy as np
-
         params = super().get_test_params()
         experiment = params[0]["experiment"]
         more_params = {

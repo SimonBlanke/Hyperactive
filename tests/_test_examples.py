@@ -1,11 +1,12 @@
-import os, sys, glob
+import glob
+import os
 import subprocess
 from subprocess import DEVNULL, STDOUT
 
 here = os.path.dirname(os.path.abspath(__file__))
 
-files0 = glob.glob(here+"/../examples/*/*.py")
-files1 = glob.glob(here+"/../examples/*.py")
+files0 = glob.glob(here + "/../examples/*/*.py")
+files1 = glob.glob(here + "/../examples/*.py")
 
 files = files0 + files1
 
@@ -16,7 +17,7 @@ for file_path in files:
 
     try:
         print("\033[0;33;40m Testing", file_name, end="...\r")
-        subprocess.check_call(["python", file_path], stdout=DEVNULL, stderr=STDOUT)
+        subprocess.check_call(["python", file_path], stdout=DEVNULL, stderr=STDOUT)  # noqa: S603, S607
     except subprocess.CalledProcessError:
         print("\033[0;31;40m Error in", file_name)
     else:

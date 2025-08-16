@@ -1,4 +1,5 @@
-# Author: Simon Blanke
+"""custom_optimization_strategy module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
@@ -6,6 +7,8 @@ from .optimization_strategy import BaseOptimizationStrategy
 
 
 class CustomOptimizationStrategy(BaseOptimizationStrategy):
+    """CustomOptimizationStrategy class."""
+
     def __init__(self):
         super().__init__()
 
@@ -13,6 +16,7 @@ class CustomOptimizationStrategy(BaseOptimizationStrategy):
         self.duration_sum = 0
 
     def add_optimizer(self, optimizer, duration=1, early_stopping=None):
+        """Add Optimizer function."""
         self.duration_sum += duration
         optimizer_setup = {
             "optimizer": optimizer,

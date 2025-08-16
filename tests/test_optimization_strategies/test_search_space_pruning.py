@@ -1,17 +1,21 @@
-import time
-import pytest
-import numpy as np
+"""Test module for search space pruning optimization strategy."""
 
+import time
+
+import numpy as np
+import pytest
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import GridSearchOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers_smbo
 
 
 @pytest.mark.parametrize(*optimizers_smbo)
 def test_memory_Warm_start_smbo_0(Optimizer_smbo):
+    """Test memory warm start with SMBO optimizers and custom optimization strategy."""
+
     def objective_function(opt):
         time.sleep(0.01)
         score = -(opt["x1"] * opt["x1"])

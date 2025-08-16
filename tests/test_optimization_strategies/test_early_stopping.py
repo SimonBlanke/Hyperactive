@@ -1,13 +1,13 @@
-import pytest
-import numpy as np
+"""Test module for early stopping optimization strategy."""
 
+import numpy as np
+import pytest
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import RandomSearchOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers
-
 
 n_iter_no_change_parametr = (
     "n_iter_no_change",
@@ -22,6 +22,8 @@ n_iter_no_change_parametr = (
 @pytest.mark.parametrize(*n_iter_no_change_parametr)
 @pytest.mark.parametrize(*optimizers)
 def test_strategy_early_stopping_0(Optimizer, n_iter_no_change):
+    """Test early stopping strategy with different optimizers and iteration limits."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
