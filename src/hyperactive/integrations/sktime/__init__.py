@@ -3,4 +3,6 @@
 # License: MIT License
 
 
-from .main import HyperactiveSearchCV
+from hyperactive.integrations.sktime._forecasting import ForecastingOptCV
+
+__all__ = ["ForecastingOptCV"]
