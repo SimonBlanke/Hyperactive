@@ -18,8 +18,7 @@ How to use this implementation template to implement a new estimator:
 - once complete: use as a local library, or contribute to hyperactive via PR
 
 Mandatory methods:
-    scoring         - _score(self, params: dict) -> np.float64
-    parameter names - _paramnames(self) -> list[str]
+    optimization - _solve(self, experiment, **search_config) -> dict
 
 Testing - required for automated test framework and check_estimator usage:
     get default parameters for test instance(s) - get_test_params()
@@ -127,19 +126,6 @@ class MyOptimizer(BaseOptimizer):
         # todo: optional, parameter checking logic (if applicable) should happen here
         # if writes derived values to self, should *not* overwrite self.parama etc
         # instead, write to self._parama, self._newparam (starting with _)
-
-    # todo: implement this, mandatory
-    def _paramnames(self):
-        """Return the parameter names of the search.
-
-        Returns
-        -------
-        list of str
-            The parameter names of the search parameters.
-        """
-        # for every instance, this should return the correct parameter names
-        # i.e., the maximal set of keys of the dict expected by _score
-        return ["score_param1", "score_param2"]
 
     # optional: implement this to prepare arguments for _run
     # the default is all parameters passed to __init__, minus the experiment
