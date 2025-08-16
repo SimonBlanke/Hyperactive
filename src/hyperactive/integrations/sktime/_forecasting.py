@@ -15,7 +15,7 @@ from hyperactive.experiment.integrations.sktime_forecasting import (
 
 
 class ForecastingOptCV(_DelegatedForecaster):
-    """Tuning via any optimizer in the hyperactive API.
+    """Tune an sktime forecaster via any optimizer in the hyperactive API.
 
     Parameters
     ----------
@@ -172,6 +172,7 @@ class ForecastingOptCV(_DelegatedForecaster):
         optimizer,
         cv,
         strategy="refit",
+        update_behaviour="full_refit",
         scoring=None,
         refit=True,
         return_n_best_forecasters=1,
@@ -184,6 +185,7 @@ class ForecastingOptCV(_DelegatedForecaster):
         self.optimizer = optimizer
         self.cv = cv
         self.strategy = strategy
+        self.update_behaviour = update_behaviour
         self.scoring = scoring
         self.refit = refit
         self.return_n_best_forecasters = return_n_best_forecasters
@@ -373,24 +375,32 @@ class ForecastingOptCV(_DelegatedForecaster):
         )
         from sktime.split import SingleWindowSplitter
 
-        params = {
+        from hyperactive.opt.gfo import HillClimbing
+        from hyperactive.opt.gridsearch import GridSearchSk
+        from hyperactive.opt.random_search import RandomSearchSk
+
+        params_gridsearch = {
             "forecaster": NaiveForecaster(strategy="mean"),
             "cv": SingleWindowSplitter(fh=1),
-            "param_grid": {"window_length": [2, 5]},
+            "optimizer": GridSearchSk(param_grid={"window_length": [2, 5]}),
             "scoring": MeanAbsolutePercentageError(symmetric=True),
         }
-        params2 = {
+        params_randomsearch = {
             "forecaster": PolynomialTrendForecaster(),
             "cv": SingleWindowSplitter(fh=1),
-            "param_grid": {"degree": [1, 2]},
+            "optimizer": RandomSearchSk(param_distributions={"degree": [1, 2]}),
             "scoring": mean_absolute_percentage_error,
             "update_behaviour": "inner_only",
         }
-        params3 = {
+        params_hillclimb = {
             "forecaster": NaiveForecaster(strategy="mean"),
             "cv": SingleWindowSplitter(fh=1),
-            "param_grid": {"window_length": [3, 4]},
+            "optimizer": HillClimbing(
+                search_space={"window_length": [2, 5]},
+                max_iter=10,
+                n_random_starts=5,
+            ),
             "scoring": "MeanAbsolutePercentageError(symmetric=True)",
             "update_behaviour": "no_update",
         }
-        return [params, params2, params3]
+        return [params_gridsearch, params_randomsearch, params_hillclimb]
