@@ -187,7 +187,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
   </tbody>
 </table>
 
-The examples above are not necessarily done with realistic datasets or training procedures. 
+The examples above are not necessarily done with realistic datasets or training procedures.
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
 
@@ -195,7 +195,7 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 
 ## Sideprojects and Tools
 
-The following packages are designed to support Hyperactive and expand its use cases. 
+The following packages are designed to support Hyperactive and expand its use cases.
 
 | Package                                                                       | Description                                                                          |
 |-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
@@ -287,9 +287,9 @@ hyper.run()
     - multiprocessing uses pickle
     - joblib uses dill
     - pathos uses cloudpickle
-  
-      
-- n_processes = "auto",   
+
+
+- n_processes = "auto",
   - Possible parameter types: (str, int)
   - The maximum number of processes that are allowed to run simultaneously. If n_processes is of int-type there will only run n_processes-number of jobs simultaneously instead of all at once. So if n_processes=10 and n_jobs_total=35, then the schedule would look like this 10 - 10 - 10 - 5. This saves computational resources if there is a large number of n_jobs. If "auto", then n_processes is the sum of all n_jobs (from .add_search(...)).
 
@@ -318,7 +318,7 @@ hyper.run()
 - optimizer = "default"
   - Possible parameter types: ("default", initialized optimizer object)
   - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The imported optimization classes from hyperactive are different from gfo. They only accept optimizer-specific-parameters. The following classes can be imported and used:
-  
+
     - HillClimbingOptimizer
     - StochasticHillClimbingOptimizer
     - RepulsingHillClimbingOptimizer
@@ -341,16 +341,16 @@ hyper.run()
     - DirectAlgorithm
     - TreeStructuredParzenEstimators
     - ForestOptimizer
-    
+
   - Example:
     ```python
     ...
-    
+
     opt_hco = HillClimbingOptimizer(epsilon=0.08)
     hyper = Hyperactive()
     hyper.add_search(..., optimizer=opt_hco)
     hyper.run()
-    
+
     ...
     ```
 
@@ -373,10 +373,10 @@ hyper.run()
 
     - warm_start
       - List of parameter dictionaries that marks additional start points for the optimization run.
-  
+
     Example:
     ```python
-    ... 
+    ...
     search_space = {
         "x1": list(range(10, 150, 5)),
         "x2": list(range(2, 12)),
@@ -399,10 +399,10 @@ hyper.run()
 - pass_through = {}
   - Possible parameter types: (dict)
   - The pass_through accepts a dictionary that contains information that will be passed to the objective-function argument. This information will not change during the optimization run, unless the user does so by himself (within the objective-function).
-  
+
     Example:
     ```python
-    ... 
+    ...
     def objective_function(para):
         para.pass_through["stuff1"] # <--- this variable is 1
         para.pass_through["stuff2"] # <--- this variable is 2
@@ -428,7 +428,7 @@ hyper.run()
 
 - callbacks = {}
   - Possible parameter types: (dict)
-  - The callbacks enables you to pass functions to hyperactive that are called every iteration during the optimization run. The function has access to the same argument as the objective-function. You can decide if the functions are called before or after the objective-function is evaluated via the keys of the callbacks-dictionary. The values of the dictionary are lists of the callback-functions. The following example should show they way to use callbacks: 
+  - The callbacks enables you to pass functions to hyperactive that are called every iteration during the optimization run. The function has access to the same argument as the objective-function. You can decide if the functions are called before or after the objective-function is evaluated via the keys of the callbacks-dictionary. The values of the dictionary are lists of the callback-functions. The following example should show they way to use callbacks:
 
 
     Example:
@@ -460,13 +460,13 @@ hyper.run()
 
 - catch = {}
   - Possible parameter types: (dict)
-  - The catch parameter provides a way to handle exceptions that occur during the evaluation of the objective-function or the callbacks. It is a dictionary that accepts the exception class as a key and the score that is returned instead as the value. This way you can handle multiple types of exceptions and return different scores for each. 
+  - The catch parameter provides a way to handle exceptions that occur during the evaluation of the objective-function or the callbacks. It is a dictionary that accepts the exception class as a key and the score that is returned instead as the value. This way you can handle multiple types of exceptions and return different scores for each.
   In the case of an exception it often makes sense to return `np.nan` as a score. You can see an example of this in the following code-snippet:
 
     Example:
     ```python
     ...
-    
+
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -543,8 +543,8 @@ hyper.run()
           </tr>
         </tbody>
       </table>
-  
-  
+
+
 </details>
 
 
@@ -568,12 +568,12 @@ hyper.run()
 <summary><b> Objective Function</b></summary>
 
 Each iteration consists of two steps:
- - The optimization step: decides what position in the search space (parameter set) to evaluate next 
+ - The optimization step: decides what position in the search space (parameter set) to evaluate next
  - The evaluation step: calls the objective function, which returns the score for the given position in the search space
-  
+
 The objective function has one argument that is often called "para", "params", "opt" or "access".
 This argument is your access to the parameter set that the optimizer has selected in the
-corresponding iteration. 
+corresponding iteration.
 
 ```python
 def objective_function(opt):
@@ -628,7 +628,7 @@ A special feature of Hyperactive is shown in the next example. You can put not j
 def func1():
   # do stuff
   return stuff
-  
+
 
 def func2():
   # do stuff
@@ -647,7 +647,7 @@ If you want to put other types of variables (like numpy arrays, pandas dataframe
 ```python
 def array1():
   return np.array([1, 2, 3])
-  
+
 
 def array2():
   return np.array([3, 2, 1])
@@ -660,7 +660,7 @@ search_space = {
 }
 ```
 
-The functions contain the numpy arrays and returns them. This way you can use them inside the objective function. 
+The functions contain the numpy arrays and returns them. This way you can use them inside the objective function.
 
 
 </details>
@@ -670,25 +670,25 @@ The functions contain the numpy arrays and returns them. This way you can use th
 <summary><b> Optimizer Classes</b></summary>
 
 Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts **only optimizer-specific-paramters** (no random_state, initialize, ... ):
-  
+
   ```python
   optimizer = HillClimbingOptimizer(epsilon=0.1, distribution="laplace", n_neighbours=4)
   ```
-  
+
   for the default parameters you can just write:
-  
+
   ```python
   optimizer = HillClimbingOptimizer()
   ```
-  
+
   and pass it to Hyperactive:
-  
+
   ```python
   hyper = Hyperactive()
   hyper.add_search(model, search_space, optimizer=optimizer, n_iter=100)
   hyper.run()
   ```
-  
+
   So the optimizer-classes are **different** from Gradient-Free-Optimizers. A more detailed explanation of the optimization-algorithms and the optimizer-specific-paramters can be found in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
 
 - HillClimbingOptimizer
@@ -730,11 +730,11 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   example:
   ```python
   {
-    'x1': 0.2, 
+    'x1': 0.2,
     'x2': 0.3,
   }
   ```
-  
+
 </details>
 
 
@@ -754,8 +754,8 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
 - objective_function
   - (callable)
-- returns: Pandas dataframe 
-- The dataframe contains score and parameter information of the given objective_function found in the optimization run. If the parameter `times` is set to True the evaluation- and iteration- times are added to the dataframe. 
+- returns: Pandas dataframe
+- The dataframe contains score and parameter information of the given objective_function found in the optimization run. If the parameter `times` is set to True the evaluation- and iteration- times are added to the dataframe.
 
     example:
 
@@ -879,7 +879,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <details>
 <summary><b>v3.3.0</b> :heavy_check_mark:</summary>
 
-  - [x] Early stopping 
+  - [x] Early stopping
   - [x] Shared memory dictionary between processes with the same objective function
 
 </details>
@@ -943,7 +943,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   - [x] add early stopping feature to custom optimization strategies
   - [x] display additional outputs from objective-function in results in command-line
   - [x] add type hints to hyperactive-api
-  
+
 </details>
 
 
@@ -951,7 +951,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <summary><b>v4.6.0</b> :heavy_check_mark: </summary>
 
   - [x] add support for constrained optimization
-  
+
 </details>
 
 
@@ -992,7 +992,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 
   - [ ] new optimization algorithms from [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) will always be added to Hyperactive
   - [ ] add "prune_search_space"-method to custom optimization strategy class
-  
+
 </details>
 
 
@@ -1007,37 +1007,37 @@ Each of the following optimizer classes can be initialized and passed to the "ad
 <summary><b> Read this before opening a bug-issue </b></summary>
 
 <br>
-  
+
 - <b>Are you sure the bug is located in Hyperactive? </b>
 
-  The error might be located in the optimization-backend. 
+  The error might be located in the optimization-backend.
   Look at the error message from the command line. <b>If</b> one of the last messages look like this:
      - File "/.../gradient_free_optimizers/...", line ...
 
-  <b>Then</b> you should post the bug report in: 
+  <b>Then</b> you should post the bug report in:
      - https://github.com/SimonBlanke/Gradient-Free-Optimizers
 
   <br>Otherwise</b> you can post the bug report in Hyperactive
-  
+
 - <b>Do you have the correct Hyperactive version? </b>
-  
+
   Every major version update (e.g. v2.2 -> v3.0) the API of Hyperactive changes.
   Check which version of Hyperactive you have. If your major version is older you have two options:
-  
+
   <b>Recommended:</b> You could just update your Hyperactive version with:
   ```bash
   pip install hyperactive --upgrade
   ```
   This way you can use all the new documentation and examples from the current repository.
-    
+
   Or you could continue using the old version and use an old repository branch as documentation.
   You can do that by selecting the corresponding branch. (top right of the repository. The default is "master" or "main")
   So if your major version is older (e.g. v2.1.0) you can select the 2.x.x branch to get the old repository for that version.
-  
+
 - <b>Provide example code for error reproduction </b>
   To understand and fix the issue I need an example code to reproduce the error.
   I must be able to just copy the code into a py-file and execute it to reproduce the error.
-  
+
 </details>
 
 
@@ -1051,7 +1051,7 @@ This is expected of the current implementation of smb-optimizers. For all Sequen
 search_space_size = 1
 for value_ in search_space.values():
     search_space_size *= len(value_)
-    
+
 print("search_space_size", search_space_size)
 ```
 Reduce the search space size to resolve this error.
@@ -1097,17 +1097,17 @@ warnings.warn = warn
 <summary> Warning: Not enough initial positions for population size </summary>
 
 <br>
-  
+
 This warning occurs because Hyperactive needs more initial positions to choose from to generate a population for the optimization algorithm:
 The number of initial positions is determined by the `initialize`-parameter in the `add_search`-method.
 ```python
 # This is how it looks per default
 initialize = {"grid": 4, "random": 2, "vertices": 4}
-  
+
 # You could set it to this for a maximum population of 20
 initialize = {"grid": 4, "random": 12, "vertices": 4}
 ```
-  
+
 </details>
 
 
