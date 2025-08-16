@@ -62,9 +62,12 @@ test = [
   "flake8",
   "pytest-cov",
   "pathos",
+  "torch",
+  "tf_keras",
 ]
 all_extras = [
   "hyperactive[integrations]",
+  "optuna<5",
 ]
 
 
