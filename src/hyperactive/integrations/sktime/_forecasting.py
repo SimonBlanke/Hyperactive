@@ -124,29 +124,29 @@ class ForecastingOptCV(_DelegatedForecaster):
 
     Example
     -------
-    Tuning sklearn SVC via grid search
+    Tuning an sktime forecaster via grid search
 
     1. defining the tuned estimator:
-    >>> from sklearn.svm import SVC
-    >>> from hyperactive.integrations.sklearn import OptCV
+    >>> from sktime.forecasting.naive import NaiveForecaster
+    >>> from hyperactive.integrations.sktime import ForecastingOptCV
     >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
-    >>> param_grid = {"kernel": ["linear", "rbf"], "C": [1, 10]}
-    >>> tuned_svc = OptCV(SVC(), GridSearch(param_grid))
+    >>> param_grid = {"strategy": ["mean", "last", "drift"]}
+    >>> tuned_naive = ForecastingCV(NaiveForecaster(), GridSearch(param_grid))
 
     2. fitting the tuned estimator:
-    >>> from sklearn.datasets import load_iris
-    >>> from sklearn.model_selection import train_test_split
-    >>> X, y = load_iris(return_X_y=True)
-    >>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    >>> from sktime.datasets import load_airline
+    >>> from sktime.split import train_test_split
+    >>> y = load_airline()
+    >>> y_train, y_test = train_test_split(y, test_size=12)
     >>>
-    >>> tuned_svc.fit(X_train, y_train)
-    OptCV(...)
-    >>> y_pred = tuned_svc.predict(X_test)
+    >>> tuned_naive.fit(y_train, fh=range(1, 13))
+    ForecastingOptCV(...)
+    >>> y_pred = tuned_naive.predict()
 
     3. obtaining best parameters and best estimator
-    >>> best_params = tuned_svc.best_params_
-    >>> best_estimator = tuned_svc.best_estimator_
+    >>> best_params = tuned_naive.best_params_
+    >>> best_estimator = tuned_naive.best_forecaster_
     """
 
     _tags = {
