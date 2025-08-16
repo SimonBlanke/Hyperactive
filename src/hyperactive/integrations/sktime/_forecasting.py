@@ -128,11 +128,18 @@ class ForecastingOptCV(_DelegatedForecaster):
 
     1. defining the tuned estimator:
     >>> from sktime.forecasting.naive import NaiveForecaster
+    >>> from sktime.split import ExpandingWindowSplitter
     >>> from hyperactive.integrations.sktime import ForecastingOptCV
     >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
     >>> param_grid = {"strategy": ["mean", "last", "drift"]}
-    >>> tuned_naive = ForecastingOptCV(NaiveForecaster(), GridSearch(param_grid))
+    >>> tuned_naive = ForecastingOptCV(
+    ...     NaiveForecaster(),
+    ...     GridSearch(param_grid),
+    ...     cv=ExpandingWindowSplitter(
+    ...         initial_window=12, step_length=3, fh=range(1, 13)
+    ...     ),
+    ... )
 
     2. fitting the tuned estimator:
     >>> from sktime.datasets import load_airline
