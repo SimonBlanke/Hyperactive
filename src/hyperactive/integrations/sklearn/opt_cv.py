@@ -127,7 +127,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
 
         optimizer = self.optimizer.clone()
         optimizer.set_params(experiment=experiment)
-        best_params = optimizer.run()
+        best_params = optimizer.solve()
 
         self.best_params_ = best_params
         self.best_estimator_ = clone(self.estimator).set_params(**best_params)

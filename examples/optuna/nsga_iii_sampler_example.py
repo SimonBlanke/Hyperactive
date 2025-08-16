@@ -154,7 +154,7 @@ def main():
     # Running NSGA-III many-objective optimization...
 
     try:
-        best_params = optimizer.run()
+        best_params = optimizer.solve()
 
         # Results
         print("\n=== Results ===")

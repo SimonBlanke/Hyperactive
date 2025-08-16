@@ -51,7 +51,7 @@ class QMCOptimizer(_BaseOptunaAdapter):
     >>> optimizer = QMCOptimizer(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
-    >>> best_params = optimizer.run()
+    >>> best_params = optimizer.solve()
     """
 
     _tags = {

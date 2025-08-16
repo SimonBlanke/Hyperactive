@@ -40,7 +40,7 @@ def test_endtoend_hillclimbing():
     hill_climbing = HillClimbing(**hillclimbing_config, experiment=sklearn_exp)
 
     # 3. run the HillClimbing optimizer
-    hill_climbing.run()
+    hill_climbing.solve()
 
     best_params = hill_climbing.best_params_
     assert best_params is not None, "Best parameters should not be None"

@@ -277,7 +277,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         if not experiment.get_tag("object_type") == "experiment":
             raise ValueError(msg)
 
-        best_params = object_instance.run()
+        best_params = object_instance.solve()
 
         assert isinstance(best_params, dict), "return of run is not a dict"
 
@@ -340,7 +340,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         optimizer = optimizer.clone().set_params(**_config)
 
         # 3. run the HillClimbing optimizer
-        optimizer.run()
+        optimizer.solve()
 
         best_params = optimizer.best_params_
         assert best_params is not None, "Best parameters should not be None"

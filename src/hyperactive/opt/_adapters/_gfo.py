@@ -111,7 +111,7 @@ class _BaseGFOadapter(BaseOptimizer):
         coerced_search_space = {k: coerce_to_numpy(v) for k, v in search_space.items()}
         return coerced_search_space
 
-    def _run(self, experiment, **search_config):
+    def _solve(self, experiment, **search_config):
         """Run the optimization search process.
 
         Parameters
