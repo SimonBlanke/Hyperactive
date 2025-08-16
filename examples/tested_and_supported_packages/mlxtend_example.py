@@ -41,4 +41,3 @@ search_space = {
 hyper = Hyperactive()
 hyper.add_search(model, search_space, n_iter=25)
 hyper.run()
-

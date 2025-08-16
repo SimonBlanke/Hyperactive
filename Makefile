@@ -95,3 +95,81 @@ install-editable:
 reinstall: uninstall install
 
 reinstall-editable: uninstall install-editable
+
+# === Linting and Formatting Commands ===
+
+# Run ruff linter to check for code issues
+lint:
+	ruff check .
+
+# Run ruff linter with auto-fix for fixable issues
+lint-fix:
+	ruff check --fix .
+
+# Format code using ruff formatter
+format:
+	ruff format .
+
+# Check formatting without making changes
+format-check:
+	ruff format --check .
+
+# Sort imports using ruff (isort functionality)
+isort:
+	ruff check --select I --fix .
+
+# Check import sorting without making changes
+isort-check:
+	ruff check --select I .
+
+# Run all code quality checks (lint + format check + import check)
+check: lint format-check isort-check
+
+# Fix all auto-fixable issues (lint + format + imports)
+fix: lint-fix format isort
+
+# === Notebook-specific Commands ===
+
+# Run ruff on Jupyter notebooks
+lint-notebooks:
+	ruff check --include="*.ipynb" .
+
+# Fix ruff issues in Jupyter notebooks
+lint-notebooks-fix:
+	ruff check --include="*.ipynb" --fix .
+
+# Format Jupyter notebooks with black via nbqa
+format-notebooks:
+	pre-commit run nbqa-black --all-files
+
+# Run all notebook checks and fixes
+notebooks-fix: lint-notebooks-fix format-notebooks
+
+# === Pre-commit Commands ===
+
+# Install pre-commit hooks
+pre-commit-install:
+	pre-commit install
+
+# Run pre-commit on all files
+pre-commit-all:
+	pre-commit run --all-files
+
+# Run pre-commit on staged files only
+pre-commit:
+	pre-commit run
+
+# Update pre-commit hooks to latest versions
+pre-commit-update:
+	pre-commit autoupdate
+
+# === Combined Quality Commands ===
+
+# Run comprehensive code quality checks
+quality-check: check lint-notebooks
+
+# Fix all code quality issues
+quality-fix: fix notebooks-fix
+
+# Full quality workflow: install hooks, fix issues, run final check
+quality: pre-commit-install quality-fix quality-check

@@ -1,11 +1,11 @@
 import time
-import pytest
-import numpy as np
 
+import numpy as np
+import pytest
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import GridSearchOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers_non_smbo
 
@@ -46,7 +46,7 @@ def test_memory_Warm_start_0():
     d_time = time.time() - c_time
 
     search_data = hyper.search_data(objective_function)
-    
+
     optimizer1 = hyper.opt_pros[0].optimizer_setup_l[0]["optimizer"]
     optimizer2 = hyper.opt_pros[0].optimizer_setup_l[1]["optimizer"]
 
@@ -107,7 +107,6 @@ def test_memory_Warm_start_1():
     assert d_time > 0.95
 
 
-
 @pytest.mark.parametrize(*optimizers_non_smbo)
 def test_memory_Warm_start_2(Optimizer_non_smbo):
     optimizer1 = GridSearchOptimizer()
@@ -152,4 +151,3 @@ def test_memory_Warm_start_2(Optimizer_non_smbo):
     print("\n d_time", d_time)
 
     assert d_time < 0.9
-    

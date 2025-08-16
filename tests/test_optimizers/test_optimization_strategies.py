@@ -1,15 +1,17 @@
-import pytest
-import numpy as np
+"""Test module for optimizer optimization strategy functionality."""
 
+import numpy as np
+import pytest
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 from hyperactive.optimizers import HillClimbingOptimizer
+from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 from ._parametrize import optimizers
 
 
 def objective_function(opt):
+    """Two-dimensional quadratic objective function."""
     score = -(opt["x1"] * opt["x1"] + opt["x2"] * opt["x2"])
     return score
 
@@ -22,6 +24,7 @@ search_space = {
 
 @pytest.mark.parametrize(*optimizers)
 def test_strategy_combinations_0(Optimizer):
+    """Test custom optimization strategy with multiple optimizers."""
     optimizer1 = Optimizer()
     optimizer2 = HillClimbingOptimizer()
 

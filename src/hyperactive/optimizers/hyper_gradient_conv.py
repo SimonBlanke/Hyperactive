@@ -1,4 +1,5 @@
-# Author: Simon Blanke
+"""hyper_gradient_conv module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
@@ -7,28 +8,34 @@ import pandas as pd
 
 
 class HyperGradientConv:
+    """HyperGradientConv class."""
+
     def __init__(self, s_space):
         self.s_space = s_space
 
     def value2position(self, value: list) -> list:
+        """Convert values to positions."""
         return [
             np.abs(v - np.array(space_dim)).argmin()
             for v, space_dim in zip(value, self.s_space.values_l)
         ]
 
     def value2para(self, value: list) -> dict:
+        """Convert values to parameters."""
         return {key: p for key, p in zip(self.s_space.dim_keys, value)}
 
     def para2value(self, para: dict) -> list:
+        """Convert parameters to values."""
         return [para[para_name] for para_name in self.s_space.dim_keys]
 
     def position2value(self, position):
+        """Position2Value function."""
         return [
-            space_dim[pos]
-            for pos, space_dim in zip(position, self.s_space.values_l)
+            space_dim[pos] for pos, space_dim in zip(position, self.s_space.values_l)
         ]
 
     def para_func2str(self, para):
+        """Para Func2Str function."""
         return {
             dim_key: (
                 para[dim_key].__name__
@@ -39,12 +46,14 @@ class HyperGradientConv:
         }
 
     def value_func2str(self, value):
+        """Value Func2Str function."""
         try:
             return value.__name__
-        except:
+        except AttributeError:
             return value
 
     def conv_para(self, para_hyper):
+        """Conv Para function."""
         para_gfo = {}
         for para in self.s_space.dim_keys:
             value_hyper = para_hyper[para]
@@ -58,30 +67,30 @@ class HyperGradientConv:
                 if value_hyper in space_dim:
                     value_gfo = space_dim.index(value_hyper)
                 else:
-                    raise ValueError(
-                        f"'{value_hyper}' was not found in '{para}'"
-                    )
+                    raise ValueError(f"'{value_hyper}' was not found in '{para}'")
 
             para_gfo[para] = value_gfo
         return para_gfo
 
     def conv_initialize(self, initialize):
+        """Conv Initialize function."""
         if "warm_start" in initialize:
             warm_start_l = initialize["warm_start"]
-            warm_start_gfo = [
-                self.conv_para(warm_start) for warm_start in warm_start_l
-            ]
+            warm_start_gfo = [self.conv_para(warm_start) for warm_start in warm_start_l]
             initialize["warm_start"] = warm_start_gfo
 
         return initialize
 
     def get_list_positions(self, list1_values, search_dim):
+        """Get List Positions function."""
         return [search_dim.index(value2) for value2 in list1_values]
 
     def values2positions(self, values, search_dim):
+        """Values2Positions function."""
         return np.array(search_dim).searchsorted(values)
 
     def positions2results(self, positions):
+        """Positions2Results function."""
         results_dict = {}
 
         for para_name in self.s_space.dim_keys:
@@ -98,6 +107,7 @@ class HyperGradientConv:
         return results
 
     def conv_memory_warm_start(self, results):
+        """Conv Memory Warm Start function."""
         if results is None:
             return results
 
@@ -113,13 +123,9 @@ class HyperGradientConv:
                     self.value_func2str(value) for value in result_dim_values
                 ]
 
-                list1_positions = self.get_list_positions(
-                    result_dim_values, search_dim
-                )
+                list1_positions = self.get_list_positions(result_dim_values, search_dim)
             else:
-                list1_positions = self.values2positions(
-                    result_dim_values, search_dim
-                )
+                list1_positions = self.values2positions(result_dim_values, search_dim)
 
             df_positions_dict[dim_key] = list1_positions
 

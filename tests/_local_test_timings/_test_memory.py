@@ -1,11 +1,11 @@
 import time
+
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-
 
 from hyperactive import Hyperactive
 
@@ -50,9 +50,6 @@ def test_memory_timeSave_0():
 
 
 def test_memory_timeSave_1():
-    data = load_breast_cancer()
-    X, y = data.data, data.target
-
     def objective_function(opt):
         time.sleep(0.001)
         return 1

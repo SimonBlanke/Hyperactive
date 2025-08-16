@@ -1,11 +1,14 @@
+"""Test module for issue #29 reproduction."""
+
 from sklearn.datasets import load_diabetes
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeRegressor
 
 from hyperactive import Hyperactive
 
 
 def test_issue_29():
+    """Test issue 29 - accessing optimizer attributes during optimization."""
     data = load_diabetes()
     X, y = data.data, data.target
 

@@ -25,8 +25,11 @@ class SpiralOptimization(_BaseGFOadapter):
     population : int
         The number of particles in the swarm.
     decay_rate : float
-        This parameter is a factor, that influences the radius of the particles during their spiral movement.
-        Lower values accelerates the convergence of the particles to the best known position, while values above 1 eventually lead to a movement where the particles spiral away from each other.
+        This parameter is a factor, that influences the radius of the particles
+        during their spiral movement.
+        Lower values accelerates the convergence of the particles to the best
+        known position, while values above 1 eventually lead to a movement where
+        the particles spiral away from each other.
     n_iter : int, default=100
         The number of iterations to run the optimizer.
     verbose : bool, default=False
@@ -126,8 +129,6 @@ class SpiralOptimization(_BaseGFOadapter):
         dict with str keys
             The test parameters dictionary.
         """
-        import numpy as np
-
         params = super().get_test_params()
         experiment = params[0]["experiment"]
         more_params = {

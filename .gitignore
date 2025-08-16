@@ -40,6 +40,7 @@ pip-delete-this-directory.txt
 
 # Dev
 **/_dev_scripts
+*.code-workspace
 
 # Unit test / coverage reports
 htmlcov/

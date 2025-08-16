@@ -1,9 +1,14 @@
+"""Test module for verbose output functionality."""
+
 import sys
+
 import numpy as np
+
 from hyperactive import Hyperactive
 
 
 def ackley_function(para):
+    """Ackley optimization function for testing."""
     x, y = para["x"], para["y"]
 
     loss = (

@@ -1,46 +1,57 @@
-import time
-import pytest, sys
+"""Test module for warm start functionality."""
+
+import sys
+
 import numpy as np
-import pandas as pd
+import pytest
 
 from hyperactive import Hyperactive
-
 
 if sys.platform.startswith("win"):
     pytest.skip("skip these tests for windows", allow_module_level=True)
 
 
 def func1():
+    """Test function 1 for search space."""
     pass
 
 
 def func2():
+    """Test function 2 for search space."""
     pass
 
 
 class class1:
+    """Test class for search space functionality."""
+
     def __init__(self):
         pass
 
 
 class class2:
+    """Test class for search space functionality."""
+
     def __init__(self):
         pass
 
 
 def class_f1():
+    """Return class1 for search space."""
     return class1
 
 
 def class_f2():
+    """Return class2 for search space."""
     return class2
 
 
 def numpy_f1():
+    """Return numpy array [0, 1] for search space."""
     return np.array([0, 1])
 
 
 def numpy_f2():
+    """Return numpy array [1, 0] for search space."""
     return np.array([1, 0])
 
 
@@ -55,11 +66,13 @@ search_space = {
 
 
 def objective_function(opt):
+    """Return simple quadratic objective function for testing."""
     score = -opt["x1"] * opt["x1"]
     return score
 
 
 def test_warm_start_0():
+    """Test warm start from single job to single job."""
     hyper0 = Hyperactive()
     hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
@@ -77,6 +90,7 @@ def test_warm_start_0():
 
 
 def test_warm_start_1():
+    """Test warm start from multi-job to single job."""
     hyper0 = Hyperactive(distribution="pathos")
     hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper0.run()
@@ -94,6 +108,7 @@ def test_warm_start_1():
 
 
 def test_warm_start_2():
+    """Test warm start from single job to multi-job."""
     hyper0 = Hyperactive()
     hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
@@ -112,6 +127,7 @@ def test_warm_start_2():
 
 
 def test_warm_start_3():
+    """Test warm start from multi-job to multi-job."""
     hyper0 = Hyperactive(distribution="pathos")
     hyper0.add_search(objective_function, search_space, n_iter=15, n_jobs=2)
     hyper0.run()

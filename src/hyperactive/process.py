@@ -1,7 +1,9 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Process handling for hyperparameter optimization.
 
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 from tqdm import tqdm
 

@@ -1,18 +1,21 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Search execution utilities for hyperparameter optimization.
 
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 from .distribution import (
-    single_process,
     joblib_wrapper,
     multiprocessing_wrapper,
     pathos_wrapper,
+    single_process,
 )
 from .process import _process_
 
 
 def proxy(args):
+    """Proxy function."""
     return _process_(*args)
 
 
@@ -38,6 +41,7 @@ def _get_distribution(distribution):
 
 
 def run_search(opt_pros, distribution, n_processes):
+    """Run Search function."""
     process_infos = list(opt_pros.items())
 
     if n_processes == "auto":
