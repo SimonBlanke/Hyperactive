@@ -132,7 +132,7 @@ class ForecastingOptCV(_DelegatedForecaster):
     >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
     >>> param_grid = {"strategy": ["mean", "last", "drift"]}
-    >>> tuned_naive = ForecastingCV(NaiveForecaster(), GridSearch(param_grid))
+    >>> tuned_naive = ForecastingOptCV(NaiveForecaster(), GridSearch(param_grid))
 
     2. fitting the tuned estimator:
     >>> from sktime.datasets import load_airline
