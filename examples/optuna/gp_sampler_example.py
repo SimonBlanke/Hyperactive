@@ -96,7 +96,7 @@ def main():
 
     # Run optimization
     # Running GP-based optimization...
-    best_params = optimizer.run()
+    best_params = optimizer.solve()
 
     # Results
     print("\n=== Results ===")

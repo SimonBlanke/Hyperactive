@@ -77,7 +77,7 @@ def main():
 
     # Run optimization
     # Running random search...
-    best_params = optimizer.run()
+    best_params = optimizer.solve()
 
     # Results
     print("\n=== Results ===")

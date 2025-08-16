@@ -116,7 +116,7 @@ def main():
     # Run optimization
     # Running CMA-ES optimization...
     try:
-        best_params = optimizer.run()
+        best_params = optimizer.solve()
 
         # Results
         print("\n=== Results ===")

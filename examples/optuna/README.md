@@ -219,14 +219,14 @@ All samplers support:
 ```python
 # Phase 1: Initial exploration
 qmc_optimizer = QMCSampler(n_trials=20, ...)
-initial_results = qmc_optimizer.run()
+initial_results = qmc_optimizer.solve()
 
 # Phase 2: Focused optimization
 tpe_optimizer = TPESampler(
     n_trials=30,
     initialize={"warm_start": [initial_results]}
 )
-final_results = tpe_optimizer.run()
+final_results = tpe_optimizer.solve()
 ```
 
 ### Multi-objective Analysis
@@ -235,7 +235,7 @@ final_results = tpe_optimizer.run()
 # For multi-objective problems, you'll typically get multiple solutions
 # along the Pareto front. Choose based on your preferences:
 
-solutions = nsga_ii_optimizer.run()
+solutions = nsga_ii_optimizer.solve()
 # In practice, you'd analyze the trade-off curve
 ```
 
