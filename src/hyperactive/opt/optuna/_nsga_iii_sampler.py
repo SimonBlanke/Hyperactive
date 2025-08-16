@@ -1,7 +1,7 @@
 """NSGA-III multi-objective sampler optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-from ._base_optuna_adapter import _BaseOptunaAdapter
+from .._adapters._base_optuna_adapter import _BaseOptunaAdapter
 
 
 class NSGAIIISampler(_BaseOptunaAdapter):
