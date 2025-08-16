@@ -138,9 +138,32 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
 class TestAllObjects(BaseFixtureGenerator, _TestAllObjects):
     """Generic tests for all objects in the package."""
 
+    OBJECT_TYPES_IN_HYPERACTIVE = [
+        "experiment",
+        "optimizer",
+    ]
+
     def test_doctest_examples(self, object_class):
         """Runs doctests for estimator class."""
         run_doctest(object_class, name=f"class {object_class.__name__}")
+
+    def test_valid_object_class_tags(self, object_class):
+        """Check that object class tags are in self.valid_tags."""
+        # stepout for estimators with base classes in other packages
+        cls_type = object_class.get_class_tag("object_type", None)
+        if cls_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
+            return None
+
+        super().test_valid_object_class_tags(object_class)
+
+    def test_valid_object_tags(self, object_instance):
+        """Check that object tags are in self.valid_tags."""
+        # stepout for estimators with base classes in other packages
+        obj_type = object_instance.get_tag("object_type", None)
+        if obj_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
+            return None
+
+        super().test_valid_object_class_tags(object_instance)
 
 
 class ExperimentFixtureGenerator(BaseFixtureGenerator):
