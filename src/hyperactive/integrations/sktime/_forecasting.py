@@ -1,7 +1,6 @@
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
-
 from skbase.utils.dependencies import _check_soft_dependencies
 
 if _check_soft_dependencies("sktime", severity="none"):
@@ -230,7 +229,7 @@ class ForecastingOptCV(_DelegatedForecaster):
             backend=self.backend,
             backend_params=self.backend_params,
         )
-        
+
         optimizer = self.optimizer.clone()
         optimizer.set_params(experiment=experiment)
         best_params, results = optimizer.run()
@@ -397,8 +396,8 @@ class ForecastingOptCV(_DelegatedForecaster):
             "cv": SingleWindowSplitter(fh=1),
             "optimizer": HillClimbing(
                 search_space={"window_length": [2, 5]},
-                max_iter=10,
-                n_random_starts=5,
+                n_iter=10,
+                n_neighbours=5,
             ),
             "scoring": "MeanAbsolutePercentageError(symmetric=True)",
             "update_behaviour": "no_update",
