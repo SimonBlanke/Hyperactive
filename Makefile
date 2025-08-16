@@ -87,7 +87,7 @@ install-no-extras-for-test:
 	python -m pip install .[test]
 
 install-all-extras-for-test:
-	python -m pip install .[all_extras,test]
+	python -m pip install .[all_extras,sktime-integration,test]
 
 install-editable:
 	pip install -e .

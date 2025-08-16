@@ -120,11 +120,14 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
         if isclass(filter):
             obj_list = [obj for obj in obj_list if issubclass(obj, filter)]
 
-        # run_test_for_class selects the estimators to run
-        # based on whether they have changed, and whether they have all dependencies
-        # internally, uses the ONLY_CHANGED_MODULES flag,
-        # and checks the python env against python_dependencies tag
-        # obj_list = [obj for obj in obj_list if run_test_for_class(obj)]
+        # only run tests if all soft dependencies are present
+        def softdeps_present(obj):
+            """Check if the object has all dependencies present."""
+            from skbase.utils.dependencies import _check_estimator_deps
+
+            return _check_estimator_deps(obj, severity="none")
+
+        obj_list = [obj for obj in obj_list if softdeps_present(obj)]
 
         return obj_list
 
@@ -135,9 +138,34 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
 class TestAllObjects(BaseFixtureGenerator, _TestAllObjects):
     """Generic tests for all objects in the package."""
 
+    OBJECT_TYPES_IN_HYPERACTIVE = [
+        "experiment",
+        "optimizer",
+    ]
+
     def test_doctest_examples(self, object_class):
         """Runs doctests for estimator class."""
         run_doctest(object_class, name=f"class {object_class.__name__}")
+
+    def test_valid_object_class_tags(self, object_class):
+        """Check that object class tags are in self.valid_tags."""
+        # stepout for estimators with base classes in other packages
+        # e.g., sktime BaseForecaster, BaseClassifier, used in hyperactive.integrations
+        cls_type = object_class.get_class_tag("object_type", None)
+        if cls_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
+            return None
+
+        super().test_valid_object_class_tags(object_class)
+
+    def test_valid_object_tags(self, object_instance):
+        """Check that object tags are in self.valid_tags."""
+        # stepout for estimators with base classes in other packages
+        # e.g., sktime BaseForecaster, BaseClassifier, used in hyperactive.integrations
+        obj_type = object_instance.get_tag("object_type", None)
+        if obj_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
+            return None
+
+        super().test_valid_object_class_tags(object_instance)
 
 
 class ExperimentFixtureGenerator(BaseFixtureGenerator):
