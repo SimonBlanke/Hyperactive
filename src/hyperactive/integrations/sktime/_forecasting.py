@@ -208,7 +208,7 @@ class ForecastingOptCV(_DelegatedForecaster):
         forecaster = self.forecaster.clone()
 
         scoring = check_scoring(self.scoring, obj=self)
-        scoring_name = f"test_{scoring.name}"
+        # scoring_name = f"test_{scoring.name}"
 
         experiment = SktimeForecastingExperiment(
             forecaster=forecaster,
