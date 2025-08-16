@@ -68,11 +68,6 @@ class ForecastingOptCV(_DelegatedForecaster):
         This is to be used to tune the hyperparameters, and then use the estimator
         as a parameter estimator, e.g., via get_fitted_params or PluginParamsForecaster.
 
-    return_n_best_forecasters : int, default=1
-        In case the n best forecaster should be returned, this value can be set
-        and the n best forecasters will be assigned to n_best_forecasters_.
-        Set return_n_best_forecasters to -1 to return all forecasters.
-
     error_score : "raise" or numeric, default=np.nan
         Value to assign to the score if an exception occurs in estimator fitting. If set
         to "raise", the exception is raised. If a numeric value is given,
@@ -174,7 +169,6 @@ class ForecastingOptCV(_DelegatedForecaster):
         update_behaviour="full_refit",
         scoring=None,
         refit=True,
-        return_n_best_forecasters=1,
         error_score=np.nan,
         cv_X=None,
         backend=None,
@@ -187,7 +181,6 @@ class ForecastingOptCV(_DelegatedForecaster):
         self.update_behaviour = update_behaviour
         self.scoring = scoring
         self.refit = refit
-        self.return_n_best_forecasters = return_n_best_forecasters
         self.error_score = error_score
         self.cv_X = cv_X
         self.backend = backend
@@ -232,7 +225,7 @@ class ForecastingOptCV(_DelegatedForecaster):
 
         optimizer = self.optimizer.clone()
         optimizer.set_params(experiment=experiment)
-        best_params, results = optimizer.run()
+        best_params = optimizer.run()
 
         self.best_params_ = best_params
         self.best_forecaster_ = forecaster.set_params(**best_params)
@@ -241,8 +234,6 @@ class ForecastingOptCV(_DelegatedForecaster):
         if self.refit:
             self.best_forecaster_.fit(y=y, X=X, fh=fh)
 
-        # Select best parameters.
-        self.best_index_ = results.loc[:, f"rank_{scoring_name}"].argmin()
         # Raise error if all fits in evaluate failed because all score values are NaN.
         if self.best_index_ == -1:
             raise RuntimeError(
@@ -250,35 +241,10 @@ class ForecastingOptCV(_DelegatedForecaster):
                 set error_score='raise' to see the exceptions.
                 Failed forecaster: {self.forecaster}"""
             )
-        self.best_score_ = results.loc[self.best_index_, f"mean_{scoring_name}"]
 
         # Refit model with best parameters.
         if self.refit:
             self.best_forecaster_.fit(y=y, X=X, fh=fh)
-
-        # Sort values according to rank
-        results = results.sort_values(
-            by=f"rank_{scoring_name}",
-            ascending=True,
-        )
-        # Select n best forecaster
-        self.n_best_forecasters_ = []
-        self.n_best_scores_ = []
-        _forecasters_to_return = min(self.return_n_best_forecasters, len(results.index))
-        if _forecasters_to_return == -1:
-            _forecasters_to_return = len(results.index)
-        for i in range(_forecasters_to_return):
-            params = results["params"].iloc[i]
-            rank = results[f"rank_{scoring_name}"].iloc[i]
-            rank = str(int(rank))
-            forecaster = self.forecaster.clone().set_params(**params)
-            # Refit model with best parameters.
-            if self.refit:
-                forecaster.fit(y=y, X=X, fh=fh)
-            self.n_best_forecasters_.append((rank, forecaster))
-            # Save score
-            score = results[f"mean_{scoring_name}"].iloc[i]
-            self.n_best_scores_.append(score)
 
         return self
 
