@@ -17,6 +17,6 @@ def test_sktime_estimator(estimator):
     """Test sktime estimator via check_estimator."""
     from sktime.utils.estimator_checks import check_estimator
 
-    check_estimator(estimator, raise_exception=True)
+    check_estimator(estimator, raise_exceptions=True)
     # The above line collects all API conformance tests in sktime and runs them.
     # It will raise an error if the estimator is not API conformant.
