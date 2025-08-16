@@ -143,9 +143,9 @@ class ForecastingOptCV(_DelegatedForecaster):
 
     2. fitting the tuned estimator:
     >>> from sktime.datasets import load_airline
-    >>> from sktime.split import train_test_split
+    >>> from sktime.split import temporal_train_test_split
     >>> y = load_airline()
-    >>> y_train, y_test = train_test_split(y, test_size=12)
+    >>> y_train, y_test = temporal_train_test_split(y, test_size=12)
     >>>
     >>> tuned_naive.fit(y_train, fh=range(1, 13))
     ForecastingOptCV(...)
