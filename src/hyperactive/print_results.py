@@ -1,14 +1,20 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Results printing utilities for hyperparameter optimization.
+
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 import logging
+
 import numpy as np
 
 indent = "  "
 
 
 class PrintResults:
+    """PrintResults class."""
+
     def __init__(self, opt_pros, verbosity):
         self.opt_pros = opt_pros
         self.verbosity = verbosity
@@ -23,7 +29,7 @@ class PrintResults:
             eval_time,
             "sec",
             indent,
-            "[{} %]".format(round(eval_time / iter_time * 100, 2)),
+            f"[{round(eval_time / iter_time * 100, 2)} %]",
         )
         print(
             indent,
@@ -31,7 +37,7 @@ class PrintResults:
             opt_time,
             "sec",
             indent,
-            "[{} %]".format(round(opt_time / iter_time * 100, 2)),
+            f"[{round(opt_time / iter_time * 100, 2)} %]",
         )
         if iterPerSec >= 1:
             print(
@@ -40,7 +46,7 @@ class PrintResults:
                 iter_time,
                 "sec",
                 indent,
-                "[{} iter/sec]".format(round(iterPerSec, 2)),
+                f"[{round(iterPerSec, 2)} iter/sec]",
             )
         else:
             secPerIter = iter_time / n_iter
@@ -50,11 +56,12 @@ class PrintResults:
                 iter_time,
                 "sec",
                 indent,
-                "[{} sec/iter]".format(round(secPerIter, 2)),
+                f"[{round(secPerIter, 2)} sec/iter]",
             )
         print(" ")
 
     def align_para_names(self, para_names):
+        """Align Para Names function."""
         str_lengths = [len(str_) for str_ in para_names]
         max_length = max(str_lengths)
 
@@ -74,7 +81,7 @@ class PrintResults:
         best_additional_results,
         random_seed,
     ):
-        print("\nResults: '{}'".format(objective_function.__name__), " ")
+        print(f"\nResults: '{objective_function.__name__}'", " ")
         if best_para is None:
             print(indent, "Best score:", best_score, " ")
             print(indent, "Best parameter set:", best_para, " ")
@@ -93,8 +100,8 @@ class PrintResults:
                     print(
                         indent,
                         indent,
-                        "'{}'".format(best_additional_result),
-                        "{}:".format(added_spaces),
+                        f"'{best_additional_result}'",
+                        f"{added_spaces}:",
                         best_additional_results[best_additional_result],
                         " ",
                     )
@@ -109,8 +116,8 @@ class PrintResults:
                     print(
                         indent,
                         indent,
-                        "'{}'".format(para_key),
-                        "{}:".format(added_spaces),
+                        f"'{para_key}'",
+                        f"{added_spaces}:",
                         best_para[para_key],
                         " ",
                     )
@@ -122,6 +129,7 @@ class PrintResults:
         print(" ")
 
     def print_process(self, results, nth_process):
+        """Print Process function."""
         verbosity = self.verbosity
         objective_function = self.opt_pros[nth_process].objective_function
         search_space = self.opt_pros[nth_process].s_space.search_space

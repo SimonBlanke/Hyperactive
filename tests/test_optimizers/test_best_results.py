@@ -1,22 +1,27 @@
-import pytest
-import numpy as np
+"""Test module for best results optimizer functionality."""
 
+import numpy as np
+import pytest
 
 from hyperactive import Hyperactive
+
 from ._parametrize import optimizers
 
 
 def objective_function(opt):
+    """Return standard quadratic objective function."""
     score = -opt["x1"] * opt["x1"]
     return score
 
 
 def objective_function_m5(opt):
+    """Quadratic objective function shifted by -5."""
     score = -(opt["x1"] - 5) * (opt["x1"] - 5)
     return score
 
 
 def objective_function_p5(opt):
+    """Quadratic objective function shifted by +5."""
     score = -(opt["x1"] + 5) * (opt["x1"] + 5)
     return score
 
@@ -62,6 +67,7 @@ search_space_para = (
 @pytest.mark.parametrize(*search_space_para)
 @pytest.mark.parametrize(*optimizers)
 def test_best_results_0(Optimizer, search_space, objective):
+    """Test best score consistency with best parameters."""
     search_space = search_space
     objective_function = objective
 
@@ -87,6 +93,7 @@ def test_best_results_0(Optimizer, search_space, objective):
 @pytest.mark.parametrize(*search_space_para)
 @pytest.mark.parametrize(*optimizers)
 def test_best_results_1(Optimizer, search_space, objective):
+    """Test best parameters are present in search data."""
     search_space = search_space
     objective_function = objective
 

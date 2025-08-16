@@ -2,8 +2,9 @@
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-from hyperactive.base import BaseOptimizer
 from skbase.utils.stdout_mute import StdoutMute
+
+from hyperactive.base import BaseOptimizer
 
 __all__ = ["_BaseGFOadapter"]
 
@@ -25,7 +26,6 @@ class _BaseGFOadapter(BaseOptimizer):
     }
 
     def __init__(self):
-
         super().__init__()
 
         if self.initialize is None:
@@ -107,18 +107,20 @@ class _BaseGFOadapter(BaseOptimizer):
             if not isinstance(arr, np.ndarray):
                 return np.array(arr)
             return arr
-        
+
         coerced_search_space = {k: coerce_to_numpy(v) for k, v in search_space.items()}
         return coerced_search_space
 
     def _run(self, experiment, **search_config):
         """Run the optimization search process.
+
         Parameters
         ----------
         experiment : BaseExperiment
             The experiment to optimize parameters for.
         search_config : dict with str keys
             identical to return of ``get_search_config``.
+
         Returns
         -------
         dict with str keys
@@ -174,6 +176,7 @@ class _BaseGFOadapter(BaseOptimizer):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         import numpy as np
+
         from hyperactive.experiment.integrations import SklearnCvExperiment
 
         sklearn_exp = SklearnCvExperiment.create_test_instance()

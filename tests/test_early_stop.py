@@ -1,18 +1,12 @@
-import time
-import pytest
+"""Test module for early stopping functionality."""
+
 import numpy as np
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeClassifier
 
 from hyperactive import Hyperactive
-from hyperactive.optimizers import (
-    RandomSearchOptimizer,
-    HillClimbingOptimizer,
-)
 
 
 def objective_function(para):
+    """Return simple quadratic objective function for testing."""
     score = -para["x1"] * para["x1"]
     return score
 
@@ -23,6 +17,7 @@ search_space = {
 
 
 def test_early_stop_0():
+    """Test early stopping with both absolute and relative tolerance."""
     early_stopping = {
         "n_iter_no_change": 5,
         "tol_abs": 0.1,
@@ -41,6 +36,7 @@ def test_early_stop_0():
 
 
 def test_early_stop_1():
+    """Test early stopping with relative tolerance only."""
     early_stopping = {
         "n_iter_no_change": 5,
         "tol_abs": None,
@@ -59,6 +55,7 @@ def test_early_stop_1():
 
 
 def test_early_stop_2():
+    """Test early stopping with absolute tolerance only."""
     early_stopping = {
         "n_iter_no_change": 5,
         "tol_abs": 0.1,
@@ -77,6 +74,8 @@ def test_early_stop_2():
 
 
 def test_early_stop_3():
+    """Test early stopping without tolerance and verify iteration count."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
@@ -110,6 +109,8 @@ def test_early_stop_3():
 
 
 def test_early_stop_4():
+    """Test early stopping with absolute tolerance where no early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 
@@ -171,6 +172,8 @@ def test_early_stop_4():
 
 
 def test_early_stop_5():
+    """Test early stopping with absolute tolerance where early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 
@@ -224,6 +227,8 @@ def test_early_stop_5():
 
 
 def test_early_stop_6():
+    """Test early stopping with relative tolerance where no early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 
@@ -285,6 +290,8 @@ def test_early_stop_6():
 
 
 def test_early_stop_7():
+    """Test early stopping with relative tolerance where early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 

@@ -4,7 +4,6 @@
 from collections.abc import Sequence
 
 import numpy as np
-
 from sklearn.model_selection import ParameterGrid
 
 from hyperactive.base import BaseOptimizer
@@ -170,5 +169,5 @@ class GridSearchSk(BaseOptimizer):
             "experiment": ackley_exp,
             "param_grid": param_grid,
         }
-        
+
         return [params_sklearn, params_ackley]

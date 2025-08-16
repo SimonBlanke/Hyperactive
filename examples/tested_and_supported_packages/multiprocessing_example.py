@@ -3,7 +3,7 @@ Hyperactive can perform optimizations of multiple different objective functions
 in parallel. This can be done via multiprocessing, joblib or a custom wrapper-function.
 The processes won't communicate with each other.
 
-You can add as many searches to the optimization run (.add_search(...)) and 
+You can add as many searches to the optimization run (.add_search(...)) and
 run each of those searches n-times (n_jobs).
 
 In the example below we are performing 4 searches in parallel:

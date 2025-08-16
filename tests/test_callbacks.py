@@ -1,10 +1,8 @@
-import copy
-import pytest
+"""Test module for callback functionality."""
+
 import numpy as np
-import pandas as pd
 
 from hyperactive import Hyperactive
-
 
 search_space = {
     "x1": list(np.arange(-100, 100, 1)),
@@ -12,6 +10,8 @@ search_space = {
 
 
 def test_callback_0():
+    """Test callbacks executed before objective function."""
+
     def callback_1(access):
         access.stuff1 = 1
 
@@ -35,6 +35,8 @@ def test_callback_0():
 
 
 def test_callback_1():
+    """Test callbacks executed before and after objective function."""
+
     def callback_1(access):
         access.stuff1 = 1
 
@@ -57,6 +59,8 @@ def test_callback_1():
 
 
 def test_callback_2():
+    """Test callbacks with pass_through parameter."""
+
     def callback_1(access):
         access.pass_through["stuff1"] = 1
 
@@ -77,6 +81,8 @@ def test_callback_2():
 
 
 def test_callback_3():
+    """Test callbacks executed after objective function with pass_through."""
+
     def callback_1(access):
         access.pass_through["stuff1"] = 1
 

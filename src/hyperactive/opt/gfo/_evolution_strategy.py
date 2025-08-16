@@ -138,8 +138,6 @@ class EvolutionStrategy(_BaseGFOadapter):
         dict with str keys
             The test parameters dictionary.
         """
-        import numpy as np
-
         params = super().get_test_params()
         experiment = params[0]["experiment"]
         more_params = {

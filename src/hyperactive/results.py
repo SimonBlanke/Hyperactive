@@ -1,13 +1,17 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Results handling for hyperparameter optimization.
 
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 import numpy as np
 import pandas as pd
 
 
 class Results:
+    """Results class."""
+
     def __init__(self, results_list, opt_pros):
         self.results_list = results_list
         self.opt_pros = opt_pros
@@ -62,6 +66,7 @@ class Results:
         return search_data
 
     def best_para(self, id_):
+        """Best Para function."""
         best_para_ = self._get_result(id_, "best_para")
 
         if best_para_ is not None:
@@ -70,6 +75,7 @@ class Results:
         raise ValueError("objective function name not recognized")
 
     def best_score(self, id_):
+        """Best Score function."""
         best_score_ = self._get_result(id_, "best_score")
 
         if best_score_ != -np.inf:
@@ -78,9 +84,8 @@ class Results:
         raise ValueError("objective function name not recognized")
 
     def search_data(self, id_):
+        """Search Data function."""
         search_data = self._get_result(id_, "search_data")
-
-        params = self.objFunc2results[id_]["params"]
 
         if search_data is not None:
             return search_data

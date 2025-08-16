@@ -1,9 +1,14 @@
+"""Test module for max time functionality."""
+
 import time
+
 import numpy as np
+
 from hyperactive import Hyperactive
 
 
 def objective_function(para):
+    """Objective function for max time testing."""
     score = -para["x1"] * para["x1"]
     return score
 
@@ -14,6 +19,7 @@ search_space = {
 
 
 def test_max_time_0():
+    """Test max time constraint with short duration."""
     c_time1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=1000000)
@@ -24,6 +30,7 @@ def test_max_time_0():
 
 
 def test_max_time_1():
+    """Test max time constraint with longer duration."""
     c_time1 = time.perf_counter()
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=1000000)
