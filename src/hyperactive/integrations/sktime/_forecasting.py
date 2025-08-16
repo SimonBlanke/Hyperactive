@@ -225,7 +225,7 @@ class ForecastingOptCV(_DelegatedForecaster):
 
         optimizer = self.optimizer.clone()
         optimizer.set_params(experiment=experiment)
-        best_params = optimizer.run()
+        best_params = optimizer.solve()
 
         self.best_params_ = best_params
         self.best_forecaster_ = forecaster.set_params(**best_params)
