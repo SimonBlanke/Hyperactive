@@ -1,11 +1,11 @@
-"""NSGA-III multi-objective sampler optimizer."""
+"""Random optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from .._adapters._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class NSGAIIISampler(_BaseOptunaAdapter):
-    """NSGA-III multi-objective optimizer.
+class RandomOptimizer(_BaseOptunaAdapter):
+    """Random optimizer.
 
     Parameters
     ----------
@@ -26,22 +26,16 @@ class NSGAIIISampler(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    population_size : int, default=50
-        Population size for NSGA-III.
-    mutation_prob : float, default=0.1
-        Mutation probability for NSGA-III.
-    crossover_prob : float, default=0.9
-        Crossover probability for NSGA-III.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
 
     Examples
     --------
-    Basic usage of NSGAIIISampler with a scikit-learn experiment:
+    Basic usage of RandomOptimizer with a scikit-learn experiment:
 
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.optuna import NSGAIIISampler
+    >>> from hyperactive.opt.optuna import RandomOptimizer
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -50,17 +44,17 @@ class NSGAIIISampler(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = NSGAIIISampler(
+    >>> optimizer = RandomOptimizer(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
-        "info:name": "NSGA-III Sampler",
+        "info:name": "Random Optimizer",
         "info:local_vs_global": "global",
-        "info:explore_vs_exploit": "mixed",
-        "info:compute": "high",
+        "info:explore_vs_exploit": "explore",
+        "info:compute": "low",
         "python_dependencies": ["optuna"],
     }
 
@@ -72,15 +66,8 @@ class NSGAIIISampler(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        population_size=50,
-        mutation_prob=0.1,
-        crossover_prob=0.9,
         experiment=None,
     ):
-        self.population_size = population_size
-        self.mutation_prob = mutation_prob
-        self.crossover_prob = crossover_prob
-
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -91,36 +78,18 @@ class NSGAIIISampler(_BaseOptunaAdapter):
             experiment=experiment,
         )
 
-    def _get_sampler(self):
-        """Get the NSGA-III sampler.
+    def _get_optimizer(self):
+        """Get the Random optimizer.
 
         Returns
         -------
-        sampler
-            The Optuna NSGAIIISampler instance
+        optimizer
+            The Optuna RandomOptimizer instance
         """
         import optuna
 
-        sampler_kwargs = {
-            "population_size": self.population_size,
-            "mutation_prob": self.mutation_prob,
-            "crossover_prob": self.crossover_prob,
-        }
-
+        optimizer_kwargs = {}
         if self.random_state is not None:
-            sampler_kwargs["seed"] = self.random_state
+            optimizer_kwargs["seed"] = self.random_state
 
-        return optuna.samplers.NSGAIIISampler(**sampler_kwargs)
-
-    @classmethod
-    def get_test_params(cls, parameter_set="default"):
-        """Return testing parameter settings for the optimizer."""
-        params = super().get_test_params(parameter_set)
-        params[0].update(
-            {
-                "population_size": 20,
-                "mutation_prob": 0.2,
-                "crossover_prob": 0.8,
-            }
-        )
-        return params
+        return optuna.samplers.RandomSampler(**optimizer_kwargs)

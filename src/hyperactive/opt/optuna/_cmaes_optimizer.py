@@ -1,10 +1,10 @@
-"""CMA-ES (Covariance Matrix Adaptation Evolution Strategy) sampler optimizer."""
+"""CMA-ES (Covariance Matrix Adaptation Evolution Strategy) optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from .._adapters._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class CmaEsSampler(_BaseOptunaAdapter):
+class CmaEsOptimizer(_BaseOptunaAdapter):
     """CMA-ES (Covariance Matrix Adaptation Evolution Strategy) optimizer.
 
     Parameters
@@ -38,10 +38,10 @@ class CmaEsSampler(_BaseOptunaAdapter):
 
     Examples
     --------
-    Basic usage of CmaEsSampler with a scikit-learn experiment:
+    Basic usage of CmaEsOptimizer with a scikit-learn experiment:
 
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.optuna import CmaEsSampler
+    >>> from hyperactive.opt.optuna import CmaEsOptimizer
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -50,14 +50,14 @@ class CmaEsSampler(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = CmaEsSampler(
+    >>> optimizer = CmaEsOptimizer(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
-        "info:name": "CMA-ES Sampler",
+        "info:name": "CMA-ES Optimizer",
         "info:local_vs_global": "global",
         "info:explore_vs_exploit": "mixed",
         "info:compute": "high",
@@ -91,13 +91,13 @@ class CmaEsSampler(_BaseOptunaAdapter):
             experiment=experiment,
         )
 
-    def _get_sampler(self):
-        """Get the CMA-ES sampler.
+    def _get_optimizer(self):
+        """Get the CMA-ES optimizer.
 
         Returns
         -------
-        sampler
-            The Optuna CmaEsSampler instance
+        optimizer
+            The Optuna CmaEsOptimizer instance
         """
         import optuna
 
@@ -105,22 +105,22 @@ class CmaEsSampler(_BaseOptunaAdapter):
             import cmaes  # noqa: F401
         except ImportError:
             raise ImportError(
-                "CmaEsSampler requires the 'cmaes' package. "
+                "CmaEsOptimizer requires the 'cmaes' package. "
                 "Install it with: pip install cmaes"
             )
 
-        sampler_kwargs = {
+        optimizer_kwargs = {
             "sigma0": self.sigma0,
             "n_startup_trials": self.n_startup_trials,
         }
 
         if self.x0 is not None:
-            sampler_kwargs["x0"] = self.x0
+            optimizer_kwargs["x0"] = self.x0
 
         if self.random_state is not None:
-            sampler_kwargs["seed"] = self.random_state
+            optimizer_kwargs["seed"] = self.random_state
 
-        return optuna.samplers.CmaEsSampler(**sampler_kwargs)
+        return optuna.samplers.CmaEsSampler(**optimizer_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

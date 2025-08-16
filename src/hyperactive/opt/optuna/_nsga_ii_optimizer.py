@@ -1,11 +1,11 @@
-"""Quasi-Monte Carlo sampler optimizer."""
+"""NSGA-II multi-objective optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from .._adapters._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class QMCSampler(_BaseOptunaAdapter):
-    """Quasi-Monte Carlo sampler optimizer.
+class NSGAIIOptimizer(_BaseOptunaAdapter):
+    """NSGA-II multi-objective optimizer.
 
     Parameters
     ----------
@@ -26,20 +26,22 @@ class QMCSampler(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    qmc_type : str, default="sobol"
-        Type of QMC sequence. Options: "sobol", "halton".
-    scramble : bool, default=True
-        Whether to scramble the QMC sequence.
+    population_size : int, default=50
+        Population size for NSGA-II.
+    mutation_prob : float, default=0.1
+        Mutation probability for NSGA-II.
+    crossover_prob : float, default=0.9
+        Crossover probability for NSGA-II.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
 
     Examples
     --------
-    Basic usage of QMCSampler with a scikit-learn experiment:
+    Basic usage of NSGAIIOptimizer with a scikit-learn experiment:
 
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.optuna import QMCSampler
+    >>> from hyperactive.opt.optuna import NSGAIIOptimizer
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -48,17 +50,17 @@ class QMCSampler(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = QMCSampler(
+    >>> optimizer = NSGAIIOptimizer(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
-        "info:name": "Quasi-Monte Carlo Sampler",
+        "info:name": "NSGA-II Optimizer",
         "info:local_vs_global": "global",
-        "info:explore_vs_exploit": "explore",
-        "info:compute": "low",
+        "info:explore_vs_exploit": "mixed",
+        "info:compute": "high",
         "python_dependencies": ["optuna"],
     }
 
@@ -70,12 +72,14 @@ class QMCSampler(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        qmc_type="sobol",
-        scramble=True,
+        population_size=50,
+        mutation_prob=0.1,
+        crossover_prob=0.9,
         experiment=None,
     ):
-        self.qmc_type = qmc_type
-        self.scramble = scramble
+        self.population_size = population_size
+        self.mutation_prob = mutation_prob
+        self.crossover_prob = crossover_prob
 
         super().__init__(
             param_space=param_space,
@@ -87,76 +91,67 @@ class QMCSampler(_BaseOptunaAdapter):
             experiment=experiment,
         )
 
-    def _get_sampler(self):
-        """Get the QMC sampler.
+    def _get_optimizer(self):
+        """Get the NSGA-II optimizer.
 
         Returns
         -------
-        sampler
-            The Optuna QMCSampler instance
+        optimizer
+            The Optuna NSGAIIOptimizer instance
         """
         import optuna
 
-        sampler_kwargs = {
-            "qmc_type": self.qmc_type,
-            "scramble": self.scramble,
+        optimizer_kwargs = {
+            "population_size": self.population_size,
+            "mutation_prob": self.mutation_prob,
+            "crossover_prob": self.crossover_prob,
         }
 
         if self.random_state is not None:
-            sampler_kwargs["seed"] = self.random_state
+            optimizer_kwargs["seed"] = self.random_state
 
-        return optuna.samplers.QMCSampler(**sampler_kwargs)
+        return optuna.samplers.NSGAIISampler(**optimizer_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
         from sklearn.datasets import load_iris
-        from sklearn.linear_model import LogisticRegression
+        from sklearn.ensemble import RandomForestClassifier
 
         from hyperactive.experiment.integrations import SklearnCvExperiment
 
-        # Test case 1: Halton sequence without scrambling
+        # Test case 1: Basic single-objective (inherits from base)
         params = super().get_test_params(parameter_set)
         params[0].update(
             {
-                "qmc_type": "halton",
-                "scramble": False,
+                "population_size": 20,
+                "mutation_prob": 0.2,
+                "crossover_prob": 0.8,
             }
         )
 
-        # Test case 2: Sobol sequence with scrambling
+        # Test case 2: Multi-objective with mixed parameter types
         X, y = load_iris(return_X_y=True)
-        lr_exp = SklearnCvExperiment(
-            estimator=LogisticRegression(random_state=42, max_iter=1000), X=X, y=y
+        rf_exp = SklearnCvExperiment(
+            estimator=RandomForestClassifier(random_state=42), X=X, y=y
         )
 
         mixed_param_space = {
-            "C": (0.01, 100),  # Continuous
-            "penalty": [
-                "l1",
-                "l2",
-            ],  # Categorical - removed elasticnet to avoid solver conflicts
-            "solver": ["liblinear", "saga"],  # Categorical
+            "n_estimators": (10, 50),  # Continuous integer
+            "max_depth": [3, 5, 7, None],  # Mixed discrete/None
+            "criterion": ["gini", "entropy"],  # Categorical
+            "min_samples_split": (2, 10),  # Continuous integer
+            "bootstrap": [True, False],  # Boolean categorical
         }
 
         params.append(
             {
                 "param_space": mixed_param_space,
-                "n_trials": 16,  # Power of 2 for better QMC properties
-                "experiment": lr_exp,
-                "qmc_type": "sobol",  # Different sequence type
-                "scramble": True,  # With scrambling for randomization
-            }
-        )
-
-        # Test case 3: Different sampler configuration with same experiment
-        params.append(
-            {
-                "param_space": mixed_param_space,
-                "n_trials": 8,  # Power of 2, good for QMC
-                "experiment": lr_exp,
-                "qmc_type": "halton",  # Different QMC type
-                "scramble": False,
+                "n_trials": 15,  # Smaller for faster testing
+                "experiment": rf_exp,
+                "population_size": 8,  # Smaller population for testing
+                "mutation_prob": 0.1,
+                "crossover_prob": 0.9,
             }
         )
 

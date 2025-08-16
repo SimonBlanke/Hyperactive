@@ -1,11 +1,11 @@
-"""Grid sampler optimizer."""
+"""Grid optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from .._adapters._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class GridSampler(_BaseOptunaAdapter):
-    """Grid search sampler optimizer.
+class GridOptimizer(_BaseOptunaAdapter):
+    """Grid search optimizer.
 
     Parameters
     ----------
@@ -34,10 +34,10 @@ class GridSampler(_BaseOptunaAdapter):
 
     Examples
     --------
-    Basic usage of GridSampler with a scikit-learn experiment:
+    Basic usage of GridOptimizer with a scikit-learn experiment:
 
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.optuna import GridSampler
+    >>> from hyperactive.opt.optuna import GridOptimizer
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -46,14 +46,14 @@ class GridSampler(_BaseOptunaAdapter):
     ...     "C": [0.01, 0.1, 1, 10],
     ...     "gamma": [0.0001, 0.01, 0.1, 1],
     ... }
-    >>> optimizer = GridSampler(
+    >>> optimizer = GridOptimizer(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
-        "info:name": "Grid Sampler",
+        "info:name": "Grid Optimizer",
         "info:local_vs_global": "global",
         "info:explore_vs_exploit": "explore",
         "info:compute": "low",
@@ -83,13 +83,13 @@ class GridSampler(_BaseOptunaAdapter):
             experiment=experiment,
         )
 
-    def _get_sampler(self):
-        """Get the Grid sampler.
+    def _get_optimizer(self):
+        """Get the Grid optimizer.
 
         Returns
         -------
-        sampler
-            The Optuna GridSampler instance
+        optimizer
+            The Optuna GridOptimizer instance
         """
         import optuna
 

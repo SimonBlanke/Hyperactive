@@ -21,7 +21,7 @@ class _BaseOptunaAdapter(BaseOptimizer):
         early_stopping=None,
         max_score=None,
         experiment=None,
-        **sampler_kwargs,
+        **optimizer_kwargs,
     ):
         self.param_space = param_space
         self.n_trials = n_trials
@@ -30,21 +30,21 @@ class _BaseOptunaAdapter(BaseOptimizer):
         self.early_stopping = early_stopping
         self.max_score = max_score
         self.experiment = experiment
-        self.sampler_kwargs = sampler_kwargs
+        self.optimizer_kwargs = optimizer_kwargs
         super().__init__()
 
-    def _get_sampler(self):
-        """Get the Optuna sampler to use.
+    def _get_optimizer(self):
+        """Get the Optuna optimizer to use.
 
         This method should be implemented by subclasses to return
-        the specific sampler class and its initialization parameters.
+        the specific optimizer class and its initialization parameters.
 
         Returns
         -------
-        sampler
-            The Optuna sampler instance
+        optimizer
+            The Optuna optimizer instance
         """
-        raise NotImplementedError("Subclasses must implement _get_sampler")
+        raise NotImplementedError("Subclasses must implement _get_optimizer")
 
     def _convert_param_space(self, param_space):
         """Convert parameter space to Optuna format.
@@ -155,13 +155,13 @@ class _BaseOptunaAdapter(BaseOptimizer):
         """
         import optuna
 
-        # Create sampler with random state if provided
-        sampler = self._get_sampler()
+        # Create optimizer with random state if provided
+        optimizer = self._get_optimizer()
 
         # Create study
         study = optuna.create_study(
             direction="maximize",  # Assuming we want to maximize scores
-            sampler=sampler,
+            sampler=optimizer,
         )
 
         # Setup initial positions

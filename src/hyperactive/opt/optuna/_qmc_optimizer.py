@@ -1,11 +1,11 @@
-"""Gaussian Process sampler optimizer."""
+"""Quasi-Monte Carlo optimizer."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from .._adapters._base_optuna_adapter import _BaseOptunaAdapter
 
 
-class GPSampler(_BaseOptunaAdapter):
-    """Gaussian Process-based Bayesian optimizer.
+class QMCOptimizer(_BaseOptunaAdapter):
+    """Quasi-Monte Carlo optimizer.
 
     Parameters
     ----------
@@ -26,20 +26,20 @@ class GPSampler(_BaseOptunaAdapter):
         Number of trials after which to stop if no improvement.
     max_score : float, default=None
         Maximum score threshold. Stop optimization when reached.
-    n_startup_trials : int, default=10
-        Number of startup trials for GP.
-    deterministic_objective : bool, default=False
-        Whether the objective function is deterministic.
+    qmc_type : str, default="sobol"
+        Type of QMC sequence. Options: "sobol", "halton".
+    scramble : bool, default=True
+        Whether to scramble the QMC sequence.
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
 
     Examples
     --------
-    Basic usage of GPSampler with a scikit-learn experiment:
+    Basic usage of QMCOptimizer with a scikit-learn experiment:
 
     >>> from hyperactive.experiment.integrations import SklearnCvExperiment
-    >>> from hyperactive.opt.optuna import GPSampler
+    >>> from hyperactive.opt.optuna import QMCOptimizer
     >>> from sklearn.datasets import load_iris
     >>> from sklearn.svm import SVC
     >>> X, y = load_iris(return_X_y=True)
@@ -48,17 +48,17 @@ class GPSampler(_BaseOptunaAdapter):
     ...     "C": (0.01, 10),
     ...     "gamma": (0.0001, 10),
     ... }
-    >>> optimizer = GPSampler(
+    >>> optimizer = QMCOptimizer(
     ...     param_space=param_space, n_trials=50, experiment=sklearn_exp
     ... )
     >>> best_params = optimizer.run()
     """
 
     _tags = {
-        "info:name": "Gaussian Process Sampler",
+        "info:name": "Quasi-Monte Carlo Optimizer",
         "info:local_vs_global": "global",
-        "info:explore_vs_exploit": "exploit",
-        "info:compute": "high",
+        "info:explore_vs_exploit": "explore",
+        "info:compute": "low",
         "python_dependencies": ["optuna"],
     }
 
@@ -70,12 +70,12 @@ class GPSampler(_BaseOptunaAdapter):
         random_state=None,
         early_stopping=None,
         max_score=None,
-        n_startup_trials=10,
-        deterministic_objective=False,
+        qmc_type="sobol",
+        scramble=True,
         experiment=None,
     ):
-        self.n_startup_trials = n_startup_trials
-        self.deterministic_objective = deterministic_objective
+        self.qmc_type = qmc_type
+        self.scramble = scramble
 
         super().__init__(
             param_space=param_space,
@@ -87,34 +87,77 @@ class GPSampler(_BaseOptunaAdapter):
             experiment=experiment,
         )
 
-    def _get_sampler(self):
-        """Get the GP sampler.
+    def _get_optimizer(self):
+        """Get the QMC optimizer.
 
         Returns
         -------
-        sampler
-            The Optuna GPSampler instance
+        optimizer
+            The Optuna QMCOptimizer instance
         """
         import optuna
 
-        sampler_kwargs = {
-            "n_startup_trials": self.n_startup_trials,
-            "deterministic_objective": self.deterministic_objective,
+        optimizer_kwargs = {
+            "qmc_type": self.qmc_type,
+            "scramble": self.scramble,
         }
 
         if self.random_state is not None:
-            sampler_kwargs["seed"] = self.random_state
+            optimizer_kwargs["seed"] = self.random_state
 
-        return optuna.samplers.GPSampler(**sampler_kwargs)
+        return optuna.samplers.QMCSampler(**optimizer_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
+        from sklearn.datasets import load_iris
+        from sklearn.linear_model import LogisticRegression
+
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+
+        # Test case 1: Halton sequence without scrambling
         params = super().get_test_params(parameter_set)
         params[0].update(
             {
-                "n_startup_trials": 5,
-                "deterministic_objective": True,
+                "qmc_type": "halton",
+                "scramble": False,
             }
         )
+
+        # Test case 2: Sobol sequence with scrambling
+        X, y = load_iris(return_X_y=True)
+        lr_exp = SklearnCvExperiment(
+            estimator=LogisticRegression(random_state=42, max_iter=1000), X=X, y=y
+        )
+
+        mixed_param_space = {
+            "C": (0.01, 100),  # Continuous
+            "penalty": [
+                "l1",
+                "l2",
+            ],  # Categorical - removed elasticnet to avoid solver conflicts
+            "solver": ["liblinear", "saga"],  # Categorical
+        }
+
+        params.append(
+            {
+                "param_space": mixed_param_space,
+                "n_trials": 16,  # Power of 2 for better QMC properties
+                "experiment": lr_exp,
+                "qmc_type": "sobol",  # Different sequence type
+                "scramble": True,  # With scrambling for randomization
+            }
+        )
+
+        # Test case 3: Different sampler configuration with same experiment
+        params.append(
+            {
+                "param_space": mixed_param_space,
+                "n_trials": 8,  # Power of 2, good for QMC
+                "experiment": lr_exp,
+                "qmc_type": "halton",  # Different QMC type
+                "scramble": False,
+            }
+        )
+
         return params
