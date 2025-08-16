@@ -76,7 +76,7 @@ class GPSampler(_BaseOptunaAdapter):
     ):
         self.n_startup_trials = n_startup_trials
         self.deterministic_objective = deterministic_objective
-        
+
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -96,23 +96,25 @@ class GPSampler(_BaseOptunaAdapter):
             The Optuna GPSampler instance
         """
         import optuna
-        
+
         sampler_kwargs = {
             "n_startup_trials": self.n_startup_trials,
             "deterministic_objective": self.deterministic_objective,
         }
-        
+
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
-        
+
         return optuna.samplers.GPSampler(**sampler_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
         params = super().get_test_params(parameter_set)
-        params[0].update({
-            "n_startup_trials": 5,
-            "deterministic_objective": True,
-        })
+        params[0].update(
+            {
+                "n_startup_trials": 5,
+                "deterministic_objective": True,
+            }
+        )
         return params

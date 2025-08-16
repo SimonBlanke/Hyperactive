@@ -1,8 +1,8 @@
 """
 QMCSampler Example - Quasi-Monte Carlo Sampling
 
-The QMCSampler uses Quasi-Monte Carlo sequences (like Sobol or Halton) 
-to generate low-discrepancy samples. These sequences provide better 
+The QMCSampler uses Quasi-Monte Carlo sequences (like Sobol or Halton)
+to generate low-discrepancy samples. These sequences provide better
 coverage of the parameter space compared to purely random sampling.
 
 Characteristics:

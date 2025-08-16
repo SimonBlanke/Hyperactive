@@ -3,7 +3,7 @@ RandomSampler Example - Random Search
 
 The RandomSampler performs pure random sampling from the parameter space.
 It serves as a baseline and is surprisingly effective for many problems,
-especially when the parameter space is high-dimensional or when you have 
+especially when the parameter space is high-dimensional or when you have
 limited computational budget.
 
 Characteristics:

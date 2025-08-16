@@ -80,7 +80,7 @@ class TPESampler(_BaseOptunaAdapter):
         self.n_startup_trials = n_startup_trials
         self.n_ei_candidates = n_ei_candidates
         self.weights = weights
-        
+
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -100,62 +100,74 @@ class TPESampler(_BaseOptunaAdapter):
             The Optuna TPESampler instance
         """
         import optuna
-        
+
         sampler_kwargs = {
             "n_startup_trials": self.n_startup_trials,
             "n_ei_candidates": self.n_ei_candidates,
         }
-        
+
         if self.weights is not None:
             sampler_kwargs["weights"] = self.weights
-            
+
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
-        
+
         return optuna.samplers.TPESampler(**sampler_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
-        from hyperactive.experiment.integrations import SklearnCvExperiment
         from sklearn.datasets import load_wine
         from sklearn.ensemble import RandomForestClassifier
         from sklearn.svm import SVC
-        
+
+        from hyperactive.experiment.integrations import SklearnCvExperiment
+
         # Test case 1: Basic TPE with standard parameters
         params = super().get_test_params(parameter_set)
-        params[0].update({
-            "n_startup_trials": 5,
-            "n_ei_candidates": 12,
-        })
-        
+        params[0].update(
+            {
+                "n_startup_trials": 5,
+                "n_ei_candidates": 12,
+            }
+        )
+
         # Test case 2: Mixed parameter types with warm start
         X, y = load_wine(return_X_y=True)
-        rf_exp = SklearnCvExperiment(estimator=RandomForestClassifier(random_state=42), X=X, y=y)
-        
+        rf_exp = SklearnCvExperiment(
+            estimator=RandomForestClassifier(random_state=42), X=X, y=y
+        )
+
         mixed_param_space = {
-            "n_estimators": (10, 100),              # Continuous integer
-            "max_depth": [3, 5, 7, 10, None],       # Mixed discrete/None
-            "criterion": ["gini", "entropy"],       # Categorical
-            "min_samples_split": (2, 20),           # Continuous integer
-            "bootstrap": [True, False],             # Boolean
+            "n_estimators": (10, 100),  # Continuous integer
+            "max_depth": [3, 5, 7, 10, None],  # Mixed discrete/None
+            "criterion": ["gini", "entropy"],  # Categorical
+            "min_samples_split": (2, 20),  # Continuous integer
+            "bootstrap": [True, False],  # Boolean
         }
-        
+
         # Warm start with known good configuration
         warm_start_points = [
-            {"n_estimators": 50, "max_depth": 5, "criterion": "gini", 
-             "min_samples_split": 2, "bootstrap": True}
+            {
+                "n_estimators": 50,
+                "max_depth": 5,
+                "criterion": "gini",
+                "min_samples_split": 2,
+                "bootstrap": True,
+            }
         ]
-        
-        params.append({
-            "param_space": mixed_param_space,
-            "n_trials": 20,
-            "experiment": rf_exp,
-            "n_startup_trials": 3,     # Fewer random trials before TPE
-            "n_ei_candidates": 24,     # More EI candidates for better optimization
-            "initialize": {"warm_start": warm_start_points},
-        })
-        
+
+        params.append(
+            {
+                "param_space": mixed_param_space,
+                "n_trials": 20,
+                "experiment": rf_exp,
+                "n_startup_trials": 3,  # Fewer random trials before TPE
+                "n_ei_candidates": 24,  # More EI candidates for better optimization
+                "initialize": {"warm_start": warm_start_points},
+            }
+        )
+
         # Test case 3: High-dimensional continuous space (TPE strength)
         svm_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
         high_dim_space = {
@@ -165,13 +177,15 @@ class TPESampler(_BaseOptunaAdapter):
             "degree": (2, 5),
             "tol": (1e-5, 1e-2),
         }
-        
-        params.append({
-            "param_space": high_dim_space,
-            "n_trials": 25,
-            "experiment": svm_exp,
-            "n_startup_trials": 8,     # More startup for exploration
-            "n_ei_candidates": 32,     # More candidates for complex space
-        })
-        
+
+        params.append(
+            {
+                "param_space": high_dim_space,
+                "n_trials": 25,
+                "experiment": svm_exp,
+                "n_startup_trials": 8,  # More startup for exploration
+                "n_ei_candidates": 32,  # More candidates for complex space
+            }
+        )
+
         return params

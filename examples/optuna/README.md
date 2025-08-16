@@ -194,7 +194,7 @@ All samplers support:
 
 2. **Single objective:**
    - Need baseline/comparison → RandomSampler
-   - Small discrete space → GridSampler  
+   - Small discrete space → GridSampler
    - Expensive evaluations → GPSampler
    - Only continuous params → CmaEsSampler
    - Space exploration → QMCSampler

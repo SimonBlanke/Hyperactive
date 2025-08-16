@@ -1,8 +1,8 @@
 """
 NSGAIIISampler Example - Many-objective Optimization with NSGA-III
 
-NSGA-III is an extension of NSGA-II specifically designed for many-objective 
-optimization problems (typically 3+ objectives). It uses reference points 
+NSGA-III is an extension of NSGA-II specifically designed for many-objective
+optimization problems (typically 3+ objectives). It uses reference points
 to maintain diversity and selection pressure in high-dimensional objective spaces.
 
 Characteristics:

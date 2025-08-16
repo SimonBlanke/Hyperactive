@@ -72,7 +72,7 @@ class GridSampler(_BaseOptunaAdapter):
         experiment=None,
     ):
         self.search_space = search_space
-        
+
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -92,7 +92,7 @@ class GridSampler(_BaseOptunaAdapter):
             The Optuna GridSampler instance
         """
         import optuna
-        
+
         # Convert param_space to Optuna search space format if needed
         search_space = self.search_space
         if search_space is None and self.param_space is not None:
@@ -108,43 +108,45 @@ class GridSampler(_BaseOptunaAdapter):
                     else:
                         # Create a reasonable grid for continuous spaces
                         import numpy as np
+
                         search_space[key] = np.linspace(low, high, 10).tolist()
-        
+
         return optuna.samplers.GridSampler(search_space)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
-        from hyperactive.experiment.integrations import SklearnCvExperiment
         from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
         from sklearn.neighbors import KNeighborsClassifier
+        from sklearn.svm import SVC
+
+        from hyperactive.experiment.integrations import SklearnCvExperiment
 
         X, y = load_iris(return_X_y=True)
-        
+
         # Test case 1: Basic continuous parameters (converted to discrete)
         svm_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
         param_space_1 = {
             "C": [0.01, 0.1, 1, 10],
             "gamma": [0.0001, 0.01, 0.1, 1],
         }
-        
+
         # Test case 2: Mixed categorical and discrete parameters
         knn_exp = SklearnCvExperiment(estimator=KNeighborsClassifier(), X=X, y=y)
         param_space_2 = {
-            "n_neighbors": [1, 3, 5, 7],             # Discrete integers
-            "weights": ["uniform", "distance"],      # Categorical
-            "metric": ["euclidean", "manhattan"],    # Categorical  
-            "p": [1, 2],                             # Discrete for minkowski
+            "n_neighbors": [1, 3, 5, 7],  # Discrete integers
+            "weights": ["uniform", "distance"],  # Categorical
+            "metric": ["euclidean", "manhattan"],  # Categorical
+            "p": [1, 2],  # Discrete for minkowski
         }
-        
+
         # Test case 3: Small exhaustive grid (tests complete enumeration)
         param_space_3 = {
-            "C": [0.1, 1],                           # 2 values
-            "kernel": ["rbf", "linear"],             # 2 values  
+            "C": [0.1, 1],  # 2 values
+            "kernel": ["rbf", "linear"],  # 2 values
         }
-        # Total: 2 × 2 = 4 combinations, n_trials should cover all
-        
+        # Total: 2 x 2 = 4 combinations, n_trials should cover all
+
         return [
             {
                 "param_space": param_space_1,
@@ -152,7 +154,7 @@ class GridSampler(_BaseOptunaAdapter):
                 "experiment": svm_exp,
             },
             {
-                "param_space": param_space_2, 
+                "param_space": param_space_2,
                 "n_trials": 15,
                 "experiment": knn_exp,
             },
@@ -160,5 +162,5 @@ class GridSampler(_BaseOptunaAdapter):
                 "param_space": param_space_3,
                 "n_trials": 4,  # Exact number for exhaustive search
                 "experiment": svm_exp,
-            }
+            },
         ]

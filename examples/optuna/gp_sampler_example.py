@@ -1,8 +1,8 @@
 """
 GPSampler Example - Gaussian Process Bayesian Optimization
 
-The GPSampler uses Gaussian Processes to model the objective function and 
-select promising parameter configurations. It's particularly effective for 
+The GPSampler uses Gaussian Processes to model the objective function and
+select promising parameter configurations. It's particularly effective for
 expensive function evaluations and provides uncertainty estimates.
 
 Characteristics:

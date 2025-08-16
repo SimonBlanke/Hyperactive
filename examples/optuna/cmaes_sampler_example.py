@@ -1,14 +1,14 @@
 """
 CmaEsSampler Example - Covariance Matrix Adaptation Evolution Strategy
 
-CMA-ES is a powerful evolution strategy particularly effective for continuous 
-optimization problems. It adapts both the mean and covariance matrix of a 
+CMA-ES is a powerful evolution strategy particularly effective for continuous
+optimization problems. It adapts both the mean and covariance matrix of a
 multivariate normal distribution to efficiently explore the parameter space.
 
 Characteristics:
 - Excellent for continuous parameter optimization
 - Adapts search distribution shape and orientation
-- Self-adaptive step size control  
+- Self-adaptive step size control
 - Handles ill-conditioned problems well
 - Does not work with categorical parameters
 - Requires 'cmaes' package: pip install cmaes

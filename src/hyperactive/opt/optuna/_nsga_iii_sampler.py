@@ -80,7 +80,7 @@ class NSGAIIISampler(_BaseOptunaAdapter):
         self.population_size = population_size
         self.mutation_prob = mutation_prob
         self.crossover_prob = crossover_prob
-        
+
         super().__init__(
             param_space=param_space,
             n_trials=n_trials,
@@ -100,25 +100,27 @@ class NSGAIIISampler(_BaseOptunaAdapter):
             The Optuna NSGAIIISampler instance
         """
         import optuna
-        
+
         sampler_kwargs = {
             "population_size": self.population_size,
             "mutation_prob": self.mutation_prob,
             "crossover_prob": self.crossover_prob,
         }
-        
+
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
-        
+
         return optuna.samplers.NSGAIIISampler(**sampler_kwargs)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
         params = super().get_test_params(parameter_set)
-        params[0].update({
-            "population_size": 20,
-            "mutation_prob": 0.2,
-            "crossover_prob": 0.8,
-        })
+        params[0].update(
+            {
+                "population_size": 20,
+                "mutation_prob": 0.2,
+                "crossover_prob": 0.8,
+            }
+        )
         return params

@@ -87,9 +87,9 @@ class RandomSampler(_BaseOptunaAdapter):
             The Optuna RandomSampler instance
         """
         import optuna
-        
+
         sampler_kwargs = {}
         if self.random_state is not None:
             sampler_kwargs["seed"] = self.random_state
-        
+
         return optuna.samplers.RandomSampler(**sampler_kwargs)

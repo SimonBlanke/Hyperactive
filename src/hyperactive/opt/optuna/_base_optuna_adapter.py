@@ -21,7 +21,7 @@ class _BaseOptunaAdapter(BaseOptimizer):
         early_stopping=None,
         max_score=None,
         experiment=None,
-        **sampler_kwargs
+        **sampler_kwargs,
     ):
         self.param_space = param_space
         self.n_trials = n_trials
@@ -35,10 +35,10 @@ class _BaseOptunaAdapter(BaseOptimizer):
 
     def _get_sampler(self):
         """Get the Optuna sampler to use.
-        
+
         This method should be implemented by subclasses to return
         the specific sampler class and its initialization parameters.
-        
+
         Returns
         -------
         sampler
@@ -48,12 +48,12 @@ class _BaseOptunaAdapter(BaseOptimizer):
 
     def _convert_param_space(self, param_space):
         """Convert parameter space to Optuna format.
-        
+
         Parameters
         ----------
         param_space : dict
             The parameter space to convert
-            
+
         Returns
         -------
         dict
@@ -63,14 +63,14 @@ class _BaseOptunaAdapter(BaseOptimizer):
 
     def _suggest_params(self, trial, param_space):
         """Suggest parameters using Optuna trial.
-        
+
         Parameters
         ----------
         trial : optuna.Trial
             The Optuna trial object
         param_space : dict
             The parameter space
-            
+
         Returns
         -------
         dict
@@ -96,12 +96,12 @@ class _BaseOptunaAdapter(BaseOptimizer):
 
     def _objective(self, trial):
         """Objective function for Optuna optimization.
-        
+
         Parameters
         ----------
         trial : optuna.Trial
             The Optuna trial object
-            
+
         Returns
         -------
         float
@@ -109,16 +109,16 @@ class _BaseOptunaAdapter(BaseOptimizer):
         """
         params = self._suggest_params(trial, self.param_space)
         score = self.experiment(**params)
-        
+
         # Handle early stopping based on max_score
         if self.max_score is not None and score >= self.max_score:
             trial.study.stop()
-            
+
         return score
 
     def _setup_initial_positions(self, study):
-        """Setup initial starting positions if provided.
-        
+        """Set up initial starting positions if provided.
+
         Parameters
         ----------
         study : optuna.Study
@@ -131,12 +131,12 @@ class _BaseOptunaAdapter(BaseOptimizer):
                     # For warm start, we manually add trials to the study history
                     # instead of using suggest methods to avoid distribution conflicts
                     for point in warm_start_points:
-                        score = self.experiment(**point)
+                        self.experiment(**point)
                         study.enqueue_trial(point)
 
     def _run(self, experiment, param_space, n_trials, **kwargs):
         """Run the Optuna optimization.
-        
+
         Parameters
         ----------
         experiment : callable
@@ -147,41 +147,43 @@ class _BaseOptunaAdapter(BaseOptimizer):
             Number of trials
         **kwargs
             Additional parameters
-            
+
         Returns
         -------
         dict
             The best parameters found
         """
         import optuna
-        
+
         # Create sampler with random state if provided
         sampler = self._get_sampler()
-        
+
         # Create study
         study = optuna.create_study(
             direction="maximize",  # Assuming we want to maximize scores
-            sampler=sampler
+            sampler=sampler,
         )
-        
+
         # Setup initial positions
         self._setup_initial_positions(study)
-        
+
         # Setup early stopping callback
         callbacks = []
         if self.early_stopping is not None:
+
             def early_stopping_callback(study, trial):
                 if len(study.trials) >= self.early_stopping:
                     study.stop()
+
             callbacks.append(early_stopping_callback)
-        
+
         # Run optimization
         study.optimize(
             self._objective,
             n_trials=n_trials,
-            callbacks=callbacks if callbacks else None
+            callbacks=callbacks if callbacks else None,
         )
-        
+
         self.best_score_ = study.best_value
         self.best_params_ = study.best_params
         return study.best_params
@@ -189,9 +191,10 @@ class _BaseOptunaAdapter(BaseOptimizer):
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the optimizer."""
-        from hyperactive.experiment.integrations import SklearnCvExperiment
         from sklearn.datasets import load_iris
         from sklearn.svm import SVC
+
+        from hyperactive.experiment.integrations import SklearnCvExperiment
 
         X, y = load_iris(return_X_y=True)
         sklearn_exp = SklearnCvExperiment(estimator=SVC(), X=X, y=y)
@@ -201,8 +204,10 @@ class _BaseOptunaAdapter(BaseOptimizer):
             "gamma": (0.0001, 10),
         }
 
-        return [{
-            "param_space": param_space,
-            "n_trials": 10,
-            "experiment": sklearn_exp,
-        }]
+        return [
+            {
+                "param_space": param_space,
+                "n_trials": 10,
+                "experiment": sklearn_exp,
+            }
+        ]

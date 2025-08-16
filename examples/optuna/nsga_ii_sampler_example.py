@@ -1,7 +1,7 @@
 """
 NSGAIISampler Example - Multi-objective Optimization with NSGA-II
 
-NSGA-II (Non-dominated Sorting Genetic Algorithm II) is designed for 
+NSGA-II (Non-dominated Sorting Genetic Algorithm II) is designed for
 multi-objective optimization problems where you want to optimize multiple
 conflicting objectives simultaneously. It finds a Pareto front of solutions.
 
@@ -13,7 +13,7 @@ Characteristics:
 - Elitist approach preserving best solutions
 - Crowding distance for diversity preservation
 
-Note: For demonstration, we'll create a multi-objective problem from 
+Note: For demonstration, we'll create a multi-objective problem from
 a single-objective one by optimizing both performance and model complexity.
 """
 
