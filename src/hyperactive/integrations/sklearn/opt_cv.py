@@ -1,6 +1,5 @@
 """opt_cv module for Hyperactive optimization."""
 
-
 from collections.abc import Callable
 from typing import Union
 

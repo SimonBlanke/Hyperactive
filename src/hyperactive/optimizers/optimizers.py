@@ -3,7 +3,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
 from gradient_free_optimizers import (
     BayesianOptimizer as _BayesianOptimizer,
 )

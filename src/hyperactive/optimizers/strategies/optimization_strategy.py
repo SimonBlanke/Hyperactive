@@ -3,7 +3,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
 from .optimizer_attributes import OptimizerAttributes
 
 

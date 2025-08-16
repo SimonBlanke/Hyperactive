@@ -10,6 +10,7 @@ n_iter = 100
 
 def test_mixed_type_search_space_0():
     """Test search space with integer type validation."""
+
     def objective_function(para):
         assert isinstance(para["x1"], int)
 
@@ -26,6 +27,7 @@ def test_mixed_type_search_space_0():
 
 def test_mixed_type_search_space_1():
     """Test search space with float type validation."""
+
     def objective_function(para):
         assert isinstance(para["x2"], float)
 
@@ -42,6 +44,7 @@ def test_mixed_type_search_space_1():
 
 def test_mixed_type_search_space_2():
     """Test search space with mixed integer and float type validation."""
+
     def objective_function(para):
         assert isinstance(para["x1"], int)
         assert isinstance(para["x2"], float)
@@ -60,6 +63,7 @@ def test_mixed_type_search_space_2():
 
 def test_mixed_type_search_space_3():
     """Test search space with mixed integer, float, and string type validation."""
+
     def objective_function(para):
         assert isinstance(para["x1"], int)
         assert isinstance(para["x2"], float)

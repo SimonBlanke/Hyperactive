@@ -3,7 +3,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
 from .constraint import Constraint
 from .hyper_gradient_conv import HyperGradientConv
 from .objective_function import ObjectiveFunction

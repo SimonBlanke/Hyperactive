@@ -7,6 +7,7 @@ from hyperactive import Hyperactive
 
 def test_constr_opt_0():
     """Test constraint optimization with single constraint."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
@@ -41,6 +42,7 @@ def test_constr_opt_0():
 
 def test_constr_opt_1():
     """Test constraint optimization with single constraint on 2D space."""
+
     def objective_function(para):
         score = -(para["x1"] * para["x1"] + para["x2"] * para["x2"])
         return score

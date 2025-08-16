@@ -15,6 +15,7 @@ from ._parametrize import optimizers_smbo
 @pytest.mark.parametrize(*optimizers_smbo)
 def test_memory_Warm_start_smbo_0(Optimizer_smbo):
     """Test memory warm start with SMBO optimizers and custom optimization strategy."""
+
     def objective_function(opt):
         time.sleep(0.01)
         score = -(opt["x1"] * opt["x1"])

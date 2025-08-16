@@ -75,6 +75,7 @@ def test_early_stop_2():
 
 def test_early_stop_3():
     """Test early stopping without tolerance and verify iteration count."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
@@ -109,6 +110,7 @@ def test_early_stop_3():
 
 def test_early_stop_4():
     """Test early stopping with absolute tolerance where no early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 
@@ -171,6 +173,7 @@ def test_early_stop_4():
 
 def test_early_stop_5():
     """Test early stopping with absolute tolerance where early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 
@@ -225,6 +228,7 @@ def test_early_stop_5():
 
 def test_early_stop_6():
     """Test early stopping with relative tolerance where no early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 
@@ -287,6 +291,7 @@ def test_early_stop_6():
 
 def test_early_stop_7():
     """Test early stopping with relative tolerance where early stop occurs."""
+
     def objective_function(para):
         return para["x1"]
 

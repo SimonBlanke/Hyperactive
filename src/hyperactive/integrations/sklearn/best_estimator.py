@@ -5,7 +5,6 @@ Email: simon.blanke@yahoo.com
 License: MIT License
 """
 
-
 from sklearn.utils.metaestimators import available_if
 from sklearn.utils.validation import check_is_fitted
 

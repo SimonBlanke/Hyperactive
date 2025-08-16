@@ -23,6 +23,7 @@ search_space = {
 
 def test_max_score_0():
     """Test max_score termination with hill climbing optimizer."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
@@ -59,6 +60,7 @@ def test_max_score_0():
 
 def test_max_score_1():
     """Test max_score termination with time constraint."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         time.sleep(0.01)

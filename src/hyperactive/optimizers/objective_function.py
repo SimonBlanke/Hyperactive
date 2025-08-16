@@ -3,7 +3,6 @@
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
 from .dictionary import DictClass
 
 
@@ -38,6 +37,7 @@ class ObjectiveFunction(DictClass):
 
     def __call__(self, search_space):
         """Make object callable with search space."""
+
         # wrapper for GFOs
         def _model(para):
             self.nth_iter = len(self.optimizer.pos_l)

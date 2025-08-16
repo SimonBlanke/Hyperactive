@@ -9,6 +9,7 @@ from hyperactive.optimizers.strategies import CustomOptimizationStrategy
 
 def test_constr_opt_0():
     """Test constrained optimization with single constraint."""
+
     def objective_function(para):
         score = -para["x1"] * para["x1"]
         return score
@@ -51,6 +52,7 @@ def test_constr_opt_0():
 
 def test_constr_opt_1():
     """Test constrained optimization with multi-dimensional search space."""
+
     def objective_function(para):
         score = -(para["x1"] * para["x1"] + para["x2"] * para["x2"])
         return score

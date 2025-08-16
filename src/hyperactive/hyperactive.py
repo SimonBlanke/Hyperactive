@@ -9,7 +9,6 @@ Email: simon.blanke@yahoo.com
 License: MIT License
 """
 
-
 import copy
 import multiprocessing as mp
 from typing import Union

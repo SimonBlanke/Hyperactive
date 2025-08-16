@@ -14,6 +14,7 @@ if sys.platform.startswith("win"):
 
 def test_search_space_0():
     """Test search space with integer range."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -36,6 +37,7 @@ def test_search_space_0():
 
 def test_search_space_1():
     """Test search space with float range."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -58,6 +60,7 @@ def test_search_space_1():
 
 def test_search_space_2():
     """Test search space with numpy float range."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -81,6 +84,7 @@ def test_search_space_2():
 
 def test_search_space_3():
     """Test search space with function objects."""
+
     def func1():
         pass
 
@@ -113,6 +117,7 @@ def test_search_space_3():
 
 def test_search_space_4():
     """Test search space with class objects."""
+
     class class1:
         pass
 
@@ -145,6 +150,7 @@ def test_search_space_4():
 
 def test_search_space_5():
     """Test search space with initialized class instances."""
+
     class class1:
         def __init__(self):
             pass
@@ -189,6 +195,7 @@ def test_search_space_5():
 
 def test_search_space_6():
     """Test search space with mixed parameter types."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score

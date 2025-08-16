@@ -89,6 +89,7 @@ def test_attributes_results_5():
 
 def test_attributes_results_6():
     """Test memory disabled allows duplicate search space points."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -116,6 +117,7 @@ def test_attributes_results_6():
 
 def test_attributes_results_7():
     """Test search data without times parameter excludes timing columns."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -139,6 +141,7 @@ def test_attributes_results_7():
 
 def test_attributes_results_8():
     """Test search data without times parameter excludes iteration timing."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -162,6 +165,7 @@ def test_attributes_results_8():
 
 def test_attributes_results_9():
     """Test search data with times parameter includes timing columns."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score

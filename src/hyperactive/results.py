@@ -5,7 +5,6 @@ Email: simon.blanke@yahoo.com
 License: MIT License
 """
 
-
 import numpy as np
 import pandas as pd
 
@@ -87,7 +86,6 @@ class Results:
     def search_data(self, id_):
         """Search Data function."""
         search_data = self._get_result(id_, "search_data")
-
 
         if search_data is not None:
             return search_data

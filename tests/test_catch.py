@@ -13,6 +13,7 @@ search_space = {
 
 def test_catch_1():
     """Test catching TypeError exceptions in objective function."""
+
     def objective_function(access):
         1 + "str"  # Intentional TypeError for testing
 
@@ -30,6 +31,7 @@ def test_catch_1():
 
 def test_catch_2():
     """Test catching ValueError exceptions in objective function."""
+
     def objective_function(access):
         math.sqrt(-10)
 
@@ -47,6 +49,7 @@ def test_catch_2():
 
 def test_catch_3():
     """Test catching ZeroDivisionError exceptions in objective function."""
+
     def objective_function(access):
         1 / 0  # Intentional ZeroDivisionError for testing
 
@@ -64,6 +67,7 @@ def test_catch_3():
 
 def test_catch_all_0():
     """Test catching multiple exception types returning NaN values."""
+
     def objective_function(access):
         1 + "str"  # Intentional TypeError for testing
         math.sqrt(-10)  # Intentional ValueError for testing
@@ -91,6 +95,7 @@ def test_catch_all_0():
 
 def test_catch_all_1():
     """Test catching multiple exception types returning tuple values."""
+
     def objective_function(access):
         1 + "str"  # Intentional TypeError for testing
         math.sqrt(-10)  # Intentional ValueError for testing

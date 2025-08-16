@@ -35,5 +35,3 @@ optimizer = HillClimbingOptimizer()
 optimizer.add_search(experiment1, search_config1, n_iter=100)
 hyper = optimizer
 hyper.run(max_time=5)
-
-

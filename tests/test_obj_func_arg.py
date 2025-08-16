@@ -11,6 +11,7 @@ search_space = {
 
 def test_argument_0():
     """Test objective function arguments with pass_through parameter."""
+
     def objective_function(para):
         print("\npara.nth_iter", para.nth_iter)
         print("nth_iter_local", para.pass_through["nth_iter_local"])

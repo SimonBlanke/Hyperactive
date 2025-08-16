@@ -32,5 +32,4 @@ class OptPipe:
 
     def set_params(self):
         # einzige Möglichkeit um a b c zu ändern
-
-
+        pass

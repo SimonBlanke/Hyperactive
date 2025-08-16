@@ -8,6 +8,7 @@ class Checks:
 
     def verify_fit(function):
         """Verify Fit function."""
+
         def wrapper(self, X, y):
             """Wrap function call."""
             out = function(self, X, y)
