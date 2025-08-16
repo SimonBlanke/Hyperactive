@@ -3,6 +3,8 @@
 
 from hyperactive.base import BaseOptimizer
 
+__all__ = ["_BaseOptunaAdapter"]
+
 
 class _BaseOptunaAdapter(BaseOptimizer):
     """Base adapter for Optuna optimizers."""
@@ -134,7 +136,7 @@ class _BaseOptunaAdapter(BaseOptimizer):
                         self.experiment(**point)
                         study.enqueue_trial(point)
 
-    def _run(self, experiment, param_space, n_trials, **kwargs):
+    def _solve(self, experiment, param_space, n_trials, **kwargs):
         """Run the Optuna optimization.
 
         Parameters
