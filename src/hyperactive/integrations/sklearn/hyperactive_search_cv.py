@@ -135,7 +135,7 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
             n_jobs=self.n_jobs,
             random_state=self.random_state,
         )
-        hyper.run()
+        hyper.solve()
 
         self.best_params_ = hyper.best_para(objective_function)
         self.best_score_ = hyper.best_score(objective_function)

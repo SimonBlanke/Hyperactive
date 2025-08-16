@@ -161,7 +161,7 @@ class MyOptimizer(BaseOptimizer):
         return search_config
 
     # todo: implement this, mandatory
-    def _run(self, experiment, **search_config):
+    def _solve(self, experiment, **search_config):
         """Run the optimization search process to maximize the experiment's score.
 
         Parameters

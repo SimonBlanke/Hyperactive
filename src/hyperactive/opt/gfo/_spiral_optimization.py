@@ -69,7 +69,7 @@ class SpiralOptimization(_BaseGFOadapter):
     >>> optimizer = SpiralOptimization(experiment=sklearn_exp, **config)
 
     3. running the optimization:
-    >>> best_params = optimizer.run()
+    >>> best_params = optimizer.solve()
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_

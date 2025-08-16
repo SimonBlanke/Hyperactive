@@ -49,7 +49,7 @@ class GridSearchSk(BaseOptimizer):
     >>> grid_search = GridSearch(param_grid, experiment=sklearn_exp)
 
     3. running the grid search:
-    >>> best_params = grid_search.run()
+    >>> best_params = grid_search.solve()
 
     Best parameters can also be accessed via the attributes:
     >>> best_params = grid_search.best_params_
@@ -91,7 +91,7 @@ class GridSearchSk(BaseOptimizer):
                         "to be a non-empty sequence."
                     )
 
-    def _run(self, experiment, param_grid, error_score):
+    def _solve(self, experiment, param_grid, error_score):
         """Run the optimization search process."""
         self._check_param_grid(param_grid)
         candidate_params = list(ParameterGrid(param_grid))

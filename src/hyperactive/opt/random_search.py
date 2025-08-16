@@ -86,7 +86,7 @@ class RandomSearchSk(BaseOptimizer):
                         "non-empty sequence."
                     )
 
-    def _run(
+    def _solve(
         self,
         experiment,
         param_distributions,
