@@ -132,8 +132,10 @@ class QMCSampler(_BaseOptunaAdapter):
 
         mixed_param_space = {
             "C": (0.01, 100),  # Continuous
-            "penalty": ["l1", "l2", "elasticnet"],  # Categorical
-            "l1_ratio": (0.0, 1.0),  # Continuous ratio
+            "penalty": [
+                "l1",
+                "l2",
+            ],  # Categorical - removed elasticnet to avoid solver conflicts
             "solver": ["liblinear", "saga"],  # Categorical
         }
 
@@ -147,18 +149,13 @@ class QMCSampler(_BaseOptunaAdapter):
             }
         )
 
-        # Test case 3: Higher dimensional space (tests QMC scaling)
-        high_dim_space = {
-            f"param_{i}": (0.0, 1.0)
-            for i in range(8)  # 8-dimensional continuous space
-        }
-
+        # Test case 3: Different sampler configuration with same experiment
         params.append(
             {
-                "param_space": high_dim_space,
-                "n_trials": 32,  # Power of 2, good for QMC
+                "param_space": mixed_param_space,
+                "n_trials": 8,  # Power of 2, good for QMC
                 "experiment": lr_exp,
-                "qmc_type": "sobol",
+                "qmc_type": "halton",  # Different QMC type
                 "scramble": False,
             }
         )
