@@ -7,6 +7,8 @@ from hyperactive.base import BaseExperiment
 
 
 class Sphere(BaseExperiment):
+    """Sphere class."""
+
     r"""Simple Sphere function, common benchmark for optimization algorithms.
 
     Sphere function parameterized by the formula:

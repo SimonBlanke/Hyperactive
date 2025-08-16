@@ -1,4 +1,5 @@
-# Author: Simon Blanke
+"""hyper_optimizer module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
@@ -10,6 +11,8 @@ from .optimizer_attributes import OptimizerAttributes
 
 
 class HyperOptimizer(OptimizerAttributes):
+    """HyperOptimizer class."""
+
     def __init__(self, **opt_params):
         super().__init__()
         self.opt_params = opt_params
@@ -31,6 +34,7 @@ class HyperOptimizer(OptimizerAttributes):
         memory_warm_start,
         verbosity,
     ):
+        """Set up search parameters."""
         self.objective_function = objective_function
         self.s_space = s_space
         self.n_iter = n_iter
@@ -53,6 +57,7 @@ class HyperOptimizer(OptimizerAttributes):
             self.verbosity = []
 
     def convert_results2hyper(self):
+        """Convert Results2Hyper function."""
         self.eval_times = sum(self.gfo_optimizer.eval_times)
         self.iter_times = sum(self.gfo_optimizer.iter_times)
 
@@ -105,6 +110,7 @@ class HyperOptimizer(OptimizerAttributes):
         self.conv = self.gfo_optimizer.conv
 
     def search(self, nth_process, p_bar):
+        """Search function."""
         self._setup_process(nth_process)
 
         gfo_wrapper_model = ObjectiveFunction(

@@ -1,4 +1,5 @@
-# copyright: hyperactive developers, MIT License (see LICENSE file)
+"""opt_cv module for Hyperactive optimization."""
+
 
 from collections.abc import Callable
 from typing import Union
@@ -166,4 +167,5 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
 
     @property
     def fit_successful(self):
+        """Fit Successful function."""
         self._fit_successful

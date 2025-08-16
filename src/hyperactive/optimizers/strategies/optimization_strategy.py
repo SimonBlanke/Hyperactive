@@ -1,4 +1,5 @@
-# Author: Simon Blanke
+"""optimization_strategy module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
@@ -7,6 +8,8 @@ from .optimizer_attributes import OptimizerAttributes
 
 
 class BaseOptimizationStrategy(OptimizerAttributes):
+    """BaseOptimizationStrategy class."""
+
     def __init__(self):
         super().__init__()
 
@@ -27,6 +30,7 @@ class BaseOptimizationStrategy(OptimizerAttributes):
         memory_warm_start,
         verbosity,
     ):
+        """Set up search parameters."""
         self.objective_function = objective_function
         self.s_space = s_space
         self.n_iter = n_iter
@@ -52,16 +56,19 @@ class BaseOptimizationStrategy(OptimizerAttributes):
 
     @property
     def max_time(self):
+        """Max Time function."""
         return self._max_time
 
     @max_time.setter
     def max_time(self, value):
+        """Max Time function."""
         self._max_time = value
 
         for optimizer_setup in self.optimizer_setup_l:
             optimizer_setup["optimizer"].max_time = value
 
     def search(self, nth_process, p_bar):
+        """Search function."""
         for optimizer_setup in self.optimizer_setup_l:
             hyper_opt = optimizer_setup["optimizer"]
             duration = optimizer_setup["duration"]

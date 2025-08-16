@@ -26,9 +26,11 @@ class ParticleSwarmOptimizer(_BaseGFOadapter):
     inertia : float
         The inertia of the swarm.
     cognitive_weight : float
-        A factor of the movement towards the personal best position of the individual optimizers in the population.
+        A factor of the movement towards the personal best position of the
+        individual optimizers in the population.
     social_weight : float
-        A factor of the movement towards the personal best position of the individual optimizers in the population.
+        A factor of the movement towards the personal best position of the
+        individual optimizers in the population.
     temp_weight : float
         The temperature weight of the swarm.
     n_iter : int, default=100

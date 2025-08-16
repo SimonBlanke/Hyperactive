@@ -1,6 +1,9 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Results printing utilities for hyperparameter optimization.
+
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 import logging
 
@@ -10,6 +13,8 @@ indent = "  "
 
 
 class PrintResults:
+    """PrintResults class."""
+
     def __init__(self, opt_pros, verbosity):
         self.opt_pros = opt_pros
         self.verbosity = verbosity
@@ -56,6 +61,7 @@ class PrintResults:
         print(" ")
 
     def align_para_names(self, para_names):
+        """Align Para Names function."""
         str_lengths = [len(str_) for str_ in para_names]
         max_length = max(str_lengths)
 
@@ -123,6 +129,7 @@ class PrintResults:
         print(" ")
 
     def print_process(self, results, nth_process):
+        """Print Process function."""
         verbosity = self.verbosity
         objective_function = self.opt_pros[nth_process].objective_function
         search_space = self.opt_pros[nth_process].s_space.search_space

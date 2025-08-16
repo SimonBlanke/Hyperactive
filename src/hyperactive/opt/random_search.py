@@ -67,7 +67,7 @@ class RandomSearchSk(BaseOptimizer):
         for p in param_distributions:
             for name, v in p.items():
                 if self._is_distribution(v):
-                    # Assume scipy frozen distribution – nothing to check
+                    # Assume scipy frozen distribution - nothing to check
                     continue
 
                 if isinstance(v, np.ndarray) and v.ndim > 1:
@@ -82,7 +82,8 @@ class RandomSearchSk(BaseOptimizer):
 
                 if len(v) == 0:
                     raise ValueError(
-                        f"Parameter values for ({name}) need to be a non-empty sequence."
+                        f"Parameter values for ({name}) need to be a "
+                        "non-empty sequence."
                     )
 
     def _run(

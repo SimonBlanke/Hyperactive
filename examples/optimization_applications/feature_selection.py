@@ -1,8 +1,8 @@
 """
-This example shows how to select the best features for a model 
-and dataset. 
+This example shows how to select the best features for a model
+and dataset.
 
-The boston dataset has 13 features, therefore we have 13 search space 
+The boston dataset has 13 features, therefore we have 13 search space
 dimensions for the feature selection.
 
 The function "get_feature_indices" returns the list of features that

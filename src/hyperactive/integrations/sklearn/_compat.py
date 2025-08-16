@@ -1,7 +1,6 @@
-"""
-Internal helpers that bridge behavioural differences between
-scikit-learn versions.  Import *private* scikit-learn symbols **only**
-here and nowhere else.
+"""Internal helpers that bridge behavioural differences between scikit-learn versions.
+
+Import *private* scikit-learn symbols **only** here and nowhere else.
 
 Copyright: Hyperactive contributors
 License: MIT
@@ -10,7 +9,7 @@ License: MIT
 from __future__ import annotations
 
 import warnings
-from typing import Any, Dict
+from typing import Any
 
 import sklearn
 from packaging import version
@@ -63,12 +62,13 @@ if _SK_VERSION < version.parse("1.7"):
     # Still exists → re-export
     from sklearn.utils.deprecation import _deprecate_Xt_in_inverse_transform
 else:
-    # Removed in 1.7 → provide drop-in replacement
-    def _deprecate_Xt_in_inverse_transform(  # noqa: N802  keep sklearn’s name
+    # Removed in 1.7 - provide drop-in replacement
+    def _deprecate_Xt_in_inverse_transform(  # noqa: N802  keep sklearn's name
         X: Any | None,
         Xt: Any | None,
     ):
-        """
+        """Handle deprecation of Xt parameter in inverse_transform.
+
         scikit-learn ≤1.6 accepted both the old `Xt` parameter and the new
         `X` parameter for `inverse_transform`.  When only `Xt` is given we
         return `Xt` and raise a deprecation warning (same behaviour that
@@ -92,9 +92,9 @@ except ImportError:  # fallback for future releases
 
     def _check_method_params(  # type: ignore[override]  # noqa: N802
         X,
-        params: Dict[str, Any],
+        params: dict[str, Any],
     ):
-        # passthrough – rely on estimator & indexable for validation
+        # passthrough - rely on estimator & indexable for validation
         return params
 
 

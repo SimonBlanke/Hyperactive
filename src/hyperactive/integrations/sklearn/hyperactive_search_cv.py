@@ -1,9 +1,12 @@
-# Author: Simon Blanke
-# Email: simon.blanke@yahoo.com
-# License: MIT License
+"""Hyperactive cross-validation search for scikit-learn integration.
+
+Author: Simon Blanke
+Email: simon.blanke@yahoo.com
+License: MIT License
+"""
 
 from collections.abc import Callable
-from typing import Dict, Type, Union
+from typing import Union
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
@@ -19,16 +22,17 @@ from .checks import Checks
 
 
 class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
-    """
-    HyperactiveSearchCV class for hyperparameter tuning using cross-validation with sklearn estimators.
+    """HyperactiveSearchCV class for hyperparameter tuning with sklearn.
+
+    This class provides a hyperparameter tuning interface compatible with sklearn.
 
     Parameters
     ----------
     - estimator: SklearnBaseEstimator
         The estimator to be tuned.
-    - params_config: Dict[str, list]
+    - params_config: dict[str, list]
         Dictionary containing the hyperparameter search space.
-    - optimizer: Union[str, Type[RandomSearchOptimizer]], optional
+    - optimizer: Union[str, type[RandomSearchOptimizer]], optional
         The optimizer to be used for hyperparameter search, default is "default".
     - n_iter: int, optional
         Number of parameter settings that are sampled, default is 100.
@@ -56,8 +60,8 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
     def __init__(
         self,
         estimator: "SklearnBaseEstimator",
-        params_config: Dict[str, list],
-        optimizer: Union[str, Type[RandomSearchOptimizer]] = "default",
+        params_config: dict[str, list],
+        optimizer: Union[str, type[RandomSearchOptimizer]] = "default",
         n_iter: int = 100,
         *,
         scoring: Union[Callable, str, None] = None,
@@ -163,4 +167,5 @@ class HyperactiveSearchCV(BaseEstimator, _BestEstimator_, Checks):
 
     @property
     def fit_successful(self):
+        """Fit Successful function."""
         self._fit_successful

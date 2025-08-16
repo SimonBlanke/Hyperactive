@@ -24,7 +24,8 @@ class PatternSearch(_BaseGFOadapter):
     n_positions : int
         Number of positions that the pattern consists of.
     pattern_size : float
-        The initial size of the patterns in percentage of the size of the search space in the corresponding dimension.
+        The initial size of the patterns in percentage of the size of the search
+        space in the corresponding dimension.
     reduction : float
         The factor that reduces the size of the pattern if no better position is found.
     n_iter : int, default=100

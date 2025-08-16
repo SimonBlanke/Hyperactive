@@ -74,7 +74,7 @@ class PowellsMethod(_BaseGFOadapter):
     """
 
     _tags = {
-        "info:name": "Powell’s Method",
+        "info:name": "Powell's Method",
         "info:local_vs_global": "local",
         "info:explore_vs_exploit": "exploit",
         "info:compute": "low",

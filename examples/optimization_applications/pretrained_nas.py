@@ -1,17 +1,17 @@
 """
 This script describes how to save time during the optimization by
 using a pretrained model. It is similar to the transer learning example,
-but here you do the training and model creation of the pretrained model 
+but here you do the training and model creation of the pretrained model
 yourself.
 
-The problem is that most of the optimization time is "waisted" by 
+The problem is that most of the optimization time is "waisted" by
 training the model. The time to find a new position to explore by
-Hyperactive is very small compared to the training time of 
+Hyperactive is very small compared to the training time of
 neural networks. This means, that we can do more optimization
-if we keep the training time as little as possible. 
+if we keep the training time as little as possible.
 
 The idea of pretrained neural architecture search is to pretrain a complete model one time.
-In the next step we remove the layers that should be optimized 
+In the next step we remove the layers that should be optimized
 and make the remaining layers not-trainable.
 
 This results in a partial, pretrained, not-trainable model that will be
@@ -20,7 +20,7 @@ used during the Hyperactive optimization.
 You can now add layers to the partial model in the objective function
 and add the parameters or layers that will be optimized by Hyperactive.
 
-With each iteration of the optimization run we are only training 
+With each iteration of the optimization run we are only training
 the added layers of the model. This saves a lot of training time.
 
 """

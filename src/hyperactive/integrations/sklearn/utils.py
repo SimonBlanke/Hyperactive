@@ -1,4 +1,5 @@
-# Author: Simon Blanke
+"""utils module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
@@ -20,6 +21,7 @@ def _check_refit(search_cv, attr):
 
 def _estimator_has(attr):
     def check(self):
+        """Check function."""
         _check_refit(self, attr)
         if hasattr(self, "best_estimator_"):
             # raise an AttributeError if `attr` does not exist
