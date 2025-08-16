@@ -150,6 +150,7 @@ class TestAllObjects(BaseFixtureGenerator, _TestAllObjects):
     def test_valid_object_class_tags(self, object_class):
         """Check that object class tags are in self.valid_tags."""
         # stepout for estimators with base classes in other packages
+        # e.g., sktime BaseForecaster, BaseClassifier, used in hyperactive.integrations
         cls_type = object_class.get_class_tag("object_type", None)
         if cls_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
             return None
@@ -159,6 +160,7 @@ class TestAllObjects(BaseFixtureGenerator, _TestAllObjects):
     def test_valid_object_tags(self, object_instance):
         """Check that object tags are in self.valid_tags."""
         # stepout for estimators with base classes in other packages
+        # e.g., sktime BaseForecaster, BaseClassifier, used in hyperactive.integrations
         obj_type = object_instance.get_tag("object_type", None)
         if obj_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
             return None
