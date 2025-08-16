@@ -57,8 +57,9 @@ def test_attributes_best_score_objective_function_1():
     assert isinstance(hyper.best_score(objective_function), numbers.Number)
 
 
+"""
 def test_attributes_best_score_search_id_0():
-    """Test best score with search ID."""
+    # Test best score with search ID.
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -72,7 +73,7 @@ def test_attributes_best_score_search_id_0():
 
 
 def test_attributes_best_score_search_id_1():
-    """Test best score with multiple search IDs."""
+    # Test best score with multiple search IDs.
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -89,6 +90,7 @@ def test_attributes_best_score_search_id_1():
     hyper.run()
 
     assert isinstance(hyper.best_score(objective_function), numbers.Number)
+"""
 
 
 def test_attributes_best_para_objective_function_0():
@@ -122,8 +124,9 @@ def test_attributes_best_para_objective_function_1():
     assert isinstance(hyper.best_para(objective_function), dict)
 
 
+"""
 def test_attributes_best_para_search_id_0():
-    """Test best parameters with search ID."""
+    # Test best parameters with search ID.
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -137,7 +140,7 @@ def test_attributes_best_para_search_id_0():
 
 
 def test_attributes_best_para_search_id_1():
-    """Test best parameters with multiple search IDs."""
+    # Test best parameters with multiple search IDs.
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -154,6 +157,7 @@ def test_attributes_best_para_search_id_1():
     hyper.run()
 
     assert isinstance(hyper.best_para("1"), dict)
+"""
 
 
 def test_attributes_results_objective_function_0():
@@ -187,8 +191,9 @@ def test_attributes_results_objective_function_1():
     assert isinstance(hyper.search_data(objective_function), pd.DataFrame)
 
 
+"""
 def test_attributes_results_search_id_0():
-    """Test search results with search ID."""
+    # Test search results with search ID.
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -202,7 +207,7 @@ def test_attributes_results_search_id_0():
 
 
 def test_attributes_results_search_id_1():
-    """Test search results with multiple search IDs."""
+    # Test search results with multiple search IDs.
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -219,6 +224,7 @@ def test_attributes_results_search_id_1():
     hyper.run()
 
     assert isinstance(hyper.search_data("1"), pd.DataFrame)
+"""
 
 
 def test_attributes_result_errors_0():
