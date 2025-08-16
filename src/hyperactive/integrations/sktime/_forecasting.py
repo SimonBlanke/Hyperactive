@@ -234,18 +234,6 @@ class ForecastingOptCV(_DelegatedForecaster):
         if self.refit:
             self.best_forecaster_.fit(y=y, X=X, fh=fh)
 
-        # Raise error if all fits in evaluate failed because all score values are NaN.
-        if self.best_index_ == -1:
-            raise RuntimeError(
-                f"""All fits of forecaster failed,
-                set error_score='raise' to see the exceptions.
-                Failed forecaster: {self.forecaster}"""
-            )
-
-        # Refit model with best parameters.
-        if self.refit:
-            self.best_forecaster_.fit(y=y, X=X, fh=fh)
-
         return self
 
     def _predict(self, fh, X):
