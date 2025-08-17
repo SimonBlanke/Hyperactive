@@ -143,14 +143,7 @@ class GridSearchSk(BaseOptimizer):
                         "to be a non-empty sequence."
                     )
 
-    def _solve(
-        self,
-        experiment,
-        param_grid,
-        error_score,
-        backend,
-        backend_params,
-    ):
+    def _solve(self, experiment, param_grid, error_score, backend, backend_params):
         """Run the optimization search process."""
         self._check_param_grid(param_grid)
         candidate_params = list(ParameterGrid(param_grid))
