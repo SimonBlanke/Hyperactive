@@ -65,6 +65,11 @@ test = [
   "torch",
   "tf_keras",
 ]
+test_parallel_backends = [
+  "dask",
+  "joblib",
+  'ray >=2.40.0; python_version < "3.13"',
+]
 all_extras = [
   "hyperactive[integrations]",
   "optuna<5",

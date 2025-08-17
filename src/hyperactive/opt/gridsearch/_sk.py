@@ -7,6 +7,8 @@ import numpy as np
 from sklearn.model_selection import ParameterGrid
 
 from hyperactive.base import BaseOptimizer
+from hyperactive.opt._common import _score_params
+from hyperactive.utils.parallel import parallelize
 
 
 class GridSearchSk(BaseOptimizer):
@@ -17,8 +19,45 @@ class GridSearchSk(BaseOptimizer):
     param_grid : dict[str, list]
         The search space to explore. A dictionary with parameter
         names as keys and a numpy array as values.
+
     error_score : float, default=np.nan
         The score to assign if an error occurs during the evaluation of a parameter set.
+
+    backend : {"dask", "loky", "multiprocessing", "threading", "ray"}, default = "None".
+        Parallelization backend to use in the search process.
+
+        - "None": executes loop sequentally, simple list comprehension
+        - "loky", "multiprocessing" and "threading": uses ``joblib.Parallel`` loops
+        - "joblib": custom and 3rd party ``joblib`` backends, e.g., ``spark``
+        - "dask": uses ``dask``, requires ``dask`` package in environment
+        - "ray": uses ``ray``, requires ``ray`` package in environment
+
+    backend_params : dict, optional
+        additional parameters passed to the backend as config.
+        Directly passed to ``utils.parallel.parallelize``.
+        Valid keys depend on the value of ``backend``:
+
+        - "None": no additional parameters, ``backend_params`` is ignored
+        - "loky", "multiprocessing" and "threading": default ``joblib`` backends
+          any valid keys for ``joblib.Parallel`` can be passed here, e.g., ``n_jobs``,
+          with the exception of ``backend`` which is directly controlled by ``backend``.
+          If ``n_jobs`` is not passed, it will default to ``-1``, other parameters
+          will default to ``joblib`` defaults.
+        - "joblib": custom and 3rd party ``joblib`` backends, e.g., ``spark``.
+          any valid keys for ``joblib.Parallel`` can be passed here, e.g., ``n_jobs``,
+          ``backend`` must be passed as a key of ``backend_params`` in this case.
+          If ``n_jobs`` is not passed, it will default to ``-1``, other parameters
+          will default to ``joblib`` defaults.
+        - "dask": any valid keys for ``dask.compute`` can be passed, e.g., ``scheduler``
+
+        - "ray": The following keys can be passed:
+
+            - "ray_remote_args": dictionary of valid keys for ``ray.init``
+            - "shutdown_ray": bool, default=True; False prevents ``ray`` from shutting
+                down after parallelization.
+            - "logger_name": str, default="ray"; name of the logger to use.
+            - "mute_warnings": bool, default=False; if True, suppresses warnings
+
     experiment : BaseExperiment, optional
         The experiment to optimize parameters for.
         Optional, can be passed later via ``set_params``.
@@ -53,17 +92,29 @@ class GridSearchSk(BaseOptimizer):
 
     Best parameters can also be accessed via the attributes:
     >>> best_params = grid_search.best_params_
+
+    To parallelize the search, set the ``backend`` and ``backend_params``:
+    >>> grid_search = GridSearch(
+    ...     param_grid,
+    ...     backend="joblib",
+    ...     backend_params={"n_jobs": -1},
+    ...     experiment=sklearn_exp,
+    ... )
     """
 
     def __init__(
         self,
         param_grid=None,
         error_score=np.nan,
+        backend="None",
+        backend_params=None,
         experiment=None,
     ):
         self.experiment = experiment
         self.param_grid = param_grid
         self.error_score = error_score
+        self.backend = backend
+        self.backend_params = backend_params
 
         super().__init__()
 
@@ -91,19 +142,23 @@ class GridSearchSk(BaseOptimizer):
                         "to be a non-empty sequence."
                     )
 
-    def _solve(self, experiment, param_grid, error_score):
+    def _solve(self, experiment, param_grid, error_score, backend, backend_params):
         """Run the optimization search process."""
         self._check_param_grid(param_grid)
         candidate_params = list(ParameterGrid(param_grid))
 
-        scores = []
-        for candidate_param in candidate_params:
-            try:
-                score = experiment(**candidate_param)
-            except Exception:  # noqa: B904
-                # Catch all exceptions and assign error_score
-                score = error_score
-            scores.append(score)
+        meta = {
+            "experiment": experiment,
+            "error_score": error_score,
+        }
+
+        scores = parallelize(
+            fun=_score_params,
+            iter=candidate_params,
+            meta=meta,
+            backend=backend,
+            backend_params=backend_params,
+        )
 
         best_index = np.argmin(scores)
         best_params = candidate_params[best_index]
@@ -170,4 +225,15 @@ class GridSearchSk(BaseOptimizer):
             "param_grid": param_grid,
         }
 
-        return [params_sklearn, params_ackley]
+        params = [params_sklearn, params_ackley]
+
+        from hyperactive.utils.parallel import _get_parallel_test_fixtures
+
+        parallel_fixtures = _get_parallel_test_fixtures()
+
+        for x in parallel_fixtures:
+            new_ackley = params_ackley.copy()
+            new_ackley.update(x)
+            params.append(new_ackley)
+
+        return params
