@@ -85,10 +85,6 @@ jobs:
 
       - name: Test with pytest
         run: |
-          python -m pytest tests -p no:warnings
-
-      - name: Test with pytest
-        run: |
           python -m pytest src/hyperactive -p no:warnings
 
   test-all-extras:
@@ -120,10 +116,6 @@ jobs:
 
       - name: Show dependencies
         run: python -m pip list
-
-      - name: Test with pytest
-        run: |
-          python -m pytest tests --cov=hyperactive --cov-report=term-missing --cov-report=xml -p no:warnings
 
       - name: Test with pytest
         run: |
