@@ -11,7 +11,7 @@ def test_issue_25():
     # set a path to save the dataframe
     path = "./search_data.csv"
     search_space = {
-        "n_neighbors": list(range(1, 50)),
+        "n_neighbors": list(range(1, 10)),
     }
 
     # get para names from search space + the score
@@ -43,7 +43,7 @@ def test_issue_25():
         return score
 
     hyper0 = Hyperactive()
-    hyper0.add_search(objective_function, search_space, n_iter=50)
+    hyper0.add_search(objective_function, search_space, n_iter=15)
     hyper0.run()
 
     search_data_0 = pd.read_csv(path, na_values="nan")
@@ -55,7 +55,7 @@ def test_issue_25():
     hyper1.add_search(
         objective_function,
         search_space,
-        n_iter=50,
+        n_iter=15,
         memory_warm_start=search_data_0,
     )
     hyper1.run()

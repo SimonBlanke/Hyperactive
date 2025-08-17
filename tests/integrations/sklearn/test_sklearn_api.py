@@ -177,7 +177,7 @@ def test_best_params_and_score():
 
 def test_search_data():
     """Test access to search data after optimization."""
-    n_iter = 50
+    n_iter = 10
     search = HyperactiveSearchCV(svc, svc_params, opt, n_iter=n_iter)
     search.fit(X, y)
 

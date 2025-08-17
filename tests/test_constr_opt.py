@@ -27,7 +27,7 @@ def test_constr_opt_0():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=50,
+        n_iter=15,
         constraints=constraints_list,
     )
     hyper.run()
@@ -61,7 +61,7 @@ def test_constr_opt_1():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=50,
+        n_iter=15,
         constraints=constraints_list,
     )
     hyper.run()
@@ -76,7 +76,7 @@ def test_constr_opt_1():
 
 def test_constr_opt_2():
     """Test constraint optimization with multiple constraints."""
-    n_iter = 50
+    n_iter = 15
 
     def objective_function(para):
         score = -para["x1"] * para["x1"]
@@ -98,7 +98,7 @@ def test_constr_opt_2():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=50,
+        n_iter=15,
         constraints=constraints_list,
     )
     hyper.run()

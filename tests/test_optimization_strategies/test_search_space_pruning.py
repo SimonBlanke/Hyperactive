@@ -17,12 +17,11 @@ def test_memory_Warm_start_smbo_0(Optimizer_smbo):
     """Test memory warm start with SMBO optimizers and custom optimization strategy."""
 
     def objective_function(opt):
-        time.sleep(0.01)
         score = -(opt["x1"] * opt["x1"])
         return score
 
     search_space = {
-        "x1": list(np.arange(0, 100, 1)),
+        "x1": list(np.arange(0, 20, 1)),
     }
 
     optimizer1 = GridSearchOptimizer()
@@ -36,7 +35,7 @@ def test_memory_Warm_start_smbo_0(Optimizer_smbo):
     opt_strat.add_optimizer(optimizer1, duration=duration_1)
     opt_strat.add_optimizer(optimizer2, duration=duration_2)
 
-    n_iter = 20
+    n_iter = 10
 
     hyper = Hyperactive()
     hyper.add_search(

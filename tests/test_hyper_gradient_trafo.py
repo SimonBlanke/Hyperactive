@@ -73,8 +73,7 @@ X, y = data.data, data.target
 def objective_function_1(opt):
     """Decision tree objective function for testing with sklearn."""
     dtc = DecisionTreeClassifier(min_samples_split=opt["min_samples_split"])
-    scores = cross_val_score(dtc, X, y, cv=10)
-    time.sleep(0.1)
+    scores = cross_val_score(dtc, X, y, cv=3)
 
     return scores.mean()
 

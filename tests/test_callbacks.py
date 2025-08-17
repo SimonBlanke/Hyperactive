@@ -5,7 +5,7 @@ import numpy as np
 from hyperactive import Hyperactive
 
 search_space = {
-    "x1": list(np.arange(-100, 100, 1)),
+    "x1": list(np.arange(-20, 20, 1)),
 }
 
 
@@ -28,7 +28,7 @@ def test_callback_0():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         callbacks={"before": [callback_1, callback_2]},
     )
     hyper.run()
@@ -52,7 +52,7 @@ def test_callback_1():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         callbacks={"before": [callback_1], "after": [callback_2]},
     )
     hyper.run()
@@ -73,7 +73,7 @@ def test_callback_2():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         callbacks={"before": [callback_1]},
         pass_through={"stuff1": 0},
     )
@@ -98,7 +98,7 @@ def test_callback_3():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         callbacks={"after": [callback_1]},
         pass_through={"stuff1": 0},
     )

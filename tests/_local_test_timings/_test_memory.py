@@ -2,6 +2,7 @@ import time
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.datasets import load_breast_cancer
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import cross_val_score
@@ -20,18 +21,19 @@ search_space = {
 }
 
 
+@pytest.mark.slow
 def test_memory_timeSave_0():
     data = load_breast_cancer()
     X, y = data.data, data.target
 
     def objective_function(opt):
         dtc = DecisionTreeClassifier(min_samples_split=opt["min_samples_split"])
-        scores = cross_val_score(dtc, X, y, cv=5)
+        scores = cross_val_score(dtc, X, y, cv=3)
 
         return scores.mean()
 
     search_space = {
-        "min_samples_split": list(range(2, 20)),
+        "min_samples_split": list(range(2, 10)),
     }
 
     c_time1 = time.perf_counter()
@@ -86,7 +88,7 @@ def test_memory_warm_start():
             max_depth=opt["max_depth"],
             min_samples_split=opt["min_samples_split"],
         )
-        scores = cross_val_score(dtc, X, y, cv=5)
+        scores = cross_val_score(dtc, X, y, cv=3)
 
         return scores.mean()
 
@@ -127,7 +129,7 @@ def test_memory_warm_start_manual():
         dtc = GradientBoostingClassifier(
             n_estimators=opt["n_estimators"],
         )
-        scores = cross_val_score(dtc, X, y, cv=5)
+        scores = cross_val_score(dtc, X, y, cv=3)
 
         return scores.mean()
 

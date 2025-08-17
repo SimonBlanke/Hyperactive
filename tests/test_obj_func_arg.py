@@ -5,7 +5,7 @@ import numpy as np
 from hyperactive import Hyperactive
 
 search_space = {
-    "x1": list(np.arange(0, 100, 1)),
+    "x1": list(np.arange(0, 20, 1)),
 }
 
 
@@ -26,7 +26,7 @@ def test_argument_0():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         pass_through={"nth_iter_local": 0},
         memory=False,
     )

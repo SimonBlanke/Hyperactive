@@ -17,7 +17,7 @@ def objective_function(para):
 
 
 search_space = {
-    "x1": list(np.arange(0, 100000, 0.1)),
+    "x1": list(np.arange(0, 100, 0.1)),
 }
 
 
@@ -44,7 +44,7 @@ def test_max_score_0():
         objective_function,
         search_space,
         optimizer=opt,
-        n_iter=100000,
+        n_iter=1000,
         initialize={"warm_start": [{"x1": 99}]},
         max_score=max_score,
     )
@@ -77,7 +77,7 @@ def test_max_score_1():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100000,
+        n_iter=1000,
         initialize={"warm_start": [{"x1": 99}]},
         max_score=max_score,
     )

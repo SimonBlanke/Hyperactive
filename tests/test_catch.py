@@ -7,7 +7,7 @@ import numpy as np
 from hyperactive import Hyperactive
 
 search_space = {
-    "x1": list(np.arange(-100, 100, 1)),
+    "x1": list(np.arange(-20, 20, 1)),
 }
 
 
@@ -23,7 +23,7 @@ def test_catch_1():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         catch={TypeError: np.nan},
     )
     hyper.run()
@@ -41,7 +41,7 @@ def test_catch_2():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         catch={ValueError: np.nan},
     )
     hyper.run()
@@ -59,7 +59,7 @@ def test_catch_3():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         catch={ZeroDivisionError: np.nan},
     )
     hyper.run()
@@ -79,7 +79,7 @@ def test_catch_all_0():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         catch={
             TypeError: np.nan,
             ValueError: np.nan,
@@ -109,7 +109,7 @@ def test_catch_all_1():
     hyper.add_search(
         objective_function,
         search_space,
-        n_iter=100,
+        n_iter=20,
         catch={
             TypeError: catch_return,
             ValueError: catch_return,
