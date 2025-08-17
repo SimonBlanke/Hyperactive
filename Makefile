@@ -90,7 +90,7 @@ install-no-extras-for-test:
 	python -m pip install .[test]
 
 install-all-extras-for-test:
-	python -m pip install .[all_extras, test, test_parallel_backends, sktime-integration]
+	python -m pip install .[all_extras,test,test_parallel_backends,sktime-integration]
 
 install-editable:
 	pip install -e .
