@@ -79,14 +79,14 @@ class RandomSearchSk(BaseOptimizer):
     ...     "C": uniform(loc=0.1, scale=10),
     ...     "gamma": ["scale", "auto", 0.001, 0.01, 0.1, 1],
     ... }
-    >>> 
+    >>>
     >>> # Sequential execution
     >>> random_search = RandomSearchSk(
     ...     param_distributions=param_distributions,
     ...     n_iter=20,
     ...     backend="None",
     ... )
-    >>> 
+    >>>
     >>> # Parallel execution with threading backend
     >>> random_search_parallel = RandomSearchSk(
     ...     param_distributions=param_distributions,

@@ -1,7 +1,7 @@
 """
 GridSearchSk Optimizer Example
 
-This example demonstrates how to use the GridSearchSk optimizer with 
+This example demonstrates how to use the GridSearchSk optimizer with
 loky backend for parallel execution.
 """
 
