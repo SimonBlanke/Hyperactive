@@ -149,4 +149,4 @@ jobs:
 
       - name: Run sklearn integration tests for ${{ matrix.sklearn-version }}
         run: |
-          python -m pytest -x -p no:warnings tests/integrations/sklearn/
+          python -m pytest -x -p no:warnings src/hyperactive/integrations/sklearn/
