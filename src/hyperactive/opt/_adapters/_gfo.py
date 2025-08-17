@@ -189,7 +189,7 @@ class _BaseGFOadapter(BaseOptimizer):
             "n_iter": 100,
         }
 
-        from hyperactive.experiment.toy import Ackley
+        from hyperactive.experiment.bench import Ackley
 
         ackley_exp = Ackley.create_test_instance()
         params_ackley = {
