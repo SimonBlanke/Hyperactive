@@ -9,7 +9,7 @@ def search_space_setup(size=1000):
 
     pad_full = list(range(0, size))
     pad_cat = list(range(int(size / 3)))
-    pad_10 = list(range(int(size ** 0.1)))
+    pad_10 = list(range(int(size**0.1)))
 
     search_space_0 = {
         "x1": pad_full,
@@ -76,29 +76,6 @@ def search_space_setup(size=1000):
     }
 
     class class1:
-        pass
-
-    class class2:
-        pass
-
-    class class3:
-        pass
-
-    def wr_func_1():
-        return class1
-
-    def wr_func_2():
-        return class2
-
-    def wr_func_3():
-        return class3
-
-    search_space_6 = {
-        "x1": pad_cat,
-        "class_1": [wr_func_1, wr_func_2, wr_func_3],
-    }
-
-    class class1:
         def __init__(self):
             pass
 
@@ -118,6 +95,11 @@ def search_space_setup(size=1000):
 
     def wr_func_3():
         return class3()
+
+    search_space_6 = {
+        "x1": pad_cat,
+        "class_1": [wr_func_1, wr_func_2, wr_func_3],
+    }
 
     search_space_7 = {
         "x1": pad_cat,

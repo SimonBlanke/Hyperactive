@@ -1,22 +1,28 @@
-import pytest
-import numpy as np
+"""Test module for GFO wrapper optimizer functionality."""
 
+import numpy as np
+import pytest
 from tqdm import tqdm
-from ._parametrize import optimizers
+
 from hyperactive.search_space import SearchSpace
+
+from ._parametrize import optimizers
 
 
 def objective_function(opt):
+    """Return standard quadratic objective function."""
     score = -opt["x1"] * opt["x1"]
     return score
 
 
 def objective_function_m5(opt):
+    """Quadratic objective function shifted by -5."""
     score = -(opt["x1"] - 5) * (opt["x1"] - 5)
     return score
 
 
 def objective_function_p5(opt):
+    """Quadratic objective function shifted by +5."""
     score = -(opt["x1"] + 5) * (opt["x1"] + 5)
     return score
 
@@ -62,6 +68,7 @@ search_space_para = (
 @pytest.mark.parametrize(*search_space_para)
 @pytest.mark.parametrize(*optimizers)
 def test_gfo_opt_wrapper_0(Optimizer, search_space, objective):
+    """Test GFO optimizer wrapper functionality with various configurations."""
     search_space = search_space
     objective_function = objective
 

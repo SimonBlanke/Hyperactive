@@ -1,17 +1,15 @@
-import pytest
+"""Test module for sklearn API integration."""
+
 import numpy as np
-
-from sklearn import svm, datasets
-from sklearn.naive_bayes import GaussianNB
+import pytest
+from sklearn import datasets, svm
 from sklearn.decomposition import PCA
-from sklearn.datasets import make_blobs
 from sklearn.exceptions import NotFittedError
-
+from sklearn.naive_bayes import GaussianNB
 from sklearn.utils.validation import check_is_fitted
 
 from hyperactive.integrations import HyperactiveSearchCV
 from hyperactive.optimizers import RandomSearchOptimizer
-
 
 iris = datasets.load_iris()
 X, y = iris.data, iris.target
@@ -34,6 +32,7 @@ opt = RandomSearchOptimizer()
 
 
 def test_fit():
+    """Test fitting the HyperactiveSearchCV estimator."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -41,6 +40,7 @@ def test_fit():
 
 
 def test_not_fitted():
+    """Test behavior when estimator is not fitted."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     assert not search.fit_successful
 
@@ -51,6 +51,7 @@ def test_not_fitted():
 
 
 def test_false_params():
+    """Test error handling with invalid parameters."""
     search = HyperactiveSearchCV(svc, nb_params, opt)
     with pytest.raises(ValueError):
         search.fit(X, y)
@@ -59,6 +60,7 @@ def test_false_params():
 
 
 def test_score():
+    """Test scoring functionality of the fitted estimator."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
     score = search.score(X, y)
@@ -67,6 +69,7 @@ def test_score():
 
 
 def test_classes_():
+    """Test access to fitted classes."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -74,6 +77,7 @@ def test_classes_():
 
 
 def test_score_samples():
+    """Test score_samples method raises AttributeError."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -82,6 +86,7 @@ def test_score_samples():
 
 
 def test_predict():
+    """Test prediction functionality."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
     result = search.predict(X)
@@ -90,6 +95,7 @@ def test_predict():
 
 
 def test_predict_proba():
+    """Test predict_proba method behavior."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -104,6 +110,7 @@ def test_predict_proba():
 
 
 def test_predict_log_proba():
+    """Test predict_log_proba method behavior."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -118,6 +125,7 @@ def test_predict_log_proba():
 
 
 def test_decision_function():
+    """Test decision_function method."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
     result = search.decision_function(X)
@@ -126,6 +134,7 @@ def test_decision_function():
 
 
 def test_transform():
+    """Test transform method behavior."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -140,6 +149,7 @@ def test_transform():
 
 
 def test_inverse_transform():
+    """Test inverse_transform method behavior."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -154,6 +164,7 @@ def test_inverse_transform():
 
 
 def test_best_params_and_score():
+    """Test access to best parameters and score."""
     search = HyperactiveSearchCV(svc, svc_params, opt)
     search.fit(X, y)
 
@@ -165,6 +176,7 @@ def test_best_params_and_score():
 
 
 def test_search_data():
+    """Test access to search data after optimization."""
     n_iter = 50
     search = HyperactiveSearchCV(svc, svc_params, opt, n_iter=n_iter)
     search.fit(X, y)

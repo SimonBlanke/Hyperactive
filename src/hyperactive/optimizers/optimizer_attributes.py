@@ -1,9 +1,12 @@
-# Author: Simon Blanke
+"""optimizer_attributes module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
 
 class OptimizerAttributes:
+    """OptimizerAttributes class."""
+
     def __init__(self):
         self.best_para = None
         self.best_score = None

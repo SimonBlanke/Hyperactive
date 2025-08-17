@@ -1,7 +1,7 @@
 """
-This example shows how you can search for useful feature 
+This example shows how you can search for useful feature
 transformations for your dataset. This example is very similar to
-"feature_selection". It adds the possibility to change the features 
+"feature_selection". It adds the possibility to change the features
 with the numpy functions in the search space.
 
 """

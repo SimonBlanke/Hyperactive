@@ -1,6 +1,6 @@
 """
-This example shows how you can search for the best models in each layer in a 
-stacking ensemble. 
+This example shows how you can search for the best models in each layer in a
+stacking ensemble.
 
 We want to create a stacking ensemble with 3 layers:
     - a top layer with one model
