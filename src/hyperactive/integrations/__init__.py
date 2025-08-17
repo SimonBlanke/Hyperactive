@@ -3,9 +3,8 @@
 copyright: hyperactive developers, MIT License (see LICENSE file)
 """
 
-from hyperactive.integrations.sklearn import HyperactiveSearchCV, OptCV
+from hyperactive.integrations.sklearn import OptCV
 
 __all__ = [
-    "HyperactiveSearchCV",
     "OptCV",
 ]
