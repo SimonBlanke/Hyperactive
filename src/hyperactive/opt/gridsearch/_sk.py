@@ -1,4 +1,5 @@
 """Grid search optimizer."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from collections.abc import Sequence

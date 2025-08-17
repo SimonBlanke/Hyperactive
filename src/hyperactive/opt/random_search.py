@@ -69,6 +69,32 @@ class RandomSearchSk(BaseOptimizer):
         Callable returning a scalar score when invoked with keyword
         arguments matching a parameter set.
 
+    Example
+    -------
+    Random search with different backend configurations:
+
+    >>> from hyperactive.opt import RandomSearchSk
+    >>> from scipy.stats import uniform
+    >>> param_distributions = {
+    ...     "C": uniform(loc=0.1, scale=10),
+    ...     "gamma": ["scale", "auto", 0.001, 0.01, 0.1, 1],
+    ... }
+    >>>
+    >>> # Sequential execution
+    >>> random_search = RandomSearchSk(
+    ...     param_distributions=param_distributions,
+    ...     n_iter=20,
+    ...     backend="None",
+    ... )
+    >>>
+    >>> # Parallel execution with threading backend
+    >>> random_search_parallel = RandomSearchSk(
+    ...     param_distributions=param_distributions,
+    ...     n_iter=20,
+    ...     backend="threading",
+    ...     backend_params={"n_jobs": 2},
+    ... )
+
     Attributes
     ----------
     best_params_ : dict[str, Any]
