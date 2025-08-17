@@ -605,7 +605,7 @@ def objective_function(opt):
     return score, other_info
 ```
 
-When you take a look at the results (a pandas dataframe with all iteration information) after the run has ended you will see the additional information in it. The reason we need a dictionary for this is because Hyperactive needs to know the names of the additonal parameters. The score does not need that, because it is always called "score" in the results. You can run [this example script](https://github.com/SimonBlanke/Hyperactive/blob/master/examples/optimization_applications/multiple_scores.py) if you want to give it a try.
+When you take a look at the results (a pandas dataframe with all iteration information) after the run has ended you will see the additional information in it. The reason we need a dictionary for this is because Hyperactive needs to know the names of the additonal parameters. The score does not need that, because it is always called "score" in the results. You can run [this example script](https://github.com/SimonBlanke/Hyperactive/blob/main/examples/optimization_applications/multiple_scores.py) if you want to give it a try.
 
 </details>
 
@@ -1031,7 +1031,7 @@ Each of the following optimizer classes can be initialized and passed to the "ad
   This way you can use all the new documentation and examples from the current repository.
 
   Or you could continue using the old version and use an old repository branch as documentation.
-  You can do that by selecting the corresponding branch. (top right of the repository. The default is "master" or "main")
+  You can do that by selecting the corresponding branch. (top right of the repository. The default is "main")
   So if your major version is older (e.g. v2.1.0) you can select the 2.x.x branch to get the old repository for that version.
 
 - <b>Provide example code for error reproduction </b>
@@ -1134,4 +1134,4 @@ initialize = {"grid": 4, "random": 12, "vertices": 4}
 
 ## License
 
-[![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/main/LICENSE)
