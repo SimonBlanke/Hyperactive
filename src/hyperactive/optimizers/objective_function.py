@@ -1,12 +1,13 @@
-# Author: Simon Blanke
+"""objective_function module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
-
 
 from .dictionary import DictClass
 
 
 def gfo2hyper(search_space, para):
+    """Gfo2Hyper function."""
     values_dict = {}
     for _, key in enumerate(search_space.keys()):
         pos_ = int(para[key])
@@ -16,6 +17,8 @@ def gfo2hyper(search_space, para):
 
 
 class ObjectiveFunction(DictClass):
+    """ObjectiveFunction class."""
+
     def __init__(self, objective_function, optimizer, callbacks, catch, nth_process):
         super().__init__()
 
@@ -28,10 +31,13 @@ class ObjectiveFunction(DictClass):
         self.nth_iter = 0
 
     def run_callbacks(self, type_):
+        """Run Callbacks function."""
         if self.callbacks and type_ in self.callbacks:
             [callback(self) for callback in self.callbacks[type_]]
 
     def __call__(self, search_space):
+        """Make object callable with search space."""
+
         # wrapper for GFOs
         def _model(para):
             self.nth_iter = len(self.optimizer.pos_l)

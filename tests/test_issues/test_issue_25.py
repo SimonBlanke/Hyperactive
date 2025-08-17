@@ -1,3 +1,5 @@
+"""Test module for issue #25 reproduction."""
+
 import numpy as np
 import pandas as pd
 
@@ -5,6 +7,7 @@ from hyperactive import Hyperactive
 
 
 def test_issue_25():
+    """Test issue 25 - memory warm start with CSV file persistence."""
     # set a path to save the dataframe
     path = "./search_data.csv"
     search_space = {
@@ -30,14 +33,10 @@ def test_issue_25():
 
         # append parameter dictionary to pandas dataframe
         search_data = pd.read_csv(path, na_values="nan")
-        search_data_new = pd.DataFrame(
-            parameter_dict, columns=para_names, index=[0]
-        )
+        search_data_new = pd.DataFrame(parameter_dict, columns=para_names, index=[0])
 
         # search_data = search_data.append(search_data_new)
-        search_data = pd.concat(
-            [search_data, search_data_new], ignore_index=True
-        )
+        search_data = pd.concat([search_data, search_data_new], ignore_index=True)
 
         search_data.to_csv(path, index=False, na_rep="nan")
 
@@ -49,7 +48,7 @@ def test_issue_25():
 
     search_data_0 = pd.read_csv(path, na_values="nan")
     """
-    the second run should be much faster than before, 
+    the second run should be much faster than before,
     because Hyperactive already knows most parameters/scores
     """
     hyper1 = Hyperactive()

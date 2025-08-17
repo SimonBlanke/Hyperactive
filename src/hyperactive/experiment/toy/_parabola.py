@@ -5,6 +5,8 @@ from hyperactive.base import BaseExperiment
 
 
 class Parabola(BaseExperiment):
+    """Parabola class."""
+
     r"""2D parabola, common benchmark for optimization algorithms.
 
     Parabola parameterized by the formula:

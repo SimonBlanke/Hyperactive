@@ -1,13 +1,8 @@
-# Author: Simon Blanke
+"""utils module for Hyperactive optimization."""
+
 # Email: simon.blanke@yahoo.com
 # License: MIT License
 
-
-from sklearn.utils.validation import (
-    indexable,
-    _check_method_params,
-    check_is_fitted,
-)
 
 # NOTE Implementations of following methods from:
 # https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/model_selection/_search.py
@@ -26,6 +21,7 @@ def _check_refit(search_cv, attr):
 
 def _estimator_has(attr):
     def check(self):
+        """Check function."""
         _check_refit(self, attr)
         if hasattr(self, "best_estimator_"):
             # raise an AttributeError if `attr` does not exist

@@ -7,6 +7,8 @@ from hyperactive.base import BaseExperiment
 
 
 class Sphere(BaseExperiment):
+    """Sphere class."""
+
     r"""Simple Sphere function, common benchmark for optimization algorithms.
 
     Sphere function parameterized by the formula:
@@ -80,7 +82,7 @@ class Sphere(BaseExperiment):
             Additional metadata about the search.
         """
         params_vec = np.array([params[f"x{i}"] for i in range(self.n_dim)])
-        return np.sum(params_vec ** 2) + self.const, {}
+        return np.sum(params_vec**2) + self.const, {}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

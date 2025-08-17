@@ -74,7 +74,7 @@ class StochasticHillClimbing(_BaseGFOadapter):
     >>> hillclimbing = StochasticHillClimbing(experiment=sklearn_exp, **config)
 
     3. running the hill climbing search:
-    >>> best_params = hillclimbing.run()
+    >>> best_params = hillclimbing.solve()
 
     Best parameters can also be accessed via the attributes:
     >>> best_params = hillclimbing.best_params_
@@ -138,8 +138,6 @@ class StochasticHillClimbing(_BaseGFOadapter):
         dict with str keys
             The test parameters dictionary.
         """
-        import numpy as np
-
         params = super().get_test_params()
         experiment = params[0]["experiment"]
         more_params = {

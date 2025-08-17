@@ -8,7 +8,7 @@ data = load_diabetes()
 X, y = data.data, data.target
 
 """
-Hyperactive cannot handle multi objective optimization. 
+Hyperactive cannot handle multi objective optimization.
 But we can achive something similar with a workaround.
 The following example searches for the highest cv-score and the lowest training time.
 It is possible by creating an objective/score from those two variables.

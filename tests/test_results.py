@@ -1,11 +1,14 @@
-import pytest
+"""Test module for results functionality."""
+
 import numpy as np
 import pandas as pd
+import pytest
 
 from hyperactive import Hyperactive
 
 
 def objective_function(opt):
+    """Return simple quadratic objective function for results testing."""
     score = -opt["x1"] * opt["x1"]
     return score
 
@@ -16,6 +19,7 @@ search_space = {
 
 
 def test_attributes_results_0():
+    """Test search data returns pandas DataFrame."""
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
@@ -24,6 +28,7 @@ def test_attributes_results_0():
 
 
 def test_attributes_results_1():
+    """Test search data contains search space columns."""
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
@@ -32,6 +37,7 @@ def test_attributes_results_1():
 
 
 def test_attributes_results_2():
+    """Test search data contains x1 column."""
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
@@ -40,6 +46,7 @@ def test_attributes_results_2():
 
 
 def test_attributes_results_3():
+    """Test search data contains score column."""
     hyper = Hyperactive()
     hyper.add_search(objective_function, search_space, n_iter=100)
     hyper.run()
@@ -48,6 +55,7 @@ def test_attributes_results_3():
 
 
 def test_attributes_results_4():
+    """Test warm start initialization with specific value."""
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -61,6 +69,7 @@ def test_attributes_results_4():
 
 
 def test_attributes_results_5():
+    """Test warm start initialization with different value."""
     hyper = Hyperactive()
     hyper.add_search(
         objective_function,
@@ -79,6 +88,8 @@ def test_attributes_results_5():
 
 
 def test_attributes_results_6():
+    """Test memory disabled allows duplicate search space points."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -105,6 +116,8 @@ def test_attributes_results_6():
 
 
 def test_attributes_results_7():
+    """Test search data without times parameter excludes timing columns."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -122,11 +135,13 @@ def test_attributes_results_7():
     hyper.run()
 
     search_data = hyper.search_data(objective_function)
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         search_data["eval_times"]
 
 
 def test_attributes_results_8():
+    """Test search data without times parameter excludes iteration timing."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score
@@ -144,11 +159,13 @@ def test_attributes_results_8():
     hyper.run()
 
     search_data = hyper.search_data(objective_function)
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(Exception):
         search_data["iter_times"]
 
 
 def test_attributes_results_9():
+    """Test search data with times parameter includes timing columns."""
+
     def objective_function(opt):
         score = -opt["x1"] * opt["x1"]
         return score

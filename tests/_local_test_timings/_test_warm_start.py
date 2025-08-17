@@ -1,7 +1,4 @@
-import time
 import pytest
-import numpy as np
-import pandas as pd
 
 from hyperactive import Hyperactive
 
@@ -31,6 +28,3 @@ def test_warm_start_0(search_space):
         initialize={"warm_start": [search_data0]},
     )
     hyper1.run()
-
-
-

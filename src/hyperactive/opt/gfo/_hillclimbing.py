@@ -72,7 +72,7 @@ class HillClimbing(_BaseGFOadapter):
     >>> hillclimbing = HillClimbing(experiment=sklearn_exp, **config)
 
     3. running the hill climbing search:
-    >>> best_params = hillclimbing.run()
+    >>> best_params = hillclimbing.solve()
 
     Best parameters can also be accessed via the attributes:
     >>> best_params = hillclimbing.best_params_

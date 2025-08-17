@@ -1,6 +1,5 @@
-import pytest
 import numpy as np
-
+import pytest
 
 from hyperactive import Hyperactive
 from hyperactive.optimizers.strategies import CustomOptimizationStrategy

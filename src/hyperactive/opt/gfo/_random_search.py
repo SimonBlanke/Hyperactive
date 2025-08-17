@@ -59,7 +59,7 @@ class RandomSearch(_BaseGFOadapter):
     >>> optimizer = RandomSearch(experiment=sklearn_exp, **config)
 
     3. running the optimization:
-    >>> best_params = optimizer.run()
+    >>> best_params = optimizer.solve()
 
     Best parameters can also be accessed via:
     >>> best_params = optimizer.best_params_
@@ -113,8 +113,6 @@ class RandomSearch(_BaseGFOadapter):
         dict with str keys
             The test parameters dictionary.
         """
-        import numpy as np
-
         params = super().get_test_params()
         experiment = params[0]["experiment"]
         more_params = {

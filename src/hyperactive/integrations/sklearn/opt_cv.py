@@ -1,4 +1,4 @@
-# copyright: hyperactive developers, MIT License (see LICENSE file)
+"""opt_cv module for Hyperactive optimization."""
 
 from collections.abc import Callable
 from typing import Union
@@ -11,7 +11,7 @@ from hyperactive.integrations.sklearn.best_estimator import (
 )
 from hyperactive.integrations.sklearn.checks import Checks
 
-from ._compat import _check_method_params, _safe_validate_X_y, _safe_refit
+from ._compat import _check_method_params, _safe_refit, _safe_validate_X_y
 
 
 class OptCV(BaseEstimator, _BestEstimator_, Checks):
@@ -112,7 +112,6 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
         self : object
             Fitted Estimator.
         """
-
         X, y = self._check_data(X, y)
 
         fit_params = _check_method_params(X, params=fit_params)
@@ -128,7 +127,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
 
         optimizer = self.optimizer.clone()
         optimizer.set_params(experiment=experiment)
-        best_params = optimizer.run()
+        best_params = optimizer.solve()
 
         self.best_params_ = best_params
         self.best_estimator_ = clone(self.estimator).set_params(**best_params)
@@ -167,4 +166,5 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
 
     @property
     def fit_successful(self):
+        """Fit Successful function."""
         self._fit_successful
