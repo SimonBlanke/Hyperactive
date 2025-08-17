@@ -1,4 +1,4 @@
-"""Ackley function, common benchmark for optimization algorithms."""
+"""Sphere function, a common benchmark for optimization algorithms."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
@@ -6,46 +6,47 @@ import numpy as np
 from hyperactive.base import BaseExperiment
 
 
-class Ackley(BaseExperiment):
-    """Ackley class."""
+class Sphere(BaseExperiment):
+    """Sphere class."""
 
-    r"""Ackley function, common benchmark for optimization algorithms.
+    r"""Simple Sphere function, common benchmark for optimization algorithms.
 
-    The Ackley function is a non-convex function used to test optimization algorithms.
-    It is defined as:
+    Sphere function parameterized by the formula:
 
     .. math::
-        f(x) = -a \cdot \exp(-\frac{b}{\sqrt{d}\left\|x\right\|}) - \exp(\frac{1}{d} \sum_{i=1}^d\cos (c x_i) ) + a + \exp(1)
+        f(x_1, x_2, \ldots, x_n) = \sum_{i=1}^n x_i^2 + c
 
-    where :math:`a` (= `a`), :math:`b` (= `b`), and :math:`c` (= `c`) are constants,
-    :math:`d` (= `d`) is the number of dimensions of the real input vector :math:`x`,
-    and :math:`\left\|x\right\|` is the Euclidean norm of the vector :math:`x`.
+    where :math:`c` is a constant offset added to the sum of squares,
+    and :math:`n` is the number of dimensions.
+    Both :math:`c` (= `const`) and :math:`n` (= `n_dim`) can be set as parameters.
 
-    The components of the function argument :math:`x`
+    The function arguments :math:`x_1`, :math:`x_2`, ..., :math:`x_n`
     are the input variables of the `score` method,
-    and are set as `x0`, `x1`, ..., `x[d]` respectively.
+    and are set as `x0`, `x1`, ..., `x[n]` respectively.
+
+    This function is a common test function for optimization algorithms.
 
     Parameters
     ----------
-    a : float, optional, default=20
-        Amplitude constant used in the calculation of the Ackley function.
-    b : float, optional, default=0.2
-        Decay constant used in the calculation of the Ackley function.
-    c : float, optional, default=2*pi
-        Frequency constant used in the calculation of the Ackley function.
-    d : int, optional, default=2
-        Number of dimensions for the Ackley function. The default is 2.
+    const : float, optional, default=0
+        A constant offset added to the sum of squares.
+    n_dim : int, optional, default=2
+        The number of dimensions for the Sphere function. The default is 2.
 
     Example
     -------
-    >>> from hyperactive.experiment.toy import Ackley
-    >>> ackley = Ackley(a=20)
-    >>> params = {"x0": 1, "x1": 2}
-    >>> score, add_info = ackley.score(params)
+    >>> from hyperactive.experiment.bench import Sphere
+    >>> sphere = Sphere(const=0, n_dim=3)
+    >>> params = {"x0": 1, "x1": 2, "x2": 3}
+    >>> score, add_info = sphere.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = ackley(x0=1, x1=2)
-    """  # noqa: E501
+    >>> score = sphere(x0=1, x1=2, x2=3)
+
+    Different number of dimensions changes the parameter names:
+    >>> sphere4D = Sphere(const=0, n_dim=4)
+    >>> score4D = sphere4D(x0=1, x1=2, x2=3, x3=4)
+    """
 
     _tags = {
         "property:randomness": "deterministic",  # random or deterministic
@@ -56,15 +57,14 @@ class Ackley(BaseExperiment):
         # whether higher or lower scores are better
     }
 
-    def __init__(self, a=20, b=0.2, c=2 * np.pi, d=2):
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
+    def __init__(self, const=0, n_dim=2):
+        self.const = const
+        self.n_dim = n_dim
+
         super().__init__()
 
     def _paramnames(self):
-        return [f"x{i}" for i in range(self.d)]
+        return [f"x{i}" for i in range(self.n_dim)]
 
     def _evaluate(self, params):
         """Evaluate the parameters.
@@ -81,16 +81,8 @@ class Ackley(BaseExperiment):
         dict
             Additional metadata about the search.
         """
-        x_vec = np.array([params[f"x{i}"] for i in range(self.d)])
-
-        loss1 = -self.a * np.exp(-self.b * np.sqrt(np.sum(x_vec**2) / self.d))
-        loss2 = -np.exp(np.sum(np.cos(self.c * x_vec)) / self.d)
-        loss3 = np.exp(1)
-        loss4 = self.a
-
-        loss = loss1 + loss2 + loss3 + loss4
-
-        return loss, {}
+        params_vec = np.array([params[f"x{i}"] for i in range(self.n_dim)])
+        return np.sum(params_vec**2) + self.const, {}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -125,7 +117,9 @@ class Ackley(BaseExperiment):
             `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
-        return [{"a": 0}, {"a": 20, "d": 42}, {"a": -42, "b": 0.5, "c": 1, "d": 10}]
+        params0 = {}
+        params1 = {"n_dim": 3, "const": 1.0}
+        return [params0, params1]
 
     @classmethod
     def _get_score_params(self):
@@ -140,7 +134,6 @@ class Ackley(BaseExperiment):
         list of dict
             The parameters to be used for scoring.
         """
-        params0 = {"x0": 0, "x1": 0}
-        params1 = {f"x{i}": i + 3 for i in range(42)}
-        params2 = {f"x{i}": i**2 for i in range(10)}
-        return [params0, params1, params2]
+        score_params0 = {"x0": 0, "x1": 0}
+        score_params1 = {"x0": 1, "x1": 2, "x2": 3}
+        return [score_params0, score_params1]
