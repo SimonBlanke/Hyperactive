@@ -7,9 +7,9 @@ loky backend for parallel execution.
 
 import numpy as np
 from hyperactive.opt import GridSearchSk
-from hyperactive.experiment.toy import Sphere
+from hyperactive.experiment.bench import Sphere
 
-# Define the optimization problem using a toy sphere function
+# Define the optimization problem using a benchmark sphere function
 # The sphere function f(x,y) = x² + y² has its minimum at (0,0)
 sphere_experiment = Sphere(n_dim=2)
 
@@ -29,5 +29,5 @@ grid_search = GridSearchSk(
     experiment=sphere_experiment,
 )
 
-best_params = grid_search.run()
+best_params = grid_search.solve()
 print(f"Best params: {best_params}, Score: {grid_search.best_score_:.6f}")
