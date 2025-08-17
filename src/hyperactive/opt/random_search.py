@@ -202,9 +202,9 @@ class RandomSearchSk(BaseOptimizer):
 
     @classmethod
     def get_test_params(cls, parameter_set: str = "default"):
-        """Provide deterministic toy configurations for unit tests."""
+        """Provide deterministic benchmark configurations for unit tests."""
+        from hyperactive.experiment.bench import Ackley
         from hyperactive.experiment.integrations import SklearnCvExperiment
-        from hyperactive.experiment.toy import Ackley
 
         # 1) ML example (Iris + SVC)
         sklearn_exp = SklearnCvExperiment.create_test_instance()

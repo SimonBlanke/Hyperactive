@@ -214,7 +214,7 @@ class GridSearchSk(BaseOptimizer):
             "param_grid": param_grid,
         }
 
-        from hyperactive.experiment.toy import Ackley
+        from hyperactive.experiment.bench import Ackley
 
         ackley_exp = Ackley.create_test_instance()
         param_grid = {

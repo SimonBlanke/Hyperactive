@@ -32,7 +32,7 @@ class Parabola(BaseExperiment):
 
     Example
     -------
-    >>> from hyperactive.experiment.toy import Parabola
+    >>> from hyperactive.experiment.bench import Parabola
     >>> parabola = Parabola(a=1.0, b=0.0, c=0.0)
     >>> params = {"x": 1, "y": 2}
     >>> score, add_info = parabola.score(params)
