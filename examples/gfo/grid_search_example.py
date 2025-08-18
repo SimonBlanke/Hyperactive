@@ -33,9 +33,9 @@ experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 # Define discrete grid - grid search requires explicit discrete values
 search_space = {
     "n_estimators": [10, 50, 100, 200],         # Discrete values only
-    "max_depth": [5, 10, 15, None],             # Include None for unlimited depth
+    "max_depth": [5, 10, 15, 20],               # Discrete depth values
     "min_samples_split": [2, 5, 10],            # Small discrete set
-    "max_features": ["sqrt", "log2"],           # Categorical choices
+    "min_samples_leaf": [1, 2, 5],              # Discrete leaf values
 }
 
 # Calculate total combinations
