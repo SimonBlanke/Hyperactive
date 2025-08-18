@@ -131,7 +131,7 @@ def main():
     # Configure NSGAIIIOptimizer
     optimizer = NSGAIIIOptimizer(
         param_space=param_space,
-        n_trials=60,  # More trials needed for many objectives
+        n_trials=60,
         random_state=42,
         experiment=experiment,
         population_size=24,  # Larger population for many objectives

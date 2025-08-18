@@ -81,7 +81,7 @@ def main():
     # Configure GPOptimizer
     optimizer = GPOptimizer(
         param_space=param_space,
-        n_trials=25,  # Fewer trials - GP is sample efficient
+        n_trials=10,
         random_state=42,
         experiment=experiment,
         n_startup_trials=8,  # Random initialization before GP modeling

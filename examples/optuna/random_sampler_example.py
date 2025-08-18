@@ -65,7 +65,7 @@ def main():
     # Configure RandomOptimizer
     optimizer = RandomOptimizer(
         param_space=param_space,
-        n_trials=30,  # More trials to show random behavior
+        n_trials=20,
         random_state=42,  # For reproducible random sampling
         experiment=experiment,
     )

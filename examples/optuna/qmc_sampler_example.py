@@ -112,7 +112,7 @@ def main():
     # Configure QMCOptimizer
     optimizer = QMCOptimizer(
         param_space=param_space,
-        n_trials=32,  # Power of 2 often works well for QMC
+        n_trials=8,  # Power of 2 often works well for QMC
         random_state=42,
         experiment=experiment,
         qmc_type="sobol",  # Sobol or Halton sequences

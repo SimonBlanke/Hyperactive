@@ -95,7 +95,7 @@ def main():
     # Configure CmaEsOptimizer
     optimizer = CmaEsOptimizer(
         param_space=param_space,
-        n_trials=40,
+        n_trials=20,
         random_state=42,
         experiment=experiment,
         sigma0=0.2,  # Initial step size (exploration vs exploitation)

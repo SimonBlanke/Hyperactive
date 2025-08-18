@@ -80,7 +80,7 @@ def main():
 
     # Create experiment
     estimator = KNeighborsClassifier()
-    experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=5)
+    experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 
     # Define search space - DISCRETE values only for grid search
     param_space = {
