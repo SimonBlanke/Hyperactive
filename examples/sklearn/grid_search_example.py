@@ -8,7 +8,7 @@ compatibility with Hyperactive's unified interface.
 
 Characteristics:
 - Direct integration with sklearn's GridSearchCV
-- Optimized for sklearn estimators and pipelines  
+- Optimized for sklearn estimators and pipelines
 - Supports sklearn's built-in cross-validation strategies
 - Familiar sklearn-style parameter specification
 - Efficient parallel execution when n_jobs > 1

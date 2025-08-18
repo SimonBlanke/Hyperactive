@@ -3,7 +3,7 @@ Bayesian Optimization Example - Gaussian Process-based Optimization
 
 Bayesian optimization uses a probabilistic model (typically Gaussian Process) to
 model the objective function and an acquisition function to decide where to sample
-next. This approach is highly sample-efficient and particularly useful when 
+next. This approach is highly sample-efficient and particularly useful when
 function evaluations are expensive.
 
 Characteristics:

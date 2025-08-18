@@ -84,7 +84,7 @@ jobs:
         run: python -m pip list
 
       - name: Test core package
-        run: | 
+        run: |
           python -m pytest src/hyperactive -p no:warnings
 
   test-all-extras:
@@ -155,7 +155,7 @@ jobs:
     name: test-examples
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -176,7 +176,7 @@ jobs:
             # For pull requests, compare with base branch
             CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^examples/" || true)
           fi
-          
+
           if [ -n "$CHANGED_FILES" ]; then
             echo "examples_changed=true" >> $GITHUB_OUTPUT
             echo "Examples changed:"

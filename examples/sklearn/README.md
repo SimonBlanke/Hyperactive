@@ -21,7 +21,7 @@ python random_search_example.py
 
 The sklearn backend is ideal when you:
 - Want to leverage sklearn's mature, well-tested implementations
-- Need compatibility with existing sklearn pipelines and workflows  
+- Need compatibility with existing sklearn pipelines and workflows
 - Require sklearn's specific cross-validation and scoring features
 - Prefer sklearn's parameter specification format
 - Want to benefit from sklearn's optimized parallel execution
@@ -52,12 +52,12 @@ param_space = {
 }
 ```
 
-### Random Search - Ranges and Distributions  
+### Random Search - Ranges and Distributions
 ```python
 param_space = {
     "n_estimators": (10, 200),              # Continuous range (sampled as int)
     "max_depth": (1, 20),                   # Integer range
-    "min_samples_split": (2, 20),           # Integer range  
+    "min_samples_split": (2, 20),           # Integer range
     "max_features": ["sqrt", "log2", None], # Discrete choices
 }
 ```
@@ -112,8 +112,8 @@ Use sklearn's extensive scoring options:
 ```python
 # Single metric
 experiment = SklearnCvExperiment(
-    estimator=estimator, 
-    X=X, y=y, 
+    estimator=estimator,
+    X=X, y=y,
     cv=3,
     scoring='f1_macro'  # Use F1 score with macro averaging
 )
@@ -122,7 +122,7 @@ experiment = SklearnCvExperiment(
 experiment = SklearnCvExperiment(
     estimator=estimator,
     X=X, y=y,
-    cv=3, 
+    cv=3,
     scoring='accuracy'  # Primary scoring metric
 )
 ```
@@ -148,7 +148,7 @@ For large datasets, consider:
 ### GridSearchSk
 **Pros:**
 - Exhaustive coverage of parameter space
-- Deterministic and reproducible results  
+- Deterministic and reproducible results
 - Guarantees finding optimal solution within the grid
 - Good for small, well-defined parameter spaces
 
@@ -157,7 +157,7 @@ For large datasets, consider:
 - Requires discrete parameter values
 - Not suitable for high-dimensional spaces
 
-### RandomSearchSk  
+### RandomSearchSk
 **Pros:**
 - Scales well to high-dimensional spaces
 - Can sample from continuous distributions
@@ -216,6 +216,6 @@ param_space = {
 ## Further Reading
 
 - [Sklearn GridSearchCV Documentation](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html)
-- [Sklearn RandomizedSearchCV Documentation](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html)  
+- [Sklearn RandomizedSearchCV Documentation](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html)
 - [Sklearn Model Selection Guide](https://scikit-learn.org/stable/model_selection.html)
 - [Cross-validation Strategies](https://scikit-learn.org/stable/modules/cross_validation.html)

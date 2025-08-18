@@ -1,7 +1,7 @@
 """
 Hill Climbing Example - Local Search Optimization
 
-Hill climbing is a local search algorithm that starts from a random point and 
+Hill climbing is a local search algorithm that starts from a random point and
 iteratively moves to neighboring solutions with better objective values. It's
 a simple but effective optimization strategy that can quickly find good local
 optima, especially when started from reasonable initial points.
@@ -33,7 +33,7 @@ experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 # Define search space - discrete values for hill climbing
 search_space = {
     "n_estimators": list(range(10, 201)),       # Discrete integer values
-    "max_depth": list(range(1, 21)),            # Discrete integer values  
+    "max_depth": list(range(1, 21)),            # Discrete integer values
     "min_samples_split": list(range(2, 21)),    # Discrete integer values
     "min_samples_leaf": list(range(1, 11)),     # Discrete integer values
 }

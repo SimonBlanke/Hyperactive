@@ -1,7 +1,7 @@
 """
 Sklearn Random Search Example - Native Sklearn RandomizedSearchCV Integration
 
-This example demonstrates using Hyperactive's sklearn backend with 
+This example demonstrates using Hyperactive's sklearn backend with
 RandomizedSearchCV. This provides access to sklearn's mature random search
 implementation with support for probability distributions and efficient
 sampling strategies.
@@ -35,7 +35,7 @@ experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 param_distributions = {
     "n_estimators": list(range(10, 201)),        # Discrete list (uniform sampling)
     "max_depth": list(range(1, 21)),             # Discrete integer range
-    "min_samples_split": list(range(2, 21)),     # Discrete integer range  
+    "min_samples_split": list(range(2, 21)),     # Discrete integer range
     "min_samples_leaf": list(range(1, 11)),      # Discrete integer range
     "max_features": ["sqrt", "log2", None],      # Discrete categorical choices
     "bootstrap": [True, False],                  # Binary choice

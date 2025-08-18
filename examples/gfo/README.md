@@ -44,7 +44,7 @@ python bayesian_optimization_example.py
 - **RandomSearch**: Pure random sampling - excellent baseline
 - **GridSearch**: Exhaustive enumeration of discrete grids
 
-### Local Search Methods  
+### Local Search Methods
 - **HillClimbing**: Greedy local search from starting points
 - **SimulatedAnnealing**: Hill climbing with probabilistic escapes
 - **StochasticHillClimbing**: Hill climbing with random moves
@@ -55,7 +55,7 @@ python bayesian_optimization_example.py
 - **DifferentialEvolution**: Evolution strategy for continuous spaces
 
 ### Advanced Methods
-- **BayesianOptimizer**: Gaussian Process-based optimization  
+- **BayesianOptimizer**: Gaussian Process-based optimization
 - **TreeStructuredParzenEstimators**: TPE algorithm (similar to Optuna's TPE)
 - **ForestOptimizer**: Random forest-based surrogate optimization
 
@@ -64,7 +64,7 @@ python bayesian_optimization_example.py
 ### Quick Decision Tree
 
 1. **Need a baseline?** → RandomSearch
-2. **Small discrete space?** → GridSearch  
+2. **Small discrete space?** → GridSearch
 3. **Expensive evaluations?** → BayesianOptimizer
 4. **Continuous optimization?** → ParticleSwarmOptimizer or BayesianOptimizer
 5. **Fast local optimization?** → HillClimbing
@@ -92,7 +92,7 @@ python bayesian_optimization_example.py
 All GFO algorithms support:
 - **Random state**: `random_state=42` for reproducibility
 - **Early stopping**: `early_stopping=10` trials without improvement
-- **Max score**: `max_score=0.99` stop when target reached  
+- **Max score**: `max_score=0.99` stop when target reached
 - **Warm start**: `initialize={"warm_start": [points]}` initial solutions
 
 ## Advanced Usage
@@ -103,7 +103,7 @@ All GFO algorithms support:
 random_opt = RandomSearch(n_trials=20, ...)
 initial_results = random_opt.solve()
 
-# Phase 2: Local refinement  
+# Phase 2: Local refinement
 hill_opt = HillClimbing(
     n_trials=30,
     initialize={"warm_start": [initial_results]}
@@ -117,13 +117,13 @@ final_results = hill_opt.solve()
 ```python
 param_space = {
     "learning_rate": (0.001, 0.1),      # Log scale recommended
-    "n_estimators": (10, 1000),         # Integer range  
+    "n_estimators": (10, 1000),         # Integer range
     "regularization": (0.0, 1.0),       # Bounded continuous
 }
 ```
 
 **Discrete/Categorical:**
-```python  
+```python
 param_space = {
     "algorithm": ["adam", "sgd", "rmsprop"],  # Categorical
     "layers": [1, 2, 3, 4, 5],               # Discrete integers
