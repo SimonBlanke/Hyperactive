@@ -1,7 +1,7 @@
 """
-GridSampler Example - Exhaustive Grid Search
+GridOptimizer Example - Exhaustive Grid Search
 
-The GridSampler performs exhaustive search over a discretized parameter grid.
+The GridOptimizer performs exhaustive search over a discretized parameter grid.
 It systematically evaluates every combination of specified parameter values,
 ensuring complete coverage but potentially requiring many evaluations.
 
@@ -20,7 +20,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import GridSampler
+from hyperactive.opt.optuna import GridOptimizer
 
 
 def grid_search_theory():
@@ -68,7 +68,7 @@ def demonstrate_curse_of_dimensionality():
 
 
 def main():
-    # === GridSampler Example ===
+    # === GridOptimizer Example ===
     # Exhaustive Grid Search
 
     grid_search_theory()
@@ -100,15 +100,15 @@ def main():
     #   print(f"  {param}: {values} ({len(values)} values)")
     # Total combinations: calculated above
 
-    # Configure GridSampler
-    optimizer = GridSampler(
+    # Configure GridOptimizer
+    optimizer = GridOptimizer(
         param_space=param_space,
         n_trials=total_combinations,  # Will evaluate all combinations
         random_state=42,  # For deterministic ordering
         experiment=experiment,
     )
 
-    # GridSampler Configuration:
+    # GridOptimizer Configuration:
     # n_trials: matches total combinations
     # search_space: automatically derived from param_space
     # Systematic evaluation of every combination

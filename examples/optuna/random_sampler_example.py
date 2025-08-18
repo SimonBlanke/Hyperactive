@@ -1,7 +1,7 @@
 """
-RandomSampler Example - Random Search
+RandomOptimizer Example - Random Search
 
-The RandomSampler performs pure random sampling from the parameter space.
+The RandomOptimizer performs pure random sampling from the parameter space.
 It serves as a baseline and is surprisingly effective for many problems,
 especially when the parameter space is high-dimensional or when you have
 limited computational budget.
@@ -21,7 +21,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import RandomSampler
+from hyperactive.opt.optuna import RandomOptimizer
 
 
 def objective_function_analysis():
@@ -36,7 +36,7 @@ def objective_function_analysis():
 
 
 def main():
-    # === RandomSampler Example ===
+    # === RandomOptimizer Example ===
     # Pure Random Search - Uniform Parameter Space Exploration
 
     objective_function_analysis()
@@ -62,15 +62,15 @@ def main():
     # for param, space in param_space.items():
     #   print(f"  {param}: {space}")
 
-    # Configure RandomSampler
-    optimizer = RandomSampler(
+    # Configure RandomOptimizer
+    optimizer = RandomOptimizer(
         param_space=param_space,
         n_trials=30,  # More trials to show random behavior
         random_state=42,  # For reproducible random sampling
         experiment=experiment,
     )
 
-    # RandomSampler Configuration:
+    # RandomOptimizer Configuration:
     # n_trials: configured above
     # random_state: set for reproducibility
     # No learning parameters - pure random sampling

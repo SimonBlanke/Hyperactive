@@ -1,7 +1,7 @@
 """
-GPSampler Example - Gaussian Process Bayesian Optimization
+GPOptimizer Example - Gaussian Process Bayesian Optimization
 
-The GPSampler uses Gaussian Processes to model the objective function and
+The GPOptimizer uses Gaussian Processes to model the objective function and
 select promising parameter configurations. It's particularly effective for
 expensive function evaluations and provides uncertainty estimates.
 
@@ -20,7 +20,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import GPSampler
+from hyperactive.opt.optuna import GPOptimizer
 
 
 def gaussian_process_theory():
@@ -50,7 +50,7 @@ def gaussian_process_theory():
 
 
 def main():
-    # === GPSampler Example ===
+    # === GPOptimizer Example ===
     # Gaussian Process Bayesian Optimization
 
     gaussian_process_theory()
@@ -78,8 +78,8 @@ def main():
     # for param, space in param_space.items():
     #   print(f"  {param}: {space}")
 
-    # Configure GPSampler
-    optimizer = GPSampler(
+    # Configure GPOptimizer
+    optimizer = GPOptimizer(
         param_space=param_space,
         n_trials=25,  # Fewer trials - GP is sample efficient
         random_state=42,
@@ -88,7 +88,7 @@ def main():
         deterministic_objective=False,  # Set True if objective is noise-free
     )
 
-    # GPSampler Configuration:
+    # GPOptimizer Configuration:
     # n_trials: configured above
     # n_startup_trials: random initialization
     # deterministic_objective: configures noise handling
@@ -145,7 +145,7 @@ def main():
     #  Assumes some smoothness in objective function
 
     # Comparison with TPESampler:
-    # GPSampler advantages:
+    # GPOptimizer advantages:
     #   + Principled uncertainty quantification
     #   + Better for expensive evaluations
     #   + Can handle constraints naturally

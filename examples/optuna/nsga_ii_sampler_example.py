@@ -1,5 +1,5 @@
 """
-NSGAIISampler Example - Multi-objective Optimization with NSGA-II
+NSGAIIOptimizer Example - Multi-objective Optimization with NSGA-II
 
 NSGA-II (Non-dominated Sorting Genetic Algorithm II) is designed for
 multi-objective optimization problems where you want to optimize multiple
@@ -23,7 +23,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import NSGAIISampler
+from hyperactive.opt.optuna import NSGAIIOptimizer
 
 
 class MultiObjectiveExperiment:
@@ -80,7 +80,7 @@ def nsga_ii_theory():
 
 
 def main():
-    # === NSGAIISampler Example ===
+    # === NSGAIIOptimizer Example ===
     # Multi-objective Optimization with NSGA-II
 
     nsga_ii_theory()
@@ -110,8 +110,8 @@ def main():
     # for param, space in param_space.items():
     #   print(f"  {param}: {space}")
 
-    # Configure NSGAIISampler
-    optimizer = NSGAIISampler(
+    # Configure NSGAIIOptimizer
+    optimizer = NSGAIIOptimizer(
         param_space=param_space,
         n_trials=50,  # Population evolves over multiple generations
         random_state=42,
@@ -121,7 +121,7 @@ def main():
         crossover_prob=0.9,  # Crossover probability
     )
 
-    # NSGAIISampler Configuration:
+    # NSGAIIOptimizer Configuration:
     # n_trials: configured above
     # population_size: for genetic algorithm
     # mutation_prob: mutation probability

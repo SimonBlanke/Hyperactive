@@ -1,5 +1,5 @@
 """
-NSGAIIISampler Example - Many-objective Optimization with NSGA-III
+NSGAIIIOptimizer Example - Many-objective Optimization with NSGA-III
 
 NSGA-III is an extension of NSGA-II specifically designed for many-objective
 optimization problems (typically 3+ objectives). It uses reference points
@@ -24,7 +24,7 @@ from sklearn.model_selection import cross_val_score
 import time
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import NSGAIIISampler
+from hyperactive.opt.optuna import NSGAIIIOptimizer
 
 
 class ManyObjectiveExperiment:
@@ -94,7 +94,7 @@ def nsga_iii_theory():
 
 
 def main():
-    # === NSGAIIISampler Example ===
+    # === NSGAIIIOptimizer Example ===
     # Many-objective Optimization with NSGA-III
 
     nsga_iii_theory()
@@ -128,8 +128,8 @@ def main():
     # for param, space in param_space.items():
     #   print(f"  {param}: {space}")
 
-    # Configure NSGAIIISampler
-    optimizer = NSGAIIISampler(
+    # Configure NSGAIIIOptimizer
+    optimizer = NSGAIIIOptimizer(
         param_space=param_space,
         n_trials=60,  # More trials needed for many objectives
         random_state=42,
@@ -139,7 +139,7 @@ def main():
         crossover_prob=0.9,  # Crossover probability
     )
 
-    # NSGAIIISampler Configuration:
+    # NSGAIIIOptimizer Configuration:
     # n_trials: configured above
     # population_size: larger for many objectives
     # mutation_prob: mutation probability

@@ -1,5 +1,5 @@
 """
-CmaEsSampler Example - Covariance Matrix Adaptation Evolution Strategy
+CmaEsOptimizer Example - Covariance Matrix Adaptation Evolution Strategy
 
 CMA-ES is a powerful evolution strategy particularly effective for continuous
 optimization problems. It adapts both the mean and covariance matrix of a
@@ -23,7 +23,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import mean_squared_error
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import CmaEsSampler
+from hyperactive.opt.optuna import CmaEsOptimizer
 
 
 def cmaes_theory():
@@ -47,7 +47,7 @@ def cmaes_theory():
 
 
 def main():
-    # === CmaEsSampler Example ===
+    # === CmaEsOptimizer Example ===
     # Covariance Matrix Adaptation Evolution Strategy
 
     # Check if cmaes is available
@@ -90,10 +90,10 @@ def main():
     # for param, space in param_space.items():
     #   print(f"  {param}: {space}")
     # Note: CMA-ES only works with continuous parameters
-    # For mixed parameter types, consider TPESampler or GPSampler
+    # For mixed parameter types, consider TPESampler or GPOptimizer
 
-    # Configure CmaEsSampler
-    optimizer = CmaEsSampler(
+    # Configure CmaEsOptimizer
+    optimizer = CmaEsOptimizer(
         param_space=param_space,
         n_trials=40,
         random_state=42,
@@ -102,7 +102,7 @@ def main():
         n_startup_trials=5,  # Random trials before CMA-ES starts
     )
 
-    # CmaEsSampler Configuration:
+    # CmaEsOptimizer Configuration:
     # n_trials: configured above
     # sigma0: initial step size
     # n_startup_trials: random trials before CMA-ES starts

@@ -1,7 +1,7 @@
 """
-QMCSampler Example - Quasi-Monte Carlo Sampling
+QMCOptimizer Example - Quasi-Monte Carlo Sampling
 
-The QMCSampler uses Quasi-Monte Carlo sequences (like Sobol or Halton)
+The QMCOptimizer uses Quasi-Monte Carlo sequences (like Sobol or Halton)
 to generate low-discrepancy samples. These sequences provide better
 coverage of the parameter space compared to purely random sampling.
 
@@ -25,7 +25,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import QMCSampler
+from hyperactive.opt.optuna import QMCOptimizer
 
 
 def qmc_theory():
@@ -81,7 +81,7 @@ def demonstrate_space_filling():
 
 
 def main():
-    # === QMCSampler Example ===
+    # === QMCOptimizer Example ===
     # Quasi-Monte Carlo Low-Discrepancy Sampling
 
     qmc_theory()
@@ -109,8 +109,8 @@ def main():
     # solver: ['liblinear', 'saga'] - Solver algorithm
     # penalty: ['l1', 'l2', 'elasticnet'] - Regularization type
 
-    # Configure QMCSampler
-    optimizer = QMCSampler(
+    # Configure QMCOptimizer
+    optimizer = QMCOptimizer(
         param_space=param_space,
         n_trials=32,  # Power of 2 often works well for QMC
         random_state=42,
@@ -119,7 +119,7 @@ def main():
         scramble=True,  # Randomized QMC (Owen scrambling)
     )
 
-    # QMCSampler Configuration:
+    # QMCOptimizer Configuration:
     # n_trials: 32 (power of 2 for better QMC properties)
     # qmc_type: 'sobol' sequence
     # scramble: True (randomized QMC)
