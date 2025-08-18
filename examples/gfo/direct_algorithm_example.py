@@ -32,18 +32,15 @@ experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 
 # Define search space - DIRECT works well with moderate-sized discrete spaces
 search_space = {
-    "n_estimators": list(range(10, 201, 20)),    # Discrete integer values (reduced)
-    "max_depth": list(range(1, 21, 2)),          # Discrete integer values (reduced)
+    "n_estimators": list(range(10, 201, 20)),  # Discrete integer values (reduced)
+    "max_depth": list(range(1, 21, 2)),  # Discrete integer values (reduced)
     "min_samples_split": list(range(2, 21, 2)),  # Discrete integer values (reduced)
-    "min_samples_leaf": list(range(1, 11)),      # Discrete integer values
+    "min_samples_leaf": list(range(1, 11)),  # Discrete integer values
 }
 
 # Configure DIRECT Algorithm
 optimizer = DirectAlgorithm(
-    search_space=search_space,
-    n_iter=30,
-    random_state=42,
-    experiment=experiment
+    search_space=search_space, n_iter=15, random_state=42, experiment=experiment
 )
 
 # Run optimization

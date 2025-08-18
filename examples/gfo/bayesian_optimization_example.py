@@ -22,7 +22,7 @@ from sklearn.model_selection import cross_val_score
 from hyperactive.experiment.integrations import SklearnCvExperiment
 from hyperactive.opt.gfo import BayesianOptimizer
 
-# Load dataset  
+# Load dataset
 X, y = load_wine(return_X_y=True)
 print(f"Dataset: Wine classification ({X.shape[0]} samples, {X.shape[1]} features)")
 
@@ -32,25 +32,35 @@ experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 
 # Define search space - discrete values for Bayesian optimization
 search_space = {
-    "n_estimators": list(range(10, 201, 10)),    # Discrete integer values (step 10)
-    "max_depth": list(range(1, 21)),             # Discrete integer values
-    "min_samples_split": list(range(2, 21)),     # Discrete integer values
-    "min_samples_leaf": list(range(1, 11)),      # Discrete integer values
+    "n_estimators": list(range(10, 201, 10)),  # Discrete integer values (step 10)
+    "max_depth": list(range(1, 21)),  # Discrete integer values
+    "min_samples_split": list(range(2, 21)),  # Discrete integer values
+    "min_samples_leaf": list(range(1, 11)),  # Discrete integer values
 }
 
 # Configure Bayesian Optimization
 # Provide some initial good points to help the GP model initialization
 warm_start_points = [
-    {"n_estimators": 100, "max_depth": 10, "min_samples_split": 5, "min_samples_leaf": 2},
-    {"n_estimators": 50, "max_depth": 15, "min_samples_split": 3, "min_samples_leaf": 1}
+    {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+    },
+    {
+        "n_estimators": 50,
+        "max_depth": 15,
+        "min_samples_split": 3,
+        "min_samples_leaf": 1,
+    },
 ]
 
 optimizer = BayesianOptimizer(
     search_space=search_space,
-    n_iter=35,
+    n_iter=15,
     random_state=42,
     initialize={"warm_start": warm_start_points},
-    experiment=experiment
+    experiment=experiment,
 )
 
 # Run optimization
@@ -60,6 +70,6 @@ optimizer = BayesianOptimizer(
 best_params = optimizer.solve()
 
 # Results
-print("\n=== Results ===")  
+print("\n=== Results ===")
 print(f"Best parameters: {best_params}")
 print("Bayesian optimization completed successfully")

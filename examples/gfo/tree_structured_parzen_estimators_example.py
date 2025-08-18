@@ -32,23 +32,28 @@ experiment = SklearnCvExperiment(estimator=estimator, X=X, y=y, cv=3)
 
 # Define search space
 search_space = {
-    "n_estimators": list(range(10, 201, 10)),    # Discrete integer values
-    "max_depth": list(range(1, 21)),             # Discrete integer values
-    "min_samples_split": list(range(2, 21)),     # Discrete integer values
-    "min_samples_leaf": list(range(1, 11)),      # Discrete integer values
+    "n_estimators": list(range(10, 201, 10)),  # Discrete integer values
+    "max_depth": list(range(1, 21)),  # Discrete integer values
+    "min_samples_split": list(range(2, 21)),  # Discrete integer values
+    "min_samples_leaf": list(range(1, 11)),  # Discrete integer values
 }
 
 # Configure Tree-structured Parzen Estimators
 warm_start_points = [
-    {"n_estimators": 100, "max_depth": 10, "min_samples_split": 5, "min_samples_leaf": 2}
+    {
+        "n_estimators": 100,
+        "max_depth": 10,
+        "min_samples_split": 5,
+        "min_samples_leaf": 2,
+    }
 ]
 
 optimizer = TreeStructuredParzenEstimators(
     search_space=search_space,
-    n_iter=35,
+    n_iter=15,
     random_state=42,
     initialize={"warm_start": warm_start_points},
-    experiment=experiment
+    experiment=experiment,
 )
 
 # Run optimization
