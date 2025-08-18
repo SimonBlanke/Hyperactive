@@ -109,6 +109,9 @@ class SklearnCvExperiment(BaseExperiment):
                 from sklearn.metrics import make_scorer
 
                 self._scoring = make_scorer(scoring)
+        else:
+            # scoring is a string (scorer name)
+            self._scoring = check_scoring(self.estimator, scoring=scoring)
         self.scorer_ = self._scoring
 
         # Set the sign of the scoring function
