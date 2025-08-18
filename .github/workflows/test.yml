@@ -83,9 +83,13 @@ jobs:
       - name: Show dependencies
         run: python -m pip list
 
-      - name: Test with pytest
-        run: |
+      - name: Test core package
+        run: | 
           python -m pytest src/hyperactive -p no:warnings
+
+      - name: Test additional tests
+        run: |
+          python -m pytest test -p no:warnings
 
   test-all-extras:
     name: test-all-extras
@@ -117,9 +121,13 @@ jobs:
       - name: Show dependencies
         run: python -m pip list
 
-      - name: Test with pytest
+      - name: Test core package
         run: |
           python -m pytest src/hyperactive -p no:warnings
+
+      - name: Test additional tests
+        run: |
+          python -m pytest test -p no:warnings
 
   test-sklearn-versions:
     name: test-sklearn-${{ matrix.sklearn-version }}-python-${{ matrix.python-version }}
