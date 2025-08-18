@@ -100,7 +100,7 @@ def main():
         "C": (0.001, 100),  # Regularization strength
         "l1_ratio": (0.0, 1.0),  # Elastic net mixing parameter
         "solver": ["liblinear", "saga"],  # Solver algorithm
-        "penalty": ["l1", "l2", "elasticnet"],  # Regularization type
+        "penalty": ["l1", "l2"],  # Regularization type
     }
 
     # Search Space:
