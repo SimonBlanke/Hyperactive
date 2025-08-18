@@ -59,7 +59,6 @@ except ImportError:
     print("  This example will demonstrate the interface but may fail at runtime.")
 print()
 
-cmaes_theory()
 
 # Create a continuous optimization problem
 X, y = make_regression(n_samples=200, n_features=10, noise=0.1, random_state=42)
@@ -106,7 +105,6 @@ optimizer = CmaEsOptimizer(
 if not cmaes_available:
     print("⚠ Skipping optimization due to missing 'cmaes' package")
     print("Install with: pip install cmaes")
-    return None, None
 
 # Run optimization
 # Running CMA-ES optimization...
@@ -122,7 +120,6 @@ try:
 except ImportError as e:
     print(f"CMA-ES failed: {e}")
     print("Install the required package: pip install cmaes")
-    return None, None
 
 # CMA-ES Behavior Analysis:
 # Evolution of search distribution:

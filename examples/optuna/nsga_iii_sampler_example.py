@@ -167,7 +167,6 @@ try:
 except Exception as e:
     print(f"Many-objective optimization example: {e}")
     print("Note: This demonstrates the interface for many-objective problems.")
-    return None, None
 
 # NSGA-III vs NSGA-II for Many Objectives:
 #
