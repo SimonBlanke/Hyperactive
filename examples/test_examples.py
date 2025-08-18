@@ -20,10 +20,8 @@ import pytest
 
 def get_hyperactive_root():
     """Get the root directory of the Hyperactive project."""
-    # Start from the test file directory and go up to find the root
-    current = Path(__file__).parent
-    while current.name != "Hyperactive" and current.parent != current:
-        current = current.parent
+    # Since test file is now in examples/, go up one level to find the root
+    current = Path(__file__).parent.parent
     return current
 
 
@@ -39,8 +37,10 @@ def find_all_python_examples():
     
     # Find all .py files recursively in examples directory
     for py_file in examples_dir.rglob("*.py"):
-        # Skip __pycache__ and other non-example files
-        if "__pycache__" not in str(py_file) and ".pytest_cache" not in str(py_file):
+        # Skip __pycache__, test files, and other non-example files
+        if ("__pycache__" not in str(py_file) and 
+            ".pytest_cache" not in str(py_file) and
+            not py_file.name.startswith("test_")):
             python_files.append(py_file)
     
     return sorted(python_files)
