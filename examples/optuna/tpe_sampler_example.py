@@ -19,7 +19,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
-from hyperactive.opt.optuna import TPESampler
+from hyperactive.opt.optuna import TPEOptimizer
 
 
 def main():
@@ -54,7 +54,7 @@ def main():
          "min_samples_leaf": 1, "max_features": "sqrt", "bootstrap": True}
     ]
 
-    optimizer = TPESampler(
+    optimizer = TPEOptimizer(
         param_space=param_space,
         n_trials=50,
         random_state=42,
