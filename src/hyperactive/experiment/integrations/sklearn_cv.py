@@ -1,5 +1,4 @@
 """Experiment adapter for sklearn cross-validation experiments."""
-
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from sklearn import clone
@@ -216,7 +215,7 @@ class SklearnCvExperiment(BaseExperiment):
         X, y = load_diabetes(return_X_y=True)
         params_regress = {
             "estimator": SVR(),
-            "scoring": "neg_mean_absolute_error",
+            "scoring": mean_absolute_error,
             "cv": 2,
             "X": X,
             "y": y,
