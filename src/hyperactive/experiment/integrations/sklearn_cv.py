@@ -1,4 +1,5 @@
 """Experiment adapter for sklearn cross-validation experiments."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from sklearn import clone
@@ -199,15 +200,34 @@ class SklearnCvExperiment(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         from sklearn.datasets import load_diabetes, load_iris
-        from sklearn.metrics import accuracy_score
+        from sklearn.metrics import accuracy_score, mean_absolute_error
         from sklearn.model_selection import KFold
         from sklearn.svm import SVC, SVR
+        from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 
         X, y = load_iris(return_X_y=True)
         params_classif = {
             "estimator": SVC(),
             "scoring": accuracy_score,
             "cv": KFold(n_splits=3, shuffle=True),
+            "X": X,
+            "y": y,
+        }
+
+        X, y = load_iris(return_X_y=True)
+        params_classif_f1_str = {
+            "estimator": DecisionTreeClassifier(),
+            "scoring": "f1",
+            "cv": 2,
+            "X": X,
+            "y": y,
+        }
+
+        X, y = load_diabetes(return_X_y=True)
+        params_regress_r2_str = {
+            "estimator": DecisionTreeRegressor(),
+            "scoring": "r2",
+            "cv": 2,
             "X": X,
             "y": y,
         }
@@ -228,7 +248,13 @@ class SklearnCvExperiment(BaseExperiment):
             "y": y,
         }
 
-        return [params_classif, params_regress, params_all_default]
+        return [
+            params_classif,
+            params_regress,
+            params_classif_f1_str,
+            params_regress_r2_str,
+            params_all_default,
+        ]
 
     @classmethod
     def _get_score_params(self):
