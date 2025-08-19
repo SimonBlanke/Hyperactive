@@ -214,6 +214,15 @@ class SklearnCvExperiment(BaseExperiment):
             "y": y,
         }
 
+        X, y = load_diabetes(return_X_y=True)
+        params_regress = {
+            "estimator": SVR(),
+            "scoring": mean_absolute_error,
+            "cv": 2,
+            "X": X,
+            "y": y,
+        }
+
         X, y = load_iris(return_X_y=True)
         params_classif_f1_str = {
             "estimator": DecisionTreeClassifier(),
@@ -227,15 +236,6 @@ class SklearnCvExperiment(BaseExperiment):
         params_regress_r2_str = {
             "estimator": DecisionTreeRegressor(),
             "scoring": "r2",
-            "cv": 2,
-            "X": X,
-            "y": y,
-        }
-
-        X, y = load_diabetes(return_X_y=True)
-        params_regress = {
-            "estimator": SVR(),
-            "scoring": mean_absolute_error,
             "cv": 2,
             "X": X,
             "y": y,
@@ -275,9 +275,9 @@ class SklearnCvExperiment(BaseExperiment):
         score_params_defaults = {"C": 1.0, "kernel": "linear"}
         params = [
             score_params_classif,
-            score_params_trees,
-            score_params_trees,
             score_params_regress,
+            score_params_trees,
+            score_params_trees,
             score_params_defaults,
         ]
         return params
