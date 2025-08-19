@@ -200,7 +200,7 @@ class SklearnCvExperiment(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         from sklearn.datasets import load_diabetes, load_iris
-        from sklearn.metrics import accuracy_score, mean_absolute_error
+        from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
         from sklearn.svm import SVC, SVR
 
