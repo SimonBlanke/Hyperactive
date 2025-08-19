@@ -226,7 +226,7 @@ class SklearnCvExperiment(BaseExperiment):
         X, y = load_diabetes(return_X_y=True)
         params_regress_r2_str = {
             "estimator": DecisionTreeRegressor(),
-            "scoring": "r2_score",
+            "scoring": "r2",
             "cv": 2,
             "X": X,
             "y": y,
