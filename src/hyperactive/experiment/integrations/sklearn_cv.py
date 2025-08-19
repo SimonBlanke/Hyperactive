@@ -203,7 +203,7 @@ class SklearnCvExperiment(BaseExperiment):
         from sklearn.metrics import accuracy_score, mean_absolute_error
         from sklearn.model_selection import KFold
         from sklearn.svm import SVC, SVR
-        from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+        from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
         X, y = load_iris(return_X_y=True)
         params_classif = {
