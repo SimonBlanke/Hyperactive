@@ -217,7 +217,7 @@ class SklearnCvExperiment(BaseExperiment):
         X, y = load_iris(return_X_y=True)
         params_classif_f1_str = {
             "estimator": DecisionTreeClassifier(),
-            "scoring": "f1",
+            "scoring": "f1_score",
             "cv": 2,
             "X": X,
             "y": y,
@@ -226,7 +226,7 @@ class SklearnCvExperiment(BaseExperiment):
         X, y = load_diabetes(return_X_y=True)
         params_regress_r2_str = {
             "estimator": DecisionTreeRegressor(),
-            "scoring": "r2",
+            "scoring": "r2_score",
             "cv": 2,
             "X": X,
             "y": y,
@@ -270,9 +270,17 @@ class SklearnCvExperiment(BaseExperiment):
             The parameters to be used for scoring.
         """
         score_params_classif = {"C": 1.0, "kernel": "linear"}
+        score_params_trees = {"max_depth": 3, "min_samples_split": 2}
         score_params_regress = {"C": 1.0, "kernel": "linear"}
         score_params_defaults = {"C": 1.0, "kernel": "linear"}
-        return [score_params_classif, score_params_regress, score_params_defaults]
+        params = [
+            score_params_classif,
+            score_params_trees,
+            score_params_trees,
+            score_params_regress,
+            score_params_defaults,
+        ]
+        return params
 
 
 def _guess_sign_of_sklmetric(scorer):
