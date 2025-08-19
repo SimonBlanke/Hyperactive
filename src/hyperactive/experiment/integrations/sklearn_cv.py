@@ -217,7 +217,7 @@ class SklearnCvExperiment(BaseExperiment):
         X, y = load_iris(return_X_y=True)
         params_classif_f1_str = {
             "estimator": DecisionTreeClassifier(),
-            "scoring": "f1_score",
+            "scoring": "f1",
             "cv": 2,
             "X": X,
             "y": y,
