@@ -1,4 +1,5 @@
 """Experiment adapter for sklearn cross-validation experiments."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from sklearn import clone
@@ -109,6 +110,9 @@ class SklearnCvExperiment(BaseExperiment):
                 from sklearn.metrics import make_scorer
 
                 self._scoring = make_scorer(scoring)
+        else:
+            # scoring is a string (scorer name)
+            self._scoring = check_scoring(self.estimator, scoring=scoring)
         self.scorer_ = self._scoring
 
         # Set the sign of the scoring function
@@ -199,6 +203,7 @@ class SklearnCvExperiment(BaseExperiment):
         from sklearn.metrics import accuracy_score, mean_absolute_error
         from sklearn.model_selection import KFold
         from sklearn.svm import SVC, SVR
+        from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
         X, y = load_iris(return_X_y=True)
         params_classif = {
@@ -218,6 +223,24 @@ class SklearnCvExperiment(BaseExperiment):
             "y": y,
         }
 
+        X, y = load_iris(return_X_y=True)
+        params_classif_f1_str = {
+            "estimator": DecisionTreeClassifier(),
+            "scoring": "f1",
+            "cv": 2,
+            "X": X,
+            "y": y,
+        }
+
+        X, y = load_diabetes(return_X_y=True)
+        params_regress_r2_str = {
+            "estimator": DecisionTreeRegressor(),
+            "scoring": "r2",
+            "cv": 2,
+            "X": X,
+            "y": y,
+        }
+
         X, y = load_diabetes(return_X_y=True)
         params_all_default = {
             "estimator": SVR(),
@@ -225,7 +248,13 @@ class SklearnCvExperiment(BaseExperiment):
             "y": y,
         }
 
-        return [params_classif, params_regress, params_all_default]
+        return [
+            params_classif,
+            params_regress,
+            params_classif_f1_str,
+            params_regress_r2_str,
+            params_all_default,
+        ]
 
     @classmethod
     def _get_score_params(self):
@@ -241,9 +270,17 @@ class SklearnCvExperiment(BaseExperiment):
             The parameters to be used for scoring.
         """
         score_params_classif = {"C": 1.0, "kernel": "linear"}
+        score_params_trees = {"max_depth": 3, "min_samples_split": 2}
         score_params_regress = {"C": 1.0, "kernel": "linear"}
         score_params_defaults = {"C": 1.0, "kernel": "linear"}
-        return [score_params_classif, score_params_regress, score_params_defaults]
+        params = [
+            score_params_classif,
+            score_params_regress,
+            score_params_trees,
+            score_params_trees,
+            score_params_defaults,
+        ]
+        return params
 
 
 def _guess_sign_of_sklmetric(scorer):

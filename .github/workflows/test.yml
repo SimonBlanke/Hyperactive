@@ -83,7 +83,7 @@ jobs:
       - name: Show dependencies
         run: python -m pip list
 
-      - name: Test with pytest
+      - name: Test core package
         run: |
           python -m pytest src/hyperactive -p no:warnings
 
@@ -117,7 +117,7 @@ jobs:
       - name: Show dependencies
         run: python -m pip list
 
-      - name: Test with pytest
+      - name: Test core package
         run: |
           python -m pytest src/hyperactive -p no:warnings
 
@@ -150,3 +150,54 @@ jobs:
       - name: Run sklearn integration tests for ${{ matrix.sklearn-version }}
         run: |
           python -m pytest -x -p no:warnings src/hyperactive/integrations/sklearn/
+
+  test-examples:
+    name: test-examples
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check for example changes
+        id: check-examples
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            # For pushes, compare with previous commit
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD | grep "^examples/" || true)
+          else
+            # For pull requests, compare with base branch
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^examples/" || true)
+          fi
+
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "examples_changed=true" >> $GITHUB_OUTPUT
+            echo "Examples changed:"
+            echo "$CHANGED_FILES"
+          else
+            echo "examples_changed=false" >> $GITHUB_OUTPUT
+            echo "No example files changed"
+          fi
+
+      - name: Install dependencies
+        if: steps.check-examples.outputs.examples_changed == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build
+          make install-all-extras-for-test
+
+      - name: Show dependencies
+        if: steps.check-examples.outputs.examples_changed == 'true'
+        run: python -m pip list
+
+      - name: Test examples
+        if: steps.check-examples.outputs.examples_changed == 'true'
+        run: |
+          python -m pytest examples/ -v -p no:warnings
