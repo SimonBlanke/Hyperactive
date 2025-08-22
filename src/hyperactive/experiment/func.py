@@ -123,15 +123,14 @@ class FunctionExperiment(BaseExperiment):
             `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
+
         def _func1(x):
             """Evaluate parameters. Used in tests."""
             return x["x"] ** 2 + x["y"] ** 2
 
-
         def _func2(x):
             """Evaluate parameters. Used in tests."""
             return x["x"] ** 2 - x["y"] ** 2 + 10 * x["x"] + 5 * x["z"]
-
 
         def _func3(x, y, z):
             """Evaluate parameters. Used in tests."""
