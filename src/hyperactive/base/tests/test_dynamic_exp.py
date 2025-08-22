@@ -23,7 +23,7 @@ def test_dynamic_exp():
     hill_climbing = HillClimbing(**hillclimbing_config, experiment=parabola)
 
     # 3. run the HillClimbing optimizer
-    hill_climbing.run()
+    hill_climbing.solve()
 
     best_params = hill_climbing.best_params_
     assert best_params is not None, "Best parameters should not be None"
