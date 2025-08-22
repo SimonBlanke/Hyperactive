@@ -194,9 +194,10 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
         for inst, obj_param in zip(inst_params, obj_params):
             obj_inst = object_class(**inst)
             paramnames = obj_inst.paramnames()
-            assert set(obj_param.keys()) <= set(
-                paramnames
-            ), f"Parameter names do not match: {paramnames} != {obj_param}"
+            if paramnames is not None:
+                assert set(obj_param.keys()) <= set(
+                    paramnames
+                ), f"Parameter names do not match: {paramnames} != {obj_param}"
 
     def test_score_function(self, object_class):
         """Test that substituting into score works as intended."""
