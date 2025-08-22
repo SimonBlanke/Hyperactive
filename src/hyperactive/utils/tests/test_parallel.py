@@ -42,7 +42,11 @@ def square(x, **kwargs):
     return x**2
 
 
-@pytest.mark.parametrize("fixture", _get_parallel_test_fixtures())
+PARALLEL_TEST_FIXTURES = _get_parallel_test_fixtures()
+PTF_NAMES = [f["backend"] for f in PARALLEL_TEST_FIXTURES]
+
+
+@pytest.mark.parametrize("fixture", PARALLEL_TEST_FIXTURES, ids=PTF_NAMES)
 def test_parallelize_simple_loop(fixture):
     """Test that parallelize works with a simple function and fixture."""
     backend = fixture["backend"]
