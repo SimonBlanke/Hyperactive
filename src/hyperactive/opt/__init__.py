@@ -4,30 +4,30 @@
 
 from hyperactive.opt.gridsearch import GridSearchSk
 from hyperactive.opt.random_search import RandomSearchSk
+
 from .gfo import (
-    HillClimbing,
-    StochasticHillClimbing,
-    RepulsingHillClimbing,
-    SimulatedAnnealing,
-    DownhillSimplexOptimizer,
-    RandomSearch,
-    GridSearch,
-    RandomRestartHillClimbing,
-    PowellsMethod,
-    PatternSearch,
-    LipschitzOptimizer,
+    BayesianOptimizer,
+    DifferentialEvolution,
     DirectAlgorithm,
+    DownhillSimplexOptimizer,
+    EvolutionStrategy,
+    ForestOptimizer,
+    GeneticAlgorithm,
+    GridSearch,
+    HillClimbing,
+    LipschitzOptimizer,
     ParallelTempering,
     ParticleSwarmOptimizer,
+    PatternSearch,
+    PowellsMethod,
+    RandomRestartHillClimbing,
+    RandomSearch,
+    RepulsingHillClimbing,
+    SimulatedAnnealing,
     SpiralOptimization,
-    GeneticAlgorithm,
-    EvolutionStrategy,
-    DifferentialEvolution,
-    BayesianOptimizer,
+    StochasticHillClimbing,
     TreeStructuredParzenEstimators,
-    ForestOptimizer,
 )
-
 
 __all__ = [
     "GridSearchSk",

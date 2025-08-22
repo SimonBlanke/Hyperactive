@@ -57,7 +57,7 @@ class BaseOptimizer(BaseObject):
             exp = FunctionExperiment(exp)  # callable adapted to BaseExperiment
         return exp
 
-    def run(self):
+    def solve(self):
         """Run the optimization search process to maximize the experiment's score.
 
         The optimization searches for a maximizer of the experiment's
@@ -79,6 +79,6 @@ class BaseOptimizer(BaseObject):
         experiment = self.get_experiment()
         search_config = self.get_search_config()
 
-        best_params = self._run(experiment, **search_config)
+        best_params = self._solve(experiment, **search_config)
         self.best_params_ = best_params
         return best_params
