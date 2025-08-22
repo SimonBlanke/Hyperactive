@@ -123,6 +123,20 @@ class FunctionExperiment(BaseExperiment):
             `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
+        def _func1(x):
+            """Evaluate parameters. Used in tests."""
+            return x["x"] ** 2 + x["y"] ** 2
+
+
+        def _func2(x):
+            """Evaluate parameters. Used in tests."""
+            return x["x"] ** 2 - x["y"] ** 2 + 10 * x["x"] + 5 * x["z"]
+
+
+        def _func3(x, y, z):
+            """Evaluate parameters. Used in tests."""
+            return x**2 + y**2 - 3 * x + 2 * y + 1
+
         params0 = {"func": _func1}
         params1 = {"func": _func2}
         params2 = {"func": _func3, "parametrization": "kwargs"}
@@ -145,18 +159,3 @@ class FunctionExperiment(BaseExperiment):
         params1 = {"x": 1, "y": 1, "z": 2}
         params2 = {"x": 3, "y": 4, "z": 5}
         return [params0, params1, params2]
-
-
-def _func1(x):
-    """Evaluate parameters. Used in tests."""
-    return x["x"] ** 2 + x["y"] ** 2
-
-
-def _func2(x):
-    """Evaluate parameters. Used in tests."""
-    return x["x"] ** 2 - x["y"] ** 2 + 10 * x["x"] + 5 * x["z"]
-
-
-def _func3(x, y, z):
-    """Evaluate parameters. Used in tests."""
-    return x**2 + y**2 - 3 * x + 2 * y + 1
