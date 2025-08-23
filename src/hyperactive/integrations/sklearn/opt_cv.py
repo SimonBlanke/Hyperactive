@@ -24,7 +24,7 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
     which identifies the best hyperparameters.
 
     Any available tuning engine from hyperactive can be used, for example:
-    
+
     * grid search - ``from hyperactive.opt import GridSearchSk as GridSearch``,
       this results in the same algorithm as ``GridSearchCV``
     * hill climbing - ``from hyperactive.opt import HillClimbing``
