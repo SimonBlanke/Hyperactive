@@ -34,11 +34,14 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
 
     Formally, ``OptCV`` does the following:
 
-    In ``fit``, wraps the ``estimator``, ``scoring``, and other parameters
-    into a ``SklearnCvExperiment`` instance, which is passed to the optimizer
-    ``optimizer`` as the ``experiment`` argument.
-    Optimal parameters are then obtained from ``optimizer.solve``, and set
-    as ``best_params_`` and ``best_estimator_`` attributes.
+    In ``fit``:
+
+    * wraps the ``estimator``, ``scoring``, and other parameters
+      into a ``SklearnCvExperiment`` instance, which is passed to the optimizer
+      ``optimizer`` as the ``experiment`` argument.
+    * Optimal parameters are then obtained from ``optimizer.solve``, and set
+      as ``best_params_`` and ``best_estimator_`` attributes.
+    * If ``refit=True``, ``best_estimator_`` is fitted to the entire ``X`` and ``y``.
 
     In ``predict`` and ``predict``-like methods, calls the respective method
     of the ``best_estimator_`` if ``refit=True``.
