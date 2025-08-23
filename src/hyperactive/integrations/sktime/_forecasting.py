@@ -16,6 +16,20 @@ from hyperactive.experiment.integrations.sktime_forecasting import (
 class ForecastingOptCV(_DelegatedForecaster):
     """Tune an sktime forecaster via any optimizer in the hyperactive API.
 
+    ``ForecastingOptCV`` uses any available tuning engine from ``hyperactive``
+    to tune a forecaster by backtesting.
+
+    It passes backtesting results as scores to the tuning engine,
+    which identifies the best hyperparameters.
+
+    Any available tuning engine from hyperactive can be used, for example:
+    
+    * grid search - ``from hyperactive.opt import GridSearchSk as GridSearch``
+    * hill climbing - ``from hyperactive.opt import HillClimbing``
+    * optuna search - ``from hyperactive.opt.optuna import TPEOptimizer``
+
+    Configuration of the tuning engine is as per the respective documentation.
+
     Parameters
     ----------
     forecaster : sktime forecaster, BaseForecaster instance or interface compatible
@@ -124,7 +138,13 @@ class ForecastingOptCV(_DelegatedForecaster):
 
     Example
     -------
-    Tuning an sktime forecaster via grid search
+    Any available tuning engine from hyperactive can be used, for example:
+
+    * grid search - ``from hyperactive.opt import GridSearchSk as GridSearch``
+    * hill climbing - ``from hyperactive.opt import HillClimbing``
+    * optuna search - ``from hyperactive.opt.optuna import TPEOptimizer``
+
+    For illustration, we use grid search, this can be replaced by any other optimizer.
 
     1. defining the tuned estimator:
     >>> from sktime.forecasting.naive import NaiveForecaster
