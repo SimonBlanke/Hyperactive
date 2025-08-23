@@ -14,7 +14,7 @@ from hyperactive.experiment.integrations.sktime_forecasting import (
 
 
 class ForecastingOptCV(_DelegatedForecaster):
-    """Tune an sktime forecaster via any optimizer in the hyperactive API.
+    """Tune an sktime forecaster via any optimizer in the hyperactive toolbox.
 
     ``ForecastingOptCV`` uses any available tuning engine from ``hyperactive``
     to tune a forecaster by backtesting.

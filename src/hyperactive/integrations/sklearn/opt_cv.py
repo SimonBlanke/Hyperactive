@@ -15,7 +15,7 @@ from ._compat import _check_method_params, _safe_refit, _safe_validate_X_y
 
 
 class OptCV(BaseEstimator, _BestEstimator_, Checks):
-    """Tuning an sklearn estimator via any optimizer in the hyperactive API.
+    """Tuning an sklearn estimator via any optimizer in the hyperactive toolbox.
 
     ``OptCV`` uses any available tuning engine from ``hyperactive``
     to tune an sklearn estimator via cross-validation.
