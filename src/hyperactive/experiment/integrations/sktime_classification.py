@@ -28,6 +28,17 @@ class SktimeClassificationExperiment(BaseExperiment):
     estimator : sktime BaseClassifier descendant (concrete classifier)
         sktime classifier to benchmark
 
+    X : sktime-compatible panel data (Panel scitype)
+        Panel data container. Supported formats include:
+
+        - ``pd.DataFrame`` with MultiIndex [instance, time] and variable columns
+        - 3D ``np.array`` with shape ``[n_instances, n_dimensions, series_length]``
+        - Other formats listed in ``datatypes.SCITYPE_REGISTER``
+
+    y : sktime-compatible tabular data (Table scitype)
+        Target variable, typically a 1D ``np.ndarray`` or ``pd.Series``
+        of shape ``[n_instances]``.
+
     cv : int, sklearn cross-validation generator or an iterable, default=3-fold CV
         Determines the cross-validation splitting strategy.
         Possible inputs for cv are:
@@ -40,17 +51,6 @@ class SktimeClassificationExperiment(BaseExperiment):
         either binary or multiclass, :class:`StratifiedKFold` is used. In all
         other cases, :class:`KFold` is used. These splitters are instantiated
         with ``shuffle=False`` so the splits will be the same across calls.
-
-    X : sktime-compatible panel data (Panel scitype)
-        Panel data container. Supported formats include:
-
-        - ``pd.DataFrame`` with MultiIndex [instance, time] and variable columns
-        - 3D ``np.array`` with shape ``[n_instances, n_dimensions, series_length]``
-        - Other formats listed in ``datatypes.SCITYPE_REGISTER``
-
-    y : sktime-compatible tabular data (Table scitype)
-        Target variable, typically a 1D ``np.ndarray`` or ``pd.Series``
-        of shape ``[n_instances]``.
 
     scoring : str, callable, default=None
         Strategy to evaluate the performance of the cross-validated model on
@@ -149,25 +149,23 @@ class SktimeClassificationExperiment(BaseExperiment):
 
     def __init__(
         self,
-        forecaster,
-        cv,
+        estimator,
+        X,
         y,
-        X=None,
+        cv=None,
         strategy="refit",
         scoring=None,
         error_score=np.nan,
-        cv_X=None,
         backend=None,
         backend_params=None,
     ):
-        self.forecaster = forecaster
+        self.estimator = estimator
         self.X = X
         self.y = y
         self.strategy = strategy
         self.scoring = scoring
         self.cv = cv
         self.error_score = error_score
-        self.cv_X = cv_X
         self.backend = backend
         self.backend_params = backend_params
 
