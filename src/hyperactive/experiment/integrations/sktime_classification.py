@@ -266,9 +266,8 @@ class SktimeClassificationExperiment(BaseExperiment):
         """
         from sklearn.metrics import brier_score_loss
         from sklearn.model_selection import KFold
-
-        from sktime.datasets import load_unit_test
         from sktime.classification.dummy import DummyClassifier
+        from sktime.datasets import load_unit_test
 
         X, y = load_unit_test(return_X_y=True, return_type="pd-multiindex")
         params0 = {

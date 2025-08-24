@@ -327,7 +327,6 @@ class TSCOptCV(_DelegatedClassifier):
         """
         from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
-
         from sktime.classification.dummy import DummyClassifier
 
         from hyperactive.opt.gfo import HillClimbing
