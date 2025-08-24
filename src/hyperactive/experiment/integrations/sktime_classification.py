@@ -275,7 +275,7 @@ class SktimeClassificationExperiment(BaseExperiment):
         }
 
         params1 = {
-            "forecaster": DummyClassifier(strategy="stratified"),
+            "estimator": DummyClassifier(strategy="stratified"),
             "cv": KFold(n_splits=2),
             "X": X,
             "y": y,
