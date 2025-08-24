@@ -187,7 +187,7 @@ class SktimeForecastingTask(BaseExperiment):
         list of str
             The parameter names of the search parameters.
         """
-        return list(self.forecaster.get_params().keys())
+        return ["forecaster"]
 
     def _evaluate(self, params):
         """Evaluate the parameters.
@@ -206,7 +206,7 @@ class SktimeForecastingTask(BaseExperiment):
         """
         from sktime.forecasting.model_evaluation import evaluate
 
-        forecaster = params.pop("forecaster")
+        forecaster = params.get("forecaster", None)
 
         results = evaluate(
             forecaster,
