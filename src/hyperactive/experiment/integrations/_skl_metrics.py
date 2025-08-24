@@ -22,7 +22,7 @@ def _coerce_to_scorer(scoring, estimator):
             return make_scorer(scoring)
     else:
         # scoring is a string (scorer name)
-        return check_scoring(self.estimator, scoring=scoring)
+        return check_scoring(estimator, scoring=scoring)
 
 
 def _guess_sign_of_sklmetric(scorer):
