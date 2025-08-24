@@ -18,8 +18,6 @@ def _coerce_to_scorer(scoring, estimator):
     scorer : callable
         A sklearn scorer callable.
         Follows the unified sklearn scorer interface:
-
-        scorer(estimator, X, y) -> score
     """
     from sklearn.metrics import check_scoring
 
