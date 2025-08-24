@@ -225,7 +225,7 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
                 msg = f"Score and eval calls do not match: |{e_score}| != |{score}|"
                 assert abs(e_score) == abs(score), msg
 
-            call_sc = inst(**obj)
+            call_sc = inst(obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
             if det_tag == "deterministic":
                 msg = f"Score does not match: {score} != {call_sc}"
