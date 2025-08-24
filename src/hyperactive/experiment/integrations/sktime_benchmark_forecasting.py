@@ -261,12 +261,10 @@ class SktimeForecastingTask(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         from sktime.datasets import load_airline, load_longley
-        from sktime.forecasting.naive import NaiveForecaster
         from sktime.split import ExpandingWindowSplitter
 
         y = load_airline()
         params0 = {
-            "forecaster": NaiveForecaster(strategy="last"),
             "cv": ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
             "y": y,
         }
@@ -275,7 +273,6 @@ class SktimeForecastingTask(BaseExperiment):
 
         y, X = load_longley()
         params1 = {
-            "forecaster": NaiveForecaster(strategy="last"),
             "cv": ExpandingWindowSplitter(initial_window=3, step_length=3, fh=1),
             "y": y,
             "X": X,
@@ -297,6 +294,8 @@ class SktimeForecastingTask(BaseExperiment):
         list of dict
             The parameters to be used for scoring.
         """
-        val0 = {"strategy": "mean"}
-        val1 = {"strategy": "last"}
+        from sktime.forecasting.naive import NaiveForecaster
+
+        val0 = {"forecaster": NaiveForecaster(strategy="last")}
+        val1 = {"forecaster": NaiveForecaster(strategy="last")}
         return [val0, val1]
