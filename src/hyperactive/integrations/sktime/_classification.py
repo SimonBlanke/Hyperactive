@@ -8,7 +8,7 @@ if _check_soft_dependencies("sktime", severity="none"):
 else:
     from skbase.base import BaseEstimator as _DelegatedClassifier
 
-from hyperactive.experiment.integrations.sktime_forecasting import (
+from hyperactive.experiment.integrations.sktime_classification import (
     SktimeClassificationExperiment,
 )
 
