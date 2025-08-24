@@ -131,7 +131,7 @@ class SktimeForecastingTask(BaseExperiment):
     >>> score, add_info = fcst_task.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = fcst_task(NaiveForecaster(strategy="last"))
+    >>> score = fcst_task(forecaster=NaiveForecaster(strategy="last"))
     """
 
     _tags = {
