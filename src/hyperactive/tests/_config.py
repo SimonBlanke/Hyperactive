@@ -2,8 +2,8 @@
 
 # todo 5.1: review if skipping is still necessary
 # if not, remove below
-import sys
 import platform
+import sys
 
 cpython_138031_bug_present = (
     sys.version_info[:3] == (3, 13, 7) and platform.system() == "Windows"
