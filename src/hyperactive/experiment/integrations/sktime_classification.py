@@ -220,8 +220,10 @@ class SktimeClassificationExperiment(BaseExperiment):
         """
         from sktime.classification.model_evaluation import evaluate
 
+        estimator = self.estimator.clone().set_params(**params)
+
         results = evaluate(
-            self.estimator,
+            estimator,
             cv=self._cv,
             X=self.X,
             y=self.y,
