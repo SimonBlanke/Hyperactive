@@ -21,8 +21,8 @@ class BaseExperiment(BaseObject):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, **kwargs):
-        """Score parameters, with kwargs call. Same as score call."""
+    def __call__(self, kwargs):
+        """Score parameters. Same as score call, returns only only a first element."""
         score, _ = self.score(kwargs)
         return score
 
