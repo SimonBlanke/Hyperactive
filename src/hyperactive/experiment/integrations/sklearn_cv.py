@@ -3,12 +3,14 @@
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 from sklearn import clone
-from sklearn.metrics import check_scoring
 from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
 
 from hyperactive.base import BaseExperiment
-from hyperactive.experiment.integrations._skl_metrics import _guess_sign_of_sklmetric
+from hyperactive.experiment.integrations._skl_metrics import (
+    _coerce_to_scorer,
+    _guess_sign_of_sklmetric,
+)
 
 
 class SklearnCvExperiment(BaseExperiment):
@@ -98,22 +100,7 @@ class SklearnCvExperiment(BaseExperiment):
         else:
             self._cv = cv
 
-        # check if scoring is a scorer by checking for "estimator" in signature
-        if scoring is None:
-            self._scoring = check_scoring(self.estimator)
-        # check using inspect.signature for "estimator" in signature
-        elif callable(scoring):
-            from inspect import signature
-
-            if "estimator" in signature(scoring).parameters:
-                self._scoring = scoring
-            else:
-                from sklearn.metrics import make_scorer
-
-                self._scoring = make_scorer(scoring)
-        else:
-            # scoring is a string (scorer name)
-            self._scoring = check_scoring(self.estimator, scoring=scoring)
+        self._scoring = _coerce_to_scorer(scoring, self.estimator)
         self.scorer_ = self._scoring
 
         # Set the sign of the scoring function

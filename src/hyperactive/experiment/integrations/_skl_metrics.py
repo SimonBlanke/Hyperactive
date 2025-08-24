@@ -1,6 +1,28 @@
 """Integration utilities for sklearn metrics with Hyperactive."""
 
-__all__ = ["_guess_sign_of_sklmetric"]
+__all__ = ["_coerce_to_scorer", "_guess_sign_of_sklmetric"]
+
+
+def _coerce_to_scorer(scoring, estimator):
+    """Coerce a scoring into a sklearn scorer."""
+    from sklearn.metrics import check_scoring
+
+    # check if scoring is a scorer by checking for "estimator" in signature
+    if scoring is None:
+        return check_scoring(estimator)
+    # check using inspect.signature for "estimator" in signature
+    elif callable(scoring):
+        from inspect import signature
+
+        if "estimator" in signature(scoring).parameters:
+            return scoring
+        else:
+            from sklearn.metrics import make_scorer
+
+            return make_scorer(scoring)
+    else:
+        # scoring is a string (scorer name)
+        return check_scoring(self.estimator, scoring=scoring)
 
 
 def _guess_sign_of_sklmetric(scorer):

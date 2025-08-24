@@ -4,7 +4,10 @@
 import numpy as np
 
 from hyperactive.base import BaseExperiment
-from hyperactive.experiment.integrations._skl_metrics import _guess_sign_of_sklmetric
+from hyperactive.experiment.integrations._skl_metrics import (
+    _coerce_to_scorer,
+    _guess_sign_of_sklmetric,
+)
 
 
 class SktimeClassificationExperiment(BaseExperiment):
@@ -175,8 +178,8 @@ class SktimeClassificationExperiment(BaseExperiment):
         from sklearn.metrics import check_scoring
 
         # use dummy classifier from sklearn to get default coercion behaviour
-        # for classificatoin metrics
-        self._scoring = check_scoring(DummyClassifier(), self.scoring)
+        # for classification metrics
+        self._scoring = _coerce_to_scorer(scoring, self.estimator)
 
         # Set the sign of the scoring function
         if hasattr(self._scoring, "_score"):
