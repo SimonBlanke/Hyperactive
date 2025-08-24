@@ -15,11 +15,40 @@ from ._compat import _check_method_params, _safe_refit, _safe_validate_X_y
 
 
 class OptCV(BaseEstimator, _BestEstimator_, Checks):
-    """Tuning via any optimizer in the hyperactive API.
+    """Tuning an sklearn estimator via any optimizer in the hyperactive toolbox.
+
+    ``OptCV`` uses any available tuning engine from ``hyperactive``
+    to tune an sklearn estimator via cross-validation.
+
+    It passes cross-validation results as scores to the tuning engine,
+    which identifies the best hyperparameters.
+
+    Any available tuning engine from hyperactive can be used, for example:
+
+    * grid search - ``from hyperactive.opt import GridSearchSk as GridSearch``,
+      this results in the same algorithm as ``GridSearchCV``
+    * hill climbing - ``from hyperactive.opt import HillClimbing``
+    * optuna parzen-tree search - ``from hyperactive.opt.optuna import TPEOptimizer``
+
+    Configuration of the tuning engine is as per the respective documentation.
+
+    Formally, ``OptCV`` does the following:
+
+    In ``fit``:
+
+    * wraps the ``estimator``, ``scoring``, and other parameters
+      into a ``SklearnCvExperiment`` instance, which is passed to the optimizer
+      ``optimizer`` as the ``experiment`` argument.
+    * Optimal parameters are then obtained from ``optimizer.solve``, and set
+      as ``best_params_`` and ``best_estimator_`` attributes.
+    * If ``refit=True``, ``best_estimator_`` is fitted to the entire ``X`` and ``y``.
+
+    In ``predict`` and ``predict``-like methods, calls the respective method
+    of the ``best_estimator_`` if ``refit=True``.
 
     Parameters
     ----------
-    estimator : SklearnBaseEstimator
+    estimator : sklearn BaseEstimator
         The estimator to be tuned.
     optimizer : hyperactive BaseOptimizer
         The optimizer to be used for hyperparameter search.
@@ -40,7 +69,13 @@ class OptCV(BaseEstimator, _BestEstimator_, Checks):
 
     Example
     -------
-    Tuning sklearn SVC via grid search
+    Any available tuning engine from hyperactive can be used, for example:
+
+    * grid search - ``from hyperactive.opt import GridSearchSk as GridSearch``
+    * hill climbing - ``from hyperactive.opt import HillClimbing``
+    * optuna parzen-tree search - ``from hyperactive.opt.optuna import TPEOptimizer``
+
+    For illustration, we use grid search, this can be replaced by any other optimizer.
 
     1. defining the tuned estimator:
     >>> from sklearn.svm import SVC
