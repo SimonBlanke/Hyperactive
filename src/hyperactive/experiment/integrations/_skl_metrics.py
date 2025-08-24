@@ -4,7 +4,23 @@ __all__ = ["_coerce_to_scorer", "_guess_sign_of_sklmetric"]
 
 
 def _coerce_to_scorer(scoring, estimator):
-    """Coerce a scoring into a sklearn scorer."""
+    """Coerce scoring argument into a sklearn scorer.
+
+    Parameters
+    ----------
+    scoring : str, callable, or None
+        The scoring strategy to use.
+    estimator : estimator object
+        The estimator to use for default scoring if scoring is None.
+
+    Returns
+    -------
+    scorer : callable
+        A sklearn scorer callable.
+        Follows the unified sklearn scorer interface:
+
+        scorer(estimator, X, y) -> score
+    """
     from sklearn.metrics import check_scoring
 
     # check if scoring is a scorer by checking for "estimator" in signature
