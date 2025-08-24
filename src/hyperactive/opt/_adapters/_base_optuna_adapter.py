@@ -110,7 +110,7 @@ class _BaseOptunaAdapter(BaseOptimizer):
             The objective value
         """
         params = self._suggest_params(trial, self.param_space)
-        score = self.experiment.score(params)
+        score = self.experiment(params)
 
         # Handle early stopping based on max_score
         if self.max_score is not None and score >= self.max_score:
