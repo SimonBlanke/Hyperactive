@@ -156,7 +156,6 @@ class SktimeClassificationExperiment(BaseExperiment):
         X,
         y,
         cv=None,
-        strategy="refit",
         scoring=None,
         error_score=np.nan,
         backend=None,
@@ -165,7 +164,6 @@ class SktimeClassificationExperiment(BaseExperiment):
         self.estimator = estimator
         self.X = X
         self.y = y
-        self.strategy = strategy
         self.scoring = scoring
         self.cv = cv
         self.error_score = error_score
@@ -174,11 +172,7 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         super().__init__()
 
-        from sklearn.dummy import DummyClassifier
-
-        # use dummy classifier from sklearn to get default coercion behaviour
-        # for classification metrics
-        self._scoring = _coerce_to_scorer(scoring, DummyClassifier())
+        self._scoring = _coerce_to_scorer(scoring, "classifier")
 
         # Set the sign of the scoring function
         if hasattr(self._scoring, "_score"):
@@ -231,13 +225,14 @@ class SktimeClassificationExperiment(BaseExperiment):
             cv=self._cv,
             X=self.X,
             y=self.y,
-            scoring=self._scoring,
+            scoring=self._scoring._score_func,
             error_score=self.error_score,
             backend=self.backend,
             backend_params=self.backend_params,
         )
 
-        result_name = f"test_{self._scoring.name}"
+        metric = self._scoring._score_func
+        result_name = f"test_{metric.__name__}"
 
         res_float = results[result_name].mean()
 

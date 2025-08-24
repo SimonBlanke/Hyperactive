@@ -23,9 +23,20 @@ def _coerce_to_scorer(scoring, estimator):
 
     # check if scoring is a scorer by checking for "estimator" in signature
     if scoring is None:
-        return check_scoring(estimator)
+        if isinstance(estimator, str):
+            if estimator == "classifier":
+                from sklearn.metrics import accuracy_score
+
+                scoring = accuracy_score
+            elif estimator == "regressor":
+                from sklearn.metrics import r2_score
+
+                scoring = r2_score
+        else:
+            return check_scoring(estimator)
+
     # check using inspect.signature for "estimator" in signature
-    elif callable(scoring):
+    if callable(scoring):
         from inspect import signature
 
         if "estimator" in signature(scoring).parameters:
