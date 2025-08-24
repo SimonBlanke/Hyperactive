@@ -210,8 +210,10 @@ class SktimeForecastingExperiment(BaseExperiment):
         """
         from sktime.forecasting.model_evaluation import evaluate
 
+        forecaster = self.forecaster.clone().set_params(**params)
+
         results = evaluate(
-            self.forecaster,
+            forecaster,
             cv=self.cv,
             y=self.y,
             X=self.X,
