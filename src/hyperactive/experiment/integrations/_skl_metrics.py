@@ -10,14 +10,16 @@ def _coerce_to_scorer(scoring, estimator):
     ----------
     scoring : str, callable, or None
         The scoring strategy to use.
-    estimator : estimator object
+    estimator : estimator object or str
         The estimator to use for default scoring if scoring is None.
+
+        If str, indicates estimator type, should be one of {"classifier", "regressor"}.
 
     Returns
     -------
     scorer : callable
         A sklearn scorer callable.
-        Follows the unified sklearn scorer interface:
+        Follows the unified sklearn scorer interface
     """
     from sklearn.metrics import check_scoring
 
