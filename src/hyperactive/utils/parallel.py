@@ -224,6 +224,20 @@ SKIP_FIXTURES = [
     "ray",  # unstable, sporadic crashes in CI, see bug 8149
 ]
 
+# todo 5.1: review if skipping is still necessary
+# if not, remove below
+import sys
+import platform
+
+cpython_138031_bug_present = (
+    sys.version_info[:3] == (3, 13, 7) and platform.system() == "Windows"
+)
+
+if cpython_138031_bug_present:
+    SKIP_FIXTURES.append("loky")
+    SKIP_FIXTURES.append("multiprocessing")
+# end remove
+
 
 def _get_parallel_test_fixtures(naming="estimator"):
     """Return fixtures for parallelization tests.
