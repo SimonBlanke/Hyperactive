@@ -201,18 +201,6 @@ class TSCOptCV(_DelegatedClassifier):
         self.backend_params = backend_params
         super().__init__()
 
-        # default handling for cv
-        if isinstance(cv, int):
-            from sklearn.model_selection import KFold
-
-            self._cv = KFold(n_splits=cv, shuffle=True)
-        elif cv is None:
-            from sklearn.model_selection import KFold
-
-            self._cv = KFold(n_splits=3, shuffle=True)
-        else:
-            self._cv = cv
-
     def _fit(self, X, y):
         """Fit time series classifier to training data.
 
@@ -256,7 +244,7 @@ class TSCOptCV(_DelegatedClassifier):
         experiment = SktimeClassificationExperiment(
             estimator=estimator,
             scoring=scoring,
-            cv=self._cv,
+            cv=self.cv,
             X=X,
             y=y,
             error_score=self.error_score,

@@ -187,6 +187,18 @@ class SktimeClassificationExperiment(BaseExperiment):
             _sign_str = "higher" if _sign == 1 else "lower"
             self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
 
+        # default handling for cv
+        if isinstance(cv, int):
+            from sklearn.model_selection import KFold
+
+            self._cv = KFold(n_splits=cv, shuffle=True)
+        elif cv is None:
+            from sklearn.model_selection import KFold
+
+            self._cv = KFold(n_splits=3, shuffle=True)
+        else:
+            self._cv = cv
+
     def _paramnames(self):
         """Return the parameter names of the search.
 
@@ -216,7 +228,7 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         results = evaluate(
             self.estimator,
-            cv=self.cv,
+            cv=self._cv,
             X=self.X,
             y=self.y,
             scoring=self._scoring,
