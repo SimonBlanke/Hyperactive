@@ -19,10 +19,8 @@ QMC sequences are particularly effective for:
 - Baseline optimization comparisons
 """
 
-import numpy as np
 from sklearn.datasets import load_wine
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
 from hyperactive.opt.optuna import QMCOptimizer

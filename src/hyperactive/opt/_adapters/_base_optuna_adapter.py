@@ -110,7 +110,7 @@ class _BaseOptunaAdapter(BaseOptimizer):
             The objective value
         """
         params = self._suggest_params(trial, self.param_space)
-        score = self.experiment(**params)
+        score = self.experiment(params)
 
         # Handle early stopping based on max_score
         if self.max_score is not None and score >= self.max_score:
@@ -133,7 +133,7 @@ class _BaseOptunaAdapter(BaseOptimizer):
                     # For warm start, we manually add trials to the study history
                     # instead of using suggest methods to avoid distribution conflicts
                     for point in warm_start_points:
-                        self.experiment(**point)
+                        self.experiment(point)
                         study.enqueue_trial(point)
 
     def _solve(self, experiment, param_space, n_trials, **kwargs):

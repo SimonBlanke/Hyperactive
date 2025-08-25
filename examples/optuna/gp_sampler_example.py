@@ -14,10 +14,8 @@ Characteristics:
 - Can handle constraints and noisy observations
 """
 
-import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.svm import SVC
-from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
 from hyperactive.opt.optuna import GPOptimizer

@@ -62,7 +62,7 @@ class SklearnCvExperiment(BaseExperiment):
     ...     y=y,
     ... )
     >>> params = {"C": 1.0, "kernel": "linear"}
-    >>> score, add_info = sklearn_exp.score(params)
+    >>> score, metadata = sklearn_exp.score(params)
 
     For default choices of ``scoring`` and ``cv``:
     >>> sklearn_exp = SklearnCvExperiment(
@@ -71,10 +71,10 @@ class SklearnCvExperiment(BaseExperiment):
     ...     y=y,
     ... )
     >>> params = {"C": 1.0, "kernel": "linear"}
-    >>> score, add_info = sklearn_exp.score(params)
+    >>> score, metadata = sklearn_exp.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sklearn_exp(C=1.0, kernel="linear")
+    >>> score = sklearn_exp({"C": 1.0, "kernel": "linear"})
     """
 
     def __init__(self, estimator, X, y, scoring=None, cv=None):
@@ -158,13 +158,13 @@ class SklearnCvExperiment(BaseExperiment):
             cv=self._cv,
         )
 
-        add_info_d = {
+        metadata = {
             "score_time": cv_results["score_time"],
             "fit_time": cv_results["fit_time"],
             "n_test_samples": _num_samples(self.X),
         }
 
-        return cv_results["test_score"].mean(), add_info_d
+        return cv_results["test_score"].mean(), metadata
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

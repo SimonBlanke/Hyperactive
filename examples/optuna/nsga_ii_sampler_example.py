@@ -33,7 +33,7 @@ class MultiObjectiveExperiment:
         self.X = X
         self.y = y
 
-    def __call__(self, **params):
+    def __call__(self, params):
         # Create model with parameters
         model = RandomForestClassifier(random_state=42, **params)
 

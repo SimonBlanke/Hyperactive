@@ -14,10 +14,8 @@ Characteristics:
 - Interpretable and deterministic results
 """
 
-import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
 from hyperactive.opt.optuna import GridOptimizer
