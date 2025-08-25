@@ -13,10 +13,8 @@ Characteristics:
 - Default choice for most hyperparameter optimization tasks
 """
 
-import numpy as np
 from sklearn.datasets import load_wine
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_val_score
 
 from hyperactive.experiment.integrations import SklearnCvExperiment
 from hyperactive.opt.optuna import TPEOptimizer

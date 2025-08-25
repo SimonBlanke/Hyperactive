@@ -121,7 +121,7 @@ class SktimeForecastingExperiment(BaseExperiment):
     ...     y=y,
     ... )
     >>> params = {"strategy": "mean"}
-    >>> score, add_info = sktime_exp.score(params)
+    >>> score, metadata = sktime_exp.score(params)
 
     For default choices of ``scoring``:
     >>> sktime_exp = SktimeForecastingExperiment(
@@ -130,10 +130,10 @@ class SktimeForecastingExperiment(BaseExperiment):
     ...     y=y,
     ... )
     >>> params = {"strategy": "mean"}
-    >>> score, add_info = sktime_exp.score(params)
+    >>> score, metadata = sktime_exp.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sktime_exp(strategy="mean")
+    >>> score = sktime_exp({"strategy": "mean"})
     """
 
     _tags = {
