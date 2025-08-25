@@ -1,7 +1,6 @@
 """Automated tests based on the skbase test suite template."""
 
 from inspect import isclass
-import shutil
 
 from skbase.testing import BaseFixtureGenerator as _BaseFixtureGenerator
 from skbase.testing import QuickTester as _QuickTester
@@ -121,11 +120,14 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
         if isclass(filter):
             obj_list = [obj for obj in obj_list if issubclass(obj, filter)]
 
-        # run_test_for_class selects the estimators to run
-        # based on whether they have changed, and whether they have all dependencies
-        # internally, uses the ONLY_CHANGED_MODULES flag,
-        # and checks the python env against python_dependencies tag
-        # obj_list = [obj for obj in obj_list if run_test_for_class(obj)]
+        # only run tests if all soft dependencies are present
+        def softdeps_present(obj):
+            """Check if the object has all dependencies present."""
+            from skbase.utils.dependencies import _check_estimator_deps
+
+            return _check_estimator_deps(obj, severity="none")
+
+        obj_list = [obj for obj in obj_list if softdeps_present(obj)]
 
         return obj_list
 
@@ -136,9 +138,34 @@ class BaseFixtureGenerator(PackageConfig, _BaseFixtureGenerator):
 class TestAllObjects(BaseFixtureGenerator, _TestAllObjects):
     """Generic tests for all objects in the package."""
 
+    OBJECT_TYPES_IN_HYPERACTIVE = [
+        "experiment",
+        "optimizer",
+    ]
+
     def test_doctest_examples(self, object_class):
         """Runs doctests for estimator class."""
         run_doctest(object_class, name=f"class {object_class.__name__}")
+
+    def test_valid_object_class_tags(self, object_class):
+        """Check that object class tags are in self.valid_tags."""
+        # stepout for estimators with base classes in other packages
+        # e.g., sktime BaseForecaster, BaseClassifier, used in hyperactive.integrations
+        cls_type = object_class.get_class_tag("object_type", None)
+        if cls_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
+            return None
+
+        super().test_valid_object_class_tags(object_class)
+
+    def test_valid_object_tags(self, object_instance):
+        """Check that object tags are in self.valid_tags."""
+        # stepout for estimators with base classes in other packages
+        # e.g., sktime BaseForecaster, BaseClassifier, used in hyperactive.integrations
+        obj_type = object_instance.get_tag("object_type", None)
+        if obj_type not in self.OBJECT_TYPES_IN_HYPERACTIVE:
+            return None
+
+        super().test_valid_object_class_tags(object_instance)
 
 
 class ExperimentFixtureGenerator(BaseFixtureGenerator):
@@ -198,7 +225,7 @@ class TestAllExperiments(ExperimentFixtureGenerator, _QuickTester):
                 msg = f"Score and eval calls do not match: |{e_score}| != |{score}|"
                 assert abs(e_score) == abs(score), msg
 
-            call_sc = inst(**obj)
+            call_sc = inst(obj)
             assert isinstance(call_sc, float), f"Score is not a float: {call_sc}"
             if det_tag == "deterministic":
                 msg = f"Score does not match: {score} != {call_sc}"
@@ -250,7 +277,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         if not experiment.get_tag("object_type") == "experiment":
             raise ValueError(msg)
 
-        best_params = object_instance.run()
+        best_params = object_instance.solve()
 
         assert isinstance(best_params, dict), "return of run is not a dict"
 
@@ -282,11 +309,12 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         optimizer = object_instance
 
         # 1. define the experiment
-        from hyperactive.experiment.integrations import SklearnCvExperiment
         from sklearn.datasets import load_iris
-        from sklearn.svm import SVC
         from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
+        from sklearn.svm import SVC
+
+        from hyperactive.experiment.integrations import SklearnCvExperiment
 
         X, y = load_iris(return_X_y=True)
 
@@ -312,7 +340,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         optimizer = optimizer.clone().set_params(**_config)
 
         # 3. run the HillClimbing optimizer
-        optimizer.run()
+        optimizer.solve()
 
         best_params = optimizer.best_params_
         assert best_params is not None, "Best parameters should not be None"

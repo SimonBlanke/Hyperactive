@@ -1,8 +1,10 @@
-# copyright: hyperactive developers, MIT License (see LICENSE file)
+"""Integrations package for third-party library compatibility.
 
-from hyperactive.integrations.sklearn import HyperactiveSearchCV, OptCV
+copyright: hyperactive developers, MIT License (see LICENSE file)
+"""
+
+from hyperactive.integrations.sklearn import OptCV
 
 __all__ = [
-    "HyperactiveSearchCV",
     "OptCV",
 ]

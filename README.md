@@ -272,7 +272,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
   </tbody>
 </table>
 
-The examples above are not necessarily done with realistic datasets or training procedures. 
+The examples above are not necessarily done with realistic datasets or training procedures.
 The purpose is fast execution of the solution proposal and giving the user ideas for interesting usecases.
 
 
@@ -280,7 +280,7 @@ The purpose is fast execution of the solution proposal and giving the user ideas
 
 ## Sideprojects and Tools
 
-The following packages are designed to support Hyperactive and expand its use cases. 
+The following packages are designed to support Hyperactive and expand its use cases.
 
 | Package                                                                       | Description                                                                          |
 |-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
@@ -299,37 +299,37 @@ The following packages are designed to support Hyperactive and expand its use ca
 <summary><b> Read this before opening a bug-issue </b></summary>
 
 <br>
-  
+
 - <b>Are you sure the bug is located in Hyperactive? </b>
 
-  The error might be located in the optimization-backend. 
+  The error might be located in the optimization-backend.
   Look at the error message from the command line. <b>If</b> one of the last messages look like this:
      - File "/.../gradient_free_optimizers/...", line ...
 
-  <b>Then</b> you should post the bug report in: 
+  <b>Then</b> you should post the bug report in:
      - https://github.com/SimonBlanke/Gradient-Free-Optimizers
 
   <br>Otherwise</b> you can post the bug report in Hyperactive
-  
+
 - <b>Do you have the correct Hyperactive version? </b>
-  
+
   Every major version update (e.g. v2.2 -> v3.0) the API of Hyperactive changes.
   Check which version of Hyperactive you have. If your major version is older you have two options:
-  
+
   <b>Recommended:</b> You could just update your Hyperactive version with:
   ```bash
   pip install hyperactive --upgrade
   ```
   This way you can use all the new documentation and examples from the current repository.
-    
+
   Or you could continue using the old version and use an old repository branch as documentation.
-  You can do that by selecting the corresponding branch. (top right of the repository. The default is "master" or "main")
+  You can do that by selecting the corresponding branch. (top right of the repository. The default is "main")
   So if your major version is older (e.g. v2.1.0) you can select the 2.x.x branch to get the old repository for that version.
-  
+
 - <b>Provide example code for error reproduction </b>
   To understand and fix the issue I need an example code to reproduce the error.
   I must be able to just copy the code into a py-file and execute it to reproduce the error.
-  
+
 </details>
 
 
@@ -343,7 +343,7 @@ This is expected of the current implementation of smb-optimizers. For all Sequen
 search_space_size = 1
 for value_ in search_space.values():
     search_space_size *= len(value_)
-    
+
 print("search_space_size", search_space_size)
 ```
 Reduce the search space size to resolve this error.
@@ -389,17 +389,17 @@ warnings.warn = warn
 <summary> Warning: Not enough initial positions for population size </summary>
 
 <br>
-  
+
 This warning occurs because Hyperactive needs more initial positions to choose from to generate a population for the optimization algorithm:
 The number of initial positions is determined by the `initialize`-parameter in the `add_search`-method.
 ```python
 # This is how it looks per default
 initialize = {"grid": 4, "random": 2, "vertices": 4}
-  
+
 # You could set it to this for a maximum population of 20
 initialize = {"grid": 4, "random": 12, "vertices": 4}
 ```
-  
+
 </details>
 
 
@@ -426,4 +426,4 @@ initialize = {"grid": 4, "random": 12, "vertices": 4}
 
 ## License
 
-[![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/github/license/SimonBlanke/Hyperactive?style=for-the-badge)](https://github.com/SimonBlanke/Hyperactive/blob/main/LICENSE)
