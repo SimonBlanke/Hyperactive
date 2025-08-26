@@ -49,7 +49,13 @@ class BaseOptimizer(BaseObject):
         BaseExperiment
             The experiment to optimize parameters for.
         """
-        return self._experiment
+        exp = self._experiment
+        exp_is_baseobj = isinstance(exp, BaseObject)
+        if not exp_is_baseobj or exp.get_tag("object_type") != "experiment":
+            from hyperactive.experiment.func import FunctionExperiment
+
+            exp = FunctionExperiment(exp)  # callable adapted to BaseExperiment
+        return exp
 
     def solve(self):
         """Run the optimization search process to maximize the experiment's score.
