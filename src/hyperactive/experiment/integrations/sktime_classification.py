@@ -133,7 +133,7 @@ class SktimeClassificationExperiment(BaseExperiment):
     >>> score, add_info = sktime_exp.score(params)
 
     For default choices of ``scoring`` and ``cv``:
-    >>> sktime_exp = SktimeForecastingExperiment(
+    >>> sktime_exp = SktimeClassificationExperiment(
     ...     classifier=DummyClassifier(),
     ...     X=X,
     ...     y=y,
