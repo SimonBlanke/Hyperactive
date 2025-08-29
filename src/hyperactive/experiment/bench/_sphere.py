@@ -36,14 +36,14 @@ class Sphere(BaseExperiment):
     >>> from hyperactive.experiment.bench import Sphere
     >>> sphere = Sphere(const=0, n_dim=3)
     >>> params = {"x0": 1, "x1": 2, "x2": 3}
-    >>> score, add_info = sphere.score(params)
+    >>> score, metadata = sphere.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sphere(x0=1, x1=2, x2=3)
+    >>> score = sphere({"x0": 1, "x1": 2, "x2": 3})
 
     Different number of dimensions changes the parameter names:
     >>> sphere4D = Sphere(const=0, n_dim=4)
-    >>> score4D = sphere4D(x0=1, x1=2, x2=3, x3=4)
+    >>> score4D = sphere4D({"x0": 1, "x1": 2, "x2": 3, "x3": 4})
     """
 
     _tags = {
