@@ -114,34 +114,35 @@ class SktimeClassificationExperiment(BaseExperiment):
 
     Example
     -------
-    >>> from hyperactive.experiment.integrations import SktimeForecastingExperiment
-    >>> from sktime.datasets import load_airline
-    >>> from sktime.forecasting.naive import NaiveForecaster
-    >>> from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
-    >>> from sktime.split import ExpandingWindowSplitter
+    >>> from hyperactive.experiment.integrations import SktimeClassificationExperiment
+    >>> from sklearn.model_selection import KFold
+    >>> from sklearn.metrics import accuracy_score
+    >>> from sktime.datasets import load_unit_test
+    >>> from sktime.classification.dummy import DummyClassifier
     >>>
-    >>> y = load_airline()
+    >>> X, y = load_unit_test()
     >>>
-    >>> sktime_exp = SktimeForecastingExperiment(
-    ...     forecaster=NaiveForecaster(strategy="last"),
-    ...     scoring=MeanAbsolutePercentageError(),
-    ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
+    >>> sktime_exp = SktimeClassificationExperiment(
+    ...     classifier=DummyClassifier(),
+    ...     scoring=accuracy_score,
+    ...     cv=KFold(n_splits=2),
+    ...     X=X,
     ...     y=y,
     ... )
-    >>> params = {"strategy": "mean"}
+    >>> params = {"strategy": "most_frequent"}
     >>> score, add_info = sktime_exp.score(params)
 
-    For default choices of ``scoring``:
+    For default choices of ``scoring`` and ``cv``:
     >>> sktime_exp = SktimeForecastingExperiment(
-    ...     forecaster=NaiveForecaster(strategy="last"),
-    ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
+    ...     classifier=DummyClassifier(),
+    ...     X=X,
     ...     y=y,
     ... )
-    >>> params = {"strategy": "mean"}
+    >>> params = {"strategy": "most_frequent"}
     >>> score, add_info = sktime_exp.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sktime_exp(strategy="mean")
+    >>> score = sktime_exp({"strategy": "most_frequent"})
     """
 
     _tags = {
