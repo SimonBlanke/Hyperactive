@@ -140,33 +140,34 @@ class TSCOptCV(_DelegatedClassifier):
     For illustration, we use grid search, this can be replaced by any other optimizer.
 
     1. defining the tuned estimator:
-    >>> from sktime.forecasting.naive import NaiveForecaster
-    >>> from sktime.split import ExpandingWindowSplitter
-    >>> from hyperactive.integrations.sktime import ForecastingOptCV
+    >>> from sktime.classification.dummy import DummyClassifier
+    >>> from sklearn.model_selection import KFold
+    >>> from hyperactive.integrations.sktime import TSCOptCV
     >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
-    >>> param_grid = {"strategy": ["mean", "last", "drift"]}
-    >>> tuned_naive = ForecastingOptCV(
-    ...     NaiveForecaster(),
+    >>> param_grid = {"strategy": ["most_frequent", "stratified"]}
+    >>> tuned_naive = TSCOptCV(
+    ...     DummyClassifier(),
     ...     GridSearch(param_grid),
-    ...     cv=ExpandingWindowSplitter(
-    ...         initial_window=12, step_length=3, fh=range(1, 13)
-    ...     ),
+    ...     cv=KFold(n_splits=2, shuffle=False),
     ... )
 
     2. fitting the tuned estimator:
-    >>> from sktime.datasets import load_airline
-    >>> from sktime.split import temporal_train_test_split
-    >>> y = load_airline()
-    >>> y_train, y_test = temporal_train_test_split(y, test_size=12)
+    >>> from sktime.datasets import load_unit_test
+    >>> X_train, y_train = load_unit_test(
+    ...     return_X_y=True, split="TRAIN", return_type="pd-multiindex"
+    ... )
+    >>> X_test, _ = load_unit_test(
+    ...     return_X_y=True, split="TEST", return_type="pd-multiindex"
+    ... )
     >>>
-    >>> tuned_naive.fit(y_train, fh=range(1, 13))
-    ForecastingOptCV(...)
-    >>> y_pred = tuned_naive.predict()
+    >>> tuned_naive.fit(X_train, y_train)
+    TSCOptCV(...)
+    >>> y_pred = tuned_naive.predict(X_test)
 
-    3. obtaining best parameters and best forecaster
+    3. obtaining best parameters and best estimator
     >>> best_params = tuned_naive.best_params_
-    >>> best_forecaster = tuned_naive.best_forecaster_
+    >>> best_classifier = tuned_naive.best_estimator_
     """
 
     _tags = {
@@ -257,7 +258,7 @@ class TSCOptCV(_DelegatedClassifier):
         best_params = optimizer.solve()
 
         self.best_params_ = best_params
-        self.best_forecaster_ = estimator.set_params(**best_params)
+        self.best_estimator_ = estimator.set_params(**best_params)
 
         # Refit model with best parameters.
         if self.refit:
