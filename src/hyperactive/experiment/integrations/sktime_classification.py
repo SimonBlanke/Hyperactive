@@ -123,7 +123,7 @@ class SktimeClassificationExperiment(BaseExperiment):
     >>> X, y = load_unit_test()
     >>>
     >>> sktime_exp = SktimeClassificationExperiment(
-    ...     classifier=DummyClassifier(),
+    ...     estimator=DummyClassifier(),
     ...     scoring=accuracy_score,
     ...     cv=KFold(n_splits=2),
     ...     X=X,
@@ -134,7 +134,7 @@ class SktimeClassificationExperiment(BaseExperiment):
 
     For default choices of ``scoring`` and ``cv``:
     >>> sktime_exp = SktimeClassificationExperiment(
-    ...     classifier=DummyClassifier(),
+    ...     estimator=DummyClassifier(),
     ...     X=X,
     ...     y=y,
     ... )
