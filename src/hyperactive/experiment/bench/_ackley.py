@@ -39,10 +39,10 @@ class Ackley(BaseExperiment):
     >>> from hyperactive.experiment.bench import Ackley
     >>> ackley = Ackley(a=20)
     >>> params = {"x0": 1, "x1": 2}
-    >>> score, add_info = ackley.score(params)
+    >>> score, metadata = ackley.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = ackley(x0=1, x1=2)
+    >>> score = ackley({"x0": 1, "x1": 2})
     """  # noqa: E501
 
     _tags = {

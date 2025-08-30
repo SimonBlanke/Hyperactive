@@ -4,13 +4,17 @@
 import numpy as np
 
 from hyperactive.base import BaseExperiment
+from hyperactive.experiment.integrations._skl_metrics import (
+    _coerce_to_scorer,
+    _guess_sign_of_sklmetric,
+)
 
 
-class SktimeForecastingExperiment(BaseExperiment):
-    """Experiment adapter for time backtesting experiments.
+class SktimeClassificationExperiment(BaseExperiment):
+    """Experiment adapter for time series classification experiments.
 
-    This class is used to perform backtesting experiments using a given
-    sktime forecaster. It allows for hyperparameter tuning and evaluation of
+    This class is used to perform cross-validation experiments using a given
+    sktime classifier. It allows for hyperparameter tuning and evaluation of
     the model's performance.
 
     The score returned is the summary backtesting score,
@@ -24,41 +28,45 @@ class SktimeForecastingExperiment(BaseExperiment):
 
     Parameters
     ----------
-    forecaster : sktime BaseForecaster descendant (concrete forecaster)
-        sktime forecaster to benchmark
+    estimator : sktime BaseClassifier descendant (concrete classifier)
+        sktime classifier to benchmark
 
-    cv : sktime BaseSplitter descendant
-        determines split of ``y`` and possibly ``X`` into test and train folds
-        y is always split according to ``cv``, see above
-        if ``cv_X`` is not passed, ``X`` splits are subset to ``loc`` equal to ``y``
-        if ``cv_X`` is passed, ``X`` is split according to ``cv_X``
+    X : sktime-compatible panel data (Panel scitype)
+        Panel data container. Supported formats include:
 
-    y : sktime time series container
-        Target (endogeneous) time series used in the evaluation experiment
+        - ``pd.DataFrame`` with MultiIndex [instance, time] and variable columns
+        - 3D ``np.array`` with shape ``[n_instances, n_dimensions, series_length]``
+        - Other formats listed in ``datatypes.SCITYPE_REGISTER``
 
-    X : sktime time series container, of same mtype as y
-        Exogenous time series used in the evaluation experiment
+    y : sktime-compatible tabular data (Table scitype)
+        Target variable, typically a 1D ``np.ndarray`` or ``pd.Series``
+        of shape ``[n_instances]``.
 
-    strategy : {"refit", "update", "no-update_params"}, optional, default="refit"
-        defines the ingestion mode when the forecaster sees new data when window expands
-        "refit" = forecaster is refitted to each training window
-        "update" = forecaster is updated with training window data, in sequence provided
-        "no-update_params" = fit to first training window, re-used without fit or update
+    cv : int, sklearn cross-validation generator or an iterable, default=3-fold CV
+        Determines the cross-validation splitting strategy.
+        Possible inputs for cv are:
 
-    scoring : subclass of sktime.performance_metrics.BaseMetric,
-        default=None. Used to get a score function that takes y_pred and y_test
-        arguments and accept y_train as keyword argument.
-        If None, then uses scoring = MeanAbsolutePercentageError(symmetric=True).
+        - None = default = ``KFold(n_splits=3, shuffle=True)``
+        - integer, number of folds folds in a ``KFold`` splitter, ``shuffle=True``
+        - An iterable yielding (train, test) splits as arrays of indices.
+
+        For integer/None inputs, if the estimator is a classifier and ``y`` is
+        either binary or multiclass, :class:`StratifiedKFold` is used. In all
+        other cases, :class:`KFold` is used. These splitters are instantiated
+        with ``shuffle=False`` so the splits will be the same across calls.
+
+    scoring : str, callable, default=None
+        Strategy to evaluate the performance of the cross-validated model on
+        the test set. Can be:
+
+        - a single string resolvable to an sklearn scorer
+        - a callable that returns a single value;
+        - ``None`` = default = ``accuracy_score``
 
     error_score : "raise" or numeric, default=np.nan
         Value to assign to the score if an exception occurs in estimator fitting. If set
         to "raise", the exception is raised. If a numeric value is given,
         FitFailedWarning is raised.
-
-    cv_X : sktime BaseSplitter descendant, optional
-        determines split of ``X`` into test and train folds
-        default is ``X`` being split to identical ``loc`` indices as ``y``
-        if passed, must have same number of splits as ``cv``
 
     backend : string, by default "None".
         Parallelization backend to use for runs.
@@ -106,34 +114,35 @@ class SktimeForecastingExperiment(BaseExperiment):
 
     Example
     -------
-    >>> from hyperactive.experiment.integrations import SktimeForecastingExperiment
-    >>> from sktime.datasets import load_airline
-    >>> from sktime.forecasting.naive import NaiveForecaster
-    >>> from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
-    >>> from sktime.split import ExpandingWindowSplitter
+    >>> from hyperactive.experiment.integrations import SktimeClassificationExperiment
+    >>> from sklearn.model_selection import KFold
+    >>> from sklearn.metrics import accuracy_score
+    >>> from sktime.datasets import load_unit_test
+    >>> from sktime.classification.dummy import DummyClassifier
     >>>
-    >>> y = load_airline()
+    >>> X, y = load_unit_test()
     >>>
-    >>> sktime_exp = SktimeForecastingExperiment(
-    ...     forecaster=NaiveForecaster(strategy="last"),
-    ...     scoring=MeanAbsolutePercentageError(),
-    ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
+    >>> sktime_exp = SktimeClassificationExperiment(
+    ...     estimator=DummyClassifier(),
+    ...     scoring=accuracy_score,
+    ...     cv=KFold(n_splits=2),
+    ...     X=X,
     ...     y=y,
     ... )
-    >>> params = {"strategy": "mean"}
-    >>> score, metadata = sktime_exp.score(params)
+    >>> params = {"strategy": "most_frequent"}
+    >>> score, add_info = sktime_exp.score(params)
 
-    For default choices of ``scoring``:
-    >>> sktime_exp = SktimeForecastingExperiment(
-    ...     forecaster=NaiveForecaster(strategy="last"),
-    ...     cv=ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
+    For default choices of ``scoring`` and ``cv``:
+    >>> sktime_exp = SktimeClassificationExperiment(
+    ...     estimator=DummyClassifier(),
+    ...     X=X,
     ...     y=y,
     ... )
-    >>> params = {"strategy": "mean"}
-    >>> score, metadata = sktime_exp.score(params)
+    >>> params = {"strategy": "most_frequent"}
+    >>> score, add_info = sktime_exp.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sktime_exp({"strategy": "mean"})
+    >>> score = sktime_exp({"strategy": "most_frequent"})
     """
 
     _tags = {
@@ -144,44 +153,46 @@ class SktimeForecastingExperiment(BaseExperiment):
 
     def __init__(
         self,
-        forecaster,
-        cv,
+        estimator,
+        X,
         y,
-        X=None,
-        strategy="refit",
+        cv=None,
         scoring=None,
         error_score=np.nan,
-        cv_X=None,
         backend=None,
         backend_params=None,
     ):
-        self.forecaster = forecaster
+        self.estimator = estimator
         self.X = X
         self.y = y
-        self.strategy = strategy
         self.scoring = scoring
         self.cv = cv
         self.error_score = error_score
-        self.cv_X = cv_X
         self.backend = backend
         self.backend_params = backend_params
 
         super().__init__()
 
-        if scoring is None:
-            from sktime.performance_metrics.forecasting import (
-                MeanAbsolutePercentageError,
-            )
+        self._scoring = _coerce_to_scorer(scoring, "classifier")
 
-            self._scoring = MeanAbsolutePercentageError(symmetric=True)
-        else:
-            self._scoring = scoring
+        # Set the sign of the scoring function
+        if hasattr(self._scoring, "_score"):
+            score_func = self._scoring._score_func
+            _sign = _guess_sign_of_sklmetric(score_func)
+            _sign_str = "higher" if _sign == 1 else "lower"
+            self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
 
-        if scoring is None or scoring.get_tag("lower_is_better", False):
-            higher_or_lower_better = "lower"
+        # default handling for cv
+        if isinstance(cv, int):
+            from sklearn.model_selection import KFold
+
+            self._cv = KFold(n_splits=cv, shuffle=True)
+        elif cv is None:
+            from sklearn.model_selection import KFold
+
+            self._cv = KFold(n_splits=3, shuffle=True)
         else:
-            higher_or_lower_better = "higher"
-        self.set_tags(**{"property:higher_or_lower_is_better": higher_or_lower_better})
+            self._cv = cv
 
     def _paramnames(self):
         """Return the parameter names of the search.
@@ -191,7 +202,7 @@ class SktimeForecastingExperiment(BaseExperiment):
         list of str
             The parameter names of the search parameters.
         """
-        return list(self.forecaster.get_params().keys())
+        return list(self.estimator.get_params().keys())
 
     def _evaluate(self, params):
         """Evaluate the parameters.
@@ -208,24 +219,23 @@ class SktimeForecastingExperiment(BaseExperiment):
         dict
             Additional metadata about the search.
         """
-        from sktime.forecasting.model_evaluation import evaluate
+        from sktime.classification.model_evaluation import evaluate
 
-        forecaster = self.forecaster.clone().set_params(**params)
+        estimator = self.estimator.clone().set_params(**params)
 
         results = evaluate(
-            forecaster,
-            cv=self.cv,
-            y=self.y,
+            estimator,
+            cv=self._cv,
             X=self.X,
-            strategy=self.strategy,
-            scoring=self._scoring,
+            y=self.y,
+            scoring=self._scoring._score_func,
             error_score=self.error_score,
-            cv_X=self.cv_X,
             backend=self.backend,
             backend_params=self.backend_params,
         )
 
-        result_name = f"test_{self._scoring.name}"
+        metric = self._scoring._score_func
+        result_name = f"test_{metric.__name__}"
 
         res_float = results[result_name].mean()
 
@@ -264,26 +274,24 @@ class SktimeForecastingExperiment(BaseExperiment):
             `MyClass(**params)` or `MyClass(**params[i])` creates a valid test instance.
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
-        from sktime.datasets import load_airline, load_longley
-        from sktime.forecasting.naive import NaiveForecaster
-        from sktime.split import ExpandingWindowSplitter
+        from sklearn.metrics import brier_score_loss
+        from sklearn.model_selection import KFold
+        from sktime.classification.dummy import DummyClassifier
+        from sktime.datasets import load_unit_test
 
-        y = load_airline()
+        X, y = load_unit_test(return_X_y=True, return_type="pd-multiindex")
         params0 = {
-            "forecaster": NaiveForecaster(strategy="last"),
-            "cv": ExpandingWindowSplitter(initial_window=36, step_length=12, fh=12),
+            "estimator": DummyClassifier(strategy="most_frequent"),
+            "X": X,
             "y": y,
         }
 
-        from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
-
-        y, X = load_longley()
         params1 = {
-            "forecaster": NaiveForecaster(strategy="last"),
-            "cv": ExpandingWindowSplitter(initial_window=3, step_length=3, fh=1),
-            "y": y,
+            "estimator": DummyClassifier(strategy="stratified"),
+            "cv": KFold(n_splits=2),
             "X": X,
-            "scoring": MeanAbsolutePercentageError(symmetric=False),
+            "y": y,
+            "scoring": brier_score_loss,
         }
 
         return [params0, params1]
@@ -301,6 +309,6 @@ class SktimeForecastingExperiment(BaseExperiment):
         list of dict
             The parameters to be used for scoring.
         """
-        val0 = {"strategy": "mean"}
-        val1 = {"strategy": "last"}
+        val0 = {}
+        val1 = {"strategy": "most_frequent"}
         return [val0, val1]
