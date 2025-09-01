@@ -143,11 +143,13 @@ class MyExperiment(BaseExperiment):
 
         Returns
         -------
-        list of str
+        list of str, or None
             The parameter names of the search parameters.
+            If not known or arbitrary, return None.
         """
         # for every instance, this should return the correct parameter names
         # i.e., the maximal set of keys of the dict expected by _score
+        # (if not known or arbitrary, return None)
         return ["score_param1", "score_param2"]
 
     # todo: implement this, mandatory
