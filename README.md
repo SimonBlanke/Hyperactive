@@ -7,10 +7,8 @@
 
 **A unified interface for optimization algorithms and problems.**
 
-* [easy sklearn-like interface](#hyperactive-is-very-easy-to-use), [versatile and configurable](./examples/optimization_applications/search_space_example.py)
-- collection of [optimization algorithms](#overview), integrates with major [ML frameworks](#overview) such as `scikit-learn`
-- [memory-efficient](./examples/optimization_applications/memory.py) native implementations of [gradient-free optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers)
-- unified API to popular optimization packages such as `optuna`
+Hyperactive implements 30+ gradient-free optimization algorithms including Bayesian optimization, genetic algorithms, particle swarm optimization, and simulated annealing, accessible through a unified experiment-based API that separates optimization problems from search strategies. The library provides native implementations of algorithms from the Gradient-Free-Optimizers package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces. Designed for hyperparameter tuning and computational model optimization, it handles objective functions with expensive evaluations through memory-efficient search strategies and parallel execution capabilities.
+
 
 <br>
 
