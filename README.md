@@ -7,7 +7,9 @@
 
 **A unified interface for optimization algorithms and problems.**
 
-Hyperactive implements 30+ gradient-free optimization algorithms including Bayesian optimization, genetic algorithms, particle swarm optimization, and simulated annealing, accessible through a unified experiment-based API that separates optimization problems from search strategies. The library provides native implementations of algorithms from the Gradient-Free-Optimizers package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces. 
+Hyperactive implements a collection of optimization algorithms, accessible through a unified experiment-based 
+interface that separates optimization problems from algorithms. The library provides native implementations of algorithms from the Gradient-Free-Optimizers
+package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces. 
 
 
 <br>
