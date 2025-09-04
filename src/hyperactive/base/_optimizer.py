@@ -2,8 +2,6 @@
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
-from abc import abstractmethod
-
 from skbase.base import BaseObject
 
 
@@ -79,7 +77,6 @@ class BaseOptimizer(BaseObject):
         self.best_params_ = best_params
         return best_params
 
-    @abstractmethod
     def _solve(self, experiment, *args, **kwargs):
         """Run the optimization search process.
 
@@ -98,3 +95,4 @@ class BaseOptimizer(BaseObject):
             The best parameters found during the search.
             Must have keys a subset or identical to experiment.paramnames().
         """
+        raise NotImplementedError
