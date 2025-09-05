@@ -82,3 +82,26 @@ class BaseOptimizer(BaseObject):
         best_params = self._solve(experiment, **search_config)
         self.best_params_ = best_params
         return best_params
+
+    def _solve(self, experiment, *args, **kwargs):
+        """Run the optimization search process.
+
+        Parameters
+        ----------
+        experiment : BaseExperiment
+            The experiment to optimize parameters for.
+        *args : tuple
+            Positional arguments specific to the optimization backend.
+        **kwargs : dict
+            Keyword arguments specific to the optimization backend.
+
+        Returns
+        -------
+        dict with str keys
+            The best parameters found during the search.
+            Must have keys a subset or identical to experiment.paramnames().
+        """
+        raise NotImplementedError(
+            "abstract method, BaseOptimizer._solve should be implemented by "
+            "descendant classes"
+        )
