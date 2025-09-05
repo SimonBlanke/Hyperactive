@@ -95,4 +95,7 @@ class BaseOptimizer(BaseObject):
             The best parameters found during the search.
             Must have keys a subset or identical to experiment.paramnames().
         """
-        raise NotImplementedError
+        raise NotImplementedError(
+            "abstract method, BaseOptimizer._solve should be implemented by "
+            "descendant classes"
+        )
