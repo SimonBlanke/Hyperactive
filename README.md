@@ -7,10 +7,10 @@
 
 **A unified interface for optimization algorithms and problems.**
 
-* [easy sklearn-like interface](#hyperactive-is-very-easy-to-use), [versatile and configurable](./examples/optimization_applications/search_space_example.py)
-- collection of [optimization algorithms](#overview), integrates with major [ML frameworks](#overview) such as `scikit-learn`
-- [memory-efficient](./examples/optimization_applications/memory.py) native implementations of [gradient-free optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers)
-- unified API to popular optimization packages such as `optuna`
+Hyperactive implements a collection of optimization algorithms, accessible through a unified experiment-based 
+interface that separates optimization problems from algorithms. The library provides native implementations of algorithms from the Gradient-Free-Optimizers
+package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces. 
+
 
 <br>
 
@@ -46,29 +46,29 @@ pip install hyperactive
 import numpy as np
 
 # function to be maximized
-def problem(opt):
-    x = opt["x"]
-    y = opt["y"]
+def problem(params):
+    x = params["x"]
+    y = params["y"]
 
     return - x ** 2 + - y ** 2
 
 # discrete search space: dict of iterable, scikit-learn like grid space
 # (valid search space types depends on optimizer)
-grid = {
+search_space = {
     "x": np.arange(-1, 1, 0.01),
     "y": np.arange(-1, 2, 0.1),
 }
 
-from hyperactive.opt import HillClimbing
+from hyperactive.opt.gfo import HillClimbing
 
 hillclimbing = HillClimbing(
-    experiment=problem,
-    search_space=grid,
+    search_space=search_space,
     n_iter=100,
+    experiment=problem,
 )
 
 # running the hill climbing search:
-best_params = hillclimbing.run()
+best_params = hillclimbing.solve()
 ```
 
 ### experiment abstraction - example: scikit-learn CV experiment
@@ -79,6 +79,7 @@ best_params = hillclimbing.run()
 `scikit-learn` cross-validation experiments:
 
 ```python
+import numpy as np
 from hyperactive.experiment.integrations import SklearnCvExperiment
 from sklearn.datasets import load_iris
 from sklearn.svm import SVC
@@ -96,23 +97,25 @@ sklearn_exp = SklearnCvExperiment(
     y=y,
 )
 
-# experiments can be evaluated via "score
+# experiments can be evaluated via "score"
 params = {"C": 1.0, "kernel": "linear"}
 score, add_info = sklearn_exp.score(params)
 
 # they can be used in optimizers like above
-from hyperactive.opt import HillClimbing
+from hyperactive.opt.gfo import HillClimbing
+
+search_space = {
+    "C": np.logspace(0.01, 100, num=10),
+    "kernel": ["linear", "rbf"],
+}
 
 hillclimbing = HillClimbing(
-    experiment=problem,
-    search_space={
-        "C": np.logspace(0.01, 100, num=10),
-        "kernel": ["linear", "rbf"],
-    }
+    search_space=search_space,
     n_iter=100,
+    experiment=sklearn_exp,
 )
 
-best_params = hillclimbing.run()
+best_params = hillclimbing.solve()
 ```
 
 ### full ML toolbox integration - example: scikit-learn
@@ -125,10 +128,11 @@ Any `hyperactive` optimizer can be combined with the ML toolbox integrations!
 # 1. defining the tuned estimator:
 from sklearn.svm import SVC
 from hyperactive.integrations.sklearn import OptCV
-from hyperactive.opt import HillClimbing
+from hyperactive.opt.gfo import HillClimbing
 
-param_grid = {"kernel": ["linear", "rbf"], "C": [1, 10]}
-tuned_svc = OptCV(SVC(), HillClimbing(param_grid))
+search_space = {"kernel": ["linear", "rbf"], "C": [1, 10]}
+optimizer = HillClimbing(search_space=search_space, n_iter=20)
+tuned_svc = OptCV(SVC(), optimizer)
 
 # 2. fitting the tuned estimator:
 from sklearn.datasets import load_iris
@@ -144,6 +148,26 @@ y_pred = tuned_svc.predict(X_test)
 best_params = tuned_svc.best_params_
 best_estimator = tuned_svc.best_estimator_
 ```
+
+## :bulb: Key Concepts
+
+### Experiment-Based Architecture
+
+Hyperactive v5 introduces a clean separation between optimization algorithms and optimization problems through the **experiment abstraction**:
+
+- **Experiments** define *what* to optimize (the objective function and evaluation logic)
+- **Optimizers** define *how* to optimize (the search strategy and algorithm)
+
+This design allows you to:
+- Mix and match any optimizer with any experiment type
+- Create reusable experiment definitions for common ML tasks
+- Easily switch between different optimization strategies
+- Build complex optimization workflows with consistent interfaces
+
+**Built-in experiments include:**
+- `SklearnCvExperiment` - Cross-validation for sklearn estimators
+- `SktimeForecastingExperiment` - Time series forecasting optimization
+- Custom function experiments (pass any callable as experiment)
 
 <img src="./docs/images/bayes_convex.gif" align="right" width="500">
 
@@ -177,43 +201,54 @@ Hyperactive features a collection of optimization algorithms that can be used fo
       <td>
         <a><b>Local Search:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
-            <li><a href="./examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
-            <li><a href="./examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
-            <li><a href="./examples/optimization_techniques/downhill_simplex.py">Downhill Simplex Optimizer</a></li>
+            <li><a href="./examples/gfo/hill_climbing_example.py">Hill Climbing</a></li>
+            <li><a href="./examples/gfo/repulsing_hill_climbing_example.py">Repulsing Hill Climbing</a></li>
+            <li><a href="./examples/gfo/simulated_annealing_example.py">Simulated Annealing</a></li>
+            <li><a href="./examples/gfo/downhill_simplex_example.py">Downhill Simplex Optimizer</a></li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/random_search.py">Random Search</a></li>
-            <li><a href="./examples/optimization_techniques/grid_search.py">Grid Search</a></li>
-            <li><a href="./examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
-            <li><a href="./examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
-            <li><a href="./examples/optimization_techniques/pattern_search.py">Powell's Method</a></li>
-            <li><a href="./examples/optimization_techniques/powells_method.py">Pattern Search</a></li>
+            <li><a href="./examples/gfo/random_search_example.py">Random Search</a></li>
+            <li><a href="./examples/gfo/grid_search_example.py">Grid Search</a></li>
+            <li><a href="./examples/gfo/random_restart_hill_climbing_example.py">Random Restart Hill Climbing</a></li>
+            <li><a href="./examples/gfo/stochastic_hill_climbing_example.py">Stochastic Hill Climbing</a></li>
+            <li><a href="./examples/gfo/powells_method_example.py">Powell's Method</a></li>
+            <li><a href="./examples/gfo/pattern_search_example.py">Pattern Search</a></li>
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
-            <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
-            <li><a href="./examples/optimization_techniques/spiral_optimization.py">Spiral Optimization</li>
-            <li>Genetic Algorithm</a></li>
-            <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
-            <li>Differential Evolution</a></li>
+            <li><a href="./examples/gfo/parallel_tempering_example.py">Parallel Tempering</a></li>
+            <li><a href="./examples/gfo/particle_swarm_optimization_example.py">Particle Swarm Optimizer</a></li>
+            <li><a href="./examples/gfo/spiral_optimization_example.py">Spiral Optimization</a></li>
+            <li><a href="./examples/gfo/genetic_algorithm_example.py">Genetic Algorithm</a></li>
+            <li><a href="./examples/gfo/evolution_strategy_example.py">Evolution Strategy</a></li>
+            <li><a href="./examples/gfo/differential_evolution_example.py">Differential Evolution</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
-            <li><a href="./examples/optimization_techniques/lipschitz_optimization.py">Lipschitz Optimization</a></li>
-            <li><a href="./examples/optimization_techniques/direct_algorithm.py">Direct Algorithm</a></li>
-            <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
-            <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
+            <li><a href="./examples/gfo/bayesian_optimization_example.py">Bayesian Optimization</a></li>
+            <li><a href="./examples/gfo/lipschitz_optimization_example.py">Lipschitz Optimization</a></li>
+            <li><a href="./examples/gfo/direct_algorithm_example.py">Direct Algorithm</a></li>
+            <li><a href="./examples/gfo/tree_structured_parzen_estimators_example.py">Tree of Parzen Estimators</a></li>
+            <li><a href="./examples/gfo/forest_optimization_example.py">Forest Optimizer</a>
             [<a href="#/./overview#references">dto</a>] </li>
+          </ul><br>
+        <a><b>Optuna Backend:</b></a>
+          <ul>
+            <li><a href="./examples/optuna/tpe_sampler_example.py">TPE Optimizer</a></li>
+            <li><a href="./examples/optuna/random_sampler_example.py">Random Optimizer</a></li>
+            <li><a href="./examples/optuna/cmaes_sampler_example.py">CMA-ES Optimizer</a></li>
+            <li><a href="./examples/optuna/gp_sampler_example.py">Gaussian Process Optimizer</a></li>
+            <li><a href="./examples/optuna/grid_sampler_example.py">Grid Optimizer</a></li>
+            <li><a href="./examples/optuna/nsga_ii_sampler_example.py">NSGA-II Optimizer</a></li>
+            <li><a href="./examples/optuna/nsga_iii_sampler_example.py">NSGA-III Optimizer</a></li>
+            <li><a href="./examples/optuna/qmc_sampler_example.py">QMC Optimizer</a></li>
           </ul>
       </td>
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li><a href="./examples/tested_and_supported_packages/sklearn_example.py">Scikit-learn</a></li>
+              <li><a href="./examples/sklearn/grid_search_example.py">Scikit-learn</a></li>
               <li><a href="./examples/tested_and_supported_packages/xgboost_example.py">XGBoost</a></li>
               <li><a href="./examples/tested_and_supported_packages/lightgbm_example.py">LightGBM</a></li>
               <li><a href="./examples/tested_and_supported_packages/catboost_example.py">CatBoost</a></li>
