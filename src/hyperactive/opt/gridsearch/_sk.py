@@ -161,11 +161,21 @@ class GridSearchSk(BaseOptimizer):
             backend_params=backend_params,
         )
 
-        best_index = np.argmin(scores)
+        # choose selection direction based on experiment tag
+        hib = experiment.get_tag("property:higher_or_lower_is_better", "higher")
+        if hib == "lower":
+            best_index = int(np.argmin(scores))
+        else:  # default and "higher"
+            best_index = int(np.argmax(scores))
+
         best_params = candidate_params[best_index]
 
+        # store public attributes
         self.best_index_ = best_index
-        self.best_score_ = scores[best_index]
+        # compute signed score using experiment.score to follow the convention
+        signed_score, _ = experiment.score(best_params)
+        self.best_score_ = float(signed_score)
+        self.best_params_ = best_params
 
         return best_params
 
