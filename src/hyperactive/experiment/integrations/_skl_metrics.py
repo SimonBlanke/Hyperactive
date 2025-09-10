@@ -113,16 +113,18 @@ def _guess_sign_of_sklmetric(scorer):
 
     if hasattr(scorer, "greater_is_better"):
         return 1 if scorer.greater_is_better else -1
-    elif scorer_name in HIGHER_IS_BETTER:
+    if scorer_name is None:
+        # no name available; conservatively assume lower is better
+        return -1
+    if scorer_name in HIGHER_IS_BETTER:
         return 1 if HIGHER_IS_BETTER[scorer_name] else -1
-    elif scorer_name.endswith("_score"):
+    if scorer_name.endswith("_score"):
         # If the scorer name ends with "_score", we assume higher is better
         return 1
-    elif scorer_name.endswith("_loss") or scorer_name.endswith("_deviance"):
-        # If the scorer name ends with "_loss", we assume lower is better
+    if scorer_name.endswith("_loss") or scorer_name.endswith("_deviance"):
+        # If the scorer name ends with "_loss"/"_deviance", assume lower is better
         return -1
-    elif scorer_name.endswith("_error"):
+    if scorer_name.endswith("_error"):
         return -1
-    else:
-        # If we cannot determine the sign, we assume lower is better
-        return -1
+    # If we cannot determine the sign, assume lower is better
+    return -1
