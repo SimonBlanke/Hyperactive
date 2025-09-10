@@ -1,4 +1,4 @@
-"""Grid search optimizer."""
+"""Random search optimizer."""
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
