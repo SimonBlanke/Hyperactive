@@ -1,6 +1,5 @@
 """Validation checks for scikit-learn integration."""
 
-
 from functools import wraps
 
 
@@ -10,7 +9,7 @@ class Checks:
     _fit_successful = False
 
     def verify_fit(function):
-        """Decorator to mark a successful fit while preserving signature."""
+        """Mark fit successful and preserve signature."""
 
         @wraps(function)
         def wrapper(self, *args, **kwargs):

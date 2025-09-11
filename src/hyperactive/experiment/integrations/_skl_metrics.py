@@ -58,8 +58,9 @@ def _coerce_to_scorer(scoring, estimator):
         metric_func = _default_metric_for(estimator)
     try:
         setattr(scorer, "_metric_func", metric_func)
-    except Exception:
-        # if scorer is not settable (unlikely), ignore
+    except (TypeError, AttributeError):
+        # Some scorer objects may be read-only or frozen (e.g., built-in functions)
+        # This is acceptable as _metric_func is an optional enhancement for downstream
         pass
 
     return scorer
