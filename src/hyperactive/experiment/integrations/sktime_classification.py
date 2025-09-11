@@ -175,15 +175,12 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         self._scoring = _coerce_to_scorer(scoring, "classifier")
 
-        # Set the sign of the scoring function
-        _sign_attr = getattr(self._scoring, "_sign", None)
-        if _sign_attr is not None:
-            _sign = _sign_attr
-        else:
-            score_func = getattr(self._scoring, "_score_func", self._scoring)
+        # Set the sign of the scoring function (rely on sklearn scorer if present)
+        if hasattr(self._scoring, "_score"):
+            score_func = self._scoring._score_func
             _sign = _guess_sign_of_sklmetric(score_func)
-        _sign_str = "higher" if _sign == 1 else "lower"
-        self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
+            _sign_str = "higher" if _sign == 1 else "lower"
+            self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
 
         # default handling for cv
         if isinstance(cv, int):

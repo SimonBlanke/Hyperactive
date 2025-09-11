@@ -190,18 +190,14 @@ class RandomSearchSk(BaseOptimizer):
             backend_params=backend_params,
         )
 
-        hib = experiment.get_tag("property:higher_or_lower_is_better", "higher")
-        if hib == "lower":
-            best_index = int(np.argmin(scores))
-        else:  # default and "higher"
-            best_index = int(np.argmax(scores))
+        # select best by maximizing standardized score
+        best_index = int(np.argmax(scores))
 
         best_params = candidate_params[best_index]
 
         # public attributes for external consumers (signed score convention)
         self.best_index_ = best_index
-        signed_score, _ = experiment.score(best_params)
-        self.best_score_ = float(signed_score)
+        self.best_score_ = float(scores[best_index])
         self.best_params_ = best_params
 
         return best_params
