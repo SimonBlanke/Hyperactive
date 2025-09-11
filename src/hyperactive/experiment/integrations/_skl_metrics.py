@@ -3,6 +3,35 @@
 __all__ = ["_coerce_to_scorer", "_guess_sign_of_sklmetric"]
 
 
+
+def _default_metric_for(est):
+    """Get a default metric function for a given estimator type.
+
+    Parameters
+    ----------
+    est : sklearn estimator object or str
+        The estimator to get a default metric for.
+
+    Returns
+    -------
+    metric : callable
+        A default metric function.
+    """
+    from sklearn.base import is_classifier, is_regressor
+    from sklearn.metrics import accuracy_score, r2_score
+
+    if isinstance(est, str):
+        if est == "classifier":
+            return accuracy_score
+        if est == "regressor":
+            return r2_score
+    if is_classifier(est):
+        return accuracy_score
+    if is_regressor(est):
+        return r2_score
+    return accuracy_score  # safe fallback
+
+
 def _coerce_to_scorer(scoring, estimator):
     """Coerce scoring argument into a sklearn scorer.
 
@@ -23,16 +52,7 @@ def _coerce_to_scorer(scoring, estimator):
     """
     from inspect import signature
 
-    from sklearn.metrics import accuracy_score, check_scoring, make_scorer, r2_score
-
-    def _default_metric_for(est):
-        if isinstance(est, str):
-            if est == "classifier":
-                return accuracy_score
-            if est == "regressor":
-                return r2_score
-        # conservative fallback
-        return accuracy_score
+    from sklearn.metrics import check_scoring, make_scorer
 
     # Resolve to a sklearn scorer/callable first
     if scoring is None:
@@ -52,18 +72,39 @@ def _coerce_to_scorer(scoring, estimator):
         # string (scorer name)
         scorer = check_scoring(estimator, scoring=scoring)
 
-    # Attach a safe metric function for downstream integrations (e.g., sktime)
-    metric_func = getattr(scorer, "_score_func", None)
-    if metric_func is None:
-        metric_func = _default_metric_for(estimator)
-    try:
-        setattr(scorer, "_metric_func", metric_func)
-    except (TypeError, AttributeError):
-        # Some scorer objects may be read-only or frozen (e.g., built-in functions)
-        # This is acceptable as _metric_func is an optional enhancement for downstream
-        pass
-
     return scorer
+
+
+def _coerce_to_scorer_and_sign(scoring, estimator):
+    """Coerce scoring argument into a sklearn scorer and determine sign.
+
+    Parameters
+    ----------
+    scoring : str, callable, or None
+        The scoring strategy to use.
+    estimator : estimator object or str
+        The estimator to use for default scoring if scoring is None.
+
+        If str, indicates estimator type, should be one of {"classifier", "regressor"}.
+
+    Returns
+    -------
+    scorer : callable
+        A sklearn scorer callable.
+        Follows the unified sklearn scorer interface
+    sign : int
+        1 if higher scores are better, -1 if lower scores are better.
+    """
+    scorer = _coerce_to_scorer(scoring, estimator)
+
+    # Attach a safe metric function for downstream integrations (e.g., sktime)
+    score_func = getattr(scorer, "_score_func", None)
+    if score_func is None:
+        score_func = _default_metric_for(estimator)
+
+    sign = _guess_sign_of_sklmetric(score_func)
+
+    return scorer, sign
 
 
 def _guess_sign_of_sklmetric(scorer):

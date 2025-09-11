@@ -5,10 +5,7 @@
 import numpy as np
 
 from hyperactive.base import BaseExperiment
-from hyperactive.experiment.integrations._skl_metrics import (
-    _coerce_to_scorer,
-    _guess_sign_of_sklmetric,
-)
+from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
 
 
 class SktimeClassificationExperiment(BaseExperiment):
@@ -174,14 +171,11 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         super().__init__()
 
-        self._scoring = _coerce_to_scorer(scoring, "classifier")
+        self._scoring, _sign = _coerce_to_scorer_and_sign(scoring, "classifier")
 
         # Set the sign of the scoring function (rely on sklearn scorer if present)
-        if hasattr(self._scoring, "_score"):
-            score_func = self._scoring._score_func
-            _sign = _guess_sign_of_sklmetric(score_func)
-            _sign_str = "higher" if _sign == 1 else "lower"
-            self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
+        _sign_str = "higher" if _sign == 1 else "lower"
+        self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
 
         # default handling for cv
         if isinstance(cv, int):
