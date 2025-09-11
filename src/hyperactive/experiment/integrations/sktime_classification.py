@@ -1,4 +1,5 @@
 """Experiment adapter for sktime backtesting experiments."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
@@ -300,7 +301,18 @@ class SktimeClassificationExperiment(BaseExperiment):
             "scoring": brier_score_loss,
         }
 
-        return [params0, params1]
+        def passthrough_scorer(estimator, X, y):
+            return estimator.score(X, y)
+
+        params2 = {
+            "estimator": DummyClassifier(strategy="prior"),
+            "X": X,
+            "y": y,
+            "cv": KFold(n_splits=2),
+            "scoring": passthrough_scorer,
+        }
+
+        return [params0, params1, params2]
 
     @classmethod
     def _get_score_params(self):
