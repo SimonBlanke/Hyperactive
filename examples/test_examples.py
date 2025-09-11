@@ -10,10 +10,8 @@ than output validation, making it suitable for verifying that API changes
 don't break the examples.
 """
 
-import os
 import sys
 import subprocess
-import tempfile
 from pathlib import Path
 import pytest
 
