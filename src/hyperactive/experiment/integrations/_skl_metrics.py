@@ -1,7 +1,10 @@
 """Integration utilities for sklearn metrics with Hyperactive."""
 
-__all__ = ["_coerce_to_scorer", "_guess_sign_of_sklmetric"]
-
+__all__ = [
+    "_coerce_to_scorer",
+    "_coerce_to_scorer_and_sign",
+    "_guess_sign_of_sklmetric",
+]
 
 
 def _default_metric_for(est):

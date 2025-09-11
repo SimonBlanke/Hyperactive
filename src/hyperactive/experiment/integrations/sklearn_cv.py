@@ -97,7 +97,7 @@ class SklearnCvExperiment(BaseExperiment):
         else:
             self._cv = cv
 
-        self._scoring , _sign = _coerce_to_scorer_and_sign(scoring, self.estimator)
+        self._scoring, _sign = _coerce_to_scorer_and_sign(scoring, self.estimator)
         self.scorer_ = self._scoring
 
         _sign_str = "higher" if _sign == 1 else "lower"
