@@ -21,35 +21,48 @@ def _coerce_to_scorer(scoring, estimator):
         A sklearn scorer callable.
         Follows the unified sklearn scorer interface
     """
-    from sklearn.metrics import check_scoring
+    from inspect import signature
 
-    # check if scoring is a scorer by checking for "estimator" in signature
+    from sklearn.metrics import accuracy_score, check_scoring, make_scorer, r2_score
+
+    def _default_metric_for(est):
+        if isinstance(est, str):
+            if est == "classifier":
+                return accuracy_score
+            if est == "regressor":
+                return r2_score
+        # conservative fallback
+        return accuracy_score
+
+    # Resolve to a sklearn scorer/callable first
     if scoring is None:
+        # use default metric for type strings; otherwise rely on sklearn default
         if isinstance(estimator, str):
-            if estimator == "classifier":
-                from sklearn.metrics import accuracy_score
-
-                scoring = accuracy_score
-            elif estimator == "regressor":
-                from sklearn.metrics import r2_score
-
-                scoring = r2_score
+            scoring = _default_metric_for(estimator)
+            scorer = make_scorer(scoring)
         else:
-            return check_scoring(estimator)
-
-    # check using inspect.signature for "estimator" in signature
-    if callable(scoring):
-        from inspect import signature
-
+            scorer = check_scoring(estimator)
+    elif callable(scoring):
+        # user-provided callable
         if "estimator" in signature(scoring).parameters:
-            return scoring
+            scorer = scoring  # passthrough scorer signature
         else:
-            from sklearn.metrics import make_scorer
-
-            return make_scorer(scoring)
+            scorer = make_scorer(scoring)
     else:
-        # scoring is a string (scorer name)
-        return check_scoring(estimator, scoring=scoring)
+        # string (scorer name)
+        scorer = check_scoring(estimator, scoring=scoring)
+
+    # Attach a safe metric function for downstream integrations (e.g., sktime)
+    metric_func = getattr(scorer, "_score_func", None)
+    if metric_func is None:
+        metric_func = _default_metric_for(estimator)
+    try:
+        setattr(scorer, "_metric_func", metric_func)
+    except Exception:
+        # if scorer is not settable (unlikely), ignore
+        pass
+
+    return scorer
 
 
 def _guess_sign_of_sklmetric(scorer):

@@ -226,19 +226,25 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         estimator = self.estimator.clone().set_params(**params)
 
+        # determine metric function for sktime.evaluate via centralized coerce helper
+        metric_func = getattr(self._scoring, "_metric_func", None)
+        if metric_func is None:
+            # very defensive fallback (should not happen due to _coerce_to_scorer)
+            from sklearn.metrics import accuracy_score as metric_func  # type: ignore
+
         results = evaluate(
             estimator,
             cv=self._cv,
             X=self.X,
             y=self.y,
-            scoring=self._scoring._score_func,
+            scoring=metric_func,
             error_score=self.error_score,
             backend=self.backend,
             backend_params=self.backend_params,
         )
 
-        metric = self._scoring._score_func
-        result_name = f"test_{metric.__name__}"
+        metric = metric_func
+        result_name = f"test_{getattr(metric, '__name__', 'score')}"
 
         res_float = results[result_name].mean()
 
