@@ -356,22 +356,11 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         experiment and a deliberately poor warm start. It is scoped per-backend
         to avoid brittle stochastic behavior.
         """
-        # Import backend bases lazily to avoid hard deps when not installed
-        try:
-            from hyperactive.opt._adapters._gfo import _BaseGFOadapter
-        except Exception:  # pragma: no cover - import guard
-
-            class _BaseGFOadapter:  # type: ignore
-                pass
-
-        try:
-            from hyperactive.opt._adapters._base_optuna_adapter import (
-                _BaseOptunaAdapter,
-            )
-        except Exception:  # pragma: no cover - import guard
-
-            class _BaseOptunaAdapter:  # type: ignore
-                pass
+        # Import backend bases to check optimizer type
+        from hyperactive.opt._adapters._gfo import _BaseGFOadapter
+        from hyperactive.opt._adapters._base_optuna_adapter import _BaseOptunaAdapter
+        from hyperactive.opt.gridsearch._sk import GridSearchSk
+        from hyperactive.opt.random_search import RandomSearchSk
 
         # set up a simple deterministic experiment with clear best vs worst
         from hyperactive.experiment.bench import Ackley
@@ -433,6 +422,34 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
                 ), "GFO backend did not maximize standardized score on the controlled setup."
             else:
                 _assert_good(best_params)
+            return None
+
+        # Sklearn GridSearch optimizer: test with discrete parameter grid
+        if isinstance(object_instance, GridSearchSk):
+            inst = object_instance.clone()
+            cfg = {
+                "experiment": exp,
+                "param_grid": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+            }
+            inst.set_params(**cfg)
+            best_params = inst.solve()
+            # GridSearchSk evaluates all grid combinations and selects best
+            _assert_good(best_params)
+            return None
+
+        # Sklearn RandomSearch optimizer: test with discrete parameter distributions
+        if isinstance(object_instance, RandomSearchSk):
+            inst = object_instance.clone()
+            cfg = {
+                "experiment": exp,
+                "param_distributions": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                "n_iter": 4,  # Evaluate all combinations in small space
+                "random_state": 0,  # Ensure deterministic sampling
+            }
+            inst.set_params(**cfg)
+            best_params = inst.solve()
+            # RandomSearchSk samples and selects best from evaluated points
+            _assert_good(best_params)
             return None
 
         # For other backends, no-op here; targeted direction tests live elsewhere
