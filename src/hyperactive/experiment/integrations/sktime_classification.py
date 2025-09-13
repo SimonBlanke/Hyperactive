@@ -1,13 +1,11 @@
 """Experiment adapter for sktime backtesting experiments."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
 
 from hyperactive.base import BaseExperiment
-from hyperactive.experiment.integrations._skl_metrics import (
-    _coerce_to_scorer,
-    _guess_sign_of_sklmetric,
-)
+from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
 
 
 class SktimeClassificationExperiment(BaseExperiment):
@@ -173,14 +171,11 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         super().__init__()
 
-        self._scoring = _coerce_to_scorer(scoring, "classifier")
+        self._scoring, _sign = _coerce_to_scorer_and_sign(scoring, "classifier")
 
-        # Set the sign of the scoring function
-        if hasattr(self._scoring, "_score"):
-            score_func = self._scoring._score_func
-            _sign = _guess_sign_of_sklmetric(score_func)
-            _sign_str = "higher" if _sign == 1 else "lower"
-            self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
+        # Set the sign of the scoring function (rely on sklearn scorer if present)
+        _sign_str = "higher" if _sign == 1 else "lower"
+        self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
 
         # default handling for cv
         if isinstance(cv, int):
@@ -223,19 +218,25 @@ class SktimeClassificationExperiment(BaseExperiment):
 
         estimator = self.estimator.clone().set_params(**params)
 
+        # determine metric function for sktime.evaluate via centralized coerce helper
+        metric_func = getattr(self._scoring, "_metric_func", None)
+        if metric_func is None:
+            # very defensive fallback (should not happen due to _coerce_to_scorer)
+            from sklearn.metrics import accuracy_score as metric_func  # type: ignore
+
         results = evaluate(
             estimator,
             cv=self._cv,
             X=self.X,
             y=self.y,
-            scoring=self._scoring._score_func,
+            scoring=metric_func,
             error_score=self.error_score,
             backend=self.backend,
             backend_params=self.backend_params,
         )
 
-        metric = self._scoring._score_func
-        result_name = f"test_{metric.__name__}"
+        metric = metric_func
+        result_name = f"test_{getattr(metric, '__name__', 'score')}"
 
         res_float = results[result_name].mean()
 
@@ -294,7 +295,18 @@ class SktimeClassificationExperiment(BaseExperiment):
             "scoring": brier_score_loss,
         }
 
-        return [params0, params1]
+        def passthrough_scorer(estimator, X, y):
+            return estimator.score(X, y)
+
+        params2 = {
+            "estimator": DummyClassifier(strategy="prior"),
+            "X": X,
+            "y": y,
+            "cv": KFold(n_splits=2),
+            "scoring": passthrough_scorer,
+        }
+
+        return [params0, params1, params2]
 
     @classmethod
     def _get_score_params(self):

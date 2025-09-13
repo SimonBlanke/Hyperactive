@@ -7,10 +7,7 @@ from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
 
 from hyperactive.base import BaseExperiment
-from hyperactive.experiment.integrations._skl_metrics import (
-    _coerce_to_scorer,
-    _guess_sign_of_sklmetric,
-)
+from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
 
 
 class SklearnCvExperiment(BaseExperiment):
@@ -100,15 +97,11 @@ class SklearnCvExperiment(BaseExperiment):
         else:
             self._cv = cv
 
-        self._scoring = _coerce_to_scorer(scoring, self.estimator)
+        self._scoring, _sign = _coerce_to_scorer_and_sign(scoring, self.estimator)
         self.scorer_ = self._scoring
 
-        # Set the sign of the scoring function
-        if hasattr(self._scoring, "_score"):
-            score_func = self._scoring._score_func
-            _sign = _guess_sign_of_sklmetric(score_func)
-            _sign_str = "higher" if _sign == 1 else "lower"
-            self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
+        _sign_str = "higher" if _sign == 1 else "lower"
+        self.set_tags(**{"property:higher_or_lower_is_better": _sign_str})
 
     def _paramnames(self):
         """Return the parameter names of the search.

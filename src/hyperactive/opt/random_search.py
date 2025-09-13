@@ -190,10 +190,12 @@ class RandomSearchSk(BaseOptimizer):
             backend_params=backend_params,
         )
 
-        best_index = int(np.argmin(scores))  # lower-is-better convention
+        # select best by maximizing standardized score
+        best_index = int(np.argmax(scores))
+
         best_params = candidate_params[best_index]
 
-        # public attributes for external consumers
+        # public attributes for external consumers (signed score convention)
         self.best_index_ = best_index
         self.best_score_ = float(scores[best_index])
         self.best_params_ = best_params
