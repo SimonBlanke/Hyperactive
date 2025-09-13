@@ -410,7 +410,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
             cfg = {
                 "experiment": exp,
                 "search_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
-                "n_iter": 1,
+                "n_iter": 2,
                 "initialize": {
                     "warm_start": [poor, good],
                     "grid": 0,
