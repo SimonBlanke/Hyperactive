@@ -348,3 +348,92 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         assert isinstance(best_params, dict), "Best parameters should be a dictionary"
         assert "C" in best_params, "Best parameters should contain 'C'"
         assert "gamma" in best_params, "Best parameters should contain 'gamma'"
+
+    def test_selection_direction_backend(self, object_instance):
+        """Backends return argmax over standardized scores on controlled setup.
+
+        This verifies the maximization direction using a tiny, deterministic
+        experiment and a deliberately poor warm start. It is scoped per-backend
+        to avoid brittle stochastic behavior.
+        """
+        # Import backend bases lazily to avoid hard deps when not installed
+        try:
+            from hyperactive.opt._adapters._gfo import _BaseGFOadapter
+        except Exception:  # pragma: no cover - import guard
+
+            class _BaseGFOadapter:  # type: ignore
+                pass
+
+        try:
+            from hyperactive.opt._adapters._base_optuna_adapter import (
+                _BaseOptunaAdapter,
+            )
+        except Exception:  # pragma: no cover - import guard
+
+            class _BaseOptunaAdapter:  # type: ignore
+                pass
+
+        # set up a simple deterministic experiment with clear best vs worst
+        from hyperactive.experiment.bench import Ackley
+
+        exp = Ackley(d=2)
+        # ackley is lower-better on evaluate; score flips sign to higher-better
+        poor = {"x0": 4.0, "x1": 4.0}
+        good = {"x0": 0.0, "x1": 0.0}
+
+        # Helper: assert that returned params equal the known good point
+        def _assert_good(best_params):
+            assert isinstance(best_params, dict)
+            assert best_params == good, (
+                f"Optimizer should select argmax of standardized score. "
+                f"Expected {good}, got {best_params}."
+            )
+
+        # Optuna adapters: use warm_start via initialize and categorical space
+        if isinstance(object_instance, _BaseOptunaAdapter):
+            inst = object_instance.clone()
+            cfg = {
+                "experiment": exp,
+                "param_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                "n_trials": 2,
+                "initialize": {"warm_start": [poor, good]},
+                "random_state": 0,
+            }
+            inst.set_params(**cfg)
+            best_params = inst.solve()
+            _assert_good(best_params)
+            return None
+
+        # GFO adapters: pass discrete space and warm_start; keep iterations tiny
+        if isinstance(object_instance, _BaseGFOadapter):
+            inst = object_instance.clone()
+            cfg = {
+                "experiment": exp,
+                "search_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                "n_iter": 1,
+                "initialize": {
+                    "warm_start": [poor, good],
+                    "grid": 0,
+                    "random": 0,
+                    "vertices": 0,
+                },
+                # keep Bayesian-style pre-sampling tiny to avoid heavy defaults
+                "random_state": 0,
+                "verbose": False,
+            }
+            inst.set_params(**cfg)
+            best_params = inst.solve()
+            # In case the backend evaluates beyond warm starts, fall back to score check
+            if best_params != good:
+                sc_good, _ = exp.score(good)
+                sc_poor, _ = exp.score(poor)
+                sc_best, _ = exp.score(best_params)
+                assert sc_best >= max(
+                    sc_good, sc_poor
+                ), "GFO backend did not maximize standardized score on the controlled setup."
+            else:
+                _assert_good(best_params)
+            return None
+
+        # For other backends, no-op here; targeted direction tests live elsewhere
+        return None
