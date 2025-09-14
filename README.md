@@ -342,10 +342,15 @@ Reduce the search space size to resolve this error.
 
 <br>
 
-This is because you have classes and/or non-top-level objects in the search space. Pickle (used by multiprocessing) cannot serialize them. Setting distribution to "joblib" or "pathos" may fix this problem:
-```python
-hyper = Hyperactive(distribution="joblib")
-```
+This typically means your search space or parameter suggestions include non-serializable
+objects (e.g., classes, bound methods, lambdas, local functions, locks). Ensure that all
+values in `search_space`/`param_space` are plain Python/scientific types such as ints,
+floats, strings, lists/tuples, or numpy arrays. Avoid closures and non-top-level callables
+in parameter values.
+
+Hyperactive v5 does not expose a global “distribution” switch. If you parallelize outside
+Hyperactive (e.g., with joblib/dask/ray), choose an appropriate backend and make sure the
+objective and arguments are picklable for process-based backends.
 
 </details>
 
@@ -376,8 +381,9 @@ warnings.warn = warn
 
 <br>
 
-This warning occurs because Hyperactive needs more initial positions to choose from to generate a population for the optimization algorithm:
-The number of initial positions is determined by the `initialize`-parameter in the `add_search`-method.
+This warning occurs because the optimizer needs more initial positions to generate a
+population for the search. In v5, initial positions are controlled via the optimizer’s
+`initialize` parameter.
 ```python
 # This is how it looks per default
 initialize = {"grid": 4, "random": 2, "vertices": 4}
