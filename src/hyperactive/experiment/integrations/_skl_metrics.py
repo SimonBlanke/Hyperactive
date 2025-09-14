@@ -1,6 +1,38 @@
 """Integration utilities for sklearn metrics with Hyperactive."""
 
-__all__ = ["_coerce_to_scorer", "_guess_sign_of_sklmetric"]
+__all__ = [
+    "_coerce_to_scorer",
+    "_coerce_to_scorer_and_sign",
+    "_guess_sign_of_sklmetric",
+]
+
+
+def _default_metric_for(est):
+    """Get a default metric function for a given estimator type.
+
+    Parameters
+    ----------
+    est : sklearn estimator object or str
+        The estimator to get a default metric for.
+
+    Returns
+    -------
+    metric : callable
+        A default metric function.
+    """
+    from sklearn.base import is_classifier, is_regressor
+    from sklearn.metrics import accuracy_score, r2_score
+
+    if isinstance(est, str):
+        if est == "classifier":
+            return accuracy_score
+        if est == "regressor":
+            return r2_score
+    if is_classifier(est):
+        return accuracy_score
+    if is_regressor(est):
+        return r2_score
+    return accuracy_score  # safe fallback
 
 
 def _coerce_to_scorer(scoring, estimator):
@@ -21,35 +53,61 @@ def _coerce_to_scorer(scoring, estimator):
         A sklearn scorer callable.
         Follows the unified sklearn scorer interface
     """
-    from sklearn.metrics import check_scoring
+    from inspect import signature
 
-    # check if scoring is a scorer by checking for "estimator" in signature
+    from sklearn.metrics import check_scoring, make_scorer
+
+    # Resolve to a sklearn scorer/callable first
     if scoring is None:
+        # use default metric for type strings; otherwise rely on sklearn default
         if isinstance(estimator, str):
-            if estimator == "classifier":
-                from sklearn.metrics import accuracy_score
-
-                scoring = accuracy_score
-            elif estimator == "regressor":
-                from sklearn.metrics import r2_score
-
-                scoring = r2_score
+            scoring = _default_metric_for(estimator)
+            scorer = make_scorer(scoring)
         else:
-            return check_scoring(estimator)
-
-    # check using inspect.signature for "estimator" in signature
-    if callable(scoring):
-        from inspect import signature
-
+            scorer = check_scoring(estimator)
+    elif callable(scoring):
+        # user-provided callable
         if "estimator" in signature(scoring).parameters:
-            return scoring
+            scorer = scoring  # passthrough scorer signature
         else:
-            from sklearn.metrics import make_scorer
-
-            return make_scorer(scoring)
+            scorer = make_scorer(scoring)
     else:
-        # scoring is a string (scorer name)
-        return check_scoring(estimator, scoring=scoring)
+        # string (scorer name)
+        scorer = check_scoring(estimator, scoring=scoring)
+
+    return scorer
+
+
+def _coerce_to_scorer_and_sign(scoring, estimator):
+    """Coerce scoring argument into a sklearn scorer and determine sign.
+
+    Parameters
+    ----------
+    scoring : str, callable, or None
+        The scoring strategy to use.
+    estimator : estimator object or str
+        The estimator to use for default scoring if scoring is None.
+
+        If str, indicates estimator type, should be one of {"classifier", "regressor"}.
+
+    Returns
+    -------
+    scorer : callable
+        A sklearn scorer callable.
+        Follows the unified sklearn scorer interface
+    sign : int
+        1 if higher scores are better, -1 if lower scores are better.
+    """
+    scorer = _coerce_to_scorer(scoring, estimator)
+
+    # Attach a safe metric function for downstream integrations (e.g., sktime)
+    score_func = getattr(scorer, "_score_func", None)
+    if score_func is None:
+        score_func = _default_metric_for(estimator)
+
+    sign = _guess_sign_of_sklmetric(score_func)
+
+    return scorer, sign
 
 
 def _guess_sign_of_sklmetric(scorer):
@@ -113,16 +171,18 @@ def _guess_sign_of_sklmetric(scorer):
 
     if hasattr(scorer, "greater_is_better"):
         return 1 if scorer.greater_is_better else -1
-    elif scorer_name in HIGHER_IS_BETTER:
+    if scorer_name is None:
+        # no name available; conservatively assume lower is better
+        return -1
+    if scorer_name in HIGHER_IS_BETTER:
         return 1 if HIGHER_IS_BETTER[scorer_name] else -1
-    elif scorer_name.endswith("_score"):
+    if scorer_name.endswith("_score"):
         # If the scorer name ends with "_score", we assume higher is better
         return 1
-    elif scorer_name.endswith("_loss") or scorer_name.endswith("_deviance"):
-        # If the scorer name ends with "_loss", we assume lower is better
+    if scorer_name.endswith("_loss") or scorer_name.endswith("_deviance"):
+        # If the scorer name ends with "_loss"/"_deviance", assume lower is better
         return -1
-    elif scorer_name.endswith("_error"):
+    if scorer_name.endswith("_error"):
         return -1
-    else:
-        # If we cannot determine the sign, we assume lower is better
-        return -1
+    # If we cannot determine the sign, assume lower is better
+    return -1

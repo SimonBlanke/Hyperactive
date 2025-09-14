@@ -153,6 +153,7 @@ class GridSearchSk(BaseOptimizer):
             "error_score": error_score,
         }
 
+        # scores are sign-adjusted via experiment.score (higher-is-better)
         scores = parallelize(
             fun=_score_params,
             iter=candidate_params,
@@ -161,11 +162,15 @@ class GridSearchSk(BaseOptimizer):
             backend_params=backend_params,
         )
 
-        best_index = np.argmin(scores)
+        # select best by maximizing standardized score
+        best_index = int(np.argmax(scores))
+
         best_params = candidate_params[best_index]
 
+        # store public attributes
         self.best_index_ = best_index
-        self.best_score_ = scores[best_index]
+        self.best_score_ = float(scores[best_index])
+        self.best_params_ = best_params
 
         return best_params
 
