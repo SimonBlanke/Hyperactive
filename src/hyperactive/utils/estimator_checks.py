@@ -96,14 +96,12 @@ def check_estimator(
     {'test_clone[HillClimbing-1]': 'PASSED'}
     """
     msg = (
-        "check_estimator is a testing utility for developers, and "
-        "requires pytest to be present "
-        "in the python environment, but pytest was not found. "
-        "pytest is a developer dependency and not included in the base "
-        "sktime installation. Please run: `pip install pytest` to "
-        "install the pytest package. "
-        "To install sktime with all developer dependencies, run:"
-        " `pip install hyperactive[dev]`"
+        "check_estimator is a testing utility for developers and requires "
+        "pytest to be present in the Python environment, but pytest was not found. "
+        "pytest is a developer dependency and not included in the base Hyperactive "
+        "installation. Please run: `pip install pytest` to install the pytest package. "
+        "To install Hyperactive with all developer dependencies, run: "
+        "`pip install hyperactive[dev]`."
     )
     _check_soft_dependencies("pytest", msg=msg)
 
