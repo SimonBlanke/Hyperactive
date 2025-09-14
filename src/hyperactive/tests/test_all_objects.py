@@ -357,8 +357,8 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         to avoid brittle stochastic behavior.
         """
         # Import backend bases to check optimizer type
-        from hyperactive.opt._adapters._gfo import _BaseGFOadapter
         from hyperactive.opt._adapters._base_optuna_adapter import _BaseOptunaAdapter
+        from hyperactive.opt._adapters._gfo import _BaseGFOadapter
         from hyperactive.opt.gridsearch._sk import GridSearchSk
         from hyperactive.opt.random_search import RandomSearchSk
 
@@ -398,7 +398,6 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
 
         # Optuna adapters: use warm_start via initialize and categorical space
         if isinstance(object_instance, _BaseOptunaAdapter):
-
             inst = object_instance.clone().set_params(
                 **{
                     **base_cfg,
@@ -434,9 +433,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
                 sc_good, _ = exp.score(good)
                 sc_poor, _ = exp.score(poor)
                 sc_best, _ = exp.score(best_params)
-                assert sc_best >= max(
-                    sc_good, sc_poor
-                ), "GFO backend did not maximize standardized score on the controlled setup."
+                assert sc_best >= max(sc_good, sc_poor)
             else:
                 _assert_good(best_params)
             return None
