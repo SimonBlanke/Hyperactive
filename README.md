@@ -1,66 +1,166 @@
+
+## Welcome to hyperactive
+
 <p align="center">
-  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" height="250"></a>
+  <a href="https://github.com/SimonBlanke/Hyperactive"><img src="./docs/images/logo.png" width="300" align="right"></a>
 </p>
 
-<br>
+**A unified interface for optimization algorithms and problems.**
 
----
-
-<h2 align="center">An optimization and data collection toolbox for convenient and fast prototyping of computationally expensive models.</h2>
-
-<br>
+Hyperactive implements a collection of optimization algorithms, accessible through a unified experiment-based
+interface that separates optimization problems from algorithms. The library provides native implementations of algorithms from the Gradient-Free-Optimizers
+package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces.
 
 
 <br>
 
 ---
 
-<div align="center"><a name="menu"></a>
-  <h3>
-    <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
-    <a href="https://simonblanke.github.io/hyperactive-documentation/4.5/">API reference</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#roadmap">Roadmap</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
-    <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
-  </h3>
-</div>
-
+| | [Overview](https://github.com/SimonBlanke/Hyperactive#overview) • [Installation](https://github.com/SimonBlanke/Hyperactive#installation) • [Tutorial](https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb) • [API reference](https://simonblanke.github.io/hyperactive-documentation/) • [Citation](https://github.com/SimonBlanke/Hyperactive#citing-hyperactive) |
 | **Open&#160;Source** | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![GC.OS Sponsored](https://img.shields.io/badge/GC.OS-Sponsored%20Project-orange.svg?style=flat&colorA=0eac92&colorB=2077b4)](https://gc-os-ai.github.io/) |
 |---|---|
-| **Community** | [![!discord](https://img.shields.io/static/v1?logo=discord&label=discord&message=chat&color=lightgreen)](https://discord.com/invite/54ACzaFsn7) [![!slack](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/german-center-for-open-source-ai)  |
+| **Community** | [![Discord](https://img.shields.io/static/v1?logo=discord&label=Discord&message=chat&color=lightgreen)](https://discord.gg/7uKdHfdcJG) [![LinkedIn](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/german-center-for-open-source-ai)  |
 | **CI/CD** | [![github-actions](https://img.shields.io/github/actions/workflow/status/SimonBlanke/hyperactive/test.yml?logo=github)](https://github.com/SimonBlanke/hyperactive/actions/workflows/test.yml) [![readthedocs](https://img.shields.io/readthedocs/hyperactive?logo=readthedocs)](https://www.hyperactive.net/en/latest/?badge=latest)
 | **Code** |  [![!pypi](https://img.shields.io/pypi/v/hyperactive?color=orange)](https://pypi.org/project/hyperactive/) [![!python-versions](https://img.shields.io/pypi/pyversions/hyperactive)](https://www.python.org/) [![!black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  |
 
+## Installation
+
+```console
+pip install hyperactive
+```
+
+## :zap: Quickstart
+
+### Maximizing a custom function
+
+```python
+import numpy as np
+
+# function to be maximized
+def problem(params):
+    x = params["x"]
+    y = params["y"]
+
+    return -(x**2 + y**2)
+
+# discrete search space: dict of iterable, scikit-learn like grid space
+# (valid search space types depends on optimizer)
+search_space = {
+    "x": np.arange(-1, 1, 0.01),
+    "y": np.arange(-1, 2, 0.1),
+}
+
+from hyperactive.opt.gfo import HillClimbing
+
+hillclimbing = HillClimbing(
+    search_space=search_space,
+    n_iter=100,
+    experiment=problem,
+)
+
+# running the hill climbing search:
+best_params = hillclimbing.solve()
+```
+
+### experiment abstraction - example: scikit-learn CV experiment
+
+"experiment" abstraction = parametrized optimization problem
+
+`hyperactive` provides a number of common experiments, e.g.,
+`scikit-learn` cross-validation experiments:
+
+```python
+import numpy as np
+from hyperactive.experiment.integrations import SklearnCvExperiment
+from sklearn.datasets import load_iris
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import KFold
+
+X, y = load_iris(return_X_y=True)
+
+# create experiment
+sklearn_exp = SklearnCvExperiment(
+    estimator=SVC(),
+    scoring=accuracy_score,
+    cv=KFold(n_splits=3, shuffle=True),
+    X=X,
+    y=y,
+)
+
+# experiments can be evaluated via "score"
+params = {"C": 1.0, "kernel": "linear"}
+score, add_info = sklearn_exp.score(params)
+
+# they can be used in optimizers like above
+from hyperactive.opt.gfo import HillClimbing
+
+search_space = {
+    "C": np.logspace(-2, 2, num=10),
+    "kernel": ["linear", "rbf"],
+}
+
+hillclimbing = HillClimbing(
+    search_space=search_space,
+    n_iter=100,
+    experiment=sklearn_exp,
+)
+
+best_params = hillclimbing.solve()
+```
+
+### full ML toolbox integration - example: scikit-learn
+
+Any `hyperactive` optimizer can be combined with the ML toolbox integrations!
+
+`OptCV` for tuning `scikit-learn` estimators with any `hyperactive` optimizer:
+
+```python
+# 1. defining the tuned estimator:
+from sklearn.svm import SVC
+from hyperactive.integrations.sklearn import OptCV
+from hyperactive.opt.gfo import HillClimbing
+
+search_space = {"kernel": ["linear", "rbf"], "C": [1, 10]}
+optimizer = HillClimbing(search_space=search_space, n_iter=20)
+tuned_svc = OptCV(SVC(), optimizer)
+
+# 2. fitting the tuned estimator:
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+tuned_svc.fit(X_train, y_train)
+
+y_pred = tuned_svc.predict(X_test)
+
+# 3. obtaining best parameters and best estimator
+best_params = tuned_svc.best_params_
+best_estimator = tuned_svc.best_estimator_
+```
+
+## :bulb: Key Concepts
+
+### Experiment-Based Architecture
+
+Hyperactive v5 introduces a clean separation between optimization algorithms and optimization problems through the **experiment abstraction**:
+
+- **Experiments** define *what* to optimize (the objective function and evaluation logic)
+- **Optimizers** define *how* to optimize (the search strategy and algorithm)
+
+This design allows you to:
+- Mix and match any optimizer with any experiment type
+- Create reusable experiment definitions for common ML tasks
+- Easily switch between different optimization strategies
+- Build complex optimization workflows with consistent interfaces
+
+**Built-in experiments include:**
+- `SklearnCvExperiment` - Cross-validation for sklearn estimators
+- `SktimeForecastingExperiment` - Time series forecasting optimization
+- Custom function experiments (pass any callable as experiment)
 
 <img src="./docs/images/bayes_convex.gif" align="right" width="500">
-
-## Hyperactive:
-
-- is [very easy](#hyperactive-is-very-easy-to-use) to learn but [extremly versatile](./examples/optimization_applications/search_space_example.py)
-
-- provides intelligent [optimization algorithms](#overview), support for all major [machine-learning frameworks](#overview) and many interesting [applications](#overview)
-
-- makes optimization [data collection](./examples/optimization_applications/meta_data_collection.py) simple
-
-- saves your [computation time](./examples/optimization_applications/memory.py)
-
-- supports [parallel computing](./examples/tested_and_supported_packages/multiprocessing_example.py)
-
-
-
-
-<br>
-<br>
-<br>
-
-
-As its name suggests Hyperactive started as a hyperparameter optimization package, but it has been generalized to solve expensive gradient-free optimization problems. It uses the [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) package as an optimization-backend and expands on it with additional features and tools.
-
----
-
-<br>
-
 
 ## Overview
 
@@ -92,96 +192,58 @@ Hyperactive features a collection of optimization algorithms that can be used fo
       <td>
         <a><b>Local Search:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/hill_climbing.py">Hill Climbing</a></li>
-            <li><a href="./examples/optimization_techniques/repulsing_hill_climbing.py">Repulsing Hill Climbing</a></li>
-            <li><a href="./examples/optimization_techniques/simulated_annealing.py">Simulated Annealing</a></li>
-            <li><a href="./examples/optimization_techniques/downhill_simplex.py">Downhill Simplex Optimizer</a></li>
+            <li><a href="./examples/gfo/hill_climbing_example.py">Hill Climbing</a></li>
+            <li><a href="./examples/gfo/repulsing_hill_climbing_example.py">Repulsing Hill Climbing</a></li>
+            <li><a href="./examples/gfo/simulated_annealing_example.py">Simulated Annealing</a></li>
+            <li><a href="./examples/gfo/downhill_simplex_example.py">Downhill Simplex Optimizer</a></li>
          </ul><br>
         <a><b>Global Search:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/random_search.py">Random Search</a></li>
-            <li><a href="./examples/optimization_techniques/grid_search.py">Grid Search</a></li>
-            <li><a href="./examples/optimization_techniques/rand_rest_hill_climbing.py">Random Restart Hill Climbing</a></li>
-            <li><a href="./examples/optimization_techniques/random_annealing.py">Random Annealing</a> [<a href="#/./overview#experimental-algorithms">*</a>] </li>
-            <li><a href="./examples/optimization_techniques/pattern_search.py">Powell's Method</a></li>
-            <li><a href="./examples/optimization_techniques/powells_method.py">Pattern Search</a></li>
+            <li><a href="./examples/gfo/random_search_example.py">Random Search</a></li>
+            <li><a href="./examples/gfo/grid_search_example.py">Grid Search</a></li>
+            <li><a href="./examples/gfo/random_restart_hill_climbing_example.py">Random Restart Hill Climbing</a></li>
+            <li><a href="./examples/gfo/stochastic_hill_climbing_example.py">Stochastic Hill Climbing</a></li>
+            <li><a href="./examples/gfo/powells_method_example.py">Powell's Method</a></li>
+            <li><a href="./examples/gfo/pattern_search_example.py">Pattern Search</a></li>
          </ul><br>
         <a><b>Population Methods:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/parallel_tempering.py">Parallel Tempering</a></li>
-            <li><a href="./examples/optimization_techniques/particle_swarm_optimization.py">Particle Swarm Optimizer</li>
-            <li><a href="./examples/optimization_techniques/spiral_optimization.py">Spiral Optimization</li>
-            <li>Genetic Algorithm</a></li>
-            <li><a href="./examples/optimization_techniques/evolution_strategy.py">Evolution Strategy</a></li>
-            <li>Differential Evolution</a></li>
+            <li><a href="./examples/gfo/parallel_tempering_example.py">Parallel Tempering</a></li>
+            <li><a href="./examples/gfo/particle_swarm_example.py">Particle Swarm Optimizer</a></li>
+            <li><a href="./examples/gfo/spiral_optimization_example.py">Spiral Optimization</a></li>
+            <li><a href="./examples/gfo/genetic_algorithm_example.py">Genetic Algorithm</a></li>
+            <li><a href="./examples/gfo/evolution_strategy_example.py">Evolution Strategy</a></li>
+            <li><a href="./examples/gfo/differential_evolution_example.py">Differential Evolution</a></li>
           </ul><br>
         <a><b>Sequential Methods:</b></a>
           <ul>
-            <li><a href="./examples/optimization_techniques/bayesian_optimization.py">Bayesian Optimization</a></li>
-            <li><a href="./examples/optimization_techniques/lipschitz_optimization.py">Lipschitz Optimization</a></li>
-            <li><a href="./examples/optimization_techniques/direct_algorithm.py">Direct Algorithm</a></li>
-            <li><a href="./examples/optimization_techniques/tpe.py">Tree of Parzen Estimators</a></li>
-            <li><a href="./examples/optimization_techniques/forest_optimization.py">Forest Optimizer</a>
-            [<a href="#/./overview#references">dto</a>] </li>
+            <li><a href="./examples/gfo/bayesian_optimization_example.py">Bayesian Optimization</a></li>
+            <li><a href="./examples/gfo/lipschitz_optimizer_example.py">Lipschitz Optimization</a></li>
+            <li><a href="./examples/gfo/direct_algorithm_example.py">Direct Algorithm</a></li>
+            <li><a href="./examples/gfo/tree_structured_parzen_estimators_example.py">Tree of Parzen Estimators</a></li>
+            <li><a href="./examples/gfo/forest_optimizer_example.py">Forest Optimizer</a>
+            [<a href="#references">ref</a>] </li>
+          </ul><br>
+        <a><b>Optuna Backend:</b></a>
+          <ul>
+            <li><a href="./examples/optuna/tpe_sampler_example.py">TPE Optimizer</a></li>
+            <li><a href="./examples/optuna/random_sampler_example.py">Random Optimizer</a></li>
+            <li><a href="./examples/optuna/cmaes_sampler_example.py">CMA-ES Optimizer</a></li>
+            <li><a href="./examples/optuna/gp_sampler_example.py">Gaussian Process Optimizer</a></li>
+            <li><a href="./examples/optuna/grid_sampler_example.py">Grid Optimizer</a></li>
+            <li><a href="./examples/optuna/nsga_ii_sampler_example.py">NSGA-II Optimizer</a></li>
+            <li><a href="./examples/optuna/nsga_iii_sampler_example.py">NSGA-III Optimizer</a></li>
+            <li><a href="./examples/optuna/qmc_sampler_example.py">QMC Optimizer</a></li>
           </ul>
       </td>
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li><a href="./examples/tested_and_supported_packages/sklearn_example.py">Scikit-learn</a></li>
-              <li><a href="./examples/tested_and_supported_packages/xgboost_example.py">XGBoost</a></li>
-              <li><a href="./examples/tested_and_supported_packages/lightgbm_example.py">LightGBM</a></li>
-              <li><a href="./examples/tested_and_supported_packages/catboost_example.py">CatBoost</a></li>
-              <li><a href="./examples/tested_and_supported_packages/rgf_example.py">RGF</a></li>
-              <li><a href="./examples/tested_and_supported_packages/mlxtend_example.py">Mlxtend</a></li>
-          </ul><br>
-        <a><b>Deep Learning:</b></a>
-          <ul>
-              <li><a href="./examples/tested_and_supported_packages/tensorflow_example.py">Tensorflow</a></li>
-              <li><a href="./examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
-              <li><a href="./examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
-          </ul><br>
-        <a><b>Parallel Computing:</b></a>
-          <ul>
-              <li><a href="./examples/tested_and_supported_packages/multiprocessing_example.py">Multiprocessing</a></li>
-              <li><a href="./examples/tested_and_supported_packages/joblib_example.py">Joblib</a></li>
-              <li>Pathos</li>
+              <li><a href="./examples/sklearn/README.md">Scikit-learn</a></li>
           </ul>
       </td>
       <td>
-        <a><b>Feature Engineering:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/feature_transformation.py">Feature Transformation</a></li>
-            <li><a href="./examples/optimization_applications/feature_selection.py">Feature Selection</a></li>
-          </ul>
-        <a><b>Machine Learning:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/hyperpara_optimize.py">Hyperparameter Tuning</a></li>
-            <li><a href="./examples/optimization_applications/model_selection.py">Model Selection</a></li>
-            <li><a href="./examples/optimization_applications/sklearn_pipeline_example.py">Sklearn Pipelines</a></li>
-            <li><a href="./examples/optimization_applications/ensemble_learning_example.py">Ensemble Learning</a></li>
-          </ul>
-        <a><b>Deep Learning:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/neural_architecture_search.py">Neural Architecture Search</a></li>
-            <li><a href="./examples/optimization_applications/pretrained_nas.py">Pretrained Neural Architecture Search</a></li>
-            <li><a href="./examples/optimization_applications/transfer_learning.py">Transfer Learning</a></li>
-          </ul>
-        <a><b>Data Collection:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/meta_data_collection.py">Search Data Collection</a></li>
-            <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
-            <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
-          </ul>
-        <a><b>Miscellaneous:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/test_function.py">Test Functions</a></li>
-            <li>Fit Gaussian Curves</li>
-            <li><a href="./examples/optimization_applications/multiple_scores.py">Managing multiple objectives</a></li>
-            <li><a href="./examples/optimization_applications/search_space_example.py">Managing objects in search space</a></li>
-            <li><a href="./examples/optimization_applications/constrained_optimization.py">Constrained Optimization</a></li>
-            <li><a href="./examples/optimization_applications/memory.py">Memorize evaluations</a></li>
-          </ul>
+
       </td>
     </tr>
   </tbody>
@@ -201,799 +263,6 @@ The following packages are designed to support Hyperactive and expand its use ca
 |-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | [Search-Data-Collector](https://github.com/SimonBlanke/search-data-collector) | Simple tool to save search-data during or after the optimization run into csv-files. |
 | [Search-Data-Explorer](https://github.com/SimonBlanke/search-data-explorer)   | Visualize search-data with plotly inside a streamlit dashboard.
-
-If you want news about Hyperactive and related projects you can follow me on [twitter](https://twitter.com/blanke_simon).
-
-
-<br>
-
-## Notebooks and Tutorials
-
-- [Introduction to Hyperactive](https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb)
-
-
-<br>
-
-## Installation
-
-The most recent version of Hyperactive is available on PyPi:
-
-[![pyversions](https://img.shields.io/pypi/pyversions/hyperactive.svg?style=for-the-badge&logo=python&color=blue&logoColor=white)](https://pypi.org/project/hyperactive)
-[![PyPI version](https://img.shields.io/pypi/v/hyperactive?style=for-the-badge&logo=pypi&color=green&logoColor=white)](https://pypi.org/project/hyperactive/)
-[![PyPI version](https://img.shields.io/pypi/dm/hyperactive?style=for-the-badge&color=red)](https://pypi.org/project/hyperactive/)
-
-```console
-pip install hyperactive
-```
-
-
-
-<br>
-
-## Example
-
-```python
-from sklearn.model_selection import cross_val_score
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.datasets import load_diabetes
-from hyperactive import Hyperactive
-
-data = load_diabetes()
-X, y = data.data, data.target
-
-# define the model in a function
-def model(opt):
-    # pass the suggested parameter to the machine learning model
-    gbr = GradientBoostingRegressor(
-        n_estimators=opt["n_estimators"], max_depth=opt["max_depth"]
-    )
-    scores = cross_val_score(gbr, X, y, cv=4)
-
-    # return a single numerical value
-    return scores.mean()
-
-# search space determines the ranges of parameters you want the optimizer to search through
-search_space = {
-    "n_estimators": list(range(10, 150, 5)),
-    "max_depth": list(range(2, 12)),
-}
-
-# start the optimization run
-hyper = Hyperactive()
-hyper.add_search(model, search_space, n_iter=50)
-hyper.run()
-
-```
-
-<br>
-
-## Hyperactive API reference
-
-
-<br>
-
-### Basic Usage
-
-<details>
-<summary><b> Hyperactive(verbosity, distribution, n_processes)</b></summary>
-
-- verbosity = ["progress_bar", "print_results", "print_times"]
-  - Possible parameter types: (list, False)
-  - The verbosity list determines what part of the optimization information will be printed in the command line.
-
-- distribution = "multiprocessing"
-  - Possible parameter types: ("multiprocessing", "joblib", "pathos")
-  - Determine, which distribution service you want to use. Each library uses different packages to pickle objects:
-    - multiprocessing uses pickle
-    - joblib uses dill
-    - pathos uses cloudpickle
-
-
-- n_processes = "auto",
-  - Possible parameter types: (str, int)
-  - The maximum number of processes that are allowed to run simultaneously. If n_processes is of int-type there will only run n_processes-number of jobs simultaneously instead of all at once. So if n_processes=10 and n_jobs_total=35, then the schedule would look like this 10 - 10 - 10 - 5. This saves computational resources if there is a large number of n_jobs. If "auto", then n_processes is the sum of all n_jobs (from .add_search(...)).
-
-</details>
-
-
-<details>
-<summary><b> .add_search(objective_function, search_space, n_iter, optimizer, n_jobs, initialize, pass_through, callbacks, catch, max_score, early_stopping, random_state, memory, memory_warm_start)</b></summary>
-
-
-- objective_function
-  - Possible parameter types: (callable)
-  - The objective function defines the optimization problem. The optimization algorithm will try to maximize the numerical value that is returned by the objective function by trying out different parameters from the search space.
-
-
-- search_space
-  - Possible parameter types: (dict)
-  - Defines the space were the optimization algorithm can search for the best parameters for the given objective function.
-
-
-- n_iter
-  - Possible parameter types: (int)
-  - The number of iterations that will be performed during the optimization run. The entire iteration consists of the optimization-step, which decides the next parameter that will be evaluated and the evaluation-step, which will run the objective function with the chosen parameter and return the score.
-
-
-- optimizer = "default"
-  - Possible parameter types: ("default", initialized optimizer object)
-  - Instance of optimization class that can be imported from Hyperactive. "default" corresponds to the random search optimizer. The imported optimization classes from hyperactive are different from gfo. They only accept optimizer-specific-parameters. The following classes can be imported and used:
-
-    - HillClimbingOptimizer
-    - StochasticHillClimbingOptimizer
-    - RepulsingHillClimbingOptimizer
-    - SimulatedAnnealingOptimizer
-    - DownhillSimplexOptimizer
-    - RandomSearchOptimizer
-    - GridSearchOptimizer
-    - RandomRestartHillClimbingOptimizer
-    - RandomAnnealingOptimizer
-    - PowellsMethod
-    - PatternSearch
-    - ParallelTemperingOptimizer
-    - ParticleSwarmOptimizer
-    - SpiralOptimization
-    - GeneticAlgorithmOptimizer
-    - EvolutionStrategyOptimizer
-    - DifferentialEvolutionOptimizer
-    - BayesianOptimizer
-    - LipschitzOptimizer
-    - DirectAlgorithm
-    - TreeStructuredParzenEstimators
-    - ForestOptimizer
-
-  - Example:
-    ```python
-    ...
-
-    opt_hco = HillClimbingOptimizer(epsilon=0.08)
-    hyper = Hyperactive()
-    hyper.add_search(..., optimizer=opt_hco)
-    hyper.run()
-
-    ...
-    ```
-
-
-- n_jobs = 1
-  - Possible parameter types: (int)
-  - Number of jobs to run in parallel. Those jobs are optimization runs that work independent from another (no information sharing). If n_jobs == -1 the maximum available number of cpu cores is used.
-
-
-- initialize = {"grid": 4, "random": 2, "vertices": 4}
-  - Possible parameter types: (dict)
-  - The initialization dictionary automatically determines a number of parameters that will be evaluated in the first n iterations (n is the sum of the values in initialize). The initialize keywords are the following:
-    - grid
-      - Initializes positions in a grid like pattern. Positions that cannot be put into a grid are randomly positioned. For very high dimensional search spaces (>30) this pattern becomes random.
-    - vertices
-      - Initializes positions at the vertices of the search space. Positions that cannot be put into a new vertex are randomly positioned.
-
-    - random
-      - Number of random initialized positions
-
-    - warm_start
-      - List of parameter dictionaries that marks additional start points for the optimization run.
-
-    Example:
-    ```python
-    ...
-    search_space = {
-        "x1": list(range(10, 150, 5)),
-        "x2": list(range(2, 12)),
-    }
-
-    ws1 = {"x1": 10, "x2": 2}
-    ws2 = {"x1": 15, "x2": 10}
-
-    hyper = Hyperactive()
-    hyper.add_search(
-        model,
-        search_space,
-        n_iter=30,
-        initialize={"grid": 4, "random": 10, "vertices": 4, "warm_start": [ws1, ws2]},
-    )
-    hyper.run()
-    ```
-
-
-- pass_through = {}
-  - Possible parameter types: (dict)
-  - The pass_through accepts a dictionary that contains information that will be passed to the objective-function argument. This information will not change during the optimization run, unless the user does so by himself (within the objective-function).
-
-    Example:
-    ```python
-    ...
-    def objective_function(para):
-        para.pass_through["stuff1"] # <--- this variable is 1
-        para.pass_through["stuff2"] # <--- this variable is 2
-
-        score = -para["x1"] * para["x1"]
-        return score
-
-    pass_through = {
-      "stuff1": 1,
-      "stuff2": 2,
-    }
-
-    hyper = Hyperactive()
-    hyper.add_search(
-        model,
-        search_space,
-        n_iter=30,
-        pass_through=pass_through,
-    )
-    hyper.run()
-    ```
-
-
-- callbacks = {}
-  - Possible parameter types: (dict)
-  - The callbacks enables you to pass functions to hyperactive that are called every iteration during the optimization run. The function has access to the same argument as the objective-function. You can decide if the functions are called before or after the objective-function is evaluated via the keys of the callbacks-dictionary. The values of the dictionary are lists of the callback-functions. The following example should show they way to use callbacks:
-
-
-    Example:
-    ```python
-    ...
-
-    def callback_1(access):
-      # do some stuff
-
-    def callback_2(access):
-      # do some stuff
-
-    def callback_3(access):
-      # do some stuff
-
-    hyper = Hyperactive()
-    hyper.add_search(
-        objective_function,
-        search_space,
-        n_iter=100,
-        callbacks={
-          "after": [callback_1, callback_2],
-          "before": [callback_3]
-          },
-    )
-    hyper.run()
-    ```
-
-
-- catch = {}
-  - Possible parameter types: (dict)
-  - The catch parameter provides a way to handle exceptions that occur during the evaluation of the objective-function or the callbacks. It is a dictionary that accepts the exception class as a key and the score that is returned instead as the value. This way you can handle multiple types of exceptions and return different scores for each.
-  In the case of an exception it often makes sense to return `np.nan` as a score. You can see an example of this in the following code-snippet:
-
-    Example:
-    ```python
-    ...
-
-    hyper = Hyperactive()
-    hyper.add_search(
-        objective_function,
-        search_space,
-        n_iter=100,
-        catch={
-          ValueError: np.nan,
-          },
-    )
-    hyper.run()
-    ```
-
-
-- max_score = None
-  - Possible parameter types: (float, None)
-  - Maximum score until the optimization stops. The score will be checked after each completed iteration.
-
-
-- early_stopping=None
-  - (dict, None)
-  - Stops the optimization run early if it did not achive any score-improvement within the last iterations. The early_stopping-parameter enables to set three parameters:
-    - `n_iter_no_change`: Non-optional int-parameter. This marks the last n iterations to look for an improvement over the iterations that came before n. If the best score of the entire run is within those last n iterations the run will continue (until other stopping criteria are met), otherwise the run will stop.
-    - `tol_abs`: Optional float-paramter. The score must have improved at least this absolute tolerance in the last n iterations over the best score in the iterations before n. This is an absolute value, so 0.1 means an imporvement of 0.8 -> 0.9 is acceptable but 0.81 -> 0.9 would stop the run.
-    - `tol_rel`: Optional float-paramter. The score must have imporved at least this relative tolerance (in percentage) in the last n iterations over the best score in the iterations before n. This is a relative value, so 10 means an imporvement of 0.8 -> 0.88 is acceptable but 0.8 -> 0.87 would stop the run.
-
-  - random_state = None
-  - Possible parameter types: (int, None)
-  - Random state for random processes in the random, numpy and scipy module.
-
-
-- memory = "share"
-  - Possible parameter types: (bool, "share")
-  - Whether or not to use the "memory"-feature. The memory is a dictionary, which gets filled with parameters and scores during the optimization run. If the optimizer encounters a parameter that is already in the dictionary it just extracts the score instead of reevaluating the objective function (which can take a long time). If memory is set to "share" and there are multiple jobs for the same objective function then the memory dictionary is automatically shared between the different processes.
-
-- memory_warm_start = None
-  - Possible parameter types: (pandas dataframe, None)
-  - Pandas dataframe that contains score and parameter information that will be automatically loaded into the memory-dictionary.
-
-      example:
-
-      <table class="table">
-        <thead class="table-head">
-          <tr class="row">
-            <td class="cell">score</td>
-            <td class="cell">x1</td>
-            <td class="cell">x2</td>
-            <td class="cell">x...</td>
-          </tr>
-        </thead>
-        <tbody class="table-body">
-          <tr class="row">
-            <td class="cell">0.756</td>
-            <td class="cell">0.1</td>
-            <td class="cell">0.2</td>
-            <td class="cell">...</td>
-          </tr>
-          <tr class="row">
-            <td class="cell">0.823</td>
-            <td class="cell">0.3</td>
-            <td class="cell">0.1</td>
-            <td class="cell">...</td>
-          </tr>
-          <tr class="row">
-            <td class="cell">...</td>
-            <td class="cell">...</td>
-            <td class="cell">...</td>
-            <td class="cell">...</td>
-          </tr>
-          <tr class="row">
-            <td class="cell">...</td>
-            <td class="cell">...</td>
-            <td class="cell">...</td>
-            <td class="cell">...</td>
-          </tr>
-        </tbody>
-      </table>
-
-
-</details>
-
-
-
-<details>
-<summary><b> .run(max_time)</b></summary>
-
-- max_time = None
-  - Possible parameter types: (float, None)
-  - Maximum number of seconds until the optimization stops. The time will be checked after each completed iteration.
-
-</details>
-
-
-
-<br>
-
-### Special Parameters
-
-<details>
-<summary><b> Objective Function</b></summary>
-
-Each iteration consists of two steps:
- - The optimization step: decides what position in the search space (parameter set) to evaluate next
- - The evaluation step: calls the objective function, which returns the score for the given position in the search space
-
-The objective function has one argument that is often called "para", "params", "opt" or "access".
-This argument is your access to the parameter set that the optimizer has selected in the
-corresponding iteration.
-
-```python
-def objective_function(opt):
-    # get x1 and x2 from the argument "opt"
-    x1 = opt["x1"]
-    x2 = opt["x2"]
-
-    # calculate the score with the parameter set
-    score = -(x1 * x1 + x2 * x2)
-
-    # return the score
-    return score
-```
-
-The objective function always needs a score, which shows how "good" or "bad" the current parameter set is. But you can also return some additional information with a dictionary:
-
-```python
-def objective_function(opt):
-    x1 = opt["x1"]
-    x2 = opt["x2"]
-
-    score = -(x1 * x1 + x2 * x2)
-
-    other_info = {
-      "x1 squared" : x1**2,
-      "x2 squared" : x2**2,
-    }
-
-    return score, other_info
-```
-
-When you take a look at the results (a pandas dataframe with all iteration information) after the run has ended you will see the additional information in it. The reason we need a dictionary for this is because Hyperactive needs to know the names of the additonal parameters. The score does not need that, because it is always called "score" in the results. You can run [this example script](https://github.com/SimonBlanke/Hyperactive/blob/main/examples/optimization_applications/multiple_scores.py) if you want to give it a try.
-
-</details>
-
-
-<details>
-<summary><b> Search Space Dictionary</b></summary>
-
-The search space defines what values the optimizer can select during the search. These selected values will be inside the objective function argument and can be accessed like in a dictionary. The values in each search space dimension should always be in a list. If you use np.arange you should put it in a list afterwards:
-
-```python
-search_space = {
-    "x1": list(np.arange(-100, 101, 1)),
-    "x2": list(np.arange(-100, 101, 1)),
-}
-```
-
-A special feature of Hyperactive is shown in the next example. You can put not just numeric values into the search space dimensions, but also strings and functions. This enables a very high flexibility in how you can create your studies.
-
-```python
-def func1():
-  # do stuff
-  return stuff
-
-
-def func2():
-  # do stuff
-  return stuff
-
-
-search_space = {
-    "x": list(np.arange(-100, 101, 1)),
-    "str": ["a string", "another string"],
-    "function" : [func1, func2],
-}
-```
-
-If you want to put other types of variables (like numpy arrays, pandas dataframes, lists, ...) into the search space you can do that via functions:
-
-```python
-def array1():
-  return np.array([1, 2, 3])
-
-
-def array2():
-  return np.array([3, 2, 1])
-
-
-search_space = {
-    "x": list(np.arange(-100, 101, 1)),
-    "str": ["a string", "another string"],
-    "numpy_array" : [array1, array2],
-}
-```
-
-The functions contain the numpy arrays and returns them. This way you can use them inside the objective function.
-
-
-</details>
-
-
-<details>
-<summary><b> Optimizer Classes</b></summary>
-
-Each of the following optimizer classes can be initialized and passed to the "add_search"-method via the "optimizer"-argument. During this initialization the optimizer class accepts **only optimizer-specific-paramters** (no random_state, initialize, ... ):
-
-  ```python
-  optimizer = HillClimbingOptimizer(epsilon=0.1, distribution="laplace", n_neighbours=4)
-  ```
-
-  for the default parameters you can just write:
-
-  ```python
-  optimizer = HillClimbingOptimizer()
-  ```
-
-  and pass it to Hyperactive:
-
-  ```python
-  hyper = Hyperactive()
-  hyper.add_search(model, search_space, optimizer=optimizer, n_iter=100)
-  hyper.run()
-  ```
-
-  So the optimizer-classes are **different** from Gradient-Free-Optimizers. A more detailed explanation of the optimization-algorithms and the optimizer-specific-paramters can be found in the [Optimization Tutorial](https://github.com/SimonBlanke/optimization-tutorial).
-
-- HillClimbingOptimizer
-- RepulsingHillClimbingOptimizer
-- SimulatedAnnealingOptimizer
-- DownhillSimplexOptimizer
-- RandomSearchOptimizer
-- GridSearchOptimizer
-- RandomRestartHillClimbingOptimizer
-- RandomAnnealingOptimizer
-- PowellsMethod
-- PatternSearch
-- ParallelTemperingOptimizer
-- ParticleSwarmOptimizer
-- GeneticAlgorithmOptimizer
-- EvolutionStrategyOptimizer
-- DifferentialEvolutionOptimizer
-- BayesianOptimizer
-- TreeStructuredParzenEstimators
-- ForestOptimizer
-
-</details>
-
-
-
-<br>
-
-### Result Attributes
-
-
-<details>
-<summary><b> .best_para(objective_function)</b></summary>
-
-- objective_function
-  - (callable)
-- returnes: dictionary
-- Parameter dictionary of the best score of the given objective_function found in the previous optimization run.
-
-  example:
-  ```python
-  {
-    'x1': 0.2,
-    'x2': 0.3,
-  }
-  ```
-
-</details>
-
-
-<details>
-<summary><b> .best_score(objective_function)</b></summary>
-
-- objective_function
-  - (callable)
-- returns: int or float
-- Numerical value of the best score of the given objective_function found in the previous optimization run.
-
-</details>
-
-
-<details>
-<summary><b> .search_data(objective_function, times=False)</b></summary>
-
-- objective_function
-  - (callable)
-- returns: Pandas dataframe
-- The dataframe contains score and parameter information of the given objective_function found in the optimization run. If the parameter `times` is set to True the evaluation- and iteration- times are added to the dataframe.
-
-    example:
-
-    <table class="table">
-      <thead class="table-head">
-        <tr class="row">
-          <td class="cell">score</td>
-          <td class="cell">x1</td>
-          <td class="cell">x2</td>
-          <td class="cell">x...</td>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <tr class="row">
-          <td class="cell">0.756</td>
-          <td class="cell">0.1</td>
-          <td class="cell">0.2</td>
-          <td class="cell">...</td>
-        </tr>
-        <tr class="row">
-          <td class="cell">0.823</td>
-          <td class="cell">0.3</td>
-          <td class="cell">0.1</td>
-          <td class="cell">...</td>
-        </tr>
-        <tr class="row">
-          <td class="cell">...</td>
-          <td class="cell">...</td>
-          <td class="cell">...</td>
-          <td class="cell">...</td>
-        </tr>
-        <tr class="row">
-          <td class="cell">...</td>
-          <td class="cell">...</td>
-          <td class="cell">...</td>
-          <td class="cell">...</td>
-        </tr>
-      </tbody>
-    </table>
-
-</details>
-
-
-
-
-<br>
-
-## Roadmap
-
-
-<details>
-<summary><b>v2.0.0</b> :heavy_check_mark:</summary>
-
-  - [x] Change API
-</details>
-
-
-<details>
-<summary><b>v2.1.0</b> :heavy_check_mark:</summary>
-
-  - [x] Save memory of evaluations for later runs (long term memory)
-  - [x] Warm start sequence based optimizers with long term memory
-  - [x] Gaussian process regressors from various packages (gpy, sklearn, GPflow, ...) via wrapper
-</details>
-
-
-<details>
-<summary><b>v2.2.0</b> :heavy_check_mark:</summary>
-
-  - [x] Add basic dataset meta-features to long term memory
-  - [x] Add helper-functions for memory
-      - [x] connect two different model/dataset hashes
-      - [x] split two different model/dataset hashes
-      - [x] delete memory of model/dataset
-      - [x] return best known model for dataset
-      - [x] return search space for best model
-      - [x] return best parameter for best model
-</details>
-
-
-<details>
-<summary><b>v2.3.0</b> :heavy_check_mark:</summary>
-
-  - [x] Tree-structured Parzen Estimator
-  - [x] Decision Tree Optimizer
-  - [x] add "max_sample_size" and "skip_retrain" parameter for sbom to decrease optimization time
-</details>
-
-
-<details>
-<summary><b>v3.0.0</b> :heavy_check_mark:</summary>
-
-  - [x] New API
-      - [x] expand usage of objective-function
-      - [x] No passing of training data into Hyperactive
-      - [x] Removing "long term memory"-support (better to do in separate package)
-      - [x] More intuitive selection of optimization strategies and parameters
-      - [x] Separate optimization algorithms into other package
-      - [x] expand api so that optimizer parameter can be changed at runtime
-      - [x] add extensive testing procedure (similar to Gradient-Free-Optimizers)
-
-</details>
-
-
-<details>
-<summary><b>v3.1.0</b> :heavy_check_mark:</summary>
-
-  - [x] Decouple number of runs from active processes (Thanks to [PartiallyTyped](https://github.com/PartiallyTyped))
-
-</details>
-
-
-<details>
-<summary><b>v3.2.0</b> :heavy_check_mark:</summary>
-
-  - [x] Dashboard for visualization of search-data at runtime via streamlit (Progress-Board)
-
-</details>
-
-
-<details>
-<summary><b>v3.3.0</b> :heavy_check_mark:</summary>
-
-  - [x] Early stopping
-  - [x] Shared memory dictionary between processes with the same objective function
-
-</details>
-
-
-<details>
-<summary><b>v4.0.0</b> :heavy_check_mark:</summary>
-
-  - [x] small adjustments to API
-  - [x] move optimization strategies into sub-module "optimizers"
-  - [x] preparation for future add ons (long-term-memory, meta-learn, ...) from separate repositories
-  - [x] separate progress board into separate repository
-
-</details>
-
-
-<details>
-<summary><b>v4.1.0</b> :heavy_check_mark:</summary>
-
-  - [x] add python 3.9 to testing
-  - [x] add pass_through-parameter
-  - [x] add v1 GFO optimization algorithms
-
-</details>
-
-
-<details>
-<summary><b>v4.2.0</b> :heavy_check_mark:</summary>
-
-  - [x] add callbacks-parameter
-  - [x] add catch-parameter
-  - [x] add option to add eval- and iter- times to search-data
-
-</details>
-
-
-<details>
-<summary><b>v4.3.0</b> :heavy_check_mark:</summary>
-
-  - [x] add new features from GFO
-    - [x] add Spiral Optimization
-    - [x] add Lipschitz Optimizer
-    - [x] add DIRECT Optimizer
-    - [x] print the random seed for reproducibility
-
-</details>
-
-
-<details>
-<summary><b>v4.4.0</b> :heavy_check_mark: </summary>
-
-  - [x] add Optimization-Strategies
-  - [x] redesign progress-bar
-
-</details>
-
-
-<details>
-<summary><b>v4.5.0</b> :heavy_check_mark: </summary>
-
-  - [x] add early stopping feature to custom optimization strategies
-  - [x] display additional outputs from objective-function in results in command-line
-  - [x] add type hints to hyperactive-api
-
-</details>
-
-
-<details>
-<summary><b>v4.6.0</b> :heavy_check_mark: </summary>
-
-  - [x] add support for constrained optimization
-
-</details>
-
-
-<details>
-<summary><b>v4.7.0</b> :heavy_check_mark: </summary>
-
-  - [x] add Genetic algorithm optimizer
-  - [x] add Differential evolution optimizer
-
-</details>
-
-
-<details>
-<summary><b>v4.8.0</b> :heavy_check_mark:</summary>
-
-  - [x] add support for numpy v2
-  - [x] add support for pandas v2
-  - [x] add support for python 3.12
-  - [x] transfer setup.py to pyproject.toml
-  - [x] change project structure to src-layout
-
-</details>
-
-
-<details>
-<summary><b>v4.9.0</b> </summary>
-
-  - [ ] add sklearn integration
-
-</details>
-
-
-
-
-
-<details>
-<summary><b>Future releases</b> </summary>
-
-  - [ ] new optimization algorithms from [Gradient-Free-Optimizers](https://github.com/SimonBlanke/Gradient-Free-Optimizers) will always be added to Hyperactive
-  - [ ] add "prune_search_space"-method to custom optimization strategy class
-
-</details>
 
 
 
@@ -1064,10 +333,15 @@ Reduce the search space size to resolve this error.
 
 <br>
 
-This is because you have classes and/or non-top-level objects in the search space. Pickle (used by multiprocessing) cannot serialize them. Setting distribution to "joblib" or "pathos" may fix this problem:
-```python
-hyper = Hyperactive(distribution="joblib")
-```
+This typically means your search space or parameter suggestions include non-serializable
+objects (e.g., classes, bound methods, lambdas, local functions, locks). Ensure that all
+values in `search_space`/`param_space` are plain Python/scientific types such as ints,
+floats, strings, lists/tuples, or numpy arrays. Avoid closures and non-top-level callables
+in parameter values.
+
+Hyperactive v5 does not expose a global “distribution” switch. If you parallelize outside
+Hyperactive (e.g., with joblib/dask/ray), choose an appropriate backend and make sure the
+objective and arguments are picklable for process-based backends.
 
 </details>
 
@@ -1098,8 +372,9 @@ warnings.warn = warn
 
 <br>
 
-This warning occurs because Hyperactive needs more initial positions to choose from to generate a population for the optimization algorithm:
-The number of initial positions is determined by the `initialize`-parameter in the `add_search`-method.
+This warning occurs because the optimizer needs more initial positions to generate a
+population for the search. In v5, initial positions are controlled via the optimizer’s
+`initialize` parameter.
 ```python
 # This is how it looks per default
 initialize = {"grid": 4, "random": 2, "vertices": 4}
