@@ -362,6 +362,21 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         from hyperactive.opt.gridsearch._sk import GridSearchSk
         from hyperactive.opt.random_search import RandomSearchSk
 
+        # small helper to attach the right space key without per-estimator branching
+        def _cfg_with_space(est, exp, space):
+            cfg = {"experiment": exp}
+            param_keys = set(est.get_params().keys())
+            for key in (
+                "param_space",
+                "search_space",
+                "param_grid",
+                "param_distributions",
+            ):
+                if key in param_keys:
+                    cfg[key] = space
+                    break
+            return cfg
+
         # set up a simple deterministic experiment with clear best vs worst
         from hyperactive.experiment.bench import Ackley
 
@@ -378,12 +393,15 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
                 f"Expected {good}, got {best_params}."
             )
 
+        space = {"x0": [0.0, 4.0], "x1": [0.0, 4.0]}
+        base_cfg = _cfg_with_space(object_instance, exp, space)
+
         # Optuna adapters: use warm_start via initialize and categorical space
         if isinstance(object_instance, _BaseOptunaAdapter):
+
             inst = object_instance.clone().set_params(
                 **{
-                    "experiment": exp,
-                    "param_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                    **base_cfg,
                     "n_trials": 2,
                     "initialize": {"warm_start": [poor, good]},
                     "random_state": 0,
@@ -397,8 +415,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         if isinstance(object_instance, _BaseGFOadapter):
             inst = object_instance.clone().set_params(
                 **{
-                    "experiment": exp,
-                    "search_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                    **base_cfg,
                     "n_iter": 2,
                     "initialize": {
                         "warm_start": [poor, good],
@@ -426,12 +443,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
 
         # Sklearn GridSearch optimizer: test with discrete parameter grid
         if isinstance(object_instance, GridSearchSk):
-            inst = object_instance.clone().set_params(
-                **{
-                    "experiment": exp,
-                    "param_grid": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
-                }
-            )
+            inst = object_instance.clone().set_params(**base_cfg)
             best_params = inst.solve()
             # GridSearchSk evaluates all grid combinations and selects best
             _assert_good(best_params)
@@ -441,8 +453,7 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         if isinstance(object_instance, RandomSearchSk):
             inst = object_instance.clone().set_params(
                 **{
-                    "experiment": exp,
-                    "param_distributions": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                    **base_cfg,
                     "n_iter": 4,  # Evaluate all combinations in small space
                     "random_state": 0,  # Ensure deterministic sampling
                 }
