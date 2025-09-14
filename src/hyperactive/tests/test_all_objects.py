@@ -348,3 +348,117 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
         assert isinstance(best_params, dict), "Best parameters should be a dictionary"
         assert "C" in best_params, "Best parameters should contain 'C'"
         assert "gamma" in best_params, "Best parameters should contain 'gamma'"
+
+    def test_selection_direction_backend(self, object_instance):
+        """Backends return argmax over standardized scores on controlled setup.
+
+        This verifies the maximization direction using a tiny, deterministic
+        experiment and a deliberately poor warm start. It is scoped per-backend
+        to avoid brittle stochastic behavior.
+        """
+        # Import backend bases to check optimizer type
+        from hyperactive.opt._adapters._base_optuna_adapter import _BaseOptunaAdapter
+        from hyperactive.opt._adapters._gfo import _BaseGFOadapter
+        from hyperactive.opt.gridsearch._sk import GridSearchSk
+        from hyperactive.opt.random_search import RandomSearchSk
+
+        # small helper to attach the right space key without per-estimator branching
+        def _cfg_with_space(est, exp, space):
+            cfg = {"experiment": exp}
+            param_keys = set(est.get_params().keys())
+            for key in (
+                "param_space",
+                "search_space",
+                "param_grid",
+                "param_distributions",
+            ):
+                if key in param_keys:
+                    cfg[key] = space
+                    break
+            return cfg
+
+        # set up a simple deterministic experiment with clear best vs worst
+        from hyperactive.experiment.bench import Ackley
+
+        exp = Ackley(d=2)
+        # ackley is lower-better on evaluate; score flips sign to higher-better
+        poor = {"x0": 4.0, "x1": 4.0}
+        good = {"x0": 0.0, "x1": 0.0}
+
+        # Helper: assert that returned params equal the known good point
+        def _assert_good(best_params):
+            assert isinstance(best_params, dict)
+            assert best_params == good, (
+                f"Optimizer should select argmax of standardized score. "
+                f"Expected {good}, got {best_params}."
+            )
+
+        space = {"x0": [0.0, 4.0], "x1": [0.0, 4.0]}
+        base_cfg = _cfg_with_space(object_instance, exp, space)
+
+        # Optuna adapters: use warm_start via initialize and categorical space
+        if isinstance(object_instance, _BaseOptunaAdapter):
+            inst = object_instance.clone().set_params(
+                **{
+                    **base_cfg,
+                    "n_trials": 2,
+                    "initialize": {"warm_start": [poor, good]},
+                    "random_state": 0,
+                }
+            )
+            best_params = inst.solve()
+            _assert_good(best_params)
+            return None
+
+        # GFO adapters: pass discrete space and warm_start; keep iterations tiny
+        if isinstance(object_instance, _BaseGFOadapter):
+            inst = object_instance.clone().set_params(
+                **{
+                    **base_cfg,
+                    "n_iter": 2,
+                    "initialize": {
+                        "warm_start": [poor, good],
+                        "grid": 0,
+                        "random": 0,
+                        "vertices": 0,
+                    },
+                    # keep Bayesian-style pre-sampling tiny to avoid heavy defaults
+                    "random_state": 0,
+                    "verbose": False,
+                }
+            )
+            best_params = inst.solve()
+            # In case the backend evaluates beyond warm starts, fall back to score check
+            if best_params != good:
+                sc_good, _ = exp.score(good)
+                sc_poor, _ = exp.score(poor)
+                sc_best, _ = exp.score(best_params)
+                assert sc_best >= max(sc_good, sc_poor)
+            else:
+                _assert_good(best_params)
+            return None
+
+        # Sklearn GridSearch optimizer: test with discrete parameter grid
+        if isinstance(object_instance, GridSearchSk):
+            inst = object_instance.clone().set_params(**base_cfg)
+            best_params = inst.solve()
+            # GridSearchSk evaluates all grid combinations and selects best
+            _assert_good(best_params)
+            return None
+
+        # Sklearn RandomSearch optimizer: test with discrete parameter distributions
+        if isinstance(object_instance, RandomSearchSk):
+            inst = object_instance.clone().set_params(
+                **{
+                    **base_cfg,
+                    "n_iter": 4,  # Evaluate all combinations in small space
+                    "random_state": 0,  # Ensure deterministic sampling
+                }
+            )
+            best_params = inst.solve()
+            # RandomSearchSk samples and selects best from evaluated points
+            _assert_good(best_params)
+            return None
+
+        # For other backends, no-op here; targeted direction tests live elsewhere
+        return None
