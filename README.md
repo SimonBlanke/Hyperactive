@@ -50,7 +50,7 @@ def problem(params):
     x = params["x"]
     y = params["y"]
 
-    return - x ** 2 + - y ** 2
+    return -(x**2 + y**2)
 
 # discrete search space: dict of iterable, scikit-learn like grid space
 # (valid search space types depends on optimizer)
@@ -105,7 +105,7 @@ score, add_info = sklearn_exp.score(params)
 from hyperactive.opt.gfo import HillClimbing
 
 search_space = {
-    "C": np.logspace(0.01, 100, num=10),
+    "C": np.logspace(-2, 2, num=10),
     "kernel": ["linear", "rbf"],
 }
 
