@@ -1,4 +1,5 @@
 """Base class for experiment."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
@@ -22,7 +23,7 @@ class BaseExperiment(BaseObject):
         super().__init__()
 
     def __call__(self, params):
-        """Score parameters. Same as score call, returns only only a first element."""
+        """Score parameters. Same as score call, returns only a first element."""
         score, _ = self.score(params)
         return score
 
@@ -125,6 +126,15 @@ class BaseExperiment(BaseObject):
             sign = 1
         elif hib == "lower":
             sign = -1
+        elif hib == "mixed":
+            raise NotImplementedError(
+                "Score is undefined for mixed objectives. Override `score` or "
+                "set a concrete objective where higher or lower is better."
+            )
+        else:
+            raise ValueError(
+                f"Unknown value for tag 'property:higher_or_lower_is_better': {hib}"
+            )
 
         eval_res = self.evaluate(params)
         value = eval_res[0]
