@@ -20,7 +20,7 @@ package alongside direct interfaces to Optuna and scikit-learn optimizers, suppo
   <h3>
     <a href="https://github.com/SimonBlanke/Hyperactive#overview">Overview</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#installation">Installation</a> •
-    <a href=https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb>Tutorial</a> •
+    <a href="https://nbviewer.org/github/SimonBlanke/hyperactive-tutorial/blob/main/notebooks/hyperactive_tutorial.ipynb">Tutorial</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#citing-hyperactive">Citation</a> •
     <a href="https://github.com/SimonBlanke/Hyperactive#license">License</a>
   </h3>
@@ -218,7 +218,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <a><b>Population Methods:</b></a>
           <ul>
             <li><a href="./examples/gfo/parallel_tempering_example.py">Parallel Tempering</a></li>
-            <li><a href="./examples/gfo/particle_swarm_optimization_example.py">Particle Swarm Optimizer</a></li>
+            <li><a href="./examples/gfo/particle_swarm_example.py">Particle Swarm Optimizer</a></li>
             <li><a href="./examples/gfo/spiral_optimization_example.py">Spiral Optimization</a></li>
             <li><a href="./examples/gfo/genetic_algorithm_example.py">Genetic Algorithm</a></li>
             <li><a href="./examples/gfo/evolution_strategy_example.py">Evolution Strategy</a></li>
@@ -227,11 +227,11 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <a><b>Sequential Methods:</b></a>
           <ul>
             <li><a href="./examples/gfo/bayesian_optimization_example.py">Bayesian Optimization</a></li>
-            <li><a href="./examples/gfo/lipschitz_optimization_example.py">Lipschitz Optimization</a></li>
+            <li><a href="./examples/gfo/lipschitz_optimizer_example.py">Lipschitz Optimization</a></li>
             <li><a href="./examples/gfo/direct_algorithm_example.py">Direct Algorithm</a></li>
             <li><a href="./examples/gfo/tree_structured_parzen_estimators_example.py">Tree of Parzen Estimators</a></li>
-            <li><a href="./examples/gfo/forest_optimization_example.py">Forest Optimizer</a>
-            [<a href="#/./overview#references">dto</a>] </li>
+            <li><a href="./examples/gfo/forest_optimizer_example.py">Forest Optimizer</a>
+            [<a href="#references">ref</a>] </li>
           </ul><br>
         <a><b>Optuna Backend:</b></a>
           <ul>
@@ -248,60 +248,11 @@ Hyperactive features a collection of optimization algorithms that can be used fo
       <td>
         <a><b>Machine Learning:</b></a>
           <ul>
-              <li><a href="./examples/sklearn/grid_search_example.py">Scikit-learn</a></li>
-              <li><a href="./examples/tested_and_supported_packages/xgboost_example.py">XGBoost</a></li>
-              <li><a href="./examples/tested_and_supported_packages/lightgbm_example.py">LightGBM</a></li>
-              <li><a href="./examples/tested_and_supported_packages/catboost_example.py">CatBoost</a></li>
-              <li><a href="./examples/tested_and_supported_packages/rgf_example.py">RGF</a></li>
-              <li><a href="./examples/tested_and_supported_packages/mlxtend_example.py">Mlxtend</a></li>
-          </ul><br>
-        <a><b>Deep Learning:</b></a>
-          <ul>
-              <li><a href="./examples/tested_and_supported_packages/tensorflow_example.py">Tensorflow</a></li>
-              <li><a href="./examples/tested_and_supported_packages/keras_example.py">Keras</a></li>
-              <li><a href="./examples/tested_and_supported_packages/pytorch_example.py">Pytorch</a></li>
-          </ul><br>
-        <a><b>Parallel Computing:</b></a>
-          <ul>
-              <li><a href="./examples/tested_and_supported_packages/multiprocessing_example.py">Multiprocessing</a></li>
-              <li><a href="./examples/tested_and_supported_packages/joblib_example.py">Joblib</a></li>
-              <li>Pathos</li>
+              <li><a href="./examples/sklearn/README.md">Scikit-learn</a></li>
           </ul>
       </td>
       <td>
-        <a><b>Feature Engineering:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/feature_transformation.py">Feature Transformation</a></li>
-            <li><a href="./examples/optimization_applications/feature_selection.py">Feature Selection</a></li>
-          </ul>
-        <a><b>Machine Learning:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/hyperpara_optimize.py">Hyperparameter Tuning</a></li>
-            <li><a href="./examples/optimization_applications/model_selection.py">Model Selection</a></li>
-            <li><a href="./examples/optimization_applications/sklearn_pipeline_example.py">Sklearn Pipelines</a></li>
-            <li><a href="./examples/optimization_applications/ensemble_learning_example.py">Ensemble Learning</a></li>
-          </ul>
-        <a><b>Deep Learning:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/neural_architecture_search.py">Neural Architecture Search</a></li>
-            <li><a href="./examples/optimization_applications/pretrained_nas.py">Pretrained Neural Architecture Search</a></li>
-            <li><a href="./examples/optimization_applications/transfer_learning.py">Transfer Learning</a></li>
-          </ul>
-        <a><b>Data Collection:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/meta_data_collection.py">Search Data Collection</a></li>
-            <li><a href="./examples/optimization_applications/meta_optimization.py">Meta Optimization</a></li>
-            <li><a href="./examples/optimization_applications/meta_learning.py">Meta Learning</a></li>
-          </ul>
-        <a><b>Miscellaneous:</b></a>
-          <ul>
-            <li><a href="./examples/optimization_applications/test_function.py">Test Functions</a></li>
-            <li>Fit Gaussian Curves</li>
-            <li><a href="./examples/optimization_applications/multiple_scores.py">Managing multiple objectives</a></li>
-            <li><a href="./examples/optimization_applications/search_space_example.py">Managing objects in search space</a></li>
-            <li><a href="./examples/optimization_applications/constrained_optimization.py">Constrained Optimization</a></li>
-            <li><a href="./examples/optimization_applications/memory.py">Memorize evaluations</a></li>
-          </ul>
+        
       </td>
     </tr>
   </tbody>
