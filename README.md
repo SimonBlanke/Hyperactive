@@ -7,9 +7,9 @@
 
 **A unified interface for optimization algorithms and problems.**
 
-Hyperactive implements a collection of optimization algorithms, accessible through a unified experiment-based 
+Hyperactive implements a collection of optimization algorithms, accessible through a unified experiment-based
 interface that separates optimization problems from algorithms. The library provides native implementations of algorithms from the Gradient-Free-Optimizers
-package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces. 
+package alongside direct interfaces to Optuna and scikit-learn optimizers, supporting discrete, continuous, and mixed parameter spaces.
 
 
 <br>
@@ -252,7 +252,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
       </td>
       <td>
-        
+
       </td>
     </tr>
   </tbody>
