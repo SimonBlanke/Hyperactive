@@ -380,37 +380,37 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
 
         # Optuna adapters: use warm_start via initialize and categorical space
         if isinstance(object_instance, _BaseOptunaAdapter):
-            inst = object_instance.clone()
-            cfg = {
-                "experiment": exp,
-                "param_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
-                "n_trials": 2,
-                "initialize": {"warm_start": [poor, good]},
-                "random_state": 0,
-            }
-            inst.set_params(**cfg)
+            inst = object_instance.clone().set_params(
+                **{
+                    "experiment": exp,
+                    "param_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                    "n_trials": 2,
+                    "initialize": {"warm_start": [poor, good]},
+                    "random_state": 0,
+                }
+            )
             best_params = inst.solve()
             _assert_good(best_params)
             return None
 
         # GFO adapters: pass discrete space and warm_start; keep iterations tiny
         if isinstance(object_instance, _BaseGFOadapter):
-            inst = object_instance.clone()
-            cfg = {
-                "experiment": exp,
-                "search_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
-                "n_iter": 2,
-                "initialize": {
-                    "warm_start": [poor, good],
-                    "grid": 0,
-                    "random": 0,
-                    "vertices": 0,
-                },
-                # keep Bayesian-style pre-sampling tiny to avoid heavy defaults
-                "random_state": 0,
-                "verbose": False,
-            }
-            inst.set_params(**cfg)
+            inst = object_instance.clone().set_params(
+                **{
+                    "experiment": exp,
+                    "search_space": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                    "n_iter": 2,
+                    "initialize": {
+                        "warm_start": [poor, good],
+                        "grid": 0,
+                        "random": 0,
+                        "vertices": 0,
+                    },
+                    # keep Bayesian-style pre-sampling tiny to avoid heavy defaults
+                    "random_state": 0,
+                    "verbose": False,
+                }
+            )
             best_params = inst.solve()
             # In case the backend evaluates beyond warm starts, fall back to score check
             if best_params != good:
@@ -426,12 +426,12 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
 
         # Sklearn GridSearch optimizer: test with discrete parameter grid
         if isinstance(object_instance, GridSearchSk):
-            inst = object_instance.clone()
-            cfg = {
-                "experiment": exp,
-                "param_grid": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
-            }
-            inst.set_params(**cfg)
+            inst = object_instance.clone().set_params(
+                **{
+                    "experiment": exp,
+                    "param_grid": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                }
+            )
             best_params = inst.solve()
             # GridSearchSk evaluates all grid combinations and selects best
             _assert_good(best_params)
@@ -439,14 +439,14 @@ class TestAllOptimizers(OptimizerFixtureGenerator, _QuickTester):
 
         # Sklearn RandomSearch optimizer: test with discrete parameter distributions
         if isinstance(object_instance, RandomSearchSk):
-            inst = object_instance.clone()
-            cfg = {
-                "experiment": exp,
-                "param_distributions": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
-                "n_iter": 4,  # Evaluate all combinations in small space
-                "random_state": 0,  # Ensure deterministic sampling
-            }
-            inst.set_params(**cfg)
+            inst = object_instance.clone().set_params(
+                **{
+                    "experiment": exp,
+                    "param_distributions": {"x0": [0.0, 4.0], "x1": [0.0, 4.0]},
+                    "n_iter": 4,  # Evaluate all combinations in small space
+                    "random_state": 0,  # Ensure deterministic sampling
+                }
+            )
             best_params = inst.solve()
             # RandomSearchSk samples and selects best from evaluated points
             _assert_good(best_params)
