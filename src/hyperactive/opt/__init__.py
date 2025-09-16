@@ -54,3 +54,28 @@ __all__ = [
     "TreeStructuredParzenEstimators",
     "ForestOptimizer",
 ]
+
+try:
+    from .optuna import (
+        TPEOptimizer,
+        RandomOptimizer,
+        CmaEsOptimizer,
+        GPOptimizer,
+        GridOptimizer,
+        NSGAIIOptimizer,
+        NSGAIIIOptimizer,
+        QMCOptimizer,
+    )
+
+    __all__ += [
+        "TPEOptimizer",
+        "RandomOptimizer",
+        "CmaEsOptimizer",
+        "GPOptimizer",
+        "GridOptimizer",
+        "NSGAIIOptimizer",
+        "NSGAIIIOptimizer",
+        "QMCOptimizer",
+    ]
+except ImportError:  # optuna not available; skip re-exports
+    pass
