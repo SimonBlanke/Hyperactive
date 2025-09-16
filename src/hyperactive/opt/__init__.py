@@ -77,5 +77,5 @@ try:
         "NSGAIIIOptimizer",
         "QMCOptimizer",
     ]
-except ImportError:  # optuna not available; skip re-exports
+except ImportError:  # optuna not available
     pass
