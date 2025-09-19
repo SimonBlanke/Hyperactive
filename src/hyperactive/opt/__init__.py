@@ -28,16 +28,15 @@ from .gfo import (
     StochasticHillClimbing,
     TreeStructuredParzenEstimators,
 )
-
 from .optuna import (
-    TPEOptimizer,
-    RandomOptimizer,
     CmaEsOptimizer,
     GPOptimizer,
     GridOptimizer,
-    NSGAIIOptimizer,
     NSGAIIIOptimizer,
+    NSGAIIOptimizer,
     QMCOptimizer,
+    RandomOptimizer,
+    TPEOptimizer,
 )
 
 __all__ = [
