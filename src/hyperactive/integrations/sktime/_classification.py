@@ -232,9 +232,6 @@ class TSCOptCV(_DelegatedClassifier):
         -------
         self : Reference to self.
         """
-        from sklearn.dummy import DummyClassifier
-        from sklearn.metrics import check_scoring
-
         estimator = self.estimator.clone()
 
         experiment = SktimeClassificationExperiment(
