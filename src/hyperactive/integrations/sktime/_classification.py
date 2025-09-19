@@ -237,14 +237,9 @@ class TSCOptCV(_DelegatedClassifier):
 
         estimator = self.estimator.clone()
 
-        # use dummy classifier from sklearn to get default coercion behaviour
-        # for classificatoin metrics
-        scoring = check_scoring(DummyClassifier(), self.scoring)
-        # scoring_name = f"test_{scoring.name}"
-
         experiment = SktimeClassificationExperiment(
             estimator=estimator,
-            scoring=scoring,
+            scoring=self.scoring,
             cv=self.cv,
             X=X,
             y=y,
