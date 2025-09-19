@@ -308,6 +308,7 @@ class TSCOptCV(_DelegatedClassifier):
         """
         from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
+        from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
         from sktime.classification.dummy import DummyClassifier
 
         from hyperactive.opt.gfo import HillClimbing
@@ -329,10 +330,10 @@ class TSCOptCV(_DelegatedClassifier):
             "scoring": accuracy_score,
         }
         params_hillclimb = {
-            "estimator": DummyClassifier(strategy="constant"),
+            "estimator": KNeighborsTimeSeriesClassifier(),
             "cv": KFold(n_splits=2, shuffle=False),
             "optimizer": HillClimbing(
-                search_space={"constant": [0, 3.14159, 2.718, 42]},
+                search_space={"n_neighbors": [1, 2, 4]},
                 n_iter=10,
                 n_neighbours=5,
             ),
