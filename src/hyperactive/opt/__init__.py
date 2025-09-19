@@ -28,6 +28,16 @@ from .gfo import (
     StochasticHillClimbing,
     TreeStructuredParzenEstimators,
 )
+from .optuna import (
+    CmaEsOptimizer,
+    GPOptimizer,
+    GridOptimizer,
+    NSGAIIIOptimizer,
+    NSGAIIOptimizer,
+    QMCOptimizer,
+    RandomOptimizer,
+    TPEOptimizer,
+)
 
 __all__ = [
     "GridSearchSk",
@@ -53,4 +63,12 @@ __all__ = [
     "BayesianOptimizer",
     "TreeStructuredParzenEstimators",
     "ForestOptimizer",
+    "TPEOptimizer",
+    "RandomOptimizer",
+    "CmaEsOptimizer",
+    "GPOptimizer",
+    "GridOptimizer",
+    "NSGAIIOptimizer",
+    "NSGAIIIOptimizer",
+    "QMCOptimizer",
 ]
