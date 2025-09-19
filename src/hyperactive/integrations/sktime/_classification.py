@@ -329,10 +329,10 @@ class TSCOptCV(_DelegatedClassifier):
             "scoring": accuracy_score,
         }
         params_hillclimb = {
-            "estimator": DummyClassifier(strategy="stratified"),
+            "estimator": DummyClassifier(strategy="constant"),
             "cv": KFold(n_splits=2, shuffle=False),
             "optimizer": HillClimbing(
-                search_space={"strategy": ["most_frequent", "stratified"]},
+                search_space={"constant": [0, 3.14159, 2.718, 42]},
                 n_iter=10,
                 n_neighbours=5,
             ),
