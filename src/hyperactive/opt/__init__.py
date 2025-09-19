@@ -29,6 +29,17 @@ from .gfo import (
     TreeStructuredParzenEstimators,
 )
 
+from .optuna import (
+    TPEOptimizer,
+    RandomOptimizer,
+    CmaEsOptimizer,
+    GPOptimizer,
+    GridOptimizer,
+    NSGAIIOptimizer,
+    NSGAIIIOptimizer,
+    QMCOptimizer,
+)
+
 __all__ = [
     "GridSearchSk",
     "RandomSearchSk",
@@ -53,29 +64,12 @@ __all__ = [
     "BayesianOptimizer",
     "TreeStructuredParzenEstimators",
     "ForestOptimizer",
+    "TPEOptimizer",
+    "RandomOptimizer",
+    "CmaEsOptimizer",
+    "GPOptimizer",
+    "GridOptimizer",
+    "NSGAIIOptimizer",
+    "NSGAIIIOptimizer",
+    "QMCOptimizer",
 ]
-
-try:
-    from .optuna import (
-        TPEOptimizer,
-        RandomOptimizer,
-        CmaEsOptimizer,
-        GPOptimizer,
-        GridOptimizer,
-        NSGAIIOptimizer,
-        NSGAIIIOptimizer,
-        QMCOptimizer,
-    )
-
-    __all__ += [
-        "TPEOptimizer",
-        "RandomOptimizer",
-        "CmaEsOptimizer",
-        "GPOptimizer",
-        "GridOptimizer",
-        "NSGAIIOptimizer",
-        "NSGAIIIOptimizer",
-        "QMCOptimizer",
-    ]
-except ImportError:  # optuna not available
-    pass
