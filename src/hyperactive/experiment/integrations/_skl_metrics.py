@@ -71,6 +71,9 @@ def _coerce_to_scorer(scoring, estimator):
             scorer = scoring  # passthrough scorer signature
         else:
             scorer = make_scorer(scoring)
+    elif isinstance(estimator, str):
+        metric = _default_metric_for(estimator)
+        scorer = make_scorer(metric)
     else:
         # string (scorer name)
         scorer = check_scoring(estimator, scoring=scoring)

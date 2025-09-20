@@ -232,19 +232,11 @@ class TSCOptCV(_DelegatedClassifier):
         -------
         self : Reference to self.
         """
-        from sklearn.dummy import DummyClassifier
-        from sklearn.metrics import check_scoring
-
         estimator = self.estimator.clone()
-
-        # use dummy classifier from sklearn to get default coercion behaviour
-        # for classificatoin metrics
-        scoring = check_scoring(DummyClassifier(), self.scoring)
-        # scoring_name = f"test_{scoring.name}"
 
         experiment = SktimeClassificationExperiment(
             estimator=estimator,
-            scoring=scoring,
+            scoring=self.scoring,
             cv=self.cv,
             X=X,
             y=y,
@@ -316,6 +308,7 @@ class TSCOptCV(_DelegatedClassifier):
         """
         from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
+        from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
         from sktime.classification.dummy import DummyClassifier
 
         from hyperactive.opt.gfo import HillClimbing
@@ -337,10 +330,10 @@ class TSCOptCV(_DelegatedClassifier):
             "scoring": accuracy_score,
         }
         params_hillclimb = {
-            "estimator": DummyClassifier(strategy="stratified"),
+            "estimator": KNeighborsTimeSeriesClassifier(),
             "cv": KFold(n_splits=2, shuffle=False),
             "optimizer": HillClimbing(
-                search_space={"strategy": ["most_frequent", "stratified"]},
+                search_space={"n_neighbors": [1, 2, 4]},
                 n_iter=10,
                 n_neighbours=5,
             ),
