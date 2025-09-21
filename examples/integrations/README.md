@@ -1,4 +1,4 @@
-# Integrations to AI toolboxes
+# Integrations with AI framework toolboxes
 
 This directory contains examples for estimator level integration with
 common AI toolbox libraries such as `scikit-learn` or `sktime`.
