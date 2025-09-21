@@ -179,7 +179,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <img src="./docs/images/blue.jpg"/>
       </td>
       <td>
-        <strong>Tested and Supported Packages</strong>
+        <strong>Framework Integrations</strong>
         <img src="./docs/images/blue.jpg"/>
       </td>
       <td>
@@ -237,9 +237,11 @@ Hyperactive features a collection of optimization algorithms that can be used fo
           </ul>
       </td>
       <td>
-        <a><b>Machine Learning:</b></a>
+        <a><b>AI and Machine Learning:</b></a>
           <ul>
-              <li><a href="./examples/sklearn/README.md">Scikit-learn</a></li>
+              <li><a href="./examples/integrations/README.md">scikit-learn</a></li>
+              <li><a href="./examples/integrations/README.md">sktime forecasting</a></li>
+              <li><a href="./examples/integrations/README.md">sktime time series classification</a></li>
           </ul>
       </td>
       <td>
