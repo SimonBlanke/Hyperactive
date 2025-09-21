@@ -179,7 +179,7 @@ Hyperactive features a collection of optimization algorithms that can be used fo
         <img src="./docs/images/blue.jpg"/>
       </td>
       <td>
-        <strong>Tested and Supported Packages</strong>
+        <strong>Framework Integrations</strong>
         <img src="./docs/images/blue.jpg"/>
       </td>
       <td>
