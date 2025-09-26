@@ -321,7 +321,7 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
             "scoring": CRPS(),
         }
         params_hillclimb = {
-            "estimator": ConditionUncensored(BootstrapRegressor()),
+            "estimator": ConditionUncensored(BootstrapRegressor.create_test_instance()),
             "cv": KFold(n_splits=2),
             "optimizer": HillClimbing(
                 search_space={"estimator__n_bootstrap_samples": [3, 7, 12]},
