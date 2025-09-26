@@ -154,6 +154,7 @@ class SkproProbaRegExperiment(BaseExperiment):
         estimator,
         X,
         y,
+        C=None,
         cv=None,
         scoring=None,
         error_score=np.nan,
@@ -163,6 +164,7 @@ class SkproProbaRegExperiment(BaseExperiment):
         self.estimator = estimator
         self.X = X
         self.y = y
+        self.C = C
         self.scoring = scoring
         self.cv = cv
         self.error_score = error_score
@@ -221,6 +223,7 @@ class SkproProbaRegExperiment(BaseExperiment):
             cv=self._cv,
             X=self.X,
             y=self.y,
+            C=self.C,
             scoring=self._scoring,
             error_score=self.error_score,
             backend=self.backend,
