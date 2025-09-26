@@ -110,6 +110,7 @@ class SkproProbaRegExperiment(BaseExperiment):
 
     Example
     -------
+    >>> import pandas as pd
     >>> from hyperactive.experiment.integrations import SkproProbaRegExperiment
     >>> from sklearn.datasets import load_diabetes
     >>> from sklearn.model_selection import KFold
@@ -180,7 +181,10 @@ class SkproProbaRegExperiment(BaseExperiment):
             self._scoring = scoring
 
         # Set the sign of the scoring function (rely on sklearn scorer if present)
-        higher_is_better = not self._scoring.get_tag("lower_is_better")
+        if self._scoring.get_tag("lower_is_better"):
+            higher_is_better = "lower"
+        else:
+            higher_is_better = "higher"
         self.set_tags(**{"property:higher_or_lower_is_better": higher_is_better})
 
     def _paramnames(self):
