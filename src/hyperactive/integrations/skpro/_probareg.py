@@ -153,7 +153,7 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
     >>> from sklearn.model_selection import train_test_split
     >>> X, y = load_diabetes(return_X_y=True, as_frame=True)
     >>> y = pd.DataFrame(y)  # skpro assumes y is pd.DataFrame
-    >>> X_train, y_train, X_test, y_test = train_test_split(X, y)
+    >>> X_train, X_test, y_train, y_test = train_test_split(X, y)
     >>>
     >>> tuned_naive.fit(X_train, y_train)
     ProbaRegOptCV(...)
