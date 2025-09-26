@@ -212,7 +212,7 @@ class SkproProbaRegExperiment(BaseExperiment):
         dict
             Additional metadata about the search.
         """
-        from skpro.model_selection import evaluate
+        from skpro.benchmarking.evaluate import evaluate
 
         estimator = self.estimator.clone().set_params(**params)
 
