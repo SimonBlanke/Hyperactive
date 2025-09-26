@@ -170,10 +170,6 @@ class SkproProbaRegExperiment(BaseExperiment):
 
         super().__init__()
 
-        # Set the sign of the scoring function (rely on sklearn scorer if present)
-        higher_is_better = not scoring.get_tag("lower_is_better")
-        self.set_tags(**{"property:higher_or_lower_is_better": higher_is_better})
-
         self._cv = _coerce_cv(cv)
 
         if scoring is None:
@@ -182,6 +178,10 @@ class SkproProbaRegExperiment(BaseExperiment):
             self._scoring = CRPS()
         else:
             self._scoring = scoring
+
+        # Set the sign of the scoring function (rely on sklearn scorer if present)
+        higher_is_better = not self._scoring.get_tag("lower_is_better")
+        self.set_tags(**{"property:higher_or_lower_is_better": higher_is_better})
 
     def _paramnames(self):
         """Return the parameter names of the search.
