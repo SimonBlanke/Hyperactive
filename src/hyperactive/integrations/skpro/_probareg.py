@@ -297,37 +297,40 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
         -------
         params : dict or list of dict
         """
-        from sklearn.metrics import accuracy_score
         from sklearn.model_selection import KFold
-        from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
-        from sktime.classification.dummy import DummyClassifier
+        from skpro.metrics import CRPS, ConcordanceHarrell
+        from skpro.regression.bootstrap import BootstrapRegressor
+        from skpro.regression.residual import ResidualDouble
+        from skpro.survival.compose import ConditionUncensored
 
         from hyperactive.opt.gfo import HillClimbing
         from hyperactive.opt.gridsearch import GridSearchSk
         from hyperactive.opt.random_search import RandomSearchSk
 
         params_gridsearch = {
-            "estimator": DummyClassifier(),
+            "estimator": ResidualDouble.create_test_instance(),
             "optimizer": GridSearchSk(
-                param_grid={"strategy": ["most_frequent", "stratified"]}
+                param_grid={"distr_type": ["Normal", "Laplace"]}
             ),
         }
-        params_randomsearch = {
-            "estimator": DummyClassifier(),
-            "cv": 2,
+        param_randomsearch = {
+            "estimator": ResidualDouble.create_test_instance(),
             "optimizer": RandomSearchSk(
-                param_distributions={"strategy": ["most_frequent", "stratified"]},
+                param_distributions={"distr_type": ["Normal", "Laplace"]},
+                n_iter=2,
             ),
-            "scoring": accuracy_score,
+            "cv": 2,
+            "scoring": CRPS(),
         }
         params_hillclimb = {
-            "estimator": KNeighborsTimeSeriesClassifier(),
-            "cv": KFold(n_splits=2, shuffle=False),
+            "estimator": ConditionUncensored(BootstrapRegressor()),
+            "cv": KFold(n_splits=2),
             "optimizer": HillClimbing(
-                search_space={"n_neighbors": [1, 2, 4]},
+                search_space={"estimator__n_bootstrap_samples": [3, 7, 12]},
                 n_iter=10,
                 n_neighbours=5,
             ),
-            "scoring": "cross-entropy",
+            "scoring": ConcordanceHarrell(),
         }
-        return [params_gridsearch, params_randomsearch, params_hillclimb]
+
+        return [params_gridsearch, param_randomsearch, params_hillclimb]
