@@ -136,7 +136,7 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
     >>> from skpro.regression.dummy import DummyProbaRegressor
     >>> from skpro.metrics import CRPS
     >>> from sklearn.model_selection import KFold
-    >>> from hyperactive.integrations.sktime import ProbaRegOptCV
+    >>> from hyperactive.integrations.skpro import ProbaRegOptCV
     >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
     >>> param_grid = {"strategy": ["empirical", "normal"]}
