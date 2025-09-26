@@ -50,6 +50,7 @@ sklearn-integration = [
   "scikit-learn <1.8.0",
 ]
 sktime-integration = [
+  "skpro",
   "sktime",
 ]
 build = [
