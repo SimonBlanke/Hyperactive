@@ -1,4 +1,4 @@
-"""Experiment adapter for sktime backtesting experiments."""
+"""Experiment adapter for skpro corss-validation experiments."""
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
@@ -17,7 +17,7 @@ class SkproProbaRegExperiment(BaseExperiment):
     the model's performance.
 
     The score returned is the summary backtesting score,
-    of applying ``sktime`` ``evaluate`` to ``estimator`` with the parameters given in
+    of applying ``skpro`` ``evaluate`` to ``estimator`` with the parameters given in
     ``score`` ``params``.
 
     The backtesting performed is specified by the ``cv`` parameter,
