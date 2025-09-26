@@ -119,7 +119,7 @@ class SkproProbaRegExperiment(BaseExperiment):
     >>> X, y = load_diabetes(return_X_y=True, as_frame=True)
     >>> y = pd.DataFrame(y)  # skpro assumes y is pd.DataFrame
     >>>
-    >>> sktime_exp = SktimeClassificationExperiment(
+    >>> skpro_exp = SkproProbaRegExperiment(
     ...     estimator=DummyProbaRegressor(),
     ...     scoring=CRPS(),
     ...     cv=KFold(n_splits=2),
@@ -127,19 +127,19 @@ class SkproProbaRegExperiment(BaseExperiment):
     ...     y=y,
     ... )
     >>> params = {"strategy": "normal"}
-    >>> score, add_info = sktime_exp.score(params)
+    >>> score, add_info = skpro_exp.score(params)
 
     For default choices of ``scoring`` and ``cv``:
-    >>> sktime_exp = SktimeClassificationExperiment(
+    >>> skpro_exp = SkproProbaRegExperiment(
     ...     estimator=DummyProbaRegressor(),
     ...     X=X,
     ...     y=y,
     ... )
     >>> params = {"strategy": "most_frequent"}
-    >>> score, add_info = sktime_exp.score(params)
+    >>> score, add_info = skpro_exp.score(params)
 
     Quick call without metadata return or dictionary:
-    >>> score = sktime_exp({"strategy": "normal"})
+    >>> score = skpro_exp({"strategy": "normal"})
     """
 
     _tags = {
