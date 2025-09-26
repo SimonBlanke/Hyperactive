@@ -309,9 +309,7 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
 
         params_gridsearch = {
             "estimator": ResidualDouble.create_test_instance(),
-            "optimizer": GridSearchSk(
-                param_grid={"distr_type": ["Normal", "Laplace"]}
-            ),
+            "optimizer": GridSearchSk(param_grid={"distr_type": ["Normal", "Laplace"]}),
         }
         param_randomsearch = {
             "estimator": ResidualDouble.create_test_instance(),
