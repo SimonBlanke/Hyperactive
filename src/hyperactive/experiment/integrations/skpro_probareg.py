@@ -263,7 +263,6 @@ class SkproProbaRegExperiment(BaseExperiment):
             `create_test_instance` uses the first (or only) dictionary in `params`
         """
         import pandas as pd
-
         from sklearn.datasets import load_diabetes
         from sklearn.model_selection import KFold
         from skpro.metrics import ConcordanceHarrell
