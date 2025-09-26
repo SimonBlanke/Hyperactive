@@ -12,10 +12,10 @@ from hyperactive.experiment.integrations.skpro_probareg import SkproProbaRegExpe
 
 
 class ProbaRegOptCV(_DelegatedProbaRegressor):
-    """Tune an sktime classifier via any optimizer in the hyperactive toolbox.
+    """Tune an skpro regressor via any optimizer in the hyperactive toolbox.
 
-    ``TSCOptCV`` uses any available tuning engine from ``hyperactive``
-    to tune a classifier by backtesting.
+    ``ProbaRegOptCV`` uses any available tuning engine from ``hyperactive``
+    to tune a probabilistic regressor.
 
     It passes backtesting results as scores to the tuning engine,
     which identifies the best hyperparameters.
@@ -29,12 +29,12 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
 
     Configuration of the tuning engine is as per the respective documentation.
 
-    Formally, ``TSCOptCV`` does the following:
+    Formally, ``ProbaRegOptCV`` does the following:
 
     In ``fit``:
 
     * wraps the ``estimator``, ``scoring``, and other parameters
-      into a ``SktimeClassificationExperiment`` instance, which is passed to the
+      into a ``SkproProbaRegExperiment`` instance, which is passed to the
       optimizer ``optimizer`` as the ``experiment`` argument.
     * Optimal parameters are then obtained from ``optimizer.solve``, and set
       as ``best_params_`` and ``best_estimator_`` attributes.
@@ -45,8 +45,8 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
 
     Parameters
     ----------
-    estimator : sktime classifier, BaseClassifier instance or interface compatible
-        The classifier to tune, must implement the sktime classifier interface.
+    estimator : skpro regressor, BaseProbaRegressor instance or interface compatible
+        The regressor to tune, must implement the skpro regressor interface.
 
     optimizer : hyperactive BaseOptimizer
         The optimizer to be used for hyperparameter search.
@@ -58,11 +58,6 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
         - None = default = ``KFold(n_splits=3, shuffle=True)``
         - integer, number of folds folds in a ``KFold`` splitter, ``shuffle=True``
         - An iterable yielding (train, test) splits as arrays of indices.
-
-        For integer/None inputs, if the estimator is a classifier and ``y`` is
-        either binary or multiclass, :class:`StratifiedKFold` is used. In all
-        other cases, :class:`KFold` is used. These splitters are instantiated
-        with ``shuffle=False`` so the splits will be the same across calls.
 
     scoring : str, callable, default=None
         Strategy to evaluate the performance of the cross-validated model on
@@ -138,34 +133,35 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
     For illustration, we use grid search, this can be replaced by any other optimizer.
 
     1. defining the tuned estimator:
-    >>> from sktime.classification.dummy import DummyClassifier
+    >>> from skpro.regression.dummy import DummyProbaRegressor
+    >>> from skpro.metrics import CRPS
     >>> from sklearn.model_selection import KFold
-    >>> from hyperactive.integrations.sktime import TSCOptCV
+    >>> from hyperactive.integrations.sktime import ProbaRegOptCV
     >>> from hyperactive.opt import GridSearchSk as GridSearch
     >>>
-    >>> param_grid = {"strategy": ["most_frequent", "stratified"]}
-    >>> tuned_naive = TSCOptCV(
-    ...     DummyClassifier(),
+    >>> param_grid = {"strategy": ["empirical", "normal"]}
+    >>> tuned_naive = ProbaRegOptCV(
+    ...     DummyProbaRegressor(),
     ...     GridSearch(param_grid),
     ...     cv=KFold(n_splits=2, shuffle=False),
+    ...     scoring=CRPS(),
     ... )
 
     2. fitting the tuned estimator:
-    >>> from sktime.datasets import load_unit_test
-    >>> X_train, y_train = load_unit_test(
-    ...     return_X_y=True, split="TRAIN", return_type="pd-multiindex"
-    ... )
-    >>> X_test, _ = load_unit_test(
-    ...     return_X_y=True, split="TEST", return_type="pd-multiindex"
-    ... )
+    >>> import pandas as pd
+    >>> from sklearn.datasets import load_diabetes
+    >>> from sklearn.model_selection import train_test_split
+    >>> X, y = load_diabetes(return_X_y=True, as_frame=True)
+    >>> y = pd.DataFrame(y)  # skpro assumes y is pd.DataFrame
+    >>> X_train, y_train, X_test, y_test = train_test_split(X, y)
     >>>
     >>> tuned_naive.fit(X_train, y_train)
-    TSCOptCV(...)
+    ProbaRegOptCV(...)
     >>> y_pred = tuned_naive.predict(X_test)
 
     3. obtaining best parameters and best estimator
     >>> best_params = tuned_naive.best_params_
-    >>> best_classifier = tuned_naive.best_estimator_
+    >>> best_regressor = tuned_naive.best_estimator_
     """
 
     _tags = {
