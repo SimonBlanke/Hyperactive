@@ -221,13 +221,13 @@ class SkproProbaRegExperiment(BaseExperiment):
             cv=self._cv,
             X=self.X,
             y=self.y,
-            scoring=self.scoring,
+            scoring=self._scoring,
             error_score=self.error_score,
             backend=self.backend,
             backend_params=self.backend_params,
         )
 
-        result_name = f"test_{self.scoring.name}"
+        result_name = f"test_{self._scoring.name}"
 
         res_float = results[result_name].mean()
 
