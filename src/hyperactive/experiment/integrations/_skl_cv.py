@@ -16,8 +16,6 @@ def _coerce_cv(cv):
     cv_splitter : cross-validation generator or iterable
         A sklearn-compatible cross-validation splitter.
     """
-    from sklearn.model_selection import KFold
-
     # default handling for cv
     if isinstance(cv, int):
         from sklearn.model_selection import KFold
