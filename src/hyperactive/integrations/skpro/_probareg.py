@@ -167,7 +167,7 @@ class ProbaRegOptCV(_DelegatedProbaRegressor):
     _tags = {
         "authors": "fkiraly",
         "maintainers": "fkiraly",
-        "python_dependencies": "sktime",
+        "python_dependencies": "skpro",
     }
 
     # attribute for _DelegatedClassifier, which then delegates
