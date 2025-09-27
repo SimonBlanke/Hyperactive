@@ -1,4 +1,4 @@
-"""Experiment adapter for skpro corss-validation experiments."""
+"""Experiment adapter for skpro cross-validation experiments."""
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
