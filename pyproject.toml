@@ -51,7 +51,7 @@ sklearn-integration = [
 ]
 sktime-integration = [
   "skpro",
-  "sktime",
+  'sktime; python_version < "3.14"',
 ]
 build = [
   "setuptools",
