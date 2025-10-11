@@ -63,7 +63,7 @@ test = [
   "flake8",
   "pytest-cov",
   "pathos",
-  "torch",
+  'torch; python_version < "3.14"',
   "tf_keras",
 ]
 test_parallel_backends = [
