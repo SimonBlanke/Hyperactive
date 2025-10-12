@@ -59,7 +59,7 @@ class GPOptimizer(_BaseOptunaAdapter):
         "info:local_vs_global": "global",
         "info:explore_vs_exploit": "exploit",
         "info:compute": "high",
-        "python_dependencies": ["optuna"],
+        "python_dependencies": ["optuna", "torch"],
     }
 
     def __init__(
