@@ -1,10 +1,11 @@
 """Experiment adapter for PyTorch Lightning experiments."""
 
-from hyperactive.base import BaseExperiment
-import torch
-import lightning as L
-from torch.utils.data import DataLoader
+# copyright: hyperactive developers, MIT License (see LICENSE file)
 
+__author__ = ["amitsubhashchejara"]
+
+from hyperactive.base import BaseExperiment
+import numpy as np
 
 class TorchExperiment(BaseExperiment):
     """ Experiment adapter for PyTorch Lightning experiments.
@@ -23,8 +24,8 @@ class TorchExperiment(BaseExperiment):
     lightning_module : type
         A PyTorch Lightning Module class (not an instance) that will be instantiated
         with hyperparameters during optimization.
-    trainer : L.Trainer
-        A PyTorch Lightning Trainer that handles model training and evaluation.
+    trainer_kwargs : dict, optional (default=None)
+        A dictionary of keyword arguments to pass to the PyTorch Lightning Trainer.
     objective_metric : str, optional (default='val_loss')
         The metric used to evaluate the model's performance. This should correspond
         to a metric logged in the LightningModule during validation.
@@ -89,15 +90,15 @@ class TorchExperiment(BaseExperiment):
     ...     
     ...     def val_dataloader(self):
     ...         return DataLoader(self.val, batch_size=self.batch_size)
-    >>> 
-    >>> # Setup experiment
-    >>> trainer = L.Trainer(max_epochs=3, enable_progress_bar=False)
-    >>> datamodule = RandomDataModule()
-    >>> 
+    >>>
+    >>> datamodule = RandomDataModule(batch_size=16)
+    >>> datamodule.setup()
+    >>>
+    >>> # Create Experiment
     >>> experiment = TorchExperiment(
     ...     datamodule=datamodule,
     ...     lightning_module=SimpleLightningModule,
-    ...     trainer=trainer,
+    ...     trainer_kwargs={'max_epochs': 3},
     ...     objective_metric="val_loss"
     ... )
     >>> 
@@ -106,14 +107,36 @@ class TorchExperiment(BaseExperiment):
     >>> val_result, metadata = experiment._evaluate(params)
     """
 
-    def __init__(self, datamodule, lightning_module, trainer, objective_metric: str = "val_loss"):
-        # todo: write any hyper-parameters to self
+    _tags = {
+        "property:randomness": "random",
+        "property:higher_or_lower_is_better": "lower",
+        "authors": ["amitsubhashchejara"],
+        "python_dependencies": ["torch", "lightning"], 
+    }
+
+    def __init__(self, 
+                 datamodule, 
+                 lightning_module, 
+                 trainer_kwargs=None, 
+                 objective_metric: str = "val_loss",
+    ):
+
         self.datamodule = datamodule
         self.lightning_module = lightning_module
-        self.trainer = trainer
+        self.trainer_kwargs = trainer_kwargs or {}
         self.objective_metric = objective_metric
   
         super().__init__()
+
+        self._trainer_kwargs = {
+            "max_epochs": 10,
+            "enable_checkpointing": False,
+            "logger": False,
+            "enable_progress_bar": False,
+            "enable_model_summary": False,
+        }
+        if trainer_kwargs is not None:
+            self._trainer_kwargs.update(trainer_kwargs)
 
     def _paramnames(self):
         """Return the parameter names of the search.
@@ -143,17 +166,36 @@ class TorchExperiment(BaseExperiment):
         dict
             Additional metadata about the search.
         """
+        import lightning as L
 
-        model = self.lightning_module(**params)
-        self.trainer.fit(model, self.datamodule)
-        # get validation results
-        if self.objective_metric not in self.trainer.callback_metrics:
-            raise ValueError(f"objective metric {self.objective_metric} not found in trainer callback metrics")
-        else:
-            val_results = self.trainer.callback_metrics.get(self.objective_metric, float('inf'))
-        metadata = {}
-        import numpy as np
-        return np.float64(val_results.detach().cpu().item()), metadata
+        try:
+            model = self.lightning_module(**params)
+            trainer = L.Trainer(**self._trainer_kwargs)
+            trainer.fit(model, self.datamodule)
+            
+
+            val_result = trainer.callback_metrics.get(self.objective_metric)
+            metadata = {}
+
+            if val_result is None:
+                available_metrics = list(trainer.callback_metrics.keys())
+                raise ValueError(
+                    f"Metric '{self.objective_metric}' not found. "
+                    f"Available: {available_metrics}"
+                )
+            if hasattr(val_result, "item"):
+                val_result = np.float64(val_result.detach().cpu().item())
+            elif isinstance(val_result, (int, float)):
+                val_result = np.float64(val_result)
+            else:
+                val_result = np.float64(float(val_result))
+
+            return val_result, metadata
+        
+        except Exception as e:
+            print(f"Training failed with params {params}: {e}")
+            return np.float64(float('inf')), {}
+        
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -169,9 +211,11 @@ class TorchExperiment(BaseExperiment):
         params : dict or list of dict, default = {}
             Parameters to create testing instances of the class.
         """
+        import torch
         from torch import nn
+        from torch.utils.data import DataLoader
         import lightning as L
-        from lightning import Trainer
+
         
         class SimpleLightningModule(L.LightningModule):
             def __init__(self, input_dim=10, hidden_dim=16, lr=1e-3):
@@ -224,25 +268,24 @@ class TorchExperiment(BaseExperiment):
             def val_dataloader(self):
                 return DataLoader(self.val, batch_size=self.batch_size)
 
-        trainer = Trainer(
-            max_epochs=1, 
-            enable_progress_bar=False,
-            enable_model_summary=False,
-            logger=False
-        )
         datamodule = RandomDataModule(batch_size=16)
 
         params = {
             "datamodule": datamodule,
             "lightning_module": SimpleLightningModule,
-            "trainer": trainer,
-            "objective_metric": "val_loss"
+            "trainer_kwargs": {
+                "max_epochs": 1,
+                "enable_progress_bar": False,
+                "enable_model_summary": False,
+                "logger": False,
+            },
+            "objective_metric": "val_loss",
         }
         
         return params
 
     @classmethod
-    def _get_score_params(self):
+    def _get_score_params(cls):
         """Return settings for testing score/evaluate functions.
 
         Returns a list, the i-th element should be valid arguments for

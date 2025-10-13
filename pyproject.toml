@@ -73,6 +73,7 @@ test_parallel_backends = [
 all_extras = [
   "hyperactive[integrations]",
   "optuna<5",
+  "lightning",
 ]
 
 
