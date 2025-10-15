@@ -282,7 +282,7 @@ class TorchExperiment(BaseExperiment):
             "objective_metric": "val_loss",
         }
         
-        return params
+        return [params]
 
     @classmethod
     def _get_score_params(cls):
