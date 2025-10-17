@@ -2,6 +2,9 @@
 
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
+from hyperactive.base import BaseExperiment
+from hyperactive.experiment.integrations._skl_metrics import \
+    _coerce_to_scorer_and_sign
 from sklearn import clone
 from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
@@ -9,7 +12,6 @@ from sklearn.utils.validation import _num_samples
 from hyperactive.base import BaseExperiment
 from hyperactive.experiment.integrations._skl_cv import _coerce_cv
 from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
-
 
 class SklearnCvExperiment(BaseExperiment):
     """Experiment adapter for sklearn cross-validation experiments.
