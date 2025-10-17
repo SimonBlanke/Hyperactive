@@ -4,11 +4,12 @@
 
 __author__ = ["amitsubhashchejara"]
 
-from hyperactive.base import BaseExperiment
 import numpy as np
+from hyperactive.base import BaseExperiment
+
 
 class TorchExperiment(BaseExperiment):
-    """ Experiment adapter for PyTorch Lightning experiments.
+    """Experiment adapter for PyTorch Lightning experiments.
 
     This class is used to perform experiments using PyTorch Lightning modules.
     It allows for hyperparameter tuning and evaluation of the model's performance
@@ -37,7 +38,7 @@ class TorchExperiment(BaseExperiment):
     >>> import lightning as L
     >>> from torch import nn
     >>> from torch.utils.data import DataLoader
-    >>> 
+    >>>
     >>> # Define a simple Lightning Module
     >>> class SimpleLightningModule(L.LightningModule):
     ...     def __init__(self, input_dim=10, hidden_dim=16, lr=1e-3):
@@ -49,45 +50,45 @@ class TorchExperiment(BaseExperiment):
     ...             nn.Linear(hidden_dim, 2)
     ...         )
     ...         self.lr = lr
-    ...     
+    ...
     ...     def forward(self, x):
     ...         return self.model(x)
-    ...     
+    ...
     ...     def training_step(self, batch, batch_idx):
     ...         x, y = batch
     ...         y_hat = self(x)
     ...         loss = nn.functional.cross_entropy(y_hat, y)
     ...         self.log("train_loss", loss)
     ...         return loss
-    ...     
+    ...
     ...     def validation_step(self, batch, batch_idx):
     ...         x, y = batch
     ...         y_hat = self(x)
     ...         val_loss = nn.functional.cross_entropy(y_hat, y)
     ...         self.log("val_loss", val_loss, on_epoch=True)
     ...         return val_loss
-    ...     
+    ...
     ...     def configure_optimizers(self):
     ...         return torch.optim.Adam(self.parameters(), lr=self.lr)
-    >>> 
+    >>>
     >>> # Create DataModule
     >>> class RandomDataModule(L.LightningDataModule):
     ...     def __init__(self, batch_size=32):
     ...         super().__init__()
     ...         self.batch_size = batch_size
-    ...     
+    ...
     ...     def setup(self, stage=None):
     ...         dataset = torch.utils.data.TensorDataset(
-    ...             torch.randn(100, 10), 
+    ...             torch.randn(100, 10),
     ...             torch.randint(0, 2, (100,))
     ...         )
     ...         self.train, self.val = torch.utils.data.random_split(
     ...             dataset, [80, 20]
     ...         )
-    ...     
+    ...
     ...     def train_dataloader(self):
     ...         return DataLoader(self.train, batch_size=self.batch_size)
-    ...     
+    ...
     ...     def val_dataloader(self):
     ...         return DataLoader(self.val, batch_size=self.batch_size)
     >>>
@@ -101,9 +102,9 @@ class TorchExperiment(BaseExperiment):
     ...     trainer_kwargs={'max_epochs': 3},
     ...     objective_metric="val_loss"
     ... )
-    >>> 
+    >>>
     >>> params = {"input_dim": 10, "hidden_dim": 16, "lr": 1e-3}
-    >>> 
+    >>>
     >>> val_result, metadata = experiment._evaluate(params)
     """
 
@@ -111,21 +112,22 @@ class TorchExperiment(BaseExperiment):
         "property:randomness": "random",
         "property:higher_or_lower_is_better": "lower",
         "authors": ["amitsubhashchejara"],
-        "python_dependencies": ["torch", "lightning"], 
+        "python_dependencies": ["torch", "lightning"],
     }
 
-    def __init__(self, 
-                 datamodule, 
-                 lightning_module, 
-                 trainer_kwargs=None, 
-                 objective_metric: str = "val_loss",
+    def __init__(
+        self,
+        datamodule,
+        lightning_module,
+        trainer_kwargs=None,
+        objective_metric: str = "val_loss",
     ):
 
         self.datamodule = datamodule
         self.lightning_module = lightning_module
         self.trainer_kwargs = trainer_kwargs or {}
         self.objective_metric = objective_metric
-  
+
         super().__init__()
 
         self._trainer_kwargs = {
@@ -148,8 +150,9 @@ class TorchExperiment(BaseExperiment):
             If not known or arbitrary, return None.
         """
         import inspect
+
         sig = inspect.signature(self.lightning_module.__init__)
-        return [p for p in sig.parameters.keys() if p != 'self']
+        return [p for p in sig.parameters.keys() if p != "self"]
 
     def _evaluate(self, params):
         """Evaluate the parameters.
@@ -172,7 +175,6 @@ class TorchExperiment(BaseExperiment):
             model = self.lightning_module(**params)
             trainer = L.Trainer(**self._trainer_kwargs)
             trainer.fit(model, self.datamodule)
-            
 
             val_result = trainer.callback_metrics.get(self.objective_metric)
             metadata = {}
@@ -191,11 +193,10 @@ class TorchExperiment(BaseExperiment):
                 val_result = np.float64(float(val_result))
 
             return val_result, metadata
-        
+
         except Exception as e:
             print(f"Training failed with params {params}: {e}")
-            return np.float64(float('inf')), {}
-        
+            return np.float64(float("inf")), {}
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -211,12 +212,11 @@ class TorchExperiment(BaseExperiment):
         params : dict or list of dict, default = {}
             Parameters to create testing instances of the class.
         """
+        import lightning as L
         import torch
         from torch import nn
         from torch.utils.data import DataLoader
-        import lightning as L
 
-        
         class SimpleLightningModule(L.LightningModule):
             def __init__(self, input_dim=10, hidden_dim=16, lr=1e-3):
                 super().__init__()
@@ -224,7 +224,7 @@ class TorchExperiment(BaseExperiment):
                 self.model = nn.Sequential(
                     nn.Linear(input_dim, hidden_dim),
                     nn.ReLU(),
-                    nn.Linear(hidden_dim, 2)
+                    nn.Linear(hidden_dim, 2),
                 )
                 self.lr = lr
 
@@ -255,12 +255,9 @@ class TorchExperiment(BaseExperiment):
 
             def setup(self, stage=None):
                 dataset = torch.utils.data.TensorDataset(
-                    torch.randn(100, 10), 
-                    torch.randint(0, 2, (100,))
+                    torch.randn(100, 10), torch.randint(0, 2, (100,))
                 )
-                self.train, self.val = torch.utils.data.random_split(
-                    dataset, [80, 20]
-                )
+                self.train, self.val = torch.utils.data.random_split(dataset, [80, 20])
 
             def train_dataloader(self):
                 return DataLoader(self.train, batch_size=self.batch_size)
@@ -281,7 +278,7 @@ class TorchExperiment(BaseExperiment):
             },
             "objective_metric": "val_loss",
         }
-        
+
         return [params]
 
     @classmethod

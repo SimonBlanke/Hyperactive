@@ -3,9 +3,9 @@
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
-
 from hyperactive.base import BaseExperiment
-from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
+from hyperactive.experiment.integrations._skl_metrics import \
+    _coerce_to_scorer_and_sign
 
 
 class SktimeClassificationExperiment(BaseExperiment):
@@ -222,7 +222,8 @@ class SktimeClassificationExperiment(BaseExperiment):
         metric_func = getattr(self._scoring, "_metric_func", None)
         if metric_func is None:
             # very defensive fallback (should not happen due to _coerce_to_scorer)
-            from sklearn.metrics import accuracy_score as metric_func  # type: ignore
+            from sklearn.metrics import \
+                accuracy_score as metric_func  # type: ignore
 
         results = evaluate(
             estimator,

@@ -1,8 +1,8 @@
 """Experiment adapter for sktime backtesting experiments."""
+
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import numpy as np
-
 from hyperactive.base import BaseExperiment
 
 
@@ -169,9 +169,8 @@ class SktimeForecastingExperiment(BaseExperiment):
         super().__init__()
 
         if scoring is None:
-            from sktime.performance_metrics.forecasting import (
-                MeanAbsolutePercentageError,
-            )
+            from sktime.performance_metrics.forecasting import \
+                MeanAbsolutePercentageError
 
             self._scoring = MeanAbsolutePercentageError(symmetric=True)
         else:
@@ -275,7 +274,8 @@ class SktimeForecastingExperiment(BaseExperiment):
             "y": y,
         }
 
-        from sktime.performance_metrics.forecasting import MeanAbsolutePercentageError
+        from sktime.performance_metrics.forecasting import \
+            MeanAbsolutePercentageError
 
         y, X = load_longley()
         params1 = {
