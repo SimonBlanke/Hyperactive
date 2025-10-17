@@ -9,6 +9,9 @@ from sklearn import clone
 from sklearn.model_selection import cross_validate
 from sklearn.utils.validation import _num_samples
 
+from hyperactive.base import BaseExperiment
+from hyperactive.experiment.integrations._skl_cv import _coerce_cv
+from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
 
 class SklearnCvExperiment(BaseExperiment):
     """Experiment adapter for sklearn cross-validation experiments.
@@ -31,7 +34,7 @@ class SklearnCvExperiment(BaseExperiment):
     estimator : sklearn estimator
         The estimator to be used for the experiment.
     X : array-like, shape (n_samples, n_features)
-            The input data for the model.
+        The input data for the model.
     y : array-like, shape (n_samples,) or (n_samples, n_outputs)
         The target values for the model.
     cv : int or cross-validation generator, default = KFold(n_splits=3, shuffle=True)
@@ -86,16 +89,7 @@ class SklearnCvExperiment(BaseExperiment):
 
         super().__init__()
 
-        if cv is None:
-            from sklearn.model_selection import KFold
-
-            self._cv = KFold(n_splits=3, shuffle=True)
-        elif isinstance(cv, int):
-            from sklearn.model_selection import KFold
-
-            self._cv = KFold(n_splits=cv, shuffle=True)
-        else:
-            self._cv = cv
+        self._cv = _coerce_cv(cv)
 
         self._scoring, _sign = _coerce_to_scorer_and_sign(scoring, self.estimator)
         self.scorer_ = self._scoring
