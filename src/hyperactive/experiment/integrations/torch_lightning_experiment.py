@@ -279,7 +279,81 @@ class TorchExperiment(BaseExperiment):
             "objective_metric": "val_loss",
         }
 
-        return [params]
+        class RegressionModule(L.LightningModule):
+            def __init__(self, num_layers=2, hidden_size=32, dropout=0.1):
+                super().__init__()
+                self.save_hyperparameters()
+                layers = []
+                input_size = 20
+                for _ in range(num_layers):
+                    layers.extend(
+                        [
+                            nn.Linear(input_size, hidden_size),
+                            nn.ReLU(),
+                            nn.Dropout(dropout),
+                        ]
+                    )
+                    input_size = hidden_size
+                layers.append(nn.Linear(hidden_size, 1))
+                self.model = nn.Sequential(*layers)
+
+            def forward(self, x):
+                return self.model(x)
+
+            def training_step(self, batch, batch_idx):
+                x, y = batch
+                y_hat = self(x).squeeze()
+                loss = nn.functional.mse_loss(y_hat, y)
+                self.log("train_loss", loss)
+                return loss
+
+            def validation_step(self, batch, batch_idx):
+                x, y = batch
+                y_hat = self(x).squeeze()
+                val_loss = nn.functional.mse_loss(y_hat, y)
+                self.log("val_loss", val_loss, on_epoch=True)
+                return val_loss
+
+            def configure_optimizers(self):
+                return torch.optim.SGD(self.parameters(), lr=0.01)
+
+        class RegressionDataModule(L.LightningDataModule):
+            def __init__(self, batch_size=16, num_samples=150):
+                super().__init__()
+                self.batch_size = batch_size
+                self.num_samples = num_samples
+
+            def setup(self, stage=None):
+                X = torch.randn(self.num_samples, 20)
+                y = torch.randn(self.num_samples)
+                dataset = torch.utils.data.TensorDataset(X, y)
+                train_size = int(0.8 * self.num_samples)
+                val_size = self.num_samples - train_size
+                self.train, self.val = torch.utils.data.random_split(
+                    dataset, [train_size, val_size]
+                )
+
+            def train_dataloader(self):
+                return DataLoader(self.train, batch_size=self.batch_size)
+
+            def val_dataloader(self):
+                return DataLoader(self.val, batch_size=self.batch_size)
+
+        datamodule2 = RegressionDataModule(batch_size=16, num_samples=150)
+
+        params2 = {
+            "datamodule": datamodule2,
+            "lightning_module": RegressionModule,
+            "trainer_kwargs": {
+                "max_epochs": 1,
+                "enable_progress_bar": False,
+                "enable_model_summary": False,
+                "logger": False,
+            },
+            "objective_metric": "val_loss",
+        }
+
+        return [params, params2]
 
     @classmethod
     def _get_score_params(cls):
@@ -296,4 +370,6 @@ class TorchExperiment(BaseExperiment):
         """
         score_params1 = {"input_dim": 10, "hidden_dim": 20, "lr": 0.001}
         score_params2 = {"input_dim": 10, "hidden_dim": 16, "lr": 0.01}
-        return [score_params1, score_params2]
+        score_params3 = {"num_layers": 3, "hidden_size": 64, "dropout": 0.2}
+        score_params4 = {"num_layers": 2, "hidden_size": 32, "dropout": 0.1}
+        return [score_params1, score_params2, score_params3, score_params4]
