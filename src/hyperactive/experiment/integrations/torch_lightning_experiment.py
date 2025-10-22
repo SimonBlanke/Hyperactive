@@ -369,7 +369,5 @@ class TorchExperiment(BaseExperiment):
             The parameters to be used for scoring.
         """
         score_params1 = {"input_dim": 10, "hidden_dim": 20, "lr": 0.001}
-        score_params2 = {"input_dim": 10, "hidden_dim": 16, "lr": 0.01}
-        score_params3 = {"num_layers": 3, "hidden_size": 64, "dropout": 0.2}
-        score_params4 = {"num_layers": 2, "hidden_size": 32, "dropout": 0.1}
-        return [score_params1, score_params2, score_params3, score_params4]
+        score_params2 = {"num_layers": 3, "hidden_size": 64, "dropout": 0.2}
+        return [score_params1, score_params2]
