@@ -134,7 +134,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sklearn-version: ["1.5", "1.6", "1.7"]
+        sklearn-version: ["1.5", "1.6", "1.7.2"]
         python-version: ["3.11", "3.12", "3.13", "3.14"]
 
     steps:
