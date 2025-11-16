@@ -1,6 +1,3 @@
-"""Experiment adapter for sktime detector/anomaly experiments."""
-# copyright: hyperactive developers, MIT License (see LICENSE file)
-
 import numpy as np
 
 from hyperactive.base import BaseExperiment
@@ -8,7 +5,8 @@ from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_a
 
 
 class SktimeDetectorExperiment(BaseExperiment):
-    """Experiment adapter for time series detector/anomaly detection experiments.
+    """
+    Experiment adapter for time series detector/anomaly detection experiments.
 
     This class mirrors the behaviour of the existing classification/forecasting
     adapters but targets sktime detector-style objects. It attempts to use
@@ -17,7 +15,7 @@ class SktimeDetectorExperiment(BaseExperiment):
     """
 
     _tags = {
-        "authors": "fkiraly",
+        "authors": "arnavk23",
         "maintainers": "fkiraly",
         "python_dependencies": "sktime",
     }
@@ -45,7 +43,6 @@ class SktimeDetectorExperiment(BaseExperiment):
         super().__init__()
 
         # use "classifier" as a safe default estimator type for metric coercion
-        # (the helper expects one of the known estimator-type strings)
         self._scoring, _sign = _coerce_to_scorer_and_sign(scoring, "classifier")
 
         _sign_str = "higher" if _sign == 1 else "lower"
@@ -67,13 +64,13 @@ class SktimeDetectorExperiment(BaseExperiment):
         return list(self.detector.get_params().keys())
 
     def _evaluate(self, params):
-        """Evaluate the parameters.
+        """
+        Evaluate the parameters.
 
         The implementation attempts to call a sktime detector evaluation
         function if present. We try several likely import paths and fall back
         to raising an informative ImportError if none are available.
         """
-        # try common sktime detector evaluation locations
         evaluate = None
         candidates = [
             "sktime.anomaly_detection.model_evaluation.evaluate",
@@ -112,7 +109,6 @@ class SktimeDetectorExperiment(BaseExperiment):
                 backend_params=self.backend_params,
             )
 
-            # try to obtain a sensible result name from scoring
             metric = getattr(self._scoring, "_metric_func", self._scoring)
             result_name = f"test_{getattr(metric, '__name__', 'score')}"
 
@@ -121,7 +117,6 @@ class SktimeDetectorExperiment(BaseExperiment):
             return res_float, {"results": results}
 
         # Fallback: perform a manual cross-validation loop if `evaluate` is not present.
-        # This makes the adapter resilient across sktime versions.
         from sklearn.base import clone as skl_clone
 
         # Determine underlying metric function or sklearn-style scorer
@@ -139,7 +134,6 @@ class SktimeDetectorExperiment(BaseExperiment):
         scores = []
         # If X is None, try to build indices from y
         if self.X is None:
-            # assume y is indexable and use KFold-like splits on range(len(y))
             for train_idx, test_idx in self._cv.split(self.y):
                 X_train = None
                 X_test = None
@@ -159,25 +153,20 @@ class SktimeDetectorExperiment(BaseExperiment):
                 except TypeError:
                     est.fit(X=None)
 
-                # obtain predictions
                 try:
                     y_pred = est.predict(X=None)
                 except TypeError:
                     y_pred = est.predict()
 
-                # compute score
                 if metric_func is not None:
                     score = metric_func(y_test, y_pred)
                 elif is_sklearn_scorer:
                     score = self._scoring(est, X_test, y_test)
                 else:
-                    # fallback: try estimator.score
                     score = getattr(est, "score")(X_test, y_test)
                 scores.append(score)
         else:
             for train_idx, test_idx in self._cv.split(self.X, self.y):
-                # slicing for pandas/multiindex/array handled by sktime types in user code
-                # try to index X and y using iloc if pandas, else numpy indexing
                 X_train = self._safe_index(self.X, train_idx)
                 X_test = self._safe_index(self.X, test_idx)
                 y_train = self._safe_index(self.y, train_idx)
@@ -210,28 +199,25 @@ class SktimeDetectorExperiment(BaseExperiment):
         return float(res_float), {"results": {"cv_scores": scores}}
 
     def _safe_index(self, obj, idx):
-        """Safely index into `obj` using integer indices.
+        """
+        Safely index into `obj` using integer indices.
 
         Supports pandas objects with .iloc, numpy arrays/lists, and other indexable types.
         """
         try:
-            # pandas-like
             return obj.iloc[idx]
         except Exception:
             try:
-                # numpy-like
                 import numpy as _np
 
                 arr = _np.asarray(obj)
                 return arr[idx]
             except Exception:
-                # last resort: list-comprehension
                 return [obj[i] for i in idx]
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
-        """Return testing parameter settings for the skbase object."""
-        # Provide a small smoke-test default using a dummy detector from sktime
+        # Return testing parameter settings for the skbase object.
         try:
             from sktime.annotation.dummy import DummyDetector
         except Exception:

@@ -1,6 +1,3 @@
-"""Integration wrapper to tune sktime detectors with Hyperactive."""
-# copyright: hyperactive developers, MIT License (see LICENSE file)
-
 import numpy as np
 from skbase.utils.dependencies import _check_soft_dependencies
 
@@ -19,14 +16,15 @@ from hyperactive.experiment.integrations.sktime_detector import (
 
 
 class TSDetectorOptCv(_DelegatedDetector):
-    """Tune an sktime detector via any optimizer in the hyperactive toolbox.
+    """
+    Tune an sktime detector via any optimizer in the hyperactive toolbox.
 
     This mirrors the interface of other sktime wrappers in this package and
     delegates the tuning work to `SktimeDetectorExperiment`.
     """
 
     _tags = {
-        "authors": "fkiraly",
+        "authors": "arnavk23",
         "maintainers": "fkiraly",
         "python_dependencies": "sktime",
     }
@@ -76,7 +74,6 @@ class TSDetectorOptCv(_DelegatedDetector):
         self.best_detector_ = detector.set_params(**best_params)
 
         if self.refit:
-            # detectors typically implement fit(X, y) or fit(X)
             try:
                 self.best_detector_.fit(X=X, y=y)
             except TypeError:
@@ -95,19 +92,36 @@ class TSDetectorOptCv(_DelegatedDetector):
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
-        # Import sktime DummyDetector only if sktime is available; otherwise
-        # fall back to None so test collection does not fail in environments
-        # without the optional dependency.
-        try:
-            from sktime.annotation.dummy import DummyDetector
-        except Exception:
+        if _check_soft_dependencies("sktime", severity="none"):
+            try:
+                from sktime.annotation.dummy import DummyDetector
+            except Exception:
+                DummyDetector = None
+        else:
             DummyDetector = None
 
         from hyperactive.opt.gridsearch import GridSearchSk
 
-        params = {
+        params_default = {
             "detector": DummyDetector() if DummyDetector is not None else None,
             "optimizer": GridSearchSk(param_grid={}),
         }
 
-        return params
+        
+        params_more = {
+            "detector": DummyDetector() if DummyDetector is not None else None,
+            "optimizer": GridSearchSk(param_grid={"strategy": ["most_frequent", "stratified"]}),
+            "cv": 2,
+            "scoring": None,
+            "refit": False,
+            "error_score": 0.0,
+            "backend": "loky",
+            "backend_params": {"n_jobs": 1},
+        }
+
+        if parameter_set == "default":
+            return params_default
+        elif parameter_set == "more_params":
+            return params_more
+        else:
+            return params_default

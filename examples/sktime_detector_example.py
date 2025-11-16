@@ -1,4 +1,5 @@
-"""Example: tune an sktime detector with Hyperactive's TSDetectorOptCv.
+"""
+Example: tune an sktime detector with Hyperactive's TSDetectorOptCv.
 
 Run with:
 
@@ -32,7 +33,6 @@ def main():
         refit=True,
     )
 
-    # Fit (will run the optimizer). For a GridSearch with empty grid this is fast.
     tuned.fit(X=X, y=y)
 
     print("best_params:", tuned.best_params_)
