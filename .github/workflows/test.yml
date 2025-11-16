@@ -57,7 +57,7 @@ jobs:
     name: test-no-extras
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         os: ["macos-latest", "windows-latest", "ubuntu-latest"]
         exclude:
           - os: "windows-latest"
@@ -94,7 +94,7 @@ jobs:
     name: test-all-extras
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         os: ["macos-latest", "windows-latest", "ubuntu-latest"]
         exclude:
           - os: "windows-latest"
@@ -135,7 +135,7 @@ jobs:
       fail-fast: false
       matrix:
         sklearn-version: ["1.5", "1.6", "1.7"]
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
 
     steps:
       - uses: actions/checkout@v4
@@ -148,7 +148,7 @@ jobs:
       - name: Install dependencies for scikit-learn ${{ matrix.sklearn-version }}
         run: |
           python -m pip install --upgrade pip
-          python -m pip install .[all_extras,test] scikit-learn==${{ matrix.sklearn-version }}
+          python -m pip install .[all_extras,test] scikit-learn==${{ matrix.sklearn-version }}.*
 
       - name: Show dependencies
         run: python -m pip list
