@@ -1,3 +1,6 @@
+"""Integration tests for sktime tuners."""
+# copyright: hyperactive developers, MIT License (see LICENSE file)
+
 import pytest
 from skbase.utils.dependencies import _check_soft_dependencies
 
