@@ -267,18 +267,23 @@ class ForecastingOptCV(_DelegatedForecaster):
         -------
         self : returns an instance of self.
         """
+        # Handle broadcasting options when requested and applicable
+        if self.tune_by_instance or self.tune_by_variable:
+            broadcasted = self._fit_with_broadcasting(y, X, fh)
+            if broadcasted:
+                return self
+
+        return self._fit_single(y, X, fh)
+
+    def _fit_single(self, y, X, fh):
+        """Run the core fit logic without broadcasting shortcuts."""
         import time
 
         from sktime.utils.validation.forecasting import check_scoring
 
-        # Handle broadcasting options
-        if self.tune_by_instance or self.tune_by_variable:
-            return self._fit_with_broadcasting(y, X, fh)
-
         forecaster = self.forecaster.clone()
 
         scoring = check_scoring(self.scoring, obj=self)
-        # scoring_name = f"test_{scoring.name}"
         self.scorer_ = scoring
 
         # Count number of CV splits
@@ -379,7 +384,8 @@ class ForecastingOptCV(_DelegatedForecaster):
 
         Returns
         -------
-        self : returns an instance of self.
+        bool
+            True if broadcasting was performed, False otherwise.
         """
         import pandas as pd
         from sktime.utils.validation.forecasting import check_scoring
@@ -393,9 +399,12 @@ class ForecastingOptCV(_DelegatedForecaster):
         is_multivariate = isinstance(y, pd.DataFrame) and len(y.columns) > 1
 
         forecasters_list = []
+        refit_times = []
+        broadcast_handled = False
 
         # Handle tune_by_instance for Panel/Hierarchical data
         if self.tune_by_instance and is_panel:
+            broadcast_handled = True
             # Get unique instances
             if hasattr(y.index, "levels"):
                 instances = y.index.get_level_values(0).unique()
@@ -435,18 +444,17 @@ class ForecastingOptCV(_DelegatedForecaster):
                         "forecaster": tuner.best_forecaster_,
                         "best_params": tuner.best_params_,
                         "best_score": tuner.best_score_,
+                        "refit_time": getattr(tuner, "refit_time_", 0.0),
                     }
                 )
+                refit_times.append(getattr(tuner, "refit_time_", 0.0))
 
             # Store as DataFrame
             self.forecasters_ = pd.DataFrame(forecasters_list)
-            # Set a representative best_forecaster_
-            self.best_forecaster_ = forecasters_list[0]["forecaster"]
-            self.best_params_ = forecasters_list[0]["best_params"]
-            self.best_score_ = forecasters_list[0]["best_score"]
 
         # Handle tune_by_variable for multivariate data
         elif self.tune_by_variable and is_multivariate:
+            broadcast_handled = True
             variables = y.columns
 
             for variable in variables:
@@ -478,24 +486,42 @@ class ForecastingOptCV(_DelegatedForecaster):
                         "forecaster": tuner.best_forecaster_,
                         "best_params": tuner.best_params_,
                         "best_score": tuner.best_score_,
+                        "refit_time": getattr(tuner, "refit_time_", 0.0),
                     }
                 )
+                refit_times.append(getattr(tuner, "refit_time_", 0.0))
 
             # Store as DataFrame
             self.forecasters_ = pd.DataFrame(forecasters_list)
-            # Set a representative best_forecaster_
-            self.best_forecaster_ = forecasters_list[0]["forecaster"]
-            self.best_params_ = forecasters_list[0]["best_params"]
-            self.best_score_ = forecasters_list[0]["best_score"]
         else:
             # If broadcasting was requested but not applicable, fall back to regular fit
-            return self._fit(y, X, fh)
+            return False
 
-        self.best_index_ = 0
+        if not forecasters_list:
+            raise RuntimeError(
+                "Broadcasting was requested but no forecasters were fitted."
+            )
+
+        # Determine best forecaster based on available scores
+        scores = [entry.get("best_score") for entry in forecasters_list]
+        score_values = [np.inf if score is None else score for score in scores]
+        best_index = int(np.argmin(score_values))
+        best_entry = forecasters_list[best_index]
+
+        self.best_forecaster_ = best_entry["forecaster"]
+        self.best_params_ = best_entry["best_params"]
+        self.best_score_ = best_entry.get("best_score")
+        self.best_index_ = best_index
+
         self.cv_results_ = {"forecasters": self.forecasters_}
-        self.refit_time_ = 0.0
 
-        return self
+        # Aggregate refit times from each cloned tuner
+        if self.refit:
+            self.refit_time_ = float(np.sum(refit_times))
+        else:
+            self.refit_time_ = 0.0
+
+        return broadcast_handled
 
     def _update(self, y, X=None, update_params=True):
         """Update time series to incremental training data.
