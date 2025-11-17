@@ -1,4 +1,5 @@
 import numpy as np
+from skbase.utils.dependencies import _check_soft_dependencies
 
 from hyperactive.base import BaseExperiment
 from hyperactive.experiment.integrations._skl_metrics import _coerce_to_scorer_and_sign
@@ -218,22 +219,43 @@ class SktimeDetectorExperiment(BaseExperiment):
     @classmethod
     def get_test_params(cls, parameter_set="default"):
         # Return testing parameter settings for the skbase object.
-        try:
-            from sktime.annotation.dummy import DummyDetector
-        except Exception:
-            DummyDetector = None
+        if _check_soft_dependencies("sktime", severity="none"):
+            try:
+                from sktime.annotation.dummy import DummyDetector
+            except Exception:
+                DummyDetector = None
 
-        try:
-            from sktime.datasets import load_unit_test
-            X, y = load_unit_test(return_X_y=True, return_type="pd-multiindex")
-        except Exception:
+            try:
+                from sktime.datasets import load_unit_test
+                X, y = load_unit_test(return_X_y=True, return_type="pd-multiindex")
+            except Exception:
+                X = None
+                y = None
+        else:
+            DummyDetector = None
             X = None
             y = None
 
-        params0 = {
+        params_default = {
             "detector": DummyDetector() if DummyDetector is not None else None,
             "X": X,
             "y": y,
         }
 
-        return [params0]
+        params_more = {
+            "detector": DummyDetector() if DummyDetector is not None else None,
+            "X": X,
+            "y": y,
+            "cv": 2,
+            "scoring": None,
+            "error_score": 0.0,
+            "backend": "loky",
+            "backend_params": {"n_jobs": 1},
+        }
+
+        if parameter_set == "default":
+            return [params_default]
+        elif parameter_set == "more_params":
+            return [params_more]
+        else:
+            return [params_default]
