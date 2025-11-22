@@ -53,6 +53,15 @@ sktime-integration = [
   "skpro",
   'sktime; python_version < "3.14"',
 ]
+skforecast-integration = [
+  "skforecast",
+]
+integrations = [
+  "scikit-learn <1.8.0",
+  "skpro",
+  'sktime; python_version < "3.14"',
+  "skforecast",
+]
 build = [
   "setuptools",
   "build",
