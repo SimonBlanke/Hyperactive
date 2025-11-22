@@ -187,7 +187,7 @@ class TorchExperiment(BaseExperiment):
                 )
             if hasattr(val_result, "item"):
                 val_result = np.float64(val_result.detach().cpu().item())
-            elif isinstance(val_result, (int, float)):
+            elif isinstance(val_result, int | float):
                 val_result = np.float64(val_result)
             else:
                 val_result = np.float64(float(val_result))
