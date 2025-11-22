@@ -1,7 +1,8 @@
+"""Skforecast integration for hyperactive."""
 # copyright: hyperactive developers, MIT License (see LICENSE file)
 
 import copy
-import numpy as np
+
 from sklearn.base import BaseEstimator
 
 from hyperactive.experiment.integrations.skforecast_forecasting import (
@@ -21,40 +22,44 @@ class SkforecastOptCV(BaseEstimator):
         The optimizer to be used for hyperparameter search.
 
     steps : int
-        Number of steps to predict
+        Number of steps to predict.
 
     metric : str or callable
-        Metric used to quantify the goodness of fit of the model
+        Metric used to quantify the goodness of fit of the model.
+        If string, it must be a metric name allowed by skforecast
+        (e.g., 'mean_squared_error').
+        If callable, it must take (y_true, y_pred) and return a float.
 
     initial_train_size : int
-        Number of samples in the initial training set
+        Number of samples in the initial training set.
 
-    exog : pandas Series or DataFrame, optional
-        Exogenous variable/s used in the evaluation experiment
+    exog : pandas Series or DataFrame, default=None
+        Exogenous variable/s used in the evaluation experiment.
 
-    refit : bool, optional
-        Whether to re-fit the forecaster in each iteration
+    refit : bool, default=False
+        Whether to re-fit the forecaster in each iteration.
 
-    fixed_train_size : bool, optional
-        If True, the train size doesn't increase but moves by `steps` in each iteration
+    fixed_train_size : bool, default=False
+        If True, the train size doesn't increase but moves by `steps` in each iteration.
 
-    gap : int, optional
-        Number of samples to exclude from the end of each training set and the start of the test set
+    gap : int, default=0
+        Number of samples to exclude from the end of each training set and the
+        start of the test set.
 
-    allow_incomplete_fold : bool, optional
-        If True, the last fold is allowed to have fewer samples than `steps`
+    allow_incomplete_fold : bool, default=True
+        If True, the last fold is allowed to have fewer samples than `steps`.
 
-    return_best : bool, optional
-        If True, the best model is returned
+    return_best : bool, default=False
+        If True, the best model is returned.
 
-    n_jobs : int or 'auto', optional
-        Number of jobs to run in parallel
+    n_jobs : int or 'auto', default="auto"
+        Number of jobs to run in parallel.
 
-    verbose : bool, optional
-        Print summary figures
+    verbose : bool, default=False
+        Print summary figures.
 
-    show_progress : bool, optional
-        Whether to show a progress bar
+    show_progress : bool, default=False
+        Whether to show a progress bar.
     """
 
     def __init__(
@@ -88,6 +93,44 @@ class SkforecastOptCV(BaseEstimator):
         self.n_jobs = n_jobs
         self.verbose = verbose
         self.show_progress = show_progress
+
+    @classmethod
+    def get_test_params(cls, parameter_set="default"):
+        """Return testing parameter settings for the estimator.
+
+        Parameters
+        ----------
+        parameter_set : str, default="default"
+            Name of the parameter set to return.
+
+        Returns
+        -------
+        params : dict or list of dict, default = {}
+            Parameters to create testing instances of the class
+            Each dict are parameters to construct an "interesting" test instance,
+            i.e., MyClass(**params) or MyClass(**params[i]) creates a valid test
+            instance.
+            create_test_instance uses the first (or only) dictionary in `params`
+        """
+        from skforecast.recursive import ForecasterRecursive
+        from sklearn.ensemble import RandomForestRegressor
+
+        from hyperactive import HillClimbingOptimizer
+
+        forecaster = ForecasterRecursive(
+            regressor=RandomForestRegressor(random_state=123),
+            lags=2,
+        )
+        optimizer = HillClimbingOptimizer()
+
+        params = {
+            "forecaster": forecaster,
+            "optimizer": optimizer,
+            "steps": 3,
+            "metric": "mean_squared_error",
+            "initial_train_size": 10,
+        }
+        return [params]
 
     def fit(self, y, exog=None):
         """Fit to training data.

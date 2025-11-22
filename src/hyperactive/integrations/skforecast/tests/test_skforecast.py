@@ -1,9 +1,12 @@
-import pytest
+"""Test skforecast integration."""
+
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.ensemble import RandomForestRegressor
-from hyperactive.opt import HillClimbing
+
 from hyperactive.integrations.skforecast import SkforecastOptCV
+from hyperactive.opt import HillClimbing
 
 try:
     from skforecast.recursive import ForecasterRecursive
@@ -13,6 +16,7 @@ except ImportError:
 
 @pytest.fixture
 def data():
+    """Create test data."""
     return pd.Series(
         np.random.randn(100),
         index=pd.date_range(start="2020-01-01", periods=100, freq="D"),
@@ -21,10 +25,8 @@ def data():
 
 
 def test_skforecast_opt_cv(data):
-    try:
-        import skforecast
-    except ImportError:
-        pytest.skip("skforecast not installed", allow_module_level=True)
+    """Test SkforecastOptCV."""
+    pytest.importorskip("skforecast")
 
     forecaster = ForecasterRecursive(
         regressor=RandomForestRegressor(random_state=123), lags=5
